@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "SLOS_MS_USER")
+@Table(name = "MST_USER")
 public class User {
     @Id
     @Column(name = "USER_ID")

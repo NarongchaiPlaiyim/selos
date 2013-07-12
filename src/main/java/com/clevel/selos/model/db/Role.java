@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "SLOS_MS_ROLE")
+@Table(name = "MST_ROLE")
 public class Role {
     @Id
     @Column(name = "ROLE_ID")
