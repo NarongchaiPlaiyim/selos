@@ -9,4 +9,23 @@
         <exception-handler-factory>com.clevel.selos.exception.handler.ViewExpiredHandlerFactory</exception-handler-factory>
     </factory>
 
+    <navigation-rule>
+        <display-name>LoginBean</display-name>
+        <from-view-id>/login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{loginBean.login}</from-action>
+            <from-outcome>secured</from-outcome>
+            <to-view-id>/admin/welcome.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <display-name>LoggedOut</display-name>
+        <navigation-case>
+            <from-action>#{loginBean.logout}</from-action>
+            <from-outcome>loggedOut</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>
