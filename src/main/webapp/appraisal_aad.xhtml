@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Template</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="resources/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="resources/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="resources/menubar.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Appraisal</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%"><p:spacer width="2"/></td></tr>
+                        <tr>
+                            <td width="110"><p:spacer width="2"/></td>
+                            <td>
+                                <table class="table_content">
+                                    <tr>
+                                        <th colspan="8">CA Information.</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right" width="140">Request Type :</td>
+                                        <td colspan="7" class="left"><input type="text" class="medium" value="New Credit"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">CA No. :</td>
+                                        <td class="left"><input type="text" class="medium" value="44122113213123"/></td>
+                                        <td class="title right" width="130">Customer Name :</td>
+                                        <td class="left" colspan="5"><input type="text" class="larger" value="Mr.xxxxxxxxx xxxxxxx"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">BDM :</td>
+                                        <td><input type="text" class="medium"/></td>
+                                        <td class="title right">Tel. :</td>
+                                        <td><input type="text" class="medium"/></td>
+                                        <td class="title right">Zone :</td>
+                                        <td><input type="text" class="medium"/></td>
+                                        <td class="title right">Existing Customer :</td>
+                                        <td><input type="checkbox"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8">Appraisal Details</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Type :</td>
+                                        <td colspan="7">
+                                            <input type="radio" name="appraisal_type" />Internal
+                                            <p:spacer width="2"/><input type="radio" name="appraisal_type" />External
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Company :</td>
+                                        <td colspan="7">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Division :</td>
+                                        <td colspan="2">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Appraisal Name :</td>
+                                        <td colspan="4"><input type="text" class="large"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Received task Date :</td>
+                                        <td colspan="7"><input type="text" class="large" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Location of Property :</td>
+                                        <td colspan="2">
+                                            <select class="larger">
+                                                <option>Bangkok</option>
+                                                <option>Up Country</option>
+                                                <option>Complicated task</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Province of Property :</td>
+                                        <td colspan="4">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Date :</td>
+                                        <td colspan="2"><input type="text" class="large" /></td>
+                                        <td class="title right">Due Date :</td>
+                                        <td colspan="4"><input type="text" class="large" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Remark :</td>
+                                        <td colspan="7"><input type="text" style="width: 605px"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <span style="color:red; font-size: bold;">Retrieving Collateral From BDM Request for AAD Appraisal...</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">ผู้ติดต่อ :</td>
+                                        <td class="left"><input type="text" class="medium"/></td>
+                                        <td class="title right">เบอร์ติดต่อ :</td>
+                                        <td class="left"><input type="text" class="medium"/></td>
+                                        <td class="title right">เบอร์ติดต่อ :</td>
+                                        <td class="left" colspan="3"><input type="text" class="medium"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">ยกเลิก :</td>
+                                        <td class="left">
+                                            <select class="smaller">
+                                                <option>Y</option>
+                                                <option>N</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">หมายเหตุ :</td>
+                                        <td class="left" colspan="5"><input type="text" class="larger"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8">Over SLA</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Reason :</td>
+                                        <td colspan="2">
+                                            <select class="largest">
+                                                <option></option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Description :</td>
+                                        <td colspan="4"><input type="text" style="width:380px;"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p:spacer width="2"/></td>
+                            <td>
+                                <input type="button" class="greenButton medium" value="Save"/>
+                                <input type="button" class="greenButton medium" value="Cancel"/>
+                                <input type="button" class="greenButton large" disabled="disabled" value="Next"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="resources/footer.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>
