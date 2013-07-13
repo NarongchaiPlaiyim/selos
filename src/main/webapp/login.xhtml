@@ -9,24 +9,31 @@
 
     <h:head>
         <title>Login</title>
-        <h:outputStylesheet library="default" name="css/style.css" />
-        <!--<link rel="stylesheet" href="resources/default/css/style.css" type="text/css" media="screen"/>-->
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
     </h:head>
     <h:body>
 
         <p:panel header="login">
             <h:form>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="3">
                     <h:outputText value="user name: "/>
                     <p:inputText value="#{loginBean.userName}"/>
                     <h:outputText value="password: "/>
                     <p:password value="#{loginBean.password}"/>
+                    <p:commandButton value="Login" action="#{loginBean.login}"
+                                     ajax="false" style="width: 150px;"/>
                 </h:panelGrid>
                 <p:commandButton value="Login" action="#{loginBean.login}"
+                                 ajax="false" style="width: 150px;"/>
+                <p:commandButton value="Reset" action="#{loginBean.login}"
                                  ajax="false" style="width: 150px;"/>
                 <!--<p:commandButton value="Logout" action="#{identity.logout}" rendered="#{identity.loggedIn}"-->
                                  <!--ajax="false" style="width: 150px;"/>-->
             </h:form>
+            <p:commandButton id="basic" value="Basic" onclick="dlg1.show();" type="button" />
+            <p:dialog id="basicDialog" header="Basic Dialog" widgetVar="dlg1">
+                <h:outputText value="Resistance to PrimeFaces is futile!" />
+            </p:dialog>
 
         </p:panel>
     </h:body>
