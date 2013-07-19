@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Prescreen-Maker</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="resources/header_logo_maker.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="resources/header_detail_maker_s2.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="resources/menubar_maker.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Prescreen - Maker</div>
+                <div id="content">
+                <table id="content_form">
+                <tr><td colspan="100%" class="right" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td></tr>
+                <tr>
+                    <td class="title">Product Group :</td>
+                    <td>
+                        <select class="larger">
+                            <option>- Please Select -</option>
+                            <option selected="selected">SmartBiz</option>
+                            <option>F-Cash</option>
+                        </select>
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td class="title">Product Program :</td>
+                    <td>
+                        <select class="larger">
+                            <option>- Please Select -</option>
+                            <option>TMB SME SmartBiz</option>
+                            <option>Top Up Bancassurance</option>
+                        </select>
+                    </td>
+                </tr>-->
+                <tr>
+                    <td class="title">Facility <!--<span class="require-field">*</span>--> :</td>
+                    <td>
+                        <p:commandButton value="Add" styleClass="smaller" onclick="facilityDlg.show();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content" style="width:540px;">
+                            <tr>
+                                <th style="width: 30px;"></th>
+                                <th style="width: 170px;">Product Program</th>
+                                <th style="width: 170px;">Facility</th>
+                                <th style="width: 120px;">Request amount</th>
+                                <th style="width: 50px;"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">TMB SME SmartBiz</td>
+                                <td class="center">Loan</td>
+                                <td class="right">2,000,000</td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr>
+                    <td class="title">Customer Information :</td>
+                    <td>
+                        <p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title top">Borrower :</td>
+                    <td>
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th style="width:30px;"></th>
+                                <th style="width:100px;">Main Borrower</th>
+                                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                                <th style="width:90px;">Customer ID</th>
+                                <th style="width:210px;">Customer Name</th>
+                                <th style="width:100px;">Customer Type</th>
+                                <th style="width:30px;">Age</th>
+                                <!--<th style="width:30px;">NCB</th>
+                                <th style="width:40px;">Eligible</th>-->
+                                <th style="width:50px;"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center"><input type="radio" name="mainborrower"/></td>
+                                <td class="center">312320123123</td>
+                                <td class="center">30232</td>
+                                <td>Mr.A Example</td>
+                                <td class="center">Individual</td>
+                                <td class="center">48</td>
+                                <!--<td class="center"></td>
+                                <td class="center"></td>-->
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="center">2</td>
+                                <td class="center"><input type="radio" name="mainborrower"/></td>
+                                <td class="center">412420124124</td>
+                                <td class="center">30234</td>
+                                <td>Mrs.B Example</td>
+                                <td class="center">Individual</td>
+                                <td class="center">36</td>
+                                <!--<td class="center"></td>
+                                <td class="center"></td>-->
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr><td colspan="100%"><p:spacer width="5"/></td></tr>
+                <tr>
+                    <td class="center" colspan="100%">
+                        <p:commandButton value="Save" styleClass="large"/>
+                    </td>
+                </tr>
+                </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="resources/footer_prescreen.xhtml" />
+            <!-- End Footer -->
+        <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+                  modal="true" width="400" height="150"
+                >
+            <table class="content_form">
+                <tr>
+                    <td class="title" width="145">Product Program :</td>
+                    <td>
+                        <select class="largest">
+                            <option>TMB SME SmartBiz</option>
+                            <option>Top Up Bancassurance</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Facility :</td>
+                    <td>
+                        <select class="largest">
+                            <option>Loan</option>
+                            <option>OD</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Request Amount :</td>
+                    <td><input type="text" class="medium right"/> Bath.</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton value="Save" styleClass="small" onclick="facilityDlg.hide()"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="facilityDlg.hide()"/>
+                    </td>
+                </tr>
+            </table>
+        </p:dialog>
+        <p:dialog id="customerDialog" header="Customer Information" widgetVar="customerDlg"
+                modal="true" width="700"
+                >
+            <div id="customer_relation">
+                <table class="content_form" style="width:650px;">
+                    <tr>
+                        <td class="title" style="width:120px;">Customer Type :</td>
+                        <td colspan="3">
+                            <input type="radio" name="customerType" value="0" onclick="checkCustomerType(this)"/> Individual
+                            <input type="radio" name="customerType" value="1" onclick="checkCustomerType(this)"/> Juristic
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Borrower Type :</td>
+                        <td colspan="3">
+                            <select class="larger">
+                                <option>- Please Select -</option>
+                                <option>Borrower</option>
+                                <option>Co-Borrower</option>
+                                <option>Owner of collateral</option>
+                            </select>
+                            <input type="checkbox">Main Borrower</input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Relationship :</td>
+                        <td colspan="3">
+                            <select class="larger">
+                                <option>- Please Select -</option>
+                                <option>Director</option>
+                                <option>Shares holder</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Citizen ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/><p:spacer width="5"/><p:commandButton value="Search" styleClass="medium" style="margin-top:-3px;"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Customer ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="individual_form">
+                <table class="content_form" style="width:650px;">
+                    <tr>
+                        <td class="title" style="width:120px;">Title :</td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Mr.</option>
+                                <option>Mrs.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">First Name :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Last Name :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Birth :</td>
+                        <td><p:calendar value="#{calendarBean.date3}" id="popupButtonCal" showOn="button" /></td>
+                        <td class="title">Age :</td>
+                        <td><input type="text" class="smallest"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Nationality :</td>
+                        <td>
+                            <select class="medium">
+                                <option>Thai</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="juristic_form" style="display: none;">
+                <table class="content_form" style="width: 650px;">
+                    <tr>
+                        <td class="title">Name :</td>
+                        <td><input type="text" style="width:300px;"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Register :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                </table>
+            </div>
+            <table class="content_form">
+                <tr>
+                    <td class="title top" style="padding-top:8px;">Address :</td>
+                    <td colspan="3" class="top">
+                        <table class="table_noborder">
+                            <tr>
+                                <td class="title left">Addr. No.</td>
+                                <td class="left"><input type="text" class="smallest"/></td>
+                                <td class="title right">Moo.</td>
+                                <td class="left"><input type="text" class="smallest"/></td>
+                                <td class="title right">Building</td>
+                                <td class="left"><input type="text" class="small"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title left">Soi/Road</td>
+                                <td colspan="5" class="left"><input type="text" style="width:320px;"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        <select class="large">
+                            <option>Province</option>
+                        </select>
+                        <select class="large">
+                            <option>District</option>
+                        </select>
+                        <select class="large">
+                            <option>Sub District</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Postal Code :</td>
+                    <td colspan="3"><input type="text" class="medium"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Approx. Income :</td>
+                    <td colspan="3"><input type="text" class="medium" /> Bath/Year</td>
+                </tr>
+                <tr>
+                    <td class="title">Marriage Status :</td>
+                    <td colspan="3">
+                        <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
+                        <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                    </td>
+                </tr>
+            </table>
+            <div id="spouse_information" style="display:none; margin-top: 20px;">
+                <div class="separate"><!-- --></div>
+                <table class="content_form">
+                    <tr>
+                        <td class="title">Customer Type :</td>
+                        <td colspan="3">
+                            <input type="radio" name="customerType" value="0"/> Individual
+                            <input type="radio" name="customerType" value="1"/> Juristic
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Relationship :</td>
+                        <td colspan="3">
+                            <select class="medium">
+                                <option>Borrower</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Citizen ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Customer ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Title :</td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Mr.</option>
+                                <option>Mrs.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">First Name :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Last Name :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Birth :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Age :</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Nationality :</td>
+                        <td>
+                            <select class="medium">
+                                <option>Thai</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Address :</td>
+                        <td colspan="3">
+                            <table class="table_noborder">
+                                <tr>
+                                    <td class="title left">Addr. No.</td>
+                                    <td class="left"><input type="text" class="smallest"/></td>
+                                    <td class="title right">Moo.</td>
+                                    <td class="left"><input type="text" class="smallest"/></td>
+                                    <td class="title right">Building</td>
+                                    <td class="left"><input type="text" class="small"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title left">Soi/Road</td>
+                                    <td class="left"><input type="text" style="width:400px;"/></td>
+                                </tr>
+                            </table>
+                            <input type="text" style="width:400px;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Province</option>
+                            </select>
+                            <select class="large">
+                                <option>District</option>
+                            </select>
+                            <select class="large">
+                                <option>Sub District</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Postcode :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Approx. Income :</td>
+                        <td colspan="3"><input type="text" class="medium" /> Bath/Year</td>
+                    </tr>
+                    <tr>
+                        <td class="title">Marriage Status :</td>
+                        <td colspan="3">
+                            <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
+                            <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="center" style="margin-top: 20px; padding-bottom: 10px;">
+                <p:commandButton value="Save" styleClass="small" onclick="customerDlg.hide()"/>
+                <p:commandButton value="Cancel" styleClass="small" onclick="customerDlg.hide()"/>
+            </div>
+        </p:dialog>
+        <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg"
+                modal="true"
+                >
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width:145px;">Type Of Collateral :</td>
+                    <td>
+                        <select class="largest">
+                            <option>Core Asset</option>
+                            <option>Core non Asset</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Value :</td>
+                    <td><input type="text" class="medium right"/> Bath.</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton value="Save" styleClass="small" onclick="collateralDlg.hide()"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="collateralDlg.hide()"/>
+                    </td>
+                </tr>
+            </table>
+        </p:dialog>
+        </div>
+    </h:body>
+</f:view>
+</html>

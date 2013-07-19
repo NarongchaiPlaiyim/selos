@@ -150,6 +150,9 @@ td .option{
 #content_form td{
     line-height: 28px;
 }
+#content_form td.title{
+    padding-left: 4px;
+}
 .separate{
     border-top: 1px solid #acacac;
     height:1px;
@@ -206,6 +209,9 @@ table.table_result {
     border-bottom: 1px solid #868686;
 }
 table.table_noborder {
+    border: none;
+}
+table.table_noborder td{
     border: none;
 }
 table.table_content {
@@ -305,6 +311,13 @@ table.table_content {
     width: 99%;
     margin-left: 5px;
     border-bottom: 1px solid #acacac;
+    height:20px;
+    color: #393939;
+}
+h2{
+    text-align:left;
+    font-weight: bold;
+    font-size: 1.1em;
     height:20px;
     color: #393939;
 }

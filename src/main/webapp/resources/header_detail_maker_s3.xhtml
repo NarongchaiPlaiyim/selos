@@ -8,11 +8,10 @@
         <div id="header_colapse" style="float: left; width: 50px; margin-top: 5px;">  ^  </div>
         <div id="header_button" style="float:right; width: 820px; text-align: right; margin-right: 10px; margin-top: 5px;">
             <h:form>
-                <p:commandButton value="Check NCB" styleClass="blueButton" onclick="assignDlg.show()" />
+                <p:commandButton value="Check Mandate Doc" styleClass="blueButton" onclick="mandateDocDlg.show()" />
                 <p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Closed Sales" ajax="false" disabled="true" styleClass="blueButton" />
+                <p:commandButton value="Close Sales" ajax="false" styleClass="blueButton" />
             </h:form>
         </div>
         <div class="clear"></div>
@@ -20,7 +19,7 @@
             <table id="table_information" align="center" style="margin-top: 5px; min-width: 920px; width: 100%">
                 <tr>
                     <td colspan="11" style="font-weight: bold; text-align: right;">Status :</td>
-                    <td>Prescreen-Maker</td>
+                    <td>Return from check NCB</td>
                 </tr>
                 <tr>
                     <td class="title left" style="min-width: 130px; max-width: 180px;">BDM :</td>
@@ -67,7 +66,7 @@
                         <table>
                             <tr>
                                 <td style="width: 150px;">Mr.A Example</td>
-                                <td style="width: 150px;">Mr.A Example</td>
+                                <td style="width: 150px;">Mrs.B Example</td>
                             </tr>
                             <tr>
                                 <td>312320123123</td>
@@ -81,7 +80,7 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Product Program :</td>
-                    <td colspan="11"></td>
+                    <td colspan="11">TMB SME SmartBiz</td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Prescreen Result :</td>
@@ -91,13 +90,14 @@
         </div>
     </div>
     <div class="clear"></div>
-    <p:dialog id="assignDialog" header="Check NCB - Assign to" widgetVar="assignDlg" modal="true">
+    <p:dialog id="assignDialog" header="Check NCB - Assign to BDM Checker" widgetVar="assignDlg" modal="true">
         <table class="content_form">
             <tr>
                 <td class="title right" width="90">Assign to :</td>
                 <td>
                     <select class="large">
                         <option>- Please Select -</option>
+                        <option>Mr.BDM Checker</option>
                     </select>
                 </td>
             </tr>
