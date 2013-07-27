@@ -96,6 +96,9 @@ textarea {
 .require-field{
     color: red;
 }
+.smallest_4s{
+    width: 40px;
+}
 .smallest{
     width: 50px;
 }
@@ -116,6 +119,9 @@ textarea {
 }
 .largest{
     width: 200px;
+}
+.largest_m{
+    width: 300px;
 }
 .left {
     text-align: left;

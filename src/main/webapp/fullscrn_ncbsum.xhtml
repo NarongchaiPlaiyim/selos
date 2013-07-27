@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Template</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="resources/header_logo.xhtml"/>
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="resources/header_detail_fullapp.xhtml"/>
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="resources/menubar_fullapp.xhtml"/>
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">NCB Record Summary</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td colspan="100%" class="right"
+                                style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                                <span style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table class="table_content">
+                                    <tr>
+                                        <th style="width: 30px;line-height: 15px;">No.</th>
+                                        <th style="width: 210px;line-height: 15px;">Customer Name</th>
+                                        <th style="width: 80px;line-height: 15px;">Customer Type</th>
+                                        <th style="width: 110px;line-height: 15px;">Citizen ID/ Registration ID</th>
+                                        <th style="width: 80px;line-height: 15px;">จำนวนการสืบค้นข้อมูลในช่วง 6 เดือน</th>
+                                        <th style="width: 80px;line-height: 15px;">การชำระหนี้ ณ ปัจจุบัน</th>
+                                        <th style="width: 80px;line-height: 15px;">ประวัติการชำระหนี้</th>
+                                        <th style="width: 80px;line-height: 15px;">ประวัติการเป็นหนี้ NPL</th>
+                                        <th style="width: 80px;line-height: 15px;">ประวัติการทำ TDR</th>
+                                        <th style="width: 250px;line-height: 15px;">เงื่อนไขการชำระหนี้ TDR</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center" style="line-height: 15px">1</td>
+                                        <td class="center" style="line-height: 15px">Mr.A Example</td>
+                                        <td class="center" style="line-height: 15px">Individual</td>
+                                        <td class="center" style="line-height: 15px">312320123123</td>
+                                        <td class="center result_green" style="line-height: 15px">3</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center" style="line-height: 15px">2</td>
+                                        <td class="center" style="line-height: 15px">Mr.B Example</td>
+                                        <td class="center" style="line-height: 15px">Individual</td>
+                                        <td class="center" style="line-height: 15px">412420124124</td>
+                                        <td class="center result_green" style="line-height: 15px">1</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center result_green" style="line-height: 15px">GREEN</td>
+                                        <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="bottom_line"></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="resources/footer.xhtml"/>
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>
