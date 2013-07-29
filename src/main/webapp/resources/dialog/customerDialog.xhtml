@@ -22,7 +22,7 @@
                         <option>Co-Borrower</option>
                         <option>Owner of collateral</option>
                     </select>
-                    <input type="checkbox">Main Borrower</input>
+                    <!--<input type="checkbox">Main Borrower</input>-->
                 </td>
             </tr>
             <tr>
@@ -130,13 +130,14 @@
         </tr>
         <tr>
             <td class="title">Approx. Income :</td>
-            <td colspan="3"><input type="text" class="medium" /> Bath/Year</td>
+            <td colspan="3"><input type="text" class="medium" /> Baht/Year</td>
         </tr>
         <tr>
             <td class="title">Marriage Status :</td>
             <td colspan="3">
-                <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
-                <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                <select class="larger">
+                    <option>- Please Select -</option>
+                </select>
             </td>
         </tr>
     </table>
@@ -240,8 +241,9 @@
             <tr>
                 <td class="title">Marriage Status :</td>
                 <td colspan="3">
-                    <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
-                    <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                    <select class="larger">
+                        <option>- Please Select -</option>
+                    </select>
                 </td>
             </tr>
         </table>
