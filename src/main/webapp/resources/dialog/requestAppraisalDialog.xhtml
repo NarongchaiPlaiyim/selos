@@ -1,0 +1,41 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <div id="request_appraisal">
+        <table class="content_form" style="width:650px;">
+            <tr>
+                <td class="title" style="width:140px;">Propose Collateral :</td>
+                <td><p:commandButton value="Add" styleClass="smaller" onclick="collateralAppraisalDlg.show();"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table class="table_content" style="width:660px;">
+                        <tr>
+                            <th style="width: 30px;"></th>
+                            <th style="width: 180px;">Collateral Type</th>
+                            <th style="width: 120px;">Credit Type</th>
+                            <th style="width: 120px;">Mortgage Type</th>
+                            <th style="width: 90px;">Value</th>
+                            <th style="width: 120px;">Mortgage Value</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Core asset</td>
+                            <td class="center">OD</td>
+                            <td></td>
+                            <td class="right">1,500,000</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="center" style="margin-top: 20px; padding-bottom: 10px;">
+        <p:commandButton value="Submit" styleClass="small" onclick="customerDlg.hide()"/>
+        <p:commandButton value="Cancel" styleClass="small" onclick="customerDlg.hide()"/>
+    </div>
+</ui:composition>

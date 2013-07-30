@@ -37,7 +37,7 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <td class="title">Product Program :</td>
                     <td>
                         <select class="larger">
@@ -46,9 +46,9 @@
                             <option>Top Up Bancassurance</option>
                         </select>
                     </td>
-                </tr>
+                </tr>-->
                 <tr>
-                    <td class="title">Facility <!--<span class="require-field">*</span>--> :</td>
+                    <td class="title">Product Program <!--<span class="require-field">*</span>--> :</td>
                     <td>
                         <p:commandButton value="Add" styleClass="smaller" onclick="facilityDlg.show();" />
                     </td>
@@ -66,8 +66,8 @@
                             </tr>
                             <tr>
                                 <td class="center">1</td>
-                                <td class="center">SmartBiz</td>
                                 <td class="center">TMB SME SmartBiz</td>
+                                <td class="center">Loan</td>
                                 <td class="right">2,000,000</td>
                                 <td class="option">
                                     <p:commandButton icon="ui-icon-pencil" title="Edit"/>
@@ -81,53 +81,66 @@
                     <td colspan="100%"><div class="separate"><!-- --></div></td>
                 </tr>
                 <tr>
+                    <td class="title">Expected submission date :</td>
+                    <td>
+                        <p:calendar value="#{calendarBean.date3}" id="submitDate" pattern="dd/MM/yyyy" showOn="button" />
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td class="title">Type of customer :</td>
+                    <td>
+                        <input type="radio" id="customer_new" name="customertype" checked="true"/><label for="customer_new">New</label>
+                        <input type="radio" id="customer_exist" name="customertype"/><label for="customer_exist">Existing</label>
+                    </td>
+                </tr>-->
+                <tr>
                     <td class="title">Customer Information :</td>
                     <td>
                         <p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()" />
                     </td>
                 </tr>
+
                 <tr>
                     <td class="title top">Borrower :</td>
                     <td>
                         <table class="table_content" cellpadding="0" cellspacing="0">
                             <tr>
                                 <th style="width:30px;"></th>
-                                <th style="width:100px;">Main Borrower</th>
-                                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
-                                <th style="width:90px;">Customer ID</th>
                                 <th style="width:210px;">Customer Name</th>
                                 <th style="width:100px;">Customer Type</th>
                                 <th style="width:30px;">Age</th>
+                                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                                <th style="width:90px;">Customer ID</th>
                                 <!--<th style="width:30px;">NCB</th>
                                 <th style="width:40px;">Eligible</th>-->
                                 <th style="width:50px;"></th>
                             </tr>
                             <tr>
                                 <td class="center">1</td>
-                                <td class="center"><input type="radio" name="mainborrower" checked="checked" disabled="disabled"/></td>
-                                <td class="center">312320123123</td>
-                                <td class="center">30232</td>
                                 <td>Mr.A Example</td>
                                 <td class="center">Individual</td>
                                 <td class="center">48</td>
-                                <!--<td class="result_red"></td>
-                                <td class="result_green"></td>-->
+                                <td class="center">312320123123</td>
+                                <td class="center">30232</td>
+                                <!--<td class="center"></td>
+                                <td class="center"></td>-->
                                 <td class="option">
                                     <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="center">2</td>
-                                <td class="center"><input type="radio" name="mainborrower" disabled="disabled"/></td>
-                                <td class="center">412420124124</td>
-                                <td class="center">30234</td>
                                 <td>Mrs.B Example</td>
                                 <td class="center">Individual</td>
                                 <td class="center">36</td>
-                                <!--<td class="result_green"></td>
-                                <td class="result_green"></td>-->
+                                <td class="center">412420124124</td>
+                                <td class="center">30234</td>
+                                <!--<td class="center"></td>
+                                <td class="center"></td>-->
                                 <td class="option">
                                     <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
                                 </td>
                             </tr>
                         </table>
@@ -142,23 +155,23 @@
                         <table class="table_content" cellpadding="0" cellspacing="0">
                             <tr>
                                 <th style="width:30px;"></th>
-                                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
-                                <th style="width:90px;">Customer ID</th>
                                 <th style="width:210px;">Customer Name</th>
                                 <th style="width:100px;">Customer Type</th>
                                 <th style="width:30px;">Age</th>
+                                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                                <th style="width:90px;">Customer ID</th>
                                 <th style="width:140px;">Relationship</th>
                                 <!--<th style="width:30px;">CSI</th>-->
                                 <th style="width:50px;"></th>
                             </tr>
                             <tr>
                                 <td class="center">1</td>
-                                <td class="center">312320123123</td>
-                                <td class="center">40432</td>
                                 <td>Mr.C Guarantor</td>
                                 <td class="center">Individual</td>
                                 <td class="center">30</td>
-                                <td class="center">Owner of collateral</td>
+                                <td class="center">312320123123</td>
+                                <td class="center">40432</td>
+                                <td class="center">Director</td>
                                 <!--<td class="result_green"></td>-->
                                 <td class="option">
                                     <p:commandButton icon="ui-icon-pencil" title="Edit"/>
@@ -177,24 +190,22 @@
                         <table class="table_content" cellpadding="0" cellspacing="0">
                             <tr>
                                 <th width="30"></th>
-                                <th width="160">Citizen ID /<br/> Registration ID</th>
-                                <th width="90">Customer ID</th>
                                 <th width="210">Customer Name</th>
                                 <th width="100">Customer Type</th>
                                 <th width="30">Age</th>
-                                <th width="120">Borrower Type</th>
-                                <th width="120">Relationship</th>
+                                <th width="160">Citizen ID /<br/> Registration ID</th>
+                                <th width="90">Customer ID</th>
+                                <th width="140">Relationship</th>
                                 <!--<th width="30">CSI</th>-->
                                 <th width="50"></th>
                             </tr>
                             <tr>
                                 <td class="center">1</td>
-                                <td class="center">312320123123</td>
-                                <td class="center">50637</td>
                                 <td>Mr.D Related</td>
                                 <td class="center">Individual</td>
                                 <td class="center">30</td>
-                                <td class="center">Related Person</td>
+                                <td class="center">312320123123</td>
+                                <td class="center">50637</td>
                                 <td class="center">Shareholders</td>
                                 <!--<td class="result_red"></td>-->
                                 <td class="option">
@@ -265,38 +276,51 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="title">Business Location :</td>
+                    <td><select class="larger"><option>- Please Select -</option></select></td>
+                </tr>
+                <tr>
                     <td class="title">Seasonal business :</td>
-                    <td><input type="checkbox" id="isSeasonalBusiness"/></td>
+                    <td>
+                        <input type="radio" id="seasonal_no" name="seasonal" checked="true"/><label for="seasonal_no">No</label>
+                        <input type="radio" id="seasonal_yes" name="seasonal"/><label for="seasonal_yes">Yes</label>
+                    </td>
                 </tr>
                 <tr>
                     <td class="title">Date of register :</td>
                     <td><input id="dateOfRegister" type="text" class="medium" value="22/06/2556"/></td>
                 </tr>
                 <tr>
-                    <td class="title">TCG :</td>
-                    <td><input type="checkbox" id="isTCG"/></td>
-                </tr>
-                <tr>
-                    <td class="title">Refinance :</td>
-                    <td><input type="checkbox" id="isRefinance"/></td>
-                </tr>
-                <tr>
-                    <td class="title">Approx. income :</td>
-                    <td><input type="text" id="approxIncome" class="medium right" value="12,000,000"/>Baht.</td>
-                </tr>
-                <tr>
                     <td class="title">Reffered company :</td>
                     <td><p:calendar value="#{calendarBean.date3}" id="popupButtonCal" pattern="dd/MM/yyyy" showOn="button" />
                         <select class="largest">
-                                <option>- Please Select -</option>
-                                <option>ทะเบียนพาณิชย์</option>
-                                <option>วันที่เริ่มบริหารกิจการ</option>
-                                <option>Business Permission</option>
-                                <option>เอกสารภาษี</option>
-                                <option>Statement ย้อนหลัง 2 ปี</option>
-                            </select>
+                            <option>- Please Select -</option>
+                            <option>ทะเบียนพาณิชย์</option>
+                            <option>วันที่เริ่มบริหารกิจการ</option>
+                            <option>Business Permission</option>
+                            <option>เอกสารภาษี</option>
+                            <option>Statement ย้อนหลัง 2 ปี</option>
+                        </select>
                     </td>
                 </tr>
+                <tr>
+                    <td class="title">TCG :</td>
+                    <td>
+                        <input type="radio" id="tcg_no" name="tcg" checked="true"/><label for="tcg_no">No</label>
+                        <input type="radio" id="tcg_yes" name="tcg"/><label for="tcg_yes">Yes</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Refinance :</td>
+                    <td>
+                        <input type="radio" id="refinance_no" name="refinance" checked="true"/><label for="refinance_no">No</label>
+                        <input type="radio" id="refinance_yes" name="refinance"/><label for="refinance_yes">Yes</label>
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td class="title">Approx. income :</td>
+                    <td><input type="text" id="approxIncome" class="medium right" value="12,000,000"/>Baht.</td>
+                </tr>-->
                 <tr>
                     <td class="title">Collateral :</td>
                     <td>
@@ -347,7 +371,7 @@
                     <td colspan="100%" class="title">Existing Credit</td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td class="title top">Borrower :</td>
                     <td>
                         <table class="table_content">
                             <tr>
@@ -370,10 +394,33 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="title top">Related :</td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="120">Product program</th>
+                                <th width="110">Facility</th>
+                                <th width="90">Interest</th>
+                                <th width="90">Limit</th>
+                                <th width="90">Outstanding</th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">TMB SME SmartBiz</td>
+                                <td class="center">Loan</td>
+                                <td class="center">MLR +2.00</td>
+                                <td class="right">300,000</td>
+                                <td class="right">100,000</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="100%" class="title">Existing Collateral</td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td class="title top">Borrower :</td>
                     <td>
                         <table class="table_content">
                             <tr>
@@ -392,8 +439,8 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                <!--<tr>
+                    <td colspan="100%"><div class="separate">&lt;!&ndash; &ndash;&gt;</div></td>
                 </tr>
                 <tr>
                     <td colspan="100%" class="title">Prescreen Result :</td>
@@ -498,7 +545,7 @@
                             </tr>
                         </table>
                     </td>
-                </tr>
+                </tr>-->
                 <tr><td colspan="100%"><p:spacer width="5"/></td></tr>
                 <tr>
                     <td class="center" colspan="100%">
@@ -555,6 +602,11 @@
                 >
             <ui:include src="resources/dialog/customerDialog.xhtml" />
         </p:dialog>
+        <p:dialog id="requestAppraisalDialog" header="Request Appraisal" widgetVar="requestAppraisalDlg"
+                      modal="true" width="700"
+                    >
+                <ui:include src="resources/dialog/requestAppraisalDialog.xhtml" />
+            </p:dialog>
         <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg"
                 modal="true"
                 >
@@ -586,7 +638,7 @@
         <p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
                   modal="true">
             <table class="content_form">
-                <tr>
+                <!--<tr>
                     <td class="title">Business Type :</td>
                     <td>
                         <select class="largest">
@@ -595,7 +647,7 @@
                             <option>Manufacturing business</option>
                         </select>
                     </td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td class="title">Business Group :</td>
                     <td>
@@ -617,15 +669,81 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title">Business Code :</td>
+                    <td class="title">Comment :</td>
                     <td class="left">
-                        <input type="text" class="large" value="CD010001"/>
+                        <input type="text" class="large" value="ผ่าน "/>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2" class="center">
                         <p:commandButton value="Save" styleClass="small" onclick="businessDlg.hide()"/>
                         <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
+                    </td>
+                </tr>
+            </table>
+        </p:dialog>
+        <p:dialog id="collateralAppraisalDialog" header="Collateral Information" widgetVar="collateralAppraisalDlg"
+                  modal="true" width="470">
+            <table class="content_form" style="width:420px;">
+                <tr>
+                    <td colspan="2" class="title left">Collateral Information </td>
+                </tr>
+                <tr>
+                    <td style="width: 160px;" class="title right">ศักยภาพหลักประกัน :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">ประเภทหลักประกัน :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">กรรมสิทธิ์ :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">ความเกี่ยวพัน :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">เลขที่ :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">ที่อยู่ :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td class="title right">หมายเหตุ :</td>
+                    <td><input type="text" class="large"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="title left">Credit Type </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table class="table_content" style="width:400px; margin-left: 25px;">
+                            <tr>
+                                <th style="width: 30px;"></th>
+                                <th style="width: 150px;">Product Program</th>
+                                <th style="width: 110px;">Facility</th>
+                                <th style="width: 110px;">Amount</th>
+                            </tr>
+                            <tr>
+                                <td class="center"><input type="checkbox"/></td>
+                                <td class="center">TMB SME SmartBiz</td>
+                                <td class="center">Loan</td>
+                                <td class="right">2,000,000</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><p:spacer width="5"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton value="Add" styleClass="smaller"/>
+                        <p:commandButton value="Cancel" styleClass="smaller"/>
                     </td>
                 </tr>
             </table>

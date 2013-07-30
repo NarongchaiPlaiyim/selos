@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Confirmation Checklist - Fee Collection Complete</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="resources/header_logo_confirmation.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="resources/header_detail_confirmation.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="resources/menubar_confirmation.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Confirmation Checklist - Fee Collection Complete</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td><p:spacer width="5"></p:spacer></td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <table class="table_content" width="90%" align="center">
+                                    <tr>
+                                        <th>Fee Collection Complete</th>
+                                        <th>Confirm date</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title left"><p:spacer width="5"/>Confirm Fee Collection Complete</td>
+                                        <td style="width:180px;"><p:calendar id="feeCollectCalendar" pattern="dd/MM/yyyy" showOn="button"/></td>
+                                        <td style="width:70px;"><input type="checkbox"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p:spacer width="5"></p:spacer></td>
+                        </tr>
+                        <!--<tr>
+                            <td class="center">
+                                <div style="width: 90%; display:table; margin: 0 auto;">
+                                    <h2>Pricing Tiers</h2>
+                                    <table class="table_content" width="100%" align="center">
+                                        <tr>
+                                            <th>S/N</th>
+                                            <th>Tiers</th>
+                                            <th>Pricing</th>
+                                        </tr>
+                                        <tr>
+                                            <td>1</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>-->
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <p:commandButton value="Save" styleClass="medium"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="resources/footer_confirmation.xhtml" />
+            <!-- End Footer -->
+        </div>
+        <h:inputHidden id="pageId" value="checkfeecollection"/>
+    </h:body>
+</f:view>
+</html>
