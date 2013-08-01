@@ -64,11 +64,11 @@
                         </tr>
                         <tr>
                             <td class="title">ประวัติการเป็นหนี้ NPL:</td>
-                            <td><input type="radio" name="isNPL" value="Y"/> Yes <input type="radio" name="isNPL" value="N" disabled="true"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                            <td><input type="radio" name="isNPL" value="Y"/> Yes <input type="radio" name="isNPL" value="N"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
                         </tr>
                         <tr>
                             <td class="title">ประวัติการเป็นหนี้ TDR:</td>
-                            <td><input type="radio" name="isNPL" value="Y"/> Yes <input type="radio" name="isNPL" value="N" disabled="true"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                            <td><input type="radio" name="isTDR" value="Y"/> Yes <input type="radio" name="isNPL" value="N"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
                         </tr>
                         <tr>
                             <td class="title">เงื่อนไขการชำระหนี้ TDR:</td>
@@ -120,8 +120,8 @@
                                         <td class="right" style="line-height: 15px">21,100.00</td>
                                         <td class="center" style="line-height: 15px"></td>
                                         <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
                                     </tr>
@@ -137,8 +137,8 @@
                                         <td class="right" style="line-height: 15px">0.00</td>
                                         <td class="center" style="line-height: 15px"></td>
                                         <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
                                     </tr>
@@ -165,8 +165,8 @@
                                         <td class="right" style="line-height: 15px">2,100.00</td>
                                         <td class="center" style="line-height: 15px"></td>
                                         <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
                                         <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
                                     </tr>
@@ -244,27 +244,6 @@
                             <option>ไม่ค้างชำระหรือค้างชำระ 0-30</option>
                         </select></td>
                     </tr>
-                    <!--tr>
-                        <td class="title">จำนวนเดือนที่หาร :</td>
-                        <td>
-                            <select class="medium">
-                                <option> โปรดระบุ </option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="title">เดือนที่ 1 :</td>
-                        <td><input type="text" class="large right" name="date"/></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"></td>
-                    </tr-->
                     <tr>
                         <td colspan="2" class="center">
                             <p:commandButton value="Add" styleClass="small" onclick="ncbDlg.hide()"/>
