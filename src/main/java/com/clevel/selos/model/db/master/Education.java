@@ -9,17 +9,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_marriagestatus")
-public class MarriageStatus {
+@Table(name = "mst_education")
+public class Education {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "code")
+    private String code;
+    @Column(name = "nameEn")
+    private String nameEn;
+    @Column(name = "nameTh")
+    private String nameTh;
     @Column(name = "active")
     private int active;
 
-    public MarriageStatus() {
+    public Education() {
     }
 
     public int getId() {
@@ -30,12 +34,28 @@ public class MarriageStatus {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameTh() {
+        return nameTh;
+    }
+
+    public void setNameTh(String nameTh) {
+        this.nameTh = nameTh;
     }
 
     public int getActive() {
@@ -50,7 +70,9 @@ public class MarriageStatus {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("name", name).
+                append("code", code).
+                append("nameEn", nameEn).
+                append("nameTh", nameTh).
                 append("active", active).
                 toString();
     }
