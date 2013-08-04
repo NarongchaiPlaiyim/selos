@@ -1,7 +1,7 @@
 package com.clevel.selos.security;
 
-import com.clevel.selos.dao.UserDAO;
-import com.clevel.selos.model.db.User;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.Language;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

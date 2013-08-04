@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db;
+package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -9,19 +9,27 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SYS_CONFIG")
-public class Config {
+@Table(name = "mst_businesstype")
+public class BusinessType {
     @Id
-    @Column(name = "CONFIG_NAME")
+    @Column(name = "id")
+    private int id;
+    @Column(name = "name")
     private String name;
-    @Column(name = "CONFIG_VALUE")
-    private String value;
-    @Column(name = "CONFIG_DESC")
+    @Column(name = "description")
     private String description;
-    @Column(name = "CONFIG_ENABLE")
-    private int enable;
+    @Column(name = "active")
+    private int active;
 
-    public Config() {
+    public BusinessType() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -32,14 +40,6 @@ public class Config {
         this.name = name;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -48,21 +48,21 @@ public class Config {
         this.description = description;
     }
 
-    public int getEnable() {
-        return enable;
+    public int getActive() {
+        return active;
     }
 
-    public void setEnable(int enable) {
-        this.enable = enable;
+    public void setActive(int active) {
+        this.active = active;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
                 append("name", name).
-                append("value", value).
                 append("description", description).
-                append("enable", enable).
+                append("active", active).
                 toString();
     }
 }

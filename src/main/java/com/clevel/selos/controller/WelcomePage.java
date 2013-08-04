@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.dao.ConfigDAO;
-import com.clevel.selos.model.db.Config;
+import com.clevel.selos.dao.system.ConfigDAO;
+import com.clevel.selos.model.db.system.Config;
 import com.clevel.selos.system.MessageProvider;
 import org.slf4j.Logger;
 

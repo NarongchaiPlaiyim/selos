@@ -1,6 +1,7 @@
-package com.clevel.selos.dao;
+package com.clevel.selos.dao.system;
 
-import com.clevel.selos.model.db.Config;
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.system.Config;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;

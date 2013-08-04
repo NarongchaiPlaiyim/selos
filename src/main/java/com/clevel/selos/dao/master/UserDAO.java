@@ -1,6 +1,7 @@
-package com.clevel.selos.dao;
+package com.clevel.selos.dao.master;
 
-import com.clevel.selos.model.db.User;
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.master.User;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 

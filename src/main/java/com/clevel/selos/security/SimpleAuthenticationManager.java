@@ -1,7 +1,7 @@
 package com.clevel.selos.security;
 
-import com.clevel.selos.model.db.Role;
-import com.clevel.selos.model.db.User;
+import com.clevel.selos.model.db.master.Role;
+import com.clevel.selos.model.db.master.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -36,9 +36,7 @@ public class SimpleAuthenticationManager implements AuthenticationManager {
         log.debug("user to authenticate: {}",user);
         if (user.getPassword().equalsIgnoreCase(authentication.getCredentials().toString().trim())) {
             List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-            for (Role role: user.getRoles()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-            }
+            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
             return new UsernamePasswordAuthenticationToken(authentication.getName(),
                     authentication.getCredentials(), grantedAuthorities);
         }
