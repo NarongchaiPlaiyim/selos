@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Customer Information</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo_callcenter.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_callcenter.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_callcenter.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Customer Info. Summary</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td class="title top" style="padding-left:40px;">Borrower:</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left:60px;">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:210px;">Customer Name</th>
+                                        <th style="width:100px;">Customer Type</th>
+                                        <th style="width:140px;">Relationship</th>
+                                        <th style="width:30px;">Age</th>
+                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
+                                        <th style="width:90px;">Customer ID</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td>Mr.A Example</td>
+                                        <td class="center">Individual</td>
+                                        <td class="center"></td>
+                                        <td class="center">48</td>
+                                        <td class="center">312320123123</td>
+                                        <td class="center">30232</td>
+                                        <td class="option">
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('customer_record.jsf');return;"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">2</td>
+                                        <td>Mrs.B Example</td>
+                                        <td class="center">Individual</td>
+                                        <td class="center"></td>
+                                        <td class="center">36</td>
+                                        <td class="center">412420124124</td>
+                                        <td class="center">30234</td>
+                                        <td class="option">
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_juris.jsf');return;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:spacer width="2"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title top" style="padding-left:40px;">Guarantor :</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left:60px;">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:210px;">Customer Name</th>
+                                        <th style="width:100px;">Customer Type</th>
+                                        <th style="width:140px;">Relationship</th>
+                                        <th style="width:30px;">Age</th>
+                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
+                                        <th style="width:90px;">Customer ID</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td>Mr.C Guarantor</td>
+                                        <td class="center">Individual</td>
+                                        <td class="center">Owner of collateral</td>
+                                        <td class="center">30</td>
+                                        <td class="center">312320123123</td>
+                                        <td class="center">40432</td>
+                                        <td class="option">
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                            <!--p:commandButton icon="ui-icon-trash" title="Remove"/-->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colspan="100%"><p:spacer width="2" height="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title top" style="padding-left:40px;">Related :</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left:60px;">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:210px;">Customer Name</th>
+                                        <th style="width:100px;">Customer Type</th>
+                                        <th style="width:120px;">Borrower Type</th>
+                                        <th style="width:140px;">Relationship</th>
+                                        <th style="width:30px;">Age</th>
+                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
+                                        <th style="width:90px;">Customer ID</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td>Mr.D Related</td>
+                                        <td class="center">Individual</td>
+                                        <td class="center">Related Person</td>
+                                        <td class="center">Shareholders</td>
+                                        <td class="center">30</td>
+                                        <td class="center">312320123123</td>
+                                        <td class="center">50637</td>
+                                        <!--<td class="result_red"></td>-->
+                                        <td class="option">
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                            <!--p:commandButton icon="ui-icon-trash" title="Remove"/-->
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer_callcenter.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>

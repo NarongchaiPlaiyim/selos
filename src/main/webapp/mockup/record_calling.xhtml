@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Record Calling Result</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo_callcenter.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_callcenter.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_callcenter.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Customer Contract Record</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td><p:spacer width="5"></p:spacer></td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <table class="table_content" width="95%" align="center">
+                                    <tr>
+                                        <th colspan="2">Customer Contract Record</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">First Call :</td>
+                                        <td>
+                                            <table class="table_noborder">
+                                                <tr>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Time</td>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="left">
+                                                        <input type="radio" id="callcomplete_1" name="call_1"/><label for="callcomplete_1">Completed</label>
+                                                        <input type="radio" id="callnotcomplete_1" name="call_1"/><label for="callnotcomplete_2">Not Complete</label>
+                                                    </td>
+                                                    <td class="title right">Next Date/Next Time :</td>
+                                                    <td><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Reason Code :</td>
+                                                    <td><select class="medium"><option>- Please Select -</option></select></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Second Call :</td>
+                                        <td>
+                                            <table class="table_noborder">
+                                                <tr>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Time</td>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="left">
+                                                        <input type="radio" id="callcomplete_2" name="call_2"/><label for="callcomplete_2">Completed</label>
+                                                        <input type="radio" id="callnotcomplete_2" name="call_2"/><label for="callnotcomplete_2">Not Complete</label>
+                                                    </td>
+                                                    <td class="title right">Next Date/Next Time :</td>
+                                                    <td><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Reason Code :</td>
+                                                    <td><select class="medium"><option>- Please Select -</option></select></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Third Call :</td>
+                                        <td>
+                                            <table class="table_noborder">
+                                                <tr>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Time</td>
+                                                    <td class="left"><input type="text" class="smaller"/></td>
+                                                    <td class="left">
+                                                        <input type="radio" id="callcomplete_3" name="call_3"/><label for="callcomplete_3">Completed</label>
+                                                        <input type="radio" id="callnotcomplete_3" name="call_3"/><label for="callnotcomplete_3">Not Complete</label>
+                                                    </td>
+                                                    <td class="title right">Next Date/Next Time :</td>
+                                                    <td><input type="text" class="smaller"/></td>
+                                                    <td class="title right">Reason Code :</td>
+                                                    <td><select class="medium"><option>- Please Select -</option></select></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p:spacer width="5"></p:spacer></td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <p:commandButton value="Save" styleClass="medium"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer_confirmation.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Summary</title>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+</h:head>
+<h:body>
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="../resources/header_logo.xhtml"/>
+<!-- End Header Logo -->
+<!-- Start Header Detail -->
+<ui:include src="../resources/header_detail_fullapp.xhtml"/>
+<!-- End Header Detail -->
+<!-- Start Menu -->
+<ui:include src="../resources/menubar_fullapp.xhtml"/>
+<!-- End Menu -->
+<div id="content_container">
+    <div id="content_name">Executive Summary</div>
+    <div id="content">
+        <table id="content_form">
+            <tr>
+                <td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                    <span style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><p:separator/></td>
+            </tr>
+            <tr>
+                <td class="title top">Borrower:</td>
+            </tr>
+            <tr>
+                <td colspan="100%">
+                    <table class="table_content" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="width:30px;"></th>
+                            <th style="width:150px;line-height: 15px;">Customer Name</th>
+                            <th style="width:100px;line-height: 15px;">Customer Type</th>
+                            <th style="width:120px;line-height: 15px;">Borrower Type</th>
+                            <th style="width:120px;">Relationship</th>
+                            <th style="width:80px;">%Share</th>
+                            <th style="width:30px;">Age</th>
+                            <th style="width:130px;line-height: 15px;">Citizen ID /<br/> Registration ID</th>
+                            <th style="width:80px;line-height: 15px;">Cust ID</th>
+                            <th style="width:70px;">KYC</th>
+                            <th style="width:80px;line-height: 15px;">CPIC Code</th>
+                            <th style="width:80px;">Datamart</th>
+                            <th style="width:80px;">Covenant</th>
+                            <th style="width:80px;">EWS</th>
+                            <th style="width:80px;">Review</th>
+                            <th style="width:80px;">Reason</th>
+                            <th style="width:80px;line-height: 15px;">Credit Worthiness</th>
+                        </tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td style="width:150px;line-height: 15px">Mr.A Example</td>
+                            <td class="center">Individual</td>
+                            <td class="center">ผู้กู้</td>
+                            <td class="center">-</td>
+                            <td class="center">#.##</td>
+                            <td class="center">48</td>
+                            <td class="center">312320123123</td>
+                            <td class="center">30232</td>
+                            <td class="center">1</td>
+                            <td class="center result_green" style="width:90px;line-height: 15px">No Data</td>
+                            <td class="center result_green">GREEN</td>
+                            <td class="center">-</td>
+                            <td class="center">No</td>
+                            <td class="center">Yes</td>
+                            <td class="center">-</td>
+                            <td class="center result_green">GREEN</td>
+                        </tr>
+                        <tr>
+                            <td class="center">2</td>
+                            <td style="width:150px;line-height: 15px">Mrs.B Example</td>
+                            <td class="center">Individual</td>
+                            <td class="center">ผู้กู้</td>
+                            <td class="center">-</td>
+                            <td class="center">#.##</td>
+                            <td class="center">36</td>
+                            <td class="center">412420124124</td>
+                            <td class="center">30234</td>
+                            <td class="center">1</td>
+                            <td class="center result_green" style="line-height: 15px">No Data</td>
+                            <td class="center result_green">GREEN</td>
+                            <td class="center">-</td>
+                            <td class="center">No</td>
+                            <td class="center">Yes</td>
+                            <td class="center">-</td>
+                            <td class="center result_green">GREEN</td>
+                        </tr>
+                        <tr>
+                            <td class="center">3</td>
+                            <td style="width: 150px; line-height: 15px">Mr.C Guarantor</td>
+                            <td class="center">Individual</td>
+                            <td class="center">ผู้ค้ำ</td>
+                            <td class="center" style="line-height: 15px">Owner of collateral</td>
+                            <td class="center">#.##</td>
+                            <td class="center">30</td>
+                            <td class="center">312320123123</td>
+                            <td class="center">40432</td>
+                            <td class="center">1</td>
+                            <td class="center result_green" style="line-height: 15px">No Data</td>
+                            <td class="center result_green">GREEN</td>
+                            <td class="center">-</td>
+                            <td class="center">No</td>
+                            <td class="center">Yes</td>
+                            <td class="center">-</td>
+                            <td class="center result_green">GREEN</td>
+                        </tr>
+                        <tr>
+                            <td class="center">4</td>
+                            <td style="width: 15px;line-height: 15px">Mr.D Related</td>
+                            <td class="center">Individual</td>
+                            <td class="center" style="line-height: 15px">Related Person</td>
+                            <td class="center">Shareholders</td>
+                            <td class="center">#.##</td>
+                            <td class="center">30</td>
+                            <td class="center">312320123123</td>
+                            <td class="center">50637</td>
+                            <td class="center">1</td>
+                            <td class="center result_green" style="line-height: 15px">No Data</td>
+                            <td class="center result_green">GREEN</td>
+                            <td class="center">-</td>
+                            <td class="center">No</td>
+                            <td class="center">Yes</td>
+                            <td class="center">-</td>
+                            <td class="center result_green">GREEN</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td style="width: 150px">ชื่อสถานประกอบการ</td>
+                            <td style="width: 300px">ตัวอย่างสถานประกอบการ</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px">ที่อยู่สถานประกอบการ</td>
+                            <td style="width: 450px">ตัวอย่างสถานประกอบการ</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px">Address</td>
+                            <td style="width: 450px">-</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 150px">กรรมสิทธิ</td>
+                            <td style="width: 450px">xxxx</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" class="title" style="line-height: 15px;">กรณี Trade Finance</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th></th>
+                        <th style="width: 100px">ชื่อผู้ติดต่อ</th>
+                        <th style="width: 100px">โทรศัพท์</th>
+                        <th style="width: 200px">ศูนย์ต่างประเทศที่ใช้บริการ</th>
+                        <th style="width: 200px">ที่อยู่</th>
+                        <th style="line-height: 15px">E-mail/<br/>Import</th>
+                        <th style="line-height: 15px">E-mail/<br/>Export</th>
+                        <th style="line-height: 15px">รหัสสาขาที่ลูกค้าใช้บัญชีเงินฝาก</th>
+                        <th style="line-height: 15px">รหัสหน่วยงานที่ดูแลสาขา</th>
+                    </tr>
+                    <tr>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                        <td style="height: 10px"></td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr><td colspan="100%"><h2>Borrower Characteristic</h2></td></tr>
+            <tr><td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th rowspan="2">Customer</th>
+                    <th rowspan="2">DBR Start</th>
+                    <th rowspan="2">DBR Final</th>
+                    <th rowspan="2">(WC)/Income</th>
+                    <th rowspan="2" style="line-height: 15px">Recommend <br/>W/C Need</th>
+                    <th rowspan="2" style="line-height: 15px">Actual <br/>W/C Need</th>
+                    <th rowspan="2" style="line-height: 15px">Start Business Date</th>
+                    <th rowspan="2" style="line-height: 15px">Year in Business</th>
+                    <th colspan="2">Sale/Year</th>
+                    <th colspan="2">Group Sale</th>
+                    <th colspan="2">Group Exposure</th>
+                </tr>
+                <tr>
+                    <th>BDM</th>
+                    <th>UW</th>
+                    <th>BDM</th>
+                    <th>UW</th>
+                    <th>BDM</th>
+                    <th>UW</th>
+                </tr>
+                <tr>
+                    <td>Normal</td>
+                    <td class="result_green right">##.##</td>
+                    <td class="right">##.##</td>
+                    <td class="right">-</td>
+                    <td class="right">#.##x</td>
+                    <td class="right">-</td>
+                    <td class="center">DD/M/YYYY</td>
+                    <td class="center result_green">11Y 1M</td>
+                    <td class="right">XXX,XXX,XXX.XX</td>
+                    <td class="right">-</td>
+                    <td class="right">-</td>
+                    <td class="right">-</td>
+                    <td class="right">XXX,XXX,XXX.XX</td>
+                    <td class="right">-</td>
+                </tr>
+            </table></td></tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr><td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th rowspan="2" style="line-height: 15px;width: 100px;padding: 2px;">Net Fix Asset</th>
+                    <th rowspan="2" style="line-height: 15px;width: 80px;padding: 2px;">No. Employee</th>
+                    <th rowspan="2" style="line-height: 15px;width: 100px;padding: 2px;">Business Area</th>
+                    <th rowspan="2" style="line-height: 15px;width: 150px;padding: 2px;">Business Type</th>
+                    <th rowspan="2" style="line-height: 15px;width: 150px;padding: 2px;">Business Group</th>
+                    <th rowspan="2" style="line-height: 15px;width: 80px;padding: 2px;">Business Code</th>
+                    <th rowspan="2" style="line-height: 15px;width: 250px;padding: 2px;">Business Description</th>
+                    <th rowspan="2" style="line-height: 15px;width: 100px;padding: 2px;">การจัดชั้นหนี้ตาม Qualitative</th>
+                    <th rowspan="2" style="line-height: 15px;width: 100px;padding: 2px;">ขนาดธุรกิจ</th>
+                    <th colspan="2" style="line-height: 15px;width: 70px;padding: 2px;">Income factor(%)</th>
+                    <th rowspan="2" style="width: 40px;padding: 2px;">AR</th>
+                    <th rowspan="2" style="width: 40px;padding: 2px;">AP</th>
+                    <th rowspan="2" style="width: 40px;padding: 2px;">INV</th>
+                </tr>
+                <tr>
+                    <th>BDM</th>
+                    <th>UW</th>
+                </tr>
+                <tr>
+                    <td class="right">##,###,###.00</td>
+                    <td class="right">##</td>
+                    <td class="result_green center">Location</td>
+                    <td class="center" style="line-height: 15px;">ธุรกิจค้าปลีก</td>
+                    <td class="center" style="line-height: 15px;">Consumer Goods &amp; Services</td>
+                    <td class="center">DJ090000</td>
+                    <td class="center result_green" style="line-height: 15px;">การค้าสินค้าเบ็ดเตล็ด ซึ่งมิได้จัดประเภทไว้ที่อื่น</td>
+                    <td class="center">P</td>
+                    <td class="right">XXX,XXX,XXX.XX</td>
+                    <td class="right">##.00</td>
+                    <td class="right">#.00</td>
+                    <td class="right">##.00</td>
+                    <td class="right">##.00</td>
+                    <td class="right">##.00</td>
+                </tr>
+            </table></td></tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><span class="title">Business Operation Activity : </span> 01 - Domestic ค้าขายภายในประเทศเท่านั้น</td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><span class="title">Business Permission : </span> No</td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><span class="title">Expiry date : </span> -</td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>NCB Record</h2></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th style="width: 150px">จำนวนครั้งการสืบค้นข้อมูล</th>
+                        <th style="width: 150px">การชำระหนี้ ณ ปัจจุบัน</th>
+                        <th style="width: 150px">ประวัติการชำระหนี้</th>
+                        <th style="width: 150px">ประวัติการเป็นหนี้ NPL</th>
+                        <th style="line-height: 15px">ประวัติการเป็น TDR</th>
+                        <th style="line-height: 15px">เงื่อนไขการชำระหนี้ TDR</th>
+                        <th style="line-height: 15px">การจัดชั้นหนี้ตาม NCB</th>
+                    </tr>
+                    <tr>
+                        <td class="center result_green">2</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                        <td class="center">P</td>
+                    </tr>
+                    <tr>
+                        <td class="center result_green">0</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center result_green">GREEN</td>
+                        <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                        <td class="center">P</td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>Account Movement</h2></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th colspan="7" style="width: 150px" >Main OD Account Movement</th>
+                        <th colspan="2" style="width: 150px">All Account</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 100px" rowspan="2">OD Limit</th>
+                        <th style="width: 100px" rowspan="2">Utilization (%)</th>
+                        <th style="width: 100px" rowspan="2">Swing (%)</th>
+                        <th style="width: 150px" rowspan="2">OD Over Limit (Times)</th>
+                        <th style="width: 150px;line-height: 15px" rowspan="2">OD Over Limit (Days)</th>
+                        <th style="width: 150px;line-height: 15px" rowspan="2">Cheque Return (Times)</th>
+                        <th style="width: 100px;line-height: 15px" rowspan="2">Cash Flow</th>
+                        <th colspan="2" style="width: 150px;line-height: 15px">Trade Cheque Return</th>
+                    </tr>
+                    <tr>
+                        <th style="line-height: 15px">Amount</th>
+                        <th style="line-height: 15px">%</th>
+                    </tr>
+                    <tr>
+                        <td class="center">#,###,###.00</td>
+                        <td class="center result_green">##.00</td>
+                        <td class="center result_green">##.00</td>
+                        <td class="center result_green">##</td>
+                        <td class="center result_green">##</td>
+                        <td class="center result_green">##</td>
+                        <td class="center result_green">##,###,###.00</td>
+                        <td class="center result_green">0.00</td>
+                        <td class="center result_green">0.00</td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>Collateral</h2></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th colspan="3">หลักประกันที่นำเสนอครั้งนี้</th>
+                        <th colspan="2">สัดส่วนสินเชื่อ/หลักประกัน</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 150px">Cash Collateral</th>
+                        <th style="width: 150px">Core Asset</th>
+                        <th style="width: 150px">Non Core Asset</th>
+                        <th style="width: 150px">Maximum Limit Offer</th>
+                        <th style="width: 150px;line-height: 15px">%LTV</th>
+                    </tr>
+                    <tr>
+                        <td class="center">#,###,###.00</td>
+                        <td class="center">##.00</td>
+                        <td class="center">##.00</td>
+                        <td class="center">#,###,###.00</td>
+                        <td class="center">##.00</td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>Credit Risk Information</h2></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th style="width: 190px; line-height: 15px;">Risk Cust Type</th>
+                        <th style="width: 70px; line-height: 15px;">BOT Class</th>
+                        <th style="width: 80px; line-height: 15px;">Reason</th>
+                        <th style="width: 115px; line-height: 15px;">Last Review Date</th>
+                        <th style="width: 115px; line-height: 15px;">Next Review Date</th>
+                        <th style="width: 130px; line-height: 15px;">Extended Review Date</th>
+                        <th style="width: 130px; line-height: 15px;">Indirect Country Name</th>
+                        <th style="width: 140px; line-height: 15px;">%Export to Indirect Country</th>
+                    </tr>
+                    <tr>
+                        <td>SOMB - Small One Man Business</td>
+                        <td class="center">P</td>
+                        <td class="center"></td>
+                        <td class="center"></td>
+                        <td class="center"></td>
+                        <td class="center"></td>
+                        <td class="center"></td>
+                        <td class="center"></td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>BDM Description: Why? How to solve?</h2><p:commandButton value="Add" styleClass="small"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><table class="table_content" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th style="width: 190px; line-height: 15px;">Flag</th>
+                        <th style="width: 70px; line-height: 15px;">Topic</th>
+                        <th style="width: 80px; line-height: 15px;">Sub-Topic</th>
+                        <th style="width: 450px; line-height: 15px;">Description</th>
+                        <th style="width: 50px; line-height: 15px;"></th>
+                    </tr>
+                    <tr class="top">
+                        <td>N/A</td>
+                        <td class="center"><select class="larger">
+                            <option>Borrower &amp; Related Profile</option>
+                        </select></td>
+                        <td class="center"><input type="text" name="subTopic" value=""/></td>
+                        <td class="center"><textarea cols="80" rows="4"/></td>
+                        <td class="center"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>Business Overview and Support Decision</h2></td>
+            </tr>
+            <tr>
+                <td colspan="100%">Nature of business : ลักษณะการดำเนินธุรกิจ</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><textarea cols="100" rows="8"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%">Historical and reason of change : ประวัติการเปลียนแปลงพร้อมอธิบายเหตุผลของการเปลี่ยนแปลง</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><textarea cols="100" rows="8"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%">TMB credit history : ประวัติการใช้สินชื่อกับ TMB</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><textarea cols="100" rows="8"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%">Support reason : เหตุผล/ประเด็นสนับสนุนเพิ่มเติม</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><textarea cols="100" rows="8"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>Standard Question</h2></td>
+            </tr>
+            <tr>
+                <td style="width: 800px">RM008 : กรณีมีโกดังสินค้า แต่ไม่มีสต๊อกสินค้า หรือ ธุรกิจดังกล่าวไม่ต้องมีสต๊อกสินค้าเลย หรือกรณีที่ Standard credit term มีระบุสต๊อกแต่ลูกค้าไม่มีการเก็บสต๊อก</td>
+                <td class="right" style="padding-right: 20px"><input type="radio" name="rm008" value="OK"/> ตอบ <p:spacer width="5"/><input type="radio" name="rm008" value="OK"/> ไม่ตอบ</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><input type="text" style="width: 100%"/></td>
+            </tr>
+            <tr>
+                <td style="width: 800px">RM204 : กรณีผู้บริหารหลัก (Main Director) มีชื่ออยู่ในนิติบุคคลไม่ถึง 1 ปี ให้ชี้แจงประสบการณ์ในการทำธุรกิจที่เกี่ยวข้อง</td>
+                <td class="right" style="padding-right: 20px"><input type="radio" name="rm204" value="OK"/> ตอบ <p:spacer width="5"/><input type="radio" name="rm204" value="OK"/> ไม่ตอบ</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><input type="text" style="width: 100%"/></td>
+            </tr>
+            <tr>
+                <td style="width: 800px">RM020 : กรณีไม่สามารถนำส่งสัญญากู้ยืมมาประกอบการพิจารณา ให้ชี้แจงพร้อมนำส่งสัญญาจำนองหรือสัญญาจำนำ</td>
+                <td class="right" style="padding-right: 20px"><input type="radio" name="rm020" value="OK"/> ตอบ <p:spacer width="5"/><input type="radio" name="rm020" value="OK"/> ไม่ตอบ</td>
+            </tr>
+            <tr>
+                <td colspan="100%"><input type="text" style="width: 100%"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%" style="line-height: 15px;"><p:spacer width="2"/></td>
+            </tr>
+            <tr>
+                <td colspan="100%"><h2>##### Pending UW Decision Section #########</h2></td>
+            </tr>
+        </table>
+    </div>
+    <div class="bottom_line"></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<ui:include src="../resources/footer.xhtml"/>
+<!-- End Footer -->
+</div>
+</h:body>
+</f:view>
+</html>

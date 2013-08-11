@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Template</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_fullapp.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Basic Information</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                            <span style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>></tr>
+                        <tr>
+                            <td class="title" style="width: 150px">CA No.:</td>
+                            <td style="width: 250px">04731660051802013007</td>
+                            <td class="title" style="width: 150px">Ref CA No.:</td>
+                            <td><input type="text" value="" class="large" name="refCANo"/><p:commandButton value="View Related CA" styleClass="medium" onclick="ncbDlg.hide()"/>
+                                <p:commandButton value="Duplicate Last CA" styleClass="large" onclick="ncbDlg.hide()"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title">Request Type:</td>
+                            <td colspan=""><select name="requestType" disabled="disabled" class="largest">
+                                <option value="new">New Request</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title">Product Group :</td>
+                            <td colspan="3">
+                                <select class="largest">
+                                    <option>- Please Select -</option>
+                                    <option selected="selected">SmartBiz</option>
+                                    <option>F-Cash</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">Product Program:</td>
+                            <td colspan="3">
+                                <select class="largest">
+                                    <option>TMB SME SmartBiz</option>
+                                    <option>Top Up Bancassurance</option>
+                                </select><p:spacer width="2"/> <p:commandButton value="Add" styleClass="small"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="3"><table class="table_content" style="width: 350px" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <th style="width:30px;"></th>
+                                    <th style="width:270px;">Product Program</th>
+                                    <th style="width:50px;"></th>
+                                </tr>
+                                <tr>
+                                    <td class="center">1</td>
+                                    <td>TMB SME SmartBiz</td>
+                                    <td><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+                                </tr>
+                            </table></td>
+                        </tr>
+                        <tr>
+                            <td class="title">เข้าร่วมโครงการพิเศษหรือไม่:</td>
+                            <td colspan="3"><input type="radio" name="isSpecial" value="N"/> No <input type="radio" name="isSpecial" value="Y"/> Yes</td>
+                        </tr>
+                        <tr>
+                            <td class="title">Refinance:</td>
+                            <td colspan="3"><input type="radio" name="isSpecial" value="N"/> No <input type="radio" name="isSpecial" value="Y"/> Yes</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Financial Info.</title>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+</h:head>
+<h:body>
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="../resources/header_logo.xhtml" />
+<!-- End Header Logo -->
+<!-- Start Header Detail -->
+<ui:include src="../resources/header_detail.xhtml" />
+<!-- End Header Detail -->
+<!-- Start Menu -->
+<ui:include src="../resources/menubar_fullapp.xhtml" />
+<!-- End Menu -->
+<div id="content_container">
+<div id="content_name">Credit Facility - Propose Line</div>
+<div id="content">
+<table id="content_form">
+<tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39</td></tr>
+<tr>
+    <td colspan="2"><div class="separate"><!-- --></div></td>
+</tr>
+<tr>
+    <td colspan="2"><h2>Proposed Credit</h2></td>
+</tr>
+<tr>
+    <td colspan="2">วัตถุประสงค์ของการขอสินเชื่อต้องเหมาะสมต่อธุรกิจและประเภทสินเชื่อ</td>
+</tr>
+<tr>
+    <td colspan="2">วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ) <p:spacer width="5px"/><input type="text" class="small"/><p:spacer width="5px"/>วงเงินสูงสุด<p:spacer width="5px"/><input type="text" class="small"/></td>
+</tr>
+<tr>
+    <td colspan="2"><input type="radio" name="cusType" value="N"/> Normal <p:spacer width="5px"/><input type="radio" name="cusType" value="P"/> Prime </td>
+</tr>
+<tr>
+    <td class="left middle">Tier: <input type="text" class="smallest" value=""/><p:spacer width="5px"/><p:commandButton value="Add" styleClass="small"/></td>
+    <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width: 30px; padding-right: 2px; padding-left: 2px;"></th>
+                <th style="width: 70px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Type</th>
+                <th style="width: 70px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Refinance</th>
+                <th style="width: 150px;padding-right: 2px; padding-left: 2px;">Product Program</th>
+                <th style="width: 150px;padding-right: 2px; padding-left: 2px;">Credit Type</th>
+                <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Product code</th>
+                <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Project code</th>
+                <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Limit</th>
+                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Standard)</th>
+                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Suggest)</th>
+                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Final)</th>
+                <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Installment</th>
+                <th style="width: 80px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Tenor (Months)</th>
+                <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Front End Fee %</th>
+                <th style="width: 50px;"></th>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td class="center" rowspan="2" style="padding-right: 2px; padding-left: 2px;">1</td>
+                <td class="left" rowspan="2" style="padding-right: 2px; padding-left: 2px;"><div style="display:block;width: 70px;"><input type="radio" name="type1" value="N"/> New <br/><input type="radio" name="type1" value="C"/> Change</div></td>
+                <td class="center" rowspan="2"><input type="checkbox" value="Y" name="isRefinance"/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;">
+                    <select class="large">
+                        <option>- Please Select -</option>
+                        <option>TMB SME SmartBiz</option>
+                        <option>Top Up Bancassurance</option>
+                    </select>
+                </td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;">
+                    <select class="large">
+                        <option>Loan</option>
+                        <option>OD</option>
+                    </select>
+                </td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="productCode" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="projectCode" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px;"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="1.75"/></td>
+                <td class="option" rowspan="2" style="padding-right: 2px; padding-left: 2px;"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+            </tr>
+            <tr class="top" style="background-color: #fafafa;">
+                <td class="left" colspan="14" style="padding-top: 5px;">วัดถุประสงค์: <textarea rows="3" cols="150" name="purpose"/></td>
+            </tr>
+
+            <tr  class="top" style="background-color: #e6e6e6">
+                <td class="center" rowspan="4" style="padding-right: 2px; padding-left: 2px;">2</td>
+                <td class="left" rowspan="4" style="padding-right: 2px; padding-left: 2px;"><div style="display:block;width: 70px;"><input type="radio" name="type2" value="N"/> New <br/><input type="radio" name="type2" value="C"/> Change</div></td>
+                <td class="center" rowspan="4"><input type="checkbox" value="Y" name="isRefinance"/></td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;">
+                    <select class="large">
+                        <option>- Please Select -</option>
+                        <option>TMB SME SmartBiz</option>
+                        <option>Top Up Bancassurance</option>
+                    </select>
+                </td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;">
+                    <select class="large">
+                        <option>Loan</option>
+                        <option>OD</option>
+                    </select>
+                </td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="productCode" value=""/></td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="projectCode" value=""/></td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px;"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value=""/></td>
+                <td class="center" rowspan="3" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="1.75"/></td>
+                <td class="option" rowspan="4" style="padding-right: 2px; padding-left: 2px;"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px;"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value=""/></td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px;"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
+                    <option>MOR</option>
+                    <option>MLR</option>
+                </select></td>
+                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value=""/></td>
+            </tr>
+            <tr class="top" style="background-color: #e6e6e6;">
+                <td class="left" colspan="14" style="padding-top: 5px;">วัดถุประสงค์: <textarea rows="3" cols="150" name="purpose"/></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+            </tr>
+            <tr style="background-color: #e6e6e6;">
+                <td style="border-right: none;border-left: none"></td>
+                <td class="title left" colspan="4" style="border-right: none;border-left: none">Total Proposed Credit</td>
+                <td class="title right" style="border-left: none">#,###,###.00</td>
+                <td style="border-left: none; border-right: none" colspan="12"></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+            </tr>
+            <tr style="background-color: #e6e6e6;">
+                <td style="border-right: none;border-left: none"></td>
+                <td class="title left" colspan="4" style="border-right: none;border-left: none">Total Borrower Exposure</td>
+                <td class="title right" style="border-left: none">#,###,###.00</td>
+                <td style="border-left: none; border-right: none" colspan="12"></td>
+            </tr>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+            </tr>
+            <tr style="background-color: #e6e6e6;">
+                <td style="border-right: none;border-left: none"></td>
+                <td class="title left" colspan="4" style="border-right: none;border-left: none">Total Group Exposure</td>
+                <td class="title right" style="border-left: none">#,###,###.00</td>
+                <td style="border-left: none; border-right: none" colspan="12"></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2" style="height: 15px"><p:spacer width="2px"/></td></tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width: 150px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Product Program</th>
+                <th style="width: 150px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Commitment Fee</th>
+                <th style="width: 150px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Extension Fee</th>
+                <th style="width: 150px;padding-right: 2px; padding-left: 2px;">Prepayment Fee</th>
+                <th style="width: 150px;padding-right: 2px; padding-left: 2px;">Cancellation Fee</th>
+            </tr>
+            <tr>
+                <td class="center">TMB SME SmartBiz</td>
+                <td class="center">1.00% , -</td>
+                <td class="center">1.00% , -</td>
+                <td class="center">2.00% , 5 Years</td>
+                <td class="center">2.00% , 2 Years</td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="2"><h2>Proposed Collateral</h2></td>
+</tr>
+<tr>
+    <td colspan="2" style="line-height: 11px;" class="left">เงื่อนไขการจำนอง/จำนำ หลักประกันต้องให้ครอบคลุมวงเงินสินเชื่อและเป็นไปตามวิธีปฏิบัติของธนาคารทั้งนี้ความถูกต้องของข้อมูลและเงื่อนไขการทำนิติกรรมเป็นหน้าที่ความรับผิดชอบของ BDM</td>
+</tr>
+<tr>
+    <td colspan="2" style="line-height: 11px;" class="left">(Mortgage condition has to cover facilities and complied with bank's policy, however, all collateral information and mortgage condition are under BDM's responsibility)</td>
+</tr>
+<tr>
+    <td class="left middle"><p:commandButton value="Add" styleClass="small"/></td>
+    <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width: 30px;"></th>
+                <th style="width: 450px;">Collateral Type</th>
+                <th style="width: 150px;">Credit Type</th>
+                <th style="width: 300px;">ประเภทนิติกรรม</th>
+                <th style="width: 100px;">ราคาประมาณ</th>
+                <th style="width: 100px;">ราคาประเมิน</th>
+                <th style="width: 100px;">สินเชื่อตามเกณฑ์</th>
+                <th style="width: 100px;">จำนำ/จำนอง</th>
+                <th style="width: 50px;"></th>
+            </tr>
+            <tr class="top" style="background-color: #FAFAFA">
+                <td rowspan="2" class="center">1</td>
+                <td style="border-bottom: none"><table class="table_noborder">
+                    <tr><td>ศักยภาพหลักประกัน :</td>
+                        <td><select class="large">
+                            <option>Core Asset</option>
+                        </select></td></tr>
+                    <tr><td>ประเภทหลักประกัน :</td>
+                        <td><select style="width: 280px">
+                            <option>อาคารพาณิชย์</option>
+                        </select></td></tr>
+                    <tr><td>กรรมสิทธิ์ :</td>
+                        <td><input type="text" class="larger" value="นาย เอ ตัวอย่าง"/></td></tr>
+                    <tr><td>ความเกี่ยวพัน :</td>
+                        <td><select  style="width: 250px">
+                            <option>ผู้กู้</option>
+                        </select></td></tr>
+                    <tr><td>วันที่ประเมิน :</td>
+                        <td><input type="text" class="medium" value="05/05/2012"/></td></tr>
+                    <tr><td>เลขที่ :</td>
+                        <td><input type="text" class="medium" value="ฉ. ####, ฉ. ๒๒๒๒"/></td></tr>
+                </table></td>
+                <td class="center top"><textarea rows="5" cols="20">Smart Biz O/D , Loan</textarea></td>
+                <td class="center top">
+                    <select style="width: 280px">
+                        <option>จำนำเป็นประกัน</option>
+                    </select>
+                </td>
+                <td class="center"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center"><input type="text" class="small right" value="###,###.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##,###,###.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##,###,###.00"/></td>
+                <td class="option" rowspan="2"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <table class="table_noborder">
+                        <tr>
+                            <td>ที่อยู่ :</td>
+                            <td><input type="text" style="width: 700px" value=""/></td>
+                        </tr>
+                        <tr>
+                            <td>หมายเหตุ :</td>
+                            <td><input type="text" style="width: 700px" value=""/></td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="8"></td>
+            </tr>
+            <tr style="background-color:#e6e6e6;">
+                <td colspan="4">Total</td>
+                <td class="right">###,###.00</td>
+                <td class="right">###,###.00</td>
+                <td class="right">###,###.00</td>
+                <td class="center">##,###,###.00</td>
+                <td></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="2"><h2>Proposed Guarantor</h2></td>
+</tr>
+<tr>
+    <td class="left middle"><p:commandButton value="Add" styleClass="small"/></td>
+    <td><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width: 30px;"></th>
+                <th style="width: 270px;">Guarantor Name</th>
+                <th style="width: 150px;">Ref.</th>
+                <th style="width: 180px;">Credit Type</th>
+                <th style="width: 120px;">Limit</th>
+                <th style="width: 50px;"></th>
+            </tr>
+
+            <tr style="background-color: #fafafa">
+                <td class="center top">1</td>
+                <td class="center top"><input type="text" style="width: 250px" value="บสย."/></td>
+                <td class="center top"><input type="text" class="medium" value=""/></td>
+                <td class="center"><textarea rows="5" cols="20">Smart Biz Loan</textarea></td>
+                <td class="center top"><input type="text" class="medium right" value="##,###,###.00"/></td>
+                <td class="option top"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2"><p:spacer width="2px"/></td></tr>
+<tr><td colspan="2"><p:separator/></td></tr>
+
+<tr>
+    <td colspan="2" style="line-height: 15px;" class="title">Proposed Condition</td>
+</tr>
+<tr>
+    <td class="title" style="width:820px;"><p:commandButton value="Add" styleClass="small"/></td>
+    <td><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width:30px;"></th>
+                <th style="width:270px;">ประเภทสินเชื่อ</th>
+                <th style="width:400px;">เงื่อนไขการเบิกใช้/ผ่อนชำระ/ติดตามสินเชื่อ</th>
+                <th style="width:50px;"></th>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td class="center">1</td>
+                <td class="center"><input type="text" style="width: 250px" value=""/></td>
+                <td class="center"><input type="text" style="width: 480px" value=""/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center">2</td>
+                <td class="center"><input type="text" style="width: 250px" value=""/></td>
+                <td class="center"><input type="text" style="width: 480px" value=""/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr><td class="title" colspan="2">หลักเกณฑ์การกำกับการปล่อยสินเชื่อให้กับลูกหนี้</td></tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" style="width: 100%" cellpadding="0" cellspacing="0">
+            <tr style="background-color: #fafafa">
+                <td>การให้สินเชื่อแก่ผู้ที่เกี่ยวข้องกับธนาคาร (Related Lending)</td>
+                <td><input type="radio" name="isBankRelated" value="Y"/> เกี่ยวข้อง <p:spacer width="5px"/><input type="radio" name="isBankRelated" value="N"/> ไม่เกี่ยวข้อง </td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td>25% ของหนี้สินรวมทั้งหมดของผู้ถือหุ้นรายใหญ่หรือกิจการที่เกี่ยวข้องกับธนาคาร</td>
+                <td><input type="radio" name="is25Percent" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input type="radio" name="is25Percent" value="N"/> ไม่เกินเกณฑ์ </td>
+            </tr>
+            <tr style="background-color: #fafafa">
+                <td>หลักเกณฑ์การกำกับลูกหนี้รายใหญ่ (Single Lending Limit)</td>
+                <td><input type="radio" name="isSingleLendingLimit" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input type="radio" name="isBankRelated" value="N"/> ไม่เกินเกณฑ์ </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr>
+    <td class="title">ปรับลดราคาดอกเบี้ย/ค่าธรรมเนียม</td>
+    <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" style="width: 100%" cellpadding="0" cellspacing="0">
+            <tr style="background-color: #fafafa">
+                <td style="width: 250px">ดอกเบี้ย/ค่าธรรมเนียม ที่ขอลดตาม DOA :</td>
+                <td style="width: 160px"><input type="text" class="medium right"/> %</td>
+                <td style="width: 250px">ค่าธรรมเนียม Front End Fee ที่ขอลดตาม DOA :</td>
+                <td style="width: 160px"><input type="text" class="medium right"/> %</td>
+                <td style="width: 160px">ทุนประกันที่ทำ BA :</td>
+                <td><input type="text" class="medium right"/> %</td>
+            </tr>
+            <tr style="background-color: #fafafa">
+                <td>เหตุผลประกอบการพิจารณาขอลดดอกเบี้ย :</td>
+                <td colspan="5"><textarea cols="150" rows="3"/></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2" style="line-height: 20px"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr><td colspan="2" style="line-height: 10px"><p:spacer width="2"/></td></tr>
+<tr>
+    <td class="title">ข้อมูลประกอบสำหรับจัดทำนิติกรรมสัญญา</td>
+    <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <table class="table_content" style="width: 100%" cellpadding="0" cellspacing="0">
+            <tr style="background-color: #fafafa">
+                <td style="width: 250px">เลขที่บัญชีเงินฝากสำหรับหักค่างวดเงินกู้ :</td>
+                <td style="width: 300px"><input type="text" class="largest"/></td>
+                <td style="width: 250px">เลขที่บัญชีกระแสรายวันสำหรับหักค่าธรรมเนียม บสย. :</td>
+                <td style="width: 300px"><input type="text" class="largest"/> %</td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2" class="title">รายละเอียดบัญชีสินเชื่อและการจำนำหลักประกัน (เงินฝาก / ตั๋วแลกเงิน / พันธบัตร) <p:spacer width="5"/><p:commandButton value="Add" styleClass="small"/></td>
+</tr>
+<tr>
+    <td colspan="2" style="line-height: 10px;"><table class="table_noborder" cellpadding="0" cellspacing="0">
+        <tr>
+            <td class="right" style="line-height: 10px; width: 1410px;"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+            <td></td>
+        </tr>
+    </table></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th></th>
+            <th>ประเภทบัญชี</th>
+            <th>วันที่เปิดบัญชี/BE</th>
+            <th>สาขา</th>
+            <th>เลขที่บัญชีหลักประกัน</th>
+            <th>ประเภทเงินฝาก</th>
+            <th>ชื่อบัญชีเงินฝากที่เป็นหลักประกัน</th>
+            <th>รายการที่ (DEP)</th>
+            <th>วงเงินที่จำนำ (บาท)</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td><input type="text" class="medium"/></td>
+            <td><input type="text" class="medium"/></td>
+            <td><input type="text" class="largest"/></td>
+            <td><input type="text" class="medium"/></td>
+            <td><input type="text" class="medium"/></td>
+            <td><input type="text" class="largest"/></td>
+            <td><input type="text" class="medium"/></td>
+            <td><input type="text" class="right" value="0.00"/></td>
+            <td class="option">
+                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+            </td>
+        </tr>
+    </table></td>
+</tr>
+<tr>
+    <td colspan="2">กรณีมีมากกว่า 1 DEP ให้ระบุเลข DEP พร้อมจำนวนเงิน<p:spacer width="5"/> <input type="text" style="width: 300px;" value=""/></td>
+</tr>
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2" class="title">รายละเอียดผู้มีอำนาจลงนามการลงนามในสัญญา <p:spacer width="5"/><p:commandButton value="Add" styleClass="small"/></td>
+</tr>
+<tr>
+    <td colspan="2" style="line-height: 11px;"><table class="table_noborder">
+        <tr>
+            <td class="right" style="line-height: 11px; width: 645px;"><a style="cursor: pointer;" href="#">[View Change]</a></td>
+            <td></td>
+        </tr>
+    </table></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th>ชื่อ-นามสกุลผู้มีอำนาจลงนาม</th>
+                <th>สถานะ</th>
+                <th>ระบุชื่อคู่สมรส</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><input type="text" class="largest"/></td>
+                <td><select class="large">
+                    <option>- โปรดระบุ -</option>
+                    <option>โสด</option>
+                </select></td>
+                <td><input type="text" class="largest"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2">ลูกค้าจะลงนามสัญญาที่ <p:spacer width="5px"/><input type="radio" name="signLocation" value=""/> SME Zone <input type="radio" name="signLocation" value=""/> สาขา <input type="text" class="largest" value=""/></td>
+</tr>
+<tr>
+    <td colspan="2">ชื่อ-นามสกุล ผู้รับมอบอำนาจ (กรณีที่เจ้าของหลักประกันมอบอำนาจไปจำนอง) <input type="text" class="largest" value=""/></td>
+</tr>
+<tr>
+    <td colspan="2">ชื่อ-นามสกุลผู้รับหมาย (กรณีกรรมการเป็นชาวต่างชาติ) <input type="text" class="largest" value=""/></td>
+</tr>
+<tr><td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td></tr>
+<tr><td colspan="2"><p:separator/></td></tr>
+<tr><td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2" class="center">
+        <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+        <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+    </td>
+</tr>
+</table>
+</div>
+<div class="bottom_line"></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<ui:include src="../resources/footer.xhtml" />
+<!-- End Footer -->
+</div>
+</h:body>
+</f:view>
+</html>

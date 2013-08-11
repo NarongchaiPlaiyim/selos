@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Appraisal</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo_aad.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_aad.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_aad.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Appraisal</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%"><p:spacer width="2"/></td></tr>
+                        <tr>
+                            <td width="110"><p:spacer width="2"/></td>
+                            <td>
+                                <table class="table_content">
+                                    <tr>
+                                        <th colspan="8">CA Information.</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right" width="150">Request Type :</td>
+                                        <td colspan="7" class="left"><input type="text" class="medium" value="New Credit"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">CA No. :</td>
+                                        <td class="left"><input type="text" class="medium" value="04731660051802013007"/></td>
+                                        <td class="title right" width="130">Customer Name :</td>
+                                        <td class="left" colspan="5"><input type="text" class="larger" value="Mr.A Example"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">BDM :</td>
+                                        <td><input type="text" class="medium" value="Mr.BDM Maker"/></td>
+                                        <td class="title right">Tel. :</td>
+                                        <td><input type="text" class="medium" value="012-345-6788"/></td>
+                                        <td class="title right">Zone :</td>
+                                        <td><input type="text" class="medium" value="พหลโยธิน"/></td>
+                                        <td class="title right">Existing Customer :</td>
+                                        <td><input type="checkbox"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8">Appraisal Details</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Type :</td>
+                                        <td colspan="7">
+                                            <input type="radio" name="appraisal_type" />Internal
+                                            <p:spacer width="2"/><input type="radio" name="appraisal_type" />External
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Company :</td>
+                                        <td colspan="7">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Division :</td>
+                                        <td colspan="2">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Appraisal Name :</td>
+                                        <td colspan="4"><input type="text" class="large"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Received task Date :</td>
+                                        <td colspan="7"><input type="text" class="large" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Location of Property :</td>
+                                        <td colspan="2">
+                                            <select class="larger">
+                                                <option>Bangkok</option>
+                                                <option>Up Country</option>
+                                                <option>Complicated task</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Province of Property :</td>
+                                        <td colspan="4">
+                                            <select class="larger">
+                                                <option>- Please Select -</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Appraisal Date :</td>
+                                        <td colspan="2"><input type="text" class="large" /></td>
+                                        <td class="title right">Due Date :</td>
+                                        <td colspan="4"><input type="text" class="large" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Remark :</td>
+                                        <td colspan="7"><input type="text" style="width: 605px"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8"><span style="float:left; margin-left: 5px;">วัตถุประสงค์</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8"><p:spacer width="15" height="2"/><input type="checkbox">ขอประเมินราคาหลักทรัพย์ใหม่</input></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8"><p:spacer width="15" height="2"/><input type="checkbox">ขอทบทวนราคาประเมิน</input></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8"><span style="float:left; margin-left: 5px;">ขอทบทวนเรื่องเอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง ดังนี้.</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <table class="table_content" align="center">
+                                                <tr>
+                                                    <td colspan="2" class="title center" style="width: 450px;">สำเนาโฉนด/น.ส.3ก/น.ส.3/กรรมสิทธิ์ห้องชุด/สิทธิการเช่า</td>
+                                                    <td class="title center" style="width: 400px;">สำเนาเอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง (จำนวนฉบับที่สั่งเพิ่ม)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 60px;">ฉบับที่ 1</td>
+                                                    <td><input type="text" class="small" value="เลขที่ 19855"/></td>
+                                                    <td class="center"><input type="text" class="smallest" value="4"/> ฉบับ</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8"><span style="float:left; margin-left: 5px;">เอกสารประกอบเพื่อดำเนินการประเมินราคา ดังนี้.</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="8">
+                                            <table align="center" class="table_noborder">
+                                                <tr>
+                                                    <td colspan="2" class="left"><input type="checkbox"/>ประเภทเอกสารแสดงสิทธิ์ของที่ดิน</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="left" style="width: 480px;"><input type="checkbox"/>4.1 สำเนาโฉนด/น.ส.3ก/น.ส.3/กรรมสิทธิ์ห้องชุด/สิทธิการเช่า พร้อมสารบัญทุกหน้าที่เป็นปัจจุบัน</td>
+                                                    <td class="left" style="width: 360px;"><input type="checkbox"/>4.2 สำเนาเอกาสรแสดงกรรมสิทธิ์สิ่งปลูกสร้าง</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="left"><div style="margin-left: 20px;">โปรดระบุเลขที่โฉนด</div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div style="margin-left: 20px;">
+                                                            <table class="table_noborder">
+                                                                <tr>
+                                                                    <td class="left" style="padding-left: 10px;">ฉบับที่ 1</td>
+                                                                    <td class="left" style="width: 390px;"><input type="text" class="small" value="19825"/></td>
+                                                                    <td class="left" style="width: 200px;"><input type="checkbox"/> ตามแนบ <input type="text" class="smallest" value="4"/> ฉบับ</td>
+                                                                    <td class="left"><input type="checkbox"/> ไม่มีเป็นที่ดินเปล่า</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="left">
+                                                        <div style="margin-left: 20px;">
+                                                            <input type="checkbox">สำเนาแผนที่สังเขปที่ตั้งหลักประกัน</input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="left">
+                                                        <div style="margin-left: 20px;">
+                                                            <input type="checkbox">งบการเงินลูกค้า เป็นงบสรรพากร ปีล่าสุด</input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="left">
+                                                        <div style="margin-left: 20px;">
+                                                            <input type="checkbox">สำเนาสัญญาจะซื้อจะขาย/สัญญาซื้อขาย</input>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="left">
+                                                        <div style="margin-left: 20px;">
+                                                            <input type="checkbox">อื่นๆ</input>
+                                                            <input type="text" class="largest"/>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <!--<tr>
+                                        <td colspan="8">
+                                            <table class="table_content" align="center" style="margin-top:10px;">
+                                                <tr>
+                                                    <td class="title left" style="width:495px;"><input type="checkbox">4.1 สำเนาโฉนด/น.ส.3/กรรมสิทธิ์ห้องชุด/สิทธิการเช่า พร้อมสารบัญทุกหน้าที่เป็นปัจจุบัน</input></td>
+                                                    <td class="title left" style="width:300px;"><input type="checkbox">4.2 นำเนาเอกสารแสดงกรรมสิทธิ์สิ่งปลูกสร้าง</input></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <table class="table_noborder">
+                                                            <tr>
+                                                                <td colspan="2">โปรดระบุเลขที่โฉนด</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>ฉบับที่ 1 <input type="text"/></td>
+                                                                <td>ฉบับที่ 1 <input type="text"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><p:spacer width="20" height="5"></p:spacer>โปรดระบุเลขที่โฉนด</td>
+                                                    <td><p:spacer width="2"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><p:spacer width="30" height="5"/>ฉบับที่ 1 <input type="text" value="เลขที่ 19933"/></td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                            <span style="color:red; font-weight: bold;">Retrieving Collateral From BDM Request for AAD Appraisal...</span>
+                                        </td>
+                                    </tr>-->
+                                    <tr>
+                                        <th colspan="8"><span style="float:left; margin-left: 5px;">ข้อมุลการติดต่อลูกค้าเพื่อประเมินราคา</span></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">ผู้ติดต่อ :</td>
+                                        <td class="left"><input type="text" class="medium"/></td>
+                                        <td class="title right">เบอร์ติดต่อ :</td>
+                                        <td class="left"><input type="text" class="medium"/></td>
+                                        <td class="title right">เบอร์ติดต่อ :</td>
+                                        <td class="left" colspan="3"><input type="text" class="medium"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">ยกเลิก :</td>
+                                        <td class="left">
+                                            <select class="smaller">
+                                                <option>Y</option>
+                                                <option>N</option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">หมายเหตุ :</td>
+                                        <td class="left" colspan="5"><input type="text" class="larger"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="8">Over SLA</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Reason :</td>
+                                        <td colspan="2">
+                                            <select class="largest">
+                                                <option></option>
+                                            </select>
+                                        </td>
+                                        <td class="title right">Description :</td>
+                                        <td colspan="4"><input type="text" style="width:380px;"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><p:spacer width="2"></p:spacer></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <p:commandButton value="Save" styleClass="smaller"/>
+                                <p:commandButton value="Cancel" styleClass="smaller"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer_aad.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>

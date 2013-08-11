@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : NCB Record Detail</title>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+</h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo.xhtml"/>
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_fullapp.xhtml"/>
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_fullapp.xhtml"/>
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">NCB Record Detail</div>
+                <div id="content">
+                    <table id="content_form" style="width: 1300">
+                        <tr>
+                            <td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                                <span style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 200px" class="title">สรุปผลข้อมูล NCB:</td>
+                            <td><div style="width: 90px;height: 20px; line-height:20px;float: left;" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">วันที่ออกรายงาน:</td>
+                            <td><select class="smaller" disabled="true">
+                                <option>7</option>
+                            </select><p:spacer width="2" height="0"/><select class="smaller"  disabled="true">
+                            <option>ก.พ.</option>
+                        </select><p:spacer width="2" height="0"/><select class="smaller" disabled="true">
+                            <option>2556</option>
+                        </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title">จำนวนการสืบค้นข้อมูลในช่วง 6 เดือน:</td>
+                            <td><select class="smaller" disabled="true">
+                                <option>2</option>
+                            </select> <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">การชำระหนี้จัดอยู่ในระดับ:</td>
+                            <td><input type="text" value="P" class="larger" disabled="true"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title">การชำระหนี้ ณ ปัจจุบัน:</td>
+                            <td><input type="text" value="ไม่ค้างชำระหรือค้างชำระ 0-30 วัน" class="larger" disabled="true"/><div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">ประวัติการชำระหนี้:</td>
+                            <td><input type="text" value="ไม่ค้างชำระหรือค้างชำระ 0-30 วัน" class="larger" disabled="true"/><div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">ประวัติการเป็นหนี้ NPL:</td>
+                            <td><input type="radio" name="isNPL" value="Y"/> Yes <input type="radio" name="isNPL" value="N"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">ประวัติการเป็นหนี้ TDR:</td>
+                            <td><input type="radio" name="isTDR" value="Y"/> Yes <input type="radio" name="isNPL" value="N"/> No. <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">เงื่อนไขการชำระหนี้ TDR:</td>
+                            <td><select class="largest_m" disabled="true">
+                                <option>ไม่เคยปรับปรุงโครงสร้างหนี้</option>
+                            </select> <div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">GREEN</div></td>
+                        </tr>
+                        <tr>
+                            <td class="title">หมายเหตุ:</td>
+                            <td><textarea cols="60" rows="3" name="remark" disabled="true"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="Add" styleClass="smaller" onclick="ncbDlg.show()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table class="table_content">
+                                    <tr>
+                                        <th style="width: 25px;line-height: 15px;">No.</th>
+                                        <th style="width: 110px;line-height: 15px;">ประเภทบัญชี</th>
+                                        <th style="width: 25px;line-height: 15px;">TMB</th>
+                                        <th style="width: 70px;line-height: 15px;">สถานะบัญชี</th>
+                                        <th style="width: 90px;line-height: 15px;">ข้อมูล ณ วันที (วัน/เดือน/ปี)</th>
+                                        <th style="width: 90px;line-height: 15px;">วันที่เปิดบัญช (วัน/เดือน/ปี)</th>
+                                        <th style="width: 80px;line-height: 15px;">วงเงิน (หน่วย:บาท)</th>
+                                        <th style="width: 80px;line-height: 15px;">ภาระคงค้าง / ยอดใช้ (หน่วย:บาท)</th>
+                                        <th style="width: 80px;line-height: 15px;">ยอดชำระต่อเดือน (หน่วย:บาท)</th>
+                                        <th style="width: 100px;line-height: 15px;">วันที่ปรับปรุงโครงสร้างหนี้ (วัน/เดือน/ปี)</th>
+                                        <th style="width: 120px;line-height: 15px;">ลักษณะการชำระหนี้ ณ ปัจจุบัน</th>
+                                        <th style="width: 120px;line-height: 15px;">ลักษณะการชำระหนี้ที่ผ่านมา</th>
+                                        <th style="width: 110px;line-height: 15px;">จำนวนการค้างชำระในรอบ 12 เดือน</th>
+                                        <th style="width: 30px; line-height: 15px;">Over Limit (Times)</th>
+                                        <th style="width: 30px; line-height: 15px;">Refinance</th>
+                                    </tr>
+                                    <tr style="background-color: #dfdfdf">
+                                        <td class="center" style="line-height: 15px">1</td>
+                                        <td class="center" style="line-height: 15px">สินเชื่อบุคคล (เงินกู้)</td>
+                                        <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
+                                        <td class="center" style="line-height: 15px">ปกติ</td>
+                                        <td class="center" style="line-height: 15px">31/10/2555</td>
+                                        <td class="center" style="line-height: 15px">14/09/2555</td>
+                                        <td class="right" style="line-height: 15px">600,000.00</td>
+                                        <td class="right" style="line-height: 15px">607,809.00</td>
+                                        <td class="right" style="line-height: 15px">21,100.00</td>
+                                        <td class="center" style="line-height: 15px"></td>
+                                        <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
+                                        <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
+                                    </tr>
+                                    <tr style="background-color: #dfdfdf">
+                                        <td class="center" style="line-height: 15px">2</td>
+                                        <td class="center" style="line-height: 15px">สินเชื่อหมุนเวียนส่วนบุคคล</td>
+                                        <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
+                                        <td class="center" style="line-height: 15px">ปกติ</td>
+                                        <td class="center" style="line-height: 15px">30/11/2555</td>
+                                        <td class="center" style="line-height: 15px">08/03/2549</td>
+                                        <td class="right" style="line-height: 15px">130,000.00</td>
+                                        <td class="right" style="line-height: 15px">13,544.00</td>
+                                        <td class="right" style="line-height: 15px">0.00</td>
+                                        <td class="center" style="line-height: 15px"></td>
+                                        <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
+                                        <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
+                                    </tr>
+                                    <tr style="background-color: #ffffff">
+                                        <td class="center" style="line-height: 15px" colspan="4">จำนวนเดือนที่หาร : 4 </td>
+                                        <td colspan="11" class="center" style="line-height: 15px; padding-left: 2px; padding-right: 1px;">เดือนที่ 1 : <input type="text" class="smaller right" name="month1" disabled="true" value="2,500.00"></input>
+
+                                            เดือนที่ 2 : <input type="text" class="smaller right" name="month1" disabled="true" value="2,500.00"></input>
+                                            เดือนที่ 3 : <input type="text" class="smaller right" name="month1" disabled="true" value="2,500.00"></input>
+                                            เดือนที่ 4 : <input type="text" class="smaller right" name="month1" disabled="true" value="2,500.00"></input>
+                                            เดือนที่ 5 : <input type="text" class="smaller right" name="month1" disabled="true" value=""></input>
+                                            เดือนที่ 6 : <input type="text" class="smaller right" name="month1" disabled="true" value=""></input></td>
+
+                                    </tr>
+                                    <tr style="background-color: #dfdfdf">
+                                        <td class="center" style="line-height: 15px">3</td>
+                                        <td class="center" style="line-height: 15px">สินเชื่อบุคคล (เงินกู้)</td>
+                                        <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
+                                        <td class="center" style="line-height: 15px">ปกติ</td>
+                                        <td class="center" style="line-height: 15px">31/10/2555</td>
+                                        <td class="center" style="line-height: 15px">14/09/2555</td>
+                                        <td class="right" style="line-height: 15px">100,000.00</td>
+                                        <td class="right" style="line-height: 15px">5,809.00</td>
+                                        <td class="right" style="line-height: 15px">2,100.00</td>
+                                        <td class="center" style="line-height: 15px"></td>
+                                        <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
+                                        <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
+                                        <td class="right" style="line-height: 15px">0</td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="text" class="smallest_4s" name="overLimits"/></td>
+                                        <td class="center" style="background-color:#cae4cb;"><input type="checkbox" name="isRefinance"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="center">
+                                <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_ncbsum.jsf');return;"/>
+                                <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_ncbsum.jsf');return;"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer.xhtml"/>
+            <!-- End Footer -->
+            <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
+                      modal="true" width="520" height="300"
+                    >
+                <table class="content_form">
+                    <tr>
+                        <td class="title" style="width: 200px;">ประเภทบัญชี :</td>
+                        <td>
+                            <select class="largest">
+                                <option>-- โปรดระบุ --</option>
+                                <option>สินเชื่อเพื่อการพาณิชย์</option>
+                                <option>สินเชื่อบัตรเครดิต</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">TMB :</td>
+                        <td><input type="radio" name="isTMB" value="Y"/> Yes <input type="radio" name="isTMB" value="N"/> No</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">สถานะบัญชี :</td>
+                        <td><select class="largest">
+                            <option>-- โปรดระบุ --</option>
+                            <option>ปกติ</option>
+                            <option>พักชำระหนี้ตามนโยบายฯ</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">ข้อมูล ณ วันที่ (วัน/เดือน/ปี) :</td>
+                        <td><input type="text" class="large" name="date"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">วันที่เปิดบัญชี (วัน/เดือน/ปี) :</td>
+                        <td><input type="text" class="large" name="date"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">วงเงิน (หน่วย:บาท):</td>
+                        <td><input type="text" class="large right" name="date"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">ภาระคงค้าง / ยอดใช้ (หน่วย:บาท) :</td>
+                        <td><input type="text" class="large right" name="date"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">วันที่ปรับปรุงโครงสร้างหนี้ (วัน/เดือน/ปี) :</td>
+                        <td><input type="text" class="large" name="date"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 200px;">ลักษณะการชำระหนี้ ณ ปัจจุบัน :</td>
+                        <td><select class="largest">
+                            <option>-- โปรดระบุ --</option>
+                            <option>ยอดหนี้ไม่เกินวงเงิน</option>
+                            <option>ไม่ค้างชำระหรือค้างชำระ 0-30</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="center">
+                            <p:commandButton value="Add" styleClass="small" onclick="ncbDlg.hide()"/>
+                            <p:commandButton value="Cancel" styleClass="small" onclick="ncbDlg.hide()"/>
+                        </td>
+                    </tr>
+                </table>
+            </p:dialog>
+        </div>
+    </h:body>
+</f:view>
+</html>

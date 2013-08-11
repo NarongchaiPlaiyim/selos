@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Prescreen-Maker</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Prescreen - Maker</div>
+                <div id="content">
+                <table id="content_form">
+                <tr><td colspan="100%" class="right" style="padding-right: 10px;">[Track change]</td></tr>
+                <tr>
+                    <td class="title">Product Group :</td>
+                    <td>
+                        <select class="large">
+                            <option>SmartBiz</option>
+                            <option>F-Cash</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Product Program :</td>
+                    <td>
+                        <select class="larger">
+                            <option>TMB SME SmartBiz</option>
+                            <option>Top Up Bancassurance</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Facility <span class="require-field">*</span> :</td>
+                    <td>
+                        <p:commandButton value="Add" styleClass="smaller" onclick="facilityDlg.show();" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <p:dataTable id="resultTable" var="item" value="#{prescreenMaker.facilityList}"
+                            paginator="false" rowKey="#{item.facility}" style="width:430px;">
+
+                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                <h:outputText value="#{rowIndex+1}"/>
+                            </p:column>
+
+                            <p:column headerText="Facility" styleClass="center">
+                                <h:outputText value="#{item.facilityName}"/>
+                            </p:column>
+
+                            <p:column headerText="Request Amount" >
+                                <div class="right">
+                                    <h:outputText value="#{item.requestAmount}">
+                                        <f:convertNumber pattern = "#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="8"/>
+                                    </h:outputText>
+                                </div>
+                            </p:column>
+
+                            <p:column headerText="" styleClass="center" style="width:35px;">
+                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <table class="table_content" style="width:430px;">
+                            <tr>
+                                <th style="width: 30px;"></th>
+                                <th style="width: 170px;">Facility</th>
+                                <th style="width: 200px;">Request amount (Bath)</th>
+                                <th style="width: 50px;"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="left">Loan</td>
+                                <td class="right">2,000,000</td>
+                                <td class="option ">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr>
+                    <td class="title">Customer Information :</td>
+                    <td>
+                        <p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()" />
+                        <p:commandButton value="Pull Relationship" styleClass="large"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title top">Borrower :</td>
+                    <td>
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="160">Citizen ID /<br/> Registration ID</th>
+                                <th width="90">Customer ID</th>
+                                <th width="210">Customer Name</th>
+                                <th width="100">Customer Type</th>
+                                <th width="30">Age</th>
+                                <th width="30">NCB</th>
+                                <th width="40">Eligible</th>
+                                <th width="50"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">312320123123</td>
+                                <td class="center">30232</td>
+                                <td>Mr.xxxxxxxxxx xxxxxxxxxxx</td>
+                                <td class="center">Individual</td>
+                                <td class="center">30</td>
+                                <td class="result_green"></td>
+                                <td class="result_green"></td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="center">2</td>
+                                <td class="center">412420124124</td>
+                                <td class="center">40242</td>
+                                <td>Mrs.xxxxxxxxxx xxxxxxxxxxx</td>
+                                <td class="center">Individual</td>
+                                <td class="center">28</td>
+                                <td class="result_red"></td>
+                                <td class="result_green"></td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"></td>
+                </tr>
+                <tr>
+                    <td class="title top">Guarantor :</td>
+                    <td>
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="160">Citizen ID /<br/> Registration ID</th>
+                                <th width="90">Customer ID</th>
+                                <th width="210">Customer Name</th>
+                                <th width="100">Customer Type</th>
+                                <th width="30">Age</th>
+                                <th width="100">Relationship</th>
+                                <th width="120">Role in CA</th>
+                                <!--<th width="30">NCB</th>-->
+                                <th width="30">CSI</th>
+                                <th width="50"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">312320123123</td>
+                                <td class="center">30232</td>
+                                <td>Mr.xxxxxxxxxx xxxxxxxxx</td>
+                                <td class="center">Individual</td>
+                                <td class="center">30</td>
+                                <td class="center">Dad of borrower</td>
+                                <td class="center">Owner of collateral</td>
+                                <!--<td class="result_green"></td>-->
+                                <td class="result_green"></td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"></td>
+                </tr>
+                <tr>
+                    <td class="title top">Related :</td>
+                    <td>
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="160">Citizen ID /<br/> Registration ID</th>
+                                <th width="90">Customer ID</th>
+                                <th width="210">Customer Name</th>
+                                <th width="100">Customer Type</th>
+                                <th width="30">Age</th>
+                                <th width="100">Relationship</th>
+                                <th width="120">Role in CA</th>
+                                <!--<th width="30">NCB</th>-->
+                                <th width="30">CSI</th>
+                                <th width="50"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">312320123123</td>
+                                <td class="center">30232</td>
+                                <td>Mr.xxxxxxxxxx xxxxxxxxx</td>
+                                <td class="center">Individual</td>
+                                <td class="center">30</td>
+                                <td class="center">Dad of borrower</td>
+                                <td class="center">Owner of collateral</td>
+                                <!--<td class="result_green"></td>-->
+                                <td class="result_red"></td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr>
+                    <td class="title">Business Group :</td>
+                    <td>
+                        <select class="large">
+                            <option>Import</option>
+                            <option>Export</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Business Description :</td>
+                    <td>
+                        <select class="larger">
+                            <option>Rice</option>
+                            <option>Meat</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th width="120">Business code</th>
+                                <th width="60">Result</th>
+                                <th width="100">Deviation</th>
+                                <th width="40">ESR</th>
+                                <th width="60">Negative</th>
+                                <th width="60">High risk</th>
+                                <th width="60">Suspend</th>
+                                <th width="130">Business permission</th>
+                            </tr>
+                            <tr>
+                                <td align="center">AA001120</td>
+                                <td align="center" class="result_red">Not Pass</td>
+                                <td align="center" class="result_green">Y (F-Cash Only)</td>
+                                <td align="center">N</td>
+                                <td align="center">N</td>
+                                <td align="center">Y</td>
+                                <td align="center">Y</td>
+                                <td align="left">1.xxxxxxxxxxxxxxxx <br/>2.xxxxxxxxxxxxxxxxx</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Seasonal business :</td>
+                    <td><input type="checkbox" id="isSeasonalBusiness"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Date of register :</td>
+                    <td><input id="dateOfRegister" type="text" class="medium" value="22/06/2556"/></td>
+                </tr>
+                <tr>
+                    <td class="title">TCG :</td>
+                    <td><input type="checkbox" id="isTCG"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Refinance :</td>
+                    <td><input type="checkbox" id="isRefinance"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Approx. income :</td>
+                    <td><input type="text" id="approxIncome" class="medium right" value="40,000"/>Bath.</td>
+                </tr>
+                <tr>
+                    <td class="title">Reffered company :</td>
+                    <td><input type="checkbox" id="isRefferCompany"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Collateral :</td>
+                    <td>
+                        <p:commandButton value="Add" styleClass="small" onclick="collateralDlg.show()"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="120">Type of collateral</th>
+                                <th width="90">Value (Bath)</th>
+                                <th width="100">AAD Appraisal</th>
+                                <th width="30"></th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="left">Core asset</td>
+                                <td class="right">1,500,000</td>
+                                <td class="center"><input type="checkbox" style="margin-top:10px;"/></td>
+                                <td class="center"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!--<tr>
+                    <td colspan="100%" class="center">
+                        <input type="button" class="greenButton" value="NCB Checking / Prescreen Borrower"/>
+                        <input type="button" class="greenButton" value="Check prescreen" />
+                        <input type="button" class="greenButton" value="Closed sale" />
+                        <input type="button" class="greenButton" value="Cancel Reject CA" />
+                    </td>
+                </tr>-->
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr>
+                    <td colspan="100%" class="title">
+                        Interface result :
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Group exposure</td>
+                    <td>0 MB.</td>
+                </tr>
+                <tr>
+                    <td class="title">Group income</td>
+                    <td>55,000,150 MB.</td>
+                </tr>
+                <tr>
+                    <td class="title">Group income</td>
+                    <td>55,000,150 MB.</td>
+                </tr>
+                <tr>
+                    <td colspan="100%" class="title">Existing Credit</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="120">Product group</th>
+                                <th width="110">Facility</th>
+                                <th width="90">Interest</th>
+                                <th width="90">Limit</th>
+                                <th width="90">Outstanding</th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="center">Loan</td>
+                                <td class="center">SmartBiz</td>
+                                <td class="center">MLR +2.00</td>
+                                <td class="right">2,000,000</td>
+                                <td class="right">1,700,000</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%" class="title">Existing Collateral</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <th width="30"></th>
+                                <th width="160">Collateral</th>
+                                <th width="90">Value</th>
+                                <th width="90">Pledge</th>
+
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td class="left">Land with building</td>
+                                <td class="right">12,000,000</td>
+                                <td class="right">10,000,000</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><div class="separate"><!-- --></div></td>
+                </tr>
+                <tr>
+                    <td colspan="100%" class="title">Prescreen Result :</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <td class="title" width="160">Prescreen Result </td>
+                                <td class="result_green" width="60"></td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="padding-left: 35px;">+ Eligibility</td>
+                                <td class="result_green"></td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="padding-left: 35px;">- NCB</td>
+                                <td class="result_red"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td colspan="100%"></td></tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <table class="table_content">
+                            <tr>
+                                <td class="title" width="160">Borrower </td>
+                                <td width="110" class="center">Mr.xxxxxxxxxx</td>
+                                <td width="110" class="center">Mrs.xxxxxxxxxx</td>
+                            </tr>
+                            <tr>
+                                <td>Time of NCB Checking</td>
+                                <td class="result_green"></td>
+                                <td class="result_green"></td>
+                            </tr>
+                            <tr>
+                                <td>NPL</td>
+                                <td class="result_green"></td>
+                                <td class="result_green"></td>
+                            </tr>
+                            <tr>
+                                <td>TDR Status</td>
+                                <td class="result_green"></td>
+                                <td class="result_green"></td>
+                            </tr>
+                            <tr>
+                                <td>Delinquency Status</td>
+                                <td class="result_green"></td>
+                                <td class="result_red"></td>
+                            </tr>
+                            <tr>
+                                <td>DBR</td>
+                                <td class="result_green"></td>
+                                <td class="result_green"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr><td colspan="100%"><p:spacer width="5"/></td></tr>
+                <tr>
+                    <td class="center" colspan="100%">
+                        <p:commandButton value="Save" styleClass="large"/>
+                    </td>
+                </tr>
+                </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer.xhtml" />
+            <!-- End Footer -->
+        <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+                  modal="true" width="400" height="150"
+                >
+            <table class="content_form">
+                <tr>
+                    <td class="title" width="145">Product Program :</td>
+                    <td>
+                        <select class="largest">
+                            <option>TMB SME SmartBiz</option>
+                            <option>Top Up Bancassurance</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Facility :</td>
+                    <td>
+                        <select class="largest">
+                            <option>Loan</option>
+                            <option>OD</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Request Amount :</td>
+                    <td><input type="text" class="medium right"/> Bath.</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton value="Add" styleClass="small" onclick="facilityDlg.hide()"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="facilityDlg.hide()"/>
+                    </td>
+                </tr>
+            </table>
+        </p:dialog>
+        <p:dialog id="customerDialog" header="Customer Information" widgetVar="customerDlg"
+                modal="true" width="700"
+                >
+            <div id="customer_relation">
+                <table class="content_form" style="width:650px;">
+                    <tr>
+                        <td class="title" style="width:120px;">Customer Type :</td>
+                        <td colspan="3">
+                            <input type="radio" name="customerType" value="0" onclick="checkCustomerType(this)"/> Individual
+                            <input type="radio" name="customerType" value="1" onclick="checkCustomerType(this)"/> Juristic
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Relationship :</td>
+                        <td colspan="3">
+                            <select class="medium">
+                                <option>Borrower</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Citizen ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/><p:spacer width="5"/><p:commandButton value="Search" styleClass="medium" style="margin-top:-3px;"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Customer ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="individual_form">
+                <table class="content_form" style="width:650px;">
+                    <tr>
+                        <td class="title" style="width:120px;">Title :</td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Mr.</option>
+                                <option>Mrs.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">First Name :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Last Name :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Birth :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Age :</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Nationality :</td>
+                        <td>
+                            <select class="medium">
+                                <option>Thai</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="juristic_form" style="display: none;">
+                <table class="content_form" style="width: 650px;">
+                    <tr>
+                        <td class="title">Name :</td>
+                        <td><input type="text" style="width:300px;"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Register :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                </table>
+            </div>
+            <table class="content_form">
+                <tr>
+                    <td class="title">Address :</td>
+                    <td colspan="3"><input type="text" style="width:400px;"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        <select class="large">
+                            <option>Province</option>
+                        </select>
+                        <select class="large">
+                            <option>District</option>
+                        </select>
+                        <select class="large">
+                            <option>Sub District</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Postal Code :</td>
+                    <td colspan="3"><input type="text" class="medium"/></td>
+                </tr>
+                <tr>
+                    <td class="title">Approx. Income :</td>
+                    <td colspan="3"><input type="text" class="medium" /> Bath/Year</td>
+                </tr>
+                <tr>
+                    <td class="title">Marriage Status :</td>
+                    <td colspan="3">
+                        <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
+                        <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                    </td>
+                </tr>
+            </table>
+            <div id="spouse_information" style="display:none; margin-top: 20px;">
+                <div class="separate"><!-- --></div>
+                <table class="content_form">
+                    <tr>
+                        <td class="title">Customer Type :</td>
+                        <td colspan="3">
+                            <input type="radio" name="customerType" value="0"/> Individual
+                            <input type="radio" name="customerType" value="1"/> Juristic
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Relationship :</td>
+                        <td colspan="3">
+                            <select class="medium">
+                                <option>Borrower</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Citizen ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Customer ID :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Title :</td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Mr.</option>
+                                <option>Mrs.</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">First Name :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Last Name :</td>
+                        <td><input type="text" class="large"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Date of Birth :</td>
+                        <td><input type="text" class="large"/></td>
+                        <td class="title">Age :</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Nationality :</td>
+                        <td>
+                            <select class="medium">
+                                <option>Thai</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Address :</td>
+                        <td colspan="3"><input type="text" style="width:400px;"/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td colspan="3">
+                            <select class="large">
+                                <option>Province</option>
+                            </select>
+                            <select class="large">
+                                <option>District</option>
+                            </select>
+                            <select class="large">
+                                <option>Sub District</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">Postal Code :</td>
+                        <td colspan="3"><input type="text" class="medium"/></td>
+                    </tr>
+                    <tr>
+                        <td class="title">Approx. Income :</td>
+                        <td colspan="3"><input type="text" class="medium" /> Bath/Year</td>
+                    </tr>
+                    <tr>
+                        <td class="title">Marriage Status :</td>
+                        <td colspan="3">
+                            <input type="radio" id="status_single" name="marriageStatus" value="0" onclick="checkMarriageStatus(this)"/> Single
+                            <input type="radio" id="status_marriage" name="marriageStatus" value="1" onclick="checkMarriageStatus(this)"/> Marriage
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="center" style="margin-top: 20px; padding-bottom: 10px;">
+                <p:commandButton value="Add" styleClass="small" onclick="customerDlg.hide()"/>
+                <p:commandButton value="Cancel" styleClass="small" onclick="customerDlg.hide()"/>
+            </div>
+        </p:dialog>
+        <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg"
+                modal="true"
+                >
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width:145px;">Type Of Collateral :</td>
+                    <td>
+                        <select class="largest">
+                            <option>Core Asset</option>
+                            <option>Core non Asset</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Value :</td>
+                    <td><input type="text" class="medium right"/> Bath.</td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton value="Save" styleClass="small" onclick="collateralDlg.hide()"/>
+                        <p:commandButton value="Cancel" styleClass="small" onclick="collateralDlg.hide()"/>
+                    </td>
+                </tr>
+            </table>
+        </p:dialog>
+        </div>
+    </h:body>
+</f:view>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Prescreen-Checker</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo_checker.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_checker.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_maker.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Prescreen - Checker</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%"></td></tr>
+                        <tr>
+                            <td style="width:130px;" class="title top">Borrower Check :</td>
+                            <td>
+                                <table class="table_content">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:200px;">Borrower Name</th>
+                                        <th style="width:180px;">Citizen ID / Registration ID</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td class="left">Mr.A Example</td>
+                                        <td class="center"><input type="text" class="medium" value="12323213213"/><span class="require-field" style="margin-left:60px; position: absolute;">Invalid Citizen ID</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">2</td>
+                                        <td class="left">Mrs.B Example</td>
+                                        <td class="center"><input type="text" class="medium" value="1255123123123"/><span class="require-field" style="margin-left:60px; position: absolute;">Invalid Citizen ID</span></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer_prescreen.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>

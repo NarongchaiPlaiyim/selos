@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Registration Request Form</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+        <style type="text/css">
+            .ui-widget-header {
+                background: #3f3f3f url('../resources/images/table/table_header_bg.jpg') repeat-x;
+            }
+
+        </style>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo_callcenter.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail_callcenter.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="../resources/menubar_callcenter.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Customer Information</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td class="title" style="padding-left: 15px;">Individual (บุคคล)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table class="table_content" width="90%" align="center">
+                                    <tr>
+                                        <td class="title right">ID Type/ID No :</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                        <td class="title right">Title Type :</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Salutation :</td>
+                                        <td class="left"><input type="text" class="large"/></td>
+                                        <td class="title right">Gender :</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Thai Name :</td>
+                                        <td class="left"><input type="text" class="large"/></td>
+                                        <td class="title right">Thai Surname :</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Marital Status :</td>
+                                        <td colspan="3" class="left"><select class="medium"><option>- Please Select -</option></select></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right top">Address :</td>
+                                        <td colspan="3">
+                                            <table class="table_noborder">
+                                                <tr>
+                                                    <td class="title left">Addr. No.</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Building/Moo Baan</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Floor :</td>
+                                                    <td colspan="3" class="left"><input type="text" class="small"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Moo :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Soi :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Road :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Tumbol :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Province :</td>
+                                                    <td class="left"><select class="larger"><option>- Please Select -</option></select></td>
+                                                    <td class="title right">Amphur :</td>
+                                                    <td class="left"><select class="larger"><option>- Please Select -</option></select></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Zip Code :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Country :</td>
+                                                    <td class="left"><select class="larger"><option>- Please Select -</option></select></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right top">Contact Numbers :</td>
+                                        <td colspan="3">
+                                            <table class="table_noborder">
+                                                <tr>
+                                                    <td class="title left">Home Number :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Ext number :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">Mobile (1) :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                    <td class="title right">Mobile (2) :</td>
+                                                    <td class="left"><input type="text" class="larger"/></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title right">Spouse Name (ชื่อคู่สมรส) :</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                        <td class="title right">Spouse Surname (นามสกุลคู่สมรส)</td>
+                                        <td class="left"><input type="text" class="largest"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><p:spacer width="5"/></td>
+                        </tr>
+                        <tr>
+                            <td class="center">
+                                <p:commandButton value="Save" styleClass="medium"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="bottom_line"><!-- --></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer_callcenter.xhtml" />
+            <!-- End Footer -->
+        </div>
+    </h:body>
+</f:view>
+</html>
