@@ -17,9 +17,9 @@
 
     <!--Daily rolling file appender -->
     <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-        <!--<File>/tmp/logs/gold-server.log</File>-->
+        <!--<File>/tmp/logs/debug.log</File>-->
         <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-            <!--<FileNamePattern>/tmp/logs/gold-server.%d{yyyy-MM-dd}.log</FileNamePattern>-->
+            <!--<FileNamePattern>/tmp/logs/debug.%d{yyyy-MM-dd}.log</FileNamePattern>-->
         <!--</rollingPolicy>-->
         <!--<encoder>-->
             <!--<pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>-->
