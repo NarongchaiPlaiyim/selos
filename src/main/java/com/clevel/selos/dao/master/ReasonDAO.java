@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Stateless
-public class ReasonDAO extends GenericDAO<Reason,Integer> {
+public class ReasonDAO extends GenericDAO<Reason, Integer> {
     @Inject
     private Logger log;
 
@@ -23,7 +23,7 @@ public class ReasonDAO extends GenericDAO<Reason,Integer> {
 
     @SuppressWarnings("unchecked")
     private List<Reason> getList(ReasonType reasonType) {
-        log.debug("getList. (reasonType: {})",reasonType);
+        log.debug("getList. (reasonType: {})", reasonType);
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("active", true));

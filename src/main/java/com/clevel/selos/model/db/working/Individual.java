@@ -1,6 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.Sex;
+import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.Education;
 import com.clevel.selos.model.db.master.MaritalStatus;
 import com.clevel.selos.model.db.master.Nationality;
@@ -25,8 +25,8 @@ public class Individual {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="birth_date")
     private Date birthDate;
-    @Column(name="sex")
-    private Sex sex;
+    @Column(name="gender")
+    private Gender gender;
     @OneToOne
     @JoinColumn(name="nationality_id")
     private Nationality nationality;
@@ -69,12 +69,12 @@ public class Individual {
         this.birthDate = birthDate;
     }
 
-    public Sex getSex() {
-        return sex;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setSex(Sex sex) {
-        this.sex = sex;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Nationality getNationality() {
@@ -123,7 +123,7 @@ public class Individual {
                 append("id", id).
                 append("customer", customer).
                 append("birthDate", birthDate).
-                append("sex", sex).
+                append("gender", gender).
                 append("nationality", nationality).
                 append("education", education).
                 append("occupation", occupation).
