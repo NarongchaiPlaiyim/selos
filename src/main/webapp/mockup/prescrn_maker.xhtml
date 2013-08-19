@@ -30,73 +30,73 @@
                 <tr>
                     <td class="title">Product Group :</td>
                     <td>
-                        <select class="large">
-                            <option>SmartBiz</option>
-                            <option>F-Cash</option>
-                        </select>
+                        <h:selectOneListbox  styleClass="largest" size="1">
+                            <f:selectItem itemLabel="- Please Select -" itemValue="" />
+                            <f:selectItems value="#{prescreenMaker.productGroupList}"
+                                           var="dlgProductGroup"
+                                           itemLabel="#{dlgProductGroup.name}"
+                                           itemValue="#{dlgProductGroup.name}"/>
+                        </h:selectOneListbox>
                     </td>
                 </tr>
-                <tr>
+<!--                <tr>
                     <td class="title">Product Program :</td>
                     <td>
-                        <select class="larger">
-                            <option>TMB SME SmartBiz</option>
-                            <option>Top Up Bancassurance</option>
-                        </select>
+                        <h:selectOneListbox  id="productProgramName"  value="#{prescreenMaker.productProgramName}" size="1" styleClass="largest">
+                            <f:selectItems value="#{prescreenMaker.productProgramList}"
+                                           var="dlgProductProgram"
+                                           itemLabel="#{dlgProductProgram.name}"
+                                           itemValue="#{dlgProductProgram.id}"/>
+                        </h:selectOneListbox>
                     </td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td class="title">Facility <span class="require-field">*</span> :</td>
                     <td>
-                        <p:commandButton value="Add" styleClass="smaller" onclick="facilityDlg.show();" />
+                        <p:commandButton value="Add"
+                                         styleClass="smaller"
+                                         action="#{prescreenMaker.onClickDialog()}"
+                                         update=":facilityDlgForm"
+                                         oncomplete="facilityDlg.show();"/>
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <p:dataTable id="resultTable" var="item" value="#{prescreenMaker.facilityList}"
-                            paginator="false" rowKey="#{item.facility}" style="width:430px;">
+                        <p:panel id="tableFacility" styleClass="panel" style="width:610px;"  >
+                            <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
+                                         paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" style="width:590px;"  >
 
-                            <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
-                            </p:column>
+                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                    <h:outputText value="#{rowIndex+1}"/>
+                                </p:column>
 
-                            <p:column headerText="Facility" styleClass="center">
-                                <h:outputText value="#{item.facilityName}"/>
-                            </p:column>
+                                <p:column headerText="Facility" styleClass="center">
+                                    <h:outputText value="#{item.facilityName}"/>
+                                </p:column>
 
-                            <p:column headerText="Request Amount" >
-                                <div class="right">
-                                    <h:outputText value="#{item.requestAmount}">
-                                        <f:convertNumber pattern = "#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="8"/>
-                                    </h:outputText>
-                                </div>
-                            </p:column>
+                                <p:column headerText="Request Amount" >
+                                    <div class="right">
+                                        <h:outputText value="#{item.requestAmount}">
+                                            <f:convertNumber pattern = "#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="8"/>
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
 
-                            <p:column headerText="" styleClass="center" style="width:35px;">
-                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                            </p:column>
+                                <p:column headerText="" styleClass="center" style="width:35px;">
+                                    <p:commandButton icon = "ui-icon-pencil"
+                                                     action  = "#{prescreenMaker.onSelectedFacility(rowIndex)}"
+                                                     update=":facilityDlgForm"
+                                                     process = ":tableFacility"
+                                                     oncomplete="facilityDlg.show();"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     title="Remove"
+                                                     action  = "#{prescreenMaker.onDeleteFacility(rowIndex)}"
+                                                     update=":tableFacility"/>
+                                </p:column>
 
-                        </p:dataTable>
-
-                        <table class="table_content" style="width:430px;">
-                            <tr>
-                                <th style="width: 30px;"></th>
-                                <th style="width: 170px;">Facility</th>
-                                <th style="width: 200px;">Request amount (Bath)</th>
-                                <th style="width: 50px;"></th>
-                            </tr>
-                            <tr>
-                                <td class="center">1</td>
-                                <td class="left">Loan</td>
-                                <td class="right">2,000,000</td>
-                                <td class="option ">
-                                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                </td>
-                            </tr>
-                        </table>
+                            </p:dataTable>
+                        </p:panel>
                     </td>
                 </tr>
                 <tr>
@@ -486,42 +486,68 @@
             <!-- Start Footer -->
             <ui:include src="../resources/footer.xhtml" />
             <!-- End Footer -->
+
         <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
-                  modal="true" width="400" height="150"
-                >
-            <table class="content_form">
+                  modal="true" width="400" height="150">
+            <h:form id="facilityDlgForm">
+                <table class="content_form">
                 <tr>
                     <td class="title" width="145">Product Program :</td>
                     <td>
-                        <select class="largest">
-                            <option>TMB SME SmartBiz</option>
-                            <option>Top Up Bancassurance</option>
-                        </select>
+                        <h:selectOneListbox value="#{prescreenMaker.productProgramNameDlg}" id="productProgramNameDlg" size="1" styleClass="largest">
+                            <f:selectItems value="#{prescreenMaker.productProgramList}"
+                                           var="dlgProductProgram"
+                                           itemLabel="#{dlgProductProgram.name}"
+                                           itemValue="#{dlgProductProgram.name}"/>
+                        </h:selectOneListbox>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">Facility :</td>
                     <td>
-                        <select class="largest">
-                            <option>Loan</option>
-                            <option>OD</option>
-                        </select>
+                        <h:selectOneListbox   size="1"  styleClass="largest" id="dlgCreditTypeName" value="#{prescreenMaker.dlgCreditTypeName}">
+                            <f:selectItems value="#{prescreenMaker.creditTypeList}"
+                                           var="dlgCreditType"
+                                           itemLabel="#{dlgCreditType.name}"
+                                           itemValue="#{dlgCreditType.name}"/>
+                        </h:selectOneListbox>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">Request Amount :</td>
-                    <td><input type="text" class="medium right"/> Bath.</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.facility.requestAmount}" styleClass="medium">
+                            <f:convertNumber pattern = "#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="8"/>
+                        </p:inputText>Bath.
+                    </td>
                 </tr>
                 <tr>
                     <td colspan="2"></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="center">
-                        <p:commandButton value="Add" styleClass="small" onclick="facilityDlg.hide()"/>
+                        <p:commandButton
+                                rendered="#{prescreenMaker.modeForButton == 'add'}"
+                                id="addFacility"
+                                value="Add"
+                                styleClass="small"
+                                action="#{prescreenMaker.onAddFacility}"
+                                process=":facilityDlgForm"
+                                update=":tableFacility"
+                                oncomplete="facilityDlg.hide()"/>
+                        <p:commandButton
+                                rendered="#{prescreenMaker.modeForButton == 'edit'}"
+                                id="editFacility"
+                                value="Edit"
+                                styleClass="small"
+                                action="#{prescreenMaker.onEditFacility}"
+                                update=":tableFacility"
+                                oncomplete="facilityDlg.hide()"/>
                         <p:commandButton value="Cancel" styleClass="small" onclick="facilityDlg.hide()"/>
                     </td>
                 </tr>
             </table>
+            </h:form>
         </p:dialog>
         <p:dialog id="customerDialog" header="Customer Information" widgetVar="customerDlg"
                 modal="true" width="700"
