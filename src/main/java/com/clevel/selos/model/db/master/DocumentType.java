@@ -6,22 +6,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "mst_reason")
-public class Reason {
+@Table(name = "mst_documenttype")
+public class DocumentType {
     @Id
     @Column(name = "id")
     private int id;
-    @OneToOne
-    @JoinColumn(name="reasontype_id")
-    private ReasonType reasonType;
-    @Column(name = "code")
-    private String code;
-    @Column(name = "description",length = 400)
+    @Column(name = "description")
     private String description;
-    @Column(name = "active")
+    @OneToOne
+    @JoinColumn(name="customertype_id")
+    private CustomerType customerType;
+    @JoinColumn(name="active")
     private int active;
 
-    public Reason() {
+    public DocumentType() {
     }
 
     public int getId() {
@@ -32,28 +30,20 @@ public class Reason {
         this.id = id;
     }
 
-    public ReasonType getReasonType() {
-        return reasonType;
-    }
-
-    public void setReasonType(ReasonType reasonType) {
-        this.reasonType = reasonType;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 
     public int getActive() {
@@ -68,9 +58,8 @@ public class Reason {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("reasonType", reasonType).
-                append("code", code).
                 append("description", description).
+                append("customerType", customerType).
                 append("active", active).
                 toString();
     }

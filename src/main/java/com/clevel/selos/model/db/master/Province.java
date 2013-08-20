@@ -16,6 +16,8 @@ public class Province {
     @OneToOne
     @JoinColumn(name="region_id")
     private Region region;
+    @Column(name = "active")
+    private int active;
 
     public Province() {
     }
@@ -44,12 +46,21 @@ public class Province {
         this.region = region;
     }
 
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("code", code).
                 append("name", name).
                 append("region", region).
+                append("active", active).
                 toString();
     }
 }
