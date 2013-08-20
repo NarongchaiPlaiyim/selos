@@ -4,10 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_subdistrict")
-public class SubDistrict {
+public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")
     private int code;

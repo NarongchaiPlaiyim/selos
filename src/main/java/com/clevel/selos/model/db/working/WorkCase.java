@@ -7,12 +7,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "wrk_case")
-public class WorkCase {
+public class WorkCase implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_CASE_ID", sequenceName = "SEQ_WRK_CASE_ID", allocationSize=1)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_ID")

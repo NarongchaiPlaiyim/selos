@@ -4,10 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_sattlementstatus")
-public class SettlementStatus {
+public class SettlementStatus implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

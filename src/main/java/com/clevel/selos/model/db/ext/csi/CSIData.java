@@ -4,10 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "ext_csi")
-public class CSIData {
+public class CSIData implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_EXT_CSI_ID", sequenceName="SEQ_EXT_CSI_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_CSI_ID")

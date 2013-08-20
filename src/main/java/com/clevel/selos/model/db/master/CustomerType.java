@@ -7,10 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_customertype")
-public class CustomerType {
+public class CustomerType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
