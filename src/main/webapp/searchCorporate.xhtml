@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Welcome</title>
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
+        <script>
+            function pp(){
+                alert('gg');
+            }
+
+        </script>
+    </h:head>
+    <h:body>
+        <fieldset>
+            <legend>Search Form</legend>
+            <h:form id="he">
+
+                <h:panelGrid id="pa" columns="3">
+                    <p:outputLabel value="Register ID : "/>
+                    <p:inputText id="id" value="#{testrm.testrmView.reqId}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="id"/>
+
+                    <p:outputLabel value="Customer Type : "/>
+                    <p:inputText id="custype" value="#{testrm.testrmView.custType}" disabled="true"/>
+                    <p:message for="custype"/>
+
+                    <p:outputLabel value="Card Type : "/>
+                    <p:selectOneMenu id="cardtype" value="#{testrm.testrmView.type}" required="true" requiredMessage="Please enter Data!">
+                        <f:selectItems value="#{testrm.list}" var="c" itemLabel="#{c.name}" itemValue="#{c.value}"/>
+                    </p:selectOneMenu>
+                    <p:message for="cardtype"/>
+
+                    <p:outputLabel value="Customer ID : "/>
+                    <p:inputText id="cusid" value="#{testrm.testrmView.custId}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="cusid"/>
+
+                    <p:outputLabel value="RM Number : "/>
+                    <p:inputText id="rmnumber" value="#{testrm.testrmView.custNbr}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="rmnumber"/>
+
+                    <p:outputLabel value="Customer Name : "/>
+                    <p:inputText id="cusname" value="#{testrm.testrmView.custName}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="cusname"/>
+
+                    <p:outputLabel value="Customer Surname : "/>
+                    <p:inputText id="cussur" value="#{testrm.testrmView.custSurname}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="cussur"/>
+
+                    <p:outputLabel value="radSelectSearch : "/>
+                    <p:inputText id="radser" value="#{testrm.testrmView.custName}" required="true" requiredMessage="Please enter Data!"/>
+                    <p:message for="radser"/>
+
+                    <p:commandButton value="Search"  actionListener="#{testrm.testnaja()}" update="@form :he:pa">
+                        <!--<p:ajax  update="he"  />-->
+                    </p:commandButton>
+                    <p:commandButton value="Cancel"/>
+                </h:panelGrid>
+
+            </h:form>
+        </fieldset>
+    </h:body>
+</f:view>
+</html>
