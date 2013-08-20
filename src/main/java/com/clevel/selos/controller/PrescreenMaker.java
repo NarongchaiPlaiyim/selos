@@ -45,6 +45,7 @@ public class PrescreenMaker implements Serializable {
     private Facility facility;
     private String dlgCreditTypeName;
     private String productProgramName;
+    private String productGroupName;
     private String modeForButton;
     private int rowIndex;
     private BigDecimal dCollateralAmount;
@@ -121,7 +122,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSelectedFacility(int rowNumber) {
-        log.info("facilityList.get(row).getFacilityName()>> ", facilityList.get(rowNumber).getFacilityName());
+        log.info("facilityList.get(row).getFacilityName()>> "+ facilityList.get(rowNumber).getFacilityName());
         modeForButton = "edit";
         productProgramName = facilityList.get(rowNumber).getProductProgramName();
         dlgCreditTypeName = facilityList.get(rowNumber).getFacilityName();
@@ -133,7 +134,6 @@ public class PrescreenMaker implements Serializable {
         facilityList.get(rowIndex).setProductProgramName(productProgramName);
         facilityList.get(rowIndex).setFacilityName(dlgCreditTypeName);
         facilityList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
-        modeForButton = "add";
     }
 
     public void onDeleteFacility(int row) {
@@ -141,9 +141,11 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onClickDialog() {
+        log.info("productGroupName >> "+productGroupName);
         productProgramName = null;
         dlgCreditTypeName = null;
         facility.setRequestAmount(null);
+        modeForButton = "add";
     }
 
     public void onChangeProductGroup() {
@@ -341,5 +343,11 @@ public class PrescreenMaker implements Serializable {
         this.mode = mode;
     }
 
+    public String getProductGroupName() {
+        return productGroupName;
+    }
 
+    public void setProductGroupName(String productGroupName) {
+        this.productGroupName = productGroupName;
+    }
 }
