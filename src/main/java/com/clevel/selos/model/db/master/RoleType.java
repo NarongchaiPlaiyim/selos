@@ -3,26 +3,23 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_role")
-public class Role implements Serializable {
+@Table(name = "mst_roletype")
+public class RoleType {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
-    private String name;
     @Column(name = "description")
     private String description;
-    @OneToOne
-    @JoinColumn(name="roletype_id")
-    private RoleType roleType;
     @Column(name = "active")
     private int active;
 
-    public Role() {
+    public RoleType() {
     }
 
     public int getId() {
@@ -33,28 +30,12 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
     }
 
     public int getActive() {
@@ -69,9 +50,7 @@ public class Role implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("name", name).
                 append("description", description).
-                append("roleType", roleType).
                 append("active", active).
                 toString();
     }

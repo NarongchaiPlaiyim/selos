@@ -13,14 +13,24 @@ import java.io.Serializable;
 @Table(name = "mst_occupation")
 public class Occupation implements Serializable {
     @Id
+    @Column(name = "id")
+    private int id;
     @Column(name = "code")
-    int code;
+    private int code;
     @Column(name = "description")
-    String description;
+    private String description;
     @Column(name = "active")
-    private boolean active;
+    private int active;
 
     public Occupation() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getCode() {
@@ -39,17 +49,18 @@ public class Occupation implements Serializable {
         this.description = description;
     }
 
-    public boolean isActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
                 append("code", code).
                 append("description", description).
                 append("active", active).
