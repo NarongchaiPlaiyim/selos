@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://data.sme.tmb.com/EAISearchIndividualCustomer/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EAISearchIndividualCustomer" targetNamespace="http://data.sme.tmb.com/EAISearchIndividualCustomer/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://data.sme.tmb.com/EAISearchIndividualCustomer/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:Q1="http://data.sme.tmb.com/requestSearchIndividualCustomer" xmlns:Q2="http://data.sme.tmb.com/responseSearchIndividualCustomer">
+            <xsd:import schemaLocation="res_searchIndividualCustomer.xsd" namespace="http://data.sme.tmb.com/responseSearchIndividualCustomer"></xsd:import>
+            <xsd:import schemaLocation="req_searchIndividualCustomer.xsd" namespace="http://data.sme.tmb.com/requestSearchIndividualCustomer"></xsd:import>
+            <xsd:element name="searchIndividualCustomer">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="requestData" type="Q1:reqSearchIndividualCustomer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="searchIndividualCustomerResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="responseData" type="Q2:resSearchIndividualCustomer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="searchIndividualCustomerRequest">
+    <wsdl:part element="tns:searchIndividualCustomer" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="searchIndividualCustomerResponse">
+    <wsdl:part element="tns:searchIndividualCustomerResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="EAISearchIndividualCustomer">
+    <wsdl:operation name="searchIndividualCustomer">
+      <wsdl:input message="tns:searchIndividualCustomerRequest"/>
+      <wsdl:output message="tns:searchIndividualCustomerResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EAISearchIndividualCustomer" type="tns:EAISearchIndividualCustomer">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="searchIndividualCustomer">
+      <soap:operation soapAction="searchIndividualCustomer"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EAISearchIndividualCustomer">
+    <wsdl:port binding="tns:EAISearchIndividualCustomer" name="EAISearchIndividualCustomer">
+      <soap:address location="http://localhost:7800/EAISearchIndividualCustomer"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
