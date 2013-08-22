@@ -56,13 +56,5 @@ public class CreditType {
         this.active = active;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("active", active).
-                toString();
-    }
+
 }
