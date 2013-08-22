@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +16,9 @@ public class ProductProgram implements Serializable {
     private String name;
     @Column(name = "description")
     private String description;
+    @OneToOne
+    @JoinColumn(name="productgroup_id")
+    private ProductGroup productGroup;
     @Column(name = "active")
     private int active;
 
@@ -49,6 +49,14 @@ public class ProductProgram implements Serializable {
         this.description = description;
     }
 
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
+    }
+
     public int getActive() {
         return active;
     }
@@ -63,6 +71,7 @@ public class ProductProgram implements Serializable {
                 append("id", id).
                 append("name", name).
                 append("description", description).
+                append("productGroup", productGroup).
                 append("active", active).
                 toString();
     }
