@@ -4,33 +4,26 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_subdistrict")
-public class SubDistrict {
+public class SubDistrict implements Serializable {
     @Id
-    @Column(name = "id")
-    private int id;
     @Column(name = "code")
     private int code;
     @Column(name = "name")
     private String name;
     @OneToOne
     @JoinColumn(name="district_id")
-    District district;
+    private District district;
     @OneToOne
     @JoinColumn(name="province_id")
-    Province province;
+    private Province province;
+    @Column(name = "active")
+    private int active;
 
     public SubDistrict() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getCode() {
@@ -65,14 +58,22 @@ public class SubDistrict {
         this.province = province;
     }
 
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
                 append("code", code).
                 append("name", name).
                 append("district", district).
                 append("province", province).
+                append("active", active).
                 toString();
     }
 }

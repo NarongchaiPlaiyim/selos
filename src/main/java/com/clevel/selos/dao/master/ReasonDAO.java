@@ -8,11 +8,9 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
-@Stateless
 public class ReasonDAO extends GenericDAO<Reason, Integer> {
     @Inject
     private Logger log;

@@ -4,11 +4,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "ext_crs")
-public class CRSData {
+public class CRSData implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_EXT_CRS_ID", sequenceName="SEQ_EXT_CRS_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_CRS_ID")

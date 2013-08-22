@@ -8,12 +8,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
 @Table(name = "wrk_juristic")
-public class Juristic {
+public class Juristic implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_JURISTIC_ID", sequenceName="SEQ_WRK_JURISTIC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_JURISTIC_ID")

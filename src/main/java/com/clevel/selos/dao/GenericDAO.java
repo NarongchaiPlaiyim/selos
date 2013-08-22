@@ -15,8 +15,8 @@ import java.util.List;
 
 public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<T,ID>,Serializable {
     private Class<T> entityClass;
-    @Inject
-    private Logger log;
+//    @Inject
+//    private Logger log;
     private Session session;
     @PersistenceContext
     protected EntityManager em;
@@ -35,19 +35,19 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         this.session = session;
     }
 
-    public void setLog(Logger log) {
-        this.log = log;
-    }
+//    public void setLog(Logger log) {
+//        this.log = log;
+//    }
 
     public void setEntityClass(Class<T> T) {
         this.entityClass = T;
     }
 
-    public void setup(Session session,Class<T> T,Logger log) {
-        setSession(session);
-        setEntityClass(T);
-        setLog(log);
-    }
+//    public void setup(Session session,Class<T> T,Logger log) {
+//        setSession(session);
+//        setEntityClass(T);
+//        setLog(log);
+//    }
 
     public Class<T> getEntityClass() {
         return entityClass;

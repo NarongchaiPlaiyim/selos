@@ -6,9 +6,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Table(name = "mst_userauthorization")
-public class UserAuthorization {
+public class UserAuthorization implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

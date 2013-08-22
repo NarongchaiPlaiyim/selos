@@ -3,21 +3,22 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_role")
-public class Role {
+public class Role implements Serializable {
     @Id
     @Column(name = "id")
-    int id;
+    private int id;
     @Column(name = "name")
-    String name;
+    private String name;
     @Column(name = "description")
     private String description;
+    @OneToOne
+    @JoinColumn(name="roletype_id")
+    private RoleType roleType;
     @Column(name = "active")
     private int active;
 
@@ -48,6 +49,14 @@ public class Role {
         this.description = description;
     }
 
+    public RoleType getRoleType() {
+        return roleType;
+    }
+
+    public void setRoleType(RoleType roleType) {
+        this.roleType = roleType;
+    }
+
     public int getActive() {
         return active;
     }
@@ -62,6 +71,7 @@ public class Role {
                 append("id", id).
                 append("name", name).
                 append("description", description).
+                append("roleType", roleType).
                 append("active", active).
                 toString();
     }

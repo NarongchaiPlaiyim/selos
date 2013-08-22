@@ -4,10 +4,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_reason")
-public class Reason {
+public class Reason implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
@@ -16,7 +17,7 @@ public class Reason {
     private ReasonType reasonType;
     @Column(name = "code")
     private String code;
-    @Column(name = "description")
+    @Column(name = "description",length = 400)
     private String description;
     @Column(name = "active")
     private int active;

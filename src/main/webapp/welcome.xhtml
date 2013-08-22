@@ -52,6 +52,27 @@
             </h:form>
         </p:panel>
 
+        <p:panel id="testPanel">
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Business Group"/>
+                    <h:selectOneListbox value="#{welcomePage.selectedBusinessGroup.id}" size="1" style="width: 200px">
+                        <f:selectItems value="#{welcomePage.businessGroups}" var="bg" itemLabel="#{bg.name}"
+                                       itemValue="#{bg.id}" />
+                        <p:ajax event="change" listener="#{welcomePage.onChangeGroup}" update=":testPanel" />
+                    </h:selectOneListbox>
+                    <h:outputText value="Business Description"/>
+                    <h:selectOneListbox value="#{welcomePage.selectedBusinessDescription.id}" size="1" style="width: 200px">
+                        <f:selectItems value="#{welcomePage.businessDescriptions}" var="bd" itemLabel="#{bd.name}"
+                                       itemValue="#{bd.id}"/>
+                        <p:ajax event="change" listener="#{welcomePage.onChangeDescription}" update=":testPanel"/>
+                    </h:selectOneListbox>
+                    <h:outputText value="Text: "/>
+                    <h:outputText value="#{welcomePage.selectedText}"/>
+                </h:panelGrid>
+
+            </h:form>
+        </p:panel>
     </h:body>
 </f:view>
 </html>
