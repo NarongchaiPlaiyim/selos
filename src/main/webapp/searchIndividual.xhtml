@@ -30,7 +30,7 @@
                       <p:message for="custype"/>
 
                       <p:outputLabel value="Card Type : "/>
-                      <p:selectOneMenu id="cardtype" value="#{testrm.searchIndividual.type}" required="true" requiredMessage="Please enter Data!">
+                      <p:selectOneMenu id="cardtype" value="#{testrm.searchIndividual.type}" required="false" requiredMessage="Please enter Data!">
                             <p:ajax update="cussur" listener="#{testrm.changeListener}"/>
                            <f:selectItems value="#{testrm.list}" var="c" itemLabel="#{c.name}" itemValue="#{c.value}"  />
 

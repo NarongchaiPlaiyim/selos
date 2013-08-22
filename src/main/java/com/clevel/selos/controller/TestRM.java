@@ -8,12 +8,17 @@ import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_
 import com.tmb.sme.data.requestsearchindividualcustomer.Body;
 import com.tmb.sme.data.requestsearchindividualcustomer.Header;
 import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
+import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.List;
 
 
@@ -39,32 +44,41 @@ public class TestRM implements Serializable{
         searchIndividual = new SearchIndividual();
         searchIndividual.setCustType("P");
 
-
-
     }
+
     public void callservice(){
+        try{
+            System.out.println("callservice() requestValue : ReqId = "+searchIndividual.getReqId()+" CustType = "+searchIndividual.getCustType());
+            com.tmb.sme.data.requestsearchindividualcustomer.Header header=new Header();
+            header.setReqID(searchIndividual.getReqId());
 
-        System.out.println("callservice() requestValue : ReqId = "+searchIndividual.getReqId()+" CustType = "+searchIndividual.getCustType());
-        com.tmb.sme.data.requestsearchindividualcustomer.Header header=new Header();
-        header.setReqID(searchIndividual.getReqId());
-
-        com.tmb.sme.data.requestsearchindividualcustomer.Body  body=new Body();
-        body.setCustType(searchIndividual.getCustType());
+            com.tmb.sme.data.requestsearchindividualcustomer.Body  body=new Body();
+            body.setCustType(searchIndividual.getCustType());
 //        body.setType(searchIndividual.getType());
-        body.setType("CI");
-        body.setCustId(searchIndividual.getCustId());
-        body.setCustNbr(searchIndividual.getCustNbr());
-        body.setCustName(searchIndividual.getCustName());
-        body.setCustSurname(searchIndividual.getCustSurname());
-        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
+            body.setType("CI");
+            body.setCustId(searchIndividual.getCustId());
+            body.setCustNbr(searchIndividual.getCustNbr());
+            body.setCustName(searchIndividual.getCustName());
+            body.setCustSurname(searchIndividual.getCustSurname());
+            body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
 
-        ReqSearchIndividualCustomer reqSearch=new ReqSearchIndividualCustomer();
-        reqSearch.setHeader(header);
-        reqSearch.setBody(body);
+            ReqSearchIndividualCustomer reqSearch=new ReqSearchIndividualCustomer();
+            reqSearch.setHeader(header);
+            reqSearch.setBody(body);
 
-        EAISearchIndividualCustomer_Service service =new EAISearchIndividualCustomer_Service();
-        EAISearchIndividualCustomer port=service.getEAISearchIndividualCustomer();
-        port.searchIndividualCustomer(reqSearch);
+            URL url = new URL("/WEB-INF/wsdl/RMIndividual/EAISearchIndividualCustomer.wsdl");
+            QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer", "EAISearchIndividualCustomer");
+            EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url,qname);
+            EAISearchIndividualCustomer eaiSearchInd = service.getPort(EAISearchIndividualCustomer.class);
+            ((BindingProvider)eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY ,
+                    "http://10.175.140.18:7809/services/EAISearchIndividualCustomerCM");
+
+            ResSearchIndividualCustomer resSearch = eaiSearchInd.searchIndividualCustomer(reqSearch);
+
+        } catch (Exception ex) {
+
+        }
+
     }
 
 
