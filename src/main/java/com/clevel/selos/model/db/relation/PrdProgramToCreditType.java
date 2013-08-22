@@ -8,8 +8,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "rel_productprogram_credittype")
-public class ProductProgramToCreditType {
+@Table(name = "rel_prdprogram_credittype")
+public class PrdProgramToCreditType {
     @Id
     @Column(name = "id")
     private int id;
@@ -19,8 +19,10 @@ public class ProductProgramToCreditType {
     @OneToOne
     @JoinColumn(name="credittype_id")
     private CreditType creditType;
+    @Column(name="active")
+    private int active;
 
-    public ProductProgramToCreditType() {
+    public PrdProgramToCreditType() {
     }
 
     public int getId() {
@@ -47,12 +49,21 @@ public class ProductProgramToCreditType {
         this.creditType = creditType;
     }
 
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("productProgram", productProgram).
                 append("creditType", creditType).
+                append("active", active).
                 toString();
     }
 }
