@@ -39,7 +39,7 @@
                         </h:selectOneListbox>
                     </td>
                 </tr>
-<!--                <tr>
+                <tr>
                     <td class="title">Product Program :</td>
                     <td>
                         <h:selectOneListbox  id="productProgramName"  value="#{prescreenMaker.productProgramName}" size="1" styleClass="largest">
@@ -308,28 +308,98 @@
                 <tr>
                     <td class="title">Collateral :</td>
                     <td>
-                        <p:commandButton value="Add" styleClass="small" onclick="collateralDlg.show()"/>
+                        <p:commandButton value="Add" styleClass="small" action="#{prescreenMaker.onClearDlg}" onclick="collateralDlg.show()"/>
                     </td>
                 </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <table class="table_content">
-                            <tr>
-                                <th width="30"></th>
-                                <th width="120">Type of collateral</th>
-                                <th width="90">Value (Bath)</th>
-                                <th width="100">AAD Appraisal</th>
-                                <th width="30"></th>
-                            </tr>
-                            <tr>
-                                <td class="center">1</td>
-                                <td class="left">Core asset</td>
-                                <td class="right">1,500,000</td>
-                                <td class="center"><input type="checkbox" style="margin-top:10px;"/></td>
-                                <td class="center"><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
-                            </tr>
-                        </table>
+                        <p:panel id="tableCollateral" styleClass="panel" style="width:610px;"  >
+                            <p:dataTable id="resultTableCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
+                                         paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex" style="width:590px;"  >
+
+                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                    <h:outputText value="#{rowIndex+1}"/>
+                                </p:column>
+
+                                <p:column headerText="Collateral" styleClass="center">
+                                    <h:outputText value="#{collateral.collateralTypeName}"/>
+                                </p:column>
+
+                                <p:column headerText="Request Amount" >
+                                    <div class="right">
+                                        <h:outputText value="#{collateral.collateralAmount}">
+                                            <f:convertNumber pattern = "#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="8"/>
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+                                <p:column headerText="" styleClass="center" style="width:35px;">
+                                    <p:commandButton icon = "ui-icon-pencil"
+                                                     action  = "#{prescreenMaker.onRowCollateral(rowIndex)}"
+                                                     update=":collateralDlgForm"
+                                                     process = ":tableCollateral"
+                                                     oncomplete="collateralDlg.show();"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     title="Remove"
+                                                     action  = "#{prescreenMaker.onRemoveCollateral(rowIndex)}"
+                                                     update=":tableCollateral"/>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:panel>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg" modal="true" >
+                            <h:form id="collateralDlgForm">
+                            <table id="collateralDialogTable" class="content_form">
+                                <tr>
+                                    <td class="title" style="width:145px;">Type Of Collateral :</td>
+                                    <td>
+                                        <h:selectOneListbox size="1" styleClass="largest" id="dCollateralTypeName" value="#{prescreenMaker.dCollateralTypeName}">
+                                            <f:selectItems value="#{prescreenMaker.collateralTypeList}"    var="dlgcollateralType"
+                                                           itemLabel="#{dlgcollateralType.description}" itemValue="#{dlgcollateralType.description}"/>
+                                        </h:selectOneListbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Value :</td>
+                                    <td>
+                                        <p:inputText id="dCollateralAmount" value="#{prescreenMaker.dCollateralAmount}"/>            Bath.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="center">
+
+                                        <p:commandButton value="Add"
+                                                         rendered="#{prescreenMaker.mode == 'add'}"
+                                                         id="AddCollateral" styleClass="small"
+                                                         update=":tableCollateral,:collateralDialog"
+                                                         action="#{prescreenMaker.onAddCollateral}"
+                                                         oncomplete="collateralDlg.hide()"/>
+
+                                        <p:commandButton value="Edit"
+                                                         rendered="#{prescreenMaker.mode == 'edit'}"
+                                                         styleClass="smaller" update=":tableCollateral,:collateralDialog"
+                                                         action="#{prescreenMaker.onEditCollateral}"
+                                                         oncomplete="collateralDlg.hide();" />
+
+                                        <p:commandButton value="Cancel"  styleClass="small"   oncomplete="collateralDlg.hide()"/>
+
+                                    </td>
+                                </tr>
+                            </table>
+                            </h:form>
+                            <p:blockUI widgetVar="blockUI" block="collateralDlgForm" trigger=":collateralDlgForm:AddCollateral">
+                                LOADING<br/>
+                                <!--<p:graphicImage value="/images/ajax-loader.gif"/>-->
+                            </p:blockUI>
+                        </p:dialog>
                     </td>
                 </tr>
                 <!--<tr>
@@ -754,34 +824,7 @@
                 <p:commandButton value="Cancel" styleClass="small" onclick="customerDlg.hide()"/>
             </div>
         </p:dialog>
-        <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg"
-                modal="true"
-                >
-            <table class="content_form">
-                <tr>
-                    <td class="title" style="width:145px;">Type Of Collateral :</td>
-                    <td>
-                        <select class="largest">
-                            <option>Core Asset</option>
-                            <option>Core non Asset</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title">Value :</td>
-                    <td><input type="text" class="medium right"/> Bath.</td>
-                </tr>
-                <tr>
-                    <td colspan="2"></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="center">
-                        <p:commandButton value="Save" styleClass="small" onclick="collateralDlg.hide()"/>
-                        <p:commandButton value="Cancel" styleClass="small" onclick="collateralDlg.hide()"/>
-                    </td>
-                </tr>
-            </table>
-        </p:dialog>
+
         </div>
     </h:body>
 </f:view>
