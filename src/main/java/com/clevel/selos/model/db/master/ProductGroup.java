@@ -66,4 +66,5 @@ public class ProductGroup implements Serializable {
                 append("active", active).
                 toString();
     }
+
 }
