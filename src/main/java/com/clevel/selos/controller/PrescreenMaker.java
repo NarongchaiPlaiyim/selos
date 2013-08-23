@@ -25,19 +25,13 @@ public class PrescreenMaker implements Serializable {
     @Inject
     MessageProvider msg;
 
-    private Facility       facility;
+
     private Collateral     collateral;
     private CollateralType collateralType;
 
     private BusinessGroup       businessGroup;
     private BusinessDescription businessDescription;
     private BusinessInformation businessInformation;
-
-    private List<Facility>            facilityList;
-
-    private List<CreditType>          creditTypeList;
-    private List<ProductGroup>        productGroupList;
-    private List<ProductProgram>      productProgramList;
 
     private List<BusinessGroup>       businessGroupList;
     private List<BusinessDescription> businessDescriptionList;
@@ -104,30 +98,7 @@ public class PrescreenMaker implements Serializable {
         businessDescription.setBusinessGroup(businessGroup);
         businessInformation.setBusinessDescription(businessDescription);
 
-        if (facility == null) {
-            facility = new Facility();
-        }
 
-        if (facilityList == null) {
-            facilityList = new ArrayList<Facility>();
-        }
-
-        if (creditTypeList == null) {
-            creditTypeList = new ArrayList<CreditType>();
-        }
-
-        if (businessInformationList == null) {
-            businessInformationList = new ArrayList<BusinessInformation>();
-        }
-
-
-        if (productGroupList == null) {
-            productGroupList = new ArrayList<ProductGroup>();
-        }
-
-        if (productProgramList == null) {
-            productProgramList = new ArrayList<ProductProgram>();
-        }
 
         if (collateral == null) {
             collateral = new Collateral();
@@ -138,59 +109,7 @@ public class PrescreenMaker implements Serializable {
         }
 
         collateralTypeList      = collateralTypeDAO.findAll();
-        productProgramList      = productProgramDAO.findAll();
-        productGroupList        = productGroupDAO.findAll();
-        creditTypeList          = creditTypeDao.findAll();
         businessGroupList       = businessGroupDAO.findAll();
-    }
-
-
-    // table facility
-    public void onAddFacility() {
-
-        Facility facAdd = new Facility();
-        facAdd.setProductProgramName(productProgramName);
-        facAdd.setFacilityName(dlgCreditTypeName);
-        facAdd.setRequestAmount(facility.getRequestAmount());
-        facilityList.add(facAdd);
-
-    }
-
-    public void onSelectedFacility(int rowNumber) {
-        log.info("facilityList.get(row).getFacilityName()>> "+ facilityList.get(rowNumber).getFacilityName());
-        modeForButton = "edit";
-        productProgramName = facilityList.get(rowNumber).getProductProgramName();
-        dlgCreditTypeName = facilityList.get(rowNumber).getFacilityName();
-        facility.setRequestAmount(facilityList.get(rowNumber).getRequestAmount());
-        rowIndex = rowNumber;
-    }
-
-    public void onEditFacility() {
-        facilityList.get(rowIndex).setProductProgramName(productProgramName);
-        facilityList.get(rowIndex).setFacilityName(dlgCreditTypeName);
-        facilityList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
-    }
-
-    public void onDeleteFacility(int row) {
-        facilityList.remove(facilityList.get(row));
-    }
-
-    public void onClickDialog() {
-        log.info("productGroupName >> "+productGroupName);
-        productProgramName = null;
-        dlgCreditTypeName = null;
-        facility.setRequestAmount(null);
-        modeForButton = "add";
-    }
-
-    public void onChangeProductGroup() {
-
-        if (facilityList.size() > 0) {
-            log.info("facilityList.size()" + facilityList.size());
-        }
-//        for(int i = 0 ; i < facilityList.size() ; i++){
-//            facilityList.remove(facilityList.get(i));
-//        }
     }
 
 
@@ -383,46 +302,6 @@ public class PrescreenMaker implements Serializable {
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(businessGroup);
         log.info("onChangeBusinessGroupName size is {}",businessDescriptionList.size());
 
-    }
-
-    public List<Facility> getFacilityList() {
-        return facilityList;
-    }
-
-    public void setFacilityList(List<Facility> facilityList) {
-        this.facilityList = facilityList;
-    }
-
-    public Facility getFacility() {
-        return facility;
-    }
-
-    public void setFacility(Facility facility) {
-        this.facility = facility;
-    }
-
-    public List<CreditType> getCreditTypeList() {
-        return creditTypeList;
-    }
-
-    public void setCreditTypeList(List<CreditType> creditTypeList) {
-        this.creditTypeList = creditTypeList;
-    }
-
-    public List<ProductGroup> getProductGroupList() {
-        return productGroupList;
-    }
-
-    public void setProductGroupList(List<ProductGroup> productGroupList) {
-        this.productGroupList = productGroupList;
-    }
-
-    public List<ProductProgram> getProductProgramList() {
-        return productProgramList;
-    }
-
-    public void setProductProgramList(List<ProductProgram> productProgramList) {
-        this.productProgramList = productProgramList;
     }
 
     public String getProductProgramName() {
