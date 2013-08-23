@@ -14,9 +14,14 @@ public class RMAudit implements Serializable {
     @SequenceGenerator(name="SEQ_ADT_EXT_RM_ID", sequenceName="SEQ_ADT_EXT_RM_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_EXT_RM_ID")
     private long id;
+    @Column(name="requester", nullable=false)
+    private String requester;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="request_time", nullable=false)
     private Date requestTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="response_time")
+    private Date responseTime;
     @Column(name = "request_msg",length = 2000)
     private String requestMsg;
     @Column(name = "response_msg",length = 2000)
@@ -37,12 +42,28 @@ public class RMAudit implements Serializable {
         this.id = id;
     }
 
+    public String getRequester() {
+        return requester;
+    }
+
+    public void setRequester(String requester) {
+        this.requester = requester;
+    }
+
     public Date getRequestTime() {
         return requestTime;
     }
 
     public void setRequestTime(Date requestTime) {
         this.requestTime = requestTime;
+    }
+
+    public Date getResponseTime() {
+        return responseTime;
+    }
+
+    public void setResponseTime(Date responseTime) {
+        this.responseTime = responseTime;
     }
 
     public String getRequestMsg() {
@@ -81,7 +102,9 @@ public class RMAudit implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
+                append("requester", requester).
                 append("requestTime", requestTime).
+                append("responseTime", responseTime).
                 append("requestMsg", requestMsg).
                 append("responseMsg", responseMsg).
                 append("result", result).

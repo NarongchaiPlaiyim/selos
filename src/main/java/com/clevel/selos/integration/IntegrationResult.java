@@ -1,10 +1,10 @@
-package com.clevel.selos.model;
+package com.clevel.selos.integration;
 
-public enum InterfaceResult {
+public enum IntegrationResult {
     SUCCESS(1),FAILED(2);
     int value;
 
-    InterfaceResult(int value) {
+    IntegrationResult(int value) {
         this.value = value;
     }
 
