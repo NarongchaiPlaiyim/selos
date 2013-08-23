@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.email.template;
 
+import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.email.EmailService;
 import org.slf4j.Logger;
 
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 
 public class SimpleEmail extends EmailService {
     @Inject
+    @Integration(Integration.System.EMAIL)
     Logger log;
 
     @Inject
