@@ -1,6 +1,5 @@
 package com.clevel.selos.security;
 
-import com.clevel.selos.model.db.master.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -21,36 +20,35 @@ import java.util.List;
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class SimpleAuthenticationManager implements AuthenticationManager {
     Logger log = LoggerFactory.getLogger(SimpleAuthenticationManager.class);
-    User user;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        log.debug("authenticate: {}",user);
+        UserDetail userDetail = (UserDetail) authentication.getPrincipal();
+        log.debug("authenticate: {}",userDetail);
 
         // special user for system test, bypass all authentication.
-        if (user.getRole().getRoleType().getName().equalsIgnoreCase(RoleTypeName.SYSTEM.name())) {
+        if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.SYSTEM.name())) {
             List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-            return new UsernamePasswordAuthenticationToken(authentication.getName(),
+            grantedAuthorities.add(new SimpleGrantedAuthority(userDetail.getRole()));
+            return new UsernamePasswordAuthenticationToken(userDetail,
                     authentication.getCredentials(), grantedAuthorities);
         }
 
         // todo: authentication with ECM
-        if (user.getRole().getRoleType().getName().equalsIgnoreCase(RoleTypeName.BUSINESS.name())) {
+        if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.BUSINESS.name())) {
             List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-            return new UsernamePasswordAuthenticationToken(authentication.getName(),
+            grantedAuthorities.add(new SimpleGrantedAuthority(userDetail.getRole()));
+            return new UsernamePasswordAuthenticationToken(userDetail,
                     authentication.getCredentials(), grantedAuthorities);
         }
 
         // todo: authentication with LDAP
-        if (user.getRole().getRoleType().getName().equalsIgnoreCase(RoleTypeName.NON_BUSINESS.name())) {
+        if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.NON_BUSINESS.name())) {
             List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
-            return new UsernamePasswordAuthenticationToken(authentication.getName(),
+            grantedAuthorities.add(new SimpleGrantedAuthority(userDetail.getRole()));
+            return new UsernamePasswordAuthenticationToken(userDetail,
                     authentication.getCredentials(), grantedAuthorities);
         }
-
 
 //        if (user.getPassword().equalsIgnoreCase(authentication.getCredentials().toString().trim())) {
 //            List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
@@ -60,14 +58,6 @@ public class SimpleAuthenticationManager implements AuthenticationManager {
 //        }
 
         throw new BadCredentialsException("Bad Credentials");
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
 

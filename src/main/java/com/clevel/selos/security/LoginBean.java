@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -24,23 +25,23 @@ public class LoginBean {
     @Inject
     UserDAO userDAO;
 
-    String userName;
-    String password;
+    private String userName;
+    private String password;
 
     private SimpleAuthenticationManager authenticationManager = new SimpleAuthenticationManager();
 
     public String login() {
-        User user = userDAO.findByUserName(this.getUserName().trim());
+        User user = userDAO.findByUserName(userName.trim());
         if (user==null) {
-            log.debug("user not found in system!");
+            log.debug("user not found in system! (user: {})",userName.trim());
             return "unSecured";
         }
+        UserDetail userDetail = new UserDetail(user.getUserName(),user.getRole().getName(),user.getRole().getRoleType().getName());
         try {
-            Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
-            authenticationManager.setUser(user);
+            Authentication request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
             Authentication result = authenticationManager.authenticate(request);
             SecurityContextHolder.getContext().setAuthentication(result);
-            log.debug("login successful. (user: {})",user.getUserName());
+            log.debug("login successful. ({})",userDetail);
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             httpSession.setAttribute("language", Language.EN);
             switch (user.getRole().getRoleType().getId()) {
@@ -52,6 +53,10 @@ public class LoginBean {
             log.debug("login failed!. ({})", e.getMessage());
         }
         return "failed";
+    }
+
+    public UserDetail getUserDetail() {
+        return (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public String logout() {
