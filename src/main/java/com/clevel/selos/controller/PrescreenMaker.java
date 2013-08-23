@@ -90,7 +90,7 @@ public class PrescreenMaker implements Serializable {
     @PostConstruct
     public void onCreation() {
 
-        log.info("onCreation. x");
+        log.info("onCreation.y");
 
         modeForButton     = "add";
         modeForCollateral = "add";
