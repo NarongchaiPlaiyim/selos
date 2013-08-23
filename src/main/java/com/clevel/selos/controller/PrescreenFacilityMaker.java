@@ -135,8 +135,6 @@ public class PrescreenFacilityMaker implements Serializable {
             facilityList.removeAll(facilityList);
         }
 
-        onLoadSelectOneListbox();
-
     }
 
     public void onChangeProductProgram(){
@@ -207,7 +205,6 @@ public class PrescreenFacilityMaker implements Serializable {
     }
 
     public void onClickDialog() {
-        onLoadSelectOneListbox();
         facility.setRequestAmount(null) ;
         modeForButton = "add";
     }
