@@ -14,7 +14,6 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -31,55 +30,34 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager = new SimpleAuthenticationManager();
 
     public String login() {
-        String contextPath = "";
-        String urlPath = "";
-
         User user = userDAO.findByUserName(this.getUserName().trim());
+        if (user==null) {
+            log.debug("user not found in system!");
+            return "unSecured";
+        }
         try {
             Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
             authenticationManager.setUser(user);
             Authentication result = authenticationManager.authenticate(request);
             SecurityContextHolder.getContext().setAuthentication(result);
-            log.debug("login successful.");
+            log.debug("login successful. (user: {})",user.getUserName());
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             httpSession.setAttribute("language", Language.EN);
-            return "secured";
-//            redirect("/admin/simple.jsf");
+            switch (user.getRole().getRoleType().getId()) {
+                case 1: return RoleTypeName.SYSTEM.name();
+                case 2: return RoleTypeName.BUSINESS.name();
+                case 3: return RoleTypeName.NON_BUSINESS.name();
+            }
         } catch (AuthenticationException e) {
             log.debug("login failed!. ({})", e.getMessage());
         }
-        return "unSecured";
+        return "failed";
     }
 
     public String logout() {
         log.debug("logging out.");
         SecurityContextHolder.clearContext();
         return "loggedOut";
-//        redirect("/login.jsf");
-    }
-
-    public void checkAuthenticated() {
-        if (isLoggedIn()) {
-            log.debug("already logged in!");
-            redirect("/admin/welcome.jsf");
-        }
-    }
-
-    public void redirect(String urlPath) {
-        String contextPath = "";
-        try {
-            contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            log.debug("redirect to: {}", contextPath+urlPath);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(contextPath+urlPath);
-        } catch (IOException e) {
-            log.error("Exception while redirection! (contextPath: {}, urlPath: {})",contextPath,urlPath);
-        }
-    }
-
-
-    public boolean isLoggedIn() {
-        log.debug("isLoggedIn result is: {}",SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
-        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
     public String getUserName() {
