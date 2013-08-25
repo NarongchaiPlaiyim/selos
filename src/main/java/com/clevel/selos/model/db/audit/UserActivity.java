@@ -10,16 +10,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "adt_activity")
-public class ActivityLog implements Serializable {
+public class UserActivity implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_ADT_ACTIVITY_ID", sequenceName="SEQ_ADT_ACTIVITY_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_ACTIVITY_ID")
     private Long id;
-//    @Column(name="source_type", nullable=false)
-//    private String sourceType;
-//    @Column(name="source_module", nullable=false)
-//    private String sourceModule;
-
     @Column(name="user_id")
     private String userId;
     @Column(name="action", nullable=false)
@@ -37,10 +32,10 @@ public class ActivityLog implements Serializable {
     @Column(name="ip_address", length = 100)
     private String ipAddress;
 
-    public ActivityLog() {
+    public UserActivity() {
     }
 
-    public ActivityLog(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, String ipAddress) {
+    public UserActivity(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, String ipAddress) {
         this.userId = userId;
         this.action = action;
         this.actionDesc = actionDesc;

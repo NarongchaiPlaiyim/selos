@@ -1,8 +1,8 @@
 package com.clevel.selos.system;
 
+import com.clevel.selos.model.Language;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
