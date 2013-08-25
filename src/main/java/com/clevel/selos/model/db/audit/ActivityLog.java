@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.audit;
 
+import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -29,7 +30,8 @@ public class ActivityLog implements Serializable {
     @Column(name="action_date", nullable=false)
     private Date actionDate;
     @Column(name="result", nullable=false)
-    private String result;
+    @Enumerated(EnumType.STRING)
+    private ActionResult actionResult;
     @Column(name="result_desc", length = 500)
     private String resultDesc;
     @Column(name="ip_address", length = 100)
@@ -38,12 +40,12 @@ public class ActivityLog implements Serializable {
     public ActivityLog() {
     }
 
-    public ActivityLog(String userId, String action, String actionDesc, String result, String resultDesc, String ipAddress) {
+    public ActivityLog(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, String ipAddress) {
         this.userId = userId;
         this.action = action;
         this.actionDesc = actionDesc;
         this.actionDate = new Date();
-        this.result = result;
+        this.actionResult = actionResult;
         this.resultDesc = resultDesc;
         this.ipAddress = ipAddress;
     }
@@ -88,12 +90,12 @@ public class ActivityLog implements Serializable {
         this.actionDate = actionDate;
     }
 
-    public String getResult() {
-        return result;
+    public ActionResult getActionResult() {
+        return actionResult;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setActionResult(ActionResult actionResult) {
+        this.actionResult = actionResult;
     }
 
     public String getResultDesc() {
@@ -120,7 +122,7 @@ public class ActivityLog implements Serializable {
                 append("action", action).
                 append("actionDesc", actionDesc).
                 append("actionDate", actionDate).
-                append("result", result).
+                append("actionResult", actionResult).
                 append("resultDesc", resultDesc).
                 append("ipAddress", ipAddress).
                 toString();
