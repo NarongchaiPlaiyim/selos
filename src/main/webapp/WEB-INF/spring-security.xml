@@ -15,11 +15,11 @@
         <form-login login-page="/login.jsf" />
         <logout invalidate-session="true" delete-cookies="true" logout-success-url=""/>
         <access-denied-handler error-page="/error/accessDenied.jsf" />
-        <session-management>
-            <concurrency-control max-sessions="1" />
-        </session-management>
+        <anonymous enabled="false"/>
+
     </http>
 
     <authentication-manager alias="simpleAuthenticationManager">
     </authentication-manager>
+
 </bean:beans>

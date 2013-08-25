@@ -1,4 +1,4 @@
-package com.clevel.selos.security;
+package com.clevel.selos.model;
 
 public enum RoleTypeName {
     SYSTEM,BUSINESS,NON_BUSINESS

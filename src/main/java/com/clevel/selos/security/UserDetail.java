@@ -1,5 +1,7 @@
 package com.clevel.selos.security;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -48,18 +50,17 @@ public class UserDetail {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserDetail that = (UserDetail) o;
-
-        return userName.equals(that.userName);
-
+    public boolean equals(final Object obj) {
+        if (obj instanceof UserDetail) {
+            final UserDetail other = (UserDetail) obj;
+            return new EqualsBuilder().append(userName,other.userName).isEquals();
+        } else {
+            return false;
+        }
     }
 
     @Override
     public int hashCode() {
-        return userName.hashCode();
+        return new HashCodeBuilder().append(userName).toHashCode();
     }
 }

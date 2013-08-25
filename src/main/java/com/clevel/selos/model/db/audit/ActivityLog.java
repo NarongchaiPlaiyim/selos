@@ -38,6 +38,16 @@ public class ActivityLog implements Serializable {
     public ActivityLog() {
     }
 
+    public ActivityLog(String userId, String action, String actionDesc, String result, String resultDesc, String ipAddress) {
+        this.userId = userId;
+        this.action = action;
+        this.actionDesc = actionDesc;
+        this.actionDate = new Date();
+        this.result = result;
+        this.resultDesc = resultDesc;
+        this.ipAddress = ipAddress;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,6 +1,9 @@
 package com.clevel.selos.security;
 
+import com.clevel.selos.dao.audit.ActivityLogDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.model.RoleTypeName;
+import com.clevel.selos.model.db.audit.ActivityLog;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.Language;
 import org.slf4j.Logger;
@@ -8,12 +11,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "loginBean")
@@ -24,31 +28,34 @@ public class LoginBean {
 
     @Inject
     UserDAO userDAO;
+    @Inject
+    ActivityLogDAO activityLogDAO;
 
     private String userName;
     private String password;
 
-    private SimpleAuthenticationManager authenticationManager = new SimpleAuthenticationManager();
+    @Inject
+    private SimpleAuthenticationManager authenticationManager;
 
     public String login() {
         User user = userDAO.findByUserName(userName.trim());
+        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         if (user==null) {
             log.debug("user not found in system! (user: {})",userName.trim());
             return "unSecured";
         }
-        UserDetail userDetail = new UserDetail(user.getUserName(),user.getRole().getName(),user.getRole().getRoleType().getName());
+        UserDetail userDetail = new UserDetail(user.getUserName(),user.getRole().getName(),user.getRole().getRoleType().getRoleTypeName().name());
         try {
-            Authentication request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
+            UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
+            request.setDetails(new WebAuthenticationDetails(httpServletRequest));
             Authentication result = authenticationManager.authenticate(request);
+            log.debug("authentication result: {}", result);
             SecurityContextHolder.getContext().setAuthentication(result);
             log.debug("login successful. ({})",userDetail);
             HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             httpSession.setAttribute("language", Language.EN);
-            switch (user.getRole().getRoleType().getId()) {
-                case 1: return RoleTypeName.SYSTEM.name();
-                case 2: return RoleTypeName.BUSINESS.name();
-                case 3: return RoleTypeName.NON_BUSINESS.name();
-            }
+
+            return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (AuthenticationException e) {
             log.debug("login failed!. ({})", e.getMessage());
         }

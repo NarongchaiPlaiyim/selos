@@ -1,12 +1,10 @@
 package com.clevel.selos.model.db.master;
 
+import com.clevel.selos.model.RoleTypeName;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "mst_roletype")
@@ -15,7 +13,8 @@ public class RoleType {
     @Column(name = "id")
     private int id;
     @Column(name = "name")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleTypeName roleTypeName;
     @Column(name = "description")
     private String description;
     @Column(name = "active")
@@ -32,12 +31,12 @@ public class RoleType {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RoleTypeName getRoleTypeName() {
+        return roleTypeName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoleTypeName(RoleTypeName name) {
+        this.roleTypeName = name;
     }
 
     public String getDescription() {
@@ -60,7 +59,7 @@ public class RoleType {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("name", name).
+                append("roleTypeName", roleTypeName).
                 append("description", description).
                 append("active", active).
                 toString();
