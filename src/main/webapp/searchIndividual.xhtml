@@ -54,18 +54,21 @@
                       <p:message for="cussur"/>
 
                       <p:outputLabel value="radSelectSearch : "/>
-                      <p:inputText id="radser" value="#{testrm.searchIndividual.custName}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="radser" value="#{testrm.searchIndividual.radSelectSearch}" required="true" requiredMessage="Please enter Data!"/>
                       <p:message for="radser"/>
 
 
-                      <p:commandButton value="Search"  actionListener="#{testrm.callservice()}" update="@form">
+                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.callserviceIndividual()}" update="@form">
+                          <!--<p:ajax  update="he"  />-->
+                      </p:commandButton>
+                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.callserviceCorporate()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
 
                   </h:panelGrid>
                   <p:outputLabel value="Response :" />
-                  <p:inputTextarea value="#{testrm.printresponse}" rows="10" cols="100"/>
+                  <p:inputTextarea value="#{testrm.printResponse}" rows="10" cols="100"/>
               </h:form>
 
     </fieldset>

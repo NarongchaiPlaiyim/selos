@@ -1,17 +1,14 @@
 
 package com.tmb.sme.data.eaisearchindividualcustomer;
 
-import com.tmb.sme.data.fff;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
-import javax.xml.ws.handler.Handler;
 
 
 /**
@@ -20,7 +17,10 @@ import javax.xml.ws.handler.Handler;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "EAISearchIndividualCustomer", targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/", wsdlLocation = "file:/D:/kkkk/EAISearchIndividualCustomer.wsdl")
+@WebServiceClient(name = "EAISearchIndividualCustomer",
+        targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/",
+        wsdlLocation = "/EAISearchIndividualCustomer.wsdl")
+@HandlerChain(file = "/LogMessage_handler.xml")
 public class EAISearchIndividualCustomer_Service
     extends Service
 {
@@ -33,9 +33,9 @@ public class EAISearchIndividualCustomer_Service
         try {
             URL baseUrl;
             baseUrl = com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_Service.class.getResource(".");
-            url = new URL(baseUrl, "/com/tmb/sme/data/EAISearchIndividualCustomer.wsdl");
+            url = new URL(baseUrl, "file:/D:/Project-Clevel/selos/src/main/java/EAISearchIndividualCustomer.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: '/com/tmb/sme/data/EAISearchIndividualCustomer.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'file:/D:/Project-Clevel/selos/src/main/java/EAISearchIndividualCustomer.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         EAISEARCHINDIVIDUALCUSTOMER_WSDL_LOCATION = url;
@@ -43,17 +43,6 @@ public class EAISearchIndividualCustomer_Service
 
     public EAISearchIndividualCustomer_Service(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
-        Service service = null;
-        service = Service.create(wsdlLocation, serviceName);
-        EAISearchIndividualCustomer_Service mtomService = service.getPort(EAISearchIndividualCustomer_Service.class);
-        BindingProvider bindProv = (BindingProvider) mtomService;
-        java.util.List<Handler> handlers = bindProv.getBinding().getHandlerChain();
-        handlers.add(new fff());
-        bindProv.getBinding().setHandlerChain(handlers);
-        String ss;
-        System.out.println("----------------------------------------- "+bindProv.getRequestContext());
-        System.out.println("----------------------------------------- "+bindProv.getResponseContext());
-
     }
 
     public EAISearchIndividualCustomer_Service() {
