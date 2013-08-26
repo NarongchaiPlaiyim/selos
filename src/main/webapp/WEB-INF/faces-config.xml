@@ -14,8 +14,21 @@
         <from-view-id>/login.xhtml</from-view-id>
         <navigation-case>
             <from-action>#{loginBean.login}</from-action>
-            <from-outcome>secured</from-outcome>
+            <from-outcome>SYSTEM</from-outcome>
             <to-view-id>/admin/welcome.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{loginBean.login}</from-action>
+            <from-outcome>BUSINESS</from-outcome>
+            <to-view-id>/site/welcome.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{loginBean.login}</from-action>
+            <from-outcome>NON_BUSINESS</from-outcome>
+            <to-view-id>/isa/welcome.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 
@@ -25,6 +38,7 @@
             <from-action>#{loginBean.logout}</from-action>
             <from-outcome>loggedOut</from-outcome>
             <to-view-id>/login.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
     </navigation-rule>
 

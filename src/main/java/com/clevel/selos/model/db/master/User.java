@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,8 +15,6 @@ public class User implements Serializable {
     private long id;
     @Column(name = "username")
     private String userName;
-    @Column(name = "password")
-    private String password;
     @OneToOne
     @JoinColumn(name="role_id")
     private Role role;
@@ -47,13 +44,11 @@ public class User implements Serializable {
     @Column(name="phone_ext")
     private String phoneExt;
     @OneToOne
-    @JoinColumn(name="deportment_id")
+    @JoinColumn(name="department_id")
     private UserDepartment department;
     @OneToOne
     @JoinColumn(name="division_id")
     private UserDivision division;
-    @Column(name="administrator")
-    private int administrator;
     @Column(name="active")
     private int active;
 
@@ -74,14 +69,6 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Role getRole() {
@@ -188,14 +175,6 @@ public class User implements Serializable {
         this.division = division;
     }
 
-    public int getAdministrator() {
-        return administrator;
-    }
-
-    public void setAdministrator(int administrator) {
-        this.administrator = administrator;
-    }
-
     public int getActive() {
         return active;
     }
@@ -209,7 +188,6 @@ public class User implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("userName", userName).
-                append("password", password).
                 append("role", role).
                 append("buCode", buCode).
                 append("emailAddress", emailAddress).
@@ -223,7 +201,6 @@ public class User implements Serializable {
                 append("phoneExt", phoneExt).
                 append("department", department).
                 append("division", division).
-                append("administrator", administrator).
                 append("active", active).
                 toString();
     }

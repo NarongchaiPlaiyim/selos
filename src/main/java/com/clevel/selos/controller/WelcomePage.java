@@ -65,6 +65,7 @@ public class WelcomePage implements Serializable {
     }
 
     public void reloadConfig() {
+        log.debug("reloadConfig.");
         configList = configDAO.findAll();
     }
 

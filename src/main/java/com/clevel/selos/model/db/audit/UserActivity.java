@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.audit;
 
+import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -9,16 +10,11 @@ import java.util.Date;
 
 @Entity
 @Table(name = "adt_activity")
-public class ActivityLog implements Serializable {
+public class UserActivity implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_ADT_ACTIVITY_ID", sequenceName="SEQ_ADT_ACTIVITY_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_ACTIVITY_ID")
     private Long id;
-//    @Column(name="source_type", nullable=false)
-//    private String sourceType;
-//    @Column(name="source_module", nullable=false)
-//    private String sourceModule;
-
     @Column(name="user_id")
     private String userId;
     @Column(name="action", nullable=false)
@@ -29,13 +25,24 @@ public class ActivityLog implements Serializable {
     @Column(name="action_date", nullable=false)
     private Date actionDate;
     @Column(name="result", nullable=false)
-    private String result;
+    @Enumerated(EnumType.STRING)
+    private ActionResult actionResult;
     @Column(name="result_desc", length = 500)
     private String resultDesc;
     @Column(name="ip_address", length = 100)
     private String ipAddress;
 
-    public ActivityLog() {
+    public UserActivity() {
+    }
+
+    public UserActivity(String userId, String action, String actionDesc, ActionResult actionResult, String resultDesc, String ipAddress) {
+        this.userId = userId;
+        this.action = action;
+        this.actionDesc = actionDesc;
+        this.actionDate = new Date();
+        this.actionResult = actionResult;
+        this.resultDesc = resultDesc;
+        this.ipAddress = ipAddress;
     }
 
     public Long getId() {
@@ -78,12 +85,12 @@ public class ActivityLog implements Serializable {
         this.actionDate = actionDate;
     }
 
-    public String getResult() {
-        return result;
+    public ActionResult getActionResult() {
+        return actionResult;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setActionResult(ActionResult actionResult) {
+        this.actionResult = actionResult;
     }
 
     public String getResultDesc() {
@@ -110,7 +117,7 @@ public class ActivityLog implements Serializable {
                 append("action", action).
                 append("actionDesc", actionDesc).
                 append("actionDate", actionDate).
-                append("result", result).
+                append("actionResult", actionResult).
                 append("resultDesc", resultDesc).
                 append("ipAddress", ipAddress).
                 toString();

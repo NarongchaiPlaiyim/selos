@@ -1,16 +1,17 @@
 package com.clevel.selos.dao.audit;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.audit.ActivityLog;
+import com.clevel.selos.model.db.audit.UserActivity;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-public class ActivityLogDAO extends GenericDAO<ActivityLog,Long> {
+public class UserActivityDAO extends GenericDAO<UserActivity,Long> {
     @Inject
     private Logger log;
 
     @Inject
-    public ActivityLogDAO() {
+    public UserActivityDAO() {
     }
 }

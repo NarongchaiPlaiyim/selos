@@ -1,9 +1,9 @@
 package com.clevel.selos.system;
 
+import com.clevel.selos.model.Language;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-@RequestScoped
+@ApplicationScoped
 @ManagedBean(name = "msg")
 public class MessageProvider {
     @Inject
