@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.system.ConfigDAO;
+import com.clevel.selos.integration.Integration;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.system.Config;
@@ -23,6 +24,28 @@ public class WelcomePage implements Serializable {
     @Inject
     Logger log;
     @Inject
+    @Integration(Integration.System.RM)
+    Logger rmLog;
+    @Inject
+    @Integration(Integration.System.NCB)
+    Logger ncbLog;
+    @Inject
+    @Integration(Integration.System.NCBI)
+    Logger ncbiLog;
+    @Inject
+    @Integration(Integration.System.SW_ROSC)
+    Logger swLog;
+    @Inject
+    @Integration(Integration.System.EMAIL)
+    Logger emailLog;
+    @Inject
+    @Integration(Integration.System.DWH)
+    Logger dwhLog;
+    @Inject
+    @Integration(Integration.System.BRMS)
+    Logger brmsLog;
+
+    @Inject
     MessageProvider msg;
     @Inject
     ConfigDAO configDAO;
@@ -42,7 +65,35 @@ public class WelcomePage implements Serializable {
     }
 
     public void reloadConfig() {
+        log.debug("reloadConfig.");
         configList = configDAO.findAll();
+    }
+
+    public void onActionRM() {
+        rmLog.debug("test RM log. ({})",new Date());
+    }
+
+    public void onActionNCB() {
+        ncbLog.debug("test NCB log. ({})",new Date());
+    }
+
+    public void onActionNCBI() {
+        ncbiLog.debug("test NCBI log. ({})",new Date());
+    }
+
+    public void onActionSW() {
+        swLog.debug("test SW log. ({})",new Date());
+    }
+    public void onActionEmail() {
+        emailLog.debug("test Email log. ({})",new Date());
+    }
+
+    public void onActionDWH() {
+        dwhLog.debug("test DWH log. ({})",new Date());
+    }
+
+    public void onActionBRMS() {
+        brmsLog.debug("test BRMS log. ({})",new Date());
     }
 
     public Date getNow() {

@@ -1,20 +1,24 @@
 package com.clevel.selos.security;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.Language;
+import com.clevel.selos.model.db.audit.UserActivity;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.system.Language;
+import com.clevel.selos.system.audit.UserAudit;
+import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -24,62 +28,54 @@ public class LoginBean {
 
     @Inject
     UserDAO userDAO;
+    @Inject
+    UserAudit userAudit;
 
-    String userName;
-    String password;
+    private String userName;
+    private String password;
 
-    private SimpleAuthenticationManager authenticationManager = new SimpleAuthenticationManager();
+    @Inject
+    private SimpleAuthenticationManager authenticationManager;
 
     public String login() {
-        String contextPath = "";
-        String urlPath = "";
-
-        User user = userDAO.findByUserName(this.getUserName().trim());
+        User user = userDAO.findByUserName(userName.trim());
+        HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+        if (user == null) {
+            log.debug("user not found in system! (user: {})", userName.trim());
+            userAudit.addFailed(userName.trim(), "Login", "", "User not found in system!");
+            return "unSecured";
+        }
+        UserDetail userDetail = new UserDetail(user.getUserName(), user.getRole().getName(), user.getRole().getRoleType().getRoleTypeName().name());
         try {
-            Authentication request = new UsernamePasswordAuthenticationToken(this.getUserName(), this.getPassword());
-            authenticationManager.setUser(user);
+            UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
+            request.setDetails(new WebAuthenticationDetails(httpServletRequest));
             Authentication result = authenticationManager.authenticate(request);
+            log.debug("authentication result: {}", result);
             SecurityContextHolder.getContext().setAuthentication(result);
-            log.debug("login successful.");
-            HttpSession httpSession = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            log.debug("login successful. ({})", userDetail);
+            HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("language", Language.EN);
-            return "secured";
-//            redirect("/admin/simple.jsf");
+
+            userAudit.addSucceed(userDetail.getUserName(), "Login", "");
+            return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (AuthenticationException e) {
+            userAudit.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
         }
-        return "unSecured";
+        userAudit.addFailed(userName.trim(),"Login","","Authentication failed!");
+        return "failed";
+    }
+
+    public UserDetail getUserDetail() {
+        return (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public String logout() {
         log.debug("logging out.");
+        UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
+        userAudit.addSucceed(userDetail.getUserName(),"Logout","");
         return "loggedOut";
-//        redirect("/login.jsf");
-    }
-
-    public void checkAuthenticated() {
-        if (isLoggedIn()) {
-            log.debug("already logged in!");
-            redirect("/admin/welcome.jsf");
-        }
-    }
-
-    public void redirect(String urlPath) {
-        String contextPath = "";
-        try {
-            contextPath = FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-            log.debug("redirect to: {}", contextPath+urlPath);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(contextPath+urlPath);
-        } catch (IOException e) {
-            log.error("Exception while redirection! (contextPath: {}, urlPath: {})",contextPath,urlPath);
-        }
-    }
-
-
-    public boolean isLoggedIn() {
-        log.debug("isLoggedIn result is: {}",SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
-        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
     }
 
     public String getUserName() {

@@ -8,13 +8,89 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/tmp/logs/debug.log</file>
+        <file>/tmp/logs/slos.log</file>
         <append>false</append>
         <encoder>
             <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
 
+    <appender name="RM-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-RM.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="RM" level="DEBUG" additivity="false">
+        <appender-ref ref="RM-FILE"/>
+    </logger>
+
+    <appender name="NCB-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-NCB.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="NCB" level="DEBUG" additivity="false">
+        <appender-ref ref="NCB-FILE"/>
+    </logger>
+
+    <appender name="NCBI-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-NCBI.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="NCBI" level="DEBUG" additivity="false">
+        <appender-ref ref="NCBI-FILE"/>
+    </logger>
+
+    <appender name="SW_ROSC-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-SW_ROSC.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="SW_ROSC" level="DEBUG" additivity="false">
+        <appender-ref ref="SW_ROSC-FILE"/>
+    </logger>
+
+    <appender name="EMAIL-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-EMAIL.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="EMAIL" level="DEBUG" additivity="false">
+        <appender-ref ref="EMAIL-FILE"/>
+    </logger>
+
+    <appender name="DWH-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-DWH.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="DWH" level="DEBUG" additivity="false">
+        <appender-ref ref="DWH-FILE"/>
+    </logger>
+
+    <appender name="BRMS-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-BRMS.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="BRMS" level="DEBUG" additivity="false">
+        <appender-ref ref="BRMS-FILE"/>
+    </logger>
     <!--Daily rolling file appender -->
     <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
         <!--<File>/tmp/logs/debug.log</File>-->

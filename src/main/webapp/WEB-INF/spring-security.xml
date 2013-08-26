@@ -9,20 +9,17 @@
                             http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <http auto-config="false">
-        <intercept-url pattern="/admin/**" access="ROLE_USER"/>
+        <intercept-url pattern="/admin/**" access="ROLE_SYSTEM"/>
+        <intercept-url pattern="/site/**" access="ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_HSME,ROLE_CHIEF,ROLE_UW,ROLE_SSO"/>
+        <intercept-url pattern="/isa/**" access="ROLE_ISA"/>
         <form-login login-page="/login.jsf" />
         <logout invalidate-session="true" delete-cookies="true" logout-success-url=""/>
+        <access-denied-handler error-page="/error/accessDenied.jsf" />
+        <anonymous enabled="false"/>
+
     </http>
 
     <authentication-manager alias="simpleAuthenticationManager">
-        <!--<authentication-provider>-->
-            <!--<user-service>-->
-                <!--<user authorities="ROLE_USER" name="admin" password="admin" />-->
-            <!--</user-service>-->
-        <!--</authentication-provider>-->
     </authentication-manager>
 
-    <!--<bean:bean id="loginBean" name="loginBean" class="com.clevel.slos.security.LoginBean" scope="prototype">-->
-        <!--<bean:property name="authenticationManager" ref="simpleAuthenticationManager" />-->
-    <!--</bean:bean>-->
 </bean:beans>
