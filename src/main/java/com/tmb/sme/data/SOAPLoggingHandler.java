@@ -63,7 +63,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
 
                 soapResponse.writeTo(System.out);
-                 printSOAPResponse(soapResponse);
+
             }catch(SOAPException e){
                 System.err.println(e);
             }catch(IOException e){
@@ -78,14 +78,14 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
         //continue other handler chain
         return true;
     }
-    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        Source sourceContent = soapResponse.getSOAPPart().getContent();
-        System.out.print("\nResponse SOAP Message = ");
-        StreamResult result = new StreamResult(System.out);
-        transformer.transform(sourceContent, result);
-    }
+//    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
+//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//        Transformer transformer = transformerFactory.newTransformer();
+//        Source sourceContent = soapResponse.getSOAPPart().getContent();
+//        System.out.print("\nResponse SOAP Message = ");
+//        StreamResult result = new StreamResult(System.out);
+//        transformer.transform(sourceContent, result);
+//    }
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
