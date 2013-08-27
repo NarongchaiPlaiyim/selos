@@ -37,6 +37,7 @@
             <h:form id="productGroup" styleClass="panel" style="width:230px">
                 <h:selectOneListbox styleClass="largest" size="1"
                                     value="#{prescreenFacilityMaker.selectProductGroup.id}" id="productGroupName" >
+                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                     <f:selectItems value="#{prescreenFacilityMaker.productGroupList}"
                                    var="dlgProductGroup"
                                    itemLabel="#{dlgProductGroup.name}"
@@ -527,7 +528,7 @@
                     <h:outputText value="#{collateral.collateralTypeName}"/>
                 </p:column>
 
-                <p:column headerText="Request Amount">
+                <p:column headerText="Value (Baht)">
                     <div class="right">
                         <h:outputText value="#{collateral.collateralAmount}">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
@@ -704,6 +705,7 @@
                 <td>
                     <h:selectOneListbox value="#{prescreenFacilityMaker.selectProductProgram.id}" id="productProgramName"
                                         size="1" styleClass="largest">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenFacilityMaker.prdGroupToPrdProgramList}"
                                        var="dlgProductProgram"
                                        itemLabel="#{dlgProductProgram.productProgram.name}"
@@ -719,6 +721,7 @@
                 <td>
                     <h:selectOneListbox value="#{prescreenFacilityMaker.selectCreditType.id}" id="creditTypeName"
                                         size="1" styleClass="largest" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenFacilityMaker.prdProgramToCreditTypeList}"
                                        var="dlgCreditType"
                                        itemLabel="#{dlgCreditType.creditType.name}"
@@ -767,8 +770,7 @@
     </h:form>
 </p:dialog>
 <p:dialog id="requestAppraisalDialog" header="Request Appraisal" widgetVar="requestAppraisalDlg"
-          modal="true" width="700"
-        >
+          modal="true" width="700">
     <ui:include src="../resources/dialog/requestAppraisalDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg" modal="true">
