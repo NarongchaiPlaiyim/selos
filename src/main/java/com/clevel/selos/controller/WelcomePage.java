@@ -37,8 +37,8 @@ public class WelcomePage implements Serializable {
     public void onCreation() {
         log.debug("onCreation.");
         now = new Date();
-        reloadConfig();
-        onLoadDescription();
+        //reloadConfig();
+        //onLoadDescription();
     }
 
     public void reloadConfig() {
