@@ -34,11 +34,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Body }
+     * Create an instance of {@link PersonalDetailSection }
      * 
      */
-    public Body createBody() {
-        return new Body();
+    public PersonalDetailSection createPersonalDetailSection() {
+        return new PersonalDetailSection();
     }
 
     /**
@@ -47,22 +47,6 @@ public class ObjectFactory {
      */
     public PersonalListSection createPersonalListSection() {
         return new PersonalListSection();
-    }
-
-    /**
-     * Create an instance of {@link Header }
-     * 
-     */
-    public Header createHeader() {
-        return new Header();
-    }
-
-    /**
-     * Create an instance of {@link PersonalDetail }
-     * 
-     */
-    public PersonalDetail createPersonalDetail() {
-        return new PersonalDetail();
     }
 
     /**
@@ -82,11 +66,27 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PersonalDetailSection }
+     * Create an instance of {@link Header }
      * 
      */
-    public PersonalDetailSection createPersonalDetailSection() {
-        return new PersonalDetailSection();
+    public Header createHeader() {
+        return new Header();
+    }
+
+    /**
+     * Create an instance of {@link PersonalDetail }
+     * 
+     */
+    public PersonalDetail createPersonalDetail() {
+        return new PersonalDetail();
+    }
+
+    /**
+     * Create an instance of {@link Body }
+     * 
+     */
+    public Body createBody() {
+        return new Body();
     }
 
     /**

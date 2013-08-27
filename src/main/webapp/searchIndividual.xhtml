@@ -18,9 +18,9 @@
     <h:body>
         <fieldset>
             <legend>Search Form</legend>
-              <h:form id="he">
+              <h:form>
 
-                  <h:panelGrid id="pa" columns="3">
+                  <h:panelGrid columns="3">
                       <p:outputLabel value="Register ID : "/>
                       <p:inputText id="id" value="#{testrm.searchIndividual.reqId}" required="true" requiredMessage="Please enter Data!"/>
                       <p:message for="id"/>
@@ -32,7 +32,7 @@
                       <p:outputLabel value="Card Type : "/>
                       <p:selectOneMenu id="cardtype" value="#{testrm.searchIndividual.type}" required="false" requiredMessage="Please enter Data!">
                             <p:ajax update="cussur" listener="#{testrm.changeListener}"/>
-                           <f:selectItems value="#{testrm.list}" var="c" itemLabel="#{c.name}" itemValue="#{c.value}"  />
+                           <f:selectItems value="#{testrm.listhardcode}" var="c" itemLabel="#{c.name}" itemValue="#{c.value}"  />
 
                       </p:selectOneMenu>
                       <p:message for="cardtype"/>
@@ -54,16 +54,23 @@
                       <p:message for="cussur"/>
 
                       <p:outputLabel value="radSelectSearch : "/>
-                      <p:inputText id="radser" value="#{testrm.searchIndividual.custName}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="radser" value="#{testrm.searchIndividual.radSelectSearch}" required="true" requiredMessage="Please enter Data!"/>
                       <p:message for="radser"/>
 
-                      <p:commandButton value="Search"  actionListener="#{testrm.callservice()}" update="@form :he:pa">
+
+                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.callserviceIndividual()}" update="@form">
+                          <!--<p:ajax  update="he"  />-->
+                      </p:commandButton>
+                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.callserviceCorporate()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
-                  </h:panelGrid>
 
+                  </h:panelGrid>
+                  <p:outputLabel value="Response :" />
+                  <p:inputTextarea value="#{testrm.printResponse}" rows="10" cols="100"/>
               </h:form>
+
     </fieldset>
     </h:body>
 </f:view>

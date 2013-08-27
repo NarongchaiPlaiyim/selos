@@ -46,7 +46,7 @@
   </wsdl:binding>
   <wsdl:service name="EAISearchIndividualCustomer">
     <wsdl:port binding="tns:EAISearchIndividualCustomer" name="EAISearchIndividualCustomer">
-      <soap:address location="http://localhost:7800/EAISearchIndividualCustomer"/>
+      <soap:address location="http://10.175.140.18:7809/services/EAISearchIndividualCustomerCM"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
