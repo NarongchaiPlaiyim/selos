@@ -1,6 +1,6 @@
 package com.clevel.selos.exception;
 
-public class EmailException extends Exception {
+public class EmailException extends RuntimeException {
     public EmailException() {
         super();
     }
