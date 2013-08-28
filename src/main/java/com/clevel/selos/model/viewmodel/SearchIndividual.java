@@ -1,5 +1,6 @@
 package com.clevel.selos.model.viewmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Time: 11:36 น.
  * To change this template use File | Settings | File Templates.
  */
-public class SearchIndividual {
+public class SearchIndividual implements Serializable {
 
     private String reqId;
     private String custType;

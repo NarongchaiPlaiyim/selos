@@ -1,5 +1,7 @@
 package com.clevel.selos.model.viewmodel;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sahawat
@@ -7,7 +9,7 @@ package com.clevel.selos.model.viewmodel;
  * Time: 14:31 น.
  * To change this template use File | Settings | File Templates.
  */
-public class CardTypeView {
+public class CardTypeView implements Serializable{
 
     public CardTypeView(String name, String value){
         this.name=name;

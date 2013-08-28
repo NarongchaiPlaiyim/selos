@@ -34,14 +34,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Body }
-     * 
-     */
-    public Body createBody() {
-        return new Body();
-    }
-
-    /**
      * Create an instance of {@link Header }
      * 
      */
@@ -55,6 +47,14 @@ public class ObjectFactory {
      */
     public ReqSearchIndividualCustomer createReqSearchIndividualCustomer() {
         return new ReqSearchIndividualCustomer();
+    }
+
+    /**
+     * Create an instance of {@link Body }
+     * 
+     */
+    public Body createBody() {
+        return new Body();
     }
 
     /**
