@@ -170,17 +170,17 @@ public class PrescreenMaker implements Serializable {
         productGroupList     = productGroupDAO.findAll();
         log.info("onLoadFirst :::::::  productGroupList size :::::::::::: {}", productGroupList.size());
 
-        selectProductGroup   = productGroupList.get(0);
+//        selectProductGroup   = productGroupList.get(0);
         prdGroupToPrdProgramList   = null;
         prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroupList.get(0));
         log.info("onLoadFirst ::::::: prdGroupToPrdProgramList size ::::::::::::", prdGroupToPrdProgramList.size());
 
-        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
+//        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
         log.info("onLoadFirst ::::::: selectProductProgram.name :::::::::::: "+selectProductProgram.getName());
 
-        selectCreditType = prdProgramToCreditTypeList.get(0).getCreditType();
+//        selectCreditType = prdProgramToCreditTypeList.get(0).getCreditType();
         log.info("onLoadFirst ::::::: selectCreditType.name :::::::::::: "+selectCreditType.getName());
     }
 
@@ -191,7 +191,7 @@ public class PrescreenMaker implements Serializable {
         prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
         log.info("onChangeProductGroup :::::::: prdGroupToPrdProgramList size :::: ", prdGroupToPrdProgramList.size());
 
-        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
+//        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
         log.info("onChangeProductGroup ::::::: selectProductProgram.id :::: "+selectProductProgram.getId());
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
@@ -419,18 +419,26 @@ public class PrescreenMaker implements Serializable {
 
     public void onAddFacility() {
         log.info("onAddFacility:::");
-        log.info("onAddFacility::: selectProductProgram.getId() :: "+
-                productProgramDAO.findById(selectProductProgram.getId()).toString());
-        log.info("onAddFacility::: selectCreditType.getId() :: "+
-                creditTypeDao.findById(selectCreditType.getId()).toString());
+        log.info("selectProductGroup.getId() >> " + selectProductGroup.getId());
+        log.info("selectProductProgram.getId() >> " + selectProductProgram.getId());
+        log.info("selectCreditType.getId() >> " + selectCreditType.getId());
 
-        Facility facAdd   = new Facility();
-        ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        facAdd.setProductProgram(productProgram);
-        facAdd.setCreditType(creditType);
-        facAdd.setRequestAmount(facility.getRequestAmount());
-        facilityList.add(facAdd);
+        if (!((selectProductGroup.getId() == 0) || (selectProductProgram.getId() == 0) || (selectCreditType.getId() == 0))) {
+
+            log.info("onAddFacility::: selectProductProgram.getId() :: " +
+                    productProgramDAO.findById(selectProductProgram.getId()).toString());
+            log.info("onAddFacility::: selectCreditType.getId() :: " +
+                    creditTypeDao.findById(selectCreditType.getId()).toString());
+
+            ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+            CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
+            Facility facAdd = new Facility();
+            facAdd.setProductProgram(productProgram);
+            facAdd.setCreditType(creditType);
+            facAdd.setRequestAmount(facility.getRequestAmount());
+            facilityList.add(facAdd);
+        }
+
     }
 
     // open dialog

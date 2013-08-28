@@ -41,6 +41,7 @@
                                     <h:form id="productGroup" styleClass="panel" style="width:230px">
                                         <h:selectOneListbox styleClass="largest" size="1"
                                                             value="#{prescreenMaker.selectProductGroup.id}" id="productGroupName" >
+                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                             <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                            var="dlgProductGroup"
                                                            itemLabel="#{dlgProductGroup.name}"
