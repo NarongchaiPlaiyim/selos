@@ -1,0 +1,57 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="collateralDlgForm">
+        <table id="collateralDialogTable" class="content_form">
+            <tr>
+                <td class="title" style="width:145px;">Type Of Collateral :</td>
+                <td>
+                    <h:selectOneListbox size="1" styleClass="largest" id="dCollateralTypeName"
+                                        value="#{prescreenMaker.dCollateralTypeName}">
+                        <f:selectItems value="#{prescreenMaker.collateralTypeList}" var="dlgcollateralType"
+                                       itemLabel="#{dlgcollateralType.description}"
+                                       itemValue="#{dlgcollateralType.description}"/>
+                    </h:selectOneListbox>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Value :</td>
+                <td>
+                    <p:inputText id="dCollateralAmount" styleClass="right numeric" value="#{prescreenMaker.dCollateralAmount}"/> Baht.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+
+                    <p:commandButton value="Add"
+                                     rendered="#{prescreenMaker.modeForCollateral == 'add'}"
+                                     id="btnAddCollateralDlg" styleClass="small"
+                                     update=":tableCollateral,:collateralDialog"
+                                     action="#{prescreenMaker.onAddCollateral}"
+                                     oncomplete="collateralDlg.hide()"/>
+
+                    <p:commandButton value="Edit"
+                                     rendered="#{prescreenMaker.modeForCollateral == 'edit'}"
+                                     styleClass="smaller" update=":tableCollateral,:collateralDialog"
+                                     action="#{prescreenMaker.onEditCollateral}"
+                                     oncomplete="collateralDlg.hide();"/>
+
+                    <p:commandButton value="Cancel" styleClass="small" oncomplete="collateralDlg.hide()"/>
+
+                </td>
+            </tr>
+        </table>
+        <p:blockUI widgetVar="blockUI" block="collateralDlgForm" trigger=":collateralDlgForm:btnAddCollateralDlg">
+            LOADING<br/>
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+    </h:form>
+
+</ui:composition>

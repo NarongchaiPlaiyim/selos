@@ -1,0 +1,64 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="businessDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title">Business Group :</td>
+                <td>
+                    <h:selectOneListbox size="1" styleClass="largest" id="businessGroupID"
+                                        value="#{prescreenMaker.businessInformation.businessDescription.businessGroup.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgbusinessGroup"
+                                       itemLabel="#{dlgbusinessGroup.name}"
+                                       itemValue="#{dlgbusinessGroup.id}"/>
+                        <p:ajax listener="#{prescreenMaker.onChangeBusinessGroupName}" update=":businessDlgForm" />
+                    </h:selectOneListbox>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Business Description :</td>
+                <td>
+                    <h:selectOneListbox size="1" styleClass="largest" id="businessDescriptionID"
+                                        value="#{prescreenMaker.businessInformation.businessDescription.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgbusinessDesciption"
+                                       itemLabel="#{dlgbusinessDesciption.name}"
+                                       itemValue="#{dlgbusinessDesciption.id}"/>
+                    </h:selectOneListbox>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Comment :</td>
+                <td class="left">
+                    <p:inputText id="dBusinessComment" styleClass="numeric"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton value="Add"
+                                     rendered="#{prescreenMaker.modeForBusiness == 'add'}"
+                                     id="AddBusinessInformation" styleClass="small"
+                                     update=":tableBusinessInformation"
+                                     action="#{prescreenMaker.onAddBusinessInformation()}"
+                                     oncomplete="businessDlg.hide()"/>
+
+                    <p:commandButton value="Edit"
+                                     rendered="#{prescreenMaker.modeForBusiness == 'edit'}"
+                                     id="EditBusinessInformation" styleClass="small"
+                                     update=":tableBusinessInformation"
+                                     action="#{prescreenMaker.onEditBusinessInformation()}"
+                                     oncomplete="businessDlg.hide()"/>
+
+                    <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,90 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css" />
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            selosmenu.init({
+                mainmenuid: "selosmenu", //menu DIV id
+                orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+                classname: 'selosmenu'//, //class added to menu's outer DIV
+            });
+
+            /*if($("#pagename").val() != undefined){
+                var pagename = $("#pagename").val();
+                $("#"+pagename).attr("class","current");
+                if($("#subpagename").val() != undefined){
+                    var subpagename = $("#subpagename").val();
+                    $("#"+subpagename).attr("class","current");
+                }
+            }*/
+        });
+    </script>
+
+    <div id="selosmenu" class="selosmenu">
+        <ul>
+            <li id="mnuinbox"><a href="inbox.jsf" title="Inbox">Inbox</a></li>
+            <li id="mnuprescreen">
+                <a href="prescreen.jsf" title="Prescreen">Prescreen</a>
+                <ul>
+                    <li id="submnuprescreen"><a href="prescreen.jsf" title="Prescreen">Prescreen</a></li>
+                    <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="Prescreen Result">Prescreen Result</a></li>
+                </ul>
+            </li>
+            <li id="mnubasicinfo"><a href="basicinfo.jsf" title="Basic Info.">Basic Info.</a></li>
+            <li id="mnuborrowerinfo">
+                <a href="borrowerinfoSummary.jsf" title="Borrower Info.">Borrower Info.</a>
+                <ul>
+                    <li id="submnucustomerinfo"><a href="borrowerinfoSummary.jsf" title="Prescreen">Customer Info.</a></li>
+                    <li id="submnucredithistory"><a href="credithistory.jsf" title="Credit History">Credit History</a></li>
+                    <li id="submnuqualitative"><a href="qualitative.jsf" title="Qualitative">Qualitative</a></li>
+                    <li id="submnutcgcalculation"><a href="tcgcalculation.jsf" title="TCG Calculation">TCG Calculation</a></li>
+                </ul>
+            </li>
+            <li id="mnubusinessinfo"><a href="businessinfoSummary.jsf" title="Business Info.">Business Info.</a></li>
+            <li id="mnufinancialinfo">
+                <a href="bankstatementSummary.jsf" title="Financial Info.">Financial Info.</a>
+                <ul>
+                    <li id="submnubankstatement"><a href="bankstatementSummary.jsf" title="Bank Statement">Bank Statement</a></li>
+                    <li id="submnudbr"><a href="dbr.jsf" title="DBR">DBR</a></li>
+                    <li id="submnuexistingline"><a href="existingline.jsf" title="Existing Line">Existing Line</a></li>
+                    <li id="submnuproposeline"><a href="proposeline.jsf" title="Propose Line">Propose Line</a></li>
+                </ul>
+            </li>
+            <li id="mnudecision">
+                <a href="exsummary.jsf" title="Decision">Decision</a>
+                <ul>
+                    <li id="submnuexsum"><a href="exsummary.jsf" title="Ex Summary">Ex Summary</a></li>
+                    <li id="submnudecision"><a href="decision.jsf" title="Decision">Decision</a></li>
+                </ul>
+            </li>
+            <li id="mnuregistrationrequest">
+                <a href="customercontact.jsf" title="Registration Request">Registration Request</a>
+                <ul>
+                    <li id="submnucontactrecord"><a href="customercontact.jsf" title="Contact Record">Contact Record</a></li>
+                    <li id="submnupostcustomerinfo"><a href="customerinfoSummary.jsf" title="Customer Info.">Customer Info.</a></li>
+                    <li id="submnuappointment"><a href="appointment.jsf" title="Appointment">Appointment And Collateral</a></li>
+                    <li id="submnudisbursement"><a href="disbursement.jsf" title="Disbursement">Disbursement</a></li>
+                    <li id="submnupaymentdetail"><a href="paymentdetail.jsf" title="Payment Detail">Payment Detail</a></li>
+                </ul>
+            </li>
+            <li id="mnutcg"><a href="tcg.jsf" title="TCG">TCG</a></li>
+            <li id="mnuinsurance"><a href="insurance.jsf" title="Insurance">Insurance</a></li>
+            <li id="mnuconfirmation">
+                <a href="agreementconfirm.jsf" title="Confirmation">Confirmation</a>
+                <ul>
+                    <li id="submnuagreementconfirm"><a href="agreementconfirm.jsf" title="Agreement Confirm">Agreement Confirm</a></li>
+                    <li id="submnuperfection"><a href="perfectionreview.jsf" title="Perfection Review">Perfection Review</a></li>
+                </ul>
+            </li>
+            <!--<li id="mnufeecalculation"><a href="feecalculation.jsf" title="Fee Calculation">Fee Calculation</a></li>
+            <li id="mnupredisbursement"><a href="predisbursement.jsf" title="Pre-Disbursement">Pre-Disbursement</a></li>-->
+        </ul>
+        <br style="clear: left" />
+    </div>
+    <div id="menu_sub" style="height: 14px;"><!-- --></div>
+    <div class="clear"></div>
+</ui:composition>
