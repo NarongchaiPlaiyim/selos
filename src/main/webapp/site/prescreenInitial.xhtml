@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Prescreen Initial</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+
+<h:body>
+    <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="include/header_logo.xhtml" />
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="include/header_detail.xhtml" />
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="include/menubar.xhtml" />
+        <!-- End Menu -->
+        <div id="content_container">
+            <div id="content_name">Prescreen - Prescreen Initial</div>
+            <div id="content">
+                <div id="content_info">
+                    <div id="content_trackchange">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by Mr.BDM Maker, 02/08/2555 11:11:11</div>
+                </div>
+                <div id="content_form">
+                    <!--<p:panel id="pnlContent_form">-->
+                        <!-- start content -->
+                        <table class="content_table_form">
+                            <tr>
+                                <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
+                                <td>
+                                    <h:form id="productGroup" styleClass="panel" style="width:230px">
+                                        <h:selectOneListbox styleClass="largest" size="1"
+                                                            value="#{prescreenMaker.selectProductGroup.id}" id="productGroupName" >
+<!--                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>-->
+                                            <f:selectItems value="#{prescreenMaker.productGroupList}"
+                                                           var="dlgProductGroup"
+                                                           itemLabel="#{dlgProductGroup.name}"
+                                                           itemValue="#{dlgProductGroup.id}"/>
+                                            <p:ajax event="change"
+                                                    listener="#{prescreenMaker.onChangeProductGroup}"
+                                                    process=":productGroup"
+                                                    update=":tableFacility,:facilityDlgForm"/>
+                                        </h:selectOneListbox>
+                                    </h:form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Product Program <h:outputText value="*" styleClass="require-field"/> :</td>
+                                <td>
+                                    <p:commandButton id="btnAddFacility"
+                                                     value="Add"
+                                                     styleClass="smaller"
+                                                     action="#{prescreenMaker.onClickDialog()}"
+                                                     oncomplete="facilityDlg.show();"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <h:form id="tableFacility" styleClass="panel" style="width:610px;">
+                                        <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
+                                                     paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
+
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Product Program" styleClass="center" style="width: 130px;">
+                                                <h:outputText value="#{item.productProgram.name}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Facility" styleClass="center" style="width: 110px;">
+                                                <h:outputText value="#{item.creditType.name}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Request Amount" style="width: 120px;">
+                                                <div class="right">
+                                                    <h:outputText value="#{item.requestAmount}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="8"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </p:column>
+
+                                            <p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                 action="#{prescreenMaker.onSelectedFacility(rowIndex)}"
+                                                                 update=":facilityDlgForm"
+                                                                 process=":tableFacility"
+                                                                 oncomplete="facilityDlg.show();"/>
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                 title="Remove"
+                                                                 action="#{prescreenMaker.onDeleteFacility(rowIndex)}"
+                                                                 update=":tableFacility"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="separate"><!-- --></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Expected submission date :</td>
+                                <td>
+                                    <p:calendar value="#{calendarBean.date3}" id="submitDate" pattern="dd/MM/yyyy" showOn="button"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Customer Information </td>
+                                <td>
+                                    <!--<p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()"/>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title top">Borrower :</td>
+                                <td>
+                                    <table class="table_content" >
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="width:210px;">Customer Name</th>
+                                            <th style="width:100px;">Customer Type</th>
+                                            <th style="width:30px;">Age</th>
+                                            <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                                            <th style="width:90px;">Customer ID</th>
+                                            <!--<th style="width:30px;">NCB</th>
+                                            <th style="width:40px;">Eligible</th>-->
+                                            <th style="width:50px;"></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">1</td>
+                                            <td>Mr.A Example</td>
+                                            <td class="center">Individual</td>
+                                            <td class="center">48</td>
+                                            <td class="center">312320123123</td>
+                                            <td class="center">30232</td>
+                                            <!--<td class="center"></td>
+                                            <td class="center"></td>-->
+                                            <td class="option">
+                                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">2</td>
+                                            <td>Mrs.B Example</td>
+                                            <td class="center">Individual</td>
+                                            <td class="center">36</td>
+                                            <td class="center">412420124124</td>
+                                            <td class="center">30234</td>
+                                            <!--<td class="center"></td>
+                                            <td class="center"></td>-->
+                                            <td class="option">
+                                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td class="title top">Guarantor :</td>
+                                <td>
+                                    <table class="table_content" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="width:210px;">Customer Name</th>
+                                            <th style="width:100px;">Customer Type</th>
+                                            <th style="width:30px;">Age</th>
+                                            <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                                            <th style="width:90px;">Customer ID</th>
+                                            <th style="width:140px;">Relationship</th>
+                                            <!--<th style="width:30px;">CSI</th>-->
+                                            <th style="width:50px;"></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">1</td>
+                                            <td>Mr.C Guarantor</td>
+                                            <td class="center">Individual</td>
+                                            <td class="center">30</td>
+                                            <td class="center">312320123123</td>
+                                            <td class="center">40432</td>
+                                            <td class="center">Director</td>
+                                            <!--<td class="result_green"></td>-->
+                                            <td class="option">
+                                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td class="title top">Related :</td>
+                                <td>
+                                    <table class="table_content" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <th width="30"></th>
+                                            <th width="210">Customer Name</th>
+                                            <th width="100">Customer Type</th>
+                                            <th width="30">Age</th>
+                                            <th width="160">Citizen ID /<br/> Registration ID</th>
+                                            <th width="90">Customer ID</th>
+                                            <th width="140">Relationship</th>
+                                            <!--<th width="30">CSI</th>-->
+                                            <th width="50"></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">1</td>
+                                            <td>Mr.D Related</td>
+                                            <td class="center">Individual</td>
+                                            <td class="center">30</td>
+                                            <td class="center">312320123123</td>
+                                            <td class="center">50637</td>
+                                            <td class="center">Shareholders</td>
+                                            <!--<td class="result_red"></td>-->
+                                            <td class="option">
+                                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="separate"><!-- --></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Business Information :</td>
+                                <td><p:commandButton value="Add" styleClass="smaller" onclick="businessDlg.show();"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title">Business Information x :</td>
+                                <td>
+                                    <p:panel id="tableBusinessInformation" styleClass="panel">
+                                        <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
+                                                     paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex">
+
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Business code" styleClass="center" style="width: 110px;">
+                                                <h:outputText value="#{businessInformation.businessDescription.tmbCode}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Business Group" styleClass="center" style="width: 140px;">
+                                                <h:outputText value="#{businessInformation.businessDescription.businessGroup.name}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Business Description" styleClass="center" style="width: 180px;">
+                                                <h:outputText value="#{businessInformation.businessDescription.name}"/>
+                                            </p:column>
+
+                                            <p:column headerText="ESR" styleClass="center" style="width: 35px;">
+
+                                            </p:column>
+
+                                            <p:column headerText="Negative" styleClass="center" style="width: 65px;">
+
+                                            </p:column>
+
+                                            <p:column headerText="High risk" styleClass="center" style="width: 65px;">
+
+                                            </p:column>
+
+                                            <p:column headerText="Suspend" styleClass="center" style="width: 65px;">
+
+                                            </p:column>
+
+                                            <p:column headerText="Business permission" styleClass="center" style="width: 160px;">
+
+                                            </p:column>
+
+                                            <p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                 action="#{prescreenMaker.onRowBusinessInformation(rowIndex)}"
+                                                                 update=":businessDlgForm"
+                                                                 process=":tableBusinessInformation"
+                                                                 oncomplete="businessDlg.show();"/>
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                 title="Remove"
+                                                                 action="#{prescreenMaker.onRemoveBusinessInformation(rowIndex)}"
+                                                                 update=":tableBusinessInformation"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:panel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <table class="table_content" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <th style="width:120px">Business code</th>
+                                            <th style="width:120px">Business Group</th>
+                                            <th style="width:130px">Business Description</th>
+                                            <th style="width:40px">ESR</th>
+                                            <th style="width:60px">Negative</th>
+                                            <th style="width:60px">High risk</th>
+                                            <th style="width:60px">Suspend</th>
+                                            <th style="width:180px">Business permission</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">CD010000</td>
+                                            <td class="center">Consumer Goods &amp; Services</td>
+                                            <td class="center">Abttoir</td>
+                                            <td class="center">N</td>
+                                            <td class="center">N</td>
+                                            <td class="center">Y</td>
+                                            <td class="center">Y</td>
+                                            <td class="left">1.Example for Description <br/>2.Example for Description</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Business Location :</td>
+                                <td><select class="larger"><option>- Please Select -</option></select></td>
+                            </tr>
+                            <tr>
+                                <td class="title">Date of register :</td>
+                                <td><input id="dateOfRegister" type="text" class="medium" value="22/06/2556"/></td>
+                            </tr>
+                            <tr>
+                                <td class="title">Referred company :</td>
+                                <td><p:calendar value="#{calendarBean.date3}" id="popupButtonCal" pattern="dd/MM/yyyy" showOn="button" />
+                                    <select class="largest">
+                                        <option>- Please Select -</option>
+                                        <option>ทะเบียนพาณิชย์</option>
+                                        <option>วันที่เริ่มบริหารกิจการ</option>
+                                        <option>Business Permission</option>
+                                        <option>เอกสารภาษี</option>
+                                        <option>Statement ย้อนหลัง 2 ปี</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">TCG :</td>
+                                <td>
+                                    <input type="radio" id="tcg_no" name="tcg" checked="true"/><label for="tcg_no">No</label>
+                                    <input type="radio" id="tcg_yes" name="tcg"/><label for="tcg_yes">Yes</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Refinance :</td>
+                                <td>
+                                    <input type="radio" id="refinance_no" name="refinance" checked="true"/><label for="refinance_no">No</label>
+                                    <input type="radio" id="refinance_yes" name="refinance"/><label for="refinance_yes">Yes</label><p:spacer width="5px"/>
+                                    <select id="specialProgramName">
+                                        <option>- Please Select -</option>
+                                        <option>BOT</option>
+                                        <option>GSB</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">ลักษณะการขอสินเชื่อ :</td>
+                                <td>
+                                    <select class="larger"><option>- Please Select -</option></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">Collateral :</td>
+                                <td>
+                                    <p:commandButton id="btnAddCollateral"
+                                                     value="Add"
+                                                     styleClass="smaller"
+                                                     action="#{prescreenMaker.onClearDlg}"
+                                                     oncomplete="collateralDlg.show()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <p:panel id="tableCollateral" styleClass="panel">
+                                        <p:dataTable id="resultTableCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
+                                                     paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex">
+
+                                            <p:column headerText="" styleClass="center" style="width:22px;">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Collateral" styleClass="center" style="width: 110px;">
+                                                <h:outputText value="#{collateral.collateralTypeName}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Request Amount" style="width: 130px;">
+                                                <div class="right">
+                                                    <h:outputText value="#{collateral.collateralAmount}" >
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="8"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </p:column>
+
+                                            <p:column headerText="" styleClass="center" style="width:54px;">
+                                                <p:commandButton icon="ui-icon-pencil"
+                                                                 action="#{prescreenMaker.onRowCollateral(rowIndex)}"
+                                                                 update=":collateralDlgForm"
+                                                                 process=":tableCollateral"
+                                                                 oncomplete="collateralDlg.show();"/>
+                                                <p:commandButton icon="ui-icon-trash"
+                                                                 title="Remove"
+                                                                 action="#{prescreenMaker.onRemoveCollateral(rowIndex)}"
+                                                                 update=":tableCollateral"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </p:panel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <div class="separate"><!-- --></div>
+                                </td>
+                            </tr>
+                            <tr><td colspan="2"><p:spacer width="5"/></td></tr>
+                            <tr>
+                                <td class="center" colspan="100%">
+                                    <p:commandButton id="btnSave"
+                                                     value="Save"
+                                                     styleClass="medium"/>
+                                </td>
+                            </tr>
+                        </table>
+                    <!--</p:panel>-->
+                    <!--<p:blockUI widgetVar="blockUIContentForm" block="pnlContent_form" trigger=":btnSave"/>-->
+                    <!-- end content -->
+                </div>
+            </div>
+            <div id="bottom_line"><!-- --></div>
+        </div>
+        <div class="clear"></div>
+        <!-- Start Footer -->
+        <ui:include src="include/footer.xhtml" />
+        <!-- End Footer -->
+        <h:inputHidden id="pagename" value="mnuprescreen"/>
+        <h:inputHidden id="subpagename" value="submnuprescreen"/>
+    </div>
+    <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+              modal="true" width="400" height="150">
+        <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
+    </p:dialog>
+    <p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
+              modal="true">
+        <ui:include src="dialog/prescreenBusinessDialog.xhtml"/>
+    </p:dialog>
+    <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg"
+              modal="true" width="400" height="100">
+        <ui:include src="dialog/prescreenCollateralDialog.xhtml"/>
+    </p:dialog>
+</h:body>
+</f:view>
+</html>

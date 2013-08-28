@@ -44,7 +44,6 @@ public class PrescreenFacilityMaker implements Serializable {
     private String modeForButton;
     private int rowIndex;
 
-
     @Inject
     private CreditTypeDAO creditTypeDao;
     @Inject
@@ -74,6 +73,18 @@ public class PrescreenFacilityMaker implements Serializable {
             facility = new Facility();
         }
 
+        if (selectProductGroup == null) {
+            selectProductGroup = new ProductGroup();
+        }
+
+        if (selectProductProgram == null) {
+            selectProductProgram = new ProductProgram();
+        }
+
+        if (selectCreditType == null) {
+            selectCreditType = new CreditType();
+        }
+
         if (creditTypeList == null) {
             creditTypeList = new ArrayList<CreditType>();
         }
@@ -86,11 +97,11 @@ public class PrescreenFacilityMaker implements Serializable {
             productProgramList = new ArrayList<ProductProgram>();
         }
 
-        if(prdGroupToPrdProgramList == null){
+        if (prdGroupToPrdProgramList == null) {
             prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         }
 
-        if(prdProgramToCreditTypeList == null){
+        if (prdProgramToCreditTypeList == null) {
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
 
@@ -100,32 +111,37 @@ public class PrescreenFacilityMaker implements Serializable {
 
     public void onLoadSelectOneListbox() {
         log.info("onLoadFirst ::::::: ");
-        productGroupList     = productGroupDAO.findAll();
+        productGroupList = null;
+        productGroupList = productGroupDAO.findAll();
         log.info("onLoadFirst :::::::  productGroupList size ::::::::::::", productGroupList.size());
 
-        selectProductGroup   = productGroupList.get(0);
-        prdGroupToPrdProgramList   = null;
-        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroupList.get(0));
+//        selectProductGroup   = productGroupList.get(0);
+        log.info("onLoadFirst :::::::  selectProductGroup  ::::::::::::", selectProductGroup.getId());
+
+        prdGroupToPrdProgramList = null;
+        prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(selectProductGroup);
         log.info("onLoadFirst ::::::: prdGroupToPrdProgramList size ::::::::::::", prdGroupToPrdProgramList.size());
 
-        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
+//        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
-        log.info("onLoadFirst ::::::: selectProductProgram.name :::::::::::: "+selectProductProgram.getName());
+        log.info("onLoadFirst ::::::: selectProductProgram.name :::::::::::: " + selectProductProgram.getName());
 
-        selectCreditType = prdProgramToCreditTypeList.get(0).getCreditType();
-        log.info("onLoadFirst ::::::: selectCreditType.name :::::::::::: "+selectCreditType.getName());
+//        selectCreditType = prdProgramToCreditTypeList.get(0).getCreditType();
+        log.info("onLoadFirst ::::::: selectCreditType.name :::::::::::: " + selectCreditType.getName());
+
     }
 
-    public void onChangeProductGroup(){
+    public void onChangeProductGroup() {
         log.info("onChangeProductGroup :::::::: selectProductGroup.id ::::: " + selectProductGroup.getId());
-        ProductGroup productGroup  = productGroupDAO.findById(selectProductGroup.getId());
-        prdGroupToPrdProgramList   = null;
-        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
+        ProductGroup productGroup = null;
+        productGroup = productGroupDAO.findById(selectProductGroup.getId());
+        prdGroupToPrdProgramList = null;
+        prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
         log.info("onChangeProductGroup :::::::: prdGroupToPrdProgramList size :::: ", prdGroupToPrdProgramList.size());
 
-        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
-        log.info("onChangeProductGroup ::::::: selectProductProgram.id :::: "+selectProductProgram.getId());
+//        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
+        log.info("onChangeProductGroup ::::::: selectProductProgram.id :::: " + selectProductProgram.getId());
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
 
@@ -135,20 +151,19 @@ public class PrescreenFacilityMaker implements Serializable {
             facilityList.removeAll(facilityList);
         }
 
-        onLoadSelectOneListbox();
-
     }
 
-    public void onChangeProductProgram(){
-        ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+    public void onChangeProductProgram() {
+        ProductProgram productProgram = null;
+        productProgram = productProgramDAO.findById(selectProductProgram.getId());
         log.info("onChangeProductProgram :::: productProgram.Id :::  " + productProgram.getId());
         log.info("onChangeProductProgram :::: productProgram.name ::: " + productProgram.getName());
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
-        log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
+        log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " + prdProgramToCreditTypeList.size());
     }
 
-    public void onChangeCreditType(){
+    public void onChangeCreditType() {
         log.info("onChangeCreditType ::: selectCreditType.Id() >>> " + selectCreditType.getId());
 //        CreditType creditType  = creditTypeDao.findById(selectCreditType.getId());
 //        log.info("onChangeCreditType ::: selectCreditType.Name() >>> " + creditType.getName());
@@ -157,35 +172,43 @@ public class PrescreenFacilityMaker implements Serializable {
 
     public void onAddFacility() {
         log.info("onAddFacility:::");
-        log.info("onAddFacility::: selectProductProgram.getId() :: "+
-                productProgramDAO.findById(selectProductProgram.getId()).toString());
-        log.info("onAddFacility::: selectCreditType.getId() :: "+
-                creditTypeDao.findById(selectCreditType.getId()).toString());
+        log.info("selectProductGroup.getId() >> " + selectProductGroup.getId());
+        log.info("selectProductProgram.getId() >> " + selectProductProgram.getId());
+        log.info("selectCreditType.getId() >> " + selectCreditType.getId());
 
-        Facility facAdd   = new Facility();
-        ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        facAdd.setProductProgram(productProgram);
-        facAdd.setCreditType(creditType);
-        facAdd.setRequestAmount(facility.getRequestAmount());
-        facilityList.add(facAdd);
+        if (!((selectProductGroup.getId() == 0) || (selectProductProgram.getId() == 0) || (selectCreditType.getId() == 0))) {
+
+            log.info("onAddFacility::: selectProductProgram.getId() :: " +
+                    productProgramDAO.findById(selectProductProgram.getId()).toString());
+            log.info("onAddFacility::: selectCreditType.getId() :: " +
+                    creditTypeDao.findById(selectCreditType.getId()).toString());
+
+            ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+            CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
+            Facility facAdd = new Facility();
+            facAdd.setProductProgram(productProgram);
+            facAdd.setCreditType(creditType);
+            facAdd.setRequestAmount(facility.getRequestAmount());
+            facilityList.add(facAdd);
+        }
+
     }
 
     // open dialog
     public void onSelectedFacility(int rowNumber) {
-        modeForButton   = "edit";
-        rowIndex        =  rowNumber;
-        log.info("onSelectedFacility :::  rowNumber  :: "+ rowNumber );
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getFacilityName :: "+ rowNumber +"  "
+        modeForButton = "edit";
+        rowIndex = rowNumber;
+        log.info("onSelectedFacility :::  rowNumber  :: " + rowNumber);
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getFacilityName :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getCreditType().getId());
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getProductProgramName :: "+ rowNumber +"  "
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getProductProgramName :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getProductProgram().getId());
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getRequestAmount :: "+ rowNumber +"  "
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getRequestAmount :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getRequestAmount());
 
         selectProductProgram = facilityList.get(rowNumber).getProductProgram();
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
-        selectCreditType     = facilityList.get(rowNumber).getCreditType();
+        selectCreditType = facilityList.get(rowNumber).getCreditType();
         facility.setProductProgram(selectProductProgram);
         facility.setCreditType(selectCreditType);
         facility.setRequestAmount(facilityList.get(rowNumber).getRequestAmount());
@@ -194,9 +217,9 @@ public class PrescreenFacilityMaker implements Serializable {
 
     public void onEditFacility() {
         ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        log.info("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
-        log.info("onEditFacility :::::: selectCreditType ::: "+selectCreditType.getName());
+        CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
+        log.info("onEditFacility :::::: selectProductProgram ::: " + selectProductProgram.getName());
+        log.info("onEditFacility :::::: selectCreditType ::: " + selectCreditType.getName());
         facilityList.get(rowIndex).setProductProgram(productProgram);
         facilityList.get(rowIndex).setCreditType(creditType);
         facilityList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
@@ -207,8 +230,9 @@ public class PrescreenFacilityMaker implements Serializable {
     }
 
     public void onClickDialog() {
-        onLoadSelectOneListbox();
-        facility.setRequestAmount(null) ;
+        selectProductProgram = new ProductProgram();
+        selectCreditType = new CreditType();
+        facility.setRequestAmount(null);
         modeForButton = "add";
     }
 

@@ -1,0 +1,23 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
+    <div id="header_logo">
+        <div id="header_logo_image">
+            <img src="#{request.contextPath}/resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application" />
+        </div>
+        <div id="header_userinfo">
+            <div id="header_user">
+                Login as : Mr. BDM Maker
+            </div>
+            <div id="header_menu">
+                <a href="inbox.jsf" class="header_menu">inbox</a> |
+                <a href="search.jsf" class="header_menu">search</a> |
+                <a href="download.jsf" class="header_menu">download</a> |
+                <a href="logout.jsf" class="header_menu">logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</ui:composition>

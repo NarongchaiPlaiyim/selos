@@ -22,13 +22,11 @@ public class RMAudit implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="response_time")
     private Date responseTime;
-    @Column(name = "request_msg",length = 2000)
-    private String requestMsg;
-    @Column(name = "response_msg",length = 2000)
-    private String responseMsg;
+    @Column(name = "link_key")
+    private String linkKey;
     @Column(name = "result",length = 20)
     private String result;
-    @Column(name = "result_datail",length = 2000)
+    @Column(name = "result_detail",length = 2000)
     private String resultDetail;
 
     public RMAudit() {
@@ -66,20 +64,12 @@ public class RMAudit implements Serializable {
         this.responseTime = responseTime;
     }
 
-    public String getRequestMsg() {
-        return requestMsg;
+    public String getLinkKey() {
+        return linkKey;
     }
 
-    public void setRequestMsg(String requestMsg) {
-        this.requestMsg = requestMsg;
-    }
-
-    public String getResponseMsg() {
-        return responseMsg;
-    }
-
-    public void setResponseMsg(String responseMsg) {
-        this.responseMsg = responseMsg;
+    public void setLinkKey(String linkKey) {
+        this.linkKey = linkKey;
     }
 
     public String getResult() {
@@ -105,8 +95,7 @@ public class RMAudit implements Serializable {
                 append("requester", requester).
                 append("requestTime", requestTime).
                 append("responseTime", responseTime).
-                append("requestMsg", requestMsg).
-                append("responseMsg", responseMsg).
+                append("linkKey", linkKey).
                 append("result", result).
                 append("resultDetail", resultDetail).
                 toString();
