@@ -26,7 +26,7 @@
                       <p:message for="id"/>
 
                       <p:outputLabel value="Customer Type : "/>
-                      <p:inputText id="custype" value="#{testrm.searchIndividual.custType}" disabled="true"/>
+                      <p:inputText id="custype" value="#{testrm.searchIndividual.custType}" disabled="false"/>
                       <p:message for="custype"/>
 
                       <p:outputLabel value="Card Type : "/>
@@ -38,19 +38,19 @@
                       <p:message for="cardtype"/>
 
                       <p:outputLabel value="Customer ID : "/>
-                      <p:inputText id="cusid" value="#{testrm.searchIndividual.custId}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="cusid" value="#{testrm.searchIndividual.custId}" />
                       <p:message for="cusid"/>
 
                       <p:outputLabel value="RM Number : "/>
-                      <p:inputText id="rmnumber" value="#{testrm.searchIndividual.custNbr}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="rmnumber" value="#{testrm.searchIndividual.custNbr}" />
                       <p:message for="rmnumber"/>
 
                       <p:outputLabel value="Customer Name : "/>
-                      <p:inputText id="cusname" value="#{testrm.searchIndividual.custName}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="cusname" value="#{testrm.searchIndividual.custName}"/>
                       <p:message for="cusname"/>
 
                       <p:outputLabel value="Customer Surname : "/>
-                      <p:inputText id="cussur" value="#{testrm.searchIndividual.custSurname}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:inputText id="cussur" value="#{testrm.searchIndividual.custSurname}"/>
                       <p:message for="cussur"/>
 
                       <p:outputLabel value="radSelectSearch : "/>
@@ -58,17 +58,22 @@
                       <p:message for="radser"/>
 
 
-                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.callserviceIndividual()}" update="@form">
+                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.IntiIndividual()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
-                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.callserviceCorporate()}" update="@form">
+                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.IntiCorporate()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
 
                   </h:panelGrid>
+                  <h:panelGrid columns="2" >
+                  <p:outputLabel value="Request :" />
                   <p:outputLabel value="Response :" />
-                  <p:inputTextarea value="#{testrm.printResponse}" rows="10" cols="100"/>
+                  <p:inputTextarea value="#{testrm.printRequest}" rows="15" cols="90"/>
+
+                  <p:inputTextarea value="#{testrm.printResponse}" rows="15" cols="90"/>
+                  </h:panelGrid>
               </h:form>
 
     </fieldset>

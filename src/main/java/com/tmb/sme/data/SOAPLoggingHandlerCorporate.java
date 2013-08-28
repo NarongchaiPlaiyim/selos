@@ -1,11 +1,7 @@
 package com.tmb.sme.data;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Set;
+import com.clevel.selos.controller.TestRM;
+
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.transform.Source;
@@ -15,8 +11,15 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Set;
 
-public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
+public class SOAPLoggingHandlerCorporate implements SOAPHandler<SOAPMessageContext>{
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
@@ -43,7 +46,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
                 String mac = getMACAddress();
 
                 //add a soap header, name as "mac address"
-                QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
+                QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
                 SOAPHeaderElement soapHeaderElement = soapHeader.addHeaderElement(qname);
 
                 soapHeaderElement.setActor(SOAPConstants.URI_SOAP_ACTOR_NEXT);
@@ -51,19 +54,19 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
                 soapMsg.saveChanges();
 
                 //tracking
-                soapMsg.writeTo(System.out);
-
+                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                soapMsg.writeTo(baos);
+                TestRM.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
                 System.out.println("Response...........................................................");
 
                 // Send SOAP 	Message to SOAP Server
-                String url = "http://10.175.140.18:7809/services/EAISearchIndividualCustomerCM";
+                String url = "http://10.175.140.18:7807/EAISearchCorporateCustomer";
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
-
-                soapResponse.writeTo(System.out);
-
+               soapResponse.writeTo(baos);
+                TestRM.printResponse=baos.toString();
             }catch(SOAPException e){
                 System.err.println(e);
             }catch(IOException e){
@@ -78,14 +81,14 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
         //continue other handler chain
         return true;
     }
-//    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
-//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//        Transformer transformer = transformerFactory.newTransformer();
-//        Source sourceContent = soapResponse.getSOAPPart().getContent();
-//        System.out.print("\nResponse SOAP Message = ");
-//        StreamResult result = new StreamResult(System.out);
-//        transformer.transform(sourceContent, result);
-//    }
+    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        Source sourceContent = soapResponse.getSOAPPart().getContent();
+        System.out.print("\nResponse SOAP Message = ");
+        StreamResult result = new StreamResult(System.out);
+        transformer.transform(sourceContent, result);
+    }
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
