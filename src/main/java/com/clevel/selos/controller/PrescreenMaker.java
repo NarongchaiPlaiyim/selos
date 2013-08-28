@@ -159,6 +159,20 @@ public class PrescreenMaker implements Serializable {
             businessInformationList = new ArrayList<BusinessInformation>();
         }
 
+
+        if (selectProductGroup == null) {
+            selectProductGroup = new ProductGroup();
+        }
+
+        if (selectProductProgram == null) {
+            selectProductProgram = new ProductProgram();
+        }
+
+        if (selectCreditType == null) {
+            selectCreditType = new CreditType();
+        }
+
+
         collateralTypeList = collateralTypeDAO.findAll();
         businessGroupList = businessGroupDAO.findAll();
 
@@ -170,18 +184,13 @@ public class PrescreenMaker implements Serializable {
         productGroupList     = productGroupDAO.findAll();
         log.info("onLoadFirst :::::::  productGroupList size :::::::::::: {}", productGroupList.size());
 
-        selectProductGroup   = productGroupList.get(0);
         prdGroupToPrdProgramList   = null;
-        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroupList.get(0));
+        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(selectProductGroup);
         log.info("onLoadFirst ::::::: prdGroupToPrdProgramList size ::::::::::::", prdGroupToPrdProgramList.size());
 
-        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
-        log.info("onLoadFirst ::::::: selectProductProgram.name :::::::::::: "+selectProductProgram.getName());
 
-        selectCreditType = prdProgramToCreditTypeList.get(0).getCreditType();
-        log.info("onLoadFirst ::::::: selectCreditType.name :::::::::::: "+selectCreditType.getName());
     }
 
     public void onChangeProductGroup(){
@@ -191,7 +200,6 @@ public class PrescreenMaker implements Serializable {
         prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
         log.info("onChangeProductGroup :::::::: prdGroupToPrdProgramList size :::: ", prdGroupToPrdProgramList.size());
 
-//        selectProductProgram = prdGroupToPrdProgramList.get(0).getProductProgram();
         log.info("onChangeProductGroup ::::::: selectProductProgram.id :::: "+selectProductProgram.getId());
         prdProgramToCreditTypeList = null;
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
@@ -419,38 +427,47 @@ public class PrescreenMaker implements Serializable {
 
     public void onAddFacility() {
         log.info("onAddFacility:::");
-        log.info("onAddFacility::: selectProductProgram.getId() :: "+
-                productProgramDAO.findById(selectProductProgram.getId()).toString());
-        log.info("onAddFacility::: selectCreditType.getId() :: "+
-                creditTypeDao.findById(selectCreditType.getId()).toString());
+        log.info("selectProductGroup.getId() >> " + selectProductGroup.getId());
+        log.info("selectProductProgram.getId() >> " + selectProductProgram.getId());
+        log.info("selectCreditType.getId() >> " + selectCreditType.getId());
 
-        Facility facAdd   = new Facility();
-        ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        facAdd.setProductProgram(productProgram);
-        facAdd.setCreditType(creditType);
-        facAdd.setRequestAmount(facility.getRequestAmount());
-        facilityList.add(facAdd);
+        if (!((selectProductGroup.getId() == 0) || (selectProductProgram.getId() == 0) || (selectCreditType.getId() == 0))) {
+
+            log.info("onAddFacility::: selectProductProgram.getId() :: " +
+                    productProgramDAO.findById(selectProductProgram.getId()).toString());
+            log.info("onAddFacility::: selectCreditType.getId() :: " +
+                    creditTypeDao.findById(selectCreditType.getId()).toString());
+
+            ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+            CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
+            Facility facAdd = new Facility();
+            facAdd.setProductProgram(productProgram);
+            facAdd.setCreditType(creditType);
+            facAdd.setRequestAmount(facility.getRequestAmount());
+            facilityList.add(facAdd);
+        }
+
     }
 
     // open dialog
     public void onSelectedFacility(int rowNumber) {
-        modeForButton   = "edit";
-        rowIndex        =  rowNumber;
-        log.info("onSelectedFacility :::  rowNumber  :: "+ rowNumber );
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getFacilityName :: "+ rowNumber +"  "
+        modeForButton = "edit";
+        rowIndex = rowNumber;
+        log.info("onSelectedFacility :::  rowNumber  :: " + rowNumber);
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getFacilityName :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getCreditType().getId());
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getProductProgramName :: "+ rowNumber +"  "
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getProductProgramName :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getProductProgram().getId());
-        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getRequestAmount :: "+ rowNumber +"  "
+        log.info("onSelectedFacility ::: facilityList.get(rowNumber).getRequestAmount :: " + rowNumber + "  "
                 + facilityList.get(rowNumber).getRequestAmount());
 
         selectProductProgram = facilityList.get(rowNumber).getProductProgram();
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
-        selectCreditType     = facilityList.get(rowNumber).getCreditType();
+        selectCreditType = facilityList.get(rowNumber).getCreditType();
         facility.setProductProgram(selectProductProgram);
         facility.setCreditType(selectCreditType);
         facility.setRequestAmount(facilityList.get(rowNumber).getRequestAmount());
+
 
     }
 
