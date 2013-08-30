@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://data.common.tmb.com/EAISearchCustomerAccount/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://data.common.tmb.com/EAISearchCustomerAccount/" name="EAISearchCustomerAccount">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://data.common.tmb.com/EAISearchCustomerAccount/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:Q1="http://data.common.tmb.com/requestSearchCustomerAccount" xmlns:Q2="http://data.common.tmb.com/responseSearchCustomerAccount">
+			<xsd:import schemaLocation="res_searchCustomerAccount.xsd" namespace="http://data.common.tmb.com/responseSearchCustomerAccount"/>
+			<xsd:import schemaLocation="req_searchCustomerAccount.xsd" namespace="http://data.common.tmb.com/requestSearchCustomerAccount"/>
+			<xsd:element name="searchCustomerAccount">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestData" type="Q1:reqSearchCustomerAccount"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="searchCustomerAccountResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseData" type="Q2:resSearchCustomerAccount"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="searchCustomerAccountRequest">
+		<wsdl:part name="parameters" element="tns:searchCustomerAccount"/>
+	</wsdl:message>
+	<wsdl:message name="searchCustomerAccountResponse">
+		<wsdl:part name="parameters" element="tns:searchCustomerAccountResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="EAISearchCustomerAccount">
+		<wsdl:operation name="searchCustomerAccount">
+			<wsdl:input message="tns:searchCustomerAccountRequest"/>
+			<wsdl:output message="tns:searchCustomerAccountResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="EAISearchCustomerAccount" type="tns:EAISearchCustomerAccount">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="searchCustomerAccount">
+			<soap:operation soapAction="searchCustomerAccount"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="EAISearchCustomerAccount">
+		<wsdl:port name="EAISearchCustomerAccount" binding="tns:EAISearchCustomerAccount">
+			<soap:address location="http://10.175.140.18:7809/services/EAISearchCustomerAccount"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
