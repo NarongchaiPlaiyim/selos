@@ -56,6 +56,7 @@ public class SOAPLoggingHandlerCorporate implements SOAPHandler<SOAPMessageConte
                 //tracking
                 ByteArrayOutputStream baos=new ByteArrayOutputStream();
                 soapMsg.writeTo(baos);
+                soapMsg.writeTo(System.out);
                 TestRM.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -66,6 +67,7 @@ public class SOAPLoggingHandlerCorporate implements SOAPHandler<SOAPMessageConte
                 String url = "http://10.175.140.18:7807/EAISearchCorporateCustomer";
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
                soapResponse.writeTo(baos);
+               soapResponse.writeTo(System.out);
                 TestRM.printResponse=baos.toString();
             }catch(SOAPException e){
                 System.err.println(e);

@@ -19,7 +19,7 @@
         <fieldset>
             <legend>Search Form</legend>
               <h:form>
-
+                 <h:panelGrid columns="2">
                   <h:panelGrid columns="3">
                       <p:outputLabel value="Register ID : "/>
                       <p:inputText id="id" value="#{testrm.searchIndividual.reqId}" required="true" requiredMessage="Please enter Data!"/>
@@ -58,21 +58,24 @@
                       <p:message for="radser"/>
 
 
-                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.IntiIndividual()}" update="@form">
+                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.individual()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
-                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.IntiCorporate()}" update="@form">
+                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.corporate()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
 
                   </h:panelGrid>
+                     <p:inputTextarea value="#{testrm.printDetail}" rows="15" cols="50"/>
+                 </h:panelGrid>
                   <h:panelGrid columns="2" >
                   <p:outputLabel value="Request :" />
                   <p:outputLabel value="Response :" />
-                  <p:inputTextarea value="#{testrm.printRequest}" rows="15" cols="90"/>
 
-                  <p:inputTextarea value="#{testrm.printResponse}" rows="15" cols="90"/>
+                  <p:inputTextarea value="#{testrm.printRequest}" rows="15" cols="70"/>
+
+                  <p:inputTextarea value="#{testrm.printResponse}" rows="15" cols="70"/>
                   </h:panelGrid>
               </h:form>
 

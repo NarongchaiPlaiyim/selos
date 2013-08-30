@@ -1,26 +1,18 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
+import com.clevel.selos.integration.corebanking.RmService;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.viewmodel.CardTypeView;
+import com.clevel.selos.model.viewmodel.CorporateModel;
+import com.clevel.selos.model.viewmodel.IndividualModel;
 import com.clevel.selos.model.viewmodel.SearchIndividual;
-import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer;
-import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_Service;
-import com.tmb.sme.data.requestsearchcorporatecustomer.ReqSearchCorporateCustomer;
-import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
-import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
-import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,121 +26,114 @@ public class TestRM implements Serializable{
     @Inject
     CardTypeDao dao;
 
+//    @Inject
+    RmService rmService;
+
     SearchIndividual searchIndividual;
+    CorporateModel corporateModel;
+
     List<CardType> list;
     List<CardTypeView>listhardcode;
+
     public static String printResponse;
     public static String printRequest;
+    private String printDetail;
+
     public TestRM(){
+
     }
 
     @PostConstruct
     public void onCreate(){
-//        log.debug("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+//        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+
+
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
-        listhardcode.add(new CardTypeView("NAME","CI"));
+        listhardcode.add(new CardTypeView("Citizen ID","CI"));
+        listhardcode.add(new CardTypeView("Tax Identification Number","TN"));
+        listhardcode.add(new CardTypeView("Passport","PP"));
+        listhardcode.add(new CardTypeView("Driver License","DL"));
+        listhardcode.add(new CardTypeView("Swift Code","SW"));
+        listhardcode.add(new CardTypeView("FI Code","FI"));
+        listhardcode.add(new CardTypeView("Work Permit","WP"));
+        listhardcode.add(new CardTypeView("Alien ID","AI"));
+        listhardcode.add(new CardTypeView("Temporary Card","TC"));
+        listhardcode.add(new CardTypeView("Other","OT"));
 
         searchIndividual = new SearchIndividual();
-//        searchIndividual.setCustType("P");
-
-
-
     }
 
-    public void IntiIndividual(){
-        com.tmb.sme.data.requestsearchindividualcustomer.Header header=new com.tmb.sme.data.requestsearchindividualcustomer.Header();
-        header.setReqID(searchIndividual.getReqId());
+    ////////////////////////////////////////////////////////   call Service
 
-        com.tmb.sme.data.requestsearchindividualcustomer.Body  body=new com.tmb.sme.data.requestsearchindividualcustomer.Body();
-        body.setCustType(searchIndividual.getCustType());
-//        body.setType(searchIndividual.getType());
-        body.setType("CI");
-        body.setCustId(searchIndividual.getCustId());
-        body.setCustNbr(searchIndividual.getCustNbr());
-        body.setCustName(searchIndividual.getCustName());
-        body.setCustSurname(searchIndividual.getCustSurname());
-        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
+    public void individual(){
+        rmService =new RmService();
+        IndividualModel individualModel ;
+        //callservice
+       individualModel = rmService.intiIndividual(searchIndividual);
+        //showData
+       StringBuffer result=new StringBuffer();
+        result.append("==================== Individual Data Demo ===================");
+        result.append("\n responseCode : "+ individualModel.getResCode());
+        result.append("\n responseDesc : "+ individualModel.getResDesc());
+        result.append("\n searchResult : "+ individualModel.getSearchResult());
+        result.append("\n lastPageFlag : "+ individualModel.getLastPageFlag());
+        result.append("\n\n ===== personal Detail Section =====");
+        result.append("\n title : "+ individualModel.getTitle());
+        result.append("\n custId : "+ individualModel.getCustId());
+        result.append("\n telephone1 : "+ individualModel.getTelephone1());
+        result.append("\n\n ===== personal List Section =====");
 
-        ReqSearchIndividualCustomer reqSearch=new ReqSearchIndividualCustomer();
-        reqSearch.setHeader(header);
-        reqSearch.setBody(body);
-
-     ResSearchIndividualCustomer resSearchIndividualCustomer = callserviceIndividual(reqSearch);
-    }
-
-    public void IntiCorporate(){
-        com.tmb.sme.data.requestsearchcorporatecustomer.Header header=new com.tmb.sme.data.requestsearchcorporatecustomer.Header();
-        header.setReqID(searchIndividual.getReqId());
-
-        com.tmb.sme.data.requestsearchcorporatecustomer.Body  body=new com.tmb.sme.data.requestsearchcorporatecustomer.Body();
-        body.setCustType(searchIndividual.getCustType());
-//        body.setType(searchIndividual.getType());
-        body.setType("CI");
-        body.setCustId(searchIndividual.getCustId());
-        body.setCustNbr(searchIndividual.getCustNbr());
-        body.setCustName(searchIndividual.getCustName());
-        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
-
-
-        ReqSearchCorporateCustomer reqSearch=new ReqSearchCorporateCustomer();
-        reqSearch.setHeader(header);
-        reqSearch.setBody(body);
-
-        ResSearchCorporateCustomer resSearchCorporateCustomer = callserviceCorporate(reqSearch);
-
-
-    }
-
-
-    // Services
-
-    public ResSearchIndividualCustomer callserviceIndividual(ReqSearchIndividualCustomer reqSearch){
-        ResSearchIndividualCustomer resSearchIndividualCustomer=null;
-        try{
-            System.out.println("callserviceIndividual() requestValue : ReqId = "+searchIndividual.getReqId()+" CustType = "+searchIndividual.getCustType());
-            URL url = this.getClass().getResource("/EAISearchIndividualCustomer.wsdl");
-            QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
-            System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-            EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url,qname);
-            EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
-            ((BindingProvider)eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY ,
-                    "http://10.175.140.18:7809/EAISearchIndividualCustomer");
-
-            resSearchIndividualCustomer=eaiSearchInd.searchIndividualCustomer(reqSearch) ;
-
-        } catch (Exception ex) {
-                ex.printStackTrace();
+        if(individualModel.getPersonalLists()!=null ){
+        result.append("/n personalListSize : "+ individualModel.getPersonalLists().size());
+                for(int i=0;i< individualModel.getPersonalLists().size();i++){
+                result.append("/n address : "+ individualModel.getPersonalLists().get(i).getAddress());
+                }
+        }else{
+            result.append("/n personalListSize : null");
         }
-          return resSearchIndividualCustomer;
+
+        printDetail=result.toString();
     }
 
 
-    public ResSearchCorporateCustomer callserviceCorporate(ReqSearchCorporateCustomer reqSearch){
-        ResSearchCorporateCustomer resSearchCorporateCustomer=null;
-        try{
-            System.out.println("callserviceCorporate() requestValue : ReqId = "+searchIndividual.getReqId()+" CustType = "+searchIndividual.getCustType());
+    public void corporate(){
+        rmService =new RmService();
+        corporateModel=new CorporateModel();
+        corporateModel = rmService.intiCorporate(searchIndividual);
+        //showData
+        StringBuffer result=new StringBuffer();
+        result.append("==================== Corporate Data Demo ===================");
+        result.append("\n responseCode : "+ corporateModel.getResCode());
+        result.append("\n responseDesc : "+ corporateModel.getResDesc());
+        result.append("\n searchResult : "+ corporateModel.getSearchResult());
 
+        result.append("\n\n ===== personal Detail Section =====");
+        result.append("\n title : "+ corporateModel.getTitle());
+        result.append("\n custNbr : "+ corporateModel.getCustNbr());
+        result.append("\n citizenId : "+ corporateModel.getCitizenId());
+        result.append("\n thaiName1 : "+ corporateModel.getThaiName1());
+        result.append("\n cId : "+ corporateModel.getcId());
+        result.append("\n estDate : "+ corporateModel.getEstDate());
+        result.append("\n\n ===== personal List Section =====");
 
-            URL url = this.getClass().getResource("/EAISearchCorporateCustomer.wsdl");
-            QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
-            System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-            EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url,qname);
-            EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
-            ((BindingProvider)eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY ,
-                    "http://10.175.140.18:7807/EAISearchCorporateCustomer");
-
-            resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
-
-
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            setPrintResponse(ex.getMessage());
-
+        if(corporateModel.getPersonalList()!=null ){
+            result.append("/n personalListSize : "+ corporateModel.getPersonalList().size());
+            for(int i=0;i< corporateModel.getPersonalList().size();i++){
+                result.append("/n custNbr1 : "+ corporateModel.getPersonalList().get(i).getCustNbr1());
+                result.append("/n cId1 : "+ corporateModel.getPersonalList().get(i).getcId1());
+                result.append("/n citizenId1 : "+ corporateModel.getPersonalList().get(i).getCitizenId1());
+                result.append("/n title1 : "+ corporateModel.getPersonalList().get(i).getTitle1());
+            }
+        }else{
+            result.append("/n personalListSize : null");
         }
-          return resSearchCorporateCustomer;
+
+        printDetail=result.toString();
     }
+
+
+    //////////////////////////////////////////////////////////////////////
 
 
     public void changeListener(){
@@ -182,6 +167,9 @@ public class TestRM implements Serializable{
         this.listhardcode = listhardcode;
     }
 
+
+    // print Request Response
+
     public String getPrintResponse() {
         return printResponse;
     }
@@ -195,5 +183,12 @@ public class TestRM implements Serializable{
 
     public void setPrintRequest(String printRequest) {
         this.printRequest = printRequest;
+    }
+    public String getPrintDetail() {
+        return printDetail;
+    }
+
+    public void setPrintDetail(String printDetail) {
+        this.printDetail = printDetail;
     }
 }

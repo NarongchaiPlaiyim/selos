@@ -56,6 +56,7 @@ public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageCont
                 //tracking
                 ByteArrayOutputStream baos=new ByteArrayOutputStream();
                 soapMsg.writeTo(baos);
+                soapMsg.writeTo(System.out);
                 TestRM.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -66,6 +67,7 @@ public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageCont
                 String url = "http://10.175.140.18:7809/EAISearchIndividualCustomer";
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
                soapResponse.writeTo(baos);
+               soapResponse.writeTo(System.out);
                  TestRM.printResponse=baos.toString();
             }catch(SOAPException e){
                 System.err.println(e);
@@ -81,14 +83,7 @@ public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageCont
         //continue other handler chain
         return true;
     }
-    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        Source sourceContent = soapResponse.getSOAPPart().getContent();
-        System.out.print("\nResponse SOAP Message = ");
-        StreamResult result = new StreamResult(System.out);
-        transformer.transform(sourceContent, result);
-    }
+
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {
