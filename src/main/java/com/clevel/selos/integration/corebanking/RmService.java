@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.exception.ValidationException;
-import com.clevel.selos.model.viewmodel.*;
+import com.clevel.selos.model.RMmodel.*;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service;
 import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer;

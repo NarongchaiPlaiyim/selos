@@ -1,4 +1,4 @@
-package com.clevel.selos.model.viewmodel;
+package com.clevel.selos.model.RMmodel;
 
 /**
  * Created with IntelliJ IDEA.

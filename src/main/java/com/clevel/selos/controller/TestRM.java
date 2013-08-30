@@ -3,10 +3,10 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.integration.corebanking.RmService;
 import com.clevel.selos.model.db.testrm.CardType;
-import com.clevel.selos.model.viewmodel.CardTypeView;
-import com.clevel.selos.model.viewmodel.CorporateModel;
-import com.clevel.selos.model.viewmodel.IndividualModel;
-import com.clevel.selos.model.viewmodel.SearchIndividual;
+import com.clevel.selos.model.RMmodel.CardTypeView;
+import com.clevel.selos.model.RMmodel.CorporateModel;
+import com.clevel.selos.model.RMmodel.IndividualModel;
+import com.clevel.selos.model.RMmodel.SearchIndividual;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -66,7 +66,7 @@ public class TestRM implements Serializable{
 
     ////////////////////////////////////////////////////////   call Service
 
-    public void individual(){
+    public void individual() throws Exception {
         rmService =new RmService();
         IndividualModel individualModel ;
         //callservice
@@ -97,7 +97,7 @@ public class TestRM implements Serializable{
     }
 
 
-    public void corporate(){
+    public void corporate() throws Exception {
         rmService =new RmService();
         corporateModel=new CorporateModel();
         corporateModel = rmService.intiCorporate(searchIndividual);
@@ -131,6 +131,8 @@ public class TestRM implements Serializable{
 
         printDetail=result.toString();
     }
+
+
 
 
     //////////////////////////////////////////////////////////////////////
