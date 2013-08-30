@@ -27,7 +27,7 @@ public class RmService implements Serializable{
 
 
 
-    public IndividualModel intiIndividual(SearchIndividual searchIndividual) {
+    public IndividualModel intiIndividual(SearchIndividual searchIndividual) throws Exception {
 
         //Validate
         if(searchIndividual.getReqId().length()<1 || searchIndividual.getReqId().length()>50){
@@ -82,6 +82,10 @@ public class RmService implements Serializable{
         if(resSearchIndividualCustomer.getHeader().getResCode().equals("0000")){
 
         individualModel.setSearchResult(resSearchIndividualCustomer.getBody().getSearchResult());
+            //checkSearchResult
+            if( individualModel.getSearchResult().equals("CL")){
+                throw new ValidationException("Customer List for multiple customers result");
+            }
         individualModel.setLastPageFlag(resSearchIndividualCustomer.getBody().getLastPageFlag());
           //personal detail session
         individualModel.setTitle(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
@@ -115,7 +119,7 @@ public class RmService implements Serializable{
     }
 
 
-    public CorporateModel intiCorporate(SearchIndividual searchIndividual){
+    public CorporateModel intiCorporate(SearchIndividual searchIndividual) throws Exception {
 
         System.out.println("======================  " +searchIndividual.getReqId());
         if(searchIndividual.getReqId().length()<1 || searchIndividual.getReqId().length()>50){
@@ -165,6 +169,10 @@ public class RmService implements Serializable{
         //Check Success
         if(resSearchCorporateCustomer.getHeader().getResCode().equals("0000")){
             corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
+            //checkSearchResult
+            if( corporateModel.getSearchResult().equals("CL")){
+                throw new ValidationException("Customer List for multiple customers result");
+            }
             //personal detail session
             corporateModel.setTitle(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
             corporateModel.setCustNbr(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
@@ -209,9 +217,9 @@ public class RmService implements Serializable{
 
     // Services
 
-    private ResSearchIndividualCustomer callserviceIndividual(ReqSearchIndividualCustomer reqSearch){
+    private ResSearchIndividualCustomer callserviceIndividual(ReqSearchIndividualCustomer reqSearch)throws Exception{
         ResSearchIndividualCustomer resSearchIndividualCustomer=null;
-        try{
+
 
             URL url = this.getClass().getResource("/EAISearchIndividualCustomer.wsdl");
             QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
@@ -223,16 +231,14 @@ public class RmService implements Serializable{
 
             resSearchIndividualCustomer=eaiSearchInd.searchIndividualCustomer(reqSearch) ;
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
         return resSearchIndividualCustomer;
     }
 
 
-    private ResSearchCorporateCustomer callserviceCorporate(ReqSearchCorporateCustomer reqSearch){
+    private ResSearchCorporateCustomer callserviceCorporate(ReqSearchCorporateCustomer reqSearch)throws Exception{
         ResSearchCorporateCustomer resSearchCorporateCustomer=null;
-        try{
+
 
             URL url = this.getClass().getResource("/EAISearchCorporateCustomer.wsdl");
             QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
@@ -245,10 +251,6 @@ public class RmService implements Serializable{
             resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
 
 
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
         return resSearchCorporateCustomer;
     }
 }
