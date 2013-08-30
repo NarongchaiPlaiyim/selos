@@ -1,26 +1,20 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 8/20/13
- * Time: 5:19 PM
- * To change this template use File | Settings | File Templates.
- */
 public class BusinessInformation {
     @Inject
     Logger log;
     @Inject
-    MessageProvider msg;
+    @NormalMessage
+    Message msg;
 
     private BusinessDescription businessDescription;
 
