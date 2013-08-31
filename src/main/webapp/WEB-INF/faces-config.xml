@@ -8,6 +8,9 @@
     <factory>
         <exception-handler-factory>com.clevel.selos.exception.handler.ViewExpiredHandlerFactory</exception-handler-factory>
     </factory>
+    <application>
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+    </application>
 
     <navigation-rule>
         <display-name>LoginBean</display-name>

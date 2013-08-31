@@ -17,9 +17,10 @@
         <access-denied-handler error-page="/error/accessDenied.jsf" />
         <anonymous enabled="false"/>
 
+        <session-management>
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" session-registry-alias="sessionRegistry"/>
+        </session-management>
     </http>
 
-    <authentication-manager alias="simpleAuthenticationManager">
-    </authentication-manager>
-
+    <authentication-manager />
 </bean:beans>

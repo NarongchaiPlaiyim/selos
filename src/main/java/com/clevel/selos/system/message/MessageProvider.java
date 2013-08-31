@@ -1,6 +1,7 @@
 package com.clevel.selos.system.message;
 
 import com.clevel.selos.model.Language;
+import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -11,13 +12,12 @@ import java.util.ResourceBundle;
 public abstract class MessageProvider implements Message {
     @Inject
     private Logger log;
-    @Inject
-    HttpSession httpSession;
     protected String resource;
     protected ResourceBundle messageTh;
     protected ResourceBundle messageEn;
 
     protected ResourceBundle getBundle() {
+        HttpSession httpSession = FacesUtil.getSession(false);
         if (Language.TH == httpSession.getAttribute("language")) {
             if (messageTh == null) {
                 log.debug("Load resource: {} (Th)",resource);
@@ -34,12 +34,12 @@ public abstract class MessageProvider implements Message {
 
     public void setLanguageTh() {
         log.debug("setLanguageTh.");
-        httpSession.setAttribute("language", Language.TH);
+        FacesUtil.getSession(false).setAttribute("language", Language.TH);
     }
 
     public void setLanguageEn() {
         log.debug("setLanguageEn.");
-        httpSession.setAttribute("language", Language.EN);
+        FacesUtil.getSession(false).setAttribute("language", Language.EN);
     }
 
 }
