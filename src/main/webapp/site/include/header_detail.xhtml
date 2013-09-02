@@ -7,13 +7,11 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-            <h:form>
-                <p:commandButton value="Check NCB" styleClass="blueButton" onclick="assignDlg.show()" />
+                <!--<p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:frmCheckCustomer:resultTableCustomer" />-->
                 <p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Closed Sales" ajax="false" disabled="true" styleClass="blueButton" />
-            </h:form>
         </div>
         <div class="clear"></div>
         <div id="header_information">

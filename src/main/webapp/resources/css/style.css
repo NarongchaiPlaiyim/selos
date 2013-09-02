@@ -63,6 +63,11 @@ textarea {
     display: table;
     background: url('../images/shared/content_bg.jpg');
 }
+#pnl_maincontainer {
+    border: 0!important;
+    margin: 0!important;
+    padding: 0!important;
+}
 #header_logo {
     min-width: 980px;
     width: 100%;
@@ -112,6 +117,8 @@ textarea {
     background: url('../images/shared/collapse_open.png') no-repeat;
     min-width: 30px;
     width: 30px;
+    min-height: 18px;
+    height: 18px;
     margin: 8px 0 0 5px;
     cursor: pointer;
     float: left;
@@ -120,6 +127,8 @@ textarea {
     background: url('../images/shared/collapse_close.png') no-repeat;
     min-width: 30px;
     width: 30px;
+    min-height: 18px;
+    height: 18px;
     margin: 8px 0 0 5px;
     cursor: pointer;
     float: left;
