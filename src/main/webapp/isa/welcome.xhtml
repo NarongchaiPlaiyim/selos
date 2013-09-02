@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Welcome (after login)</title>
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
+    </h:head>
+    <h:body>
+
+        <p:panel id="welcomePanel">
+            <h:form>
+                <h:outputText value="ISA welcome page. (after login)"/>
+                <br/>
+                <h:outputText value="#{welcomePage.now}"/>
+                <br/>
+                <h:outputText value="#{msg.get('app.name')}"/>
+                <br/>
+                <p:separator/>
+                <p:commandButton value="Eng" action="#{msg.setLanguageEn}" update=":welcomePanel"/>
+                <p:commandButton value="Th" action="#{msg.setLanguageTh}" update=":welcomePanel"/>
+                <p:commandButton value="Logout" action="#{loginBean.logout}" />
+            </h:form>
+        </p:panel>
+
+    </h:body>
+</f:view>
+</html>

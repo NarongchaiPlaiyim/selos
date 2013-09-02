@@ -4,6 +4,7 @@ package com.tmb.sme.data.eaisearchcorporatecustomer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -16,7 +17,8 @@ import javax.xml.ws.WebServiceClient;
  * Generated source version: 2.0
  * 
  */
-@WebServiceClient(name = "EAISearchCorporateCustomer", targetNamespace = "http://data.sme.tmb.com/EAISearchCorporateCustomer/", wsdlLocation = "file:/D:/kkkk/Corporate/EAISearchCorporateCustomer.wsdl")
+@WebServiceClient(name = "EAISearchCorporateCustomer", targetNamespace = "http://data.sme.tmb.com/EAISearchCorporateCustomer/", wsdlLocation = "file:/D:/Project-Clevel/selos/src/main/java/EAISearchCorporateCustomer.wsdl")
+@HandlerChain(file = "/LogMessage_handlerCorporate.xml")
 public class EAISearchCorporateCustomer_Service
     extends Service
 {
@@ -29,9 +31,9 @@ public class EAISearchCorporateCustomer_Service
         try {
             URL baseUrl;
             baseUrl = com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/D:/kkkk/Corporate/EAISearchCorporateCustomer.wsdl");
+            url = new URL(baseUrl, "file:/D:/Project-Clevel/selos/src/main/java/EAISearchCorporateCustomer.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/D:/kkkk/Corporate/EAISearchCorporateCustomer.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'file:/D:/Project-Clevel/selos/src/main/java/EAISearchCorporateCustomer.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         EAISEARCHCORPORATECUSTOMER_WSDL_LOCATION = url;

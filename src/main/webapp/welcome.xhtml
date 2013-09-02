@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
     </h:head>
     <h:body>
+        <h:link outcome="testRM" value="TESTRM"/>
+
 
         <p:panel id="welcomePanel">
             <h:form>
@@ -17,7 +19,16 @@
                 <br/>
                 <h:outputText value="#{welcomePage.now}"/>
                 <br/>
-                <h:outputText value="#{msg.key('app.name')}"/>
+                <h:outputText value="#{msg.get('app.name')}"/>
+                <br/>
+                <h:outputText value="#{validationMsg.get('001')}"/>
+                <br/>
+                <h:outputText value="#{exceptionMsg.get('001')}"/>
+                <br/>
+                <p:separator/>
+                <h:outputText value="#{welcomePage.validationStr}"/>
+                <br/>
+                <h:outputText value="#{welcomePage.exceptionStr}"/>
                 <br/>
                 <p:separator/>
 
@@ -45,8 +56,20 @@
 
                 <p:separator/>
                 <p:commandButton value="En" action="#{msg.setLanguageEn}" update=":welcomePanel"/>
-                <p:commandButton value="Th" action="#{msg.setLanguageTh}" update=":welcomePanel"/>
+                <p:commandButton value="Th" action="#{validationMsg.setLanguageTh}" update=":welcomePanel"/>
                 <p:commandButton value="reload config" action="#{welcomePage.reloadConfig}" update=":welcomePanel"/>
+                <p:commandButton value="action RM" action="#{welcomePage.onActionRM}" update=":welcomePanel"/>
+                <p:commandButton value="action NCB" action="#{welcomePage.onActionNCB}" update=":welcomePanel"/>
+                <p:commandButton value="action NCBI" action="#{welcomePage.onActionNCBI}" update=":welcomePanel"/>
+                <p:commandButton value="action SW" action="#{welcomePage.onActionSW}" update=":welcomePanel"/>
+                <p:commandButton value="action EMail" action="#{welcomePage.onActionEmail}" update=":welcomePanel"/>
+                <p:commandButton value="action DWH" action="#{welcomePage.onActionDWH}" update=":welcomePanel"/>
+                <p:commandButton value="action BRMS" action="#{welcomePage.onActionBRMS}" update=":welcomePanel"/>
+                <p:separator/>
+                <p:commandButton value="001" action="#{welcomePage.on001}" update=":welcomePanel"/>
+                <p:commandButton value="002" action="#{welcomePage.on002}" update=":welcomePanel"/>
+
+
             </h:form>
         </p:panel>
 

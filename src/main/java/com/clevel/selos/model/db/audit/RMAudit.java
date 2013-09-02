@@ -14,16 +14,19 @@ public class RMAudit implements Serializable {
     @SequenceGenerator(name="SEQ_ADT_EXT_RM_ID", sequenceName="SEQ_ADT_EXT_RM_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_EXT_RM_ID")
     private long id;
+    @Column(name="requester", nullable=false)
+    private String requester;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="request_time", nullable=false)
     private Date requestTime;
-    @Column(name = "request_msg",length = 2000)
-    private String requestMsg;
-    @Column(name = "response_msg",length = 2000)
-    private String responseMsg;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="response_time")
+    private Date responseTime;
+    @Column(name = "link_key")
+    private String linkKey;
     @Column(name = "result",length = 20)
     private String result;
-    @Column(name = "result_datail",length = 2000)
+    @Column(name = "result_detail",length = 2000)
     private String resultDetail;
 
     public RMAudit() {
@@ -37,6 +40,14 @@ public class RMAudit implements Serializable {
         this.id = id;
     }
 
+    public String getRequester() {
+        return requester;
+    }
+
+    public void setRequester(String requester) {
+        this.requester = requester;
+    }
+
     public Date getRequestTime() {
         return requestTime;
     }
@@ -45,20 +56,20 @@ public class RMAudit implements Serializable {
         this.requestTime = requestTime;
     }
 
-    public String getRequestMsg() {
-        return requestMsg;
+    public Date getResponseTime() {
+        return responseTime;
     }
 
-    public void setRequestMsg(String requestMsg) {
-        this.requestMsg = requestMsg;
+    public void setResponseTime(Date responseTime) {
+        this.responseTime = responseTime;
     }
 
-    public String getResponseMsg() {
-        return responseMsg;
+    public String getLinkKey() {
+        return linkKey;
     }
 
-    public void setResponseMsg(String responseMsg) {
-        this.responseMsg = responseMsg;
+    public void setLinkKey(String linkKey) {
+        this.linkKey = linkKey;
     }
 
     public String getResult() {
@@ -81,9 +92,10 @@ public class RMAudit implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
+                append("requester", requester).
                 append("requestTime", requestTime).
-                append("requestMsg", requestMsg).
-                append("responseMsg", responseMsg).
+                append("responseTime", responseTime).
+                append("linkKey", linkKey).
                 append("result", result).
                 append("resultDetail", resultDetail).
                 toString();

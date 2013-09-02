@@ -1,10 +1,7 @@
 
 package com.tmb.sme.data.eaisearchindividualcustomer;
 
-import javax.jws.WebMethod;
-import javax.jws.WebParam;
-import javax.jws.WebResult;
-import javax.jws.WebService;
+import javax.jws.*;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
@@ -31,8 +28,7 @@ public interface EAISearchIndividualCustomer {
     @WebResult(name = "responseData", targetNamespace = "")
     @RequestWrapper(localName = "searchIndividualCustomer", targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/", className = "com.tmb.sme.data.eaisearchindividualcustomer.SearchIndividualCustomer")
     @ResponseWrapper(localName = "searchIndividualCustomerResponse", targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/", className = "com.tmb.sme.data.eaisearchindividualcustomer.SearchIndividualCustomerResponse")
-    public ResSearchIndividualCustomer searchIndividualCustomer(
-        @WebParam(name = "requestData", targetNamespace = "")
+    public ResSearchIndividualCustomer searchIndividualCustomer(@WebParam(name = "requestData", targetNamespace = "")
         ReqSearchIndividualCustomer requestData);
 
 }

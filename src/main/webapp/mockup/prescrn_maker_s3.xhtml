@@ -28,287 +28,290 @@
 
 
 <table id="content_form">
-<tr>
-    <td colspan="100%" class="right" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td>
-</tr>
-
+    <tr>
+        <td colspan="100%" class="right" style="padding-right: 10px;"><p:spacer width="5"></p:spacer></td>
+    </tr>
     <tr>
         <td class="title">Product Group :</td>
         <td>
-           <!--<p:panel id="productGroup" styleClass="panel" style="width:230px">-->
-            <h:selectOneListbox styleClass="largest" size="1"
-                                value="#{prescreenMaker.productGroupName}" id="productGroupName"
-                                onchange="#{prescreenMaker.onChangeProductGroup()}" onblur='true' >
-                <f:selectItem itemLabel="- Please Select -"/>
-                <f:selectItems value="#{prescreenMaker.productGroupList}"
-                               var="dlgProductGroup"
-                               itemLabel="#{dlgProductGroup.name}"
-                               itemValue="#{dlgProductGroup.name}"/>
-            </h:selectOneListbox>
-            <!--</p:panel>-->
+            <h:form id="productGroup" styleClass="panel" style="width:230px">
+                <h:selectOneListbox styleClass="largest" size="1"
+                                    value="#{prescreenFacilityMaker.selectProductGroup.id}" id="productGroupName" >
+                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                    <f:selectItems value="#{prescreenFacilityMaker.productGroupList}"
+                                   var="dlgProductGroup"
+                                   itemLabel="#{dlgProductGroup.name}"
+                                   itemValue="#{dlgProductGroup.id}"/>
+                    <p:ajax event="change"
+                            listener="#{prescreenFacilityMaker.onChangeProductGroup}"
+                            process=":productGroup"
+                            update=":tableFacility,:facilityDlgForm"/>
+                </h:selectOneListbox>
+            </h:form>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">Product Program <!--<span class="require-field">*</span>--> :</td>
+        <td>
+            <p:commandButton value="Add"
+                             styleClass="smaller"
+                             action="#{prescreenFacilityMaker.onClickDialog()}"
+                             update=":facilityDlgForm"
+                             oncomplete="facilityDlg.show();"/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+        </td>
+        <td>
+            <h:form id="tableFacility" styleClass="panel" style="width:610px;">
+                <p:dataTable id="resultTableFacility" var="item" value="#{prescreenFacilityMaker.facilityList}"
+                             paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" style="width:590px;">
+
+                    <p:column headerText="" styleClass="center" style="width:22px;">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
+
+                    <p:column headerText="Product Program" styleClass="center">
+                        <h:outputText value="#{item.productProgram.name}"/>
+                    </p:column>
+
+                    <p:column headerText="Facility" styleClass="center">
+                        <h:outputText value="#{item.creditType.name}"/>
+                    </p:column>
+
+                    <p:column headerText="Request Amount">
+                        <div class="right">
+                            <h:outputText value="#{item.requestAmount}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                                 maxIntegerDigits="8"/>
+                            </h:outputText>
+                        </div>
+                    </p:column>
+
+                    <p:column headerText="" styleClass="center" style="width:35px;">
+                        <p:commandButton icon="ui-icon-pencil"
+                                         action="#{prescreenFacilityMaker.onSelectedFacility(rowIndex)}"
+                                         update=":facilityDlgForm"
+                                         process=":tableFacility"
+                                         oncomplete="facilityDlg.show();"/>
+                        <p:commandButton icon="ui-icon-trash"
+                                         title="Remove"
+                                         action="#{prescreenFacilityMaker.onDeleteFacility(rowIndex)}"
+                                         update=":tableFacility"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+            <!--<table class="table_content" style="width:540px;">
+                <tr>
+                    <th style="width: 30px;"></th>
+                    <th style="width: 170px;">Product Program</th>
+                    <th style="width: 170px;">Facility</th>
+                    <th style="width: 120px;">Request amount</th>
+                    <th style="width: 50px;"></th>
+                </tr>
+                <tr>
+                    <td class="center">1</td>
+                    <td class="center">TMB SME SmartBiz</td>
+                    <td class="center">Loan</td>
+                    <td class="right">2,000,000</td>
+                    <td class="option">
+                        <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                        <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                    </td>
+                </tr>
+            </table>-->
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100%">
+            <div class="separate"><!-- --></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">Expected submission date :</td>
+        <td>
+            <p:calendar value="#{calendarBean.date3}" id="submitDate" pattern="dd/MM/yyyy" showOn="button"/>
+        </td>
+    </tr>
+    <!--<tr>
+        <td class="title">Type of customer :</td>
+        <td>
+            <input type="radio" id="customer_new" name="customertype" checked="true"/><label for="customer_new">New</label>
+            <input type="radio" id="customer_exist" name="customertype"/><label for="customer_exist">Existing</label>
+        </td>
+    </tr>-->
+    <tr>
+        <td class="title">Customer Information :</td>
+        <td>
+            <p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()"/>
         </td>
     </tr>
 
-<!--<tr>
-    <td class="title">Product Program :</td>
-    <td>
-        <select class="larger">
-            <option>- Please Select -</option>
-            <option>TMB SME SmartBiz</option>
-            <option>Top Up Bancassurance</option>
-        </select>
-    </td>
-</tr>-->
-<tr>
-    <td class="title">Product Program <!--<span class="require-field">*</span>--> :</td>
-    <td>
-        <p:commandButton value="Add"
-                         styleClass="smaller"
-                         action="#{prescreenMaker.onClickDialog()}"
-                         update=":facilityDlgForm"
-                         oncomplete="facilityDlg.show();"/>
-    </td>
-</tr>
-<tr>
-    <td></td>
-    <td>
-        <p:panel id="tableFacility" styleClass="panel" style="width:610px;">
-            <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
-                         paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" style="width:590px;">
+    <tr>
+        <td class="title top">Borrower :</td>
+        <td>
+            <table class="table_content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th style="width:30px;"></th>
+                    <th style="width:210px;">Customer Name</th>
+                    <th style="width:100px;">Customer Type</th>
+                    <th style="width:30px;">Age</th>
+                    <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                    <th style="width:90px;">Customer ID</th>
+                    <!--<th style="width:30px;">NCB</th>
+                    <th style="width:40px;">Eligible</th>-->
+                    <th style="width:50px;"></th>
+                </tr>
+                <tr>
+                    <td class="center">1</td>
+                    <td>Mr.A Example</td>
+                    <td class="center">Individual</td>
+                    <td class="center">48</td>
+                    <td class="center">312320123123</td>
+                    <td class="center">30232</td>
+                    <!--<td class="center"></td>
+                    <td class="center"></td>-->
+                    <td class="option">
+                        <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                        <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="center">2</td>
+                    <td>Mrs.B Example</td>
+                    <td class="center">Individual</td>
+                    <td class="center">36</td>
+                    <td class="center">412420124124</td>
+                    <td class="center">30234</td>
+                    <!--<td class="center"></td>
+                    <td class="center"></td>-->
+                    <td class="option">
+                        <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                        <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100%"></td>
+    </tr>
+    <tr>
+        <td class="title top">Guarantor :</td>
+        <td>
+            <table class="table_content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th style="width:30px;"></th>
+                    <th style="width:210px;">Customer Name</th>
+                    <th style="width:100px;">Customer Type</th>
+                    <th style="width:30px;">Age</th>
+                    <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
+                    <th style="width:90px;">Customer ID</th>
+                    <th style="width:140px;">Relationship</th>
+                    <!--<th style="width:30px;">CSI</th>-->
+                    <th style="width:50px;"></th>
+                </tr>
+                <tr>
+                    <td class="center">1</td>
+                    <td>Mr.C Guarantor</td>
+                    <td class="center">Individual</td>
+                    <td class="center">30</td>
+                    <td class="center">312320123123</td>
+                    <td class="center">40432</td>
+                    <td class="center">Director</td>
+                    <!--<td class="result_green"></td>-->
+                    <td class="option">
+                        <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                        <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100%"></td>
+    </tr>
+    <tr>
+        <td class="title top">Related :</td>
+        <td>
+            <table class="table_content" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="30"></th>
+                    <th width="210">Customer Name</th>
+                    <th width="100">Customer Type</th>
+                    <th width="30">Age</th>
+                    <th width="160">Citizen ID /<br/> Registration ID</th>
+                    <th width="90">Customer ID</th>
+                    <th width="140">Relationship</th>
+                    <!--<th width="30">CSI</th>-->
+                    <th width="50"></th>
+                </tr>
+                <tr>
+                    <td class="center">1</td>
+                    <td>Mr.D Related</td>
+                    <td class="center">Individual</td>
+                    <td class="center">30</td>
+                    <td class="center">312320123123</td>
+                    <td class="center">50637</td>
+                    <td class="center">Shareholders</td>
+                    <!--<td class="result_red"></td>-->
+                    <td class="option">
+                        <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                        <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="100%">
+            <div class="separate"><!-- --></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="title">Business Information :</td>
+        <td><p:commandButton value="Add" styleClass="smaller" onclick="businessDlg.show();"/></td>
+    </tr>
+    <tr>
+        <td class="title">Business Information x :</td>
+        <td>
+            <p:panel id="tableBusinessInformation" styleClass="panel" style="width:610px;">
+                <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
+                             paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex" style="width:590px;">
 
-                <p:column headerText="" styleClass="center" style="width:22px;">
-                    <h:outputText value="#{rowIndex+1}"/>
-                </p:column>
+                    <p:column headerText="" styleClass="center" style="width:22px;">
+                        <h:outputText value="#{rowIndex+1}"/>
+                    </p:column>
 
-                <p:column headerText="Product Program" styleClass="center">
-                    <h:outputText value="#{item.productProgramName}"/>
-                </p:column>
+                    <p:column headerText="Business code" styleClass="center">
+                        <h:outputText value="#{businessInformation.businessDescription.businessGroup.name}"/>
+                    </p:column>
 
-                <p:column headerText="Facility" styleClass="center">
-                    <h:outputText value="#{item.facilityName}"/>
-                </p:column>
+                    <p:column headerText="Business Description" styleClass="center">
+                        <h:outputText value="#{businessInformation.businessDescription.name}"/>
+                    </p:column>
 
-                <p:column headerText="Request Amount">
-                    <div class="right">
-                        <h:outputText value="#{item.requestAmount}">
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                             maxIntegerDigits="8"/>
-                        </h:outputText>
-                    </div>
-                </p:column>
 
-                <p:column headerText="" styleClass="center" style="width:35px;">
-                    <p:commandButton icon="ui-icon-pencil"
-                                     action="#{prescreenMaker.onSelectedFacility(rowIndex)}"
-                                     update=":facilityDlgForm"
-                                     process=":tableFacility"
-                                     oncomplete="facilityDlg.show();"/>
-                    <p:commandButton icon="ui-icon-trash"
-                                     title="Remove"
-                                     action="#{prescreenMaker.onDeleteFacility(rowIndex)}"
-                                     update=":tableFacility"/>
-                </p:column>
 
-            </p:dataTable>
-        </p:panel>
-        <!--<table class="table_content" style="width:540px;">
-            <tr>
-                <th style="width: 30px;"></th>
-                <th style="width: 170px;">Product Program</th>
-                <th style="width: 170px;">Facility</th>
-                <th style="width: 120px;">Request amount</th>
-                <th style="width: 50px;"></th>
-            </tr>
-            <tr>
-                <td class="center">1</td>
-                <td class="center">TMB SME SmartBiz</td>
-                <td class="center">Loan</td>
-                <td class="right">2,000,000</td>
-                <td class="option">
-                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                </td>
-            </tr>
-        </table>-->
-    </td>
-</tr>
-<tr>
-    <td colspan="100%">
-        <div class="separate"><!-- --></div>
-    </td>
-</tr>
-<tr>
-    <td class="title">Expected submission date :</td>
-    <td>
-        <p:calendar value="#{calendarBean.date3}" id="submitDate" pattern="dd/MM/yyyy" showOn="button"/>
-    </td>
-</tr>
-<!--<tr>
-    <td class="title">Type of customer :</td>
-    <td>
-        <input type="radio" id="customer_new" name="customertype" checked="true"/><label for="customer_new">New</label>
-        <input type="radio" id="customer_exist" name="customertype"/><label for="customer_exist">Existing</label>
-    </td>
-</tr>-->
-<tr>
-    <td class="title">Customer Information :</td>
-    <td>
-        <p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()"/>
-    </td>
-</tr>
+                    <p:column headerText="" styleClass="center" style="width:35px;">
+                        <p:commandButton icon="ui-icon-pencil"
+                                         action="#{prescreenMaker.onRowBusinessInformation(rowIndex)}"
+                                         update=":businessDlgForm"
+                                         process=":tableBusinessInformation"
+                                         oncomplete="businessDlg.show();"/>
+                        <p:commandButton icon="ui-icon-trash"
+                                         title="Remove"
+                                         action="#{prescreenMaker.onRemoveBusinessInformation(rowIndex)}"
+                                         update=":tableBusinessInformation"/>
+                    </p:column>
 
-<tr>
-    <td class="title top">Borrower :</td>
-    <td>
-        <table class="table_content" cellpadding="0" cellspacing="0">
-            <tr>
-                <th style="width:30px;"></th>
-                <th style="width:210px;">Customer Name</th>
-                <th style="width:100px;">Customer Type</th>
-                <th style="width:30px;">Age</th>
-                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
-                <th style="width:90px;">Customer ID</th>
-                <!--<th style="width:30px;">NCB</th>
-                <th style="width:40px;">Eligible</th>-->
-                <th style="width:50px;"></th>
-            </tr>
-            <tr>
-                <td class="center">1</td>
-                <td>Mr.A Example</td>
-                <td class="center">Individual</td>
-                <td class="center">48</td>
-                <td class="center">312320123123</td>
-                <td class="center">30232</td>
-                <!--<td class="center"></td>
-                <td class="center"></td>-->
-                <td class="option">
-                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="center">2</td>
-                <td>Mrs.B Example</td>
-                <td class="center">Individual</td>
-                <td class="center">36</td>
-                <td class="center">412420124124</td>
-                <td class="center">30234</td>
-                <!--<td class="center"></td>
-                <td class="center"></td>-->
-                <td class="option">
-                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td colspan="100%"></td>
-</tr>
-<tr>
-    <td class="title top">Guarantor :</td>
-    <td>
-        <table class="table_content" cellpadding="0" cellspacing="0">
-            <tr>
-                <th style="width:30px;"></th>
-                <th style="width:210px;">Customer Name</th>
-                <th style="width:100px;">Customer Type</th>
-                <th style="width:30px;">Age</th>
-                <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
-                <th style="width:90px;">Customer ID</th>
-                <th style="width:140px;">Relationship</th>
-                <!--<th style="width:30px;">CSI</th>-->
-                <th style="width:50px;"></th>
-            </tr>
-            <tr>
-                <td class="center">1</td>
-                <td>Mr.C Guarantor</td>
-                <td class="center">Individual</td>
-                <td class="center">30</td>
-                <td class="center">312320123123</td>
-                <td class="center">40432</td>
-                <td class="center">Director</td>
-                <!--<td class="result_green"></td>-->
-                <td class="option">
-                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td colspan="100%"></td>
-</tr>
-<tr>
-    <td class="title top">Related :</td>
-    <td>
-        <table class="table_content" cellpadding="0" cellspacing="0">
-            <tr>
-                <th width="30"></th>
-                <th width="210">Customer Name</th>
-                <th width="100">Customer Type</th>
-                <th width="30">Age</th>
-                <th width="160">Citizen ID /<br/> Registration ID</th>
-                <th width="90">Customer ID</th>
-                <th width="140">Relationship</th>
-                <!--<th width="30">CSI</th>-->
-                <th width="50"></th>
-            </tr>
-            <tr>
-                <td class="center">1</td>
-                <td>Mr.D Related</td>
-                <td class="center">Individual</td>
-                <td class="center">30</td>
-                <td class="center">312320123123</td>
-                <td class="center">50637</td>
-                <td class="center">Shareholders</td>
-                <!--<td class="result_red"></td>-->
-                <td class="option">
-                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td colspan="100%">
-        <div class="separate"><!-- --></div>
-    </td>
-</tr>
-<tr>
-    <td class="title">Business Information :</td>
-    <td><p:commandButton value="Add" styleClass="smaller" onclick="businessDlg.show();"/></td>
-</tr>
-<!--<tr>
-    <td class="title">Business Type :</td>
-    <td>
-        <select class="largest">
-            <option>Wholesale business</option>
-            <option>Manufacturing business</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td class="title">Business Group :</td>
-    <td>
-        <select class="largest">
-            <option>Animal Farming</option>
-            <option>Animal Feed</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td class="title">Business Description :</td>
-    <td>
-        <select class="largest">
-            <option>Abattoir</option>
-            <option>Livestock trade</option>
-        </select>
-    </td>
-</tr>-->
+                </p:dataTable>
+            </p:panel>
+        </td>
+    </tr>
 <tr>
     <td></td>
     <td>
@@ -502,13 +505,64 @@
 <tr>
     <td class="title top">Borrower :</td>
     <td>
+        <p:commandButton
+                value="Add"
+                styleClass="small"
+                action="#{prescreenMaker.onClearExistDlg}"
+                update=":existCollateralDlgForm"
+                onclick="existCollateralDlg.show()"/>
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td>
+        <h:form  id="tableExistCollateral" styleClass="panel" style="width:610px;">
+            <p:dataTable id="resultTableExistCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
+                         paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex" style="width:590px;">
+
+                <p:column headerText="" styleClass="center" style="width:22px;">
+                    <h:outputText value="#{rowIndex+1}"/>
+                </p:column>
+
+                <p:column headerText="Collateral" styleClass="center">
+                    <h:outputText value="#{collateral.collateralTypeName}"/>
+                </p:column>
+
+                <p:column headerText="Value (Baht)">
+                    <div class="right">
+                        <h:outputText value="#{collateral.collateralAmount}">
+                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                             maxIntegerDigits="8"/>
+                        </h:outputText>
+                    </div>
+                </p:column>
+
+
+                <p:column headerText="" styleClass="center" style="width:35px;">
+                    <p:commandButton icon="ui-icon-pencil"
+                                     action="#{prescreenMaker.onSelectedExistCollateral(rowIndex)}"
+                                     update=":existCollateralDlgForm"
+                                     process=":tableExistCollateral"
+                                     oncomplete="existCollateralDlg.show();"/>
+                    <p:commandButton icon="ui-icon-trash"
+                                     title="Remove"
+                                     action="#{prescreenMaker.onDeleteExistCollateral(rowIndex)}"
+                                     update=":tableExistCollateral"/>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </td>
+</tr>
+<tr>
+    <td></td>
+    <td>
         <table class="table_content">
             <tr>
                 <th width="30"></th>
                 <th width="160">Type Of Collateral</th>
                 <th width="90">Value (Baht)</th>
                 <th width="90">Pledge</th>
-
             </tr>
             <tr>
                 <td class="center">1</td>
@@ -649,31 +703,39 @@
             <tr>
                 <td class="title" width="145">Product Program :</td>
                 <td>
-                    <h:selectOneListbox value="#{prescreenMaker.productProgramName}" id="productProgramName" size="1"
-                                        styleClass="largest">
-                        <f:selectItems value="#{prescreenMaker.productProgramList}"
+                    <h:selectOneListbox value="#{prescreenFacilityMaker.selectProductProgram.id}" id="productProgramName"
+                                        size="1" styleClass="largest">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{prescreenFacilityMaker.prdGroupToPrdProgramList}"
                                        var="dlgProductProgram"
-                                       itemLabel="#{dlgProductProgram.name}"
-                                       itemValue="#{dlgProductProgram.name}"/>
+                                       itemLabel="#{dlgProductProgram.productProgram.name}"
+                                       itemValue="#{dlgProductProgram.productProgram.id}"/>
+                        <p:ajax event="change"
+                                listener="#{prescreenFacilityMaker.onChangeProductProgram}"
+                                update=":facilityDlgForm"/>
                     </h:selectOneListbox>
                 </td>
             </tr>
             <tr>
                 <td class="title">Facility :</td>
                 <td>
-                    <h:selectOneListbox size="1" styleClass="largest" id="dlgCreditTypeName"
-                                        value="#{prescreenMaker.dlgCreditTypeName}">
-                        <f:selectItems value="#{prescreenMaker.creditTypeList}"
+                    <h:selectOneListbox value="#{prescreenFacilityMaker.selectCreditType.id}" id="creditTypeName"
+                                        size="1" styleClass="largest" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{prescreenFacilityMaker.prdProgramToCreditTypeList}"
                                        var="dlgCreditType"
-                                       itemLabel="#{dlgCreditType.name}"
-                                       itemValue="#{dlgCreditType.name}"/>
+                                       itemLabel="#{dlgCreditType.creditType.name}"
+                                       itemValue="#{dlgCreditType.creditType.id}"/>
+                        <p:ajax event="change"
+                                listener="#{prescreenFacilityMaker.onChangeCreditType}"
+                                update=":facilityDlgForm"/>
                     </h:selectOneListbox>
                 </td>
             </tr>
             <tr>
                 <td class="title">Request Amount :</td>
                 <td>
-                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" styleClass="medium">
+                    <p:inputText value="#{prescreenFacilityMaker.facility.requestAmount}" styleClass="medium">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
                                          maxIntegerDigits="8"/>
                     </p:inputText>Bath.
@@ -685,20 +747,20 @@
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            rendered="#{prescreenMaker.modeForButton == 'add'}"
+                            rendered="#{prescreenFacilityMaker.modeForButton == 'add'}"
                             id="addFacility"
                             value="Add"
                             styleClass="small"
-                            action="#{prescreenMaker.onAddFacility}"
+                            action="#{prescreenFacilityMaker.onAddFacility}"
                             process=":facilityDlgForm"
                             update=":tableFacility"
                             oncomplete="facilityDlg.hide()"/>
                     <p:commandButton
-                            rendered="#{prescreenMaker.modeForButton == 'edit'}"
+                            rendered="#{prescreenFacilityMaker.modeForButton == 'edit'}"
                             id="editFacility"
                             value="Edit"
                             styleClass="small"
-                            action="#{prescreenMaker.onEditFacility}"
+                            action="#{prescreenFacilityMaker.onEditFacility}"
                             update=":tableFacility"
                             oncomplete="facilityDlg.hide()"/>
                     <p:commandButton value="Cancel" styleClass="small" onclick="facilityDlg.hide()"/>
@@ -708,8 +770,7 @@
     </h:form>
 </p:dialog>
 <p:dialog id="requestAppraisalDialog" header="Request Appraisal" widgetVar="requestAppraisalDlg"
-          modal="true" width="700"
-        >
+          modal="true" width="700">
     <ui:include src="../resources/dialog/requestAppraisalDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="collateralDialog" header="Collateral Information" widgetVar="collateralDlg" modal="true">
@@ -739,14 +800,14 @@
                 <td colspan="2" class="center">
 
                     <p:commandButton value="Add"
-                                     rendered="#{prescreenMaker.mode == 'add'}"
+                                     rendered="#{prescreenMaker.modeForCollateral == 'add'}"
                                      id="AddCollateral" styleClass="small"
                                      update=":tableCollateral,:collateralDialog"
                                      action="#{prescreenMaker.onAddCollateral}"
                                      oncomplete="collateralDlg.hide()"/>
 
                     <p:commandButton value="Edit"
-                                     rendered="#{prescreenMaker.mode == 'edit'}"
+                                     rendered="#{prescreenMaker.modeForCollateral == 'edit'}"
                                      styleClass="smaller" update=":tableCollateral,:collateralDialog"
                                      action="#{prescreenMaker.onEditCollateral}"
                                      oncomplete="collateralDlg.hide();"/>
@@ -764,35 +825,32 @@
 </p:dialog>
 <p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
           modal="true">
+    <h:form id="businessDlgForm">
     <table class="content_form">
-        <!--<tr>
-            <td class="title">Business Type :</td>
-            <td>
-                <select class="largest">
-                    <option>- Please Select -</option>
-                    <option>Wholesale business</option>
-                    <option>Manufacturing business</option>
-                </select>
-            </td>
-        </tr>-->
         <tr>
             <td class="title">Business Group :</td>
             <td>
-                <select class="largest">
-                    <option>- Please Select -</option>
-                    <option>Animal Farming</option>
-                    <option>Animal Feed</option>
-                </select>
+                <h:selectOneListbox size="1" styleClass="largest" id="businessGroupID"
+                                    value="#{prescreenMaker.businessInformation.businessDescription.businessGroup.id}">
+                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                    <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgbusinessGroup"
+                                   itemLabel="#{dlgbusinessGroup.name}"
+                                   itemValue="#{dlgbusinessGroup.id}"/>
+                    <p:ajax listener="#{prescreenMaker.onChangeBusinessGroupName}" update=":businessDlgForm" />
+                </h:selectOneListbox>
+
             </td>
         </tr>
         <tr>
             <td class="title">Business Description :</td>
             <td>
-                <select class="largest">
-                    <option>- Please Select -</option>
-                    <option>Abattoir</option>
-                    <option>Livestock trade</option>
-                </select>
+                <h:selectOneListbox size="1" styleClass="largest" id="businessDescriptionID"
+                                    value="#{prescreenMaker.businessInformation.businessDescription.id}">
+                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                    <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgbusinessDesciption"
+                                   itemLabel="#{dlgbusinessDesciption.name}"
+                                   itemValue="#{dlgbusinessDesciption.id}"/>
+                </h:selectOneListbox>
             </td>
         </tr>
         <tr>
@@ -803,11 +861,25 @@
         </tr>
         <tr>
             <td colspan="2" class="center">
-                <p:commandButton value="Save" styleClass="small" onclick="businessDlg.hide()"/>
+                <p:commandButton value="Add"
+                                 rendered="#{prescreenMaker.modeForBusiness == 'add'}"
+                                 id="AddBusinessInformation" styleClass="small"
+                                 update=":tableBusinessInformation"
+                                 action="#{prescreenMaker.onAddBusinessInformation()}"
+                                 oncomplete="businessDlg.hide()"/>
+
+                <p:commandButton value="Edit"
+                                 rendered="#{prescreenMaker.modeForBusiness == 'edit'}"
+                                  id="EditBusinessInformation" styleClass="small"
+                                  update=":tableBusinessInformation"
+                                  action="#{prescreenMaker.onEditBusinessInformation()}"
+                                  oncomplete="businessDlg.hide()"/>
+
                 <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
             </td>
         </tr>
     </table>
+    </h:form>
 </p:dialog>
 <p:dialog id="collateralAppraisalDialog" header="Collateral Information" widgetVar="collateralAppraisalDlg"
           modal="true" width="470">
@@ -913,6 +985,7 @@
     <p:commandButton value="Save" styleClass="medium"/>
     </div>
 </p:dialog>-->
+
 <p:dialog id="mandateDocDialog" header="Mandatory Document Information" widgetVar="mandateDocDlg"
           modal="true">
     <table class="table_content" align="center">
@@ -971,6 +1044,58 @@
     <div style="margin-top:25px;" align="center">
         <p:commandButton value="Save" styleClass="medium"/>
     </div>
+</p:dialog>
+<p:dialog id="existCollateralDialog" header="Collateral Information" widgetVar="existCollateralDlg" modal="true">
+    <h:form id="existCollateralDlgForm">
+        <table id="existCollateralDialogTable" class="content_form">
+            <tr>
+                <td class="title" style="width:145px;">Type Of Collateral :</td>
+                <td>
+                    <h:selectOneListbox size="1" styleClass="largest" id="existCollateralTypeName"
+                                        value="#{prescreenMaker.existCollateralTypeName}">
+                        <f:selectItems value="#{prescreenMaker.collateralTypeList}" var="dlgExistCollateralType"
+                                       itemLabel="#{dlgExistCollateralType.description}"
+                                       itemValue="#{dlgExistCollateralType.description}"/>
+                    </h:selectOneListbox>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Value :</td>
+                <td>
+                    <p:inputText id="existCollateralAmount" value="#{prescreenMaker.existCollateralAmount}"/> Bath.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+
+                    <p:commandButton value="Add"
+                                     rendered="#{prescreenMaker.modeForExist== 'add'}"
+                                     id="AddCollateral"
+                                     styleClass="small"
+                                     update=":tableExistCollateral,:existCollateralDlgForm"
+                                     action="#{prescreenMaker.onAddExistCollateral}"
+                                     oncomplete="existCollateralDlg.hide()"/>
+
+                    <p:commandButton value="Edit"
+                                     rendered="#{prescreenMaker.modeForExist== 'edit'}"
+                                     styleClass="smaller"
+                                     update=":tableExistCollateral,:existCollateralDlgForm"
+                                     action="#{prescreenMaker.onEditExistCollateral}"
+                                     oncomplete="existCollateralDlg.hide();"/>
+
+                    <p:commandButton value="Cancel" styleClass="small" oncomplete="existCollateralDlg.hide()"/>
+
+                </td>
+            </tr>
+        </table>
+    </h:form>
+    <p:blockUI widgetVar="blockUI" block="collateralDlgForm" trigger=":collateralDlgForm:AddCollateral">
+        LOADING<br/>
+        <!--<p:graphicImage value="/images/ajax-loader.gif"/>-->
+    </p:blockUI>
 </p:dialog>
 </div>
 </h:body>

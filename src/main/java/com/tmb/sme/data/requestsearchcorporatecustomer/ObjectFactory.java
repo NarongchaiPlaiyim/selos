@@ -42,19 +42,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ReqSearchCorporateCustomer }
-     * 
-     */
-    public ReqSearchCorporateCustomer createReqSearchCorporateCustomer() {
-        return new ReqSearchCorporateCustomer();
-    }
-
-    /**
      * Create an instance of {@link Body }
      * 
      */
     public Body createBody() {
         return new Body();
+    }
+
+    /**
+     * Create an instance of {@link ReqSearchCorporateCustomer }
+     * 
+     */
+    public ReqSearchCorporateCustomer createReqSearchCorporateCustomer() {
+        return new ReqSearchCorporateCustomer();
     }
 
     /**

@@ -3,10 +3,11 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.system.ConfigDAO;
+import com.clevel.selos.integration.Integration;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.system.Config;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.*;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -23,10 +24,44 @@ public class WelcomePage implements Serializable {
     @Inject
     Logger log;
     @Inject
-    MessageProvider msg;
+    @Integration(Integration.System.RM)
+    Logger rmLog;
+    @Inject
+    @Integration(Integration.System.NCB)
+    Logger ncbLog;
+    @Inject
+    @Integration(Integration.System.NCBI)
+    Logger ncbiLog;
+    @Inject
+    @Integration(Integration.System.SW_ROSC)
+    Logger swLog;
+    @Inject
+    @Integration(Integration.System.EMAIL)
+    Logger emailLog;
+    @Inject
+    @Integration(Integration.System.DWH)
+    Logger dwhLog;
+    @Inject
+    @Integration(Integration.System.BRMS)
+    Logger brmsLog;
+
     @Inject
     ConfigDAO configDAO;
     List<Config> configList;
+
+    @Inject
+    @NormalMessage
+    Message normalMsg;
+    @Inject
+    @ValidationMessage
+    Message validationMsg;
+    @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
+    String normalStr;
+    String validationStr;
+    String exceptionStr;
 
     private Date now;
 
@@ -37,12 +72,57 @@ public class WelcomePage implements Serializable {
     public void onCreation() {
         log.debug("onCreation.");
         now = new Date();
-        //reloadConfig();
-        //onLoadDescription();
+        reloadConfig();
+        onLoadDescription();
+        normalStr = normalMsg.get("app.name");
+        validationStr = validationMsg.get("001");
+        exceptionStr = exceptionMsg.get("001");
+    }
+
+    public void on001() {
+        log.debug("on001");
+        validationStr = validationMsg.get("001");
+        exceptionStr = exceptionMsg.get("001");
+        log.debug("v: {}, e: {}",validationStr,exceptionStr);
+    }
+
+    public void on002() {
+        log.debug("on002");
+        validationStr = validationMsg.get("002");
+        exceptionStr = exceptionMsg.get("501");
+        log.debug("v: {}, e: {}",validationStr,exceptionStr);
     }
 
     public void reloadConfig() {
+        log.debug("reloadConfig.");
         configList = configDAO.findAll();
+    }
+
+    public void onActionRM() {
+        rmLog.debug("test RM log. ({})",new Date());
+    }
+
+    public void onActionNCB() {
+        ncbLog.debug("test NCB log. ({})",new Date());
+    }
+
+    public void onActionNCBI() {
+        ncbiLog.debug("test NCBI log. ({})",new Date());
+    }
+
+    public void onActionSW() {
+        swLog.debug("test SW log. ({})",new Date());
+    }
+    public void onActionEmail() {
+        emailLog.debug("test Email log. ({})",new Date());
+    }
+
+    public void onActionDWH() {
+        dwhLog.debug("test DWH log. ({})",new Date());
+    }
+
+    public void onActionBRMS() {
+        brmsLog.debug("test BRMS log. ({})",new Date());
     }
 
     public Date getNow() {
@@ -134,5 +214,29 @@ public class WelcomePage implements Serializable {
 
     public void setSelectedText(String selectedText) {
         this.selectedText = selectedText;
+    }
+
+    public String getNormalStr() {
+        return normalStr;
+    }
+
+    public void setNormalStr(String normalStr) {
+        this.normalStr = normalStr;
+    }
+
+    public String getValidationStr() {
+        return validationStr;
+    }
+
+    public void setValidationStr(String validationStr) {
+        this.validationStr = validationStr;
+    }
+
+    public String getExceptionStr() {
+        return exceptionStr;
+    }
+
+    public void setExceptionStr(String exceptionStr) {
+        this.exceptionStr = exceptionStr;
     }
 }

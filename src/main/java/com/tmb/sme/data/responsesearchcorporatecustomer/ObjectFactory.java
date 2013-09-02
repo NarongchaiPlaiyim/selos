@@ -34,14 +34,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CorporateCustomerListSection }
-     * 
-     */
-    public CorporateCustomerListSection createCorporateCustomerListSection() {
-        return new CorporateCustomerListSection();
-    }
-
-    /**
      * Create an instance of {@link CorporateDetail }
      * 
      */
@@ -66,6 +58,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ResSearchCorporateCustomer }
+     * 
+     */
+    public ResSearchCorporateCustomer createResSearchCorporateCustomer() {
+        return new ResSearchCorporateCustomer();
+    }
+
+    /**
      * Create an instance of {@link Body }
      * 
      */
@@ -74,19 +74,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CorporateCustomerListSection }
+     * 
+     */
+    public CorporateCustomerListSection createCorporateCustomerListSection() {
+        return new CorporateCustomerListSection();
+    }
+
+    /**
      * Create an instance of {@link Header }
      * 
      */
     public Header createHeader() {
         return new Header();
-    }
-
-    /**
-     * Create an instance of {@link ResSearchCorporateCustomer }
-     * 
-     */
-    public ResSearchCorporateCustomer createResSearchCorporateCustomer() {
-        return new ResSearchCorporateCustomer();
     }
 
     /**

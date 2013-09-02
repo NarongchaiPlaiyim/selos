@@ -19,12 +19,12 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription,Integ
     }
 
     public List<BusinessDescription> getListByBusinessGroup(BusinessGroup businessGroup) {
-        log.debug("getListByBusinessGroup. (businessGroup: {})",businessGroup);
+        log.info("getListByBusinessGroup. (businessGroup: {})",businessGroup);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("businessGroup",businessGroup));
 
         List<BusinessDescription> businessDescriptions = criteria.list();
-        log.debug("getListByBusinessGroup. (result size: {})",businessDescriptions.size());
+        log.info("getListByBusinessGroup. (result size: {})",businessDescriptions.size());
         return businessDescriptions;
     }
 }
