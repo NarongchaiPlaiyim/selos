@@ -10,7 +10,7 @@
             <tr>
                 <td class="title">Business Group :</td>
                 <td>
-                    <h:selectOneListbox size="1" styleClass="largest" id="businessGroupID"
+                    <h:selectOneListbox size="1" styleClass="largest_l" id="businessGroupID"
                                         value="#{prescreenMaker.businessInformation.businessDescription.businessGroup.id}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgbusinessGroup"
@@ -24,7 +24,7 @@
             <tr>
                 <td class="title">Business Description :</td>
                 <td>
-                    <h:selectOneListbox size="1" styleClass="largest" id="businessDescriptionID"
+                    <h:selectOneListbox size="1" styleClass="largest_l" id="businessDescriptionID"
                                         value="#{prescreenMaker.businessInformation.businessDescription.id}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgbusinessDesciption"
@@ -44,14 +44,14 @@
                     <p:commandButton value="Add"
                                      rendered="#{prescreenMaker.modeForBusiness == 'add'}"
                                      id="AddBusinessInformation" styleClass="small"
-                                     update=":tableBusinessInformation"
+                                     update=":frmMain:resulttableBusinessInformation"
                                      action="#{prescreenMaker.onAddBusinessInformation()}"
                                      oncomplete="businessDlg.hide()"/>
 
                     <p:commandButton value="Edit"
                                      rendered="#{prescreenMaker.modeForBusiness == 'edit'}"
                                      id="EditBusinessInformation" styleClass="small"
-                                     update=":tableBusinessInformation"
+                                     update=":frmMain:resulttableBusinessInformation"
                                      action="#{prescreenMaker.onEditBusinessInformation()}"
                                      oncomplete="businessDlg.hide()"/>
 
