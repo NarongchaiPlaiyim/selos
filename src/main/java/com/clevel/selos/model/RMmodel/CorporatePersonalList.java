@@ -1,5 +1,7 @@
 package com.clevel.selos.model.RMmodel;
 
+import java.io.Serializable;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sahawat
@@ -7,7 +9,7 @@ package com.clevel.selos.model.RMmodel;
  * Time: 20:22 น.
  * To change this template use File | Settings | File Templates.
  */
-public class CorporatePersonalList {
+public class CorporatePersonalList implements Serializable{
 
     private String custNbr1;
     private String cId1;
