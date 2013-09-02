@@ -1,7 +1,6 @@
-package com.clevel.selos.model.viewmodel;
+package com.clevel.selos.model.RMmodel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.

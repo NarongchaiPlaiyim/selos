@@ -19,17 +19,20 @@
         <fieldset>
             <legend>Search Form</legend>
               <h:form>
+                  <p:outputLabel value="** RM -Search Individual and Corporate     **CV -Search CustomerAccount"   />
+
+                 <h:panelGrid columns="2">
 
                   <h:panelGrid columns="3">
-                      <p:outputLabel value="Register ID : "/>
+                      <p:outputLabel value="Register ID : (RM,CA)"/>
                       <p:inputText id="id" value="#{testrm.searchIndividual.reqId}" required="true" requiredMessage="Please enter Data!"/>
                       <p:message for="id"/>
 
-                      <p:outputLabel value="Customer Type : "/>
-                      <p:inputText id="custype" value="#{testrm.searchIndividual.custType}" disabled="true"/>
+                      <p:outputLabel value="Customer Type : (RM) "/>
+                      <p:inputText id="custype" value="#{testrm.searchIndividual.custType}" disabled="false"/>
                       <p:message for="custype"/>
 
-                      <p:outputLabel value="Card Type : "/>
+                      <p:outputLabel value="Card Type : (RM)"/>
                       <p:selectOneMenu id="cardtype" value="#{testrm.searchIndividual.type}" required="false" requiredMessage="Please enter Data!">
                             <p:ajax update="cussur" listener="#{testrm.changeListener}"/>
                            <f:selectItems value="#{testrm.listhardcode}" var="c" itemLabel="#{c.name}" itemValue="#{c.value}"  />
@@ -37,38 +40,49 @@
                       </p:selectOneMenu>
                       <p:message for="cardtype"/>
 
-                      <p:outputLabel value="Customer ID : "/>
-                      <p:inputText id="cusid" value="#{testrm.searchIndividual.custId}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:outputLabel value="Customer ID : (RM)"/>
+                      <p:inputText id="cusid" value="#{testrm.searchIndividual.custId}" />
                       <p:message for="cusid"/>
 
-                      <p:outputLabel value="RM Number : "/>
-                      <p:inputText id="rmnumber" value="#{testrm.searchIndividual.custNbr}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:outputLabel value="RM Number : (RM,CA)"/>
+                      <p:inputText id="rmnumber" value="#{testrm.searchIndividual.custNbr}" />
                       <p:message for="rmnumber"/>
 
-                      <p:outputLabel value="Customer Name : "/>
-                      <p:inputText id="cusname" value="#{testrm.searchIndividual.custName}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:outputLabel value="Customer Name : (RM)"/>
+                      <p:inputText id="cusname" value="#{testrm.searchIndividual.custName}"/>
                       <p:message for="cusname"/>
 
-                      <p:outputLabel value="Customer Surname : "/>
-                      <p:inputText id="cussur" value="#{testrm.searchIndividual.custSurname}" required="true" requiredMessage="Please enter Data!"/>
+                      <p:outputLabel value="Customer Surname : (RM - Individual Only)"/>
+                      <p:inputText id="cussur" value="#{testrm.searchIndividual.custSurname}"/>
                       <p:message for="cussur"/>
 
-                      <p:outputLabel value="radSelectSearch : "/>
+                      <p:outputLabel value="radSelectSearch : (RM,CA)"/>
                       <p:inputText id="radser" value="#{testrm.searchIndividual.radSelectSearch}" required="true" requiredMessage="Please enter Data!"/>
                       <p:message for="radser"/>
 
 
-                      <p:commandButton value="SearchIndividual"  actionListener="#{testrm.callserviceIndividual()}" update="@form">
+                      <p:commandButton value="(RM)SearchIndividual"  actionListener="#{testrm.individual()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
-                      <p:commandButton value="SearchCorporate"  actionListener="#{testrm.callserviceCorporate()}" update="@form">
+                      <p:commandButton value="(RM)SearchCorporate"  actionListener="#{testrm.corporate()}" update="@form">
+                          <!--<p:ajax  update="he"  />-->
+                      </p:commandButton>
+                      <p:commandButton value="(CA)SearchCustomerAccount"  actionListener="#{testrm.customerAccount()}" update="@form">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
 
                   </h:panelGrid>
+                     <p:inputTextarea value="#{testrm.printDetail}" rows="15" cols="65"/>
+                 </h:panelGrid>
+                  <h:panelGrid columns="2" >
+                  <p:outputLabel value="Request :" />
                   <p:outputLabel value="Response :" />
-                  <p:inputTextarea value="#{testrm.printResponse}" rows="10" cols="100"/>
+
+                  <p:inputTextarea value="#{testrm.printRequest}" rows="15" cols="70"/>
+
+                  <p:inputTextarea value="#{testrm.printResponse}" rows="15" cols="70"/>
+                  </h:panelGrid>
               </h:form>
 
     </fieldset>

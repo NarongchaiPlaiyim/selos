@@ -4,11 +4,11 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 @ApplicationScoped
-@ManagedBean(name="app")
+@Named("app")
 public class Application {
     @Inject
     Logger log;

@@ -20,7 +20,7 @@ import javax.xml.ws.WebServiceClient;
 @WebServiceClient(name = "EAISearchIndividualCustomer",
         targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/",
         wsdlLocation = "/EAISearchIndividualCustomer.wsdl")
-@HandlerChain(file = "/LogMessage_handler.xml")
+@HandlerChain(file = "/LogMessage_handlerIndividual.xml")
 public class EAISearchIndividualCustomer_Service
     extends Service
 {

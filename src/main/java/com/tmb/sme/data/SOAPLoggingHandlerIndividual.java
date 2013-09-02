@@ -1,5 +1,8 @@
 package com.tmb.sme.data;
 
+import com.clevel.selos.controller.TestRM;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -16,7 +19,7 @@ import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 
-public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
+public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageContext>{
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
@@ -51,19 +54,21 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
                 soapMsg.saveChanges();
 
                 //tracking
+                ByteArrayOutputStream baos=new ByteArrayOutputStream();
+                soapMsg.writeTo(baos);
                 soapMsg.writeTo(System.out);
-
+                TestRM.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
                 System.out.println("Response...........................................................");
 
                 // Send SOAP 	Message to SOAP Server
-                String url = "http://10.175.140.18:7809/services/EAISearchIndividualCustomerCM";
+                String url = "http://10.175.140.18:7809/EAISearchIndividualCustomer";
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
-
-                soapResponse.writeTo(System.out);
-
+               soapResponse.writeTo(baos);
+               soapResponse.writeTo(System.out);
+                 TestRM.printResponse=baos.toString();
             }catch(SOAPException e){
                 System.err.println(e);
             }catch(IOException e){
@@ -78,14 +83,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext>{
         //continue other handler chain
         return true;
     }
-//    private static void printSOAPResponse(SOAPMessage soapResponse) throws Exception {
-//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//        Transformer transformer = transformerFactory.newTransformer();
-//        Source sourceContent = soapResponse.getSOAPPart().getContent();
-//        System.out.print("\nResponse SOAP Message = ");
-//        StreamResult result = new StreamResult(System.out);
-//        transformer.transform(sourceContent, result);
-//    }
+
 
     @Override
     public boolean handleFault(SOAPMessageContext context) {

@@ -15,7 +15,6 @@ import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCust
  * 
  */
 @WebService(name = "EAISearchIndividualCustomer", targetNamespace = "http://data.sme.tmb.com/EAISearchIndividualCustomer/")
-//@HandlerChain(file = "/LogMessage_handler.xml")
 public interface EAISearchIndividualCustomer {
 
 

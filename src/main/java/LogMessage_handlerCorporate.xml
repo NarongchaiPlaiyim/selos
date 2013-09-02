@@ -3,8 +3,8 @@
                 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee">
     <handler-chain>
         <handler>
-            <handler-name>com.tmb.sme.data.SOAPLoggingHandler</handler-name>
-            <handler-class>com.tmb.sme.data.SOAPLoggingHandler</handler-class>
+            <handler-name>com.tmb.sme.data.SOAPLoggingHandlerCorporate</handler-name>
+            <handler-class>com.tmb.sme.data.SOAPLoggingHandlerCorporate</handler-class>
         </handler>
     </handler-chain>
 </handler-chains>

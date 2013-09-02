@@ -12,6 +12,7 @@
                 <td>
                     <h:selectOneListbox value="#{prescreenMaker.selectProductProgram.id}" id="productProgramName"
                                         size="1" styleClass="largest_s">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
                                        var="dlgProductProgram"
                                        itemLabel="#{dlgProductProgram.productProgram.name}"
@@ -27,6 +28,7 @@
                 <td>
                     <h:selectOneListbox value="#{prescreenMaker.selectCreditType.id}" id="creditTypeName"
                                         size="1" styleClass="largest_s" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.prdProgramToCreditTypeList}"
                                        var="dlgCreditType"
                                        itemLabel="#{dlgCreditType.creditType.name}"
