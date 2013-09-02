@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.model.CAmodel.CustomerAccountListModel;
 import com.clevel.selos.model.CAmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.CorporatePersonalList;
@@ -19,8 +20,10 @@ import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCust
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -65,44 +68,34 @@ public class CaService implements Serializable{
 
         //Check Success
         if(resSearchCustomerAccount.getHeader().getResCode().equals("0000")){
-
+            List<CustomerAccountListModel> listModelList=null;
             //checkSearchResult
-//            if( customerAccountModel.getSearchResult().equals("CL")){
-//                throw new ValidationException("Customer List for multiple customers result");
-//            }
-            //personal detail session
-//            customerAccountModel.setRel(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//            customerAccountModel.setCd(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//            customerAccountModel.setThaiName1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//            customerAccountModel.setcId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//            customerAccountModel.setCitizenId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//            customerAccountModel.setEstDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
+        if(resSearchCustomerAccount.getBody().getAccountList()!=null&&resSearchCustomerAccount.getBody().getAccountList().size()>0){
+            CustomerAccountListModel customerAccountListModel=null;
+                 listModelList=new ArrayList<CustomerAccountListModel>();
+                 for(int i=0;i<resSearchCustomerAccount.getBody().getAccountList().size();i++){
+                     customerAccountListModel=new CustomerAccountListModel();
 
-//          //personal list session
+                     customerAccountListModel.setRel(resSearchCustomerAccount.getBody().getAccountList().get(i).getRel());
+                     customerAccountListModel.setCd(resSearchCustomerAccount.getBody().getAccountList().get(i).getCd());
+                     customerAccountListModel.setpSO(resSearchCustomerAccount.getBody().getAccountList().get(i).getPSO());
+                     customerAccountListModel.setAppl(resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl());
+                     customerAccountListModel.setAccountNo(resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo());
+                     customerAccountListModel.setTrlr(resSearchCustomerAccount.getBody().getAccountList().get(i).getTrlr());
+                     customerAccountListModel.setBalance(resSearchCustomerAccount.getBody().getAccountList().get(i).getBalance());
+                     customerAccountListModel.setDir(resSearchCustomerAccount.getBody().getAccountList().get(i).getDir());
+                     customerAccountListModel.setProd(resSearchCustomerAccount.getBody().getAccountList().get(i).getProd());
+                     customerAccountListModel.setCtl1(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl1());
+                     customerAccountListModel.setCtl2(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl2());
+                     customerAccountListModel.setCtl3(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl3());
+                     customerAccountListModel.setCtl4(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl4());
+                     customerAccountListModel.setStatus(resSearchCustomerAccount.getBody().getAccountList().get(i).getStatus());
+                     customerAccountListModel.setDate(resSearchCustomerAccount.getBody().getAccountList().get(i).getDate());
+                     listModelList.add(customerAccountListModel);
 
-//            if(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection()!=null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList()!=null &&
-//                    resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size()>0)){
-//
-//                int perlistsize=resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size();
-
-//
-//                CorporatePersonalList corporatePersonalList=null;
-//                ArrayList<CorporatePersonalList> list=new ArrayList<CorporatePersonalList>();
-//                if(perlistsize!=0){
-//                    for(int i =0;i<perlistsize;i++){
-//                        corporatePersonalList=new CorporatePersonalList();
-//                        corporatePersonalList.setCustNbr1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCustNbr1());
-//                        corporatePersonalList.setcId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCId1());
-//                        corporatePersonalList.setCitizenId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCitizenCId1());
-//                        corporatePersonalList.setTitle1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getTitle1());
-//
-//                        list.add(corporatePersonalList);
-//                    }
-//                    customerAccountModel.setPersonalList(list);
-//                }
-//            }
-
-
+                     }
+             }
+            customerAccountModel.setAccountBody(listModelList);
         }
         return customerAccountModel;
 
