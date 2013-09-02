@@ -17,7 +17,11 @@
                 <br/>
                 <h:outputText value="#{welcomePage.now}"/>
                 <br/>
-                <h:outputText value="#{msg.key('app.name')}"/>
+                <h:outputText value="#{msg.get('app.name')}"/>
+                <br/>
+                <h:outputText value="#{validationMsg.get('001')}"/>
+                <br/>
+                <h:outputText value="#{exceptionMsg.get('001')}"/>
                 <br/>
                 <p:separator/>
                 <p:commandButton value="Eng" action="#{msg.setLanguageEn}" update=":welcomePanel"/>

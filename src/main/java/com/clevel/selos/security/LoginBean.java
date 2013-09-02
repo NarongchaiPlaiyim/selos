@@ -12,12 +12,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @ManagedBean(name = "loginBean")
@@ -36,10 +41,14 @@ public class LoginBean {
 
     @Inject
     private SimpleAuthenticationManager authenticationManager;
+    @ManagedProperty(value="#{sessionRegistry}")
+    private SessionRegistry sessionRegistry;
 
     public String login() {
+        log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
         User user = userDAO.findByUserName(userName.trim());
         HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+        HttpServletResponse httpServletResponse = FacesUtil.getResponse();
         if (user == null) {
             log.debug("user not found in system! (user: {})", userName.trim());
             userAudit.addFailed(userName.trim(), "Login", "", "User not found in system!");
@@ -53,6 +62,9 @@ public class LoginBean {
             log.debug("authentication result: {}", result);
             SecurityContextHolder.getContext().setAuthentication(result);
             log.debug("login successful. ({})", userDetail);
+
+            ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
+            concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
             HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("language", Language.EN);
 
@@ -62,7 +74,7 @@ public class LoginBean {
             userAudit.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
         }
-        userAudit.addFailed(userName.trim(),"Login","","Authentication failed!");
+        userAudit.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
     }
 
@@ -92,5 +104,13 @@ public class LoginBean {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public SessionRegistry getSessionRegistry() {
+        return sessionRegistry;
+    }
+
+    public void setSessionRegistry(SessionRegistry sessionRegistry) {
+        this.sessionRegistry = sessionRegistry;
     }
 }

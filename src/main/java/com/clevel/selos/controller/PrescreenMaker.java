@@ -7,7 +7,8 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.BusinessInformation;
 import com.clevel.selos.model.view.Collateral;
 import com.clevel.selos.model.view.Facility;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +26,8 @@ public class PrescreenMaker implements Serializable {
     @Inject
     Logger log;
     @Inject
-    MessageProvider msg;
+    @NormalMessage
+    Message msg;
 
 
     private Collateral collateral;
