@@ -293,6 +293,25 @@ public class PrescreenMaker implements Serializable {
         modeForCollateral = "add";
     }
 
+    public void onClearBusinessDlg() {
+
+        log.info("onClearBusinessDlg {}");
+
+        businessInformation = new BusinessInformation();
+        businessGroup = new BusinessGroup();
+        businessDescription = new BusinessDescription();
+        businessGroup.setId(0);
+        businessDescription.setId(0);
+        businessDescription.setBusinessGroup(businessGroup);
+        businessInformation.setBusinessDescription(businessDescription);
+
+        log.info("businessInformation {}",businessInformation);
+        log.info("modeForBusiness {}",modeForBusiness);
+
+        modeForBusiness = "add";
+    }
+
+
     public void onAddExistCollateral() {
         log.info("onAddExistCollateral {}");
         Collateral collExist = null;
@@ -371,6 +390,7 @@ public class PrescreenMaker implements Serializable {
         businessInformation = businessInfo;
 
         indexBusiness = index;
+        modeForBusiness = "edit";
     }
 
     public void onEditBusinessInformation() {

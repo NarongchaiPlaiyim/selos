@@ -22,7 +22,6 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription,Integ
         log.info("getListByBusinessGroup. (businessGroup: {})",businessGroup);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("businessGroup",businessGroup));
-
         List<BusinessDescription> businessDescriptions = criteria.list();
         log.info("getListByBusinessGroup. (result size: {})",businessDescriptions.size());
         return businessDescriptions;
