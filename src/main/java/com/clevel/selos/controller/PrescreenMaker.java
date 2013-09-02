@@ -7,8 +7,10 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.BusinessInformation;
 import com.clevel.selos.model.view.Collateral;
 import com.clevel.selos.model.view.Facility;
+import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +30,15 @@ public class PrescreenMaker implements Serializable {
     @Inject
     @NormalMessage
     Message msg;
+
+    @Inject
+    @ValidationMessage
+    Message validationMsg;
+
+    @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
 
 
     private Collateral collateral;

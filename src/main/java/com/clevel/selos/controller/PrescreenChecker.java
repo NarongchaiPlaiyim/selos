@@ -1,7 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.model.view.CustomerView;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.system.message.ExceptionMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +22,17 @@ public class PrescreenChecker implements Serializable {
     @Inject
     Logger log;
     @Inject
-    MessageProvider msg;
+    @NormalMessage
+    Message msg;
+
+    @Inject
+    @ValidationMessage
+    Message validationMsg;
+
+    @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
 
     private List<CustomerView> customerViewList;
     private String[] citizenID;

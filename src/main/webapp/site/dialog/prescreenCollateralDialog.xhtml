@@ -33,13 +33,13 @@
                     <p:commandButton value="Add"
                                      rendered="#{prescreenMaker.modeForCollateral == 'add'}"
                                      id="btnAddCollateralDlg" styleClass="small"
-                                     update=":tableCollateral,:collateralDialog"
+                                     update=":frmMain:resultTableCollateral,:collateralDialog"
                                      action="#{prescreenMaker.onAddCollateral}"
                                      oncomplete="collateralDlg.hide()"/>
 
                     <p:commandButton value="Edit"
                                      rendered="#{prescreenMaker.modeForCollateral == 'edit'}"
-                                     styleClass="smaller" update=":tableCollateral,:collateralDialog"
+                                     styleClass="smaller" update=":frmMain:resultTableCollateral,:collateralDialog"
                                      action="#{prescreenMaker.onEditCollateral}"
                                      oncomplete="collateralDlg.hide();"/>
 
