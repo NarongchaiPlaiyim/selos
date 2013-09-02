@@ -40,19 +40,16 @@
             <tr>
                 <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
                 <td>
-                    <h:form id="productGroup" styleClass="panel" style="width:230px">
-                        <h:selectOneListbox styleClass="largest" size="1"
-                                            value="#{prescreenMaker.selectProductGroup.id}" id="productGroupName" >
-                            <f:selectItems value="#{prescreenMaker.productGroupList}"
-                                           var="dlgProductGroup"
-                                           itemLabel="#{dlgProductGroup.name}"
-                                           itemValue="#{dlgProductGroup.id}"/>
-                            <p:ajax event="change"
-                                    listener="#{prescreenMaker.onChangeProductGroup}"
-                                    process=":productGroup"
-                                    update=":tableFacility,:facilityDlgForm"/>
-                        </h:selectOneListbox>
-                    </h:form>
+                    <h:selectOneListbox styleClass="largest" size="1"
+                                        value="#{prescreenMaker.selectProductGroup.id}" id="productGroupName" >
+                        <f:selectItems value="#{prescreenMaker.productGroupList}"
+                                       var="dlgProductGroup"
+                                       itemLabel="#{dlgProductGroup.name}"
+                                       itemValue="#{dlgProductGroup.id}"/>
+                        <p:ajax event="change"
+                                listener="#{prescreenMaker.onChangeProductGroup}"
+                                update=":frmMain:resultTableFacility,:facilityDlgForm"/>
+                    </h:selectOneListbox>
                 </td>
             </tr>
             <tr>
@@ -68,45 +65,42 @@
             <tr>
                 <td></td>
                 <td>
-                    <h:form id="tableFacility" styleClass="panel" style="width:610px;">
-                        <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
-                                     paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
+                                 paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
 
-                            <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:22px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
 
-                            <p:column headerText="Product Program" styleClass="center" style="width: 130px;">
-                                <h:outputText value="#{item.productProgram.name}"/>
-                            </p:column>
+                        <p:column headerText="Product Program" styleClass="center" style="width: 130px;">
+                            <h:outputText value="#{item.productProgram.name}"/>
+                        </p:column>
 
-                            <p:column headerText="Facility" styleClass="center" style="width: 110px;">
-                                <h:outputText value="#{item.creditType.name}"/>
-                            </p:column>
+                        <p:column headerText="Facility" styleClass="center" style="width: 110px;">
+                            <h:outputText value="#{item.creditType.name}"/>
+                        </p:column>
 
-                            <p:column headerText="Request Amount" style="width: 120px;">
-                                <div class="right">
-                                    <h:outputText value="#{item.requestAmount}">
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="8"/>
-                                    </h:outputText>
-                                </div>
-                            </p:column>
+                        <p:column headerText="Request Amount" style="width: 120px;">
+                            <div class="right">
+                                <h:outputText value="#{item.requestAmount}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="8"/>
+                                </h:outputText>
+                            </div>
+                        </p:column>
 
-                            <p:column headerText="" styleClass="center" style="width:54px;">
-                                <p:commandButton icon="ui-icon-pencil"
-                                                 action="#{prescreenMaker.onSelectedFacility(rowIndex)}"
-                                                 update=":facilityDlgForm"
-                                                 process=":tableFacility"
-                                                 oncomplete="facilityDlg.show();"/>
-                                <p:commandButton icon="ui-icon-trash"
-                                                 title="Remove"
-                                                 action="#{prescreenMaker.onDeleteFacility(rowIndex)}"
-                                                 update=":tableFacility"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:54px;">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{prescreenMaker.onSelectedFacility(rowIndex)}"
+                                             update=":facilityDlgForm"
+                                             oncomplete="facilityDlg.show();"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="Remove"
+                                             action="#{prescreenMaker.onDeleteFacility(rowIndex)}"
+                                             update=":resultTableFacility"/>
+                        </p:column>
 
-                        </p:dataTable>
-                    </h:form>
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -254,60 +248,57 @@
             <tr>
                 <td class="title">Business Information x :</td>
                 <td>
-                    <p:panel id="tableBusinessInformation" styleClass="panel">
-                        <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
-                                     paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
+                                 paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex">
 
-                            <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:22px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
 
-                            <p:column headerText="Business code" styleClass="center" style="width: 110px;">
-                                <h:outputText value="#{businessInformation.businessDescription.tmbCode}"/>
-                            </p:column>
+                        <p:column headerText="Business code" styleClass="center" style="width: 110px;">
+                            <h:outputText value="#{businessInformation.businessDescription.tmbCode}"/>
+                        </p:column>
 
-                            <p:column headerText="Business Group" styleClass="center" style="width: 140px;">
-                                <h:outputText value="#{businessInformation.businessDescription.businessGroup.name}"/>
-                            </p:column>
+                        <p:column headerText="Business Group" styleClass="center" style="width: 140px;">
+                            <h:outputText value="#{businessInformation.businessDescription.businessGroup.name}"/>
+                        </p:column>
 
-                            <p:column headerText="Business Description" styleClass="center" style="width: 180px;">
-                                <h:outputText value="#{businessInformation.businessDescription.name}"/>
-                            </p:column>
+                        <p:column headerText="Business Description" styleClass="center" style="width: 180px;">
+                            <h:outputText value="#{businessInformation.businessDescription.name}"/>
+                        </p:column>
 
-                            <p:column headerText="ESR" styleClass="center" style="width: 35px;">
+                        <p:column headerText="ESR" styleClass="center" style="width: 35px;">
 
-                            </p:column>
+                        </p:column>
 
-                            <p:column headerText="Negative" styleClass="center" style="width: 65px;">
+                        <p:column headerText="Negative" styleClass="center" style="width: 65px;">
 
-                            </p:column>
+                        </p:column>
 
-                            <p:column headerText="High risk" styleClass="center" style="width: 65px;">
+                        <p:column headerText="High risk" styleClass="center" style="width: 65px;">
 
-                            </p:column>
+                        </p:column>
 
-                            <p:column headerText="Suspend" styleClass="center" style="width: 65px;">
+                        <p:column headerText="Suspend" styleClass="center" style="width: 65px;">
 
-                            </p:column>
+                        </p:column>
 
-                            <p:column headerText="Business permission" styleClass="center" style="width: 160px;">
+                        <p:column headerText="Business permission" styleClass="center" style="width: 160px;">
 
-                            </p:column>
+                        </p:column>
 
-                            <p:column headerText="" styleClass="center" style="width:54px;">
-                                <p:commandButton icon="ui-icon-pencil"
-                                                 action="#{prescreenMaker.onRowBusinessInformation(rowIndex)}"
-                                                 update=":businessDlgForm"
-                                                 process=":tableBusinessInformation"
-                                                 oncomplete="businessDlg.show();"/>
-                                <p:commandButton icon="ui-icon-trash"
-                                                 title="Remove"
-                                                 action="#{prescreenMaker.onRemoveBusinessInformation(rowIndex)}"
-                                                 update=":tableBusinessInformation"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:54px;">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{prescreenMaker.onRowBusinessInformation(rowIndex)}"
+                                             update=":businessDlgForm"
+                                             oncomplete="businessDlg.show();"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="Remove"
+                                             action="#{prescreenMaker.onRemoveBusinessInformation(rowIndex)}"
+                                             update=":resulttableBusinessInformation"/>
+                        </p:column>
 
-                        </p:dataTable>
-                    </p:panel>
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -396,41 +387,39 @@
             <tr>
                 <td></td>
                 <td>
-                    <p:panel id="tableCollateral" styleClass="panel">
-                        <p:dataTable id="resultTableCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
-                                     paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resultTableCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
+                                 paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex">
 
-                            <p:column headerText="" styleClass="center" style="width:22px;">
-                                <h:outputText value="#{rowIndex+1}"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:22px;">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
 
-                            <p:column headerText="Collateral" styleClass="center" style="width: 110px;">
-                                <h:outputText value="#{collateral.collateralTypeName}"/>
-                            </p:column>
+                        <p:column headerText="Collateral" styleClass="center" style="width: 110px;">
+                            <h:outputText value="#{collateral.collateralTypeName}"/>
+                        </p:column>
 
-                            <p:column headerText="Request Amount" style="width: 130px;">
-                                <div class="right">
-                                    <h:outputText value="#{collateral.collateralAmount}" >
-                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                                         maxIntegerDigits="8"/>
-                                    </h:outputText>
-                                </div>
-                            </p:column>
+                        <p:column headerText="Request Amount" style="width: 130px;">
+                            <div class="right">
+                                <h:outputText value="#{collateral.collateralAmount}" >
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="8"/>
+                                </h:outputText>
+                            </div>
+                        </p:column>
 
-                            <p:column headerText="" styleClass="center" style="width:54px;">
-                                <p:commandButton icon="ui-icon-pencil"
-                                                 action="#{prescreenMaker.onRowCollateral(rowIndex)}"
-                                                 update=":collateralDlgForm"
-                                                 process=":tableCollateral"
-                                                 oncomplete="collateralDlg.show();"/>
-                                <p:commandButton icon="ui-icon-trash"
-                                                 title="Remove"
-                                                 action="#{prescreenMaker.onRemoveCollateral(rowIndex)}"
-                                                 update=":tableCollateral"/>
-                            </p:column>
+                        <p:column headerText="" styleClass="center" style="width:54px;">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{prescreenMaker.onRowCollateral(rowIndex)}"
+                                             update=":collateralDlgForm"
+                                             process=":resultTableCollateral"
+                                             oncomplete="collateralDlg.show();"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="Remove"
+                                             action="#{prescreenMaker.onRemoveCollateral(rowIndex)}"
+                                             update=":resultTableCollateral"/>
+                        </p:column>
 
-                        </p:dataTable>
-                    </p:panel>
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
