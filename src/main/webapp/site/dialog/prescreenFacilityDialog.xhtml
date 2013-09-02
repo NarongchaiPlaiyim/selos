@@ -60,7 +60,7 @@
                             styleClass="small"
                             action="#{prescreenMaker.onAddFacility}"
                             process=":facilityDlgForm"
-                            update=":tableFacility"
+                            update=":frmMain:resultTableFacility"
                             oncomplete="facilityDlg.hide()"/>
                     <p:commandButton
                             rendered="#{prescreenMaker.modeForButton == 'edit'}"
@@ -68,7 +68,7 @@
                             value="Edit"
                             styleClass="small"
                             action="#{prescreenMaker.onEditFacility}"
-                            update=":tableFacility"
+                            update=":frmMain:resultTableFacility"
                             oncomplete="facilityDlg.hide()"/>
                     <p:commandButton value="Cancel" styleClass="small" onclick="facilityDlg.hide()"/>
                 </td>

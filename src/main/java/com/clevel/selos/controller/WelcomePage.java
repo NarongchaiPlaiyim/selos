@@ -7,7 +7,7 @@ import com.clevel.selos.integration.Integration;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.system.Config;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.*;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -46,10 +46,22 @@ public class WelcomePage implements Serializable {
     Logger brmsLog;
 
     @Inject
-    MessageProvider msg;
-    @Inject
     ConfigDAO configDAO;
     List<Config> configList;
+
+    @Inject
+    @NormalMessage
+    Message normalMsg;
+    @Inject
+    @ValidationMessage
+    Message validationMsg;
+    @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
+    String normalStr;
+    String validationStr;
+    String exceptionStr;
 
     private Date now;
 
@@ -62,6 +74,23 @@ public class WelcomePage implements Serializable {
         now = new Date();
         reloadConfig();
         onLoadDescription();
+        normalStr = normalMsg.get("app.name");
+        validationStr = validationMsg.get("001");
+        exceptionStr = exceptionMsg.get("001");
+    }
+
+    public void on001() {
+        log.debug("on001");
+        validationStr = validationMsg.get("001");
+        exceptionStr = exceptionMsg.get("001");
+        log.debug("v: {}, e: {}",validationStr,exceptionStr);
+    }
+
+    public void on002() {
+        log.debug("on002");
+        validationStr = validationMsg.get("002");
+        exceptionStr = exceptionMsg.get("501");
+        log.debug("v: {}, e: {}",validationStr,exceptionStr);
     }
 
     public void reloadConfig() {
@@ -185,5 +214,29 @@ public class WelcomePage implements Serializable {
 
     public void setSelectedText(String selectedText) {
         this.selectedText = selectedText;
+    }
+
+    public String getNormalStr() {
+        return normalStr;
+    }
+
+    public void setNormalStr(String normalStr) {
+        this.normalStr = normalStr;
+    }
+
+    public String getValidationStr() {
+        return validationStr;
+    }
+
+    public void setValidationStr(String validationStr) {
+        this.validationStr = validationStr;
+    }
+
+    public String getExceptionStr() {
+        return exceptionStr;
+    }
+
+    public void setExceptionStr(String exceptionStr) {
+        this.exceptionStr = exceptionStr;
     }
 }

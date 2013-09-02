@@ -7,7 +7,8 @@ import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.Facility;
-import com.clevel.selos.system.MessageProvider;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +25,8 @@ public class PrescreenFacilityMaker implements Serializable {
     @Inject
     Logger log;
     @Inject
-    MessageProvider msg;
+    @NormalMessage
+    Message msg;
 
     private List<Facility> facilityList;
     private Facility facility;
