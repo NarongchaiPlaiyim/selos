@@ -21,7 +21,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name="testrm")
-public class TestRM implements Serializable{
+public class TestService implements Serializable{
     @Inject
 //    @Integration(Integration.System.RM)
     Logger log;
@@ -42,7 +42,7 @@ public class TestRM implements Serializable{
     public static String printRequest;
     private String printDetail;
 
-    public TestRM(){
+    public TestService(){
 
     }
 
