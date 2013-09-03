@@ -51,6 +51,11 @@ public class CaService implements Serializable{
 
         com.tmb.common.data.requestsearchcustomeraccount.Header header=new com.tmb.common.data.requestsearchcustomeraccount.Header();
         header.setReqId(searchIndividual.getReqId());
+        header.setAcronym("EAC");
+        header.setProductCode("0");
+        //header.setServerURL("");
+        //header.setSessionId("");
+
 
         com.tmb.common.data.requestsearchcustomeraccount.Body  body=new com.tmb.common.data.requestsearchcustomeraccount.Body();
         body.setCustNbr(searchIndividual.getCustNbr());
