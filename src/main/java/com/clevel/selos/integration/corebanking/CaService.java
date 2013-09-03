@@ -75,10 +75,12 @@ public class CaService implements Serializable{
         if(resSearchCustomerAccount.getHeader().getResCode().equals("0000")){
             List<CustomerAccountListModel> listModelList=null;
             //checkSearchResult
+            System.out.println("hellooooooooooooooooooooooooooooo "+resSearchCustomerAccount.getBody().getAccountList().size());
         if(resSearchCustomerAccount.getBody().getAccountList()!=null&&resSearchCustomerAccount.getBody().getAccountList().size()>0){
             CustomerAccountListModel customerAccountListModel=null;
                  listModelList=new ArrayList<CustomerAccountListModel>();
                  for(int i=0;i<resSearchCustomerAccount.getBody().getAccountList().size();i++){
+                     System.out.println("============================================ 111");
                      customerAccountListModel=new CustomerAccountListModel();
 
                      customerAccountListModel.setRel(resSearchCustomerAccount.getBody().getAccountList().get(i).getRel());
@@ -101,6 +103,7 @@ public class CaService implements Serializable{
                      }
              }
             customerAccountModel.setAccountBody(listModelList);
+            System.out.println("cccccccccccccccccc "+listModelList.size());
         }
         return customerAccountModel;
 
