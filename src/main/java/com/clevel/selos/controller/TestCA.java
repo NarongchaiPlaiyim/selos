@@ -37,30 +37,38 @@ public class TestCA  implements Serializable{
 
     public void customerAccount() throws Exception {
         caService =new CaService();
-        CustomerAccountModel customerAccountModel ;
+        CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
         customerAccountModel = caService.intiCustomerAction(searchIndividual);
         //showData
         StringBuffer result=new StringBuffer();
-//        result.append("==================== Individual Data Demo ===================");
-//        result.append("\n responseCode : "+ customerAccountModel.getResCode());
-//        result.append("\n responseDesc : "+ individualModel.getResDesc());
-//        result.append("\n searchResult : "+ individualModel.getSearchResult());
-//        result.append("\n lastPageFlag : "+ individualModel.getLastPageFlag());
-//        result.append("\n\n ===== personal Detail Section =====");
-//        result.append("\n title : "+ individualModel.getTitle());
-//        result.append("\n custId : "+ individualModel.getCustId());
-//        result.append("\n telephone1 : "+ individualModel.getTelephone1());
-//        result.append("\n\n ===== personal List Section =====");
+        result.append("==================== CustomerAccountList Data Demo ===================");
+        result.append("\n reqId : "+ customerAccountModel.getReqId());
+        result.append("\n resCode : "+ customerAccountModel.getResCode());
+        result.append("\n resDesc : "+ customerAccountModel.getResDesc());
 
-//        if(customerAccountModel.getPersonalLists()!=null ){
-//            result.append("/n personalListSize : "+ individualModel.getPersonalLists().size());
-//            for(int i=0;i< individualModel.getPersonalLists().size();i++){
-//                result.append("/n address : "+ individualModel.getPersonalLists().get(i).getAddress());
-//            }
-//        }else{
-//            result.append("/n personalListSize : null");
-//        }
+        if(customerAccountModel.getAccountBody()!=null&&customerAccountModel.getAccountBody().size()>0 ){
+            result.append("\n cusAccountListSize : "+ customerAccountModel.getAccountBody().size());
+            for(int i=0;i< customerAccountModel.getAccountBody().size();i++){
+                result.append("\n rel : "+ customerAccountModel.getAccountBody().get(i).getRel());
+                result.append("\n cd : "+ customerAccountModel.getAccountBody().get(i).getCd());
+                result.append("\n pSO : "+ customerAccountModel.getAccountBody().get(i).getpSO());
+                result.append("\n appl : "+ customerAccountModel.getAccountBody().get(i).getAppl());
+                result.append("\n accountNo : "+ customerAccountModel.getAccountBody().get(i).getAccountNo());
+                result.append("\n trlr : "+ customerAccountModel.getAccountBody().get(i).getTrlr());
+                result.append("\n balance : "+ customerAccountModel.getAccountBody().get(i).getBalance());
+                result.append("\n dir : "+ customerAccountModel.getAccountBody().get(i).getDir());
+                result.append("\n prod : "+ customerAccountModel.getAccountBody().get(i).getProd());
+                result.append("\n ctl1 : "+ customerAccountModel.getAccountBody().get(i).getCtl1());
+                result.append("\n ctl2 : "+ customerAccountModel.getAccountBody().get(i).getCtl2());
+                result.append("\n ctl3 : "+ customerAccountModel.getAccountBody().get(i).getCtl3());
+                result.append("\n ctl4 : "+ customerAccountModel.getAccountBody().get(i).getCtl4());
+                result.append("\n status : "+ customerAccountModel.getAccountBody().get(i).getStatus());
+                result.append("\n date : "+ customerAccountModel.getAccountBody().get(i).getDate());
+            }
+        }else{
+            result.append("\n accountListSize : null");
+        }
 
         printDetail=result.toString();
     }

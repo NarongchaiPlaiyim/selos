@@ -1,7 +1,9 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
+import com.clevel.selos.integration.corebanking.CaService;
 import com.clevel.selos.integration.corebanking.RmService;
+import com.clevel.selos.model.CAmodel.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.RMmodel.CardTypeView;
 import com.clevel.selos.model.RMmodel.CorporateModel;
@@ -28,6 +30,7 @@ public class TestRM implements Serializable{
 
 //    @Inject
     RmService rmService;
+    CaService caService;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -85,12 +88,12 @@ public class TestRM implements Serializable{
         result.append("\n\n ===== personal List Section =====");
 
         if(individualModel.getPersonalLists()!=null ){
-        result.append("/n personalListSize : "+ individualModel.getPersonalLists().size());
+        result.append("\n personalListSize : "+ individualModel.getPersonalLists().size());
                 for(int i=0;i< individualModel.getPersonalLists().size();i++){
-                result.append("/n address : "+ individualModel.getPersonalLists().get(i).getAddress());
+                result.append("\n address : "+ individualModel.getPersonalLists().get(i).getAddress());
                 }
         }else{
-            result.append("/n personalListSize : null");
+            result.append("\n personalListSize : null");
         }
 
         printDetail=result.toString();
@@ -118,21 +121,58 @@ public class TestRM implements Serializable{
         result.append("\n\n ===== personal List Section =====");
 
         if(corporateModel.getPersonalList()!=null ){
-            result.append("/n personalListSize : "+ corporateModel.getPersonalList().size());
+            result.append("\n personalListSize : "+ corporateModel.getPersonalList().size());
             for(int i=0;i< corporateModel.getPersonalList().size();i++){
-                result.append("/n custNbr1 : "+ corporateModel.getPersonalList().get(i).getCustNbr1());
-                result.append("/n cId1 : "+ corporateModel.getPersonalList().get(i).getcId1());
-                result.append("/n citizenId1 : "+ corporateModel.getPersonalList().get(i).getCitizenId1());
-                result.append("/n title1 : "+ corporateModel.getPersonalList().get(i).getTitle1());
+                result.append("\n custNbr1 : "+ corporateModel.getPersonalList().get(i).getCustNbr1());
+                result.append("\n cId1 : "+ corporateModel.getPersonalList().get(i).getcId1());
+                result.append("\n citizenId1 : "+ corporateModel.getPersonalList().get(i).getCitizenId1());
+                result.append("\n title1 : "+ corporateModel.getPersonalList().get(i).getTitle1());
             }
         }else{
-            result.append("/n personalListSize : null");
+            result.append("\n personalListSize : null");
         }
 
         printDetail=result.toString();
     }
 
+    public void customerAccount() throws Exception {
+        caService =new CaService();
+        CustomerAccountModel customerAccountModel =new CustomerAccountModel();
+        //callservice
+        customerAccountModel = caService.intiCustomerAction(searchIndividual);
+        //showData
+        StringBuffer result=new StringBuffer();
+        result.append("==================== CustomerAccountList Data Demo ===================");
+        result.append("\n reqId : "+ customerAccountModel.getReqId());
+        result.append("\n resCode : "+ customerAccountModel.getResCode());
+        result.append("\n resDesc : "+ customerAccountModel.getResDesc());
 
+        if(customerAccountModel.getAccountBody()!=null&&customerAccountModel.getAccountBody().size()>0 ){
+            result.append("\n cusAccountListSize : "+ customerAccountModel.getAccountBody().size());
+            for(int i=0;i< customerAccountModel.getAccountBody().size();i++){
+                result.append("\n rel : "+ customerAccountModel.getAccountBody().get(i).getRel());
+                result.append("\n cd : "+ customerAccountModel.getAccountBody().get(i).getCd());
+                result.append("\n pSO : "+ customerAccountModel.getAccountBody().get(i).getpSO());
+                result.append("\n appl : "+ customerAccountModel.getAccountBody().get(i).getAppl());
+                result.append("\n accountNo : "+ customerAccountModel.getAccountBody().get(i).getAccountNo());
+                result.append("\n trlr : "+ customerAccountModel.getAccountBody().get(i).getTrlr());
+                result.append("\n balance : "+ customerAccountModel.getAccountBody().get(i).getBalance());
+                result.append("\n dir : "+ customerAccountModel.getAccountBody().get(i).getDir());
+                result.append("\n prod : "+ customerAccountModel.getAccountBody().get(i).getProd());
+                result.append("\n ctl1 : "+ customerAccountModel.getAccountBody().get(i).getCtl1());
+                result.append("\n ctl2 : "+ customerAccountModel.getAccountBody().get(i).getCtl2());
+                result.append("\n ctl3 : "+ customerAccountModel.getAccountBody().get(i).getCtl3());
+                result.append("\n ctl4 : "+ customerAccountModel.getAccountBody().get(i).getCtl4());
+                result.append("\n status : "+ customerAccountModel.getAccountBody().get(i).getStatus());
+                result.append("\n date : "+ customerAccountModel.getAccountBody().get(i).getDate());
+                result.append("\n =========================================================== ");
+            }
+        }else{
+            result.append("\n accountListSize : null");
+        }
+
+        printDetail=result.toString();
+    }
 
 
     //////////////////////////////////////////////////////////////////////
