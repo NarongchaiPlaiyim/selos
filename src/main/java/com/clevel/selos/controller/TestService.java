@@ -50,8 +50,8 @@ public class TestService implements Serializable{
 
     @PostConstruct
     public void onCreate(){
-        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-        log.debug("TESTLOG");
+//        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+//        log.debug("TESTLOG");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
