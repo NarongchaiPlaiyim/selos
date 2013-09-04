@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
-import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.corebanking.CaService;
 import com.clevel.selos.integration.corebanking.RmService;
 import com.clevel.selos.model.CAmodel.CustomerAccountModel;
@@ -24,7 +24,7 @@ import java.util.List;
 @ManagedBean(name="testrm")
 public class TestService implements Serializable{
     @Inject
-    @Integration(Integration.System.RM)
+    @RM
     Logger log;
 
     @Inject

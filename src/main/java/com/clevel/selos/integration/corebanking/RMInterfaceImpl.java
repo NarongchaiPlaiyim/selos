@@ -23,13 +23,13 @@ public class RMInterfaceImpl implements RMInterface {
 
     @Override
     public CustomerInfo getCustomerInfo(String id, CustomerType customerType, DocumentType documentType) throws Exception {
-        SearchIndividual searchIndividual = new SearchIndividual();
-
-        searchIndividual.setCustId("");
-        IndividualModel individualModel = rmService.intiIndividual(searchIndividual);
+//        SearchIndividual searchIndividual = new SearchIndividual();
+//
+//        searchIndividual.setCustId("");
+//        IndividualModel individualModel = rmService.intiIndividual(searchIndividual);
 
         CustomerInfo customerInfo = new CustomerInfo();
-        customerInfo.setCitizenId(individualModel.getCustId());
+        customerInfo.setCitizenId("REAL");
         return  customerInfo;
     }
 }
