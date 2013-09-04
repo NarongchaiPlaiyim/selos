@@ -1,7 +1,6 @@
 package com.clevel.selos.integration.email.template;
 
 import com.clevel.selos.integration.Email;
-import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.email.EmailService;
 import org.slf4j.Logger;
 
