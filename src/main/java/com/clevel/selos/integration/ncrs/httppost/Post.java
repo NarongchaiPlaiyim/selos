@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.exception.ValidationException;
 import com.clevel.selos.util.Util;
 import org.apache.http.HttpResponse;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 
 public class Post implements Serializable {
     @Inject
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger log;
 
     private static Post post = null;

@@ -3,6 +3,7 @@ package com.clevel.selos.integration.ncrs.service;
 
 //import com.clevel.selos.controller.TestNCRS;
 import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
 import com.clevel.selos.integration.ncrs.models.response.Ncrsresponse;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class NCRSService implements Serializable {
     @Inject
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger log;
 
     @Inject
