@@ -4,7 +4,7 @@ import com.clevel.selos.integration.test.RMTest;
 
 import javax.enterprise.inject.Produces;
 
-public class IntegrationProducer {
+public class InterfaceProducer {
 
     @Produces
     public RMInterface getRMInterface(@RM RMInterface rmInterface) {
