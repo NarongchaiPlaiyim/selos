@@ -7,6 +7,9 @@ import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.CorporatePersonalList;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
 import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.MessageProvider;
+import com.clevel.selos.system.message.ValidationMessage;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
@@ -27,33 +30,35 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sahawat
- * Date: 30/8/2556
- * Time: 13:33 น.
- * To change this template use File | Settings | File Templates.
- */
+
 public class CaService implements Serializable{
 
     @Inject
     @ExceptionMessage
-    com.clevel.selos.system.message.Message exceptionMsg;
+    Message exceptionMsg;
 
+    @Inject
+    @ValidationMessage
+    Message validationMsg;
+
+    @Inject
+    public CaService(){
+
+    }
 
     public CustomerAccountModel intiCustomerAction(SearchIndividual searchIndividual) throws Exception {
 
         System.out.println("======================  " +searchIndividual.getReqId());
         if(searchIndividual.getReqId().length()<1 || searchIndividual.getReqId().length()>50){
-            throw new ValidationException("ReID Invalid");
+            throw new ValidationException(validationMsg.get("validation.006"));
         }
 
         if(searchIndividual.getCustNbr().length()>14){
-            throw new ValidationException("CustNbr Invalid");
+            throw new ValidationException(validationMsg.get("validation.006"));
         }
 
         if(searchIndividual.getRadSelectSearch().length()<1 || searchIndividual.getRadSelectSearch().length()>10){
-            throw new ValidationException("RadSelectSearch Invalid");
+            throw new ValidationException(validationMsg.get("validation.006"));
         }
 
         com.tmb.common.data.requestsearchcustomeraccount.Header header=new com.tmb.common.data.requestsearchcustomeraccount.Header();
