@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.RMmodel.*;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service;
@@ -21,9 +22,9 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
-
 public class RmService implements Serializable {
     @Inject
+    @RM
     Logger log;
 
     @Inject
@@ -73,7 +74,7 @@ public class RmService implements Serializable {
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
-        ResSearchIndividualCustomer resSearchIndividualCustomer = callserviceIndividual(reqSearch);
+        ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividual(reqSearch);
 
         IndividualModel individualModel = new IndividualModel();
         individualModel.setResCode(resSearchIndividualCustomer.getHeader().getResCode());
@@ -155,7 +156,7 @@ public class RmService implements Serializable {
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
-        ResSearchCorporateCustomer resSearchCorporateCustomer = callserviceCorporate(reqSearch);
+        ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
 
         CorporateModel corporateModel = new CorporateModel();
         corporateModel.setResCode(resSearchCorporateCustomer.getHeader().getResCode());
@@ -202,7 +203,7 @@ public class RmService implements Serializable {
     }
 
     // Services
-    private ResSearchIndividualCustomer callserviceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
+    private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
         ResSearchIndividualCustomer resSearchIndividualCustomer = null;
 
         URL url = this.getClass().getResource("/EAISearchIndividualCustomer.wsdl");
@@ -217,7 +218,7 @@ public class RmService implements Serializable {
         return resSearchIndividualCustomer;
     }
 
-    private ResSearchCorporateCustomer callserviceCorporate(ReqSearchCorporateCustomer reqSearch) throws Exception {
+    private ResSearchCorporateCustomer callServiceCorporate(ReqSearchCorporateCustomer reqSearch) throws Exception {
         ResSearchCorporateCustomer resSearchCorporateCustomer = null;
 
         URL url = this.getClass().getResource("/EAISearchCorporateCustomer.wsdl");
