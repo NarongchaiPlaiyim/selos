@@ -1,6 +1,8 @@
 package com.clevel.selos.system;
 
 import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.RM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +16,13 @@ public class LogProducer {
     }
 
     @Produces
-    @Integration(Integration.System.RM)
+    @RM
     Logger createRMLogger() {
         return LoggerFactory.getLogger(Integration.System.RM.name());
     }
 
     @Produces
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger createNCBLogger() {
         return LoggerFactory.getLogger(Integration.System.NCB.name());
     }
