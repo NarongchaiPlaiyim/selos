@@ -66,7 +66,6 @@ public class WelcomePage implements Serializable {
     String exceptionStr;
 
     @Inject
-    @RM
     RMInterface rm;
 
     private Date now;
