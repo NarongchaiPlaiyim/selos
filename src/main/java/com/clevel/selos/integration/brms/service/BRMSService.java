@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.brms.service;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 
 public class BRMSService implements Serializable{
     @Inject
-    @Integration(Integration.System.BRMS)
+    @BRMS
     Logger log;
 
     public PreScreenResponse checkPreScreenRule(PreScreenRequest preScreenRequest) throws ValidationException{

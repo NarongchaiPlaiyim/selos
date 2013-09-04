@@ -2,6 +2,7 @@ package com.clevel.selos.integration.ncrs.service;
 
 
 import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.commands.Command;
 import com.clevel.selos.integration.ncrs.exception.ValidationException;
 import com.clevel.selos.integration.ncrs.httppost.Post;
@@ -17,7 +18,7 @@ import org.slf4j.Logger;
 
 public class NCRSImp implements NCRS {
     @Inject
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger log;
 
     public NCRSImp() {

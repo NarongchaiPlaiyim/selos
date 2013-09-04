@@ -1,8 +1,6 @@
 package com.clevel.selos.system;
 
-import com.clevel.selos.integration.Integration;
-import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.RM;
+import com.clevel.selos.integration.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,31 +26,31 @@ public class LogProducer {
     }
 
     @Produces
-    @Integration(Integration.System.NCBI)
+    @NCBI
     Logger createNCBILogger() {
         return LoggerFactory.getLogger(Integration.System.NCBI.name());
     }
 
     @Produces
-    @Integration(Integration.System.DWH)
+    @DWH
     Logger createDWHLogger() {
         return LoggerFactory.getLogger(Integration.System.DWH.name());
     }
 
     @Produces
-    @Integration(Integration.System.EMAIL)
+    @Email
     Logger createEmailLogger() {
         return LoggerFactory.getLogger(Integration.System.EMAIL.name());
     }
 
     @Produces
-    @Integration(Integration.System.SW_ROSC)
+    @SW_ROSC
     Logger createSWROSCLogger() {
         return LoggerFactory.getLogger(Integration.System.SW_ROSC.name());
     }
 
     @Produces
-    @Integration(Integration.System.BRMS)
+    @BRMS
     Logger createBRMSLogger() {
         return LoggerFactory.getLogger(Integration.System.BRMS.name());
     }

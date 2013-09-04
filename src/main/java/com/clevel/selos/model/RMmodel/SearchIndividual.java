@@ -2,15 +2,7 @@ package com.clevel.selos.model.RMmodel;
 
 import java.io.Serializable;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sahawat
- * Date: 16/8/2556
- * Time: 11:36 น.
- * To change this template use File | Settings | File Templates.
- */
 public class SearchIndividual implements Serializable {
-
     private String reqId;
     private String custType;
     private String type;
@@ -43,8 +35,6 @@ public class SearchIndividual implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
-
-
 
     public String getCustId() {
         return custId;
