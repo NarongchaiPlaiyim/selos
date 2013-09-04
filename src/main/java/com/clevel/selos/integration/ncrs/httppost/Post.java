@@ -3,6 +3,7 @@ package com.clevel.selos.integration.ncrs.httppost;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class Post {
+public class Post implements Serializable {
     @Inject
     @Integration(Integration.System.NCB)
     Logger log;
@@ -31,7 +32,9 @@ public class Post {
         return post == null ? post =new Post() : post;
     }
     public String sendPost(String xml, String url) throws Exception {
-        log.debug("sendPost. (xml: {}, url: {})",xml,url);
+        System.out.println("========================================= sendPost");
+        //log.debug("sendPost. (xml: {}, url: {})",xml,url);
+        System.out.println("========================================= XML : "+xml+" "+"URL : "+url);
         String result = "";
 
         Util util = new Util();
@@ -43,8 +46,9 @@ public class Post {
             urlParameters.add(new BasicNameValuePair("q", xml));
             post.setEntity(new UrlEncodedFormEntity(urlParameters));
             HttpResponse response = client.execute(post);
-            if (response.getStatusLine().getStatusCode()==200) {
-                log.debug("The request has succeeded");
+            int resCode = response.getStatusLine().getStatusCode();
+            if (resCode==200) {
+                //log.debug("The request has succeeded");
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
                 StringBuilder builder = new StringBuilder();
                 String line = "";
@@ -52,10 +56,15 @@ public class Post {
                     builder.append(line);
                 }
                 result = builder.toString();
-                log.debug("Result : {}",result);
+
+                //log.debug("sendPost. (result: {})",result);
+
+                System.out.println("========================================= Result : "+result);
+
                 return result;
             }else{
-                log.error("Error code {}",response.getStatusLine().getStatusCode());
+                System.out.println("========================================= Error code : "+ resCode);
+                //log.error("sendPost. (Error code : {})",resCode);
                 return result;
             }
         }else {

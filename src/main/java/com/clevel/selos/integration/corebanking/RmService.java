@@ -25,7 +25,10 @@ public class RmService implements Serializable{
     @Inject
     Logger log;
 
+    @Inject
+    public RmService(){
 
+    }
 
     public IndividualModel intiIndividual(SearchIndividual searchIndividual) throws Exception {
 
