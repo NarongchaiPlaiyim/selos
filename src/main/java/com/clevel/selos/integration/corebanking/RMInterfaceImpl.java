@@ -1,13 +1,13 @@
 package com.clevel.selos.integration.corebanking;
 
-import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.model.CustomerInfo;
 import org.slf4j.Logger;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
-@RM
+@Default
 public class RMInterfaceImpl implements RMInterface {
     @Inject
     Logger log;
