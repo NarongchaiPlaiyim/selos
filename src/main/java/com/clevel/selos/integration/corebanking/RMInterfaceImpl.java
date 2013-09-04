@@ -8,10 +8,12 @@ import com.clevel.selos.model.RMmodel.SearchIndividual;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 
 @RM
-public class RMInterfaceImpl implements RMInterface {
+public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Inject
+    @RM
     Logger log;
 
     @Inject
@@ -19,17 +21,29 @@ public class RMInterfaceImpl implements RMInterface {
 
     @Inject
     public RMInterfaceImpl() {
+        log.info("=== RMInterfaceImpl()");
     }
 
     @Override
-    public CustomerInfo getCustomerInfo(String id, CustomerType customerType, DocumentType documentType) throws Exception {
-//        SearchIndividual searchIndividual = new SearchIndividual();
-//
-//        searchIndividual.setCustId("");
-//        IndividualModel individualModel = rmService.intiIndividual(searchIndividual);
+    public CustomerInfo getCustomerInfo(String reqid, String type, String custId, CustomerType customerType, DocumentType documentType) throws Exception {
+        SearchIndividual searchIndividual = new SearchIndividual();
+
+        searchIndividual.setReqId(reqid);
+
+        if(customerType==CustomerType.INDIVIDUAL){
+            searchIndividual.setCustType("P");
+        }else{
+            searchIndividual.setCustType("C");
+        }
+        searchIndividual.setType(type);
+        searchIndividual.setRadSelectSearch("card");
+
+        IndividualModel individualModel = rmService.intiIndividual(searchIndividual);
 
         CustomerInfo customerInfo = new CustomerInfo();
-        customerInfo.setCitizenId("REAL");
+        customerInfo.setCitizenId(individualModel.getCustId());
         return  customerInfo;
     }
+
+
 }

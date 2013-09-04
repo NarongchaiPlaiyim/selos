@@ -6,10 +6,11 @@ import com.clevel.selos.integration.model.CustomerInfo;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Date;
 
 @RMTest
-public class RMInterfaceImplTest implements RMInterface {
+public class RMInterfaceImplTest implements RMInterface ,Serializable{
     @Inject
     Logger log;
 
@@ -18,7 +19,7 @@ public class RMInterfaceImplTest implements RMInterface {
     }
 
     @Override
-    public CustomerInfo getCustomerInfo(String id, CustomerType customerType, DocumentType documentType) throws Exception {
+    public CustomerInfo getCustomerInfo(String reqid, String type, String custId, CustomerType customerType, DocumentType documentType) throws Exception {
         CustomerInfo customerInfo = new CustomerInfo();
         customerInfo.setCitizenId("3100300390029");
         customerInfo.setFirstName("พสุ");
