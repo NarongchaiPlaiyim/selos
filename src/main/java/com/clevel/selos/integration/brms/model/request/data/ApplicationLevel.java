@@ -3,6 +3,7 @@ package com.clevel.selos.integration.brms.model.request.data;
 import java.math.BigDecimal;
 
 public class ApplicationLevel {
+    public String caNo;
     public int numberOfMonthsLastContractDate;
     public String clisFlag;
     public int productGroup; //enum
@@ -25,7 +26,8 @@ public class ApplicationLevel {
     public ApplicationLevel() {
     }
 
-    public ApplicationLevel(int numberOfMonthsLastContractDate, String clisFlag, int productGroup, int productProgram, boolean existingSMECustomerIndv, boolean refinance, int cusType, int bizLocation, int ageOfBusinessMonths, BigDecimal finalDBR, BigDecimal totalApprovedCredit, int creditCusType, boolean requestTCG, BigDecimal existingODLimit, BigDecimal case1WCLimit, BigDecimal case2WCLimit, BigDecimal case3WCLimit) {
+    public ApplicationLevel(String caNo, int numberOfMonthsLastContractDate, String clisFlag, int productGroup, int productProgram, boolean existingSMECustomerIndv, boolean refinance, int cusType, int bizLocation, int ageOfBusinessMonths, BigDecimal finalDBR, BigDecimal totalApprovedCredit, int creditCusType, boolean requestTCG, BigDecimal existingODLimit, BigDecimal case1WCLimit, BigDecimal case2WCLimit, BigDecimal case3WCLimit) {
+        this.caNo = caNo;
         this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
         this.clisFlag = clisFlag;
         this.productGroup = productGroup;
@@ -43,6 +45,14 @@ public class ApplicationLevel {
         this.case1WCLimit = case1WCLimit;
         this.case2WCLimit = case2WCLimit;
         this.case3WCLimit = case3WCLimit;
+    }
+
+    public String getCaNo() {
+        return caNo;
+    }
+
+    public void setCaNo(String caNo) {
+        this.caNo = caNo;
     }
 
     public int getNumberOfMonthsLastContractDate() {

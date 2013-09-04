@@ -2,7 +2,8 @@ package com.clevel.selos.integration.brms.model.request.data;
 
 import java.math.BigDecimal;
 
-public class NcbAccount {
+public class NcbAccountLevel {
+    public String accountId;
     public boolean nplFlag;
     public BigDecimal creditAmountAtFirstNPLDate;
     public boolean tdrStatusFromNCB;
@@ -15,10 +16,11 @@ public class NcbAccount {
     public int ncbAccountStatus; //enum
     //todo add more field
 
-    public NcbAccount() {
+    public NcbAccountLevel() {
     }
 
-    public NcbAccount(boolean nplFlag, BigDecimal creditAmountAtFirstNPLDate, boolean tdrStatusFromNCB, int accountClosePeriod, int typeOfCurrentPayment, int typeOf12monthsPayment, int numberODIn12Months, int typeOf6monthsPayment, int numberODIn6Months, int ncbAccountStatus) {
+    public NcbAccountLevel(String accountId, boolean nplFlag, BigDecimal creditAmountAtFirstNPLDate, boolean tdrStatusFromNCB, int accountClosePeriod, int typeOfCurrentPayment, int typeOf12monthsPayment, int numberODIn12Months, int typeOf6monthsPayment, int numberODIn6Months, int ncbAccountStatus) {
+        this.accountId = accountId;
         this.nplFlag = nplFlag;
         this.creditAmountAtFirstNPLDate = creditAmountAtFirstNPLDate;
         this.tdrStatusFromNCB = tdrStatusFromNCB;
@@ -29,6 +31,14 @@ public class NcbAccount {
         this.typeOf6monthsPayment = typeOf6monthsPayment;
         this.numberODIn6Months = numberODIn6Months;
         this.ncbAccountStatus = ncbAccountStatus;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public boolean isNplFlag() {

@@ -3,10 +3,10 @@ package com.clevel.selos.integration.brms.model.request.data;
 import java.util.Date;
 
 public class CustomerLevel {
+    public String personalId; //use for citizenID, registrationID, passportNumber
     public int borrowerType; //enum
     public int relationshipType; //enum
     public int nationality; //enum
-    public String personalId; //use for citizenID, registrationID, passportNumber
     public int ageMonths;
     public int newQualitativeClass; //enum ,Default to 'P'
     public Date lastReviewDate;
@@ -19,19 +19,19 @@ public class CustomerLevel {
     public int noOfNCBCheckIn6months;
     public int numberOfDaysLastNCBCheck;
 
-    public NcbAccount ncbAccount; //should be in CustomerLevel?
-    public BankAccount bankAccount; //should be in CustomerLevel?
-    public TmbAccount tmbAccount; //should be in CustomerLevel?
+    public NcbAccountLevel ncbAccountLevel; //should be in CustomerLevel?
+    public BankAccountLevel bankAccountLevel; //should be in CustomerLevel?
+    public TmbAccountLevel tmbAccountLevel; //should be in CustomerLevel?
     //todo add more field
 
     public CustomerLevel() {
     }
 
-    public CustomerLevel(int borrowerType, int relationshipType, int nationality, String personalId, int ageMonths, int newQualitativeClass, Date lastReviewDate, Date extendedReviewDate, int SCFScore, int warningCodeFullMatch, int warningCodeSomeMatch, boolean creditWorthiness, int kycLevel, int noOfNCBCheckIn6months, int numberOfDaysLastNCBCheck, NcbAccount ncbAccount) {
+    public CustomerLevel(String personalId, int borrowerType, int relationshipType, int nationality, int ageMonths, int newQualitativeClass, Date lastReviewDate, Date extendedReviewDate, int SCFScore, int warningCodeFullMatch, int warningCodeSomeMatch, boolean creditWorthiness, int kycLevel, int noOfNCBCheckIn6months, int numberOfDaysLastNCBCheck, NcbAccountLevel ncbAccountLevel, BankAccountLevel bankAccountLevel, TmbAccountLevel tmbAccountLevel) {
+        this.personalId = personalId;
         this.borrowerType = borrowerType;
         this.relationshipType = relationshipType;
         this.nationality = nationality;
-        this.personalId = personalId;
         this.ageMonths = ageMonths;
         this.newQualitativeClass = newQualitativeClass;
         this.lastReviewDate = lastReviewDate;
@@ -43,7 +43,17 @@ public class CustomerLevel {
         this.kycLevel = kycLevel;
         this.noOfNCBCheckIn6months = noOfNCBCheckIn6months;
         this.numberOfDaysLastNCBCheck = numberOfDaysLastNCBCheck;
-        this.ncbAccount = ncbAccount;
+        this.ncbAccountLevel = ncbAccountLevel;
+        this.bankAccountLevel = bankAccountLevel;
+        this.tmbAccountLevel = tmbAccountLevel;
+    }
+
+    public String getPersonalId() {
+        return personalId;
+    }
+
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
     }
 
     public int getBorrowerType() {
@@ -68,14 +78,6 @@ public class CustomerLevel {
 
     public void setNationality(int nationality) {
         this.nationality = nationality;
-    }
-
-    public String getPersonalId() {
-        return personalId;
-    }
-
-    public void setPersonalId(String personalId) {
-        this.personalId = personalId;
     }
 
     public int getAgeMonths() {
@@ -166,11 +168,27 @@ public class CustomerLevel {
         this.numberOfDaysLastNCBCheck = numberOfDaysLastNCBCheck;
     }
 
-    public NcbAccount getNcbAccount() {
-        return ncbAccount;
+    public NcbAccountLevel getNcbAccountLevel() {
+        return ncbAccountLevel;
     }
 
-    public void setNcbAccount(NcbAccount ncbAccount) {
-        this.ncbAccount = ncbAccount;
+    public void setNcbAccountLevel(NcbAccountLevel ncbAccountLevel) {
+        this.ncbAccountLevel = ncbAccountLevel;
+    }
+
+    public BankAccountLevel getBankAccountLevel() {
+        return bankAccountLevel;
+    }
+
+    public void setBankAccountLevel(BankAccountLevel bankAccountLevel) {
+        this.bankAccountLevel = bankAccountLevel;
+    }
+
+    public TmbAccountLevel getTmbAccountLevel() {
+        return tmbAccountLevel;
+    }
+
+    public void setTmbAccountLevel(TmbAccountLevel tmbAccountLevel) {
+        this.tmbAccountLevel = tmbAccountLevel;
     }
 }

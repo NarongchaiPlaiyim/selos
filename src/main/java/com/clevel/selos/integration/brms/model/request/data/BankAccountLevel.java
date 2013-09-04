@@ -2,7 +2,8 @@ package com.clevel.selos.integration.brms.model.request.data;
 
 import java.math.BigDecimal;
 
-public class BankAccount {
+public class BankAccountLevel {
+    public String accountId;
     public int chequeReturn;
     public BigDecimal tradeChequeReturnPercent;
     public BigDecimal utilizationPercent;
@@ -12,10 +13,11 @@ public class BankAccount {
     public boolean isMainAccount;
     //todo add more field
 
-    public BankAccount() {
+    public BankAccountLevel() {
     }
 
-    public BankAccount(int chequeReturn, BigDecimal tradeChequeReturnPercent, BigDecimal utilizationPercent, BigDecimal swingPercent, BigDecimal averageIncomeGross, int overLimitDays, boolean mainAccount) {
+    public BankAccountLevel(String accountId, int chequeReturn, BigDecimal tradeChequeReturnPercent, BigDecimal utilizationPercent, BigDecimal swingPercent, BigDecimal averageIncomeGross, int overLimitDays, boolean mainAccount) {
+        this.accountId = accountId;
         this.chequeReturn = chequeReturn;
         this.tradeChequeReturnPercent = tradeChequeReturnPercent;
         this.utilizationPercent = utilizationPercent;
@@ -23,6 +25,14 @@ public class BankAccount {
         this.averageIncomeGross = averageIncomeGross;
         this.overLimitDays = overLimitDays;
         isMainAccount = mainAccount;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public int getChequeReturn() {

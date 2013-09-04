@@ -1,20 +1,30 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
-public class TmbAccount {
+public class TmbAccountLevel {
+    public String accountId;
     public int adjustClass; //enum
     public int numberOfMonthsTDRClosedDate;
     public boolean unpaidFeeInsurance;
     public boolean noPendingClaimLG;
     //todo add more field
 
-    public TmbAccount() {
+    public TmbAccountLevel() {
     }
 
-    public TmbAccount(int adjustClass, int numberOfMonthsTDRClosedDate, boolean unpaidFeeInsurance, boolean noPendingClaimLG) {
+    public TmbAccountLevel(String accountId, int adjustClass, int numberOfMonthsTDRClosedDate, boolean unpaidFeeInsurance, boolean noPendingClaimLG) {
+        this.accountId = accountId;
         this.adjustClass = adjustClass;
         this.numberOfMonthsTDRClosedDate = numberOfMonthsTDRClosedDate;
         this.unpaidFeeInsurance = unpaidFeeInsurance;
         this.noPendingClaimLG = noPendingClaimLG;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
 
     public int getAdjustClass() {
