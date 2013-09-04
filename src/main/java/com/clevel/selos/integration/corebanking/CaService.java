@@ -6,6 +6,7 @@ import com.clevel.selos.model.CAmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.CorporatePersonalList;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
+import com.clevel.selos.system.message.ExceptionMessage;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
@@ -17,6 +18,7 @@ import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCusto
 import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
 import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 
+import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
@@ -33,6 +35,11 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class CaService implements Serializable{
+
+    @Inject
+    @ExceptionMessage
+    com.clevel.selos.system.message.Message exceptionMsg;
+
 
     public CustomerAccountModel intiCustomerAction(SearchIndividual searchIndividual) throws Exception {
 
@@ -51,6 +58,11 @@ public class CaService implements Serializable{
 
         com.tmb.common.data.requestsearchcustomeraccount.Header header=new com.tmb.common.data.requestsearchcustomeraccount.Header();
         header.setReqId(searchIndividual.getReqId());
+        header.setAcronym("EAC");
+        header.setProductCode("0");
+        //header.setServerURL("");
+        //header.setSessionId("");
+
 
         com.tmb.common.data.requestsearchcustomeraccount.Body  body=new com.tmb.common.data.requestsearchcustomeraccount.Body();
         body.setCustNbr(searchIndividual.getCustNbr());
@@ -68,14 +80,15 @@ public class CaService implements Serializable{
 
         //Check Success
         if(resSearchCustomerAccount.getHeader().getResCode().equals("0000")){
-            List<CustomerAccountListModel> listModelList=null;
+            List<CustomerAccountListModel> listModelList=new ArrayList<CustomerAccountListModel>();
             //checkSearchResult
+            System.out.println("hellooooooooooooooooooooooooooooo "+resSearchCustomerAccount.getBody().getAccountList().size());
         if(resSearchCustomerAccount.getBody().getAccountList()!=null&&resSearchCustomerAccount.getBody().getAccountList().size()>0){
             CustomerAccountListModel customerAccountListModel=null;
-                 listModelList=new ArrayList<CustomerAccountListModel>();
-                 for(int i=0;i<resSearchCustomerAccount.getBody().getAccountList().size();i++){
-                     customerAccountListModel=new CustomerAccountListModel();
 
+                 for(int i=0;i<resSearchCustomerAccount.getBody().getAccountList().size();i++){
+
+                     customerAccountListModel=new CustomerAccountListModel();
                      customerAccountListModel.setRel(resSearchCustomerAccount.getBody().getAccountList().get(i).getRel());
                      customerAccountListModel.setCd(resSearchCustomerAccount.getBody().getAccountList().get(i).getCd());
                      customerAccountListModel.setpSO(resSearchCustomerAccount.getBody().getAccountList().get(i).getPSO());
@@ -96,6 +109,13 @@ public class CaService implements Serializable{
                      }
              }
             customerAccountModel.setAccountBody(listModelList);
+
+        }else if(resSearchCustomerAccount.getHeader().getResCode().equals("1500")){
+            throw new ValidationException(exceptionMsg.get("exception.1500"));
+        }else if(resSearchCustomerAccount.getHeader().getResCode().equals("1511")){
+            throw new ValidationException(exceptionMsg.get("exception.1500"));
+        }else if(resSearchCustomerAccount.getHeader().getResCode().equals("3500")){
+            throw new ValidationException(exceptionMsg.get("exception.1500"));
         }
         return customerAccountModel;
 

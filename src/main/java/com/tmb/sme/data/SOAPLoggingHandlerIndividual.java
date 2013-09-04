@@ -1,6 +1,6 @@
 package com.tmb.sme.data;
 
-import com.clevel.selos.controller.TestRM;
+import com.clevel.selos.controller.TestService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,10 +11,6 @@ import java.net.UnknownHostException;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
@@ -57,7 +53,7 @@ public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageCont
                 ByteArrayOutputStream baos=new ByteArrayOutputStream();
                 soapMsg.writeTo(baos);
                 soapMsg.writeTo(System.out);
-                TestRM.printRequest=baos.toString();
+                TestService.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
@@ -68,7 +64,7 @@ public class SOAPLoggingHandlerIndividual implements SOAPHandler<SOAPMessageCont
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
                soapResponse.writeTo(baos);
                soapResponse.writeTo(System.out);
-                 TestRM.printResponse=baos.toString();
+                 TestService.printResponse=baos.toString();
             }catch(SOAPException e){
                 System.err.println(e);
             }catch(IOException e){
