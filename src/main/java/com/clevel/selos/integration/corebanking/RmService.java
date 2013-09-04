@@ -22,13 +22,13 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class RmService implements Serializable {
+public class RMService implements Serializable {
     @Inject
     @RM
     Logger log;
 
     @Inject
-    public RmService() {
+    public RMService() {
     }
 
     public IndividualModel intiIndividual(SearchIndividual searchIndividual) throws Exception {
