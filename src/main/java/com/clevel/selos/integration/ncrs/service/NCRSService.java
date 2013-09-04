@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.ncrs.service;
 
 
-import com.clevel.selos.controller.TestNCRS;
+//import com.clevel.selos.controller.TestNCRS;
 import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
@@ -60,11 +60,11 @@ public class NCRSService implements Serializable {
             Ncrsresponse response =  ncrs.requestOnline(ncrsModel);
 
             if(null!=response){
-                TestNCRS testNCRS = new TestNCRS();
-                testNCRS.setResult("========================================= DONE!!!");
-                System.out.println("========================================= User : "+response.getHeaderModel().getUser());
-                System.out.println("========================================= Pass : "+response.getHeaderModel().getPassword());
-                System.out.println("========================================= Command : "+response.getHeaderModel().getCommand());
+//                TestNCRS testNCRS = new TestNCRS();
+//                testNCRS.setResult("========================================= DONE!!!");
+//                System.out.println("========================================= User : "+response.getHeaderModel().getUser());
+//                System.out.println("========================================= Pass : "+response.getHeaderModel().getPassword());
+//                System.out.println("========================================= Command : "+response.getHeaderModel().getCommand());
             }else {
                 System.out.println("========================================= Response is null");
             }
