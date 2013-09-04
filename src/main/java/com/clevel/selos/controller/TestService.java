@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
+import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.corebanking.CaService;
 import com.clevel.selos.integration.corebanking.RmService;
 import com.clevel.selos.model.CAmodel.CustomerAccountModel;
@@ -23,8 +24,9 @@ import java.util.List;
 @ManagedBean(name="testrm")
 public class TestService implements Serializable{
     @Inject
-//    @Integration(Integration.System.RM)
+    @Integration(Integration.System.RM)
     Logger log;
+
     @Inject
     CardTypeDao dao;
 
@@ -48,8 +50,8 @@ public class TestService implements Serializable{
 
     @PostConstruct
     public void onCreate(){
-//        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-
+        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+        log.debug("TESTLOG");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();

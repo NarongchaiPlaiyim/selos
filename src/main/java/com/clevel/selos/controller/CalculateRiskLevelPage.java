@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import java.io.Serializable;
 
 @ViewScoped
 @ManagedBean(name="calculateRiskLevelPage")
 
-public class CalculateRiskLevelPage {
+public class CalculateRiskLevelPage implements Serializable {
     private String reqId;
     private String productCode = "SLOS";
     private String acronym = "3100300390029";
