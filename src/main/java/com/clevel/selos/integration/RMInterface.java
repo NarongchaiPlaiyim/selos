@@ -1,9 +1,14 @@
 package com.clevel.selos.integration;
 
 import com.clevel.selos.integration.model.CustomerInfo;
+import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CorporateModel;
+import com.clevel.selos.model.RMmodel.IndividualModel;
 
 public interface RMInterface {
-    enum CustomerType {INDIVIDUAL,JURISTIC}
     enum DocumentType {CITIZEN_ID,REGISTRATION_ID}
-    public CustomerInfo getCustomerInfo(String reqid,String type,String custId ,CustomerType customerType,DocumentType documentType) throws Exception;
+
+    public IndividualModel getIndividualInfo(String reqid,String type,String custId,DocumentType documentType)throws Exception;
+    public CorporateModel getCorporateInfo(String reqid,String type,String custId,DocumentType documentType)throws Exception;
+    public CustomerAccountModel getCustomerAccount(String reqid,String type,String custId ,DocumentType documentType) throws Exception;
 }

@@ -2,6 +2,9 @@ package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.model.CustomerInfo;
+import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CorporateModel;
+import com.clevel.selos.model.RMmodel.IndividualModel;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
@@ -18,18 +21,19 @@ public class RMInterfaceImplTest implements RMInterface {
     public RMInterfaceImplTest() {
     }
 
+
     @Override
-    public CustomerInfo getCustomerInfo(String reqid, String type, String custId, CustomerType customerType, DocumentType documentType) throws Exception {
-        CustomerInfo customerInfo = new CustomerInfo();
-        customerInfo.setCitizenId("3100300390029");
-        customerInfo.setFirstName("พสุ");
-        customerInfo.setLastName("กุญ");
-        customerInfo.setAddressNumber("");
-        customerInfo.setAge(22);
-        customerInfo.setDateOfBirth(new Date());
-        customerInfo.setTmbCustomerId("00000001180946");
+    public IndividualModel getIndividualInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
+    @Override
+    public CorporateModel getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
-        return customerInfo;
+    @Override
+    public CustomerAccountModel getCustomerAccount(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
