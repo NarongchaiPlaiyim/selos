@@ -5,10 +5,11 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XStreamAlias("ncrsresponse")
-public class Ncrsresponse {
+public class NcrsResponse {
+
     @XStreamAlias("header")
     private HeaderModel header;
-    
+
     @XStreamAlias("body")
     private BodyModel body;
 
@@ -20,3 +21,4 @@ public class Ncrsresponse {
         return body;
     }
 }
+
