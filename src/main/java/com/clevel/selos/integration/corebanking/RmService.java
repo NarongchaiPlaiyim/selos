@@ -35,6 +35,7 @@ public class RMService implements Serializable {
         //Validate
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException("RegisterID Invalid");
+
         }
         if (searchIndividual.getCustType().length() != 1) {
             throw new ValidationException("CustType Invalid");
