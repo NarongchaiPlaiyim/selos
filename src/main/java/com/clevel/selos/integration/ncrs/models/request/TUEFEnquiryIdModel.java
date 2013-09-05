@@ -39,7 +39,7 @@ public class TUEFEnquiryIdModel {
         if(ValidationUtil.isGreaterThan(2, idtype))throw new ValidationException("Length of idtype is more than 2");
 
         if(ValidationUtil.isNull(idnumber))throw new ValidationException("idnumber is null");
-        if(ValidationUtil.isGreaterThan(2, idnumber))throw new ValidationException("Length of idnumber is more than 2");
+        if(ValidationUtil.isGreaterThan(20, idnumber))throw new ValidationException("Length of idnumber is more than 20");
 
         if(!ValidationUtil.isNull(issuecountry) && ValidationUtil.isGreaterThan(2, issuecountry))throw new ValidationException("Length of issuecountry is more than 2");
 
