@@ -42,7 +42,8 @@ public class CAService implements Serializable {
     }
 
     public CustomerAccountModel intiCustomerAction(SearchIndividual searchIndividual) throws Exception {
-        log.debug("requestId: ({})", searchIndividual.getReqId());
+//        log.info("============ CustomerAccount");
+//        log.info("dsd");
 
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException(validationMsg.get("validation.006"));
