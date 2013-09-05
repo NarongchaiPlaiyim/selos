@@ -28,17 +28,13 @@ public class TestNCRS implements Serializable {
     private String consent = "Y";
     private String disputeenquiry;
 
-
-
-
-
     @Inject
     public TestNCRS() {
     }
 
     public void onClick(){
         System.out.println("========================================= Onclick");
-        //log.info("========================================= Onclick");
+//        log.info("========================================= Onclick");
         new NCRSService().process(this);
     }
 

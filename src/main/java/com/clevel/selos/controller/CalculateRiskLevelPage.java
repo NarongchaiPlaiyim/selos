@@ -27,7 +27,7 @@ public class CalculateRiskLevelPage implements Serializable {
     @Inject
     CalculateRiskLevel calculateRiskLevel;
 
-
+    @Inject
     public CalculateRiskLevelPage() {
     }
 
