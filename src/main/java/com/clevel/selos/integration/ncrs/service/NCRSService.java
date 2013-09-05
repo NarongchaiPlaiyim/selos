@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class NCRSService implements Serializable {
     @Inject
+
     @NCB
     Logger log;
 
@@ -36,8 +37,8 @@ public class NCRSService implements Serializable {
         //!!!!! TEST !!!!!
         //!!!!! TEST !!!!!
         //!!!!! TEST !!!!!
-        //log.debug("========================================= process().");
-        System.out.println("=========================================process().");
+        log.debug("========================================= process().");
+        //System.out.println("=========================================process().");
         NCRSModel ncrsModel = new NCRSModel();
 
         String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
@@ -50,7 +51,6 @@ public class NCRSService implements Serializable {
         TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", "3111111111115", null);
         ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
         id.add(idModel);
-
 
         Command command = new Command();
 
@@ -67,16 +67,22 @@ public class NCRSService implements Serializable {
             ncrsModel.setNameList(name);
             ncrsModel.setUrl(url);
 
-            System.out.println("=========================================process() Model : "+ncrsModel.toString());
+            //System.out.println("=========================================process() Model : "+ncrsModel.toString());
+            log.debug("========================================= process (Model : {})",ncrsModel.toString());
             ncrsModel.validation();
             NCRSImp ncrs = new NCRSImp();
 
-            Ncrsresponse response =  null;//ncrs.requestOnline(ncrsModel);
-            System.out.println("=========================================process() Call  : requestOnline(NCRSModel)");
+            Ncrsresponse response =  ncrs.requestOnline(ncrsModel);
+            //System.out.println("=========================================process() Call  : requestOnline(NCRSModel)");
+            log.debug("=========================================process() Call  : requestOnline(NCRSModel)");
             if(null!=response){
                 if(!command.ERROR.equals(response.getHeaderModel().getCommand())){
                     //The response (Online) has succeeded
+                    log.debug("The response (Online) has succeeded");
+
+
                     //The response will be return (XML Transaction record)
+
                 }else {
                     //Exception NCB
                     //if you want to know Error message
@@ -86,9 +92,11 @@ public class NCRSService implements Serializable {
             }else {
                 System.out.println("=========================================process() Response form requestOnline is null");
                 System.out.println("=========================================process() Call  : requestOffline(NCRSModel)");
-                response =  null;//ncrs.requestOffline(ncrsModel);
+                response =  ncrs.requestOffline(ncrsModel);
                 if(!command.ERROR.equals(response.getHeaderModel().getCommand())){
                     //The response (Offline) has succeeded
+                    log.debug("The response (Offline) has succeeded");
+
                     //The response will be return (trackingid and result)
 
                     //code
@@ -105,7 +113,7 @@ public class NCRSService implements Serializable {
 
 
         } catch (Exception e) {
-            System.out.println("=========================================process() Exception : "+e);
+            log.error("========================================= Exception ({})",e);
         }
     }
 

@@ -14,7 +14,7 @@ public class RMAudit implements Serializable {
     @SequenceGenerator(name="SEQ_ADT_EXT_RM_ID", sequenceName="SEQ_ADT_EXT_RM_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_EXT_RM_ID")
     private long id;
-    @Column(name="requester", nullable=false)
+    @Column(name="requester", nullable=false)   //user id
     private String requester;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="request_time", nullable=false)
@@ -23,11 +23,11 @@ public class RMAudit implements Serializable {
     @Column(name="response_time")
     private Date responseTime;
     @Column(name = "link_key")
-    private String linkKey;
+    private String linkKey;   // user + id
     @Column(name = "result",length = 20)
-    private String result;
+    private String result;     //resDesc  sucsess fail
     @Column(name = "result_detail",length = 2000)
-    private String resultDetail;
+    private String resultDetail;   //exception
 
     public RMAudit() {
     }

@@ -3,6 +3,8 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
+import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.model.CustomerInfo;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -64,6 +66,8 @@ public class WelcomePage implements Serializable {
 
     @Inject
     RMInterface rm;
+    @Inject
+    BRMSInterface brms;
 
     @Inject
     @Config(name = "selos.system.name")
@@ -75,9 +79,19 @@ public class WelcomePage implements Serializable {
     }
 
     public void testRM() {
+//        try {
+//            CustomerInfo customerInfo = rm.getIndividualInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
+//            log.debug("{}",customerInfo);
+//        } catch (Exception e) {
+//            log.error("",e);
+//        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testBRMS() {
         try {
-            CustomerInfo customerInfo = rm.getCustomerInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
-            log.debug("{}",customerInfo);
+            List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new PreScreenRequest());
+            log.debug("{}",preScreenResponseList);
         } catch (Exception e) {
             log.error("",e);
         }
@@ -88,8 +102,8 @@ public class WelcomePage implements Serializable {
     public void onCreation() {
         log.debug("onCreation.");
         now = new Date();
-        reloadConfig();
-        onLoadDescription();
+//        reloadConfig();
+//        onLoadDescription();
         normalStr = normalMsg.get("app.name");
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
