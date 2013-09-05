@@ -4,8 +4,7 @@ import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.RMInterfaceImpl;
-import com.clevel.selos.integration.corebanking.RMService;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.RMmodel.CardTypeView;
 import com.clevel.selos.model.RMmodel.CorporateModel;
@@ -72,7 +71,7 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        IndividualModel individualModel  ;
+        IndividualModel individualModel =new IndividualModel() ;
         //callservice
        individualModel = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
                          searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
@@ -105,7 +104,7 @@ public class TestService implements Serializable{
     public void corporate() throws Exception {
 
         corporateModel=new CorporateModel();
-        corporateModel = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(),searchIndividual.getType(),
+        corporateModel = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(), searchIndividual.getType(),
                 searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
@@ -142,7 +141,7 @@ public class TestService implements Serializable{
 
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = rmInterfaceImpl.getCustomerAccount(searchIndividual.getReqId(),searchIndividual.getType(),
+        customerAccountModel = rmInterfaceImpl.getCustomerAccount(searchIndividual.getReqId(), searchIndividual.getType(),
                 searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();

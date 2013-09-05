@@ -2,8 +2,7 @@ package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.integration.model.CustomerInfo;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.IndividualModel;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
@@ -29,11 +28,13 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
     @PostConstruct
     public void onRMinterface(){
-        log.info("=== RMInterfaceImpl()");
+        log.info(" RMInterfaceImpl()");
     }
 
     @Override
     public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+
+        log.debug("getIndividualInfo() =====================");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("P");
@@ -41,12 +42,14 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustId(custId);
         searchIndividual.setRadSelectSearch("card");
 
-        IndividualModel individualModel = rmService.intiIndividual(searchIndividual);
+        IndividualModel individualModel = rmService.IndividualService(searchIndividual);
         return individualModel;
     }
 
     @Override
     public CorporateModel getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+
+        log.debug("getCorporateInfo() =====================");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("C");
@@ -54,18 +57,20 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustId(custId);
         searchIndividual.setRadSelectSearch("card");
 
-        CorporateModel corporateModel = rmService.intiCorporate(searchIndividual);
+        CorporateModel corporateModel = rmService.CorporateService(searchIndividual);
         return corporateModel;
     }
 
     @Override
     public CustomerAccountModel getCustomerAccount(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
+
+        log.debug("getCustomerAccount() =====================");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustNbr(custNbr);
         searchIndividual.setRadSelectSearch("code");
 
-        CustomerAccountModel customerAccountModel = rmService.intiCustomerAccount(searchIndividual);
+        CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchIndividual);
 
         return  customerAccountModel;
     }

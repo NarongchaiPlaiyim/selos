@@ -1,16 +1,13 @@
 package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.integration.model.CustomerInfo;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.IndividualModel;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
-import java.io.Serializable;
-import java.util.Date;
 
 @Alternative
 public class RMInterfaceImplTest implements RMInterface {

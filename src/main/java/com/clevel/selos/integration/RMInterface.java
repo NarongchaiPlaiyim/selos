@@ -1,7 +1,6 @@
 package com.clevel.selos.integration;
 
-import com.clevel.selos.integration.model.CustomerInfo;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.CorporateModel;
 import com.clevel.selos.model.RMmodel.IndividualModel;
 
