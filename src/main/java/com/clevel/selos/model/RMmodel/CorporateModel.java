@@ -1,5 +1,6 @@
 package com.clevel.selos.model.RMmodel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  * Time: 20:20 น.
  * To change this template use File | Settings | File Templates.
  */
-public class CorporateModel {
+public class CorporateModel implements Serializable{
 
     private String reqId;
     private String resCode;

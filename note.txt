@@ -1,24 +1,12 @@
-test note.test note.test note.
-test note.test note.test note.
-test 2
-
-test 08/15/2013
-test 08/15/2013 10:12
-test 08/15/2013 10:16
-test xxx
-
-wintest xxx yyyy
-
-
-wwwwwwwwwwww
-
-kkkktest
-
-08/15/2013 15:21
-
-win 1.39
-
-16/8/56 10.18  test pop16/8/56 10.18
-
-
-add   19/08/2013
+lib
+xpp3-1.1.4c.jar
+xstream-1.4.3.jar
+httpclient-4.2.5.jar
+httpcore-4.2.4.jar
+v
+v
+v
+v
+v
+115.178.62.131
+/home/developer/TMB/SELOS/selos/lib

@@ -3,11 +3,11 @@ package com.clevel.selos.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 public class Util {
     private static Logger log = LoggerFactory.getLogger(Util.class);
@@ -37,6 +37,35 @@ public class Util {
 
     public static boolean isTrue(String str) {
         return str != null && str.matches("[tT]rue|[yY]es|1");
+    }
+
+
+    public boolean isNotNullString(String string){
+        return null!=string?true:false;
+    }
+    public boolean checkLength(String string, int length){
+        if(null!=string){
+            return string.length()<=length?true:false;
+        }else{
+            return false;
+        }
+    }
+    public boolean checkSize(ArrayList arrayList, int size){
+        if(null!=arrayList){
+            return arrayList.size()>=size?true:false;
+        }else{
+            return false;
+        }
+    }
+    public String convertNullToBlank(String string){
+        if(string != null || !"null".equals(string.toLowerCase())){
+            return "";
+        }else{
+            return string;
+        }
+    }
+    public List convertNullToEmpeyList(List list){
+        return list!=null?list: Collections.EMPTY_LIST;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.clevel.selos.system;
 
-import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,50 +8,58 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 public class LogProducer {
+    private static final String LOGGER_NAME_RM = "RM";
+    private static final String LOGGER_NAME_NCB = "NCB";
+    private static final String LOGGER_NAME_NCBI = "NCBI";
+    private static final String LOGGER_NAME_DWH = "DWH";
+    private static final String LOGGER_NAME_EMAIL = "EMAIL";
+    private static final String LOGGER_NAME_SW_ROSC = "SW_ROSC";
+    private static final String LOGGER_NAME_BRMS = "SW_BRMS";
+
     @Produces
     Logger createLogger(InjectionPoint injectionPoint) {
         return LoggerFactory.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
     }
 
     @Produces
-    @Integration(Integration.System.RM)
+    @RM
     Logger createRMLogger() {
-        return LoggerFactory.getLogger(Integration.System.RM.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_RM);
     }
 
     @Produces
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger createNCBLogger() {
-        return LoggerFactory.getLogger(Integration.System.NCB.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_NCB);
     }
 
     @Produces
-    @Integration(Integration.System.NCBI)
+    @NCBI
     Logger createNCBILogger() {
-        return LoggerFactory.getLogger(Integration.System.NCBI.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_NCBI);
     }
 
     @Produces
-    @Integration(Integration.System.DWH)
+    @DWH
     Logger createDWHLogger() {
-        return LoggerFactory.getLogger(Integration.System.DWH.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_DWH);
     }
 
     @Produces
-    @Integration(Integration.System.EMAIL)
+    @Email
     Logger createEmailLogger() {
-        return LoggerFactory.getLogger(Integration.System.EMAIL.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_EMAIL);
     }
 
     @Produces
-    @Integration(Integration.System.SW_ROSC)
+    @SW_ROSC
     Logger createSWROSCLogger() {
-        return LoggerFactory.getLogger(Integration.System.SW_ROSC.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_SW_ROSC);
     }
 
     @Produces
-    @Integration(Integration.System.BRMS)
+    @BRMS
     Logger createBRMSLogger() {
-        return LoggerFactory.getLogger(Integration.System.BRMS.name());
+        return LoggerFactory.getLogger(LOGGER_NAME_BRMS);
     }
 }

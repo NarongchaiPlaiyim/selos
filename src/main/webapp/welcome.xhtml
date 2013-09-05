@@ -32,27 +32,6 @@
                 <br/>
                 <p:separator/>
 
-                <p:dataTable var="item" value="#{welcomePage.configList}"
-                             paginator="true" rows="10" paginatorPosition="bottom"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-
-                    <f:facet name="header">
-                        Config
-                    </f:facet>
-
-                    <p:column headerText="Name" styleClass="onLeft">
-                        <h:outputText value="#{item.name}"/>
-                    </p:column>
-
-                    <p:column headerText="Value" styleClass="onLeft">
-                        <h:outputText value="#{item.value}"/>
-                    </p:column>
-
-                    <p:column headerText="Enabled" styleClass="onLeft">
-                        <h:outputText value="#{item.enable}"/>
-                    </p:column>
-
-                </p:dataTable>
 
                 <p:separator/>
                 <p:commandButton value="En" action="#{msg.setLanguageEn}" update=":welcomePanel"/>
@@ -65,6 +44,7 @@
                 <p:commandButton value="action EMail" action="#{welcomePage.onActionEmail}" update=":welcomePanel"/>
                 <p:commandButton value="action DWH" action="#{welcomePage.onActionDWH}" update=":welcomePanel"/>
                 <p:commandButton value="action BRMS" action="#{welcomePage.onActionBRMS}" update=":welcomePanel"/>
+                <p:commandButton value="test RM" action="#{welcomePage.testRM}" update=":welcomePanel"/>
                 <p:separator/>
                 <p:commandButton value="001" action="#{welcomePage.on001}" update=":welcomePanel"/>
                 <p:commandButton value="002" action="#{welcomePage.on002}" update=":welcomePanel"/>

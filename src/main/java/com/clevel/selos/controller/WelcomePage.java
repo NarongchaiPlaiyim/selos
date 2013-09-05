@@ -2,12 +2,15 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.dao.system.ConfigDAO;
-import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.*;
+import com.clevel.selos.integration.model.CustomerInfo;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.system.Config;
-import com.clevel.selos.system.message.*;
+import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -24,30 +27,26 @@ public class WelcomePage implements Serializable {
     @Inject
     Logger log;
     @Inject
-    @Integration(Integration.System.RM)
+    @RM
     Logger rmLog;
     @Inject
-    @Integration(Integration.System.NCB)
+    @NCB
     Logger ncbLog;
     @Inject
-    @Integration(Integration.System.NCBI)
+    @NCBI
     Logger ncbiLog;
     @Inject
-    @Integration(Integration.System.SW_ROSC)
+    @SW_ROSC
     Logger swLog;
     @Inject
-    @Integration(Integration.System.EMAIL)
+    @Email
     Logger emailLog;
     @Inject
-    @Integration(Integration.System.DWH)
+    @DWH
     Logger dwhLog;
     @Inject
-    @Integration(Integration.System.BRMS)
+    @BRMS
     Logger brmsLog;
-
-    @Inject
-    ConfigDAO configDAO;
-    List<Config> configList;
 
     @Inject
     @NormalMessage
@@ -63,9 +62,26 @@ public class WelcomePage implements Serializable {
     String validationStr;
     String exceptionStr;
 
+    @Inject
+    RMInterface rm;
+
+    @Inject
+    @Config(name = "selos.system.name")
+    String system;
+
     private Date now;
 
     public WelcomePage() {
+    }
+
+    public void testRM() {
+        try {
+            CustomerInfo customerInfo = rm.getCustomerInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
+            log.debug("{}",customerInfo);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+        log.debug("system: {}",system);
     }
 
     @PostConstruct
@@ -95,7 +111,6 @@ public class WelcomePage implements Serializable {
 
     public void reloadConfig() {
         log.debug("reloadConfig.");
-        configList = configDAO.findAll();
     }
 
     public void onActionRM() {
@@ -131,14 +146,6 @@ public class WelcomePage implements Serializable {
 
     public void setNow(Date now) {
         this.now = now;
-    }
-
-    public List<Config> getConfigList() {
-        return configList;
-    }
-
-    public void setConfigList(List<Config> configList) {
-        this.configList = configList;
     }
 
     @Inject
