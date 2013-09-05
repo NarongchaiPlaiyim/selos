@@ -30,8 +30,9 @@ public class TestService implements Serializable{
     @Inject
     CardTypeDao dao;
 
-//    @Inject
+    @Inject
     RMService rmService;
+    @Inject
     CAService caService;
 
     SearchIndividual searchIndividual;
@@ -72,7 +73,7 @@ public class TestService implements Serializable{
     ////////////////////////////////////////////////////////   call Service
 
     public void individual() throws Exception {
-        rmService =new RMService();
+
         IndividualModel individualModel ;
         //callservice
        individualModel = rmService.intiIndividual(searchIndividual);
@@ -103,7 +104,7 @@ public class TestService implements Serializable{
 
 
     public void corporate() throws Exception {
-        rmService =new RMService();
+
         corporateModel=new CorporateModel();
         corporateModel = rmService.intiCorporate(searchIndividual);
         //showData
@@ -138,7 +139,7 @@ public class TestService implements Serializable{
     }
 
     public void customerAccount() throws Exception {
-        caService =new CAService();
+
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
         customerAccountModel = caService.intiCustomerAction(searchIndividual);
@@ -170,7 +171,7 @@ public class TestService implements Serializable{
                 result.append("\n =========================================================== ");
             }
         }else{
-            result.append("\n accountListSize : null");
+            result.append("\n accountListSize : "+customerAccountModel.getAccountBody().size());
         }
 
         printDetail=result.toString();
