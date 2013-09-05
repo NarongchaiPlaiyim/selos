@@ -88,20 +88,10 @@ public class WelcomePage implements Serializable {
         log.debug("system: {}",system);
     }
 
-    public void testBRRMS() {
+    public void testBRMS() {
         try {
             List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new PreScreenRequest());
             log.debug("{}",preScreenResponseList);
-        } catch (Exception e) {
-            log.error("",e);
-        }
-        log.debug("system: {}",system);
-    }
-
-    public void testBRMS() {
-        try {
-            CustomerInfo customerInfo = rm.getCustomerInfo("", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
-            log.debug("{}",customerInfo);
         } catch (Exception e) {
             log.error("",e);
         }
