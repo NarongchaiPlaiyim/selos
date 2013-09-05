@@ -42,8 +42,10 @@ public class CAService implements Serializable {
     }
 
     public CustomerAccountModel intiCustomerAction(SearchIndividual searchIndividual) throws Exception {
-        log.debug("requestId: {}", searchIndividual.getReqId());
+//        log.info("============ CustomerAccount");
+//        log.info("dsd");
 
+        System.out.println("ssd");
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException(validationMsg.get("validation.006"));
         }
@@ -122,7 +124,7 @@ public class CAService implements Serializable {
     private ResSearchCustomerAccount callServiceCustomerAction(ReqSearchCustomerAccount reqSearch) throws Exception {
         ResSearchCustomerAccount resSearchCustomerAccount = null;
 
-        URL url = this.getClass().getResource("/EAISearchCustomerAccount.wsdl");
+        URL url = this.getClass().getResource("/com/tmb/EAISearchCustomerAccount.wsdl");
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);
         EAISearchCustomerAccount eaiSearchInd = service.getEAISearchCustomerAccount();

@@ -48,4 +48,33 @@ public class ValidationUtilTest {
         assertEquals("expected false.", false, ValidationUtil.isLessThan(10, 10));
         assertEquals("expected false.", false, ValidationUtil.isLessThan(10, 11));
     }
+
+    //for NCB
+    @Test
+    public void testisEmpty() throws Exception {
+        log.info("testisEmpty.");
+        assertEquals("expected true.", true, ValidationUtil.isEmpty(null));
+        assertEquals("expected true.", true, ValidationUtil.isEmpty(""));
+        assertEquals("expected false.", false, ValidationUtil.isEmpty("null"));
+    }
+    @Test
+    public void testisNull() throws Exception {
+        log.info("testisEmpty.");
+        assertEquals("expected true.", true, ValidationUtil.isNull(null));
+        assertEquals("expected false.", false, ValidationUtil.isNull(""));
+        assertEquals("expected true.", true, ValidationUtil.isNull("null"));
+
+
+        String middlename = "123456789012345678901234567890";
+        assertEquals("expected true.", true, !ValidationUtil.isNull(middlename)&& ValidationUtil.isGreaterThan(26, middlename));
+
+        String middlename2 = "null";
+        assertEquals("expected false.", false, !ValidationUtil.isNull(middlename2)&& ValidationUtil.isGreaterThan(26, middlename2));
+
+        String middlename3 = null;
+        assertEquals("expected false.", false, !ValidationUtil.isNull(middlename3)&& ValidationUtil.isGreaterThan(26, middlename3));
+
+        String middlename4 = "12345678901234567890123456";
+        assertEquals("expected false.", false, !ValidationUtil.isNull(middlename4)&& ValidationUtil.isGreaterThan(26, middlename4));
+    }
 }

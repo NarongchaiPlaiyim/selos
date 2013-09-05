@@ -40,16 +40,23 @@
             <tr>
                 <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
                 <td>
-                    <h:selectOneListbox styleClass="largest" size="1"
-                                        value="#{prescreenMaker.selectProductGroup.id}" id="productGroupName" >
+                    <p:selectOneMenu id="selectProductGroupID" styleClass="largest" size="1"
+                                     value="#{prescreenMaker.selectProductGroup}" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.productGroupList}"
-                                       var="dlgProductGroup"
-                                       itemLabel="#{dlgProductGroup.name}"
-                                       itemValue="#{dlgProductGroup.id}"/>
-                        <p:ajax event="change"
-                                listener="#{prescreenMaker.onChangeProductGroup}"
-                                update=":frmMain:resultTableFacility,:facilityDlgForm"/>
-                    </h:selectOneListbox>
+                                       var="productGroupList"
+                                       itemLabel="#{productGroupList.name}"
+                                       itemValue="#{productGroupList.id}"/>
+                        <p:ajax event="change" listener="#{prescreenMaker.checkOnChangeProductGroup()}" />
+                    </p:selectOneMenu>
+                    <p:confirmDialog id="messageBoxFacilityDialog" widgetVar="messageBoxFacilityDlg"   message="Are you want to change Productgroup? If you click 'YES' facility added will be remove!!">`
+                        <p:commandButton value="YES"
+                                         process="@this"
+                                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
+                                         oncomplete="confirmChangeProductGroupDlg.hide()"
+                                         update=":frmMain:resultTableFacility,:facilityDlgForm" />
+                        <p:commandButton value="NO" onclick="confirmChangeProductGroupDlg.hide()"/>
+                    </p:confirmDialog>
                 </td>
             </tr>
             <tr>
@@ -58,8 +65,12 @@
                     <p:commandButton id="btnAddFacility"
                                      value="Add"
                                      styleClass="smaller"
-                                     action="#{prescreenMaker.onClickDialog()}"
-                                     oncomplete="facilityDlg.show();"/>
+                                     process="@this"
+                                     actionListener="#{prescreenMaker.onAddFacility}"
+                                     update=":facilityDlgForm"
+                                     oncomplete="facilityDlg.show();">
+                        <p:resetInput target=":facilityDlgForm" />
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
@@ -83,21 +94,20 @@
                         <p:column headerText="Request Amount" style="width: 120px;">
                             <div class="right">
                                 <h:outputText value="#{item.requestAmount}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
-                                                     maxIntegerDigits="8"/>
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                 </h:outputText>
                             </div>
                         </p:column>
 
                         <p:column headerText="" styleClass="center" style="width:54px;">
                             <p:commandButton icon="ui-icon-pencil"
-                                             action="#{prescreenMaker.onSelectedFacility(rowIndex)}"
+                                             action="#{prescreenMaker.onEditFacility(rowIndex)}"
                                              update=":facilityDlgForm"
                                              oncomplete="facilityDlg.show();"/>
                             <p:commandButton icon="ui-icon-trash"
                                              title="Remove"
                                              action="#{prescreenMaker.onDeleteFacility(rowIndex)}"
-                                             update=":resultTableFacility"/>
+                                             update=":frmMain:resultTableFacility"/>
                         </p:column>
 
                     </p:dataTable>
@@ -243,44 +253,58 @@
             </tr>
             <tr>
                 <td class="title">Business Information :</td>
-                <td><p:commandButton value="Add" styleClass="smaller" onclick="businessDlg.show();"/></td>
+                <td>
+                    <p:commandButton id="btnAddBusinessInfo"
+                                     value="Add"
+                                     styleClass="smaller"
+                                     process="@this"
+                                     actionListener="#{prescreenMaker.onAddBusinessInformation()}"
+                                     update=":businessDlgForm"
+                                     oncomplete="businessDlg.show();">
+                        <p:resetInput target=":businessDlgForm" />
+                    </p:commandButton>
+                </td>
             </tr>
             <tr>
-                <td class="title">Business Information x :</td>
+                <td></td>
                 <td>
-                    <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
-                                 paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resulttableBusinessInformation"
+                                 var="businessResultItem"
+                                 value="#{prescreenMaker.businessInformationList}"
+                                 paginator="false"
+                                 rowKey="#{businessResultItem.businessDescription.id}"
+                                 rowIndexVar="rowIndex">
 
                         <p:column headerText="" styleClass="center" style="width:22px;">
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
 
                         <p:column headerText="Business code" styleClass="center" style="width: 110px;">
-                            <h:outputText value="#{businessInformation.businessDescription.tmbCode}"/>
+                            <h:outputText value="#{businessResultItem.businessDescription.tmbCode}"/>
                         </p:column>
 
                         <p:column headerText="Business Group" styleClass="center" style="width: 140px;">
-                            <h:outputText value="#{businessInformation.businessDescription.businessGroup.name}"/>
+                            <h:outputText value="#{businessResultItem.businessDescription.businessGroup.name}"/>
                         </p:column>
 
                         <p:column headerText="Business Description" styleClass="center" style="width: 180px;">
-                            <h:outputText value="#{businessInformation.businessDescription.name}"/>
+                            <h:outputText value="#{businessResultItem.businessDescription.name}"/>
                         </p:column>
 
                         <p:column headerText="ESR" styleClass="center" style="width: 35px;">
-
+                            <h:outputText value="#{businessResultItem.businessDescription.esr}"/>
                         </p:column>
 
                         <p:column headerText="Negative" styleClass="center" style="width: 65px;">
-
+                            <h:outputText value="#{businessResultItem.businessDescription.negative}"/>
                         </p:column>
 
                         <p:column headerText="High risk" styleClass="center" style="width: 65px;">
-
+                            <h:outputText value="#{businessResultItem.businessDescription.highRisk}"/>
                         </p:column>
 
                         <p:column headerText="Suspend" styleClass="center" style="width: 65px;">
-
+                            <h:outputText value="#{businessResultItem.businessDescription.suspend}"/>
                         </p:column>
 
                         <p:column headerText="Business permission" styleClass="center" style="width: 160px;">
@@ -289,43 +313,16 @@
 
                         <p:column headerText="" styleClass="center" style="width:54px;">
                             <p:commandButton icon="ui-icon-pencil"
-                                             action="#{prescreenMaker.onRowBusinessInformation(rowIndex)}"
+                                             actionListener="#{prescreenMaker.onEditBusinessInformation(rowIndex)}"
                                              update=":businessDlgForm"
                                              oncomplete="businessDlg.show();"/>
                             <p:commandButton icon="ui-icon-trash"
                                              title="Remove"
-                                             action="#{prescreenMaker.onRemoveBusinessInformation(rowIndex)}"
-                                             update=":resulttableBusinessInformation"/>
+                                             action="#{prescreenMaker.onDeleteBusinessInformation(rowIndex)}"
+                                             update=":frmMain:resulttableBusinessInformation"/>
                         </p:column>
 
                     </p:dataTable>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <table class="table_content" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <th style="width:120px">Business code</th>
-                            <th style="width:120px">Business Group</th>
-                            <th style="width:130px">Business Description</th>
-                            <th style="width:40px">ESR</th>
-                            <th style="width:60px">Negative</th>
-                            <th style="width:60px">High risk</th>
-                            <th style="width:60px">Suspend</th>
-                            <th style="width:180px">Business permission</th>
-                        </tr>
-                        <tr>
-                            <td class="center">CD010000</td>
-                            <td class="center">Consumer Goods &amp; Services</td>
-                            <td class="center">Abttoir</td>
-                            <td class="center">N</td>
-                            <td class="center">N</td>
-                            <td class="center">Y</td>
-                            <td class="center">Y</td>
-                            <td class="left">1.Example for Description <br/>2.Example for Description</td>
-                        </tr>
-                    </table>
                 </td>
             </tr>
             <tr>
@@ -341,11 +338,11 @@
                 <td><p:calendar value="#{calendarBean.date3}" id="popupButtonCal" pattern="dd/MM/yyyy" showOn="button" />
                     <select class="largest">
                         <option>- Please Select -</option>
-                        <option>ทะเบียนพาณิชย์</option>
-                        <option>วันที่เริ่มบริหารกิจการ</option>
+                        <option>??????????????</option>
+                        <option>???????????????????????</option>
                         <option>Business Permission</option>
-                        <option>เอกสารภาษี</option>
-                        <option>Statement ย้อนหลัง 2 ปี</option>
+                        <option>??????????</option>
+                        <option>Statement ???????? 2 ??</option>
                     </select>
                 </td>
             </tr>
@@ -369,7 +366,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">ลักษณะการขอสินเชื่อ :</td>
+                <td class="title">??????????????????? :</td>
                 <td>
                     <select class="larger"><option>- Please Select -</option></select>
                 </td>
@@ -411,12 +408,12 @@
                             <p:commandButton icon="ui-icon-pencil"
                                              action="#{prescreenMaker.onRowCollateral(rowIndex)}"
                                              update=":collateralDlgForm"
-                                             process=":resultTableCollateral"
+                                             process=":frmMain:resultTableCollateral"
                                              oncomplete="collateralDlg.show();"/>
                             <p:commandButton icon="ui-icon-trash"
                                              title="Remove"
                                              action="#{prescreenMaker.onRemoveCollateral(rowIndex)}"
-                                             update=":resultTableCollateral"/>
+                                             update=":tableCollateral"/>
                         </p:column>
 
                     </p:dataTable>

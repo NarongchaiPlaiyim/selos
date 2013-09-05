@@ -1,8 +1,11 @@
 package com.clevel.selos.integration.ncrs.service;
 
 
-//import com.clevel.selos.controller.TestNCRS;
+import com.clevel.selos.controller.TestNCRS;
+
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ncrs.commands.Command;
+import com.clevel.selos.integration.ncrs.exception.ValidationException;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
 import com.clevel.selos.integration.ncrs.models.response.Ncrsresponse;
@@ -22,16 +25,25 @@ public class NCRSService implements Serializable {
 
     }
 
-    public void process(){
+    public void process(TestNCRS testNCRS){
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
+        //!!!!! TEST !!!!!
         //!!!!! TEST !!!!!
         //log.debug("========================================= process().");
-        System.out.println("========================================= process().");
+        System.out.println("=========================================process().");
         NCRSModel ncrsModel = new NCRSModel();
 
         String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
         System.out.println("URL : "+url);
 
-        TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", null);
+        TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", "19000101");
         ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
         name.add(nameModel);
 
@@ -40,38 +52,60 @@ public class NCRSService implements Serializable {
         id.add(idModel);
 
 
+        Command command = new Command();
+
         try {
-            ncrsModel.setId("SLOSTEST");
-            ncrsModel.setPass("SLOSTEST12");
-            ncrsModel.setMemberref("123456789");
-            ncrsModel.setEnqpurpose("01");
-            ncrsModel.setEnqamount(null);
-            ncrsModel.setConsent("Y");
-            ncrsModel.setDisputeenquiry(null);
+            ncrsModel.setId(testNCRS.getId());
+            ncrsModel.setPass(testNCRS.getPass());
+            ncrsModel.setMemberref(testNCRS.getMemberref());
+            ncrsModel.setEnqpurpose(testNCRS.getEnqpurpose());
+            ncrsModel.setEnqamount(testNCRS.getEnqamount());
+            ncrsModel.setConsent(testNCRS.getConsent());
+            ncrsModel.setDisputeenquiry(testNCRS.getDisputeenquiry());
 
             ncrsModel.setIdList(id);
             ncrsModel.setNameList(name);
             ncrsModel.setUrl(url);
 
-            System.out.println("========================================= Model : "+ncrsModel.toString());
-
+            System.out.println("=========================================process() Model : "+ncrsModel.toString());
+            ncrsModel.validation();
             NCRSImp ncrs = new NCRSImp();
 
-            Ncrsresponse response =  ncrs.requestOnline(ncrsModel);
-
+            Ncrsresponse response =  null;//ncrs.requestOnline(ncrsModel);
+            System.out.println("=========================================process() Call  : requestOnline(NCRSModel)");
             if(null!=response){
-//                TestNCRS testNCRS = new TestNCRS();
-//                testNCRS.setResult("========================================= DONE!!!");
-//                System.out.println("========================================= User : "+response.getHeaderModel().getUser());
-//                System.out.println("========================================= Pass : "+response.getHeaderModel().getPassword());
-//                System.out.println("========================================= Command : "+response.getHeaderModel().getCommand());
+                if(!command.ERROR.equals(response.getHeaderModel().getCommand())){
+                    //The response (Online) has succeeded
+                    //The response will be return (XML Transaction record)
+                }else {
+                    //Exception NCB
+                    //if you want to know Error message
+                    //response.getBodyModel().getErrormsg();
+                    //throw new ValidationException("Exception : NCB");
+                }
             }else {
-                System.out.println("========================================= Response is null");
+                System.out.println("=========================================process() Response form requestOnline is null");
+                System.out.println("=========================================process() Call  : requestOffline(NCRSModel)");
+                response =  null;//ncrs.requestOffline(ncrsModel);
+                if(!command.ERROR.equals(response.getHeaderModel().getCommand())){
+                    //The response (Offline) has succeeded
+                    //The response will be return (trackingid and result)
+
+                    //code
+                    //response.getBodyModel().getsTrackingid();
+                    //response.getBodyModel().getsResult();
+
+                }else {
+                    //if you want to know Error message
+                    //response.getBodyModel().getErrormsg();
+                    // I don't know...
+                }
+
             }
 
 
         } catch (Exception e) {
-            System.out.println("Exception : "+e);
+            System.out.println("=========================================process() Exception : "+e);
         }
     }
 

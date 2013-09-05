@@ -35,6 +35,7 @@ public class RMService implements Serializable {
         //Validate
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException("RegisterID Invalid");
+
         }
         if (searchIndividual.getCustType().length() != 1) {
             throw new ValidationException("CustType Invalid");
@@ -206,7 +207,7 @@ public class RMService implements Serializable {
     private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
         ResSearchIndividualCustomer resSearchIndividualCustomer = null;
 
-        URL url = this.getClass().getResource("/EAISearchIndividualCustomer.wsdl");
+        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
         EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
@@ -221,7 +222,7 @@ public class RMService implements Serializable {
     private ResSearchCorporateCustomer callServiceCorporate(ReqSearchCorporateCustomer reqSearch) throws Exception {
         ResSearchCorporateCustomer resSearchCorporateCustomer = null;
 
-        URL url = this.getClass().getResource("/EAISearchCorporateCustomer.wsdl");
+        URL url = this.getClass().getResource("/com/tmb/EAISearchCorporateCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();

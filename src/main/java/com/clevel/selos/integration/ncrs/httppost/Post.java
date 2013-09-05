@@ -32,9 +32,9 @@ public class Post implements Serializable {
         return post == null ? post =new Post() : post;
     }
     public String sendPost(String xml, String url) throws Exception {
-        System.out.println("========================================= sendPost");
+        System.out.println("=========================================sendPost()");
         //log.debug("sendPost. (xml: {}, url: {})",xml,url);
-        System.out.println("========================================= XML : "+xml+" "+"URL : "+url);
+        System.out.println("=========================================sendPost() XML : "+xml+" "+"URL : "+url);
         String result = "";
 
         Util util = new Util();
@@ -59,11 +59,11 @@ public class Post implements Serializable {
 
                 //log.debug("sendPost. (result: {})",result);
 
-                System.out.println("========================================= Result : "+result);
+                System.out.println("=========================================sendPost() Result : "+result);
 
                 return result;
             }else{
-                System.out.println("========================================= Error code : "+ resCode);
+                System.out.println("=========================================sendPost() Error code : "+ resCode);
                 //log.error("sendPost. (Error code : {})",resCode);
                 return result;
             }

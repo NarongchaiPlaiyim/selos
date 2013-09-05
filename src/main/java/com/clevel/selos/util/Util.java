@@ -57,8 +57,12 @@ public class Util {
             return false;
         }
     }
-    public String convertNullToBlankString(String string){
-        return string!=null?string:"";
+    public String convertNullToBlank(String string){
+        if(string != null || !"null".equals(string.toLowerCase())){
+            return "";
+        }else{
+            return string;
+        }
     }
     public List convertNullToEmpeyList(List list){
         return list!=null?list: Collections.EMPTY_LIST;
