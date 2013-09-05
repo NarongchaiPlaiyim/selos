@@ -3,14 +3,11 @@ package com.clevel.selos.integration.ncrs.service;
 
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.commands.Command;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.models.response.NcrsResponse;
+import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class NCRSService implements Serializable {
 
@@ -32,7 +29,7 @@ public class NCRSService implements Serializable {
         Command command = null;
         try {
             ncrsModel.validation();
-            NcrsResponse ncrsResponse =  ncrs.requestOnline(ncrsModel);
+            NCRSResponse ncrsResponse =  ncrs.requestOnline(ncrsModel);
             log.debug("=========================================process. Call  : requestOnline(NCRSModel)");
             if(null!=ncrsResponse){
                 if(!command.ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){

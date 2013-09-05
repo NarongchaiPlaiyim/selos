@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XStreamAlias("ncrsresponse")
-public class NcrsResponse {
+public class NCRSResponse {
 
     @XStreamAlias("header")
     private HeaderModel header;

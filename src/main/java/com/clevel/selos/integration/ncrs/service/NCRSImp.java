@@ -6,7 +6,7 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.commands.Command;
 import com.clevel.selos.integration.ncrs.httppost.Post;
 import com.clevel.selos.integration.ncrs.models.request.*;
-import com.clevel.selos.integration.ncrs.models.response.NcrsResponse;
+import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 
 import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
@@ -34,7 +34,7 @@ public class NCRSImp implements NCRS {
     }
 
     @Override
-    public NcrsResponse requestOnline(NCRSModel ncrsModel) throws Exception {
+    public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
 
         if(null!=ncrsModel){
             Util util = new Util();
@@ -51,15 +51,15 @@ public class NCRSImp implements NCRS {
             String xml = null;
             String result = null;
             XStream xStream = null;
-            NcrsRequest ncrsRequest = null;
+            NCRSRequest ncrsRequest = null;
             Command command = null;
-            NcrsResponse ncrsResponse = null;
+            NCRSResponse ncrsResponse = null;
 
             xStream = new XStream();
-            xStream.processAnnotations(NcrsRequest.class);
+            xStream.processAnnotations(NCRSRequest.class);
             command = new Command();
             log.debug("=========================================requestOnline. Command code : {}",command.CPUTOCPU_ENQUIRY);
-            ncrsRequest = new NcrsRequest(
+            ncrsRequest = new NCRSRequest(
             new HeaderModel(id, pass, command.CPUTOCPU_ENQUIRY),
             new BodyModel(
                 new TUEFEnquiryModel(
@@ -71,8 +71,8 @@ public class NCRSImp implements NCRS {
 
             if(!"".equals(result)){
                 log.debug("=========================================requestOnline. Response : {}",result);
-                xStream.processAnnotations(NcrsResponse.class);
-                ncrsResponse = (NcrsResponse)xStream.fromXML(result);
+                xStream.processAnnotations(NCRSResponse.class);
+                ncrsResponse = (NCRSResponse)xStream.fromXML(result);
                 return ncrsResponse;
             }else{
                 log.debug("=========================================requestOnline. Response : {}", result);
@@ -85,7 +85,7 @@ public class NCRSImp implements NCRS {
     }
 
     @Override
-    public NcrsResponse requestOffline(NCRSModel ncrsModel) throws Exception {
+    public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
         if(null!=ncrsModel){
             Util util = new Util();
             log.debug("=========================================requestOffline(NCRSModel : {})",ncrsModel.toString());
@@ -101,15 +101,15 @@ public class NCRSImp implements NCRS {
             String xml = null;
             String result = null;
             XStream xStream = null;
-            NcrsRequest ncrsRequest = null;
+            NCRSRequest ncrsRequest = null;
             Command command = null;
-            NcrsResponse ncrsResponse = null;
+            NCRSResponse ncrsResponse = null;
 
             xStream = new XStream();
-            xStream.processAnnotations(NcrsRequest.class);
+            xStream.processAnnotations(NCRSRequest.class);
             command = new Command();
             log.debug("=========================================requestOffline. Command code : {}",command.BATCHOFFLINE_ENQUIRY_ENTRY);
-            ncrsRequest = new NcrsRequest(
+            ncrsRequest = new NCRSRequest(
                     new HeaderModel(id, pass, command.BATCHOFFLINE_ENQUIRY_ENTRY),
                     new BodyModel(
                             new TUEFEnquiryModel(
@@ -121,8 +121,8 @@ public class NCRSImp implements NCRS {
 
             if(!"".equals(result)){
                 log.debug("=========================================requestOffline. Response : {}",result);
-                xStream.processAnnotations(NcrsResponse.class);
-                ncrsResponse = (NcrsResponse)xStream.fromXML(result);
+                xStream.processAnnotations(NCRSResponse.class);
+                ncrsResponse = (NCRSResponse)xStream.fromXML(result);
                 return ncrsResponse;
             }else{
                 log.debug("=========================================requestOffline. Response : {}",result);

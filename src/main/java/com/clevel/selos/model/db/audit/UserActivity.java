@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "adt_activity")
+@Table(name = "adt_user_activity")
 public class UserActivity implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_ADT_ACTIVITY_ID", sequenceName="SEQ_ADT_ACTIVITY_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_ACTIVITY_ID")
+    @SequenceGenerator(name="SEQ_ADT_USER_ID", sequenceName="SEQ_ADT_USER_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_USER_ID")
     private Long id;
     @Column(name="user_id")
     private String userId;

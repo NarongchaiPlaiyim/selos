@@ -27,7 +27,6 @@ public class Post implements Serializable {
 
     @Inject
     public Post() {
-
     }
 
     public String sendPost(String xml, String url) throws Exception {
@@ -65,9 +64,6 @@ public class Post implements Serializable {
         }else {
             throw new ValidationException("sendPost() : xml is null or url is null");
         }
-
-
-
     }
 
 }
