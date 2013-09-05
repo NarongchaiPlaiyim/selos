@@ -14,7 +14,7 @@ public class ConfigurationProducer {
     Logger log;
 
     private volatile static Properties config;
-    public static String configFileLocation = "/tmp/selos.properties";
+    public static String configFileLocation = "D://Project-Clevel/tmp/selos.properties";
 
     public synchronized Properties getProperties() {
         if (config==null) {
