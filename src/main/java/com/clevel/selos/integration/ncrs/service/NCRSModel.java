@@ -1,8 +1,10 @@
 package com.clevel.selos.integration.ncrs.service;
 
+import com.clevel.selos.integration.ncrs.exception.ValidationException;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.models.response.Ncrsresponse;
+import com.clevel.selos.util.Util;
+import com.clevel.selos.util.ValidationUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -117,5 +119,34 @@ public class NCRSModel implements Serializable {
                 .append("nameList", nameList)
                 .append("idList", idList)
                 .toString();
+    }
+
+    public void validation()throws Exception{
+
+        if(ValidationUtil.isNull(id))throw new ValidationException("id is null");
+
+        if(ValidationUtil.isNull(pass))throw new ValidationException("pass is null");
+
+        if(!ValidationUtil.isNull(memberref) && ValidationUtil.isGreaterThan(25, memberref))throw new ValidationException("Length of memberref is more than 25");
+
+        if(ValidationUtil.isNull(enqpurpose))throw new ValidationException("enqpurpose is null");
+        if(ValidationUtil.isGreaterThan(2, enqpurpose))throw new ValidationException("Length of enqpurpose is more than 2");
+
+        if(!ValidationUtil.isNull(enqamount) && ValidationUtil.isGreaterThan(9, enqamount))throw new ValidationException("Length of enqamount is more than 9");
+
+        if(ValidationUtil.isNull(consent))throw new ValidationException("enqpurpose is null");
+        if(ValidationUtil.isGreaterThan(1, consent))throw new ValidationException("Length of consent is more than 1");
+
+
+        if(ValidationUtil.isLessThan(1, nameList))throw new ValidationException("Size of nameList is less than 1");
+        for (TUEFEnquiryNameModel nameModel : nameList){
+            nameModel.validation();
+        }
+
+        if(ValidationUtil.isLessThan(1, idList))throw new ValidationException("Size of idList is less than 1");
+        for (TUEFEnquiryIdModel idModel : idList){
+            idModel.validation();
+        }
+
     }
 }
