@@ -1,7 +1,6 @@
 package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.integration.test.RMTest;
 import com.clevel.selos.integration.model.CustomerInfo;
 import org.slf4j.Logger;
 

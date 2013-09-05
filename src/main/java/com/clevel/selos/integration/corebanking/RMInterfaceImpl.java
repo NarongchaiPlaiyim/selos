@@ -17,7 +17,7 @@ public class RMInterfaceImpl implements RMInterface {
     Logger log;
 
     @Inject
-    RmService rmService;
+    RMService rmService;
 
     @Inject
     public RMInterfaceImpl() {

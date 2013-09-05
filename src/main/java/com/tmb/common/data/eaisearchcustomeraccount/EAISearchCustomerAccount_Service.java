@@ -18,7 +18,7 @@ import javax.xml.ws.WebServiceClient;
  * 
  */
 @WebServiceClient(name = "EAISearchCustomerAccount", targetNamespace = "http://data.common.tmb.com/EAISearchCustomerAccount/", wsdlLocation = "file:/D:/Project-Clevel/selos/src/main/java/EAISearchCustomerAccount.wsdl")
-@HandlerChain(file = "/LogMessage_handlerCustomerAccount.xml")
+@HandlerChain(file = "/com/tmb/LogMessage_handlerCustomerAccount.xml")
 public class EAISearchCustomerAccount_Service
     extends Service
 {
