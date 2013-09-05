@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 
 public class CustomerView {
@@ -51,5 +54,16 @@ public class CustomerView {
 
     public void setValidCitizenID(int validCitizenID) {
         this.validCitizenID = validCitizenID;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customerName", customerName)
+                .append("citizenID", citizenID)
+                .append("inputCitizenID", inputCitizenID)
+                .append("validCitizenID", validCitizenID)
+                .toString();
     }
 }

@@ -15,4 +15,20 @@ $(document).ready(function(){
     $(".positive").numeric({ negative: false }, function() { alert("No negative values"); this.value = ""; this.focus(); });
 });
 
+$(document).ready(function() {
+    $(".readonly").bind("onclick", function(e) {
+        $(".readonly").blur();
+    })
+});
 
+function handlePrescreenFacilityRequest(xhr, status, args) {
+    if(args.functionComplete){
+        facilityDlg.hide();
+    }
+}
+
+function handlePrescreenBusinessInfoRequest(xhr, status, args) {
+    if(args.functionComplete){
+        businessDlg.hide();
+    }
+}

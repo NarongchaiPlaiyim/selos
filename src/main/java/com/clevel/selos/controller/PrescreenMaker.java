@@ -11,11 +11,14 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,59 +42,39 @@ public class PrescreenMaker implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+    //*** Drop down List ***//
+    private List<ProductGroup> productGroupList;
+    private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
+    private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
+    private List<CollateralType> collateralTypeList;
 
+    private List<BusinessGroup> businessGroupList;
+    private List<BusinessDescription> businessDescriptionList;
 
-    private Collateral collateral;
+    //*** Result table List ***//
+    private List<Facility> facilityList;
+    private List<BusinessInformation> businessInformationList;
+    private List<Collateral> collateralList;
+
+    //*** Variable for view ***//
+    private ProductGroup selectProductGroup;
+    private Facility facility;
+
+    /*private Collateral collateral;
     private CollateralType collateralType;
 
     private BusinessGroup businessGroup;
     private BusinessDescription businessDescription;
     private BusinessInformation businessInformation;
 
-    private List<BusinessGroup> businessGroupList;
-    private List<BusinessDescription> businessDescriptionList;
-    private List<BusinessInformation> businessInformationList;
 
-    private List<Collateral> collateralList;
-    private List<CollateralType> collateralTypeList;
 
-    private List<Facility> facilityList;
-    private Facility facility;
-
-    private List<CreditType> creditTypeList;
-    private CreditType selectCreditType;
-
-    private List<ProductProgram> productProgramList;
-    private ProductProgram selectProductProgram;
-
-    private List<PrdGroupToPrdProgram> prdGroupToPrdProgramList;
-    private List<PrdProgramToCreditType> prdProgramToCreditTypeList;
-
-    private List<ProductGroup> productGroupList;
-    private ProductGroup selectProductGroup;
 
     private BigDecimal existCollateralAmount;
-    private String existCollateralTypeName;
-
-    private String dlgCreditTypeName;
-    private String productProgramName;
-    private String productGroupName;
-
-    private BigDecimal dCollateralAmount;
-    private String dCollateralTypeName;
-
-    private int businessGroupID;
-    private int businessDescriptionID;
+    private String existCollateralTypeName;*/
 
     private String modeForButton;
-    private String modeForExist;
-    private String modeForCollateral;
-    private String modeForBusiness;
-
     private int rowIndex;
-    private int indexEdit;
-    private int indexBusiness;
-    private int indexExistEdit;
 
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
@@ -118,50 +101,16 @@ public class PrescreenMaker implements Serializable {
     @PostConstruct
     public void onCreation() {
 
-        log.info("onCreation.z");
+        log.info("onCreation");
 
         modeForButton = "add";
-        modeForCollateral = "add";
-        modeForExist = "add";
-        modeForBusiness = "add";
-
-        businessInformation = new BusinessInformation();
-        businessGroup = new BusinessGroup();
-        businessDescription = new BusinessDescription();
-
-        businessDescription.setBusinessGroup(businessGroup);
-        businessInformation.setBusinessDescription(businessDescription);
 
         if (facilityList == null) {
             facilityList = new ArrayList<Facility>();
         }
 
-        if (facility == null) {
-            facility = new Facility();
-        }
-
-        if (creditTypeList == null) {
-            creditTypeList = new ArrayList<CreditType>();
-        }
-
         if (productGroupList == null) {
             productGroupList = new ArrayList<ProductGroup>();
-        }
-
-        if (productProgramList == null) {
-            productProgramList = new ArrayList<ProductProgram>();
-        }
-
-        if(prdGroupToPrdProgramList == null){
-            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
-        }
-
-        if(prdProgramToCreditTypeList == null){
-            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
-        }
-
-        if (collateral == null) {
-            collateral = new Collateral();
         }
 
         if (collateralList == null) {
@@ -172,66 +121,238 @@ public class PrescreenMaker implements Serializable {
             businessInformationList = new ArrayList<BusinessInformation>();
         }
 
+        onLoadSelectList();
+    }
 
-        if (selectProductGroup == null) {
-            selectProductGroup = new ProductGroup();
-        }
+    public void onLoadSelectList() {
+        log.info("onLoadSelectList :::");
 
-        if (selectProductProgram == null) {
-            selectProductProgram = new ProductProgram();
-        }
-
-        if (selectCreditType == null) {
-            selectCreditType = new CreditType();
-        }
-
+        productGroupList = productGroupDAO.findAll();
+        log.info("onLoadSelectList ::: productGroupList size : {}", productGroupList.size());
 
         collateralTypeList = collateralTypeDAO.findAll();
+        log.info("onLoadSelectList ::: collateralTypeList size : {}", collateralTypeList.size());
+
         businessGroupList = businessGroupDAO.findAll();
-
-        onLoadSelectOneListbox();
+        log.info("onLoadSelectList ::: businessGroupList size : {}", businessGroupList.size());
     }
 
-    public void onLoadSelectOneListbox() {
-        log.info("onLoadFirst ::::::: ");
-        productGroupList     = productGroupDAO.findAll();
-        log.info("onLoadFirst :::::::  productGroupList size :::::::::::: {}", productGroupList.size());
+    // *** Function For Facility *** //
+    public void onAddFacility() {
+        log.info("onAddFacility ::: ");
+        log.info("onAddFacility ::: selectProductGroup : {}", selectProductGroup);
 
-        prdGroupToPrdProgramList   = null;
-        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(selectProductGroup);
-        log.info("onLoadFirst ::::::: prdGroupToPrdProgramList size ::::::::::::", prdGroupToPrdProgramList.size());
+        //*** Reset form ***//
+        log.info("onAddFacility ::: Reset Form");
+        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        facility = new Facility();
+        modeForButton = "add";
+    }
 
-        prdProgramToCreditTypeList = null;
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
+    public void onEditFacility(int row) {
+        modeForButton = "edit";
+        rowIndex = row;
+        log.info("onSelectedFacility ::: rowNumber  : {}", row);
+        log.info("onSelectedFacility ::: facilityList : {}", facilityList);
+
+        //*** Check list size ***//
+        if( rowIndex < facilityList.size() ) {
+            facility = new Facility();
+            ProductProgram productProgram = facilityList.get(rowIndex).getProductProgram();
+            CreditType creditType = facilityList.get(rowIndex).getCreditType();
+            BigDecimal requestAmount = facilityList.get(rowIndex).getRequestAmount();
+            prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+
+            facility.setProductProgram(productProgram);
+            facility.setCreditType(creditType);
+            facility.setRequestAmount(requestAmount);
+        }
+    }
+
+    public void onSaveFacility() {
+        log.info("onSaveFacility ::: mode : {}", modeForButton);
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesMessage msg = null;
+        boolean complete = false;
+
+        log.info("selectProductGroup.getId() : {} ", selectProductGroup.getId());
+        log.info("facility.getProductProgram().getId() : {} ", facility.getProductProgram().getId());
+        log.info("facility.getCreditType().getId() : {} ", facility.getCreditType().getId());
+
+        /*if(modeForButton.equalsIgnoreCase("add")){
+            /*//*** Validate for mandate value ***//*/
+            if( facility.getProductProgram().getId() != 0 && facility.getCreditType().getId() != 0 && facility.getRequestAmount() != null ){
+
+            }
+            if(!((selectProductGroup.getId() == 0) || (selectProductProgram.getId() == 0) || (selectCreditType.getId() == 0))) {
+
+                log.info("onAddFacility::: selectProductProgram.getId() :: " +
+                        productProgramDAO.findById(selectProductProgram.getId()).toString());
+                log.info("onAddFacility::: selectCreditType.getId() :: " +
+                        creditTypeDao.findById(selectCreditType.getId()).toString());
+
+                ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+                CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
+                Facility facAdd = new Facility();
+                facAdd.setProductProgram(productProgram);
+                facAdd.setCreditType(creditType);
+                facAdd.setRequestAmount(facility.getRequestAmount());
+                facilityList.add(facAdd);
+                complete = true;
+                msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Complete","Complete");
+            }else{
+                complete = false;
+                msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR","ERROR");
+                RequestContext.getCurrentInstance().execute("messageBoxFacilityDialog.show()");
+            }
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            context.addCallbackParam("functionComplete", complete);
+        }else if(modeForButton.equalsIgnoreCase("edit")){
+            ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
+            CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
+            log.info("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
+            log.info("onEditFacility :::::: selectCreditType ::: "+selectCreditType.getName());
+            facilityList.get(rowIndex).setProductProgram(productProgram);
+            facilityList.get(rowIndex).setCreditType(creditType);
+            facilityList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
+        }*/
+    }
+
+    public void onDeleteFacility(int row) {
+        facilityList.remove(row);
+    }
+
+    // *** Function For BusinessInformation ***//
+    /*public void onAddBusinessInformation() {
+        log.info("onAddBusinessInformation ::: reset form");
+        /*//*** Reset Form ***//*/
+        modeForButton = "add";
+        businessInformation = new BusinessInformation();
+        businessGroup = new BusinessGroup();
+        businessDescription = new BusinessDescription();
+
+        businessDescription.setBusinessGroup(businessGroup);
+        businessInformation.setBusinessDescription(businessDescription);
+
+        businessGroupID = 0;
+        businessDescriptionID = 0;
+    }
+
+    public void onEditBusinessInformation(int index) {
+        log.info("onEditBusinessInformation ::: rowIndex : {}", index);
+        modeForButton = "edit";
+        rowIndex = index;
+
+        businessInformation = new BusinessInformation();
+        businessGroup = new BusinessGroup();
+        businessDescription = new BusinessDescription();
+
+        BusinessInformation businessInfo;
+        businessInfo = businessInformationList.get(index);
+
+        businessGroup = businessInfo.getBusinessDescription().getBusinessGroup();
+        businessDescription = businessInfo.getBusinessDescription();
+        businessInformation = businessInfo;
+
+        businessDescription.setBusinessGroup(businessGroup);
+        businessInformation.setBusinessDescription(businessDescription);
+
+        businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(businessInfo.getBusinessDescription().getBusinessGroup());
+    }
+
+    public void onSaveBusinessInformation() {
+        log.info("onSaveBusinessInformation ::: modeForButton : {}", modeForButton);
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesMessage msg = null;
+        boolean complete = false;
+        /*//*** validate input ***//*/
+        if((businessGroup.getId() != 0) && (businessDescription.getId() != 0)) {
+            if(modeForButton.equalsIgnoreCase("add")) {
+                BusinessInformation businessInfo = new BusinessInformation();
+
+                log.info("onSaveBusinessInformation ::: selectBusinessGroupID : {}", businessGroupID);
+                log.info("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", businessDescriptionID);
+
+                businessGroup = businessGroupDAO.findById(businessGroupID);
+                businessDescription = businessDescriptionDAO.findById(businessDescriptionID);
+
+                businessDescription.setBusinessGroup(businessGroup);
+
+                businessInfo.setBusinessDescription(businessDescription);
+
+                businessInformationList.add(businessInfo);
+                log.info("onSaveBusinessInformation ::: Complete.");
+            } else {
+                log.info("onSaveBusinessInformation ::: rowIndex : {}", rowIndex);
+
+                BusinessInformation businessInfo;
+                businessInfo = businessInformationList.get(indexBusiness);
+
+                businessDescriptionID = businessInfo.getBusinessDescription().getId();
+                businessGroupID = businessInfo.getBusinessDescription().getBusinessGroup().getId();
+
+                businessGroup = businessGroupDAO.findById(businessGroupID);
+                businessDescription = businessDescriptionDAO.findById(businessDescriptionID);
+
+                businessInfo.setBusinessDescription(businessDescription);
+                log.info("onSaveBusinessInformation ::: rowIndex : {}, Complete.", rowIndex);
+            }
+            complete = true;
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Complete","Complete");
+        }else{
+            complete = false;
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR","ERROR");
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    public void onDeleteBusinessInformation(int index) {
+        log.info("onDeleteBusinessInformation :::");
+        businessInformationList.remove(index);
 
     }
 
+    // *** Event for DropDown *** //
+    public void checkOnChangeProductGroup(){
+        if(facilityList != null && facilityList.size() > 0){
+            RequestContext.getCurrentInstance().execute("confirmChangeProductGroupDlg.show()");
+        }else{
+            onChangeProductGroup();
+        }
+    }
     public void onChangeProductGroup(){
-        log.info("onChangeProductGroup :::::::: selectProductGroup.id ::::: " + selectProductGroup.getId());
-        ProductGroup productGroup  = productGroupDAO.findById(selectProductGroup.getId());
-        prdGroupToPrdProgramList   = null;
-        prdGroupToPrdProgramList   = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
-        log.info("onChangeProductGroup :::::::: prdGroupToPrdProgramList size :::: ", prdGroupToPrdProgramList.size());
+        log.info("onChangeProductGroup ::: selectProductGroup : {}", selectProductGroup);
+        ProductGroup productGroup = productGroupDAO.findById(selectProductGroup.getId());
 
-        log.info("onChangeProductGroup ::::::: selectProductProgram.id :::: "+selectProductProgram.getId());
-        prdProgramToCreditTypeList = null;
-        prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(selectProductProgram);
+        /*//*** Get Product Program List from Product Group ***//*/
+        prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
+        if(prdGroupToPrdProgramList == null){
+            prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
+        }
+        log.info("onChangeProductGroup ::: prdGroupToPrdProgramList size : {}", prdGroupToPrdProgramList.size());
 
-        log.info("onChangeProductGroup :::::::: facilityList.size :::::::::::" + facilityList.size());
+        /*/
+
+
+
+    /*** Check if Facility added system must be remove all ***//*/
+        log.info("onChangeProductGroup :::: facilityList.size :::::::::::" + facilityList.size());
 
         if (facilityList.size() > 0) {
             facilityList.removeAll(facilityList);
         }
-
-
     }
 
     public void onChangeProductProgram(){
         ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-        log.info("onChangeProductProgram :::: productProgram.Id :::  " + productProgram.getId());
-        log.info("onChangeProductProgram :::: productProgram.name ::: " + productProgram.getName());
-        prdProgramToCreditTypeList = null;
+        log.info("onChangeProductProgram :::: productProgram : {}", productProgram);
+
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
+        if(prdProgramToCreditTypeList == null){
+            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+        }
         log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
     }
 
@@ -284,12 +405,7 @@ public class PrescreenMaker implements Serializable {
         dCollateralAmount = null;
     }
 
-    public void onClickDialog() {
-        selectProductProgram = new ProductProgram();
-        selectCreditType = new CreditType();
-        facility.setRequestAmount(null);
-        modeForButton = "add";
-    }
+
 
     public void onRemoveCollateral(int index) {
         log.info("onRemoveCollateral {}", index);
@@ -303,25 +419,6 @@ public class PrescreenMaker implements Serializable {
         dCollateralTypeName = "";
         modeForCollateral = "add";
     }
-
-    public void onClearBusinessDlg() {
-
-        log.info("onClearBusinessDlg {}");
-
-        businessInformation = new BusinessInformation();
-        businessGroup = new BusinessGroup();
-        businessDescription = new BusinessDescription();
-        businessGroup.setId(0);
-        businessDescription.setId(0);
-        businessDescription.setBusinessGroup(businessGroup);
-        businessInformation.setBusinessDescription(businessDescription);
-
-        log.info("businessInformation {}",businessInformation);
-        log.info("modeForBusiness {}",modeForBusiness);
-
-        modeForBusiness = "add";
-    }
-
 
     public void onAddExistCollateral() {
         log.info("onAddExistCollateral {}");
@@ -355,88 +452,7 @@ public class PrescreenMaker implements Serializable {
         collateralList.remove(row);
     }
 
-    public void onAddBusinessInformation() {
-        log.info("onAddBusinessInformation");
 
-        BusinessInformation businessInfo = null;
-        businessInfo = new BusinessInformation();
-
-        businessDescriptionID = businessInformation.getBusinessDescription().getId();
-        businessGroupID = businessInformation.getBusinessDescription().getBusinessGroup().getId();
-
-        businessGroup = businessGroupDAO.findById(businessGroupID);
-        businessDescription = businessDescriptionDAO.findById(businessDescriptionID);
-
-        businessDescription.setBusinessGroup(businessGroup);
-
-        businessInfo.setBusinessDescription(businessDescription);
-
-        businessInformationList.add(businessInfo);
-
-        businessInformation = new BusinessInformation();
-        businessGroup = new BusinessGroup();
-        businessDescription = new BusinessDescription();
-
-        businessDescription.setBusinessGroup(businessGroup);
-        businessInformation.setBusinessDescription(businessDescription);
-    }
-
-    public void onRowBusinessInformation(int index) {
-
-        log.info("onRowBusinessInformation {}", index);
-
-        businessInformation = new BusinessInformation();
-        businessGroup = new BusinessGroup();
-        businessDescription = new BusinessDescription();
-
-        businessDescription.setBusinessGroup(businessGroup);
-        businessInformation.setBusinessDescription(businessDescription);
-
-        BusinessInformation businessInfo = null;
-
-        businessInfo = businessInformationList.get(index);
-
-        businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(businessInfo.getBusinessDescription().getBusinessGroup());
-
-        businessInformation = businessInfo;
-
-        indexBusiness = index;
-        modeForBusiness = "edit";
-    }
-
-    public void onEditBusinessInformation() {
-        log.info("onEditBusinessInformation {}@ index", indexEdit);
-
-        BusinessInformation businessInfo = null;
-        businessInfo = businessInformationList.get(indexBusiness);
-
-        businessDescriptionID = businessInfo.getBusinessDescription().getId();
-        businessGroupID = businessInfo.getBusinessDescription().getBusinessGroup().getId();
-
-        businessGroup = businessGroupDAO.findById(businessGroupID);
-        businessDescription = businessDescriptionDAO.findById(businessDescriptionID);
-
-        modeForBusiness = "add";
-
-        businessInfo.setBusinessDescription(businessDescription);
-
-        businessInformation = new BusinessInformation();
-        businessGroup = new BusinessGroup();
-        businessDescription = new BusinessDescription();
-
-        businessDescription.setBusinessGroup(businessGroup);
-        businessInformation.setBusinessDescription(businessDescription);
-
-        businessGroupID = 0;
-        businessDescriptionID = 0;
-
-    }
-
-    public void onRemoveBusinessInformation(int index) {
-
-        businessInformationList.remove(index);
-
-    }
 
     public void onChangeBusinessGroupName() {
 
@@ -452,38 +468,25 @@ public class PrescreenMaker implements Serializable {
 
     }
 
+    public void onChangeBusinessDescriptionName(){
+
+        log.info("onChangeBusinessDescriptinName");
+        log.info("BusinessInformation : {}", businessInformation);
+        businessDescriptionID = businessInformation.getBusinessDescription().getId();
+        businessInformation.setBusinessDescription(businessDescriptionDAO.findById(businessDescriptionID));
+        businessComment = businessInformation.getBusinessDescription().getBusinessComment();
+        log.info("businessComment : {}", businessComment);
+
+    }
+
     public void onChangeCreditType(){
         log.info("onChangeCreditType ::: selectCreditType.Id() >>> " + selectCreditType.getId());
 //        CreditType creditType  = creditTypeDao.findById(selectCreditType.getId());
 //        log.info("onChangeCreditType ::: selectCreditType.Name() >>> " + creditType.getName());
-    }
-
-    public void onAddFacility() {
-        log.info("onAddFacility:::");
-        log.info("selectProductGroup.getId() >> " + selectProductGroup.getId());
-        log.info("selectProductProgram.getId() >> " + selectProductProgram.getId());
-        log.info("selectCreditType.getId() >> " + selectCreditType.getId());
-
-        if (!((selectProductGroup.getId() == 0) || (selectProductProgram.getId() == 0) || (selectCreditType.getId() == 0))) {
-
-            log.info("onAddFacility::: selectProductProgram.getId() :: " +
-                    productProgramDAO.findById(selectProductProgram.getId()).toString());
-            log.info("onAddFacility::: selectCreditType.getId() :: " +
-                    creditTypeDao.findById(selectCreditType.getId()).toString());
-
-            ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
-            CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
-            Facility facAdd = new Facility();
-            facAdd.setProductProgram(productProgram);
-            facAdd.setCreditType(creditType);
-            facAdd.setRequestAmount(facility.getRequestAmount());
-            facilityList.add(facAdd);
-        }
-
-    }
+    }*/
 
     // open dialog
-    public void onSelectedFacility(int rowNumber) {
+ /*   public void onSelectedFacility(int rowNumber) {
         modeForButton = "edit";
         rowIndex = rowNumber;
         log.info("onSelectedFacility :::  rowNumber  :: " + rowNumber);
@@ -502,9 +505,9 @@ public class PrescreenMaker implements Serializable {
         facility.setRequestAmount(facilityList.get(rowNumber).getRequestAmount());
 
 
-    }
+    }*/
 
-    public void onEditFacility() {
+    /*public void onEditFacility() {
         ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
         CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
         log.info("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
@@ -512,19 +515,7 @@ public class PrescreenMaker implements Serializable {
         facilityList.get(rowIndex).setProductProgram(productProgram);
         facilityList.get(rowIndex).setCreditType(creditType);
         facilityList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
-    }
-
-    public void onDeleteFacility(int row) {
-        facilityList.remove(row);
-    }
-
-    public String getProductProgramName() {
-        return productProgramName;
-    }
-
-    public void setProductProgramName(String productProgramName) {
-        this.productProgramName = productProgramName;
-    }
+    }*/
 
     public String getModeForButton() {
         return modeForButton;
@@ -534,254 +525,12 @@ public class PrescreenMaker implements Serializable {
         this.modeForButton = modeForButton;
     }
 
-
-    public String getDlgCreditTypeName() {
-        return dlgCreditTypeName;
+    public List<ProductGroup> getProductGroupList() {
+        return productGroupList;
     }
 
-    public void setDlgCreditTypeName(String dlgCreditTypeName) {
-        this.dlgCreditTypeName = dlgCreditTypeName;
-    }
-
-    public CollateralType getCollateralType() {
-        return collateralType;
-    }
-
-    public void setCollateralType(CollateralType collateralType) {
-        this.collateralType = collateralType;
-    }
-
-    public List<CollateralType> getCollateralTypeList() {
-        return collateralTypeList;
-    }
-
-    public void setCollateralTypeList(List<CollateralType> collateralTypeList) {
-        this.collateralTypeList = collateralTypeList;
-    }
-
-    public Collateral getCollateral() {
-        return collateral;
-    }
-
-    public void setCollateral(Collateral collateral) {
-        this.collateral = collateral;
-    }
-
-    public List<Collateral> getCollateralList() {
-        return collateralList;
-    }
-
-    public void setCollateralList(List<Collateral> collateralList) {
-        this.collateralList = collateralList;
-    }
-
-    public BigDecimal getdCollateralAmount() {
-        return dCollateralAmount;
-    }
-
-    public void setdCollateralAmount(BigDecimal dCollateralAmount) {
-        this.dCollateralAmount = dCollateralAmount;
-    }
-
-    public String getdCollateralTypeName() {
-        return dCollateralTypeName;
-    }
-
-    public void setdCollateralTypeName(String dCollateralTypeName) {
-        this.dCollateralTypeName = dCollateralTypeName;
-    }
-
-    public String getProductGroupName() {
-        return productGroupName;
-    }
-
-    public void setProductGroupName(String productGroupName) {
-        this.productGroupName = productGroupName;
-    }
-
-    public BusinessInformation getBusinessInformation() {
-        return businessInformation;
-    }
-
-    public void setBusinessInformation(BusinessInformation businessInformation) {
-        this.businessInformation = businessInformation;
-    }
-
-    public List<BusinessInformation> getBusinessInformationList() {
-        return businessInformationList;
-    }
-
-    public void setBusinessInformationList(List<BusinessInformation> businessInformationList) {
-        this.businessInformationList = businessInformationList;
-    }
-
-    public List<BusinessDescription> getBusinessDescriptionList() {
-        return businessDescriptionList;
-    }
-
-    public void setBusinessDescriptionList(List<BusinessDescription> businessDescriptionList) {
-        this.businessDescriptionList = businessDescriptionList;
-    }
-
-    public List<BusinessGroup> getBusinessGroupList() {
-        return businessGroupList;
-    }
-
-    public void setBusinessGroupList(List<BusinessGroup> businessGroupList) {
-        this.businessGroupList = businessGroupList;
-    }
-
-    public BusinessDescription getBusinessDescription() {
-        return businessDescription;
-    }
-
-    public void setBusinessDescription(BusinessDescription businessDescription) {
-        this.businessDescription = businessDescription;
-    }
-
-    public BusinessGroup getBusinessGroup() {
-        return businessGroup;
-    }
-
-    public void setBusinessGroup(BusinessGroup businessGroup) {
-        this.businessGroup = businessGroup;
-
-    }
-
-    public int getBusinessDescriptionID() {
-        return businessDescriptionID;
-    }
-
-    public void setBusinessDescriptionID(int businessDescriptionID) {
-        this.businessDescriptionID = businessDescriptionID;
-    }
-
-    public int getBusinessGroupID() {
-        return businessGroupID;
-    }
-
-    public void setBusinessGroupID(int businessGroupID) {
-        this.businessGroupID = businessGroupID;
-    }
-
-    public BigDecimal getExistCollateralAmount() {
-        return existCollateralAmount;
-    }
-
-    public void setExistCollateralAmount(BigDecimal existCollateralAmount) {
-        this.existCollateralAmount = existCollateralAmount;
-    }
-
-    public String getExistCollateralTypeName() {
-        return existCollateralTypeName;
-    }
-
-    public void setExistCollateralTypeName(String existCollateralTypeName) {
-        this.existCollateralTypeName = existCollateralTypeName;
-    }
-
-    public String getModeForExist() {
-        return modeForExist;
-    }
-
-    public void setModeForExist(String modeForExist) {
-        this.modeForExist = modeForExist;
-    }
-
-    public int getRowIndex() {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex) {
-        this.rowIndex = rowIndex;
-    }
-
-    public int getIndexEdit() {
-        return indexEdit;
-    }
-
-    public void setIndexEdit(int indexEdit) {
-        this.indexEdit = indexEdit;
-    }
-
-    public int getIndexBusiness() {
-        return indexBusiness;
-    }
-
-    public void setIndexBusiness(int indexBusiness) {
-        this.indexBusiness = indexBusiness;
-    }
-
-    public int getIndexExistEdit() {
-        return indexExistEdit;
-    }
-
-    public void setIndexExistEdit(int indexExistEdit) {
-        this.indexExistEdit = indexExistEdit;
-    }
-
-    public String getModeForCollateral() {
-        return modeForCollateral;
-    }
-
-    public void setModeForCollateral(String modeForCollateral) {
-        this.modeForCollateral = modeForCollateral;
-    }
-
-    public String getModeForBusiness() {
-        return modeForBusiness;
-    }
-
-    public void setModeForBusiness(String modeForBusiness) {
-        this.modeForBusiness = modeForBusiness;
-    }
-
-    public List<Facility> getFacilityList() {
-        return facilityList;
-    }
-
-    public void setFacilityList(List<Facility> facilityList) {
-        this.facilityList = facilityList;
-    }
-
-    public Facility getFacility() {
-        return facility;
-    }
-
-    public void setFacility(Facility facility) {
-        this.facility = facility;
-    }
-
-    public List<CreditType> getCreditTypeList() {
-        return creditTypeList;
-    }
-
-    public void setCreditTypeList(List<CreditType> creditTypeList) {
-        this.creditTypeList = creditTypeList;
-    }
-
-    public CreditType getSelectCreditType() {
-        return selectCreditType;
-    }
-
-    public void setSelectCreditType(CreditType selectCreditType) {
-        this.selectCreditType = selectCreditType;
-    }
-
-    public List<ProductProgram> getProductProgramList() {
-        return productProgramList;
-    }
-
-    public void setProductProgramList(List<ProductProgram> productProgramList) {
-        this.productProgramList = productProgramList;
-    }
-
-    public ProductProgram getSelectProductProgram() {
-        return selectProductProgram;
-    }
-
-    public void setSelectProductProgram(ProductProgram selectProductProgram) {
-        this.selectProductProgram = selectProductProgram;
+    public void setProductGroupList(List<ProductGroup> productGroupList) {
+        this.productGroupList = productGroupList;
     }
 
     public List<PrdGroupToPrdProgram> getPrdGroupToPrdProgramList() {
@@ -800,12 +549,36 @@ public class PrescreenMaker implements Serializable {
         this.prdProgramToCreditTypeList = prdProgramToCreditTypeList;
     }
 
-    public List<ProductGroup> getProductGroupList() {
-        return productGroupList;
+    public List<BusinessGroup> getBusinessGroupList() {
+        return businessGroupList;
     }
 
-    public void setProductGroupList(List<ProductGroup> productGroupList) {
-        this.productGroupList = productGroupList;
+    public void setBusinessGroupList(List<BusinessGroup> businessGroupList) {
+        this.businessGroupList = businessGroupList;
+    }
+
+    public List<BusinessDescription> getBusinessDescriptionList() {
+        return businessDescriptionList;
+    }
+
+    public void setBusinessDescriptionList(List<BusinessDescription> businessDescriptionList) {
+        this.businessDescriptionList = businessDescriptionList;
+    }
+
+    public List<Facility> getFacilityList() {
+        return facilityList;
+    }
+
+    public void setFacilityList(List<Facility> facilityList) {
+        this.facilityList = facilityList;
+    }
+
+    public List<BusinessInformation> getBusinessInformationList() {
+        return businessInformationList;
+    }
+
+    public void setBusinessInformationList(List<BusinessInformation> businessInformationList) {
+        this.businessInformationList = businessInformationList;
     }
 
     public ProductGroup getSelectProductGroup() {
@@ -816,4 +589,11 @@ public class PrescreenMaker implements Serializable {
         this.selectProductGroup = selectProductGroup;
     }
 
+    public Facility getFacility() {
+        return facility;
+    }
+
+    public void setFacility(Facility facility) {
+        this.facility = facility;
+    }
 }
