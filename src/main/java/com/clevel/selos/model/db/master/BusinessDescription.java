@@ -27,6 +27,16 @@ public class BusinessDescription implements Serializable {
     private int ap;
     @Column(name = "inv")
     private int inv;
+    @Column(name = "esr")
+    private String esr;
+    @Column(name = "negative")
+    private String negative;
+    @Column(name = "high_risk")
+    private String highRisk;
+    @Column(name = "suspend")
+    private String suspend;
+    @Column(name = "business_comment")
+    private String businessComment;
     @OneToOne
     @JoinColumn(name="businessgroup_id")
     private BusinessGroup businessGroup;
@@ -116,19 +126,64 @@ public class BusinessDescription implements Serializable {
         this.active = active;
     }
 
+    public String getEsr() {
+        return esr;
+    }
+
+    public void setEsr(String esr) {
+        this.esr = esr;
+    }
+
+    public String getNegative() {
+        return negative;
+    }
+
+    public void setNegative(String negative) {
+        this.negative = negative;
+    }
+
+    public String getHighRisk() {
+        return highRisk;
+    }
+
+    public void setHighRisk(String highRisk) {
+        this.highRisk = highRisk;
+    }
+
+    public String getSuspend() {
+        return suspend;
+    }
+
+    public void setSuspend(String suspend) {
+        this.suspend = suspend;
+    }
+
+    public String getBusinessComment() {
+        return businessComment;
+    }
+
+    public void setBusinessComment(String businessComment) {
+        this.businessComment = businessComment;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("tmbCode", tmbCode).
-                append("incomeFactor", incomeFactor).
-                append("isicCode", isicCode).
-                append("ar", ar).
-                append("ap", ap).
-                append("inv", inv).
-                append("businessGroup", businessGroup).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("tmbCode", tmbCode)
+                .append("incomeFactor", incomeFactor)
+                .append("isicCode", isicCode)
+                .append("ar", ar)
+                .append("ap", ap)
+                .append("inv", inv)
+                .append("esr", esr)
+                .append("negative", negative)
+                .append("highRisk", highRisk)
+                .append("suspend", suspend)
+                .append("businessComment", businessComment)
+                .append("businessGroup", businessGroup)
+                .append("active", active)
+                .toString();
     }
 }
