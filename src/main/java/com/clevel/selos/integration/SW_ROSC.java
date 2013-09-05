@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Integration(Integration.System.SW_ROSC)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
 public @interface SW_ROSC {
 }

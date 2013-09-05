@@ -8,7 +8,6 @@ import java.lang.annotation.Target;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Integration(Integration.System.RM)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
 public @interface RM {
 }
