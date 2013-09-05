@@ -2,7 +2,7 @@ package com.clevel.selos.integration.ncrs.service;
 
 
 import com.clevel.selos.controller.TestNCRS;
-import com.clevel.selos.integration.Integration;
+
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.commands.Command;
 import com.clevel.selos.integration.ncrs.exception.ValidationException;
@@ -43,7 +43,7 @@ public class NCRSService implements Serializable {
         String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
         System.out.println("URL : "+url);
 
-        TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", null);
+        TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", "19000101");
         ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
         name.add(nameModel);
 
