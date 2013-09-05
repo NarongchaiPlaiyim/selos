@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CAService implements Serializable {
+
     @Inject
     @RM
     Logger log;
@@ -42,10 +43,9 @@ public class CAService implements Serializable {
     }
 
     public CustomerAccountModel intiCustomerAction(SearchIndividual searchIndividual) throws Exception {
-//        log.info("============ CustomerAccount");
-//        log.info("dsd");
+        log.info("============ CustomerAccount");
 
-        System.out.println("ssdsssssssssssssssssssssss");
+
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException(validationMsg.get("validation.006"));
         }
@@ -84,7 +84,7 @@ public class CAService implements Serializable {
         if (resSearchCustomerAccount.getHeader().getResCode().equals("0000")) {
             List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
             //checkSearchResult
-            log.debug("accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
+//            log.debug("accountListSize: ", resSearchCustomerAccount.getBody().getAccountList().size());
             if (resSearchCustomerAccount.getBody().getAccountList() != null && resSearchCustomerAccount.getBody().getAccountList().size() > 0) {
                 CustomerAccountListModel customerAccountListModel = null;
 
@@ -112,8 +112,13 @@ public class CAService implements Serializable {
 
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) {
             throw new ValidationException(exceptionMsg.get("exception.1500"));
-        } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) {
-            throw new ValidationException(exceptionMsg.get("exception.1500"));
+        } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
+
+            List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
+            log.info(listModelList.size()+"");
+            customerAccountModel.setAccountBody(listModelList);
+
+
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) {
             throw new ValidationException(exceptionMsg.get("exception.1500"));
         }
