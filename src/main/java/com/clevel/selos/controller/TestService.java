@@ -1,8 +1,9 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
-import com.clevel.selos.integration.corebanking.CaService;
-import com.clevel.selos.integration.corebanking.RmService;
+import com.clevel.selos.integration.RM;
+import com.clevel.selos.integration.corebanking.CAService;
+import com.clevel.selos.integration.corebanking.RMService;
 import com.clevel.selos.model.CAmodel.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.RMmodel.CardTypeView;
@@ -23,14 +24,15 @@ import java.util.List;
 @ManagedBean(name="testrm")
 public class TestService implements Serializable{
     @Inject
-//    @Integration(Integration.System.RM)
+    @RM
     Logger log;
+
     @Inject
     CardTypeDao dao;
 
 //    @Inject
-    RmService rmService;
-    CaService caService;
+    RMService rmService;
+    CAService caService;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -48,8 +50,8 @@ public class TestService implements Serializable{
 
     @PostConstruct
     public void onCreate(){
-//        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-
+        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+        log.debug("TESTLOG");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
@@ -70,7 +72,7 @@ public class TestService implements Serializable{
     ////////////////////////////////////////////////////////   call Service
 
     public void individual() throws Exception {
-        rmService =new RmService();
+        rmService =new RMService();
         IndividualModel individualModel ;
         //callservice
        individualModel = rmService.intiIndividual(searchIndividual);
@@ -101,7 +103,7 @@ public class TestService implements Serializable{
 
 
     public void corporate() throws Exception {
-        rmService =new RmService();
+        rmService =new RMService();
         corporateModel=new CorporateModel();
         corporateModel = rmService.intiCorporate(searchIndividual);
         //showData
@@ -136,7 +138,7 @@ public class TestService implements Serializable{
     }
 
     public void customerAccount() throws Exception {
-        caService =new CaService();
+        caService =new CAService();
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
         customerAccountModel = caService.intiCustomerAction(searchIndividual);

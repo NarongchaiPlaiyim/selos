@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.email;
 
 import com.clevel.selos.exception.EmailException;
-import com.clevel.selos.integration.Integration;
+import com.clevel.selos.integration.Email;
 import com.clevel.selos.system.Application;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public abstract class EmailService implements Serializable {
     @Inject
-    @Integration(Integration.System.EMAIL)
+    @Email
     Logger log;
     @Inject
     Application app;
