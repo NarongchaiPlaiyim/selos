@@ -1,7 +1,6 @@
 package com.clevel.selos.integration.ncrs.service;
 
 
-import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.commands.Command;
 import com.clevel.selos.integration.ncrs.exception.ValidationException;

@@ -7,11 +7,11 @@ import com.clevel.selos.model.RMmodel.IndividualModel;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
 import org.slf4j.Logger;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import java.io.Serializable;
 
-@RM
-public class RMInterfaceImpl implements RMInterface ,Serializable{
+@Default
+public class RMInterfaceImpl implements RMInterface {
     @Inject
     @RM
     Logger log;
@@ -44,6 +44,4 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         customerInfo.setCitizenId(individualModel.getCustId());
         return  customerInfo;
     }
-
-
 }

@@ -5,12 +5,13 @@ import com.clevel.selos.integration.test.RMTest;
 import com.clevel.selos.integration.model.CustomerInfo;
 import org.slf4j.Logger;
 
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Date;
 
-@RMTest
-public class RMInterfaceImplTest implements RMInterface ,Serializable{
+@Alternative
+public class RMInterfaceImplTest implements RMInterface {
     @Inject
     Logger log;
 

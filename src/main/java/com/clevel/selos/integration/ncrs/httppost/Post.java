@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clevel.selos.integration.Integration;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.exception.ValidationException;
 import com.clevel.selos.util.Util;

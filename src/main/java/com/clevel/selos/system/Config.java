@@ -1,7 +1,6 @@
-package com.clevel.selos.integration.test;
+package com.clevel.selos.system;
 
-import com.clevel.selos.integration.Integration;
-
+import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Integration(Integration.System.RM)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.PARAMETER})
-public @interface RMTest {
+public @interface Config {
+    @Nonbinding String name() default "";
 }

@@ -2,14 +2,15 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.dao.system.ConfigDAO;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.model.CustomerInfo;
-import com.clevel.selos.integration.test.RMTest;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.system.Config;
-import com.clevel.selos.system.message.*;
+import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -48,10 +49,6 @@ public class WelcomePage implements Serializable {
     Logger brmsLog;
 
     @Inject
-    ConfigDAO configDAO;
-    List<Config> configList;
-
-    @Inject
     @NormalMessage
     Message normalMsg;
     @Inject
@@ -68,6 +65,10 @@ public class WelcomePage implements Serializable {
     @Inject
     RMInterface rm;
 
+    @Inject
+    @Config(name = "selos.system.name")
+    String system;
+
     private Date now;
 
     public WelcomePage() {
@@ -80,6 +81,7 @@ public class WelcomePage implements Serializable {
         } catch (Exception e) {
             log.error("",e);
         }
+        log.debug("system: {}",system);
     }
 
     @PostConstruct
@@ -109,7 +111,6 @@ public class WelcomePage implements Serializable {
 
     public void reloadConfig() {
         log.debug("reloadConfig.");
-        configList = configDAO.findAll();
     }
 
     public void onActionRM() {
@@ -145,14 +146,6 @@ public class WelcomePage implements Serializable {
 
     public void setNow(Date now) {
         this.now = now;
-    }
-
-    public List<Config> getConfigList() {
-        return configList;
-    }
-
-    public void setConfigList(List<Config> configList) {
-        this.configList = configList;
     }
 
     @Inject
