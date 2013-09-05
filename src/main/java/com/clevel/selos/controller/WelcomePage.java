@@ -88,8 +88,8 @@ public class WelcomePage implements Serializable {
     public void onCreation() {
         log.debug("onCreation.");
         now = new Date();
-        reloadConfig();
-        onLoadDescription();
+//        reloadConfig();
+//        onLoadDescription();
         normalStr = normalMsg.get("app.name");
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
