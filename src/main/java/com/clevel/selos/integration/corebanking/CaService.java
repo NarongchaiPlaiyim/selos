@@ -45,6 +45,7 @@ public class CAService implements Serializable {
 //        log.info("============ CustomerAccount");
 //        log.info("dsd");
 
+        System.out.println("ssd");
         if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
             throw new ValidationException(validationMsg.get("validation.006"));
         }
