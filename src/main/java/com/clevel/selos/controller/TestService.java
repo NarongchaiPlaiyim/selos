@@ -2,7 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.integration.RM;
-import com.clevel.selos.integration.corebanking.CAService;
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.corebanking.RMInterfaceImpl;
 import com.clevel.selos.integration.corebanking.RMService;
 import com.clevel.selos.model.CAmodel.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
@@ -31,9 +32,7 @@ public class TestService implements Serializable{
     CardTypeDao dao;
 
     @Inject
-    RMService rmService;
-    @Inject
-    CAService caService;
+    RMInterfaceImpl rmInterfaceImpl;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -52,7 +51,6 @@ public class TestService implements Serializable{
     @PostConstruct
     public void onCreate(){
         log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-        log.debug("TESTLOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
@@ -74,9 +72,10 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        IndividualModel individualModel ;
+        IndividualModel individualModel  ;
         //callservice
-       individualModel = rmService.intiIndividual(searchIndividual);
+       individualModel = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
+                         searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
        StringBuffer result=new StringBuffer();
         result.append("==================== Individual Data Demo ===================");
@@ -106,7 +105,8 @@ public class TestService implements Serializable{
     public void corporate() throws Exception {
 
         corporateModel=new CorporateModel();
-        corporateModel = rmService.intiCorporate(searchIndividual);
+        corporateModel = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(),searchIndividual.getType(),
+                searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== Corporate Data Demo ===================");
@@ -142,7 +142,8 @@ public class TestService implements Serializable{
 
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = caService.intiCustomerAction(searchIndividual);
+        customerAccountModel = rmInterfaceImpl.getCustomerAccount(searchIndividual.getReqId(),searchIndividual.getType(),
+                searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");

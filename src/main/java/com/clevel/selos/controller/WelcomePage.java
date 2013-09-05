@@ -75,13 +75,13 @@ public class WelcomePage implements Serializable {
     }
 
     public void testRM() {
-        try {
-            CustomerInfo customerInfo = rm.getCustomerInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
-            log.debug("{}",customerInfo);
-        } catch (Exception e) {
-            log.error("",e);
-        }
-        log.debug("system: {}",system);
+//        try {
+//            CustomerInfo customerInfo = rm.getIndividualInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
+//            log.debug("{}",customerInfo);
+//        } catch (Exception e) {
+//            log.error("",e);
+//        }
+//        log.debug("system: {}",system);
     }
 
     @PostConstruct
