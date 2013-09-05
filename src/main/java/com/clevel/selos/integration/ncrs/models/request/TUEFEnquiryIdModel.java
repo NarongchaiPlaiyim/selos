@@ -1,8 +1,10 @@
 package com.clevel.selos.integration.ncrs.models.request;
 
-import com.clevel.selos.integration.ncrs.exception.ValidationException;
+import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.util.ValidationUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @XStreamAlias("id")
 public class TUEFEnquiryIdModel {
@@ -44,5 +46,13 @@ public class TUEFEnquiryIdModel {
         if(!ValidationUtil.isNull(issuecountry) && ValidationUtil.isGreaterThan(2, issuecountry))throw new ValidationException("Length of issuecountry is more than 2");
 
     }
-    
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("idtype", idtype)
+                .append("idnumber", idnumber)
+                .append("issuecountry", issuecountry)
+                .toString();
+    }
 }

@@ -27,8 +27,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     }
     @PostConstruct
-    public void onRMinterface(){
-        log.info(" RMInterfaceImpl()");
+    public void onCreation(){
+        log.info("=== RMInterfaceImpl()");
     }
 
     @Override

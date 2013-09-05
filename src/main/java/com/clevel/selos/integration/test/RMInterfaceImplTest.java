@@ -8,9 +8,10 @@ import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import java.io.Serializable;
 
 @Alternative
-public class RMInterfaceImplTest implements RMInterface {
+public class RMInterfaceImplTest implements RMInterface ,Serializable {
     @Inject
     Logger log;
 
@@ -20,7 +21,7 @@ public class RMInterfaceImplTest implements RMInterface {
 
 
     @Override
-    public IndividualModel getIndividualInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+    public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

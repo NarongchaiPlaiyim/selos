@@ -5,15 +5,15 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XStreamAlias("ncrsrequest")
-public class Ncrsrequest {
-    
+public class NCRSRequest {
+
     @XStreamAlias("header")
     private HeaderModel header;
-    
+
     @XStreamAlias("body")
     private BodyModel body;
 
-    public Ncrsrequest(HeaderModel header, BodyModel body){
+    public NCRSRequest(HeaderModel header, BodyModel body){
         this.header =  header;
         this.body = body;
     }
