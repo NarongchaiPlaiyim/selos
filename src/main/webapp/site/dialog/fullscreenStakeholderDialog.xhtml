@@ -1,0 +1,40 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="stakeholderDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title">Stakeholder Name :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.stakeholderName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder Contact :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.stakeholderContact}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="btnSaveStakeholder"
+                            value="Save"
+                            styleClass="small"
+                            action="#{businessInfoDetail.onSaveStakeholder()}"
+                            update=":supplierTable,:buyerTable"
+                            oncomplete="stakeholderDlg.hide()"
+                     />
+
+
+                    <p:commandButton value="Cancel" styleClass="small" onclick="stakeholderDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+
+</ui:composition>
