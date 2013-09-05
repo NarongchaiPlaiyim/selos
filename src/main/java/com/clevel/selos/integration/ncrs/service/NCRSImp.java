@@ -28,52 +28,52 @@ public class NCRSImp implements NCRS {
 
     @Override
     public Ncrsresponse requestOnline(NCRSModel ncrsModel) throws Exception {
-        System.out.println("=========================================requestOnline()");
+//        System.out.println("=========================================requestOnline()");
         Util util = new Util();
-        //log.debug("requestOnline.(NCRSModel : {} )",ncrsModel.toString());
+        log.debug("requestOnline.(NCRSModel : {} )",ncrsModel.toString());
 
-        System.out.println("=========================================requestOnline() Model : "+ncrsModel.toString());
+//        System.out.println("=========================================requestOnline() Model : "+ncrsModel.toString());
 
         if(null!=ncrsModel){
-            System.out.println("=========================================requestOnline() NCRSModel is not null");
+//            System.out.println("=========================================requestOnline() NCRSModel is not null");
 
             String id = ncrsModel.getId();
-            System.out.println("=========================================requestOnline() ID : "+id);
-//            log.debug("requestOnline. (NCRSModel : id {})",ncrsModel.getId());
+//            System.out.println("=========================================requestOnline() ID : "+id);
+            log.debug("requestOnline. (NCRSModel : id {})",ncrsModel.getId());
 
             String pass = ncrsModel.getPass();
-            System.out.println("=========================================requestOnline() Pass : "+pass);
-//            log.debug("requestOnline. (NCRSModel : pass {})",ncrsModel.getPass());
+//            System.out.println("=========================================requestOnline() Pass : "+pass);
+            log.debug("requestOnline. (NCRSModel : pass {})",ncrsModel.getPass());
 
             String memberref = ncrsModel.getMemberref();
-            System.out.println("=========================================requestOnline() Memberfef : "+memberref);
-//            log.debug("requestOnline. (NCRSModel : memberref {})",ncrsModel.getMemberref());
+//            System.out.println("=========================================requestOnline() Memberfef : "+memberref);
+            log.debug("requestOnline. (NCRSModel : memberref {})",ncrsModel.getMemberref());
 
             String enqpurpose = ncrsModel.getEnqpurpose();
-            System.out.println("=========================================requestOnline() Enqpurpose : "+enqpurpose);
-//            log.debug("requestOnline. (NCRSModel : enqpurpose {})",ncrsModel.getEnqpurpose());
+//            System.out.println("=========================================requestOnline() Enqpurpose : "+enqpurpose);
+            log.debug("requestOnline. (NCRSModel : enqpurpose {})",ncrsModel.getEnqpurpose());
 
             String enqamount = ncrsModel.getEnqamount();
-            System.out.println("=========================================requestOnline() Enqamount : "+enqamount);
-//            log.debug("requestOnline. (NCRSModel : enqamount {})",ncrsModel.getEnqamount());
+//            System.out.println("=========================================requestOnline() Enqamount : "+enqamount);
+            log.debug("requestOnline. (NCRSModel : enqamount {})",ncrsModel.getEnqamount());
 
             String consent = ncrsModel.getConsent();
-            System.out.println("=========================================requestOnline() Consent : "+consent);
-//            log.debug("requestOnline. (NCRSModel : consent {})",ncrsModel.getConsent());
+//            System.out.println("=========================================requestOnline() Consent : "+consent);
+            log.debug("requestOnline. (NCRSModel : consent {})",ncrsModel.getConsent());
 
             String disputeenquiry = ncrsModel.getDisputeenquiry();
-            System.out.println("=========================================requestOnline() Disputeenquiry : "+disputeenquiry);
-//            log.debug("requestOnline. (NCRSModel : disputeenquiry {})",ncrsModel.getDisputeenquiry());
+//            System.out.println("=========================================requestOnline() Disputeenquiry : "+disputeenquiry);
+            log.debug("requestOnline. (NCRSModel : disputeenquiry {})",ncrsModel.getDisputeenquiry());
 
             ArrayList<TUEFEnquiryNameModel> nameList = ncrsModel.getNameList();
-//            log.debug("requestOnline. (NCRSModel : nameList {})",ncrsModel.getNameList().size());
+            log.debug("requestOnline. (NCRSModel : nameList {})",ncrsModel.getNameList().size());
 
             ArrayList<TUEFEnquiryIdModel> idList = ncrsModel.getIdList();
-//            log.debug("requestOnline. (NCRSModel : idList {})",ncrsModel.getIdList().size());
+            log.debug("requestOnline. (NCRSModel : idList {})",ncrsModel.getIdList().size());
 
             String url = ncrsModel.getUrl();
-            System.out.println("=========================================requestOnline() URL : "+url);
-//            log.debug("requestOnline. (NCRSModel : {})",ncrsModel.toString());
+//            System.out.println("=========================================requestOnline() URL : "+url);
+            log.debug("requestOnline. (NCRSModel : {})",ncrsModel.toString());
 
 
             if(util.isNotNullString(id)&&util.isNotNullString(pass))throw new ValidationException("The NCRSModel is null");
@@ -81,12 +81,12 @@ public class NCRSImp implements NCRS {
 
 
 
-            if(util.isNotNullString(id)&&util.isNotNullString(pass)){
+            /*if(util.isNotNullString(id)&&util.isNotNullString(pass)){
                 if(util.isNotNullString(memberref)&&util.checkLength(memberref,25)&&util.isNotNullString(enqpurpose)&&util.checkLength(enqpurpose,2)){
                     if (!util.isNotNullString(enqamount)||util.checkLength(enqamount,9)){
                        if(util.isNotNullString(consent)&&util.checkLength(consent,1)){
                            if(util.checkSize(ncrsModel.getIdList(),1)&&util.checkSize(ncrsModel.getNameList(),1)){
-                               if(util.isNotNullString(url)){
+                               if(util.isNotNullString(url)){    */
 
                                    String xml = null;
                                    String result = null;
@@ -99,7 +99,7 @@ public class NCRSImp implements NCRS {
                                    xStream = new XStream();
                                    xStream.processAnnotations(Ncrsrequest.class);
                                    command = new Command();
-//                                   log.debug("requestOnline. (Commands : {})",command.CPUTOCPU_ENQUIRY);
+                                   log.debug("requestOnline. (Commands : {})",command.CPUTOCPU_ENQUIRY);
                                    ncrsrequest = new Ncrsrequest(
                                            new HeaderModel(id, pass, command.CPUTOCPU_ENQUIRY),
                                            new BodyModel(
@@ -109,25 +109,25 @@ public class NCRSImp implements NCRS {
                                                            idList)));
                                    xml = xStream.toXML(ncrsrequest);
 
-                                   System.out.println("=========================================requestOnline() XML : "+xml);
+//                                   System.out.println("=========================================requestOnline() XML : "+xml);
 
-//                                   log.debug("requestOnline. (Request : {})",xml);
+                                   log.debug("requestOnline. (Request : {})",xml);
                                    post =  Post.getInstance();
                                    result = post.sendPost(xml,url);
-                                   System.out.println("=========================================requestOnline() Result : "+result);
+//                                   System.out.println("=========================================requestOnline() Result : "+result);
 
 
                                    Ncrsresponse ncrsresponse = null;
                                    if(!"".equals(result)){
-//                                   log.debug("requestOnline. (Response : {})",result);
+                                   log.debug("requestOnline. (Response : {})",result);
                                        xStream.processAnnotations(Ncrsresponse.class);
                                        ncrsresponse = (Ncrsresponse)xStream.fromXML(result);
                                        return ncrsresponse;
                                    }else{
-//                                   log.debug("requestOnline. (Response : {})",result);
+                                   log.warn("requestOnline. (Response : {})",result);
                                        return ncrsresponse;
                                    }
-                               }else{
+                               /*}else{
                                    throw new ValidationException("NCRSModel : url is null");
                                }
                            }else{
@@ -144,7 +144,7 @@ public class NCRSImp implements NCRS {
                 }
             }else{
                 throw new ValidationException("NCRSModel : ID is null or Pass is null");
-            }
+            } */
         }else {
             throw new ValidationException("The NCRSModel is null");
         }

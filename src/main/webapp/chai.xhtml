@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>WelcomeWelcomeWelcomeWelcomeWelcome</title>
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
+    </h:head>
+
+    <h:body>
+
+        <p:panel id="top" header="Calculate Risk Level Request Message">
+            <h:form id="form">
+
+                <p:panel id="all" header="Header Section">
+
+                    <h:panelGrid id="Header" columns="3">
+
+                        <h:outputText value="reqId"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="reqId" value="#{calculateRiskLevelPage.reqId}"/>
+
+                        <h:outputText value="productCode"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="productCode" value="#{calculateRiskLevelPage.productCode}"/>
+
+                        <h:outputText value="acronym"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="acronym" value="#{calculateRiskLevelPage.acronym}"/>
+
+                        <h:outputText value="selectorFlag"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="selectorFlag" value="#{calculateRiskLevelPage.selectorFlag}"/>
+
+                    </h:panelGrid>
+
+                    <h:panelGrid id="Body" columns="3">
+
+                        <h:outputText value="firstName"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="firstName" value="#{calculateRiskLevelPage.firstName}"/>
+
+                        <h:outputText value="lastName"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="lastName" value="#{calculateRiskLevelPage.lastName}"/>
+
+                        <h:outputText value="cardId"/>
+                        <h:outputText value=":"/>
+                        <p:inputText id="cardId" value="#{calculateRiskLevelPage.cardId}"/>
+
+                    </h:panelGrid>
+
+                    <h:panelGrid id="Result" columns="3">
+                        <h:outputText value="Result"/>
+                        <h:outputText value=":"/>
+                        <p:inputTextarea id="resultTextarea" rows="6" cols="33" value="#{calculateRiskLevelPage.result}" />
+                    </h:panelGrid>
+
+                    <h:panelGrid id="submit" columns="2">
+
+                        <p:commandButton id="Submit" value="Submit" update="@form" action="#{calculateRiskLevelPage.onSubmit}" />
+                        <!--<h:commandButton value="Reset" type="reset" />-->
+                        <p:commandButton value="Reset"  type="reset" />
+                        <!--update="all"-->
+
+                        <h:outputText id="outPut" value=""/>
+
+                    </h:panelGrid>
+                </p:panel>
+
+
+
+            </h:form>
+            <h:form id="NCB">
+                <p:panel id="HeaderNCB" header="NCB">
+                    <h:panelGrid id="BodyHeaderNCB" columns="2">
+
+                        <h:outputText value="URL"/>
+                        <p:inputText id="NCBfirstName" value="#{TestNCRS.url}"/>
+
+                        <h:outputText value="id"/>
+                        <p:inputText id="NCBlastName" value="#{TestNCRS.id}"/>
+
+                        <h:outputText value="cardId"/>
+                        <p:inputText id="pass" value="#{TestNCRS.pass}"/>
+
+
+                        <h:outputText value="memberref"/>
+                        <p:inputText id="NCBmemberref" value="#{TestNCRS.memberref}"/>
+
+                        <h:outputText value="enqpurpose"/>
+                        <p:inputText id="NCBenqpurpose" value="#{TestNCRS.enqpurpose}"/>
+
+                        <h:outputText value="enqamount"/>
+                        <p:inputText id="NCBenqamount" value="#{TestNCRS.enqamount}"/>
+
+                        <h:outputText value="consent"/>
+                        <p:inputText id="NCBconsent" value="#{TestNCRS.consent}"/>
+
+                        <h:outputText value="disputeenquiry"/>
+                        <p:inputText id="NCBdisputeenquiry" value="#{TestNCRS.disputeenquiry}"/>
+
+                        <p:commandButton id="SubmitBodyHeaderNCB" value="Submit" update="@form" action="#{TestNCRS.onClick}" />
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+        </p:panel>
+
+    </h:body>
+</f:view>
+</html>
