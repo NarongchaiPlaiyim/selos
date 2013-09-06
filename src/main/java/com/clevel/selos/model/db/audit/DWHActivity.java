@@ -4,17 +4,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "adt_ext_rm")
-public class RMAudit implements Serializable {
+@Table(name = "adt_dwh_activity")
+public class DWHActivity {
     @Id
-    @SequenceGenerator(name="SEQ_ADT_EXT_RM_ID", sequenceName="SEQ_ADT_EXT_RM_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_EXT_RM_ID")
+    @SequenceGenerator(name="SEQ_ADT_DWH_ID", sequenceName="SEQ_ADT_DWH_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_DWH_ID")
     private long id;
-    @Column(name="requester", nullable=false)   //user id
+    @Column(name="requester", nullable=false)
     private String requester;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="request_time", nullable=false)
@@ -23,13 +22,13 @@ public class RMAudit implements Serializable {
     @Column(name="response_time")
     private Date responseTime;
     @Column(name = "link_key")
-    private String linkKey;   // user + id
+    private String linkKey;
     @Column(name = "result",length = 20)
-    private String result;     //resDesc  sucsess fail
-    @Column(name = "result_detail",length = 2000)
-    private String resultDetail;   //exception
+    private String result;
+    @Column(name = "result_detail",length = 200)
+    private String resultDetail;
 
-    public RMAudit() {
+    public DWHActivity() {
     }
 
     public long getId() {

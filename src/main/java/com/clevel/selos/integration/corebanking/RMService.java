@@ -2,13 +2,14 @@ package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
-import com.clevel.selos.model.CAmodel.CustomerAccountListModel;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountListModel;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.ValidationUtil;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
@@ -61,32 +62,39 @@ public class RMService implements Serializable {
     public RMService() {
     }
 
-    public IndividualModel intiIndividual(SearchIndividual searchIndividual) throws Exception {
-        //Validate
-        if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
-            throw new ValidationException("RegisterID Invalid");
-
+    public IndividualModel IndividualService(SearchIndividual searchIndividual) throws Exception {
+        log.debug("IndividualService() =====================");
+        //Validate ReqId
+        if (!ValidationUtil.isValueInRange(1,5,searchIndividual.getReqId().length())) {
+            throw new ValidationException(validationMsg.get("validation.010"));
         }
-        if (searchIndividual.getCustType().length() != 1) {
-            throw new ValidationException("CustType Invalid");
+        //Validate CustType
+        if (!ValidationUtil.isEqualRange(1,searchIndividual.getCustType().length())) {
+            throw new ValidationException(validationMsg.get("validation.011"));
         }
-        if (searchIndividual.getType().length() != 2) {
-            throw new ValidationException("Type Invalid");
+        //Validate Type
+        if (!ValidationUtil.isEqualRange(2,searchIndividual.getType().length())) {
+            throw new ValidationException(validationMsg.get("validation.012"));
         }
-        if (searchIndividual.getCustId().length() > 25) {
-            throw new ValidationException("CustomerId Invalid");
+        //Validate CustId
+        if (!ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+            throw new ValidationException(validationMsg.get("validation.013"));
         }
-        if (searchIndividual.getCustNbr().length() > 14) {
-            throw new ValidationException("CustNbr Invalid");
+        //Validate CustNbr
+        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+            throw new ValidationException(validationMsg.get("validation.014"));
         }
-        if (searchIndividual.getCustName().length() > 40) {
-            throw new ValidationException("CustName Invalid");
+        //Validate CustName
+        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+            throw new ValidationException(validationMsg.get("validation.015"));
         }
-        if (searchIndividual.getCustSurname().length() > 40) {
-            throw new ValidationException("CustSurname Invalid");
+        //Validate CustSurname
+        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustSurname().length())) {
+            throw new ValidationException(validationMsg.get("validation.016"));
         }
-        if (searchIndividual.getRadSelectSearch().length() < 1 || searchIndividual.getRadSelectSearch().length() > 10) {
-            throw new ValidationException("RadSelectSearch Invalid");
+        //Validate RadSelectSearch
+        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+            throw new ValidationException(validationMsg.get("validation.017"));
         }
 
         Header header = new Header();
@@ -147,29 +155,36 @@ public class RMService implements Serializable {
         return individualModel;
     }
 
-    public CorporateModel intiCorporate(SearchIndividual searchIndividual) throws Exception {
-        log.debug("requestId: {}", searchIndividual.getReqId());
+    public CorporateModel CorporateService(SearchIndividual searchIndividual) throws Exception {
 
-        if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
-            throw new ValidationException("ReID Invalid");
+        log.debug("CorporateService() =====================");
+        //Validate ReqId
+        if (!ValidationUtil.isValueInRange(1,5,searchIndividual.getReqId().length())) {
+            throw new ValidationException(validationMsg.get("validation.010"));
         }
-        if (searchIndividual.getCustType().length() != 1) {
-            throw new ValidationException("CustType Invalid");
+        //Validate CustType
+        if (!ValidationUtil.isEqualRange(1,searchIndividual.getCustType().length())) {
+            throw new ValidationException(validationMsg.get("validation.011"));
         }
-        if (searchIndividual.getType().length() != 2) {
-            throw new ValidationException("Type Invalid");
+        //Validate Type
+        if (!ValidationUtil.isEqualRange(2,searchIndividual.getType().length())) {
+            throw new ValidationException(validationMsg.get("validation.012"));
         }
-        if (searchIndividual.getCustId().length() > 25) {
-            throw new ValidationException("CustId Invalid");
+        //Validate CustId
+        if (!ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+            throw new ValidationException(validationMsg.get("validation.013"));
         }
-        if (searchIndividual.getCustNbr().length() > 14) {
-            throw new ValidationException("CustNbr Invalid");
+        //Validate CustNbr
+        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+            throw new ValidationException(validationMsg.get("validation.014"));
         }
-        if (searchIndividual.getCustName().length() > 40) {
-            throw new ValidationException("CustName Invalid");
+        //Validate CustName
+        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+            throw new ValidationException(validationMsg.get("validation.015"));
         }
-        if (searchIndividual.getRadSelectSearch().length() < 1 || searchIndividual.getRadSelectSearch().length() > 10) {
-            throw new ValidationException("RadSelectSearch Invalid");
+        //Validate RadSelectSearch
+        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+            throw new ValidationException(validationMsg.get("validation.017"));
         }
 
         com.tmb.sme.data.requestsearchcorporatecustomer.Header header = new com.tmb.sme.data.requestsearchcorporatecustomer.Header();
@@ -233,20 +248,36 @@ public class RMService implements Serializable {
         return corporateModel;
     }
 
-    public CustomerAccountModel intiCustomerAccount(SearchIndividual searchIndividual) throws Exception {
-        log.info("============ CustomerAccount");
+    public CustomerAccountModel CustomerAccountService(SearchIndividual searchIndividual) throws Exception {
+        log.debug("CustomerAccountService() =====================");
 
-
-        if (searchIndividual.getReqId().length() < 1 || searchIndividual.getReqId().length() > 50) {
-            throw new ValidationException(validationMsg.get("validation.006"));
+        //Validate ReqId
+        if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
+            throw new ValidationException(validationMsg.get("validation.010"));
         }
-
-        if (searchIndividual.getCustNbr().length() > 14) {
-            throw new ValidationException(validationMsg.get("validation.006"));
+//        //Validate Acronym
+//        if (!ValidationUtil.isValueInRange(1,20,searchIndividual.getReqId().length())) {
+//            throw new ValidationException(validationMsg.get("validation.014"));
+//        }
+//        //Validate ProductCode
+//        if (!ValidationUtil.isValueInRange(1,8,searchIndividual.getReqId().length())) {
+//            throw new ValidationException(validationMsg.get("validation.014"));
+//        }
+//        //Validate ServerURL
+//        if (!ValidationUtil.isGreaterThan(100,searchIndividual.getCustNbr().length())) {
+//            throw new ValidationException(validationMsg.get("validation.014"));
+//        }
+//        //Validate SessionId
+//        if (!ValidationUtil.isGreaterThan(100,searchIndividual.getCustNbr().length())) {
+//            throw new ValidationException(validationMsg.get("validation.014"));
+//        }
+        //Validate CustNbr
+        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+            throw new ValidationException(validationMsg.get("validation.014"));
         }
-
-        if (searchIndividual.getRadSelectSearch().length() < 1 || searchIndividual.getRadSelectSearch().length() > 10) {
-            throw new ValidationException(validationMsg.get("validation.006"));
+        //Validate RadSelectSearch
+        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+            throw new ValidationException(validationMsg.get("validation.017"));
         }
 
         com.tmb.common.data.requestsearchcustomeraccount.Header header = new com.tmb.common.data.requestsearchcustomeraccount.Header();
@@ -318,8 +349,8 @@ public class RMService implements Serializable {
 
     // Services
     private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
+        log.debug("callServiceIndividual() ====================");
         ResSearchIndividualCustomer resSearchIndividualCustomer = null;
-
         URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
@@ -333,8 +364,8 @@ public class RMService implements Serializable {
     }
 
     private ResSearchCorporateCustomer callServiceCorporate(ReqSearchCorporateCustomer reqSearch) throws Exception {
+        log.debug("callServiceCorporate() ====================");
         ResSearchCorporateCustomer resSearchCorporateCustomer = null;
-
         URL url = this.getClass().getResource("/com/tmb/EAISearchCorporateCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
@@ -347,8 +378,8 @@ public class RMService implements Serializable {
         return resSearchCorporateCustomer;
     }
     private ResSearchCustomerAccount callServiceCustomerAction(ReqSearchCustomerAccount reqSearch) throws Exception {
+        log.debug("callServiceCustomerAction() ====================");
         ResSearchCustomerAccount resSearchCustomerAccount = null;
-
         URL url = this.getClass().getResource("/com/tmb/EAISearchCustomerAccount.wsdl");
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);

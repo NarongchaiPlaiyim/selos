@@ -1,5 +1,8 @@
 package com.clevel.selos.model.RMmodel;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 public class SearchIndividual implements Serializable {
@@ -74,5 +77,19 @@ public class SearchIndividual implements Serializable {
 
     public void setRadSelectSearch(String radSelectSearch) {
         this.radSelectSearch = radSelectSearch;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqId", reqId)
+                .append("custType", custType)
+                .append("type", type)
+                .append("custId", custId)
+                .append("custNbr", custNbr)
+                .append("custName", custName)
+                .append("custSurname", custSurname)
+                .append("radSelectSearch", radSelectSearch)
+                .toString();
     }
 }

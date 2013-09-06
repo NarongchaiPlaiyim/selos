@@ -19,6 +19,9 @@ public class ValidationUtil {
     public static boolean isLessThan(int min,int value) {
         return  value < min;
     }
+    public static boolean isEqualRange(int min,int value) {
+        return  value == min;
+    }
 
 
     //for NCB
