@@ -10,11 +10,12 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class LogProducer {
     private static final String LOGGER_NAME_RM = "RM";
     private static final String LOGGER_NAME_NCB = "NCB";
-    private static final String LOGGER_NAME_NCBI = "NCBI";
     private static final String LOGGER_NAME_DWH = "DWH";
     private static final String LOGGER_NAME_EMAIL = "EMAIL";
-    private static final String LOGGER_NAME_SW_ROSC = "SW_ROSC";
-    private static final String LOGGER_NAME_BRMS = "SW_BRMS";
+    private static final String LOGGER_NAME_SAFEWATCH = "SAFEWATCH";
+    private static final String LOGGER_NAME_BRMS = "BRMS";
+    private static final String LOGGER_NAME_BPM = "BPM";
+    private static final String LOGGER_NAME_ECM = "ECM";
 
     @Produces
     Logger createLogger(InjectionPoint injectionPoint) {
@@ -34,12 +35,6 @@ public class LogProducer {
     }
 
     @Produces
-    @NCBI
-    Logger createNCBILogger() {
-        return LoggerFactory.getLogger(LOGGER_NAME_NCBI);
-    }
-
-    @Produces
     @DWH
     Logger createDWHLogger() {
         return LoggerFactory.getLogger(LOGGER_NAME_DWH);
@@ -52,14 +47,26 @@ public class LogProducer {
     }
 
     @Produces
-    @SW_ROSC
+    @SafeWatch
     Logger createSWROSCLogger() {
-        return LoggerFactory.getLogger(LOGGER_NAME_SW_ROSC);
+        return LoggerFactory.getLogger(LOGGER_NAME_SAFEWATCH);
     }
 
     @Produces
     @BRMS
     Logger createBRMSLogger() {
         return LoggerFactory.getLogger(LOGGER_NAME_BRMS);
+    }
+
+    @Produces
+    @BPM
+    Logger createBPMLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_BPM);
+    }
+
+    @Produces
+    @ECM
+    Logger createECMLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_ECM);
     }
 }

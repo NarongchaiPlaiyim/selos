@@ -1,7 +1,9 @@
-package com.clevel.selos.model.CAmodel;
+package com.clevel.selos.model.RMmodel;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -50,4 +52,13 @@ public class CustomerAccountModel implements Serializable {
         this.accountBody = accountBody;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqId", reqId)
+                .append("resCode", resCode)
+                .append("resDesc", resDesc)
+                .append("accountBody", accountBody)
+                .toString();
+    }
 }
