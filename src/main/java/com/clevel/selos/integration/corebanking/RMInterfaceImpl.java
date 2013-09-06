@@ -28,19 +28,20 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
     @PostConstruct
     public void onCreation(){
-        log.info("=== RMInterfaceImpl()");
+
     }
 
     @Override
     public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
-        log.debug("getIndividualInfo() =====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("P");
         searchIndividual.setType("CI");
         searchIndividual.setCustId(custId);
         searchIndividual.setRadSelectSearch("card");
+        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {} ",searchIndividual.toString());
 
         IndividualModel individualModel = rmService.IndividualService(searchIndividual);
         return individualModel;
@@ -49,27 +50,27 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CorporateModel getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
-        log.debug("getCorporateInfo() =====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  getCorporateInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("C");
         searchIndividual.setType("CI");
         searchIndividual.setCustId(custId);
         searchIndividual.setRadSelectSearch("card");
-
+        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.CorporateService(searchIndividual);
         return corporateModel;
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccount(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
 
-        log.debug("getCustomerAccount() =====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  getCustomerAccountInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustNbr(custNbr);
         searchIndividual.setRadSelectSearch("code");
-
+        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
         CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchIndividual);
 
         return  customerAccountModel;

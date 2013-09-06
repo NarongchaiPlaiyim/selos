@@ -15,6 +15,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Alternative;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -61,6 +62,7 @@ public class WelcomePage implements Serializable {
     String exceptionStr;
 
     @Inject
+    @Alternative
     RMInterface rm;
     @Inject
     BRMSInterface brms;
