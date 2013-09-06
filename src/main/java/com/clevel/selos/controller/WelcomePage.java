@@ -34,10 +34,7 @@ public class WelcomePage implements Serializable {
     @NCB
     Logger ncbLog;
     @Inject
-    @NCBI
-    Logger ncbiLog;
-    @Inject
-    @SW_ROSC
+    @SafeWatch
     Logger swLog;
     @Inject
     @Email
@@ -132,10 +129,6 @@ public class WelcomePage implements Serializable {
 
     public void onActionNCB() {
         ncbLog.debug("test NCB log. ({})",new Date());
-    }
-
-    public void onActionNCBI() {
-        ncbiLog.debug("test NCBI log. ({})",new Date());
     }
 
     public void onActionSW() {
