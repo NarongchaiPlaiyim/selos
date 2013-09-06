@@ -1,25 +1,26 @@
 package com.clevel.selos.integration.ncrs.models.request;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.ncrs.service.Validation;
 import com.clevel.selos.util.ValidationUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @XStreamAlias("name")
-public class TUEFEnquiryNameModel {
+public class TUEFEnquiryNameModel{
     
     @XStreamAlias("familyname")
-    private String familyname;//50
+    private String familyname;
     
     @XStreamAlias("firstname")
-    private String firstname;//30
+    private String firstname;
     
     @XStreamAlias("middlename")
-    private String middlename;//26
+    private String middlename;
     
     @XStreamAlias("dateofbirth")
-    private String dateofbirth;//8
+    private String dateofbirth;
 
     public TUEFEnquiryNameModel(String familyname, String firstname, String dateofbirth) {
         this.familyname = familyname;
