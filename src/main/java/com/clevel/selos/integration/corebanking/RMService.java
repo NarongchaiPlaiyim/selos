@@ -396,8 +396,8 @@ public class RMService implements Serializable {
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
         EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                individualAddress);
-                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
+                individualAddress);
+//                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
 
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceIndividual() END");
@@ -412,8 +412,8 @@ public class RMService implements Serializable {
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                corporateAddress);
-        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
+                corporateAddress);
+//        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;

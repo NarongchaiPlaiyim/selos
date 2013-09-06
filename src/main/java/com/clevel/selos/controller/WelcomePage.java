@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.Config;
@@ -62,7 +63,6 @@ public class WelcomePage implements Serializable {
     String exceptionStr;
 
     @Inject
-    @Alternative
     RMInterface rm;
     @Inject
     BRMSInterface brms;
@@ -78,12 +78,12 @@ public class WelcomePage implements Serializable {
 
     public void testRM() {
 //        try {
-//            CustomerInfo customerInfo = rm.getIndividualInfo("101","CI","3100300390029", RMInterface.CustomerType.INDIVIDUAL, RMInterface.DocumentType.CITIZEN_ID);
+//            CustomerInfo customerInfo = rm.getIndividualInfo("101","CI","3100300390029", RMInterface.DocumentType.CITIZEN_ID);
 //            log.debug("{}",customerInfo);
 //        } catch (Exception e) {
 //            log.error("",e);
 //        }
-//        log.debug("system: {}",system);
+        log.debug("system: {}",system);
     }
 
     public void testBRMS() {
