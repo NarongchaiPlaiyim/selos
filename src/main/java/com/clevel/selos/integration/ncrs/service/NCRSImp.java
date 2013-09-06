@@ -8,6 +8,8 @@ import com.clevel.selos.integration.ncrs.models.request.*;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 
 
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.ValidationMessage;
 import com.thoughtworks.xstream.XStream;
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -23,13 +25,17 @@ public class NCRSImp implements NCRS, Serializable{
     @Inject
     Post post;
 
-    //Config
-    private static String id = "SLOSTEST";
-    private static String pass = "SLOSTEST12";
-    private static String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+    @Inject
+    @ValidationMessage
+    Message message;
 
-    public final String CPUTOCPU_ENQUIRY = "BB01001";
-    public final String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
+    //Config
+    private String id = "SLOSTEST";
+    private String pass = "SLOSTEST12";
+    private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+
+    private final String CPUTOCPU_ENQUIRY = "BB01001";
+    private final String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
 
     @Inject
     public NCRSImp() {
@@ -37,20 +43,19 @@ public class NCRSImp implements NCRS, Serializable{
 
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
-        if (null!=ncrsModel) throw new ValidationException("The NCRSModel is null");
+        if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
         log.debug("========================================= requestOnline(NCRSModel : {})",ncrsModel.toString());
         return request(ncrsModel, CPUTOCPU_ENQUIRY);
     }
 
     @Override
     public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
-        if (null!=ncrsModel) throw new ValidationException("The NCRSModel is null");
+        if (null==ncrsModel) throw new ValidationException(message.get("101"));
         log.debug("========================================= requestOffline(NCRSModel : {})",ncrsModel.toString());
         return request(ncrsModel, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
 
     private NCRSResponse request(NCRSModel ncrsModel, String command)throws Exception{
-        log.debug("========================================= NCRSModel : {}",ncrsModel.toString());
         String memberRef = ncrsModel.getMemberref();
         String enqPurpose = ncrsModel.getEnqpurpose();
         String enqAmount = ncrsModel.getEnqamount();

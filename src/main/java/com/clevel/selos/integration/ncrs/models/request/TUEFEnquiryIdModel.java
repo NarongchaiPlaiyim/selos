@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @XStreamAlias("id")
-public class TUEFEnquiryIdModel implements Validation {
+public class TUEFEnquiryIdModel {
     
     @XStreamAlias("idtype")
     private String idtype;
