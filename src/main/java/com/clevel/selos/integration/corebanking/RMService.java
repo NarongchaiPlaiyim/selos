@@ -82,19 +82,19 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
-        if (!ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+        if (ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
             throw new ValidationException(validationMsg.get("013"));
         }
         //Validate CustNbr
-        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+        if (ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate CustName
-        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
             throw new ValidationException(validationMsg.get("015"));
         }
         //Validate CustSurname
-        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustSurname().length())) {
+        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustSurname().length())) {
             throw new ValidationException(validationMsg.get("016"));
         }
         //Validate RadSelectSearch
@@ -178,6 +178,8 @@ public class RMService implements Serializable {
         return individualModel;
     }
 
+
+
     public CorporateModel CorporateService(SearchIndividual searchIndividual) throws Exception {
 
         log.debug("CorporateService() =====================");
@@ -194,15 +196,15 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
-        if (!ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+        if (ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
             throw new ValidationException(validationMsg.get("013"));
         }
         //Validate CustNbr
-        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+        if (ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate CustName
-        if (!ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
             throw new ValidationException(validationMsg.get("015"));
         }
         //Validate RadSelectSearch
@@ -331,7 +333,7 @@ public class RMService implements Serializable {
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
-        ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAction(reqSearch);
+        ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAccount(reqSearch);
 
         CustomerAccountModel customerAccountModel = new CustomerAccountModel();
         customerAccountModel.setResCode(resSearchCustomerAccount.getHeader().getResCode());
@@ -387,7 +389,7 @@ public class RMService implements Serializable {
 
     // Services
     private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
-        log.debug("callServiceIndividual() ====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceIndividual() START");
         ResSearchIndividualCustomer resSearchIndividualCustomer = null;
         URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
@@ -398,12 +400,12 @@ public class RMService implements Serializable {
                 "http://10.175.140.18:7809/EAISearchIndividualCustomer");
 
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
-
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceIndividual() END");
         return resSearchIndividualCustomer;
     }
 
     private ResSearchCorporateCustomer callServiceCorporate(ReqSearchCorporateCustomer reqSearch) throws Exception {
-        log.debug("callServiceCorporate() ====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() START");
         ResSearchCorporateCustomer resSearchCorporateCustomer = null;
         URL url = this.getClass().getResource("/com/tmb/EAISearchCorporateCustomer.wsdl");
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
@@ -413,11 +415,11 @@ public class RMService implements Serializable {
 //                corporateAddress);
         "http://10.175.140.18:7807/EAISearchCorporateCustomer");
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
-
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;
     }
-    private ResSearchCustomerAccount callServiceCustomerAction(ReqSearchCustomerAccount reqSearch) throws Exception {
-        log.debug("callServiceCustomerAction() ====================");
+    private ResSearchCustomerAccount callServiceCustomerAccount(ReqSearchCustomerAccount reqSearch) throws Exception {
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() START");
         ResSearchCustomerAccount resSearchCustomerAccount = null;
         URL url = this.getClass().getResource("/com/tmb/EAISearchCustomerAccount.wsdl");
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
@@ -427,7 +429,7 @@ public class RMService implements Serializable {
 //                customerAccountAddress);
         "http://10.175.140.18:7809/services/EAISearchCustomerAccount");
         resSearchCustomerAccount = eaiSearchInd.searchCustomerAccount(reqSearch);
-
+        log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() END");
         return resSearchCustomerAccount;
     }
 }

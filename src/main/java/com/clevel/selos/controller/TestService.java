@@ -33,7 +33,7 @@ public class TestService implements Serializable{
     CardTypeDao dao;
 
     @Inject
-    RMInterfaceImpl rmInterfaceImpl;
+    RMInterface rmInterfaceImpl;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -73,7 +73,7 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        IndividualModel individualModel =new IndividualModel() ;
+        IndividualModel individualModel ;
         //callservice
        individualModel = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
                          searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);

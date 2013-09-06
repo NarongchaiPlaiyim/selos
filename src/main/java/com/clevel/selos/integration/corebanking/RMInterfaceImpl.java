@@ -39,7 +39,10 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("P");
         searchIndividual.setType("CI");
+        searchIndividual.setCustNbr("");
         searchIndividual.setCustId(custId);
+        searchIndividual.setCustName("");
+        searchIndividual.setCustSurname("");
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {} ",searchIndividual.toString());
 
@@ -55,7 +58,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("C");
         searchIndividual.setType("CI");
+        searchIndividual.setCustNbr("");
         searchIndividual.setCustId(custId);
+        searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.CorporateService(searchIndividual);
