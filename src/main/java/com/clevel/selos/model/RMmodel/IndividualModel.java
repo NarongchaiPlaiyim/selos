@@ -2,6 +2,7 @@ package com.clevel.selos.model.RMmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class IndividualModel implements Serializable {
@@ -15,10 +16,11 @@ public class IndividualModel implements Serializable {
 
     private String title;
     private String custId;
+    private String name;
     private String telephone1;
 
     //personal list Section
-    private ArrayList<IndividualPersonalList>personalLists;
+    private List<IndividualPersonalList> personalLists;
 
 
     public String getReqId() {
@@ -85,12 +87,19 @@ public class IndividualModel implements Serializable {
         this.telephone1 = telephone1;
     }
 
-    public ArrayList<IndividualPersonalList> getPersonalLists() {
+    public List<IndividualPersonalList> getPersonalLists() {
         return personalLists;
     }
 
-    public void setPersonalLists(ArrayList<IndividualPersonalList> personalLists) {
+    public void setPersonalLists(List<IndividualPersonalList> personalLists) {
         this.personalLists = personalLists;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
