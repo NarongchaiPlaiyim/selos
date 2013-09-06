@@ -9,7 +9,9 @@ import java.util.List;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.util.Util;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.ValidationUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -26,10 +28,17 @@ public class Post implements Serializable {
     Logger log;
 
     @Inject
+    @ValidationMessage
+    Message message;
+
+    @Inject
     public Post() {
     }
 
     public String sendPost(String xml, String url) throws Exception {
+        if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
+        if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
+
         log.debug("========================================= sendPost(xml : {}, url : {})", xml, url);
         String result = "";
         DefaultHttpClient client = null;
@@ -37,32 +46,29 @@ public class Post implements Serializable {
         List<NameValuePair> urlParameters = null;
         HttpResponse response = null;
 
-        if(!Util.isNull(xml)&&!Util.isNull(url)){
-            client = new DefaultHttpClient();
-            post = new HttpPost(url);
-            post.setHeader("User-Agent", "Mozilla/5.0");
-            urlParameters = new ArrayList<NameValuePair>();
-            urlParameters.add(new BasicNameValuePair("q", xml));
-            post.setEntity(new UrlEncodedFormEntity(urlParameters));
-            response = client.execute(post);
-            int resCode = response.getStatusLine().getStatusCode();
-            if (resCode==200) {
-                log.debug("=========================================sendPost. The request has succeeded");
-                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                StringBuilder builder = new StringBuilder();
-                String line = "";
-                while ((line = rd.readLine()) != null) {
-                    builder.append(line);
-                }
-                result = builder.toString();
-                log.debug("=========================================sendPost. The result is ",result);
-                return result;
-            }else{
-                log.error("=========================================sendPost. The request has failed, Error code is ",resCode);
-                return result;
+
+        client = new DefaultHttpClient();
+        post = new HttpPost(url);
+        post.setHeader("User-Agent", "Mozilla/5.0");
+        urlParameters = new ArrayList<NameValuePair>();
+        urlParameters.add(new BasicNameValuePair("q", xml));
+        post.setEntity(new UrlEncodedFormEntity(urlParameters));
+        response = client.execute(post);
+        int resCode = response.getStatusLine().getStatusCode();
+        if (resCode==200) {
+            log.debug("=========================================sendPost. The request has succeeded");
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuilder builder = new StringBuilder();
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                builder.append(line);
             }
-        }else {
-            throw new ValidationException("sendPost() : xml is null or url is null");
+            result = builder.toString();
+            log.debug("=========================================sendPost. The result is ",result);
+            return result;
+        }else{
+            log.error("=========================================sendPost. The request has failed, Error code is ",resCode);
+            return result;
         }
     }
 
