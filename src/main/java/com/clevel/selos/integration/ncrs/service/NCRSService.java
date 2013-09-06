@@ -2,7 +2,6 @@ package com.clevel.selos.integration.ncrs.service;
 
 
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.ncrs.commands.Command;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 import org.slf4j.Logger;
 
@@ -18,6 +17,7 @@ public class NCRSService implements Serializable {
     @Inject
     NCRSImp ncrs;
 
+    public final String ERROR = "ER01001";
 
     @Inject
     public NCRSService() {
@@ -26,13 +26,12 @@ public class NCRSService implements Serializable {
 
     public void process(NCRSModel ncrsModel){
         log.debug("========================================= process.");
-        Command command = null;
         try {
             ncrsModel.validation();
             NCRSResponse ncrsResponse =  ncrs.requestOnline(ncrsModel);
             log.debug("=========================================process. Call  : requestOnline(NCRSModel)");
             if(null!=ncrsResponse){
-                if(!command.ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
+                if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
                     //The response (Online) has succeeded
                     log.debug("========================================= The response (Online) has succeeded");
                     //The response will be return (XML Transaction record)
@@ -51,7 +50,7 @@ public class NCRSService implements Serializable {
                 System.out.println("=========================================process. Response form requestOnline is null");
                 System.out.println("=========================================process. Call  : requestOffline(NCRSModel)");
                 ncrsResponse =  ncrs.requestOffline(ncrsModel);
-                if(!command.ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
+                if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
                     //The response (Offline) has succeeded
                     log.debug("The response (Offline) has succeeded");
 

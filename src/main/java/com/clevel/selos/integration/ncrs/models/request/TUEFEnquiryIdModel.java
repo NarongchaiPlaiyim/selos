@@ -1,22 +1,23 @@
 package com.clevel.selos.integration.ncrs.models.request;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.ncrs.service.Validation;
 import com.clevel.selos.util.ValidationUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @XStreamAlias("id")
-public class TUEFEnquiryIdModel {
+public class TUEFEnquiryIdModel implements Validation {
     
     @XStreamAlias("idtype")
-    private String idtype;//2
+    private String idtype;
     
     @XStreamAlias("idnumber")
-    private String idnumber;//20
+    private String idnumber;
     
     @XStreamAlias("issuecountry")
-    private String issuecountry;//2
+    private String issuecountry;
 
     public TUEFEnquiryIdModel(String idtype, String idnumber, String issuecountry) {
         this.idtype = idtype;

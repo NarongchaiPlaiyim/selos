@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class NCRSModel implements Serializable {
+public class NCRSModel implements Validation, Serializable {
 
     private String memberref;
     private String enqpurpose;
@@ -104,16 +104,11 @@ public class NCRSModel implements Serializable {
         if(ValidationUtil.isNull(consent))throw new ValidationException("enqpurpose is null");
         if(ValidationUtil.isGreaterThan(1, consent))throw new ValidationException("Length of consent is more than 1");
 
-
         if(ValidationUtil.isLessThan(1, nameList))throw new ValidationException("Size of nameList is less than 1");
-        for (TUEFEnquiryNameModel nameModel : nameList){
-            nameModel.validation();
-        }
+        for (TUEFEnquiryNameModel nameModel : nameList)nameModel.validation();
 
         if(ValidationUtil.isLessThan(1, idList))throw new ValidationException("Size of idList is less than 1");
-        for (TUEFEnquiryIdModel idModel : idList){
-            idModel.validation();
-        }
+        for (TUEFEnquiryIdModel idModel : idList) idModel.validation();
 
     }
 }

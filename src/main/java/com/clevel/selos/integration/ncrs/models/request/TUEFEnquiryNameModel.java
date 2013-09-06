@@ -1,13 +1,14 @@
 package com.clevel.selos.integration.ncrs.models.request;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.ncrs.service.Validation;
 import com.clevel.selos.util.ValidationUtil;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 @XStreamAlias("name")
-public class TUEFEnquiryNameModel {
+public class TUEFEnquiryNameModel implements Validation {
     
     @XStreamAlias("familyname")
     private String familyname;//50
