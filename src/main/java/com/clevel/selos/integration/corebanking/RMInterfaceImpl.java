@@ -2,15 +2,14 @@ package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.CustomerAccountModel;
-import com.clevel.selos.model.RMmodel.CorporateModel;
-import com.clevel.selos.model.RMmodel.IndividualModel;
-import com.clevel.selos.model.RMmodel.SearchIndividual;
+import com.clevel.selos.model.RMmodel.*;
+import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBElement;
 import java.io.Serializable;
 
 @Default
@@ -21,6 +20,22 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     @Inject
     RMService rmService;
+
+    @Inject
+    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    String acronym;
+
+    @Inject
+    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    String productCode;
+
+    @Inject
+    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    String serverURL;
+
+    @Inject
+    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    String sessionId;
 
     @Inject
     public RMInterfaceImpl() {
@@ -71,12 +86,18 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     public CustomerAccountModel getCustomerAccountInfo(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
 
         log.debug("::::::::::::::::::::::::::::::::::::  getCustomerAccountInfo()");
-        SearchIndividual searchIndividual = new SearchIndividual();
-        searchIndividual.setReqId(reqId);
-        searchIndividual.setCustNbr(custNbr);
-        searchIndividual.setRadSelectSearch("code");
-        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
-        CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchIndividual);
+        SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
+        searchCustomerAccountModel.setReqId(reqId);
+//        searchCustomerAccountModel.setAcronym(acronym);
+//        searchCustomerAccountModel.setProductCode(productCode);
+        searchCustomerAccountModel.setAcronym("0");
+        searchCustomerAccountModel.setProductCode("0");
+//        searchCustomerAccountModel.setServerURL(serverURL);
+//        searchCustomerAccountModel.setSessionId(sessionId);
+        searchCustomerAccountModel.setCustNbr(custNbr);
+        searchCustomerAccountModel.setRadSelectSearch("code");
+        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchCustomerAccountModel.toString());
+        CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchCustomerAccountModel);
 
         return  customerAccountModel;
     }

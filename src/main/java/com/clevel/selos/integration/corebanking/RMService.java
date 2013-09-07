@@ -182,7 +182,7 @@ public class RMService implements Serializable {
 
     public CorporateModel CorporateService(SearchIndividual searchIndividual) throws Exception {
 
-        log.debug("CorporateService() =====================");
+        log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() START");
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
@@ -211,7 +211,7 @@ public class RMService implements Serializable {
         if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
             throw new ValidationException(validationMsg.get("017"));
         }
-
+        log.debug("::::::::::::::::::::::::::::::::::::  Validate Pass!");
         com.tmb.sme.data.requestsearchcorporatecustomer.Header header = new com.tmb.sme.data.requestsearchcorporatecustomer.Header();
         header.setReqID(searchIndividual.getReqId());
 
@@ -226,7 +226,7 @@ public class RMService implements Serializable {
         ReqSearchCorporateCustomer reqSearch = new ReqSearchCorporateCustomer();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
-
+        log.debug("::::::::::::::::::::::::::::::::::::  requestService");
         ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
 
         CorporateModel corporateModel = new CorporateModel();
@@ -234,6 +234,7 @@ public class RMService implements Serializable {
         corporateModel.setResDesc(resSearchCorporateCustomer.getHeader().getResDesc());
 
         //Check Success
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchCorporateCustomer.getHeader().getResDesc());
         if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
             corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
             //checkSearchResult
@@ -272,7 +273,7 @@ public class RMService implements Serializable {
         }else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
             throw new ValidationException(exceptionMsg.get("501"));
         } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-
+            log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
             List<CorporatePersonalList> listModelList = new ArrayList<CorporatePersonalList>();
             CorporatePersonalList corporatePersonalList = new CorporatePersonalList();
             listModelList.add(corporatePersonalList);
@@ -282,24 +283,26 @@ public class RMService implements Serializable {
         } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
             throw new ValidationException(exceptionMsg.get("502"));
         }
+        log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
         return corporateModel;
     }
 
-    public CustomerAccountModel CustomerAccountService(SearchIndividual searchIndividual) throws Exception {
-        log.debug("CustomerAccountService() =====================");
+    /******************************  CustomerAccount  **********************************/
+    public CustomerAccountModel CustomerAccountService(SearchCustomerAccountModel searchCustomerAccountModel) throws Exception {
+        log.debug("::::::::::::::::::::::::::::::::::::  CustomerAccountService() START");
 
         //Validate ReqId
-        if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
+        if (!ValidationUtil.isValueInRange(1,50,searchCustomerAccountModel.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
         }
-//        //Validate Acronym
-//        if (!ValidationUtil.isValueInRange(1,20,searchIndividual.getReqId().length())) {
-//            throw new ValidationException(validationMsg.get("014"));
-//        }
-//        //Validate ProductCode
-//        if (!ValidationUtil.isValueInRange(1,8,searchIndividual.getReqId().length())) {
-//            throw new ValidationException(validationMsg.get("validation.014"));
-//        }
+        //Validate Acronym
+        if (!ValidationUtil.isValueInRange(1,20,searchCustomerAccountModel.getAcronym().length())) {
+            throw new ValidationException(validationMsg.get("014"));
+        }
+        //Validate ProductCode
+        if (!ValidationUtil.isValueInRange(1,8,searchCustomerAccountModel.getProductCode().length())) {
+            throw new ValidationException(validationMsg.get("validation.014"));
+        }
 //        //Validate ServerURL
 //        if (!ValidationUtil.isGreaterThan(100,searchIndividual.getCustNbr().length())) {
 //            throw new ValidationException(validationMsg.get("validation.014"));
@@ -309,30 +312,33 @@ public class RMService implements Serializable {
 //            throw new ValidationException(validationMsg.get("validation.014"));
 //        }
         //Validate CustNbr
-        if (!ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+        if (!ValidationUtil.isGreaterThan(14,searchCustomerAccountModel.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate RadSelectSearch
-        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+        if (!ValidationUtil.isValueInRange(1,10,searchCustomerAccountModel.getRadSelectSearch().length())) {
             throw new ValidationException(validationMsg.get("017"));
         }
-
+        log.debug("::::::::::::::::::::::::::::::::::::  Validate Pass!");
+        //setHeader
         com.tmb.common.data.requestsearchcustomeraccount.Header header = new com.tmb.common.data.requestsearchcustomeraccount.Header();
-        header.setReqId(searchIndividual.getReqId());
-        header.setAcronym("EAC");
-        header.setProductCode("0");
-        //header.setServerURL("");
-        //header.setSessionId("");
+        header.setReqId(searchCustomerAccountModel.getReqId());
+        header.setAcronym(searchCustomerAccountModel.getAcronym());
+        header.setProductCode(searchCustomerAccountModel.getProductCode());
+//        header.setServerURL("");
+//        header.setSessionId("");
 
-
+        //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();
-        body.setCustNbr(searchIndividual.getCustNbr());
-        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
+        body.setCustNbr(searchCustomerAccountModel.getCustNbr());
+        body.setRadSelectSearch(searchCustomerAccountModel.getRadSelectSearch());
+
 
         ReqSearchCustomerAccount reqSearch = new ReqSearchCustomerAccount();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
+        log.debug("::::::::::::::::::::::::::::::::::::  requestService");
         ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAccount(reqSearch);
 
         CustomerAccountModel customerAccountModel = new CustomerAccountModel();
@@ -340,10 +346,11 @@ public class RMService implements Serializable {
         customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
 
         //Check Success
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchCustomerAccount.getHeader().getResDesc());
         if (resSearchCustomerAccount.getHeader().getResCode().equals("0000")) {
             List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
             //checkSearchResult
-//            log.debug("accountListSize: ", resSearchCustomerAccount.getBody().getAccountList().size());
+
             if (resSearchCustomerAccount.getBody().getAccountList() != null && resSearchCustomerAccount.getBody().getAccountList().size() > 0) {
                 CustomerAccountListModel customerAccountListModel = null;
 
@@ -369,13 +376,14 @@ public class RMService implements Serializable {
                     customerAccountListModel.setCurr(resSearchCustomerAccount.getBody().getAccountList().get(i).getCurr());
                     listModelList.add(customerAccountListModel);
                 }
+                log.debug("accountListSize: {}", listModelList.size());
             }
             customerAccountModel.setAccountBody(listModelList);
 
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) {
             throw new ValidationException(exceptionMsg.get("exception.1500"));
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
-
+            log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
             List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
             log.info(listModelList.size()+"");
             customerAccountModel.setAccountBody(listModelList);
@@ -384,8 +392,12 @@ public class RMService implements Serializable {
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) {
             throw new ValidationException(exceptionMsg.get("exception.1500"));
         }
+        log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
         return customerAccountModel;
     }
+
+
+
 
     // Services
     private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
@@ -396,11 +408,11 @@ public class RMService implements Serializable {
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
         EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                individualAddress);
-//                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
+//                individualAddress);
+                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
 
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
-        log.debug("::::::::::::::::::::::::::::::::::::  callServiceIndividual() END");
+        log.debug("::::::::::::::::::::::::::::::::::::  CustomerAccountService() END");
         return resSearchIndividualCustomer;
     }
 
@@ -412,8 +424,8 @@ public class RMService implements Serializable {
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                corporateAddress);
-//        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
+//                corporateAddress);
+        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;
