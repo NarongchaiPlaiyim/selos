@@ -12,5 +12,13 @@ public class RMActivityDAO extends GenericDAO<RMActivity,Long> {
 
     @Inject
     public RMActivityDAO() {
+
     }
+
+    public void auditRequestService(){
+
+
+
+    }
+
 }
