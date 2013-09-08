@@ -49,13 +49,13 @@ public class RMService implements Serializable {
     Message validationMsg;
 
     @Inject
-    @Config(name = "selos.interface.rm.individual.address")
+    @Config(name = "interface.rm.individual.address")
     String individualAddress;
     @Inject
-    @Config(name = "selos.interface.rm.juristic.address")
+    @Config(name = "interface.rm.juristic.address")
     String corporateAddress;
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.address")
+    @Config(name = "interface.rm.customerAccount.address")
     String customerAccountAddress;
 
 
