@@ -68,7 +68,7 @@ public class WelcomePage implements Serializable {
     BRMSInterface brms;
 
     @Inject
-    @Config(name = "selos.system.name")
+    @Config(name = "system.name")
     String system;
 
     private Date now;

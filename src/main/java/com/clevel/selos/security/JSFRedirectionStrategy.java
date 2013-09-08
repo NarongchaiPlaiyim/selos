@@ -31,7 +31,7 @@ public class JSFRedirectionStrategy implements InvalidSessionStrategy {
             response.getWriter().write(ajaxRedirectXml);
         } else {
             String requestURI = getRequestUrl(request);
-            log.debug("Session expired due to non-ajax request, starting a new session and redirect to requested url '{}'", requestURI);
+            log.debug("Session expired due to non-ajax request, redirect to requested url '{}'", requestURI);
             request.getSession(true);
             response.sendRedirect(requestURI);
         }
