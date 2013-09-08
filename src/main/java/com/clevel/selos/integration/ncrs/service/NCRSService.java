@@ -1,11 +1,9 @@
 package com.clevel.selos.integration.ncrs.service;
 
 
-import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.ncrs.models.response.IdModel;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
-import com.clevel.selos.integration.ncrs.models.response.NameModel;
+import com.clevel.selos.integration.ncrs.vaildation.ValidationImp;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
@@ -40,7 +38,7 @@ public class NCRSService implements Serializable {
     }
 
     public void process(NCRSModel ncrsModel){
-        try {
+        /*try {
             log.debug("========================================= process.");
 
             NCRSResponse ncrsResponse = dataForTEST.request(ncrsModel);
@@ -56,13 +54,15 @@ public class NCRSService implements Serializable {
 
         } catch (Exception e) {
             log.error("========================================= Exception : {}", e);
-        }
+        }  */
 
-        /*log.debug("========================================= process.");
+        log.debug("========================================= process.");
         try {
             validationImp.validation(ncrsModel);
-            NCRSResponse ncrsResponse =  ncrs.requestOnline(null);
+
             log.debug("=========================================process. Call  : requestOnline(NCRSModel)");
+            NCRSResponse ncrsResponse =  ncrs.requestOnline(ncrsModel);
+
             if(null!=ncrsResponse){
                 if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
                     //The response (Online) has succeeded
@@ -105,7 +105,7 @@ public class NCRSService implements Serializable {
             }
         } catch (Exception e) {
             log.error("========================================= Exception : {}", e);
-        }      */
+        }
     }
 
 }

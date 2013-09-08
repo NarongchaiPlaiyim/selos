@@ -26,32 +26,31 @@ public class NCRSImp implements NCRS, Serializable{
     Post post;
 
     @Inject
+    public NCRSImp() {
+    }
+
+    @Inject
     @ValidationMessage
     Message message;
-
     //Config
     private String id = "SLOSTEST";
     private String pass = "SLOSTEST12";
+
     private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
-
-    private final String CPUTOCPU_ENQUIRY = "BB01001";
-    private final String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
-
-    @Inject
-    public NCRSImp() {
-    }
 
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
         log.debug("========================================= requestOnline(NCRSModel : {})",ncrsModel.toString());
+        String CPUTOCPU_ENQUIRY = "BB01001";
         return request(ncrsModel, CPUTOCPU_ENQUIRY);
     }
 
     @Override
     public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
-        if (null==ncrsModel) throw new ValidationException(message.get("101"));
+        if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
         log.debug("========================================= requestOffline(NCRSModel : {})",ncrsModel.toString());
+        String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(ncrsModel, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
 
@@ -63,6 +62,7 @@ public class NCRSImp implements NCRS, Serializable{
         String disPuteenQuiry = ncrsModel.getDisputeenquiry();
         ArrayList<TUEFEnquiryNameModel> nameList = ncrsModel.getNameList();
         ArrayList<TUEFEnquiryIdModel> idList = ncrsModel.getIdList();
+
         String xml = null;
         String result = null;
         XStream xStream = null;

@@ -33,13 +33,14 @@ public class Post implements Serializable {
 
     @Inject
     public Post() {
+
     }
 
     public String sendPost(String xml, String url) throws Exception {
         if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
         if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
 
-        log.debug("========================================= sendPost(xml : {}, url : {})", xml, url);
+        log.debug("=========================================sendPost. url : {}", xml, url);
         String result = "";
         DefaultHttpClient client = null;
         HttpPost post = null;
@@ -64,7 +65,6 @@ public class Post implements Serializable {
                 builder.append(line);
             }
             result = builder.toString();
-            log.debug("=========================================sendPost. The result is ",result);
             return result;
         }else{
             log.error("=========================================sendPost. The request has failed, Error code is ",resCode);
