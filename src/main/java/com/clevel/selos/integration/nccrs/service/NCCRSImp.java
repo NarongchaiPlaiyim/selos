@@ -26,9 +26,8 @@ public class NCCRSImp implements NCCRS, Serializable {
     Message message;
 
     //Config
-    private String id = "SLOSTEST";
-    private String pass = "SLOSTEST12";
-
+    private String id = "NCBINQCSIT";
+    private String pass = "Sit12345";
     private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
 
     @Inject
@@ -38,16 +37,16 @@ public class NCCRSImp implements NCCRS, Serializable {
     @Override
     public NCCRSResponseModel requestOnline(NCCRSModel model) throws Exception {
         if (null==model) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOnline(NCCRSModel : {})",model.toString());
-        String CPUTOCPU_ENQUIRY = "BB01001";
+        log.debug("=========================================NCCRS requestOnline(NCCRSModel : {})",model.toString());
+        final String CPUTOCPU_ENQUIRY = "BB01001";
         return request(model,CPUTOCPU_ENQUIRY);
     }
 
     @Override
     public NCCRSResponseModel requestOffline(NCCRSModel model) throws Exception {
         if (null==model) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOffline(NCCRSModel : {})",model.toString());
-        String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
+        log.debug("=========================================NCCRS requestOffline(NCCRSModel : {})",model.toString());
+        final String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(model, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
 
@@ -69,7 +68,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         NCCRSResponseModel nccrsResponse = null;
         xStream = new XStream();
         xStream.processAnnotations(NCCRSRequestModel.class);
-        log.debug("========================================= Command code : {}",command);
+        log.debug("=========================================NCCRS Command code : {}",command);
         nccrsRequest = new NCCRSRequestModel(
                            new HeaderModel(id,pass,command),
                            new BodyModel(
@@ -79,15 +78,15 @@ public class NCCRSImp implements NCCRS, Serializable {
                                new AttributeModel(historicalBalanceReport)
                            ));
         xml = xStream.toXML(nccrsRequest);
-        log.debug("========================================= Request : {}",xml);
+        log.debug("=========================================NCCRS Request : {}",xml);
         result = post.sendPost(xml,url);
         if(!"".equals(result)){
-            log.debug("========================================= Response : {}",result);
+            log.debug("=========================================NCCRS Response : {}",result);
             xStream.processAnnotations(NCCRSResponseModel.class);
             nccrsResponse = (NCCRSResponseModel)xStream.fromXML(result);
             return nccrsResponse;
         }else{
-            log.debug("========================================= Response : {}",result);
+            log.debug("=========================================NCCRS Response : {}",result);
             return nccrsResponse;
         }
     }

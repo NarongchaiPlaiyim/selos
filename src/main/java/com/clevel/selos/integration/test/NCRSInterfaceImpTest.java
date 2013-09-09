@@ -1,9 +1,9 @@
-package com.clevel.selos.integration.ncrs.service;
-
+package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.NCBInterface;
+import com.clevel.selos.integration.NCRSInterface;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
+import com.clevel.selos.integration.ncrs.service.NCRSModel;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 
@@ -12,18 +12,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Serializable;
 
-public class DataForTEST implements NCBInterface, Serializable{
+public class NCRSInterfaceImpTest implements NCRSInterface, Serializable {
     @Inject
     @NCB
     Logger log;
 
     @Inject
-    public DataForTEST() {
+    public NCRSInterfaceImpTest() {
     }
 
     @Override
     public NCRSResponse request(NCRSModel ncrsModel) throws Exception {
-        log.debug("========================================= request(NCRSModel : {})",ncrsModel.toString());
+        log.debug("=========================================NCRS request(NCRSModel : {})",ncrsModel.toString());
         String path = "D:\\Response.TXT".replace("\\","/");
         BufferedReader reader = new BufferedReader(new FileReader(path));
         StringBuilder stringBuffer = new StringBuilder();

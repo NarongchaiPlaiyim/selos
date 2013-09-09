@@ -41,7 +41,7 @@ public class NCRSImp implements NCRS, Serializable{
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOnline(NCRSModel : {})",ncrsModel.toString());
+        log.debug("=========================================NCRS requestOnline(NCRSModel : {})",ncrsModel.toString());
         String CPUTOCPU_ENQUIRY = "BB01001";
         return request(ncrsModel, CPUTOCPU_ENQUIRY);
     }
@@ -49,7 +49,7 @@ public class NCRSImp implements NCRS, Serializable{
     @Override
     public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOffline(NCRSModel : {})",ncrsModel.toString());
+        log.debug("=========================================NCRS requestOffline(NCRSModel : {})",ncrsModel.toString());
         String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(ncrsModel, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
@@ -70,7 +70,7 @@ public class NCRSImp implements NCRS, Serializable{
         NCRSResponse ncrsResponse = null;
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequest.class);
-        log.debug("========================================= Command code : {}",command);
+        log.debug("=========================================NCRS Command code : {}",command);
         ncrsRequest = new NCRSRequest(
                 new HeaderModel(id, pass, command),
                 new BodyModel(
@@ -78,15 +78,15 @@ public class NCRSImp implements NCRS, Serializable{
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount,consent, disPuteenQuiry),
                                 nameList, idList)));
         xml = xStream.toXML(ncrsRequest);
-        log.debug("========================================= Request : {}",xml);
+        log.debug("=========================================NCRS Request : {}",xml);
         result = post.sendPost(xml,url);
         if(!"".equals(result)){
-            log.debug("========================================= Response : {}",result);
+            log.debug("=========================================NCRS Response : {}",result);
             xStream.processAnnotations(NCRSResponse.class);
             ncrsResponse = (NCRSResponse)xStream.fromXML(result);
             return ncrsResponse;
         }else{
-            log.debug("========================================= Response : {}",result);
+            log.debug("=========================================NCRS Response : {}",result);
             return ncrsResponse;
         }
     }
