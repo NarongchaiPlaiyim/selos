@@ -1,6 +1,9 @@
 
 package com.tmb.common.data.responsesearchcustomeraccount;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -653,4 +656,27 @@ public class AccountList {
         this.curr = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("rel", rel)
+                .append("cd", cd)
+                .append("pso", pso)
+                .append("appl", appl)
+                .append("accountNo", accountNo)
+                .append("trlr", trlr)
+                .append("balance", balance)
+                .append("dir", dir)
+                .append("prod", prod)
+                .append("ctl1", ctl1)
+                .append("ctl2", ctl2)
+                .append("ctl3", ctl3)
+                .append("ctl4", ctl4)
+                .append("status", status)
+                .append("date", date)
+                .append("name", name)
+                .append("citizenId", citizenId)
+                .append("curr", curr)
+                .toString();
+    }
 }

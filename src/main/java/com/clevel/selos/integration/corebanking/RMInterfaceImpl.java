@@ -61,7 +61,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {} ",searchIndividual.toString());
 
-        IndividualModel individualModel = rmService.IndividualService(searchIndividual);
+        IndividualModel individualModel = rmService.individualService(searchIndividual);
         return individualModel;
     }
 
@@ -78,7 +78,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
-        CorporateModel corporateModel = rmService.CorporateService(searchIndividual);
+        CorporateModel corporateModel = rmService.corporateService(searchIndividual);
         return corporateModel;
     }
 
@@ -95,7 +95,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchCustomerAccountModel.setCustNbr(custNbr);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchCustomerAccountModel.toString());
-        CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchCustomerAccountModel);
+        CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
 
         return  customerAccountModel;
     }

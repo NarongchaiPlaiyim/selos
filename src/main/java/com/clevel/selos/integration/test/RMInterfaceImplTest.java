@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.test;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.RMmodel.*;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.util.List;
 @Alternative
 public class RMInterfaceImplTest implements RMInterface ,Serializable {
     @Inject
+    @RM
     Logger log;
 
     @Inject
@@ -25,6 +27,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     @Override
     public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
+        log.debug("======= IndividualServiceTest =======");
         IndividualModel individualModel = new IndividualModel();
         individualModel.setResCode("0000");
         individualModel.setResDesc("SUCCESS");
@@ -60,6 +63,8 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
     @Override
     public CorporateModel getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+        log.debug("======= CorporateServiceTest =======");
+
         CorporateModel corporateModel = new CorporateModel();
         corporateModel.setResCode("0000");
         corporateModel.setResDesc("SUCCESS");
@@ -101,7 +106,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     @Override
     public CustomerAccountModel getCustomerAccountInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
 
-
+        log.debug("======= CustomerAccountServiceTest =======");
 
         CustomerAccountModel customerAccountModel = new CustomerAccountModel();
         customerAccountModel.setResCode("0000");

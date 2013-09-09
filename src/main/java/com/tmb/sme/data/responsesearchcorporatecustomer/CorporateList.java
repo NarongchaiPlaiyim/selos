@@ -1,6 +1,9 @@
 
 package com.tmb.sme.data.responsesearchcorporatecustomer;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -483,4 +486,22 @@ public class CorporateList {
         this.estDate1 = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("custNbr1", custNbr1)
+                .append("cId1", cId1)
+                .append("citizenCId1", citizenCId1)
+                .append("title1", title1)
+                .append("name11", name11)
+                .append("ctl11", ctl11)
+                .append("ctl21", ctl21)
+                .append("ctl31", ctl31)
+                .append("ctl41", ctl41)
+                .append("address1", address1)
+                .append("type1", type1)
+                .append("telephoneNumber1", telephoneNumber1)
+                .append("estDate1", estDate1)
+                .toString();
+    }
 }

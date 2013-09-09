@@ -1,6 +1,9 @@
 
 package com.tmb.sme.data.responsesearchindividualcustomer;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -481,4 +484,22 @@ public class PersonalList {
         this.dateOfBirth1 = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("custNbr1", custNbr1)
+                .append("title1", title1)
+                .append("name1", name1)
+                .append("custId1", custId1)
+                .append("citizenId1", citizenId1)
+                .append("ctl11", ctl11)
+                .append("ctl21", ctl21)
+                .append("ctl31", ctl31)
+                .append("ctl4", ctl4)
+                .append("address1", address1)
+                .append("type1", type1)
+                .append("telephoneNumber1", telephoneNumber1)
+                .append("dateOfBirth1", dateOfBirth1)
+                .toString();
+    }
 }

@@ -15,10 +15,4 @@ public class RMActivityDAO extends GenericDAO<RMActivity,Long> {
 
     }
 
-    public void auditRequestService(){
-
-
-
-    }
-
 }
