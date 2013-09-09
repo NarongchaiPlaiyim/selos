@@ -1,6 +1,11 @@
 package com.clevel.selos.integration.nccrs.service;
 
-public class NCCRSModel {
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
+
+public class NCCRSModel implements Serializable {
     private String registType;
     private String registId;
     private String companyName;
@@ -96,5 +101,20 @@ public class NCCRSModel {
 
     public void setHistoricalBalanceReport(String historicalBalanceReport) {
         this.historicalBalanceReport = historicalBalanceReport;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("registType", registType)
+                .append("registId", registId)
+                .append("companyName", companyName)
+                .append("inqPurose", inqPurose)
+                .append("productType", productType)
+                .append("memberRef", memberRef)
+                .append("confirmConsent", confirmConsent)
+                .append("language", language)
+                .append("historicalBalanceReport", historicalBalanceReport)
+                .toString();
     }
 }

@@ -8,6 +8,7 @@ import com.clevel.selos.integration.ncrs.models.request.*;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 
 
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.thoughtworks.xstream.XStream;
@@ -33,15 +34,27 @@ public class NCRSImp implements NCRS, Serializable{
     @ValidationMessage
     Message message;
     //Config
-    private String id = "SLOSTEST";
-    private String pass = "SLOSTEST12";
 
-    private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+    @Inject
+    @Config(name = "interface.ncb.ncrs.user")
+    private String id;
+
+    @Inject
+    @Config(name = "interface.ncb.ncrs.pass")
+    private String pass;
+
+    @Inject
+    @Config(name = "interface.ncb.ncrs.address")
+    private String url;
+
+    @Inject
+    @Config(name = "interface.ncb.ncrs.timeOut")
+    private String timeOut;
 
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOnline(NCRSModel : {})",ncrsModel.toString());
+        log.debug("=========================================NCRS requestOnline(NCRSModel : {})",ncrsModel.toString());
         String CPUTOCPU_ENQUIRY = "BB01001";
         return request(ncrsModel, CPUTOCPU_ENQUIRY);
     }
@@ -49,7 +62,7 @@ public class NCRSImp implements NCRS, Serializable{
     @Override
     public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOffline(NCRSModel : {})",ncrsModel.toString());
+        log.debug("=========================================NCRS requestOffline(NCRSModel : {})",ncrsModel.toString());
         String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(ncrsModel, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
@@ -70,7 +83,7 @@ public class NCRSImp implements NCRS, Serializable{
         NCRSResponse ncrsResponse = null;
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequest.class);
-        log.debug("========================================= Command code : {}",command);
+        log.debug("=========================================NCRS Command code : {}",command);
         ncrsRequest = new NCRSRequest(
                 new HeaderModel(id, pass, command),
                 new BodyModel(
@@ -78,15 +91,16 @@ public class NCRSImp implements NCRS, Serializable{
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount,consent, disPuteenQuiry),
                                 nameList, idList)));
         xml = xStream.toXML(ncrsRequest);
-        log.debug("========================================= Request : {}",xml);
-        result = post.sendPost(xml,url);
+        log.debug("=========================================NCRS Request : {}",xml);
+
+        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
-            log.debug("========================================= Response : {}",result);
+//            log.debug("=========================================NCRS Response : {}",result);
             xStream.processAnnotations(NCRSResponse.class);
             ncrsResponse = (NCRSResponse)xStream.fromXML(result);
             return ncrsResponse;
         }else{
-            log.debug("========================================= Response : {}",result);
+//            log.debug("=========================================NCRS Response : {}",result);
             return ncrsResponse;
         }
     }

@@ -10,12 +10,26 @@ public class BodyModel {
     
     @XStreamAlias("transaction")
     private TransactionModel transaction;
-    
+
+    @XStreamAlias("trackingid")
+    private String trackingid;
+
+    @XStreamAlias("result")
+    private String result;
+
     @XStreamAlias("errormsg")
     private String errormsg;
 
     public TransactionModel getTransaction() {
         return transaction;
+    }
+
+    public String getTrackingid() {
+        return trackingid;
+    }
+
+    public String getResult() {
+        return result;
     }
 
     public String getErrormsg() {
