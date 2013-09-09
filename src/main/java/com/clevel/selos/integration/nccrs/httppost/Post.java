@@ -1,11 +1,5 @@
-package com.clevel.selos.integration.ncrs.httppost;
+package com.clevel.selos.integration.nccrs.httppost;
 
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
@@ -21,6 +15,11 @@ import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Post implements Serializable {
     @Inject
@@ -40,7 +39,7 @@ public class Post implements Serializable {
         if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
         if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
 
-        log.debug("=========================================NCRS sendPost. url : {}", url);
+        log.debug("=========================================NCCRS sendPost. url : {}", url);
         String result = "";
         DefaultHttpClient client = null;
         HttpPost post = null;
@@ -57,7 +56,7 @@ public class Post implements Serializable {
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
-            log.debug("=========================================NCRS sendPost. The request has succeeded");
+            log.debug("=========================================NCCRS sendPost. The request has succeeded");
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder builder = new StringBuilder();
             String line = "";
@@ -67,7 +66,7 @@ public class Post implements Serializable {
             result = builder.toString();
             return result;
         }else{
-            log.error("=========================================NCRS sendPost. The request has failed, Error code is ",resCode);
+            log.error("=========================================NCCRS sendPost. The request has failed, Error code is ",resCode);
             return result;
         }
     }

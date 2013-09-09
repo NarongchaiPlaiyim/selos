@@ -4,7 +4,8 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.nccrs.models.request.*;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
-import com.clevel.selos.integration.ncrs.httppost.Post;
+import com.clevel.selos.integration.nccrs.httppost.Post;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.thoughtworks.xstream.XStream;
@@ -25,10 +26,17 @@ public class NCCRSImp implements NCCRS, Serializable {
     @ValidationMessage
     Message message;
 
-    //Config
-    private String id = "NCBINQCSIT";
-    private String pass = "Sit12345";
-    private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+    @Inject
+    @Config(name = "interface.ncb.nccrs.user")
+    private String id;
+
+    @Inject
+    @Config(name = "interface.ncb.nccrs.pass")
+    private String pass;
+
+    @Inject
+    @Config(name = "interface.ncb.nccrs.address")
+    private String url;
 
     @Inject
     public NCCRSImp() {

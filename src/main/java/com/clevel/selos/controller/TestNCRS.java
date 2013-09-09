@@ -33,10 +33,9 @@ public class TestNCRS implements Serializable {
     private String result;
     private String memberref = "123456789";
     private String enqpurpose = "01";
-    private String enqamount = "0";
+    private String enqamount = "01";
     private String consent = "Y";
     private String disputeenquiry;
-
 
     //NCCRS
     private String registType ="1140002";
@@ -62,6 +61,7 @@ public class TestNCRS implements Serializable {
         TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", "3111111111115", null);
         ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
         id.add(idModel);
+        ncrsModel.setMemberref(memberref);
         ncrsModel.setEnqpurpose(enqpurpose);
         ncrsModel.setEnqamount(enqamount);
         ncrsModel.setConsent(consent);

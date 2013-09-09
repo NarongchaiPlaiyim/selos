@@ -8,6 +8,7 @@ import com.clevel.selos.integration.ncrs.models.request.*;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
 
 
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.thoughtworks.xstream.XStream;
@@ -33,10 +34,18 @@ public class NCRSImp implements NCRS, Serializable{
     @ValidationMessage
     Message message;
     //Config
-    private String id = "SLOSTEST";
-    private String pass = "SLOSTEST12";
 
-    private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+    @Inject
+    @Config(name = "interface.ncb.ncrs.user")
+    private String id;
+
+    @Inject
+    @Config(name = "interface.ncb.ncrs.pass")
+    private String pass;
+
+    @Inject
+    @Config(name = "interface.ncb.ncrs.address")
+    private String url;
 
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
