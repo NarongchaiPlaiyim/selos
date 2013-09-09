@@ -39,6 +39,10 @@ public class NCCRSImp implements NCCRS, Serializable {
     private String url;
 
     @Inject
+    @Config(name = "interface.ncb.nccrs.timeOut")
+    private String timeOut;
+
+    @Inject
     public NCCRSImp() {
     }
 
@@ -87,14 +91,14 @@ public class NCCRSImp implements NCCRS, Serializable {
                            ));
         xml = xStream.toXML(nccrsRequest);
         log.debug("=========================================NCCRS Request : {}",xml);
-        result = post.sendPost(xml,url);
+        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
-            log.debug("=========================================NCCRS Response : {}",result);
+//            log.debug("=========================================NCCRS Response : {}",result);
             xStream.processAnnotations(NCCRSResponseModel.class);
             nccrsResponse = (NCCRSResponseModel)xStream.fromXML(result);
             return nccrsResponse;
         }else{
-            log.debug("=========================================NCCRS Response : {}",result);
+//            log.debug("=========================================NCCRS Response : {}",result);
             return nccrsResponse;
         }
     }

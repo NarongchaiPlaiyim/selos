@@ -18,6 +18,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -36,7 +39,7 @@ public class Post implements Serializable {
 
     }
 
-    public String sendPost(String xml, String url) throws Exception {
+    public String sendPost(String xml, String url, int timeOut) throws Exception {
         if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
         if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
 
@@ -46,9 +49,14 @@ public class Post implements Serializable {
         HttpPost post = null;
         List<NameValuePair> urlParameters = null;
         HttpResponse response = null;
+        HttpParams params = null;
 
+        params = new BasicHttpParams();
+        int minute = 60000;
+        HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
+        HttpConnectionParams.setSoTimeout(params, minute*timeOut);
 
-        client = new DefaultHttpClient();
+        client = new DefaultHttpClient(params);
         post = new HttpPost(url);
         post.setHeader("User-Agent", "Mozilla/5.0");
         urlParameters = new ArrayList<NameValuePair>();

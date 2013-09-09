@@ -47,6 +47,10 @@ public class NCRSImp implements NCRS, Serializable{
     @Config(name = "interface.ncb.ncrs.address")
     private String url;
 
+    @Inject
+    @Config(name = "interface.ncb.ncrs.timeOut")
+    private String timeOut;
+
     @Override
     public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
@@ -88,14 +92,15 @@ public class NCRSImp implements NCRS, Serializable{
                                 nameList, idList)));
         xml = xStream.toXML(ncrsRequest);
         log.debug("=========================================NCRS Request : {}",xml);
-        result = post.sendPost(xml,url);
+
+        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
-            log.debug("=========================================NCRS Response : {}",result);
+//            log.debug("=========================================NCRS Response : {}",result);
             xStream.processAnnotations(NCRSResponse.class);
             ncrsResponse = (NCRSResponse)xStream.fromXML(result);
             return ncrsResponse;
         }else{
-            log.debug("=========================================NCRS Response : {}",result);
+//            log.debug("=========================================NCRS Response : {}",result);
             return ncrsResponse;
         }
     }

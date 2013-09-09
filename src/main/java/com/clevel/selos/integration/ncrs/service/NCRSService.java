@@ -103,7 +103,7 @@ public class NCRSService implements Serializable {
 
             }
         } catch (Exception e) {
-            log.error("=========================================NCRS Exception : {}", e);
+            log.error("=========================================NCRS Exception : ", e);
         }
     }
 
