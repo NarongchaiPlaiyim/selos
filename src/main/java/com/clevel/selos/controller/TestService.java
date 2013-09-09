@@ -12,6 +12,8 @@ import com.clevel.selos.model.RMmodel.IndividualModel;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -31,7 +33,7 @@ public class TestService implements Serializable{
     CardTypeDao dao;
 
     @Inject
-    RMInterfaceImpl rmInterfaceImpl;
+    RMInterface rmInterfaceImpl;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -49,7 +51,7 @@ public class TestService implements Serializable{
 
     @PostConstruct
     public void onCreate(){
-        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+        log.info("::::::::::::::::::::::::::::::::::::  TEST RM SERVICE START  ");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
@@ -71,7 +73,7 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        IndividualModel individualModel =new IndividualModel() ;
+        IndividualModel individualModel ;
         //callservice
        individualModel = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
                          searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
@@ -85,6 +87,7 @@ public class TestService implements Serializable{
         result.append("\n\n ===== personal Detail Section =====");
         result.append("\n title : "+ individualModel.getTitle());
         result.append("\n custId : "+ individualModel.getCustId());
+        result.append("\n name : "+individualModel.getName());
         result.append("\n telephone1 : "+ individualModel.getTelephone1());
         result.append("\n\n ===== personal List Section =====");
 
@@ -141,7 +144,7 @@ public class TestService implements Serializable{
 
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = rmInterfaceImpl.getCustomerAccount(searchIndividual.getReqId(), searchIndividual.getType(),
+        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo(searchIndividual.getReqId(), searchIndividual.getType(),
                 searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
@@ -168,6 +171,9 @@ public class TestService implements Serializable{
                 result.append("\n ctl4 : "+ customerAccountModel.getAccountBody().get(i).getCtl4());
                 result.append("\n status : "+ customerAccountModel.getAccountBody().get(i).getStatus());
                 result.append("\n date : "+ customerAccountModel.getAccountBody().get(i).getDate());
+                result.append("\n name : "+ customerAccountModel.getAccountBody().get(i).getName());
+                result.append("\n citizenId : "+ customerAccountModel.getAccountBody().get(i).getCitizenId());
+                result.append("\n curr : "+ customerAccountModel.getAccountBody().get(i).getCurr());
                 result.append("\n =========================================================== ");
             }
         }else{

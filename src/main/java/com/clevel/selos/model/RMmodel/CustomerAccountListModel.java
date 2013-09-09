@@ -6,13 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sahawat
- * Date: 2/9/2556
- * Time: 11:07 น.
- * To change this template use File | Settings | File Templates.
- */
+
 public class CustomerAccountListModel implements Serializable{
 
     private String rel;
@@ -30,6 +24,9 @@ public class CustomerAccountListModel implements Serializable{
     private String ctl4;
     private String status;
     private String date;
+    private String name;
+    private String citizenId;
+    private String curr;
 
 
     public String getDate() {
@@ -151,6 +148,30 @@ public class CustomerAccountListModel implements Serializable{
     public void setRel(String rel) {
         this.rel = rel;
     }
+    public String getCurr() {
+        return curr;
+    }
+
+    public void setCurr(String curr) {
+        this.curr = curr;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCitizenId() {
+        return citizenId;
+    }
+
+    public void setCitizenId(String citizenId) {
+        this.citizenId = citizenId;
+    }
+
 
     @Override
     public String toString() {
@@ -170,6 +191,9 @@ public class CustomerAccountListModel implements Serializable{
                 .append("ctl4", ctl4)
                 .append("status", status)
                 .append("date", date)
+                .append("name", name)
+                .append("citizenId", citizenId)
+                .append("curr", curr)
                 .toString();
     }
 }

@@ -1,0 +1,177 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ncbDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.loanAccountType')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="dlgAccountType"
+                                     styleClass="largest"
+                                     size="1"
+                                     value="#{fullappNcb.accountType}">
+                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                        <f:selectItems value="#{fullappNcb.accountTypeList}"
+                                       var="dlgAccountTypeList"
+                                       itemLabel="#{dlgAccountTypeList.name}"
+                                       itemValue="#{dlgAccountTypeList.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.isTMBAccount')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:selectOneRadio  value="#{fullappNcb.ncbRecord.TMBAccount}" >
+                        <f:selectItems value="#{fullappNcb.ncbRecord.TMBAccounts}"  />
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.loanAccountStatus')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="dlgAccountStatus" styleClass="largest" size="1"
+                                     value="#{fullappNcb.accountStatus}">
+                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                        <f:selectItems value="#{fullappNcb.accountStatusList}"
+                                       var="dlgAccountStatusList"
+                                       itemLabel="#{dlgAccountStatusList.name}"
+                                       itemValue="#{dlgAccountStatusList.id}"/>
+                    </p:selectOneMenu>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.dateOfInfo')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                   <p:inputText name="dateOfInfo" value="#{fullappNcb.ncbRecord.dateOfInfo}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.accountOpenDate')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText name="accountOpenDate" value="#{fullappNcb.ncbRecord.accountOpenDate}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.limit')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText   name="limit" value="#{fullappNcb.ncbRecord.limit}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.outstanding')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText  name="outstanding" value="#{fullappNcb.ncbRecord.outstanding}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.installment')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText  name="installment"  value="#{fullappNcb.ncbRecord.installment}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.dateOfDebtRestructuring')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText  name="dateOfDebtRestructuring"  value="#{fullappNcb.ncbRecord.dateOfDebtRestructuring}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.typeOfCurrentPayment')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td><select class="largest">
+                    <option>-- โปรดระบุ --</option>
+                    <option>ยอดหนี้ไม่เกินวงเงิน</option>
+                    <option>ไม่ค้างชำระหรือค้างชำระ 0-30</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.typeOfHistoryPayment')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td><select class="largest">
+                    <option>-- โปรดระบุ --</option>
+                    <option>ยอดหนี้ไม่เกินวงเงิน</option>
+                    <option>ไม่ค้างชำระหรือค้างชำระ 0-30</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.noOfOutstandingPaymentIn12months')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText name="noOfOutstandingPaymentIn12months"  value="#{fullappNcb.ncbRecord.noOfOutstandingPaymentIn12months}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.noOfOverLimit')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                   <p:inputText   name="noOfOverLimit"  value="#{fullappNcb.ncbRecord.noOfOverLimit}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.refinanceFlag')}" />:
+                    <h:outputLabel value="*" styleClass="require-field"/>
+                </td>
+                <td>
+                    <input type="radio" name="isNPL" value="Y"/> Yes
+                    <input type="radio" name="isNPL" value="N"/> No.
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.noOfmonthsPayment')}" />:
+                </td>
+                <td>
+                    <p:inputText name="noOfmonthsPayment"  value="#{fullappNcb.ncbRecord.noOfmonthsPayment}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton value="#{msg.get('app.saveButton')}" styleClass="small" onclick="ncbDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.cancelButton')}" styleClass="small" onclick="ncbDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+
+</ui:composition>

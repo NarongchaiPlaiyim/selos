@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Default
-public class BRMInterfaceImpl implements BRMSInterface{
+public class BRMInterfaceImpl implements BRMSInterface,Serializable{
     @Inject
     @BRMS
     Logger log;

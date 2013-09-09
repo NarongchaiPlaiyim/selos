@@ -2,6 +2,7 @@ package com.clevel.selos.model.RMmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,13 +27,13 @@ public class CorporateModel implements Serializable{
     private String citizenId;
     private String estDate;
 
-    private ArrayList<CorporatePersonalList> PersonalList;
+    private List<CorporatePersonalList> PersonalList;
 
-    public ArrayList<CorporatePersonalList> getPersonalList() {
+    public List<CorporatePersonalList> getPersonalList() {
         return PersonalList;
     }
 
-    public void setPersonalList(ArrayList<CorporatePersonalList> personalList) {
+    public void setPersonalList(List<CorporatePersonalList> personalList) {
         PersonalList = personalList;
     }
 
