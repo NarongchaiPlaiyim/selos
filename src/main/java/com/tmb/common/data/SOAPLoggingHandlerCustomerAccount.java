@@ -13,6 +13,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Set;
 
 public class SOAPLoggingHandlerCustomerAccount implements SOAPHandler<SOAPMessageContext>{
@@ -53,6 +54,7 @@ public class SOAPLoggingHandlerCustomerAccount implements SOAPHandler<SOAPMessag
                 ByteArrayOutputStream baos=new ByteArrayOutputStream();
                 soapMsg.writeTo(baos);
                 soapMsg.writeTo(System.out);
+                getTimeRequest();
                 TestService.printRequest=baos.toString();
                 SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
                 SOAPConnection soapConnection = soapConnectionFactory.createConnection();
@@ -62,6 +64,7 @@ public class SOAPLoggingHandlerCustomerAccount implements SOAPHandler<SOAPMessag
                 // Send SOAP 	Message to SOAP Server
                 String url = "http://10.175.140.18:7809/services/EAISearchCustomerAccount";
                 SOAPMessage soapResponse = soapConnection.call(soapMsg, url);
+                getTimeResponse();
                soapResponse.writeTo(baos);
                soapResponse.writeTo(System.out);
                  TestService.printResponse=baos.toString();
@@ -96,6 +99,13 @@ public class SOAPLoggingHandlerCustomerAccount implements SOAPHandler<SOAPMessag
     public Set<QName> getHeaders() {
         System.out.println("Client : getHeaders()......");
         return null;
+    }
+
+    private void getTimeRequest(){
+        System.out.println("================================================= Request Time "+new Date());
+    }
+    private void getTimeResponse(){
+        System.out.println("================================================= Response Time "+new Date());
     }
 
     //return current client mac address

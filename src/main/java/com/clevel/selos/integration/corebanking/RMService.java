@@ -10,6 +10,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;
+import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
@@ -58,6 +59,13 @@ public class RMService implements Serializable {
     @Config(name = "interface.rm.customerAccount.address")
     String customerAccountAddress;
 
+    @Inject
+    @Config(name = "interface.rm.service.connectTimeout")
+    int connectTimeout;
+
+    @Inject
+    @Config(name = "interface.rm.service.requestTimeout")
+    int requestTimeout;
 
     @Inject
     public RMService() {
@@ -407,9 +415,11 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
         EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                individualAddress);
-                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
+                individualAddress);
+//                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
 
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  CustomerAccountService() END");
@@ -423,9 +433,11 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                corporateAddress);
-        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
+                corporateAddress);
+//        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;
@@ -436,11 +448,14 @@ public class RMService implements Serializable {
         URL url = this.getClass().getResource("/com/tmb/EAISearchCustomerAccount.wsdl");
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);
-        EAISearchCustomerAccount eaiSearchInd = service.getEAISearchCustomerAccount();
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-//                customerAccountAddress);
-        "http://10.175.140.18:7809/services/EAISearchCustomerAccount");
-        resSearchCustomerAccount = eaiSearchInd.searchCustomerAccount(reqSearch);
+        EAISearchCustomerAccount eaiSearchCa = service.getEAISearchCustomerAccount();
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                customerAccountAddress);
+
+//        "http://10.175.140.18:7809/services/EAISearchCustomerAccount");
+        resSearchCustomerAccount = eaiSearchCa.searchCustomerAccount(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() END");
         return resSearchCustomerAccount;
     }

@@ -22,19 +22,19 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     RMService rmService;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    @Config(name = "interface.rm.customerAccount.acronym")
     String acronym;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    @Config(name = "interface.rm.customerAccount.productCode")
     String productCode;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    @Config(name = "interface.rm.customerAccount.acronym")
     String serverURL;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    @Config(name = "interface.rm.customerAccount.productCode")
     String sessionId;
 
     @Inject
@@ -88,10 +88,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         log.debug("::::::::::::::::::::::::::::::::::::  getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
         searchCustomerAccountModel.setReqId(reqId);
-//        searchCustomerAccountModel.setAcronym(acronym);
-//        searchCustomerAccountModel.setProductCode(productCode);
-        searchCustomerAccountModel.setAcronym("0");
-        searchCustomerAccountModel.setProductCode("0");
+        searchCustomerAccountModel.setAcronym(acronym);
+        searchCustomerAccountModel.setProductCode(productCode);
 //        searchCustomerAccountModel.setServerURL(serverURL);
 //        searchCustomerAccountModel.setSessionId(sessionId);
         searchCustomerAccountModel.setCustNbr(custNbr);
