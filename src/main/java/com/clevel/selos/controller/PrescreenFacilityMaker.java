@@ -6,7 +6,7 @@ import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
-import com.clevel.selos.model.view.Facility;
+import com.clevel.selos.model.view.FacilityView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import org.slf4j.Logger;
@@ -28,8 +28,8 @@ public class PrescreenFacilityMaker implements Serializable {
     @NormalMessage
     Message msg;
 
-    private List<Facility> facilityList;
-    private Facility facility;
+    private List<FacilityView> facilityList;
+    private FacilityView facility;
 
     private List<CreditType> creditTypeList;
     private CreditType selectCreditType;
@@ -68,11 +68,11 @@ public class PrescreenFacilityMaker implements Serializable {
         modeForButton = "add";
 
         if (facilityList == null) {
-            facilityList = new ArrayList<Facility>();
+            facilityList = new ArrayList<FacilityView>();
         }
 
         if (facility == null) {
-            facility = new Facility();
+            facility = new FacilityView();
         }
 
         if (selectProductGroup == null) {
@@ -187,7 +187,7 @@ public class PrescreenFacilityMaker implements Serializable {
 
             ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
             CreditType creditType = creditTypeDao.findById(selectCreditType.getId());
-            Facility facAdd = new Facility();
+            FacilityView facAdd = new FacilityView();
             facAdd.setProductProgram(productProgram);
             facAdd.setCreditType(creditType);
             facAdd.setRequestAmount(facility.getRequestAmount());
@@ -239,19 +239,19 @@ public class PrescreenFacilityMaker implements Serializable {
     }
 
 
-    public List<Facility> getFacilityList() {
+    public List<FacilityView> getFacilityList() {
         return facilityList;
     }
 
-    public void setFacilityList(List<Facility> facilityList) {
+    public void setFacilityList(List<FacilityView> facilityList) {
         this.facilityList = facilityList;
     }
 
-    public Facility getFacility() {
+    public FacilityView getFacility() {
         return facility;
     }
 
-    public void setFacility(Facility facility) {
+    public void setFacility(FacilityView facility) {
         this.facility = facility;
     }
 

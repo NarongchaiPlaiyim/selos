@@ -4,10 +4,12 @@ import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 
-public class Facility {
+public class FacilityView {
 
     private BigDecimal id;
     private String facilityName;
@@ -17,7 +19,7 @@ public class Facility {
     private ProductProgram productProgram;
     private CreditType creditType ;
 
-    public Facility(){
+    public FacilityView(){
     }
 
     public String getFacilityName() {
@@ -61,5 +63,15 @@ public class Facility {
         this.creditType = creditType;
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("facilityName", facilityName)
+                .append("requestAmount", requestAmount)
+                .append("productProgramName", productProgramName)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .toString();
+    }
 }

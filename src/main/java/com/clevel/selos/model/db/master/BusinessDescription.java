@@ -9,12 +9,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "mst_business_desc")
+@Table(name = "mst_businessdescription")
 public class BusinessDescription implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="businessgroup_id")
     private BusinessGroup businessGroup;
     @Column(name = "name")
