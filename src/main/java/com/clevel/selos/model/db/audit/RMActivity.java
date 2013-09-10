@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.audit;
 
+import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,22 +15,38 @@ public class RMActivity implements Serializable {
     @SequenceGenerator(name="SEQ_ADT_RM_ID", sequenceName="SEQ_ADT_RM_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_RM_ID")
     private long id;
-    @Column(name="requester", nullable=false)   //user id
-    private String requester;
+    @Column(name="user_id", nullable=false)   //user id
+    private String userId;
+    @Column(name="action", nullable=false)
+    private String action;
+    @Column(name="action_desc", length = 500)
+    private String actionDesc;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="request_time", nullable=false)
-    private Date requestTime;
+    @Column(name="action_date", nullable=false)
+    private Date actionDate;
+    @Column(name="result", nullable=false)
+    @Enumerated(EnumType.STRING)
+    private ActionResult actionResult;
+    @Column(name="result_desc", length = 500)
+    private String resultDesc;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="response_time")
-    private Date responseTime;
+    @Column(name="result_date", nullable=false)
+    private Date resultDate;
     @Column(name = "link_key")
     private String linkKey;   // user + id
-    @Column(name = "result",length = 20)
-    private String result;     //resDesc  success fail
-    @Column(name = "result_detail",length = 200)
-    private String resultDetail;   //exception
 
     public RMActivity() {
+    }
+
+    public RMActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
+        this.userId = userId;
+        this.action = action;
+        this.actionDesc = actionDesc;
+        this.actionDate = actionDate;
+        this.actionResult = actionResult;
+        this.resultDesc = resultDesc;
+        this.resultDate = resultDate;
+        this.linkKey = linkKey;
     }
 
     public long getId() {
@@ -40,28 +57,60 @@ public class RMActivity implements Serializable {
         this.id = id;
     }
 
-    public String getRequester() {
-        return requester;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setRequester(String requester) {
-        this.requester = requester;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public Date getRequestTime() {
-        return requestTime;
+    public String getAction() {
+        return action;
     }
 
-    public void setRequestTime(Date requestTime) {
-        this.requestTime = requestTime;
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    public Date getResponseTime() {
-        return responseTime;
+    public String getActionDesc() {
+        return actionDesc;
     }
 
-    public void setResponseTime(Date responseTime) {
-        this.responseTime = responseTime;
+    public void setActionDesc(String actionDesc) {
+        this.actionDesc = actionDesc;
+    }
+
+    public Date getActionDate() {
+        return actionDate;
+    }
+
+    public void setActionDate(Date actionDate) {
+        this.actionDate = actionDate;
+    }
+
+    public ActionResult getActionResult() {
+        return actionResult;
+    }
+
+    public void setActionResult(ActionResult actionResult) {
+        this.actionResult = actionResult;
+    }
+
+    public String getResultDesc() {
+        return resultDesc;
+    }
+
+    public void setResultDesc(String resultDesc) {
+        this.resultDesc = resultDesc;
+    }
+
+    public Date getResultDate() {
+        return resultDate;
+    }
+
+    public void setResultDate(Date resultDate) {
+        this.resultDate = resultDate;
     }
 
     public String getLinkKey() {
@@ -72,32 +121,18 @@ public class RMActivity implements Serializable {
         this.linkKey = linkKey;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
-    public String getResultDetail() {
-        return resultDetail;
-    }
-
-    public void setResultDetail(String resultDetail) {
-        this.resultDetail = resultDetail;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("requester", requester).
-                append("requestTime", requestTime).
-                append("responseTime", responseTime).
+                append("userId", userId).
+                append("action", action).
+                append("actionDesc", actionDesc).
+                append("actionDate", actionDate).
+                append("actionResult", actionResult).
+                append("resultDesc", resultDesc).
+                append("resultDate", resultDate).
                 append("linkKey", linkKey).
-                append("result", result).
-                append("resultDetail", resultDetail).
                 toString();
     }
 }

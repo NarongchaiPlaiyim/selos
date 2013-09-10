@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class SWActivityDAO extends GenericDAO<SafeWatchActivity,Long> {
+public class SafeWatchActivityDAO extends GenericDAO<SafeWatchActivity,Long> {
     @Inject
     private Logger log;
 
     @Inject
-    public SWActivityDAO() {
+    public SafeWatchActivityDAO() {
     }
 }
