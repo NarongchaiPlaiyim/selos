@@ -22,19 +22,19 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     RMService rmService;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    @Config(name = "interface.rm.customerAccount.acronym")
     String acronym;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    @Config(name = "interface.rm.customerAccount.productCode")
     String productCode;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.acronym")
+    @Config(name = "interface.rm.customerAccount.acronym")
     String serverURL;
 
     @Inject
-    @Config(name = "selos.interface.rm.customerAccount.productCode")
+    @Config(name = "interface.rm.customerAccount.productCode")
     String sessionId;
 
     @Inject
@@ -61,7 +61,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {} ",searchIndividual.toString());
 
-        IndividualModel individualModel = rmService.IndividualService(searchIndividual);
+        IndividualModel individualModel = rmService.individualService(searchIndividual);
         return individualModel;
     }
 
@@ -78,7 +78,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch("card");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
-        CorporateModel corporateModel = rmService.CorporateService(searchIndividual);
+        CorporateModel corporateModel = rmService.corporateService(searchIndividual);
         return corporateModel;
     }
 
@@ -88,16 +88,14 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         log.debug("::::::::::::::::::::::::::::::::::::  getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
         searchCustomerAccountModel.setReqId(reqId);
-//        searchCustomerAccountModel.setAcronym(acronym);
-//        searchCustomerAccountModel.setProductCode(productCode);
-        searchCustomerAccountModel.setAcronym("0");
-        searchCustomerAccountModel.setProductCode("0");
+        searchCustomerAccountModel.setAcronym(acronym);
+        searchCustomerAccountModel.setProductCode(productCode);
 //        searchCustomerAccountModel.setServerURL(serverURL);
 //        searchCustomerAccountModel.setSessionId(sessionId);
         searchCustomerAccountModel.setCustNbr(custNbr);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchCustomerAccountModel.toString());
-        CustomerAccountModel customerAccountModel = rmService.CustomerAccountService(searchCustomerAccountModel);
+        CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
 
         return  customerAccountModel;
     }

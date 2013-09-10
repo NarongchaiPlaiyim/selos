@@ -1,6 +1,9 @@
 
 package com.tmb.common.data.requestsearchcustomeraccount;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -208,4 +211,14 @@ public class Header {
         this.sessionId = ((JAXBElement<String> ) value);
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqId", reqId)
+                .append("productCode", productCode)
+                .append("acronym", acronym)
+                .append("serverURL", serverURL)
+                .append("sessionId", sessionId)
+                .toString();
+    }
 }

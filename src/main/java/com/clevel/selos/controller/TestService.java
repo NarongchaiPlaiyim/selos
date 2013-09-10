@@ -41,8 +41,6 @@ public class TestService implements Serializable{
     List<CardType> list;
     List<CardTypeView>listhardcode;
 
-    public static String printResponse;
-    public static String printRequest;
     private String printDetail;
 
     public TestService(){
@@ -221,20 +219,7 @@ public class TestService implements Serializable{
 
     // print Request Response
 
-    public String getPrintResponse() {
-        return printResponse;
-    }
 
-    public void setPrintResponse(String printResponse) {
-        this.printResponse = printResponse;
-    }
-    public String getPrintRequest() {
-        return printRequest;
-    }
-
-    public void setPrintRequest(String printRequest) {
-        this.printRequest = printRequest;
-    }
     public String getPrintDetail() {
         return printDetail;
     }

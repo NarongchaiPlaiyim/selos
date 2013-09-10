@@ -4,7 +4,8 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.nccrs.models.request.*;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
-import com.clevel.selos.integration.ncrs.httppost.Post;
+import com.clevel.selos.integration.nccrs.httppost.Post;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.thoughtworks.xstream.XStream;
@@ -25,11 +26,21 @@ public class NCCRSImp implements NCCRS, Serializable {
     @ValidationMessage
     Message message;
 
-    //Config
-    private String id = "SLOSTEST";
-    private String pass = "SLOSTEST12";
+    @Inject
+    @Config(name = "interface.ncb.nccrs.user")
+    private String id;
 
-    private String url = "http://10.175.230.112/ncrs/servlet/xmladapter";
+    @Inject
+    @Config(name = "interface.ncb.nccrs.pass")
+    private String pass;
+
+    @Inject
+    @Config(name = "interface.ncb.nccrs.address")
+    private String url;
+
+    @Inject
+    @Config(name = "interface.ncb.nccrs.timeOut")
+    private String timeOut;
 
     @Inject
     public NCCRSImp() {
@@ -38,16 +49,16 @@ public class NCCRSImp implements NCCRS, Serializable {
     @Override
     public NCCRSResponseModel requestOnline(NCCRSModel model) throws Exception {
         if (null==model) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOnline(NCCRSModel : {})",model.toString());
-        String CPUTOCPU_ENQUIRY = "BB01001";
+        log.debug("=========================================NCCRS requestOnline(NCCRSModel : {})",model.toString());
+        final String CPUTOCPU_ENQUIRY = "BB01001";
         return request(model,CPUTOCPU_ENQUIRY);
     }
 
     @Override
     public NCCRSResponseModel requestOffline(NCCRSModel model) throws Exception {
         if (null==model) throw new ValidationException(message.get("validation.101"));
-        log.debug("========================================= requestOffline(NCCRSModel : {})",model.toString());
-        String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
+        log.debug("=========================================NCCRS requestOffline(NCCRSModel : {})",model.toString());
+        final String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(model, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
 
@@ -69,7 +80,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         NCCRSResponseModel nccrsResponse = null;
         xStream = new XStream();
         xStream.processAnnotations(NCCRSRequestModel.class);
-        log.debug("========================================= Command code : {}",command);
+        log.debug("=========================================NCCRS Command code : {}",command);
         nccrsRequest = new NCCRSRequestModel(
                            new HeaderModel(id,pass,command),
                            new BodyModel(
@@ -79,15 +90,15 @@ public class NCCRSImp implements NCCRS, Serializable {
                                new AttributeModel(historicalBalanceReport)
                            ));
         xml = xStream.toXML(nccrsRequest);
-        log.debug("========================================= Request : {}",xml);
-        result = post.sendPost(xml,url);
+        log.debug("=========================================NCCRS Request : {}",xml);
+        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
-            log.debug("========================================= Response : {}",result);
+//            log.debug("=========================================NCCRS Response : {}",result);
             xStream.processAnnotations(NCCRSResponseModel.class);
             nccrsResponse = (NCCRSResponseModel)xStream.fromXML(result);
             return nccrsResponse;
         }else{
-            log.debug("========================================= Response : {}",result);
+//            log.debug("=========================================NCCRS Response : {}",result);
             return nccrsResponse;
         }
     }
