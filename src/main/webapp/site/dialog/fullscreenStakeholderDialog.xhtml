@@ -8,15 +8,51 @@
     <h:form id="stakeholderDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title">Stakeholder Name :</td>
+                <td class="title">  <h:outputText value="#{businessInfoDetail.dlgStakeName}"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.stakeholderName}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.name}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title">Stakeholder Contact :</td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.stakeholderContact}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.contactName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder phoneNo :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.phoneNo}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder contactYear :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.contactYear}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentSalesVolumn :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentSalesVolumn}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentCash :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCash}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentCredit :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCredit}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder creditTerm :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.creditTerm}"/>
                 </td>
             </tr>
             <tr>
@@ -26,7 +62,7 @@
                             value="Save"
                             styleClass="small"
                             action="#{businessInfoDetail.onSaveStakeholder()}"
-                            update=":supplierTable,:buyerTable"
+                            update=":supplierTable,:buyerTable,:supplierTotalTable,:buyerTotalTable"
                             oncomplete="stakeholderDlg.hide()"
                      />
 

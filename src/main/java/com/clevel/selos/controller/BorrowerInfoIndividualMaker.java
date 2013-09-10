@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.model.RMmodel.IndividualModel;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -65,6 +67,8 @@ public class BorrowerInfoIndividualMaker implements Serializable {
     private MaritalStatusDAO maritalStatusDAO;
     @Inject
     private AddressTypeDAO addressTypeDAO;
+    @Inject
+    private RMInterface rmInterfaceImpl;
 
     public BorrowerInfoIndividualMaker() {
 
@@ -115,6 +119,12 @@ public class BorrowerInfoIndividualMaker implements Serializable {
         }else if(titleLang.equals("eng")){
             titleIDTh1 = titleIDEn1;
         }
+    }
+
+    public void onSearchRMIndividual( String cusId) {
+        IndividualModel individualModel;
+        //individualModel = rmInterfaceImpl.getIndividualInfo(1,1,"",RMInterface.DocumentType.CITIZEN_ID);
+
     }
 
     public int getTitleIDTh1() {
