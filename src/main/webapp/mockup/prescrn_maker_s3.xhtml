@@ -66,7 +66,7 @@
         </td>
         <td>
             <h:form id="tableFacility" styleClass="panel" style="width:610px;">
-                <p:dataTable id="resultTableFacility" var="item" value="#{prescreenFacilityMaker.facilityList}"
+                <p:dataTable id="resultTableFacility" var="item" value="#{prescreenFacilityMaker.facilityViewList}"
                              paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" style="width:590px;">
 
                     <p:column headerText="" styleClass="center" style="width:22px;">
@@ -279,7 +279,7 @@
         <td class="title">Business Information x :</td>
         <td>
             <p:panel id="tableBusinessInformation" styleClass="panel" style="width:610px;">
-                <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInformationList}"
+                <p:dataTable id="resulttableBusinessInformation" var="businessInformation" value="#{prescreenMaker.businessInfoViewList}"
                              paginator="false" rowKey="#{businessInformation}" rowIndexVar="rowIndex" style="width:590px;">
 
                     <p:column headerText="" styleClass="center" style="width:22px;">

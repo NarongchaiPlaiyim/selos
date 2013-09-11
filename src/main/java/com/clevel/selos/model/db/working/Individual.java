@@ -19,6 +19,7 @@ public class Individual implements Serializable {
     @SequenceGenerator(name="SEQ_WRK_INDIVIDUAL_ID", sequenceName="SEQ_WRK_INDIVIDUAL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_INDIVIDUAL_ID")
     private long id;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -26,20 +27,26 @@ public class Individual implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="birth_date")
     private Date birthDate;
+
     @Column(name="gender")
     private Gender gender;
+
     @OneToOne
     @JoinColumn(name="nationality_id")
     private Nationality nationality;
+
     @OneToOne
     @JoinColumn(name="education_id")
     private Education education;
+
     @OneToOne
     @JoinColumn(name="occupation_id")
     private Occupation occupation;
+
     @OneToOne
     @JoinColumn(name="maritalstatus_id")
     private MaritalStatus maritalStatus;
+
     @Column(name="num_of_children")
     private int numberOfChildren;
 

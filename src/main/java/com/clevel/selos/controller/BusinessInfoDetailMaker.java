@@ -6,7 +6,6 @@ import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.view.BizProduct;
-import com.clevel.selos.model.view.Facility;
 import com.clevel.selos.model.view.Stakeholder;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;

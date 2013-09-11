@@ -3,24 +3,26 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_iddocumenttype")
-public class IDDocumentType implements Serializable {
+@Table(name = "mst_customer_entity")
+public class CustomerEntity implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @OneToOne
-    @JoinColumn(name="customertype_id")
-    private CustomerType customerType;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "active")
     private int active;
 
-    public IDDocumentType() {
+    public CustomerEntity() {
     }
 
     public int getId() {
@@ -29,14 +31,6 @@ public class IDDocumentType implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public CustomerType getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
     }
 
     public String getDescription() {
@@ -59,7 +53,6 @@ public class IDDocumentType implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
-                append("customerType", customerType).
                 append("description", description).
                 append("active", active).
                 toString();

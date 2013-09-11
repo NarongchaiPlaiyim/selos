@@ -77,9 +77,9 @@ public class BorrowerInfoIndividualMaker implements Serializable {
     @PostConstruct
     public void onCreation() {
         raceList = nationalityDAO.findAll();
-        CustomerType customerType =new CustomerType();
-        customerType.setId(1);
-        titleList = titleDAO.getListByCustomerType(customerType);
+        CustomerEntity customerEntity =new CustomerEntity();
+        customerEntity.setId(1);
+        titleList = titleDAO.getListByCustomerType(customerEntity);
         provinceList = provinceDAO.getListOrderByParameter("name");
         relationList = relationDAO.findAll();
         addressTypeList = addressTypeDAO.findAll();

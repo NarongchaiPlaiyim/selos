@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class BusinessInformation {
+public class BusinessInfoView {
     @Inject
     Logger log;
     @Inject

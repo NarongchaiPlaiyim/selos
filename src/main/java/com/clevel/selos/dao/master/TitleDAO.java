@@ -1,9 +1,7 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.master.CustomerType;
+import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.Title;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -21,10 +19,10 @@ public class TitleDAO extends GenericDAO<Title,Integer> {
     public TitleDAO() {
     }
 
-    public List<Title> getListByCustomerType(CustomerType customerType) {
-        log.info("getListByCustomerType. (businessGroup: {})",customerType);
+    public List<Title> getListByCustomerType(CustomerEntity customerEntity) {
+        log.info("getListByCustomerType. (businessGroup: {})", customerEntity);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customerType", customerType));
+        criteria.add(Restrictions.eq("customerType", customerEntity));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
         log.info("getListByCustomerType. (result size: {})",titles.size());

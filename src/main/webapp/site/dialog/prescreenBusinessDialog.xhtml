@@ -10,53 +10,35 @@
             <tr>
                 <td class="title">Business Group :</td>
                 <td>
-                    <p:selectOneMenu id="businessGroupID" size="1" style="width: 300px;"
-                                        value="#{prescreenMaker.businessGroup.id}"
+                    <p:selectOneMenu id="dlgBusinessGroupId" size="1" style="width: 300px;"
+                                        value="#{prescreenMaker.businessInfo.businessDescription.businessGroup.id}"
                                         required="true">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgBusinessGroup"
-                                       itemLabel="#{dlgBusinessGroup.name}"
-                                       itemValue="#{dlgBusinessGroup.id}"/>
-                        <p:ajax listener="#{prescreenMaker.onChangeBusinessGroupName}" update=":businessDlgForm" />
-                    </p:selectOneMenu>
-
-                    <!--<h:selectOneListbox size="1" styleClass="largest_l" id="businessGroupID"
-                                        value="#{prescreenMaker.businessInformation.businessDescription.businessGroup.id}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                        <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgbusinessGroup"
-                                       itemLabel="#{dlgbusinessGroup.name}"
-                                       itemValue="#{dlgbusinessGroup.id}"/>
-                        <p:ajax listener="#{prescreenMaker.onChangeBusinessGroupName}" update=":businessDlgForm" />
-                    </h:selectOneListbox>-->
-
+                        <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgBusinessGroupItem"
+                                       itemLabel="#{dlgBusinessGroupItem.name}"
+                                       itemValue="#{dlgBusinessGroupItem.id}"/>
+                        <p:ajax listener="#{prescreenMaker.onChangeBusinessGroup}" update=":businessDlgForm" />
+                    </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
                 <td class="title">Business Description :</td>
                 <td>
                     <p:selectOneMenu id="businessDescriptionID" size="1" style="width: 300px;"
-                                        value="#{prescreenMaker.businessDescription.id}"
+                                        value="#{prescreenMaker.businessInfo.businessDescription.id}"
                                         required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgbusinessDesciption"
-                                       itemLabel="#{dlgbusinessDesciption.name}"
-                                       itemValue="#{dlgbusinessDesciption.id}"/>
-                        <p:ajax listener="#{prescreenMaker.onChangeBusinessDescriptionName}" update=":businessDlgForm" />
+                        <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgBusinessDescItem"
+                                       itemLabel="#{dlgBusinessDescItem.name}"
+                                       itemValue="#{dlgBusinessDescItem.id}"/>
+                        <p:ajax listener="#{prescreenMaker.onChangeBusinessDesc}" update=":businessDlgForm" />
                     </p:selectOneMenu>
-                    <!--<h:selectOneListbox size="1" styleClass="largest_l" id="businessDescriptionID"
-                                        value="#{prescreenMaker.businessInformation.businessDescription.id}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                        <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgbusinessDesciption"
-                                       itemLabel="#{dlgbusinessDesciption.name}"
-                                       itemValue="#{dlgbusinessDesciption.id}"/>
-                        <p:ajax listener="#{prescreenMaker.onChangeBusinessDescriptionName}" update=":businessDlgForm" />
-                    </h:selectOneListbox>-->
                 </td>
             </tr>
             <tr>
                 <td class="title">Comment :</td>
                 <td class="left">
-                    <p:inputText id="dBusinessComment" value="#{prescreenMaker.businessDescription.businessComment}" readonly="true" styleClass="readonly"/>
+                    <p:inputText id="dBusinessComment" value="#{prescreenMaker.businessInfo.businessDescription.comment}" readonly="true" styleClass="readonly"/>
                 </td>
             </tr>
             <tr>
@@ -70,13 +52,6 @@
                             process=":businessDlgForm"
                             update=":businessDlgForm :frmMain:resulttableBusinessInformation"
                             oncomplete="handlePrescreenBusinessInfoRequest(xhr, status, args)"/>
-                    <p:commandButton value="Add"
-                                     rendered="#{prescreenMaker.modeForButton == 'add'}"
-                                     id="AddBusinessInformation" styleClass="small"
-                                     update=":frmMain:resulttableBusinessInformation"
-                                     action="#{prescreenMaker.onSaveBusinessInformation()}"
-                                     oncomplete="businessDlg.hide()"/>
-
                     <p:commandButton value="Edit"
                                      rendered="#{prescreenMaker.modeForButton == 'edit'}"
                                      id="EditBusinessInformation" styleClass="small"

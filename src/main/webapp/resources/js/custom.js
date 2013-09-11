@@ -32,3 +32,9 @@ function handlePrescreenBusinessInfoRequest(xhr, status, args) {
         businessDlg.hide();
     }
 }
+
+function handlePrescreenProposeCreditRequest(xhr, status, args) {
+    if(args.functionComplete){
+        proposeCollateralDlg.hide();
+    }
+}

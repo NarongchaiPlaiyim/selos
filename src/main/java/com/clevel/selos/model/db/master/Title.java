@@ -20,7 +20,7 @@ public class Title implements Serializable {
     private String titleEn;
     @OneToOne
     @JoinColumn(name="customertype_id")
-    private CustomerType customerType;
+    private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
 
@@ -59,12 +59,12 @@ public class Title implements Serializable {
         this.titleEn = titleEn;
     }
 
-    public CustomerType getCustomerType() {
-        return customerType;
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
     }
 
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
     public int getActive() {
@@ -82,7 +82,7 @@ public class Title implements Serializable {
                 append("code", code).
                 append("titleTh", titleTh).
                 append("titleEn", titleEn).
-                append("customerType", customerType).
+                append("customerEntity", customerEntity).
                 append("active", active).
                 toString();
     }

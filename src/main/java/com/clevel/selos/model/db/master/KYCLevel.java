@@ -10,17 +10,23 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_customertype")
-public class CustomerType implements Serializable {
+@Table(name = "mst_kyclevel")
+public class KYCLevel implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "description")
-    private String description;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "kyc_level")
+    private int kycLevel;
+
     @Column(name = "active")
     private int active;
 
-    public CustomerType() {
+    public KYCLevel(){
+
     }
 
     public int getId() {
@@ -31,12 +37,20 @@ public class CustomerType implements Serializable {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getKycLevel() {
+        return kycLevel;
+    }
+
+    public void setKycLevel(int kycLevel) {
+        this.kycLevel = kycLevel;
     }
 
     public int getActive() {
@@ -49,10 +63,11 @@ public class CustomerType implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("kycLevel", kycLevel)
+                .append("active", active)
+                .toString();
     }
 }

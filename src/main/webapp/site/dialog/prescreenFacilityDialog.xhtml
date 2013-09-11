@@ -11,13 +11,13 @@
             <tr>
                 <td class="title" style="width:145px;">Product Program :</td>
                 <td>
-                    <p:selectOneMenu id="dlgSelectProductProgram" value="#{prescreenMaker.facility.productProgram.id}"
+                    <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
                                         size="1" style="width: 200px;" required="true">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
-                                   var="dlgProductProgram"
-                                   itemLabel="#{dlgProductProgram.productProgram.name}"
-                                   itemValue="#{dlgProductProgram.productProgram.id}"/>
+                                   var="prodProgramItem"
+                                   itemLabel="#{prodProgramItem.productProgram.name}"
+                                   itemValue="#{prodProgramItem.productProgram.id}"/>
                     <p:ajax event="change"
                             listener="#{prescreenMaker.onChangeProductProgram}"
                             update=":facilityDlgForm"/>
@@ -34,9 +34,6 @@
                                        var="dlgCreditType"
                                        itemLabel="#{dlgCreditType.creditType.name}"
                                        itemValue="#{dlgCreditType.creditType.id}"/>
-                        <p:ajax event="change"
-                                listener="#{prescreenMaker.onChangeCreditType}"
-                                update=":facilityDlgForm"/>
                     </p:selectOneMenu>
                 </td>
             </tr>

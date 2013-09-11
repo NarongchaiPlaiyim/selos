@@ -20,7 +20,7 @@ public class AccountType implements Serializable {
     private int wcFlag;
     @OneToOne
     @JoinColumn(name="customertype_id")
-    private CustomerType customerType;
+    private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
 
@@ -59,12 +59,12 @@ public class AccountType implements Serializable {
         this.wcFlag = wcFlag;
     }
 
-    public CustomerType getCustomerType() {
-        return customerType;
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
     }
 
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
     public int getActive() {
@@ -82,7 +82,7 @@ public class AccountType implements Serializable {
                 append("name", name).
                 append("dbrFlag", dbrFlag).
                 append("wcFlag", wcFlag).
-                append("customerType", customerType).
+                append("customerEntity", customerEntity).
                 append("active", active).
                 toString();
     }

@@ -64,7 +64,7 @@
                     <td></td>
                     <td>
                         <p:panel id="tableFacility" styleClass="panel" style="width:610px;"  >
-                            <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityList}"
+                            <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityViewList}"
                                          paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex" style="width:590px;"  >
 
                                 <p:column headerText="" styleClass="center" style="width:22px;">
@@ -627,8 +627,8 @@
                     <tr>
                         <td class="title" style="width:120px;">Customer Type :</td>
                         <td colspan="3">
-                            <input type="radio" name="customerType" value="0" onclick="checkCustomerType(this)"/> Individual
-                            <input type="radio" name="customerType" value="1" onclick="checkCustomerType(this)"/> Juristic
+                            <input type="radio" name="customerEntity" value="0" onclick="checkCustomerType(this)"/> Individual
+                            <input type="radio" name="customerEntity" value="1" onclick="checkCustomerType(this)"/> Juristic
                         </td>
                     </tr>
                     <tr>
@@ -735,8 +735,8 @@
                     <tr>
                         <td class="title">Customer Type :</td>
                         <td colspan="3">
-                            <input type="radio" name="customerType" value="0"/> Individual
-                            <input type="radio" name="customerType" value="1"/> Juristic
+                            <input type="radio" name="customerEntity" value="0"/> Individual
+                            <input type="radio" name="customerEntity" value="1"/> Juristic
                         </td>
                     </tr>
                     <tr>
