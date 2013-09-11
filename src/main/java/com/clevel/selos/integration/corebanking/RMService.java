@@ -3,11 +3,13 @@ package com.clevel.selos.integration.corebanking;
 import com.clevel.selos.dao.audit.RMActivityDAO;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RMmodel.CustomerAccountListModel;
 import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.db.audit.RMActivity;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
@@ -45,15 +47,13 @@ public class RMService implements Serializable {
     Logger log;
 
     @Inject
-    RMActivityDAO rmActivityDAO;
-
-    @Inject
     @ExceptionMessage
     Message exceptionMsg;
 
     @Inject
     @ValidationMessage
     Message validationMsg;
+
 
     @Inject
     @Config(name = "interface.rm.individual.address")
@@ -72,6 +72,10 @@ public class RMService implements Serializable {
     @Inject
     @Config(name = "interface.rm.service.requestTimeout")
     String requestTimeout;
+
+    @Inject
+    @RM
+    SystemAuditor rmAuditor;
 
     @Inject
     public RMService() {
@@ -384,10 +388,10 @@ public class RMService implements Serializable {
         customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
 
         //Audit Data
-//        auditRM(searchCustomerAccountModel.getReqId(),requestTime,responseTime,searchCustomerAccountModel.getReqId(),resSearchCustomerAccount.getHeader().getResDesc(),"OK");
+       rmAuditor.add("userid","customerAccountService","ff",new Date(), ActionResult.SUCCEED,"ff",new Date(),"df");
 
         //Check Success
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchCustomerAccount.getHeader().getResDesc());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());
         if (resSearchCustomerAccount.getHeader().getResCode().equals("0000")) {
             List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
             //checkSearchResult
@@ -438,7 +442,7 @@ public class RMService implements Serializable {
             e.printStackTrace();
             Date responseTime=new Date();
             //Audit Data
-//            auditRM(searchCustomerAccountModel.getReqId(),requestTime,responseTime,searchCustomerAccountModel.getReqId(),"fail",e.getMessage());
+            rmAuditor.add("userid","customerAccountService","ff",requestTime, ActionResult.FAILED,"ff",responseTime,"df");
         }
 
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
@@ -502,21 +506,5 @@ public class RMService implements Serializable {
     }
 
 
-//    private void auditRM(String requester,Date requestTime,Date responseTime,String linkKey,String result,String resultDetail){
-//        log.debug("AUDIT : "+requester +" "+requestTime+" "+responseTime+" "+linkKey+" "+result+" "+resultDetail);
-//              RMActivity rmActivity=new RMActivity();
-////              rmActivity.setId(0);
-//              rmActivity.setRequester(requester);
-//              rmActivity.setRequestTime(requestTime);
-//              rmActivity.setResponseTime(responseTime);
-//              rmActivity.setLinkKey(linkKey);
-//              rmActivity.setResult(result);
-//              rmActivity.setResultDetail(resultDetail+"3");
-//
-//        if(rmActivity!=null){
-//
-//          rmActivityDAO.persist(rmActivity);
-//
-//        }
-//    }
+
 }
