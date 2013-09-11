@@ -73,4 +73,8 @@ public class Util {
         return list!=null?list: Collections.EMPTY_LIST;
     }
 
+    public static String getLinkKey(String userId){
+        return userId+"_"+ System.currentTimeMillis();
+    }
+
 }
