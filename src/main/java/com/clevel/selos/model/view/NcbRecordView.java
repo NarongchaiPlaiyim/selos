@@ -1,5 +1,11 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.AccountStatus;
+import com.clevel.selos.model.db.master.AccountType;
+import com.clevel.selos.model.db.master.SettlementStatus;
+import com.clevel.selos.model.db.master.TDRCondition;
+
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 
 /**
@@ -9,58 +15,47 @@ import java.util.LinkedHashMap;
  * Time: 15:31 น.
  * To change this template use File | Settings | File Templates.
  */
-public class NcbRecord {
+public class NcbRecordView {
 
-    private String loanAccountType;
-    private String loanAccountStatus;
-    private String isTMBAccount;
+    private Boolean isTMBAccount;
     private String dateOfInfo;
     private String accountOpenDate;
-    private String limit;
-    private String outstanding;
-    private String installment;
+    private BigDecimal limit;
+    private BigDecimal outstanding;
+    private BigDecimal installment;
     private String dateOfDebtRestructuring;
     private String typeOfCurrentPayment;
     private String typeOfHistoryPayment;
     private String noOfOutstandingPaymentIn12months;
     private String noOfOverLimit;
-    private String refinanceFlag;
+    private Boolean refinanceFlag;
     private String noOfmonthsPayment;
+    private boolean monthsPaymentFlag;
 
 
-    private LinkedHashMap<String, String> isTMBAccounts;
+    private AccountType accountType;
+    private AccountStatus accountStatus;
+    private SettlementStatus settlementStatus;
+    private TDRCondition currentPayment;
+    private TDRCondition historyPayment;
 
-    public LinkedHashMap<String, String> getTMBAccounts() {
-        isTMBAccounts = new LinkedHashMap<String, String>();
-        isTMBAccounts.put("Yes", "Y");
-        isTMBAccounts.put("No", "N");
-        return isTMBAccounts;
+    public NcbRecordView(){
+
     }
 
-    public NcbRecord(){
+    public boolean isMonthsPaymentFlag() {
+        return monthsPaymentFlag;
     }
 
-    public String getLoanAccountType() {
-        return loanAccountType;
+    public void setMonthsPaymentFlag(boolean monthsPaymentFlag) {
+        this.monthsPaymentFlag = monthsPaymentFlag;
     }
 
-    public void setLoanAccountType(String loanAccountType) {
-        this.loanAccountType = loanAccountType;
-    }
-
-    public String getLoanAccountStatus() {
-        return loanAccountStatus;
-    }
-
-    public void setLoanAccountStatus(String loanAccountStatus) {
-        this.loanAccountStatus = loanAccountStatus;
-    }
-
-    public String getTMBAccount() {
+    public Boolean getTMBAccount() {
         return isTMBAccount;
     }
 
-    public void setTMBAccount(String TMBAccount) {
+    public void setTMBAccount(Boolean TMBAccount) {
         isTMBAccount = TMBAccount;
     }
 
@@ -80,27 +75,27 @@ public class NcbRecord {
         this.accountOpenDate = accountOpenDate;
     }
 
-    public String getLimit() {
+    public BigDecimal getLimit() {
         return limit;
     }
 
-    public void setLimit(String limit) {
+    public void setLimit(BigDecimal limit) {
         this.limit = limit;
     }
 
-    public String getOutstanding() {
+    public BigDecimal getOutstanding() {
         return outstanding;
     }
 
-    public void setOutstanding(String outstanding) {
+    public void setOutstanding(BigDecimal outstanding) {
         this.outstanding = outstanding;
     }
 
-    public String getInstallment() {
+    public BigDecimal getInstallment() {
         return installment;
     }
 
-    public void setInstallment(String installment) {
+    public void setInstallment(BigDecimal installment) {
         this.installment = installment;
     }
 
@@ -144,11 +139,11 @@ public class NcbRecord {
         this.noOfOverLimit = noOfOverLimit;
     }
 
-    public String getRefinanceFlag() {
+    public Boolean getRefinanceFlag() {
         return refinanceFlag;
     }
 
-    public void setRefinanceFlag(String refinanceFlag) {
+    public void setRefinanceFlag(Boolean refinanceFlag) {
         this.refinanceFlag = refinanceFlag;
     }
 
@@ -158,5 +153,45 @@ public class NcbRecord {
 
     public void setNoOfmonthsPayment(String noOfmonthsPayment) {
         this.noOfmonthsPayment = noOfmonthsPayment;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public SettlementStatus getSettlementStatus() {
+        return settlementStatus;
+    }
+
+    public void setSettlementStatus(SettlementStatus settlementStatus) {
+        this.settlementStatus = settlementStatus;
+    }
+
+    public TDRCondition getCurrentPayment() {
+        return currentPayment;
+    }
+
+    public void setCurrentPayment(TDRCondition currentPayment) {
+        this.currentPayment = currentPayment;
+    }
+
+    public TDRCondition getHistoryPayment() {
+        return historyPayment;
+    }
+
+    public void setHistoryPayment(TDRCondition historyPayment) {
+        this.historyPayment = historyPayment;
     }
 }

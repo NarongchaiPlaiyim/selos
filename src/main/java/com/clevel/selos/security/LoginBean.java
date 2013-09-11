@@ -1,11 +1,13 @@
 package com.clevel.selos.security;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.BRMS;
+import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Language;
-import com.clevel.selos.model.db.audit.UserActivity;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.system.audit.UserAudit;
+import com.clevel.selos.system.audit.SystemAuditor;
+import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,11 +21,11 @@ import org.springframework.security.web.authentication.session.ConcurrentSession
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @ManagedBean(name = "loginBean")
 @RequestScoped
@@ -33,8 +35,9 @@ public class LoginBean {
 
     @Inject
     UserDAO userDAO;
+
     @Inject
-    UserAudit userAudit;
+    UserAuditor userAuditor;
 
     private String userName;
     private String password;
@@ -51,7 +54,7 @@ public class LoginBean {
         HttpServletResponse httpServletResponse = FacesUtil.getResponse();
         if (user == null) {
             log.debug("user not found in system! (user: {})", userName.trim());
-            userAudit.addFailed(userName.trim(), "Login", "", "User not found in system!");
+            userAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
             return "unSecured";
         }
         UserDetail userDetail = new UserDetail(user.getUserName(), user.getRole().getName(), user.getRole().getRoleType().getRoleTypeName().name());
@@ -68,13 +71,13 @@ public class LoginBean {
             HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("language", Language.EN);
 
-            userAudit.addSucceed(userDetail.getUserName(), "Login", "");
+            userAuditor.addSucceed(userDetail.getUserName(), "Login", "");
             return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (AuthenticationException e) {
-            userAudit.addException(userName.trim(), "Login", "", e.getMessage());
+            userAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
         }
-        userAudit.addFailed(userName.trim(), "Login", "", "Authentication failed!");
+        userAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
     }
 
@@ -86,7 +89,7 @@ public class LoginBean {
         log.debug("logging out.");
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
-        userAudit.addSucceed(userDetail.getUserName(),"Logout","");
+        userAuditor.addSucceed(userDetail.getUserName(), "Logout", "");
         return "loggedOut";
     }
 

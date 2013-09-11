@@ -1,8 +1,8 @@
 package com.clevel.selos.integration.ncrs.service;
 
-import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
+import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
 
 public interface NCRS {
-    public NCRSResponse requestOnline(NCRSModel ncrsModel)throws Exception;
-    public NCRSResponse requestOffline(NCRSModel ncrsModel)throws Exception;
+    public NCRSResponseModel requestOnline(NCRSModel ncrsModel)throws Exception;
+    public NCRSResponseModel requestOffline(NCRSModel ncrsModel)throws Exception;
 }

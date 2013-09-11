@@ -25,7 +25,7 @@
 <ui:include src="include/menubar.xhtml"/>
 <!-- End Menu -->
 <div id="content_container">
-<div id="content_name">NCB Record Detail</div>
+<div id="content_name"><h:outputText value="#{msg.get('app.ncbRecordDetail')}"/></div>
 <div id="content">
 <div id="content_info">
     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
@@ -123,11 +123,6 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <!--      <h:selectOneRadio id="isNPL" value="#{?}">
-                  <f:selectItem itemLabel="Yes" itemValue="Y" />
-                  <f:selectItem itemLabel="No"  itemValue="N" />
-              </h:selectOneRadio>-->
-
         <input type="radio" name="isNPL" value="Y"/> Yes
         <input type="radio" name="isNPL" value="N"/> No.
 
@@ -156,9 +151,14 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <select class="largest_m" disabled="disabled">
-            <option>ไม่เคยปรับปรุงโครงสร้างหนี้</option>
-        </select>
+        <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
+                            value="#{fullappNcb.ncbRecordView.settlementStatus.id}" disabled="true">
+            <f:selectItems value="#{fullappNcb.settlementStatusList}"
+                           var="dlgSettlementStatusList"
+                           itemLabel="#{dlgSettlementStatusList.name}"
+                           itemValue="#{dlgSettlementStatusList.id}"/>
+
+        </h:selectOneListbox>
 
         <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
              class="result_green center">GREEN
@@ -183,7 +183,7 @@
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
                 process="@this"
-                actionListener="#{fullappNcb.onAdd}"
+                actionListener="#{fullappNcb.onAddNcbRecord}"
                 update=":ncbDlgForm"
                 oncomplete="ncbDlg.show();">
             <p:resetInput target=":ncbDlgForm"/>
@@ -195,176 +195,224 @@
         <table class="table_content">
             <tr>
                 <td>
-                    <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordList}"
-                                 paginator="false" rowKey="#{item.ncbRecord}" rowIndexVar="rowIndex">
+<!--                    <p:dataTable id="resultNcbDetail1" var="item" value="#{fullappNcb.ncbRecordViewList}"
+                                 paginator="false" rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
 
                         <p:column headerText="No." styleClass="center" style="width:22px;">
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.loanAccountType')}"  styleClass="center" style="width: 110px;">
-                            <h:outputText value="#{item.loanAccountType}"/>
+                        <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
+                                  style="width: 110px;">
+                            <h:outputText value="#{item.accountType.name}"/>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center" style="width: 25px;">
-                            <h:outputText value="#{item.isTMBAccount}"/>
+                            <h:selectBooleanCheckbox value="#{item.TMBAccount}"/>
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center" style="width: 70px;">
-                            <h:outputText value="#{item.loanAccountStatus}"/>
+                        <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"
+                                  style="width: 70px;">
+                            <h:outputText value="#{item.accountStatus.name}"/>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center" style="width: 90px;">
-                            <h:outputText value="#{item.dateOfInfo}"/>
+                            <h:outputText  value="#{item.dateOfInfo}" />
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center" style="width: 90px;">
+                        <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center"
+                                  style="width: 90px;">
                             <h:outputText value="#{item.accountOpenDate}"/>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.limit')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.limit}"/>
+                            <h:outputText value="#{item.limit}">
+                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                            </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.outstanding}"/>
+                            <h:outputText value="#{item.outstanding}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                            </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.installment')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.installment}"/>
+                            <h:outputText value="#{item.installment}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                            </h:outputText>
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center" style="width: 100px;">
+                        <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
+                                  style="width: 100px;">
                             <h:outputText value="#{item.dateOfDebtRestructuring}"/>
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}" styleClass="center" style="width: 120px;">
+                        <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center"
+                                  style="width: 110px;">
+                            <h:outputText value="#{item.currentPayment.description}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center"
+                                  style="width: 110px;">
+                            <h:outputText value="#{item.historyPayment.description}"/>
+                        </p:column>
+
+                        <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}" styleClass="center"
+                                  style="width: 120px;">
                             <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
                         </p:column>
 
-                        <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center" style="width: 110px;">
-                            <h:outputText value="#{item.noOfOverLimit}"/>
+                        <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"
+                                  style="width: 110px;">
+                            <h:inputText value="#{item.noOfOverLimit}"/>
                         </p:column>
 
                         <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center" style="width: 30px;">
-                            <h:outputText value="#{item.refinanceFlag}"/>
+                            <h:selectBooleanCheckbox value="#{item.refinanceFlag}"/>
                         </p:column>
 
+                        <p:column headerText="" styleClass="center" style="width:54px;">
+                            <p:commandButton icon="ui-icon-pencil"
+                                             action="#{fullappNcb.onEditNcbDetail(rowIndex)}"
+                                             update=":ncbDlgForm"
+                                             oncomplete="ncbDlg.show();"/>
+                            <p:commandButton icon="ui-icon-trash"
+                                             title="Remove"
+                                             action="#{fullappNcb.onDeleteNcbDetail(rowIndex)}"
+                                             update=":frmMain:resultNcbDetail"/>
+                        </p:column>
+
+
+                            <p:columnGroup type="footer" rendered="#{item.refinanceFlag}" >
+                                <p:row>
+                                    <p:column colspan="4"  footerText="#{item.noOfmonthsPayment}"/>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}1   #{fullappNcb.monthly}"></p:column>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}2" ><h:outputText value="#{item.installment}"/></p:column>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}3" ><h:outputText value="#{item.installment}"/></p:column>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}4" ><h:outputText value="#{item.installment}"/></p:column>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}5" ><h:outputText value="#{item.installment}"/></p:column>
+                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}6" ><h:outputText value="#{item.installment}"/></p:column>
+                                </p:row>
+                            </p:columnGroup>
+
+                    </p:dataTable>-->
+
+                    <!-- -->
+
+                    <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordViewList}" rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column headerText="No." styleClass="center" style="width:22px;"/>
+                                <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center" style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center" style="width: 25px;"/>
+                                <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"  style="width: 70px;"/>
+                                <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center" style="width: 90px;"/>
+                                <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center" style="width: 90px;"/>
+                                <p:column headerText="#{msg.get('app.limit')}" styleClass="center" style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center" style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.installment')}" styleClass="center" style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"  style="width: 100px;"/>
+                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center" style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center" style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}" styleClass="center" style="width: 120px;"/>
+                                <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"  style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center" style="width: 30px;"/>
+                                <p:column headerText="BUTTON" styleClass="center" style="width:60px;"/>
+                            </p:row>
+                        </p:columnGroup>
+                        <p:subTable var="item1" value="#{fullappNcb.ncbRecordView}">
+                            <f:facet name="header">
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{rowIndex+1}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.accountType.name}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{item.TMBAccount}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.accountStatus.name}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText  value="#{item.dateOfInfo}" />
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.accountOpenDate}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.limit}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.outstanding}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.installment}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.dateOfDebtRestructuring}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.currentPayment.description}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.historyPayment.description}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:inputText value="#{item.noOfOverLimit}"/>
+                            </p:column>
+
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{item.refinanceFlag}"/>
+                            </p:column>
+
+                            <p:column>
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 action="#{fullappNcb.onEditNcbDetail(rowIndex)}"
+                                                 update=":ncbDlgForm"
+                                                 oncomplete="ncbDlg.show();"/>
+                                <p:commandButton icon="ui-icon-trash"
+                                                 title="Remove"
+                                                 action="#{fullappNcb.onDeleteNcbDetail(rowIndex)}"
+                                                 update=":frmMain:resultNcbDetail"/>
+                            </p:column>
+
+                            <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
+                                <p:row>
+                                    <p:column colspan="4"  style="text-align: right" footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
+                                    <p:column colspan="12" style="text-align: left"  footerText="#{msg.get('app.monthNo1')} : #{fullappNcb.monthly} #{msg.get('app.monthNo2')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo3')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo4')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo5')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo6')} : #{fullappNcb.monthly}"></p:column>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:subTable>
                     </p:dataTable>
                 </td>
             </tr>
- <!--           <tr>
-                <th style="width: 25px;line-height: 15px;">No.</th>
-                <th style="width: 110px;line-height: 15px;"><h:outputText
-                        value="#{msg.get('app.loanAccountType')}"/></th>
-                <th style="width: 25px;line-height: 15px;"><h:outputText
-                        value="#{msg.get('app.isTMBAccount')}"/></th>
-                <th style="width: 70px;line-height: 15px;"><h:outputText
-                        value="#{msg.get('app.loanAccountStatus')}"/></th>
-                <th style="width: 90px;line-height: 15px;"><h:outputText
-                        value="#{msg.get('app.dateOfInfo')}"/></th>
-                <th style="width: 90px;line-height: 15px;">วันที่เปิดบัญชี (วัน/เดือน/ปี)</th>
-                <th style="width: 80px;line-height: 15px;">วงเงิน (หน่วย:บาท)</th>
-                <th style="width: 80px;line-height: 15px;">ภาระคงค้าง / ยอดใช้ (หน่วย:บาท)</th>
-                <th style="width: 80px;line-height: 15px;">ยอดชำระต่อเดือน (หน่วย:บาท)</th>
-                <th style="width: 100px;line-height: 15px;">วันที่ปรับปรุงโครงสร้างหนี้ (วัน/เดือน/ปี)</th>
-                <th style="width: 120px;line-height: 15px;">ลักษณะการชำระหนี้ ณ ปัจจุบัน</th>
-                <th style="width: 120px;line-height: 15px;">ลักษณะการชำระหนี้ที่ผ่านมา</th>
-                <th style="width: 110px;line-height: 15px;">จำนวนการค้างชำระในรอบ 12 เดือน</th>
-                <th style="width: 30px; line-height: 15px;">Over Limit (Times)</th>
-                <th style="width: 30px; line-height: 15px;">Refinance</th>
-            </tr>-->
-           <!-- <tr style="background-color: #dfdfdf">
-                <td class="center" style="line-height: 15px">1</td>
-                <td class="center" style="line-height: 15px">สินเชื่อบุคคล (เงินกู้)</td>
-                <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
-                <td class="center" style="line-height: 15px">ปกติ</td>
-                <td class="center" style="line-height: 15px">31/10/2555</td>
-                <td class="center" style="line-height: 15px">14/09/2555</td>
-                <td class="right" style="line-height: 15px">600,000.00</td>
-                <td class="right" style="line-height: 15px">607,809.00</td>
-                <td class="right" style="line-height: 15px">21,100.00</td>
-                <td class="center" style="line-height: 15px"></td>
-                <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
-                <td class="right" style="line-height: 15px">0</td>
-                <td class="center" style="background-color:#cae4cb;"><input type="text"
-                                                                            class="smallest_4s"
-                                                                            name="overLimits"/>
-                </td>
-                <td class="center" style="background-color:#cae4cb;"><input type="checkbox"
-                                                                            name="isRefinance"/>
-                </td>
-            </tr>
-            <tr style="background-color: #dfdfdf">
-                <td class="center" style="line-height: 15px">2</td>
-                <td class="center" style="line-height: 15px">สินเชื่อหมุนเวียนส่วนบุคคล</td>
-                <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
-                <td class="center" style="line-height: 15px">ปกติ</td>
-                <td class="center" style="line-height: 15px">30/11/2555</td>
-                <td class="center" style="line-height: 15px">08/03/2549</td>
-                <td class="right" style="line-height: 15px">130,000.00</td>
-                <td class="right" style="line-height: 15px">13,544.00</td>
-                <td class="right" style="line-height: 15px">0.00</td>
-                <td class="center" style="line-height: 15px"></td>
-                <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
-                <td class="right" style="line-height: 15px">0</td>
-                <td class="center" style="background-color:#cae4cb;"><input type="text"
-                                                                            class="smallest_4s"
-                                                                            name="overLimits"/>
-                </td>
-                <td class="center" style="background-color:#cae4cb;"><input type="checkbox"
-                                                                            name="isRefinance"/>
-                </td>
-            </tr>
-            <tr style="background-color: #ffffff">
-                <td class="center" style="line-height: 15px" colspan="4">
-                    <h:outputLabel value="จำนวนเดือนที่หาร : 4"/>
-                </td>
-                <td colspan="11" class="center"
-                    style="line-height: 15px; padding-left: 2px; padding-right: 1px;">
-                    <h:outputLabel value="เดือนที่ 1 : "/>
-                    <h:inputText class="smaller right" name="month1" value="2,500.00" disabled="true"></h:inputText>
 
-                    <h:outputLabel value="เดือนที่ 2 : "/>
-                    <h:inputText class="smaller right" name="month2" value="2,500.00" disabled="true"></h:inputText>
-
-                    <h:outputLabel value="เดือนที่ 3 : "/>
-                    <h:inputText class="smaller right" name="month3" value="2,500.00" disabled="true"></h:inputText>
-
-                    <h:outputLabel value="เดือนที่ 4 : "/>
-                    <h:inputText class="smaller right" name="month4" value="2,500.00" disabled="true"></h:inputText>
-
-                    <h:outputLabel value="เดือนที่ 5 : "/>
-                    <h:inputText class="smaller right" name="month5" value="" disabled="true"></h:inputText>
-
-                    <h:outputLabel value="เดือนที่ 6 : "/>
-                    <h:inputText class="smaller right" name="month6" value="" disabled="true"></h:inputText>
-                </td>
-            </tr>
-            <tr style="background-color: #dfdfdf">
-                <td class="center" style="line-height: 15px">3</td>
-                <td class="center" style="line-height: 15px">สินเชื่อบุคคล (เงินกู้)</td>
-                <td class="center"><input type="checkbox" name="isTMB" value="0"></input></td>
-                <td class="center" style="line-height: 15px">ปกติ</td>
-                <td class="center" style="line-height: 15px">31/10/2555</td>
-                <td class="center" style="line-height: 15px">14/09/2555</td>
-                <td class="right" style="line-height: 15px">100,000.00</td>
-                <td class="right" style="line-height: 15px">5,809.00</td>
-                <td class="right" style="line-height: 15px">2,100.00</td>
-                <td class="center" style="line-height: 15px"></td>
-                <td class="center" style="line-height: 15px">ไม่ค้างชำระหรือค้างชำระ 0-30</td>
-                <td class="center" style="line-height: 15px">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
-                <td class="right" style="line-height: 15px">0</td>
-                <td class="center" style="background-color:#cae4cb;"><input type="text"
-                                                                            class="smallest_4s"
-                                                                            name="overLimits"/>
-                </td>
-                <td class="center" style="background-color:#cae4cb;"><input type="checkbox"
-                                                                            name="isRefinance"/>
-                </td>
-            </tr>-->
         </table>
     </td>
 

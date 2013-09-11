@@ -1,11 +1,8 @@
 package com.clevel.selos.integration.ncrs.service;
 
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.ncrs.models.response.IdModel;
-import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
-import com.clevel.selos.integration.ncrs.models.response.NameModel;
+import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
 import com.clevel.selos.integration.ncrs.vaildation.ValidationImp;
-import com.clevel.selos.integration.test.NCRSInterfaceImpTest;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
@@ -28,9 +25,6 @@ public class NCRSService implements Serializable {
 
     @Inject
     ValidationImp validationImp;
-
-    @Inject
-    NCRSInterfaceImpTest ncrsInterfaceImpTest;
 
     public final String ERROR = "ER01001";
 
@@ -57,7 +51,7 @@ public class NCRSService implements Serializable {
             //validationImp.validation(ncrsModel);
 
             log.debug("=========================================NCRS process. Call  : requestOnline(NCRSModel)");
-            NCRSResponse ncrsResponse =  ncrsImp.requestOnline(ncrsModel);
+            NCRSResponseModel ncrsResponse =  ncrsImp.requestOnline(ncrsModel);
 
             if(null!=ncrsResponse){
                 if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){

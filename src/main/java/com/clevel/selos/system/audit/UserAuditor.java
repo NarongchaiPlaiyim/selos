@@ -10,14 +10,14 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 @Stateless
-public class UserAudit {
+public class UserAuditor {
     @Inject
     Logger log;
     @Inject
     UserActivityDAO userActivityDAO;
 
     @Inject
-    public UserAudit() {
+    public UserAuditor() {
     }
 
     public void add(String userName,String action,String actionDetail,ActionResult actionResult,String resultDetail) {
