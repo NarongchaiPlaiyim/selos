@@ -2,7 +2,6 @@ package com.clevel.selos.integration.nccrs.service;
 
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
-import com.clevel.selos.integration.test.NCCRSInterfaceImpTest;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
@@ -23,8 +22,6 @@ public class NCCRSService implements Serializable {
     @ValidationMessage
     Message message;
 
-    @Inject
-    NCCRSInterfaceImpTest nccrsInterfaceImpTest;
     public final String ERROR = "ER01001";
 
     @Inject
