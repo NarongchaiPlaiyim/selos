@@ -55,12 +55,15 @@ public class TestNCRS implements Serializable {
     public void onClickNCRS(){
         log.info("========================================= onClickNCRS");
         NCRSModel ncrsModel = new NCRSModel();
+
         TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", "19000101");
         ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
         name.add(nameModel);
         TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", "3111111111115", null);
+        TUEFEnquiryIdModel idModel2 = new TUEFEnquiryIdModel("02", "3111111111115", null);
         ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
         id.add(idModel);
+        id.add(idModel2);
         ncrsModel.setMemberref(memberref);
         ncrsModel.setEnqpurpose(enqpurpose);
         ncrsModel.setEnqamount(enqamount);
