@@ -13,6 +13,7 @@ import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
@@ -87,6 +88,8 @@ public class RMService implements Serializable {
 
     public IndividualModel individualService(SearchIndividual searchIndividual) throws Exception {
         log.debug("::::::::::::::::::::::::::::::::::::  IndividualService() START");
+        IndividualModel individualModel=null;
+
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
@@ -120,6 +123,7 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("017"));
         }
         log.debug(":::::::::::::::::::::::::::::::::::: Validate Pass!");
+
         Header header = new Header();
         header.setReqID(searchIndividual.getReqId());
 
@@ -135,18 +139,33 @@ public class RMService implements Serializable {
         ReqSearchIndividualCustomer reqSearch = new ReqSearchIndividualCustomer();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
+
+        //actionDesc
+        String actionDesc="ReqID="+reqSearch.getHeader().getReqID()+",CustId="+reqSearch.getBody().getCustId()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+
+        //requestTime
+        Date requestTime=new Date();
+
         log.debug("============================ Request ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",new Date());
         log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
-        ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividual(reqSearch);
+        try{
+        ResSearchIndividualCustomer resSearchIndividualCustomer = null;
+//                callServiceIndividual(reqSearch);
+        //responseTime
+        Date responseTime=new Date();
         log.debug("============================ Response ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",new Date());
         log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}",resSearchIndividualCustomer.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}",resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
-        IndividualModel individualModel = new IndividualModel();
+        individualModel = new IndividualModel();
         individualModel.setResCode(resSearchIndividualCustomer.getHeader().getResCode());
         individualModel.setResDesc(resSearchIndividualCustomer.getHeader().getResDesc());
+
+
+        //Audit Data
+        rmAuditor.add("userId","individualService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchIndividualCustomer.getHeader().getResCode(),responseTime, Util.getLinkKey("userId"));
 
         //Check Success
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchIndividualCustomer.getHeader().getResDesc());
@@ -197,6 +216,12 @@ public class RMService implements Serializable {
         } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
             throw new ValidationException(exceptionMsg.get("502"));
         }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}",e.getMessage());
+            //Audit Data
+            rmAuditor.add("userid","IndividualService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
+        }
         log.debug(":::::::::::::::::::::::::::::::::::: IndividualService() END");
         return individualModel;
     }
@@ -206,6 +231,8 @@ public class RMService implements Serializable {
     public CorporateModel corporateService(SearchIndividual searchIndividual) throws Exception {
 
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() START");
+        CorporateModel corporateModel=null;
+
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
@@ -249,21 +276,32 @@ public class RMService implements Serializable {
         ReqSearchCorporateCustomer reqSearch = new ReqSearchCorporateCustomer();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
+        //actionDesc
+        String actionDesc="ReqID="+reqSearch.getHeader().getReqID()+",CustId="+reqSearch.getBody().getCustId()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+
+        //requestTime
+        Date requestTime=new Date();
 
         log.debug("============================ Request ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",new Date());
         log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
-        ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
+        try{
+        ResSearchCorporateCustomer resSearchCorporateCustomer =null;// callServiceCorporate(reqSearch);
+        //responseTime
+        Date responseTime=new Date();
         log.debug("============================ Response ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",new Date());
         log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}",resSearchCorporateCustomer.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}",resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
-        CorporateModel corporateModel = new CorporateModel();
+        corporateModel = new CorporateModel();
         corporateModel.setResCode(resSearchCorporateCustomer.getHeader().getResCode());
         corporateModel.setResDesc(resSearchCorporateCustomer.getHeader().getResDesc());
 
-        //Check Success
+        //Audit Data
+        rmAuditor.add("userId","corporateService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchCorporateCustomer.getHeader().getResDesc(),responseTime, Util.getLinkKey("userId"));
+
+            //Check Success
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchCorporateCustomer.getHeader().getResDesc());
         if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
             corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
@@ -313,6 +351,12 @@ public class RMService implements Serializable {
         } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
             throw new ValidationException(exceptionMsg.get("502"));
         }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}",e.getMessage());
+            //Audit Data
+            rmAuditor.add("userid","corporateService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
+        }
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
         return corporateModel;
     }
@@ -320,6 +364,7 @@ public class RMService implements Serializable {
     /******************************  CustomerAccount  **********************************/
     public CustomerAccountModel customerAccountService(SearchCustomerAccountModel searchCustomerAccountModel) throws Exception {
         log.debug("::::::::::::::::::::::::::::::::::::  CustomerAccountService() START");
+        CustomerAccountModel customerAccountModel=null;
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1,50,searchCustomerAccountModel.getReqId().length())) {
@@ -367,14 +412,22 @@ public class RMService implements Serializable {
         ReqSearchCustomerAccount reqSearch = new ReqSearchCustomerAccount();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
-        CustomerAccountModel customerAccountModel=null;
+
+        //actionDesc
+        String actionDesc="ReqID="+reqSearch.getHeader().getReqId()+",ProductCode="+reqSearch.getHeader().getProductCode()+",Acronym="+reqSearch.getHeader().getAcronym()
+                +",CustNbr="+reqSearch.getBody().getCustNbr()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+
+        //requestTime
         Date requestTime=new Date();
-        try{
+
         log.debug("============================ Request ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",requestTime);
         log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
+        try{
         ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAccount(reqSearch);
+            if(resSearchCustomerAccount!=null){
+        //responseTime
         Date responseTime=new Date();
         log.debug("============================ Response ==============================");
         log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",responseTime);
@@ -388,7 +441,7 @@ public class RMService implements Serializable {
         customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
 
         //Audit Data
-       rmAuditor.add("userid","customerAccountService","ff",new Date(), ActionResult.SUCCEED,"ff",new Date(),"df");
+       rmAuditor.add("userId","customerAccountService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchCustomerAccount.getHeader().getResDesc(),new Date(), Util.getLinkKey("userId"));
 
         //Check Success
         log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());
@@ -432,17 +485,18 @@ public class RMService implements Serializable {
             List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
             log.info(listModelList.size()+"");
             customerAccountModel.setAccountBody(listModelList);
-
-
         } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
             throw new ValidationException(exceptionMsg.get("502"));
         }
-
+         //check null
+        }else{
+           log.warn("::::::::::::::::::::::::::::::::: resSearchCustomerAccount : Null");
+        }
         }catch (Exception e){
             e.printStackTrace();
-            Date responseTime=new Date();
+            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid","customerAccountService","ff",requestTime, ActionResult.FAILED,"ff",responseTime,"df");
+            rmAuditor.add("userid","customerAccountService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
         }
 
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
