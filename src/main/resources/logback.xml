@@ -37,26 +37,15 @@
         <appender-ref ref="NCB-FILE"/>
     </logger>
 
-    <appender name="NCBI-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/tmp/logs/slos-NCBI.log</file>
+    <appender name="SAFEWATCH-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-SAFEWATCH.log</file>
         <append>false</append>
         <encoder>
             <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
-    <logger name="NCBI" level="DEBUG" additivity="false">
-        <appender-ref ref="NCBI-FILE"/>
-    </logger>
-
-    <appender name="SW_ROSC-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/tmp/logs/slos-SW_ROSC.log</file>
-        <append>false</append>
-        <encoder>
-            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
-        </encoder>
-    </appender>
-    <logger name="SW_ROSC" level="DEBUG" additivity="false">
-        <appender-ref ref="SW_ROSC-FILE"/>
+    <logger name="SAFEWATCH" level="DEBUG" additivity="false">
+        <appender-ref ref="SAFEWATCH-FILE"/>
     </logger>
 
     <appender name="EMAIL-FILE" class="ch.qos.logback.core.FileAppender">
@@ -90,6 +79,28 @@
     </appender>
     <logger name="BRMS" level="DEBUG" additivity="false">
         <appender-ref ref="BRMS-FILE"/>
+    </logger>
+
+    <appender name="BPM-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-BPM.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="BPM" level="DEBUG" additivity="false">
+        <appender-ref ref="BPM-FILE"/>
+    </logger>
+
+    <appender name="ECM-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-ECM.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="ECM" level="DEBUG" additivity="false">
+        <appender-ref ref="ECM-FILE"/>
     </logger>
     <!--Daily rolling file appender -->
     <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->

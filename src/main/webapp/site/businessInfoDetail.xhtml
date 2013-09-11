@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Customer Info.</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="../resources/header_logo.xhtml" />
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="../resources/header_detail.xhtml" />
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml" />
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">Business Info. Detail</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                            <a style="cursor: pointer;" href="#">[View Track Change]</a></td></tr>
+                        <tr>
+                            <td colspan="100%"><div class="separate"><!-- --></div></td>
+                        </tr>
+
+                        <tr>
+                            <td class="title" style="width: 250px"> <h:outputText value="#{msg.get('app.businessInfoDetail')}"/> : </td>
+                            <td colspan="5">
+                                <p:inputText styleClass="width: 400px;" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.tradeType')}"/> : </td>
+                            <td colspan="5"><select style="width: 400px">
+                                <option>01 - Domestic ค้าขายภายในประเทศเท่านั้น</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.bizType')}"/> : </td>
+                            <td colspan="5"><select style="width: 400px">
+                                <option>- โปรดระบุ -</option>
+                            </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.bizGroup')}"/> : </td>
+                            <td colspan="5">
+                                <h:form id="businessGroupForm" styleClass="panel" style="width:230px">
+                                    <h:selectOneListbox styleClass="largest" size="1"
+                                id="businessGroupId">
+                                <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                <f:selectItems value="#{businessInfoDetail.businessGroupList}"
+                                               var="businessGroup"
+                                               itemLabel="#{businessGroup.name}"
+                                               itemValue="#{businessGroup.id}"/>
+                                <p:ajax listener="#{businessInfoDetail.onChangeBusinessGroup()}" update=":businessDescriptionForm" />
+                            </h:selectOneListbox>
+                        </h:form>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="line-height: 15px;"><h:outputText value="#{msg.get('app.bizDesc')}"/> : </td>
+                            <td colspan="5">
+                                <h:form id="businessDescriptionForm" styleClass="panel" style="width:230px">
+                                    <h:selectOneListbox styleClass="largest" size="1"
+                                                        id="businessDescriptionId">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                        <f:selectItems value="#{businessInfoDetail.businessDescriptionList}"
+                                                       var="businessDescription"
+                                                       itemLabel="#{businessDescription.name}"
+                                                       itemValue="#{businessDescription.id}"/>
+                                    </h:selectOneListbox>
+                                </h:form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.bizCode')}"/> : </td>
+                            <td style="width: 200px"><p:inputText styleClass="large" value=""/></td>
+                            <td class="title" style="width: 100px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> : </td>
+                            <td><p:inputText styleClass="medium" value=""/></td>
+                            <td class="title" style="width: 220px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/> :</td>
+                            <td><p:inputText styleClass="medium" value=""/></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.comment')}"/> </td>
+                            <td colspan="5"><p:inputText styleClass="width: 400px;" value=""/></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.percentBusiness')}"/> : </td>
+                            <td colspan="5"><p:inputText styleClass="small" value="##.00"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.bizPermission')}"/> : </td>
+                            <td colspan="5" class="title"><input type="radio" value="N" name="bizPermission" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td class="left" colspan="6">
+                                <h:outputText value="#{msg.get('app.bizProductDetail')}"/> :   <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddBizProduct()}" update=":bizProductDlgForm" oncomplete="bizProductDlg.show()"/>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6" style="text-align: center">
+
+                                <p:dataTable id="bizProductTable"
+                                             var="bizProduct"
+                                             value="#{businessInfoDetail.bizProductList}"
+                                             paginator="false"
+                                             rowKey="#{bizProduct.name}"
+                                             rowIndexVar="rowIndex"
+                                             style="width: 100%">
+
+                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.productType')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{bizProduct.productType}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizProduct.percentSalesVolumn}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentEBIT')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{bizProduct.percentEBIT}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.get('app.productDetail')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{bizProduct.productDetail}"/>
+                                    </p:column>
+                                    <p:column headerText="" styleClass="center" style="width:54px;">
+                                        <p:commandButton icon="ui-icon-pencil"
+                                                         action="#{businessInfoDetail.onEditBizProduct(rowIndex)}"
+                                                         update=":bizProductDialog"
+                                                         process=":bizProductTable"
+                                                         oncomplete="bizProductDlg.show();"/>
+                                        <p:commandButton icon="ui-icon-trash"
+                                                         title="Remove"
+                                                         action="#{businessInfoDetail.onDeleteBizProduct(rowIndex)}"
+                                                         update=":bizProductTable"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title" colspan="6">
+                                <h:outputText value="#{msg.get('app.supplierDetail')}"/> :
+                                <p:spacer width="5px"/>
+                                <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddStakeholder('supplier')}"  update=":stakeholderDlgForm" oncomplete="stakeholderDlg.show()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content" >
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:200px;">รายชื่อ Supplier หลักของผู้กู้</th>
+                                        <th style="width:150px;">ชื่อผู้ติดต่อ</th>
+                                        <th style="width:140px;">โทรศัพท์</th>
+                                        <th style="width:100px;">ติดต่อ(ปี)</th>
+                                        <th style="width:100px;">%ยอดซื้อ</th>
+                                        <th style="width:100px;">%เงินสด</th>
+                                        <th style="width:100px;">%เครดิต</th>
+                                        <th style="width:90px;">เทอม(วัน)</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+                                    <tr style="background-color:#f4f8b6;">
+                                        <td colspan="5">Total</td>
+                                        <td><p:inputText styleClass="small right" value="##"/></td>
+                                        <td colspan="2" class="right"><p:inputText styleClass="small right" value="##.00"/></td>
+                                        <td><p:inputText styleClass="smaller right" value="##.00"/></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr style="background-color:#f8d0b6;">
+                                        <td colspan="7">Adjust Term By UW</td>
+                                        <td class="right"><p:inputText styleClass="small right" value=""/></td>
+                                        <td><p:inputText styleClass="smaller right" value=""/></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+
+                                <p:dataTable id="supplierTable"
+                                             var="supplierItem"
+                                             value="#{businessInfoDetail.supplierList}"
+                                             paginator="false"
+                                             rowKey="#{supplier.name}"
+                                             rowIndexVar="rowIndex">
+
+                                    <p:column headerText="" styleClass="center" style="width:3%;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.supplierName')}" styleClass="center" style="width: 10%;">
+                                        <h:outputText value="#{supplierItem.name}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.contactName')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{supplierItem.contactName}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.phoneNo')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{supplierItem.phoneNo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.get('app.contactYear')}" styleClass="center" style="width: 30px;">
+                                        <h:outputText value="#{supplierItem.contactYear}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{supplierItem.percentSalesVolumn}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentCash')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{supplierItem.percentCash}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentCredit')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{supplierItem.percentCredit}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditTerm')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{supplierItem.creditTerm}"/>
+                                    </p:column>
+                                    <p:column headerText="" styleClass="center" style="width:54px;">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     action="#{businessInfoDetail.onEditStakeholder(rowIndex,'supplier')}"
+                                                     update=":stakeholderDlgForm,:supplierTotalTable"
+                                                     process=":supplierTable"
+                                                     oncomplete="stakeholderDlg.show();"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     title="Remove"
+                                                     action="#{businessInfoDetail.onDeleteStakeholder(rowIndex,'supplier')}"
+                                                     update=":supplierTable,:supplierTotalTable"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <br/>
+                                <p:panelGrid id="supplierTotalTable" >
+                                    <p:row>
+                                        <p:column styleClass="center" style="width:3%;">
+                                            -
+                                        </p:column>
+                                        <p:column styleClass="center" style="width:10%;">
+                                            -
+                                        </p:column>
+                                        <p:column styleClass="center" style="width:140px;">
+                                                      -
+                                        </p:column>
+                                        <p:column styleClass="center" style="width:10%;">
+                                            -
+                                        </p:column>
+                                        <p:column styleClass="center" style="width:10%;">
+                                            -
+                                        </p:column>
+
+                                        <p:column styleClass="center" style="width:10%;">
+                                            <h:inputText value="#{businessInfoDetail.supplierSum1}" size="5" />
+                                        </p:column>
+                                        <p:column  styleClass="center" style="width: 10%;">
+                                            -
+                                        </p:column>
+                                        <p:column  styleClass="center" style="width: 10%;">
+                                            <h:inputText value="#{businessInfoDetail.supplierSum2}" size="5" />
+                                        </p:column>
+
+                                        <p:column  styleClass="center" style="width: 10%;">
+                                            <h:inputText value="#{businessInfoDetail.supplierSum2}" size="5" />
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="6"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td class="title" colspan="6">
+                                <h:outputText value="#{msg.get('app.buyerDetail')}"/> :
+                                <p:spacer width="5px"/>
+                                <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddStakeholder('buyer')}" update=":stakeholderDlgForm" oncomplete="stakeholderDlg.show()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content" >
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:200px;">รายชื่อ Buyer</th>
+                                        <th style="width:150px;">ชื่อผู้ติดต่อ</th>
+                                        <th style="width:140px;">โทรศัพท์</th>
+                                        <th style="width:100px;">ติดต่อ(ปี)</th>
+                                        <th style="width:100px;">% ยอดขาย</th>
+                                        <th style="width:100px;">% เงินสด</th>
+                                        <th style="width:100px;">% เครดิต</th>
+                                        <th style="width:90px;">เทอม(วัน)</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+
+                                    <tr style="background-color:#f4f8b6;">
+                                        <td colspan="5">Total</td>
+                                        <td><p:inputText styleClass="small right" value="##"/></td>
+                                        <td colspan="2" class="right"><p:inputText styleClass="small right" value="##.00"/></td>
+                                        <td><p:inputText styleClass="smaller right" value="##.00"/></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr style="background-color:#f8d0b6;">
+                                        <td colspan="7">Adjust Term By UW</td>
+                                        <td class="right"><p:inputText styleClass="small right" value=""/></td>
+                                        <td><p:inputText styleClass="smaller right" value=""/></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <p:dataTable id="buyerTable"
+                                             var="buyerItem"
+                                             value="#{businessInfoDetail.buyerList}"
+                                             paginator="false"
+                                             rowKey="#{buyer.name}"
+                                             rowIndexVar="rowIndex">
+
+                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.buyerName')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{buyerItem.name}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.contactName')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.contactName}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.phoneNo')}" styleClass="center" style="width: 110px;">
+                                        <h:outputText value="#{buyerItem.phoneNo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg.get('app.contactYear')}" styleClass="center" style="width: 30px;">
+                                        <h:outputText value="#{buyerItem.contactYear}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.percentSalesVolumn}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentCash')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.percentCash}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.percentCredit')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.percentCredit}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditTerm')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.creditTerm}"/>
+                                    </p:column>
+                                    <p:column headerText="" styleClass="center" style="width:54px;">
+                                    <p:commandButton icon="ui-icon-pencil"
+                                                     action="#{businessInfoDetail.onEditStakeholder(rowIndex,'buyer')}"
+                                                     update=":stakeholderDlgForm,:supplierTotalTable"
+                                                     process=":buyerTable"
+                                                     oncomplete="stakeholderDlg.show();"/>
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     title="Remove"
+                                                     action="#{businessInfoDetail.onDeleteStakeholder(rowIndex,'buyer')}"
+                                                     update=":buyerTable,:buyerTotalTable"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:panelGrid id="buyerTotalTable" >
+
+                                    <p:row>
+                                        <p:column styleClass="center" colspan="5">
+                                            -
+                                        </p:column>
+
+                                        <p:column styleClass="center" colspan="2">
+                                            <h:inputText value="#{businessInfoDetail.buyerSum1}"/>
+                                        </p:column>
+
+                                        <p:column  styleClass="center" style="width: 140px;">
+                                            <h:inputText value="#{businessInfoDetail.buyerSum2}"/>
+                                        </p:column>
+
+                                        <p:column  styleClass="center" style="width: 110px;">
+                                            <h:inputText value="#{businessInfoDetail.buyerSum2}"/>
+                                        </p:column>
+
+                                        <p:column  styleClass="center" style="width: 110px;">
+                                            button
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="6"><p:separator/></td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content">
+                                    <tr>
+                                        <th colspan="2" style="width:380px;">การจัดซื้อ</th>
+                                        <th colspan="2" style="width:380px;">การขาย</th>
+                                        <th colspan="2" style="width:380px;">Stock</th>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีลูกหนี้ (วัน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีเจ้าหนี้ (วัน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) สต๊อค (วัน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อเฉลี่ย (ล้านบาท/เดือน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการขายเฉลี่ย (ล้านบาท/เดือน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-BDM</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเงินสด (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการขายที่เป็นเงินสด (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-UW</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเครดิต (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดขายที่เป็นเครดิต (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-BDM</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อภายในประเทศ (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายภายในประเทศ (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-UW</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อจากต่างประเทศ (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายจากต่างประเทศ (%)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td colspan="2" style="width: 250px;line-height: 15px"></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td style="width: 250px;line-height: 15px">เทอม T/R (วัน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td style="width: 250px;line-height: 15px">เทอม Export (วัน)</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td colspan="2" style="width: 250px;line-height: 15px"></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td colspan="2" ></td>
+                                        <td style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
+                                        <td colspan="3"><p:inputText styleClass="width: 510px;" value=""/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td colspan="2" ></td>
+                                        <td style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td colspan="2" ></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="6" class="title">กรณีมี Trade Finance กับ TMB โปรดระบุ</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content"  style="width: 1140px">
+                                    <tr style="background-color: #FAFAFA">
+                                        <td style="width: 250px;line-height: 15px">ชื่อผู้ติดต่อ :</td>
+                                        <td style="width: 970px"><p:inputText styleClass="right" style="width: 250px;" value=""/>
+                                            <p:spacer width="2px"/>โทรศัพท์ : <p:inputText styleClass="small right" value=""/>
+                                            <p:spacer width="2px"/>ศูนย์ต่างประเทศใช้บริการ : <p:inputText styleClass="small right" value=""/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">Current Address :</td>
+                                        <td><p:inputText styleClass="right" style="width: 600px;" value=""/></td>
+                                    </tr>
+                                    <tr style="background-color: #fafafa">
+                                        <td style="width: 250px;line-height: 15px">Register Address :</td>
+                                        <td><p:inputText styleClass="right" style="width: 600px;" value=""/></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">E-Mail Address :</td>
+                                        <td><p:spacer width="2px"/>Import : <p:inputText styleClass="largest" value=""/>
+                                            <p:spacer width="2px"/>Export : <p:inputText styleClass="largest" value=""/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background-color: #fafafa">
+                                        <td style="width: 250px;line-height: 15px">รหัสสาขาที่ลูกค้าใช้บัญชีอื่นฝาก: :</td>
+                                        <td><p:inputText styleClass="small" value=""/></td>
+                                    </tr>
+                                    <tr style="background-color: #efefef">
+                                        <td style="width: 250px;line-height: 15px">รหัสหน่วยงานที่ดูแลสาขา :</td>
+                                        <td><p:inputText styleClass="small" value=""/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr>
+                            <td colspan="6" class="center">
+                                <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+                                <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="bottom_line"></div>
+            </div>
+            <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="../resources/footer.xhtml" />
+            <!-- End Footer -->
+        </div>
+        <p:dialog id="stakeholderDialog" header="stakeholder Information" widgetVar="stakeholderDlg"
+                  modal="true" width="500" height="300">
+            <ui:include src="dialog/fullscreenStakeholderDialog.xhtml"/>
+        </p:dialog>
+        <p:dialog id="bizProductDialog" header="bizProduct Information" widgetVar="bizProductDlg"
+                  modal="true" width="500" height="300">
+            <ui:include src="dialog/fullscreenBizProductDialog.xhtml"/>
+        </p:dialog>
+    </h:body>
+</f:view>
+</html>

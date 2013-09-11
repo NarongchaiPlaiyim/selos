@@ -57,6 +57,7 @@ public class ValidationUtilTest {
         assertEquals("expected true.", true, ValidationUtil.isEmpty(""));
         assertEquals("expected false.", false, ValidationUtil.isEmpty("null"));
     }
+
     @Test
     public void testisNull() throws Exception {
         log.info("testisEmpty.");

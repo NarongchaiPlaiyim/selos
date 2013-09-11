@@ -10,7 +10,8 @@
         <properties>
 
             <!--for running on WebSphere-->
-            <!--<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.WebSphereExtendedJtaPlatform"/>-->
+            <!--
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.WebSphereExtendedJtaPlatform"/>  -->
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
 

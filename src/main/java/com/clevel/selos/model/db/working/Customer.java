@@ -1,7 +1,7 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CustomerType;
-import com.clevel.selos.model.db.master.IDDocumentType;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.Title;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,41 +12,53 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_customer")
+@Table(name="wrk_customer")
 public class Customer implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_CUSTOMER_ID", sequenceName="SEQ_WRK_CUSTOMER_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUSTOMER_ID")
     private long id;
+
     @ManyToOne
-    @JoinColumn(name = "workcase_id")
+    @JoinColumn(name="workcase_id")
     private WorkCase workCase;
+
     @OneToOne
     @JoinColumn(name="customertype_id")
-    private CustomerType customerType;
+    private CustomerEntity customerEntity;
+
     @OneToOne
-    @JoinColumn(name="id_documenttype")
-    private IDDocumentType idDocumentType;
+    @JoinColumn(name="documenttype_id")
+    private DocumentType documentType;
+
     @Column(name="id_number")
     private String idNumber;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="expire_date")
     private Date expireDate;
+
     @OneToOne
     @JoinColumn(name="title_id")
     private Title title;
+
     @Column(name="name_en")
     private String nameEn;
+
     @Column(name="name_th")
     private String nameTh;
+
     @Column(name="age")
     private int age;
+
     @OneToOne
     @JoinColumn(name="individual_id")
     private Individual individual;
+
     @OneToOne
     @JoinColumn(name="juristic_id")
     private Juristic juristic;
+
     @OneToOne
     @JoinColumn(name="relation_id")
     private Relation relation;
@@ -70,20 +82,12 @@ public class Customer implements Serializable {
         this.workCase = workCase;
     }
 
-    public CustomerType getCustomerType() {
-        return customerType;
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
     }
 
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
-    }
-
-    public IDDocumentType getIdDocumentType() {
-        return idDocumentType;
-    }
-
-    public void setIdDocumentType(IDDocumentType idDocumentType) {
-        this.idDocumentType = idDocumentType;
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
     public String getIdNumber() {
@@ -158,22 +162,30 @@ public class Customer implements Serializable {
         this.relation = relation;
     }
 
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("workCase", workCase).
-                append("customerType", customerType).
-                append("idDocumentType", idDocumentType).
-                append("idNumber", idNumber).
-                append("expireDate", expireDate).
-                append("title", title).
-                append("nameEn", nameEn).
-                append("nameTh", nameTh).
-                append("age", age).
-                append("individual", individual).
-                append("juristic", juristic).
-                append("relation", relation).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("customerEntity", customerEntity)
+                .append("documentType", documentType)
+                .append("idNumber", idNumber)
+                .append("expireDate", expireDate)
+                .append("title", title)
+                .append("nameEn", nameEn)
+                .append("nameTh", nameTh)
+                .append("age", age)
+                .append("individual", individual)
+                .append("juristic", juristic)
+                .append("relation", relation)
+                .toString();
     }
 }

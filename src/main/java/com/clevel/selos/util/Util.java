@@ -40,9 +40,14 @@ public class Util {
     }
 
 
-    public boolean isNotNullString(String string){
-        return null!=string?true:false;
+    public static boolean isNull(String string){
+        if(string == null || "null".equals(string.toLowerCase())){
+            return true;
+        }else{
+            return false;
+        }
     }
+
     public boolean checkLength(String string, int length){
         if(null!=string){
             return string.length()<=length?true:false;

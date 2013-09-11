@@ -341,7 +341,7 @@
                     </p:dataTable>
                 </td>
             </tr>
-            <!--<tr>
+            <tr>
                 <td class="title">Business Location :</td>
                 <td><select class="larger"><option>- Please Select -</option></select></td>
             </tr>
@@ -388,32 +388,37 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">CollateralView :</td>
+                <td class="title">Collateral :</td>
                 <td>
                     <p:commandButton id="btnAddCollateral"
                                      value="Add"
                                      styleClass="smaller"
-                                     action="#{prescreenMaker.onClearDlg}"
-                                     oncomplete="collateralDlg.show()"/>
+                                     process="@this"
+                                     actionListener="#{prescreenMaker.onAddProposeCollateral()}"
+                                     update=":proposeCollateralDlgForm"
+                                     oncomplete="proposeCollateralDlg.show();">
+                        <p:resetInput target=":proposeCollateralDlgForm" />
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <p:dataTable id="resultTableCollateral" var="collateral" value="#{prescreenMaker.collateralList}"
-                                 paginator="false" rowKey="#{collateral.id}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resultTableProposeCollateral" var="proposeCollateral"
+                                 value="#{prescreenMaker.proposeCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
+                                 paginator="false" rowKey="#{proposeCollateral.id}" rowIndexVar="rowIndex">
 
                         <p:column headerText="" styleClass="center" style="width:22px;">
                             <h:outputText value="#{rowIndex+1}"/>
                         </p:column>
 
-                        <p:column headerText="CollateralView" styleClass="center" style="width: 110px;">
-                            <h:outputText value="#{collateral.collateralTypeName}"/>
+                        <p:column headerText="Collateral Type" styleClass="center" style="width: 110px;">
+                            <h:outputText value="#{proposeCollateral.collateralType.description}"/>
                         </p:column>
 
                         <p:column headerText="Request Amount" style="width: 130px;">
                             <div class="right">
-                                <h:outputText value="#{collateral.collateralAmount}" >
+                                <h:outputText value="#{proposeCollateral.collateralAmount}" >
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="8"/>
                                 </h:outputText>
@@ -421,15 +426,32 @@
                         </p:column>
 
                         <p:column headerText="" styleClass="center" style="width:54px;">
-                            <p:commandButton icon="ui-icon-pencil"
-                                             action="#{prescreenMaker.onRowCollateral(rowIndex)}"
-                                             update=":collateralDlgForm"
-                                             process=":frmMain:resultTableCollateral"
+
+                            <p:commandButton title="Edit" icon="ui-icon-pencil"
+                                             process="@this"
+                                             action="#{prescreenMaker.onEditProposeCollateral}"
+                                             update=":proposeCollateralDlgForm"
+                                             oncomplete="proposeCollateralDlg.show();">
+                                <f:setPropertyActionListener value="#{proposeCollateral}"
+                                                             target="#{prescreenMaker.selectProposeCollateralItem}"/>
+                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                             target="#{prescreenMaker.rowIndex}"/>
+                            </p:commandButton>
+                            <p:commandButton title="Remove" icon="ui-icon-trash"
+                                             oncomplete="confirmDeleteProposeCollateralDlg.show()" >
+                                <f:setPropertyActionListener value="#{proposeCollateral}"
+                                                             target="#{prescreenMaker.selectProposeCollateralItem}"/>
+                            </p:commandButton>
+
+                            <!--<p:commandButton icon="ui-icon-pencil"
+                                             action="#{prescreenMaker.onEditProposeCollateral}"
+                                             update=":proposeCollateralDlgForm"
+                                             process=":frmMain:resultTableProposeCollateral"
                                              oncomplete="collateralDlg.show();"/>
                             <p:commandButton icon="ui-icon-trash"
                                              title="Remove"
-                                             action="#{prescreenMaker.onRemoveCollateral(rowIndex)}"
-                                             update=":tableCollateral"/>
+                                             action="#{prescreenMaker.onDeleteProposeCollateral}"
+                                             update=":frmMain:resultTableProposeCollateral"/>-->
                         </p:column>
 
                     </p:dataTable>
@@ -447,7 +469,7 @@
                                      value="Save"
                                      styleClass="medium"/>
                 </td>
-            </tr>-->
+            </tr>
             </table>
             <!--</p:panel>-->
             <!--<p:blockUI widgetVar="blockUIContentForm" block="pnlContent_form" trigger=":btnSave"/>-->
@@ -474,10 +496,10 @@
               modal="true">
         <ui:include src="dialog/prescreenBusinessDialog.xhtml"/>
     </p:dialog>
-    <!--<p:dialog id="collateralDialog" header="CollateralView Information" widgetVar="collateralDlg"
+    <p:dialog id="proposeCollateralDialog" header="Collateral Information" widgetVar="proposeCollateralDlg"
               modal="true" width="400" height="100">
-        <ui:include src="dialog/prescreenCollateralDialog.xhtml"/>
-    </p:dialog>-->
+        <ui:include src="dialog/prescreenProposeCollateralDialog.xhtml"/>
+    </p:dialog>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteFacilityDialog"/>
         <ui:param name="name" value="confirmDeleteFacilityDlg"/>
@@ -492,6 +514,14 @@
         <ui:param name="formId" value="frmConfirmDeleteBusiness"/>
         <ui:param name="controller" value="#{prescreenMaker}"/>
         <ui:param name="action" value="onDeleteFacility"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteProposeCollateralDialog"/>
+        <ui:param name="name" value="confirmDeleteProposeCollateralDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteProposeCollateral"/>
+        <ui:param name="controller" value="#{prescreenMaker}"/>
+        <ui:param name="action" value="onDeleteProposeCollateral"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
 </h:body>

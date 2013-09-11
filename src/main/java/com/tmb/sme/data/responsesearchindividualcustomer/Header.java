@@ -1,6 +1,9 @@
 
 package com.tmb.sme.data.responsesearchindividualcustomer;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -136,4 +139,12 @@ public class Header {
         this.resDesc = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqID", reqID)
+                .append("resCode", resCode)
+                .append("resDesc", resDesc)
+                .toString();
+    }
 }

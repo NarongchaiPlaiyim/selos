@@ -4,6 +4,7 @@ package com.tmb.common.data.eaisearchcustomeraccount;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
@@ -18,8 +19,9 @@ import javax.xml.ws.WebServiceClient;
  * 
  */
 @WebServiceClient(name = "EAISearchCustomerAccount", targetNamespace = "http://data.common.tmb.com/EAISearchCustomerAccount/", wsdlLocation = "file:/D:/Project-Clevel/selos/src/main/java/EAISearchCustomerAccount.wsdl")
-@HandlerChain(file = "/com/tmb/LogMessage_handlerCustomerAccount.xml")
+//@HandlerChain(file = "/com/tmb/LogMessage_handlerCustomerAccount.xml")
 public class EAISearchCustomerAccount_Service
+
     extends Service
 {
 
@@ -42,7 +44,7 @@ public class EAISearchCustomerAccount_Service
     public EAISearchCustomerAccount_Service(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
-
+    @Inject
     public EAISearchCustomerAccount_Service() {
         super(EAISEARCHCUSTOMERACCOUNT_WSDL_LOCATION, new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount"));
     }

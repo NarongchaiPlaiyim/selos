@@ -2,9 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.integration.RM;
-import com.clevel.selos.integration.corebanking.CAService;
-import com.clevel.selos.integration.corebanking.RMService;
-import com.clevel.selos.model.CAmodel.CustomerAccountModel;
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.corebanking.RMInterfaceImpl;
+import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.RMmodel.CardTypeView;
 import com.clevel.selos.model.RMmodel.CorporateModel;
@@ -12,6 +12,8 @@ import com.clevel.selos.model.RMmodel.IndividualModel;
 import com.clevel.selos.model.RMmodel.SearchIndividual;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -30,9 +32,8 @@ public class TestService implements Serializable{
     @Inject
     CardTypeDao dao;
 
-//    @Inject
-    RMService rmService;
-    CAService caService;
+    @Inject
+    RMInterface rmInterfaceImpl;
 
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
@@ -40,8 +41,6 @@ public class TestService implements Serializable{
     List<CardType> list;
     List<CardTypeView>listhardcode;
 
-    public static String printResponse;
-    public static String printRequest;
     private String printDetail;
 
     public TestService(){
@@ -50,8 +49,7 @@ public class TestService implements Serializable{
 
     @PostConstruct
     public void onCreate(){
-        log.info("LOG DEBUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-        log.debug("TESTLOGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+        log.info("::::::::::::::::::::::::::::::::::::  TEST RM SERVICE START  ");
 
 //        list = dao.findAll();
         listhardcode=new ArrayList<CardTypeView>();
@@ -72,10 +70,11 @@ public class TestService implements Serializable{
     ////////////////////////////////////////////////////////   call Service
 
     public void individual() throws Exception {
-        rmService =new RMService();
+
         IndividualModel individualModel ;
         //callservice
-       individualModel = rmService.intiIndividual(searchIndividual);
+       individualModel = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
+                         searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
        StringBuffer result=new StringBuffer();
         result.append("==================== Individual Data Demo ===================");
@@ -86,6 +85,7 @@ public class TestService implements Serializable{
         result.append("\n\n ===== personal Detail Section =====");
         result.append("\n title : "+ individualModel.getTitle());
         result.append("\n custId : "+ individualModel.getCustId());
+        result.append("\n name : "+individualModel.getName());
         result.append("\n telephone1 : "+ individualModel.getTelephone1());
         result.append("\n\n ===== personal List Section =====");
 
@@ -103,9 +103,10 @@ public class TestService implements Serializable{
 
 
     public void corporate() throws Exception {
-        rmService =new RMService();
+
         corporateModel=new CorporateModel();
-        corporateModel = rmService.intiCorporate(searchIndividual);
+        corporateModel = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(), searchIndividual.getType(),
+                searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== Corporate Data Demo ===================");
@@ -138,10 +139,11 @@ public class TestService implements Serializable{
     }
 
     public void customerAccount() throws Exception {
-        caService =new CAService();
+
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = caService.intiCustomerAction(searchIndividual);
+        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo(searchIndividual.getReqId(), searchIndividual.getType(),
+                searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");
@@ -167,10 +169,13 @@ public class TestService implements Serializable{
                 result.append("\n ctl4 : "+ customerAccountModel.getAccountBody().get(i).getCtl4());
                 result.append("\n status : "+ customerAccountModel.getAccountBody().get(i).getStatus());
                 result.append("\n date : "+ customerAccountModel.getAccountBody().get(i).getDate());
+                result.append("\n name : "+ customerAccountModel.getAccountBody().get(i).getName());
+                result.append("\n citizenId : "+ customerAccountModel.getAccountBody().get(i).getCitizenId());
+                result.append("\n curr : "+ customerAccountModel.getAccountBody().get(i).getCurr());
                 result.append("\n =========================================================== ");
             }
         }else{
-            result.append("\n accountListSize : null");
+            result.append("\n accountListSize : "+customerAccountModel.getAccountBody().size());
         }
 
         printDetail=result.toString();
@@ -214,20 +219,7 @@ public class TestService implements Serializable{
 
     // print Request Response
 
-    public String getPrintResponse() {
-        return printResponse;
-    }
 
-    public void setPrintResponse(String printResponse) {
-        this.printResponse = printResponse;
-    }
-    public String getPrintRequest() {
-        return printRequest;
-    }
-
-    public void setPrintRequest(String printRequest) {
-        this.printRequest = printRequest;
-    }
     public String getPrintDetail() {
         return printDetail;
     }

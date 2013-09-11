@@ -3,6 +3,7 @@ package com.clevel.selos.dao;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;

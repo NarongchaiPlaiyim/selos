@@ -1,6 +1,9 @@
 
 package com.tmb.sme.data.responsesearchindividualcustomer;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -153,4 +156,13 @@ public class Body {
         this.personalDetailSection = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("searchResult", searchResult)
+                .append("lastPageFlag", lastPageFlag)
+                .append("personalListSection", personalListSection)
+                .append("personalDetailSection", personalDetailSection)
+                .toString();
+    }
 }

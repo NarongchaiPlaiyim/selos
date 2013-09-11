@@ -39,12 +39,12 @@
                 <p:commandButton value="reload config" action="#{welcomePage.reloadConfig}" update=":welcomePanel"/>
                 <p:commandButton value="action RM" action="#{welcomePage.onActionRM}" update=":welcomePanel"/>
                 <p:commandButton value="action NCB" action="#{welcomePage.onActionNCB}" update=":welcomePanel"/>
-                <p:commandButton value="action NCBI" action="#{welcomePage.onActionNCBI}" update=":welcomePanel"/>
                 <p:commandButton value="action SW" action="#{welcomePage.onActionSW}" update=":welcomePanel"/>
                 <p:commandButton value="action EMail" action="#{welcomePage.onActionEmail}" update=":welcomePanel"/>
                 <p:commandButton value="action DWH" action="#{welcomePage.onActionDWH}" update=":welcomePanel"/>
                 <p:commandButton value="action BRMS" action="#{welcomePage.onActionBRMS}" update=":welcomePanel"/>
                 <p:commandButton value="test RM" action="#{welcomePage.testRM}" update=":welcomePanel"/>
+                <p:commandButton value="test BRMS" action="#{welcomePage.testBRMS}" update=":welcomePanel"/>
                 <p:separator/>
                 <p:commandButton value="001" action="#{welcomePage.on001}" update=":welcomePanel"/>
                 <p:commandButton value="002" action="#{welcomePage.on002}" update=":welcomePanel"/>
@@ -55,22 +55,22 @@
 
         <p:panel id="testPanel">
             <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputText value="Business Group"/>
-                    <h:selectOneListbox value="#{welcomePage.selectedBusinessGroup.id}" size="1" style="width: 200px">
-                        <f:selectItems value="#{welcomePage.businessGroups}" var="bg" itemLabel="#{bg.name}"
-                                       itemValue="#{bg.id}" />
-                        <p:ajax event="change" listener="#{welcomePage.onChangeGroup}" update=":testPanel" />
-                    </h:selectOneListbox>
-                    <h:outputText value="Business Description"/>
-                    <h:selectOneListbox value="#{welcomePage.selectedBusinessDescription.id}" size="1" style="width: 200px">
-                        <f:selectItems value="#{welcomePage.businessDescriptions}" var="bd" itemLabel="#{bd.name}"
-                                       itemValue="#{bd.id}"/>
-                        <p:ajax event="change" listener="#{welcomePage.onChangeDescription}" update=":testPanel"/>
-                    </h:selectOneListbox>
-                    <h:outputText value="Text: "/>
-                    <h:outputText value="#{welcomePage.selectedText}"/>
-                </h:panelGrid>
+                <!--<h:panelGrid columns="2">-->
+                    <!--<h:outputText value="Business Group"/>-->
+                    <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessGroup.id}" size="1" style="width: 200px">-->
+                        <!--<f:selectItems value="#{welcomePage.businessGroups}" var="bg" itemLabel="#{bg.name}"-->
+                                       <!--itemValue="#{bg.id}" />-->
+                        <!--<p:ajax event="change" listener="#{welcomePage.onChangeGroup}" update=":testPanel" />-->
+                    <!--</h:selectOneListbox>-->
+                    <!--<h:outputText value="Business Description"/>-->
+                    <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessDescription.id}" size="1" style="width: 200px">-->
+                        <!--<f:selectItems value="#{welcomePage.businessDescriptions}" var="bd" itemLabel="#{bd.name}"-->
+                                       <!--itemValue="#{bd.id}"/>-->
+                        <!--<p:ajax event="change" listener="#{welcomePage.onChangeDescription}" update=":testPanel"/>-->
+                    <!--</h:selectOneListbox>-->
+                    <!--<h:outputText value="Text: "/>-->
+                    <!--<h:outputText value="#{welcomePage.selectedText}"/>-->
+                <!--</h:panelGrid>-->
 
             </h:form>
         </p:panel>

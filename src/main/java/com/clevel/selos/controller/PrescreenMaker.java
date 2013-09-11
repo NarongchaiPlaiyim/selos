@@ -1,11 +1,13 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.BusinessInfoView;
 import com.clevel.selos.model.view.CollateralView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.FacilityView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -52,6 +54,7 @@ public class PrescreenMaker implements Serializable {
 
     //*** Result table List ***//
     private List<FacilityView> facilityViewList;
+    private List<CustomerInfoView> customerInfoViewList;
     private List<BusinessInfoView> businessInfoViewList;
     private List<CollateralView> proposeCollateralViewList;
 
@@ -60,18 +63,14 @@ public class PrescreenMaker implements Serializable {
     private FacilityView facility;
     private FacilityView selectFacilityItem;
 
+    private CustomerInfoView customerInfo;
+    private CustomerInfoView selectCustomerInfoItem;
+
     private BusinessInfoView selectBusinessInfoItem;
     private BusinessInfoView businessInfo;
 
     private CollateralView proposeCollateral;
     private CollateralView selectProposeCollateralItem;
-
-    /*private CollateralView collateral;
-    private CollateralType collateralType;
-
-
-    private BigDecimal existCollateralAmount;
-    private String existCollateralTypeName;*/
 
     private String modeForButton;
     private int rowIndex;
@@ -139,6 +138,7 @@ public class PrescreenMaker implements Serializable {
 
         if(proposeCollateral == null){
             proposeCollateral = new CollateralView();
+            proposeCollateral.setCollateralType(new CollateralType());
         }
     }
 
@@ -229,7 +229,33 @@ public class PrescreenMaker implements Serializable {
         facilityViewList.remove(selectFacilityItem);
     }
 
-    // *** Function For BusinessInfoView ***//
+    // *** Function For Customer *** //
+    public void onAddCustomerInfo() {
+        log.info("onAddCustomerInfo ::: reset form");
+        // *** Reset Form *** //
+        modeForButton = "add";
+
+        customerInfo = new CustomerInfoView();
+
+    }
+
+    public void onEditCustomerInfo() {
+
+    }
+
+    public void onSaveCustomerInfo() {
+
+    }
+
+    public void onDeleteCustomerInfo() {
+
+    }
+
+    public void onSearchCustomerInfo() {
+
+    }
+
+    // *** Function For BusinessInfoView *** //
     public void onAddBusinessInfo() {
         log.info("onAddBusinessInfo ::: reset form");
         /*** Reset Form ***/
@@ -304,6 +330,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onAddProposeCollateral :::");
         //*** Reset form ***//
         log.info("onAddProposeCollateral ::: Reset Form");
+        modeForButton = "add";
         proposeCollateral = new CollateralView();
         proposeCollateral.setCollateralType(new CollateralType());
     }
@@ -351,11 +378,18 @@ public class PrescreenMaker implements Serializable {
             complete = false;
             log.info("onSaveProposeCollateral ::: validation failed.");
         }
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteProposeCollateral() {
         log.info("onDeleteProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
         proposeCollateralViewList.remove(selectProposeCollateralItem);
+
+    }
+
+    // *** Function for Prescreen Maker ***//
+    public void onSavePrescreen(){
+        //*** validate forms ***//
 
     }
 
@@ -638,5 +672,45 @@ public class PrescreenMaker implements Serializable {
 
     public void setProposeCollateral(CollateralView proposeCollateral) {
         this.proposeCollateral = proposeCollateral;
+    }
+
+    public List<CollateralType> getCollateralTypeList() {
+        return collateralTypeList;
+    }
+
+    public void setCollateralTypeList(List<CollateralType> collateralTypeList) {
+        this.collateralTypeList = collateralTypeList;
+    }
+
+    public CollateralView getSelectProposeCollateralItem() {
+        return selectProposeCollateralItem;
+    }
+
+    public void setSelectProposeCollateralItem(CollateralView selectProposeCollateralItem) {
+        this.selectProposeCollateralItem = selectProposeCollateralItem;
+    }
+
+    public List<CustomerInfoView> getCustomerInfoViewList() {
+        return customerInfoViewList;
+    }
+
+    public void setCustomerInfoViewList(List<CustomerInfoView> customerInfoViewList) {
+        this.customerInfoViewList = customerInfoViewList;
+    }
+
+    public CustomerInfoView getCustomerInfo() {
+        return customerInfo;
+    }
+
+    public void setCustomerInfo(CustomerInfoView customerInfo) {
+        this.customerInfo = customerInfo;
+    }
+
+    public CustomerInfoView getSelectCustomerInfoItem() {
+        return selectCustomerInfoItem;
+    }
+
+    public void setSelectCustomerInfoItem(CustomerInfoView selectCustomerInfoItem) {
+        this.selectCustomerInfoItem = selectCustomerInfoItem;
     }
 }

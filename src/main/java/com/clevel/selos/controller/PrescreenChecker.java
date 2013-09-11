@@ -1,6 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.model.view.CustomerView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
@@ -34,7 +34,7 @@ public class PrescreenChecker implements Serializable {
     Message exceptionMsg;
 
 
-    private List<CustomerView> customerViewList;
+    private List<CustomerInfoView> customerInfoViewList;
     private String[] citizenID;
 
     public PrescreenChecker(){
@@ -44,33 +44,33 @@ public class PrescreenChecker implements Serializable {
     @PostConstruct
     public void onCreation() {
         //TODO Generate row for textbox to check Citizen id
-        if(customerViewList == null){
-            customerViewList = new ArrayList<CustomerView>();
-            CustomerView customer = new CustomerView();
+        /*if(customerInfoViewList == null){
+            customerInfoViewList = new ArrayList<CustomerInfoView>();
+            CustomerInfoView customer = new CustomerInfoView();
             customer.setId(new BigDecimal(1));
             customer.setCustomerName("test01");
             customer.setCitizenID("123456");
             customer.setValidCitizenID(2);
-            customerViewList.add(customer);
-            customer = new CustomerView();
+            customerInfoViewList.add(customer);
+            customer = new CustomerInfoView();
             customer.setId(new BigDecimal(2));
             customer.setCustomerName("test02");
             customer.setCitizenID("1234567");
             customer.setValidCitizenID(2);
-            customerViewList.add(customer);
+            customerInfoViewList.add(customer);
         }
 
-        if(customerViewList != null){
-            int row = customerViewList.size();
+        if(customerInfoViewList != null){
+            int row = customerInfoViewList.size();
             citizenID = new String[row];
-        }
+        }*/
     }
 
     public void onCheckCustomer(){
-        List<CustomerView> tmpCustomerViewList = new ArrayList<CustomerView>();
-        tmpCustomerViewList = customerViewList;
-        customerViewList = new ArrayList<CustomerView>();   //Clear old value
-        for(CustomerView customer : tmpCustomerViewList){
+        /*List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+        tmpCustomerInfoViewList = customerInfoViewList;
+        customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
+        for(CustomerInfoView customer : tmpCustomerInfoViewList){
             if(customer.getCitizenID().trim().equals(customer.getInputCitizenID().trim())){
                 log.info("Check CitizenID Customer : {}, Match", customer.getCustomerName());
                 customer.setValidCitizenID(1);
@@ -78,17 +78,17 @@ public class PrescreenChecker implements Serializable {
                 log.info("Check CitizenID Customer : {}, Not Match", customer.getCustomerName());
                 customer.setValidCitizenID(0);
             }
-            customerViewList.add(customer);
-        }
+            customerInfoViewList.add(customer);
+        }*/
 
     }
 
-    public List<CustomerView> getCustomerViewList() {
-        return customerViewList;
+    public List<CustomerInfoView> getCustomerInfoViewList() {
+        return customerInfoViewList;
     }
 
-    public void setCustomerViewList(List<CustomerView> customerViewList) {
-        this.customerViewList = customerViewList;
+    public void setCustomerInfoViewList(List<CustomerInfoView> customerInfoViewList) {
+        this.customerInfoViewList = customerInfoViewList;
     }
 
     public String[] getCitizenID() {

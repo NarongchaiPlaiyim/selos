@@ -1,0 +1,76 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="stakeholderDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title">  <h:outputText value="#{businessInfoDetail.dlgStakeName}"/></td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.name}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder Contact :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.contactName}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder phoneNo :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.phoneNo}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder contactYear :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.contactYear}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentSalesVolumn :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentSalesVolumn}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentCash :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCash}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder percentCredit :</td>
+                <td>
+                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCredit}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Stakeholder creditTerm :</td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.stakeholder.creditTerm}"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="btnSaveStakeholder"
+                            value="Save"
+                            styleClass="small"
+                            action="#{businessInfoDetail.onSaveStakeholder()}"
+                            update=":supplierTable,:buyerTable,:supplierTotalTable,:buyerTotalTable"
+                            oncomplete="stakeholderDlg.hide()"
+                     />
+
+
+                    <p:commandButton value="Cancel" styleClass="small" onclick="stakeholderDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+
+</ui:composition>
