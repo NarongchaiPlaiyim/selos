@@ -55,4 +55,11 @@ public class TUEFEnquiryIdModel {
                 .append("issuecountry", issuecountry)
                 .toString();
     }
+
+    public String toStringForActionDesc() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("idtype", idtype)
+                .append("idnumber", idnumber)
+                .toString();
+    }
 }

@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 public class NCRSService implements Serializable {
-
     @Inject
     @NCB
     Logger log;
@@ -33,6 +32,7 @@ public class NCRSService implements Serializable {
     }
 
     public void process(NCRSModel ncrsModel){
+
         /*try {
             log.debug("=========================================NCRS process.");
             NCRSResponse ncrsResponse = ncrsInterfaceImpTest.request(ncrsModel);

@@ -1,20 +1,27 @@
 package com.clevel.selos.integration.ncrs.service;
 
 import com.clevel.selos.exception.ValidationException;
+import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.vaildation.ValidationImp;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.ValidationUtil;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NCRSModel implements Serializable {
+    @Inject
+    @ValidationMessage
+    Message message;
+
+//    @Inject
+//    @NCB
+//    Logger log;
 
     private String memberref;
     private String enqpurpose;
@@ -24,6 +31,7 @@ public class NCRSModel implements Serializable {
     private ArrayList<TUEFEnquiryNameModel> nameList;
     private ArrayList<TUEFEnquiryIdModel> idList;
 
+    @Inject
     public NCRSModel() {
     }
 
