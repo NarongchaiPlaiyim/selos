@@ -6,9 +6,12 @@ import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.CustomerInfo;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.audit.SystemAuditor;
+import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -67,6 +70,17 @@ public class WelcomePage implements Serializable {
     @Inject
     BRMSInterface brms;
 
+    //user auditor
+    @Inject
+    UserAuditor userAuditor;
+    //system auditor
+    @Inject
+    @RM
+    SystemAuditor rmAuditor;
+    @Inject
+    @NCB
+    SystemAuditor ncbAuditor;
+
     @Inject
     @Config(name = "system.name")
     String system;
@@ -84,6 +98,9 @@ public class WelcomePage implements Serializable {
 //            log.error("",e);
 //        }
         log.debug("system: {}",system);
+        userAuditor.addSucceed("user1","test","test action");
+        rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCEED,"",new Date(),"12345");
+        ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCEED,"",new Date(),"67890");
     }
 
     public void testBRMS() {

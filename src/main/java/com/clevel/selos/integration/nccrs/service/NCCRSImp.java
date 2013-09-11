@@ -90,7 +90,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                                new AttributeModel(historicalBalanceReport)
                            ));
         xml = xStream.toXML(nccrsRequest);
-        log.debug("=========================================NCCRS Request : {}",xml);
+        log.debug("=========================================NCCRS Request : \n{}",xml);
         result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
 //            log.debug("=========================================NCCRS Response : {}",result);

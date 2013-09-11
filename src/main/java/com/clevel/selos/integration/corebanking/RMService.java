@@ -502,21 +502,21 @@ public class RMService implements Serializable {
     }
 
 
-    private void auditRM(String requester,Date requestTime,Date responseTime,String linkKey,String result,String resultDetail){
-        log.debug("AUDIT : "+requester +" "+requestTime+" "+responseTime+" "+linkKey+" "+result+" "+resultDetail);
-              RMActivity rmActivity=new RMActivity();
-//              rmActivity.setId(0);
-              rmActivity.setRequester(requester);
-              rmActivity.setRequestTime(requestTime);
-              rmActivity.setResponseTime(responseTime);
-              rmActivity.setLinkKey(linkKey);
-              rmActivity.setResult(result);
-              rmActivity.setResultDetail(resultDetail+"3");
-
-        if(rmActivity!=null){
-
-          rmActivityDAO.persist(rmActivity);
-
-        }
-    }
+//    private void auditRM(String requester,Date requestTime,Date responseTime,String linkKey,String result,String resultDetail){
+//        log.debug("AUDIT : "+requester +" "+requestTime+" "+responseTime+" "+linkKey+" "+result+" "+resultDetail);
+//              RMActivity rmActivity=new RMActivity();
+////              rmActivity.setId(0);
+//              rmActivity.setRequester(requester);
+//              rmActivity.setRequestTime(requestTime);
+//              rmActivity.setResponseTime(responseTime);
+//              rmActivity.setLinkKey(linkKey);
+//              rmActivity.setResult(result);
+//              rmActivity.setResultDetail(resultDetail+"3");
+//
+//        if(rmActivity!=null){
+//
+//          rmActivityDAO.persist(rmActivity);
+//
+//        }
+//    }
 }
