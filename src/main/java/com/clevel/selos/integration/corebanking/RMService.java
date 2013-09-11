@@ -81,45 +81,46 @@ public class RMService implements Serializable {
     @Inject
     public RMService() {
     }
+
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
 
     }
 
     public IndividualModel individualService(SearchIndividual searchIndividual) throws Exception {
         log.debug("::::::::::::::::::::::::::::::::::::  IndividualService() START");
-        IndividualModel individualModel=null;
+        IndividualModel individualModel = null;
 
         //Validate ReqId
-        if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
+        if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
         }
         //Validate CustType
-        if (!ValidationUtil.isEqualRange(1,searchIndividual.getCustType().length())) {
+        if (!ValidationUtil.isEqualRange(1, searchIndividual.getCustType().length())) {
             throw new ValidationException(validationMsg.get("011"));
         }
         //Validate Type
-        if (!ValidationUtil.isEqualRange(2,searchIndividual.getType().length())) {
+        if (!ValidationUtil.isEqualRange(2, searchIndividual.getType().length())) {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
-        if (ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+        if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
             throw new ValidationException(validationMsg.get("013"));
         }
         //Validate CustNbr
-        if (ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+        if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate CustName
-        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+        if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
             throw new ValidationException(validationMsg.get("015"));
         }
         //Validate CustSurname
-        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustSurname().length())) {
+        if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustSurname().length())) {
             throw new ValidationException(validationMsg.get("016"));
         }
         //Validate RadSelectSearch
-        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+        if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             throw new ValidationException(validationMsg.get("017"));
         }
         log.debug(":::::::::::::::::::::::::::::::::::: Validate Pass!");
@@ -141,124 +142,129 @@ public class RMService implements Serializable {
         reqSearch.setBody(body);
 
         //actionDesc
-        String actionDesc="ReqID="+reqSearch.getHeader().getReqID()+",CustId="+reqSearch.getBody().getCustId()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
 
         //requestTime
-        Date requestTime=new Date();
+        Date requestTime = new Date();
 
         log.debug("============================ Request ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",new Date());
-        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
-        try{
-        ResSearchIndividualCustomer resSearchIndividualCustomer = null;
-//                callServiceIndividual(reqSearch);
-        //responseTime
-        Date responseTime=new Date();
-        log.debug("============================ Response ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",new Date());
-        log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}",resSearchIndividualCustomer.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}",resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
-        individualModel = new IndividualModel();
-        individualModel.setResCode(resSearchIndividualCustomer.getHeader().getResCode());
-        individualModel.setResDesc(resSearchIndividualCustomer.getHeader().getResDesc());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}", new Date());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}", reqSearch.getHeader().toString());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}", reqSearch.getBody().toString());
+        try {
+            ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividual(reqSearch);
+            if (resSearchIndividualCustomer != null) {
+                //responseTime
+                Date responseTime = new Date();
+                log.debug("============================ Response ==============================");
+                log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}", new Date());
+                log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}", resSearchIndividualCustomer.getHeader().toString());
+                log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
+                individualModel = new IndividualModel();
+                individualModel.setResCode(resSearchIndividualCustomer.getHeader().getResCode());
+                individualModel.setResDesc(resSearchIndividualCustomer.getHeader().getResDesc());
 
 
-        //Audit Data
-        rmAuditor.add("userId","individualService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchIndividualCustomer.getHeader().getResCode(),responseTime, Util.getLinkKey("userId"));
+                //Audit Data
+                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, Util.getLinkKey("userId"));
 
-        //Check Success
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchIndividualCustomer.getHeader().getResDesc());
-        if (resSearchIndividualCustomer.getHeader().getResCode().equals("0000")) {
+                //Check Success
+                log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
+                if (resSearchIndividualCustomer.getHeader().getResCode().equals("0000")) {
 
-            individualModel.setSearchResult(resSearchIndividualCustomer.getBody().getSearchResult());
-            //checkSearchResult
-            if (individualModel.getSearchResult().equals("CL")) {
-                throw new ValidationException(validationMsg.get("007"));
-            }
-            individualModel.setLastPageFlag(resSearchIndividualCustomer.getBody().getLastPageFlag());
-            //personal detail session
-            individualModel.setTitle(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
-            individualModel.setCustId(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
-            individualModel.setName(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName());
-            individualModel.setTelephone1(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1());
+                    individualModel.setSearchResult(resSearchIndividualCustomer.getBody().getSearchResult());
+                    //checkSearchResult
+                    if (individualModel.getSearchResult().equals("CL")) {
+                        throw new ValidationException(validationMsg.get("007"));
+                    }
+                    individualModel.setLastPageFlag(resSearchIndividualCustomer.getBody().getLastPageFlag());
+                    //personal detail session
+                    individualModel.setTitle(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
+                    individualModel.setCustId(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
+                    individualModel.setName(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName());
+                    individualModel.setTelephone1(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1());
 
 //          //personal list session
-            if (resSearchIndividualCustomer.getBody().getPersonalListSection() != null && (resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList() != null && resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().size() > 0)) {
+                    if (resSearchIndividualCustomer.getBody().getPersonalListSection() != null && (resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList() != null && resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().size() > 0)) {
 
-                int personalListSize = resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().size();
+                        int personalListSize = resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().size();
 //
-                IndividualPersonalList resultPersonalList = null;
-                List<IndividualPersonalList> list = new ArrayList<IndividualPersonalList>();
-                if (personalListSize != 0) {
-                    for (int i = 0; i < personalListSize; i++) {
-                        resultPersonalList = new IndividualPersonalList();
-                        resultPersonalList.setAddress(resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().get(i).getAddress1());
+                        IndividualPersonalList resultPersonalList = null;
+                        List<IndividualPersonalList> list = new ArrayList<IndividualPersonalList>();
+                        if (personalListSize != 0) {
+                            for (int i = 0; i < personalListSize; i++) {
+                                resultPersonalList = new IndividualPersonalList();
+                                resultPersonalList.setAddress(resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().get(i).getAddress1());
 
-                        list.add(resultPersonalList);
+                                list.add(resultPersonalList);
+                            }
+                            individualModel.setPersonalLists(list);
+                        }
                     }
-                    individualModel.setPersonalLists(list);
+
+
+                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
+                    throw new ValidationException(exceptionMsg.get("501"));
+                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
+
+                    log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
+                    List<IndividualPersonalList> listModelList = new ArrayList<IndividualPersonalList>();
+                    IndividualPersonalList resultPersonalList = new IndividualPersonalList();
+                    listModelList.add(resultPersonalList);
+                    individualModel.setPersonalLists(listModelList);
+
+
+                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
+                    throw new ValidationException(exceptionMsg.get("502"));
                 }
+                //check null
+            } else {
+                log.warn("::::::::::::::::::::::::::::::::: resSearchIndividualCustomer : Null");
+                //Audit Data
+                rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), Util.getLinkKey("userId"));
             }
-
-
-        }else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")){ //Host Parameter is null
-            throw new ValidationException(exceptionMsg.get("501"));
-        }else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-
-        log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
-            List<IndividualPersonalList> listModelList = new ArrayList<IndividualPersonalList>();
-            IndividualPersonalList resultPersonalList = new IndividualPersonalList();
-            listModelList.add(resultPersonalList);
-            individualModel.setPersonalLists(listModelList);
-
-
-        } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
-            throw new ValidationException(exceptionMsg.get("502"));
-        }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}",e.getMessage());
+            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid","IndividualService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
+            rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), Util.getLinkKey("userId"));
         }
         log.debug(":::::::::::::::::::::::::::::::::::: IndividualService() END");
         return individualModel;
     }
 
 
-
     public CorporateModel corporateService(SearchIndividual searchIndividual) throws Exception {
 
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() START");
-        CorporateModel corporateModel=null;
+        CorporateModel corporateModel = null;
 
         //Validate ReqId
-        if (!ValidationUtil.isValueInRange(1,50,searchIndividual.getReqId().length())) {
+        if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
         }
         //Validate CustType
-        if (!ValidationUtil.isEqualRange(1,searchIndividual.getCustType().length())) {
+        if (!ValidationUtil.isEqualRange(1, searchIndividual.getCustType().length())) {
             throw new ValidationException(validationMsg.get("011"));
         }
         //Validate Type
-        if (!ValidationUtil.isEqualRange(2,searchIndividual.getType().length())) {
+        if (!ValidationUtil.isEqualRange(2, searchIndividual.getType().length())) {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
-        if (ValidationUtil.isGreaterThan(25,searchIndividual.getCustId().length())) {
+        if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
             throw new ValidationException(validationMsg.get("013"));
         }
         //Validate CustNbr
-        if (ValidationUtil.isGreaterThan(14,searchIndividual.getCustNbr().length())) {
+        if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate CustName
-        if (ValidationUtil.isGreaterThan(40,searchIndividual.getCustName().length())) {
+        if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
             throw new ValidationException(validationMsg.get("015"));
         }
         //Validate RadSelectSearch
-        if (!ValidationUtil.isValueInRange(1,10,searchIndividual.getRadSelectSearch().length())) {
+        if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             throw new ValidationException(validationMsg.get("017"));
         }
         log.debug("::::::::::::::::::::::::::::::::::::  Validate Pass!");
@@ -277,105 +283,113 @@ public class RMService implements Serializable {
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
         //actionDesc
-        String actionDesc="ReqID="+reqSearch.getHeader().getReqID()+",CustId="+reqSearch.getBody().getCustId()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
 
         //requestTime
-        Date requestTime=new Date();
+        Date requestTime = new Date();
 
         log.debug("============================ Request ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",new Date());
-        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
-        try{
-        ResSearchCorporateCustomer resSearchCorporateCustomer =null;// callServiceCorporate(reqSearch);
-        //responseTime
-        Date responseTime=new Date();
-        log.debug("============================ Response ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",new Date());
-        log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}",resSearchCorporateCustomer.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}",resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
-        corporateModel = new CorporateModel();
-        corporateModel.setResCode(resSearchCorporateCustomer.getHeader().getResCode());
-        corporateModel.setResDesc(resSearchCorporateCustomer.getHeader().getResDesc());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}", new Date());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}", reqSearch.getHeader().toString());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}", reqSearch.getBody().toString());
+        try {
+            ResSearchCorporateCustomer resSearchCorporateCustomer =callServiceCorporate(reqSearch);
+            if (resSearchCorporateCustomer != null) {
+                //responseTime
+                Date responseTime = new Date();
+                log.debug("============================ Response ==============================");
+                log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}", new Date());
+                log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}", resSearchCorporateCustomer.getHeader().toString());
+                log.debug("::::::::::::::::::::::::::::::::::::  responseBodyData : {}", resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
+                corporateModel = new CorporateModel();
+                corporateModel.setResCode(resSearchCorporateCustomer.getHeader().getResCode());
+                corporateModel.setResDesc(resSearchCorporateCustomer.getHeader().getResDesc());
 
-        //Audit Data
-        rmAuditor.add("userId","corporateService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchCorporateCustomer.getHeader().getResDesc(),responseTime, Util.getLinkKey("userId"));
+                //Audit Data
+                rmAuditor.add("userId", "corporateService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, Util.getLinkKey("userId"));
 
-            //Check Success
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}",resSearchCorporateCustomer.getHeader().getResDesc());
-        if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
-            corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
-            //checkSearchResult
-            if (corporateModel.getSearchResult().equals("CL")) {
-                throw new ValidationException(validationMsg.get("007"));
-            }
-            //personal detail session
-            corporateModel.setTitle(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-            corporateModel.setCustNbr(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
-            corporateModel.setThaiName1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1());
-            corporateModel.setcId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
-            corporateModel.setCitizenId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
-            corporateModel.setEstDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
-
-//          //personal list session
-            if (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection() != null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList() != null &&
-                    resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size() > 0)) {
-                int corporateListSize = resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size();
-//
-                CorporatePersonalList corporatePersonalList = null;
-                List<CorporatePersonalList> list = new ArrayList<CorporatePersonalList>();
-                if (corporateListSize != 0) {
-                    for (int i = 0; i < corporateListSize; i++) {
-                        corporatePersonalList = new CorporatePersonalList();
-                        corporatePersonalList.setCustNbr1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCustNbr1());
-                        corporatePersonalList.setcId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCId1());
-                        corporatePersonalList.setCitizenId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCitizenCId1());
-                        corporatePersonalList.setTitle1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getTitle1());
-
-                        list.add(corporatePersonalList);
+                //Check Success
+                log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
+                if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
+                    corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
+                    //checkSearchResult
+                    if (corporateModel.getSearchResult().equals("CL")) {
+                        throw new ValidationException(validationMsg.get("007"));
                     }
-                    corporateModel.setPersonalList(list);
-                }
+                    //personal detail session
+                    corporateModel.setTitle(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
+                    corporateModel.setCustNbr(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
+                    corporateModel.setThaiName1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1());
+                    corporateModel.setcId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
+                    corporateModel.setCitizenId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
+                    corporateModel.setEstDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
+
+          //personal list session
+                    if (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection() != null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList() != null &&
+                            resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size() > 0)) {
+                        int corporateListSize = resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size();
+
+                        CorporatePersonalList corporatePersonalList = null;
+                        List<CorporatePersonalList> list = new ArrayList<CorporatePersonalList>();
+                        if (corporateListSize != 0) {
+                            for (int i = 0; i < corporateListSize; i++) {
+                                corporatePersonalList = new CorporatePersonalList();
+                                corporatePersonalList.setCustNbr1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCustNbr1());
+                                corporatePersonalList.setcId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCId1());
+                                corporatePersonalList.setCitizenId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCitizenCId1());
+                                corporatePersonalList.setTitle1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getTitle1());
+
+                                list.add(corporatePersonalList);
+                            }
+                            corporateModel.setPersonalList(list);
+                        }
+                    }
+                    log.debug("responseCode: {}", corporateModel.getResCode());
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
+                    throw new ValidationException(exceptionMsg.get("501"));
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
+                    log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
+                    List<CorporatePersonalList> listModelList = new ArrayList<CorporatePersonalList>();
+                    CorporatePersonalList corporatePersonalList = new CorporatePersonalList();
+                    listModelList.add(corporatePersonalList);
+                    corporateModel.setPersonalList(listModelList);
+
+
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
+                    throw new ValidationException(exceptionMsg.get("502"));
+                }  //check null
+            } else {
+                log.warn("::::::::::::::::::::::::::::::::: resSearchCorporateCustomer : Null");
+                //Audit Data
+                rmAuditor.add("userid", "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), Util.getLinkKey("userId"));
             }
-            log.debug("responseCode: {}", corporateModel.getResCode());
-        }else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
-            throw new ValidationException(exceptionMsg.get("501"));
-        } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-            log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
-            List<CorporatePersonalList> listModelList = new ArrayList<CorporatePersonalList>();
-            CorporatePersonalList corporatePersonalList = new CorporatePersonalList();
-            listModelList.add(corporatePersonalList);
-            corporateModel.setPersonalList(listModelList);
-
-
-        } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
-            throw new ValidationException(exceptionMsg.get("502"));
-        }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}",e.getMessage());
+            log.error(":::::::::::::::::::::::::::::::::::: Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid","corporateService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
+            rmAuditor.add("userid", "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), Util.getLinkKey("userId"));
         }
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
         return corporateModel;
     }
 
-    /******************************  CustomerAccount  **********************************/
+    /**
+     * ***************************  CustomerAccount  *********************************
+     */
     public CustomerAccountModel customerAccountService(SearchCustomerAccountModel searchCustomerAccountModel) throws Exception {
         log.debug("::::::::::::::::::::::::::::::::::::  CustomerAccountService() START");
-        CustomerAccountModel customerAccountModel=null;
+        CustomerAccountModel customerAccountModel = null;
 
         //Validate ReqId
-        if (!ValidationUtil.isValueInRange(1,50,searchCustomerAccountModel.getReqId().length())) {
+        if (!ValidationUtil.isValueInRange(1, 50, searchCustomerAccountModel.getReqId().length())) {
             throw new ValidationException(validationMsg.get("010"));
         }
         //Validate Acronym
-        if (!ValidationUtil.isValueInRange(1,20,searchCustomerAccountModel.getAcronym().length())) {
+        if (!ValidationUtil.isValueInRange(1, 20, searchCustomerAccountModel.getAcronym().length())) {
             throw new ValidationException(validationMsg.get("018"));
         }
         //Validate ProductCode
-        if (!ValidationUtil.isValueInRange(1,8,searchCustomerAccountModel.getProductCode().length())) {
+        if (!ValidationUtil.isValueInRange(1, 8, searchCustomerAccountModel.getProductCode().length())) {
             throw new ValidationException(validationMsg.get("019"));
         }
 //        //Validate ServerURL
@@ -387,11 +401,11 @@ public class RMService implements Serializable {
 //            throw new ValidationException(validationMsg.get("validation.014"));
 //        }
         //Validate CustNbr
-        if (ValidationUtil.isGreaterThan(14,searchCustomerAccountModel.getCustNbr().length())) {
+        if (ValidationUtil.isGreaterThan(14, searchCustomerAccountModel.getCustNbr().length())) {
             throw new ValidationException(validationMsg.get("014"));
         }
         //Validate RadSelectSearch
-        if (!ValidationUtil.isValueInRange(1,10,searchCustomerAccountModel.getRadSelectSearch().length())) {
+        if (!ValidationUtil.isValueInRange(1, 10, searchCustomerAccountModel.getRadSelectSearch().length())) {
             throw new ValidationException(validationMsg.get("017"));
         }
         log.debug("::::::::::::::::::::::::::::::::::::  Validate Pass!");
@@ -408,102 +422,103 @@ public class RMService implements Serializable {
         body.setCustNbr(searchCustomerAccountModel.getCustNbr());
         body.setRadSelectSearch(searchCustomerAccountModel.getRadSelectSearch());
 
-//        log.debug("::::::::::::::::::::::::::::::::::::  ");
+
         ReqSearchCustomerAccount reqSearch = new ReqSearchCustomerAccount();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
         //actionDesc
-        String actionDesc="ReqID="+reqSearch.getHeader().getReqId()+",ProductCode="+reqSearch.getHeader().getProductCode()+",Acronym="+reqSearch.getHeader().getAcronym()
-                +",CustNbr="+reqSearch.getBody().getCustNbr()+",RedSelectSearch="+reqSearch.getBody().getRadSelectSearch();
+        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqId() + ",ProductCode=" + reqSearch.getHeader().getProductCode() + ",Acronym=" + reqSearch.getHeader().getAcronym()
+                + ",CustNbr=" + reqSearch.getBody().getCustNbr() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
 
         //requestTime
-        Date requestTime=new Date();
+        Date requestTime = new Date();
 
         log.debug("============================ Request ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}",requestTime);
-        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}",reqSearch.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}",reqSearch.getBody().toString());
-        try{
-        ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAccount(reqSearch);
-            if(resSearchCustomerAccount!=null){
-        //responseTime
-        Date responseTime=new Date();
-        log.debug("============================ Response ==============================");
-        log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}",responseTime);
-        log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}",resSearchCustomerAccount.getHeader().toString());
-        log.debug("::::::::::::::::::::::::::::::::::::  accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
-            for(int i=0 ;i<resSearchCustomerAccount.getBody().getAccountList().size();i++){
-        log.debug("::::::::::::::::::::::::::::::::::::  accountListData "+i+1+" : {}",resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
-            }
-         customerAccountModel = new CustomerAccountModel();
-        customerAccountModel.setResCode(resSearchCustomerAccount.getHeader().getResCode());
-        customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
-
-        //Audit Data
-       rmAuditor.add("userId","customerAccountService",actionDesc,requestTime, ActionResult.SUCCEED,resSearchCustomerAccount.getHeader().getResDesc(),new Date(), Util.getLinkKey("userId"));
-
-        //Check Success
-        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());
-        if (resSearchCustomerAccount.getHeader().getResCode().equals("0000")) {
-            List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
-            //checkSearchResult
-
-            if (resSearchCustomerAccount.getBody().getAccountList() != null && resSearchCustomerAccount.getBody().getAccountList().size() > 0) {
-                CustomerAccountListModel customerAccountListModel = null;
-
+        log.debug("::::::::::::::::::::::::::::::::::::  requestServiceTime : {}", requestTime);
+        log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}", reqSearch.getHeader().toString());
+        log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}", reqSearch.getBody().toString());
+        try {
+            ResSearchCustomerAccount resSearchCustomerAccount =  callServiceCustomerAccount(reqSearch);
+            if (resSearchCustomerAccount != null) {
+                //responseTime
+                Date responseTime = new Date();
+                log.debug("============================ Response ==============================");
+                log.debug("::::::::::::::::::::::::::::::::::::  responseServiceTime : {}", responseTime);
+                log.debug("::::::::::::::::::::::::::::::::::::  responseHeaderData : {}", resSearchCustomerAccount.getHeader().toString());
+                log.debug("::::::::::::::::::::::::::::::::::::  accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
                 for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
-                    customerAccountListModel = new CustomerAccountListModel();
-                    customerAccountListModel.setRel(resSearchCustomerAccount.getBody().getAccountList().get(i).getRel());
-                    customerAccountListModel.setCd(resSearchCustomerAccount.getBody().getAccountList().get(i).getCd());
-                    customerAccountListModel.setpSO(resSearchCustomerAccount.getBody().getAccountList().get(i).getPSO());
-                    customerAccountListModel.setAppl(resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl());
-                    customerAccountListModel.setAccountNo(resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo());
-                    customerAccountListModel.setTrlr(resSearchCustomerAccount.getBody().getAccountList().get(i).getTrlr());
-                    customerAccountListModel.setBalance(resSearchCustomerAccount.getBody().getAccountList().get(i).getBalance());
-                    customerAccountListModel.setDir(resSearchCustomerAccount.getBody().getAccountList().get(i).getDir());
-                    customerAccountListModel.setProd(resSearchCustomerAccount.getBody().getAccountList().get(i).getProd());
-                    customerAccountListModel.setCtl1(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl1());
-                    customerAccountListModel.setCtl2(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl2());
-                    customerAccountListModel.setCtl3(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl3());
-                    customerAccountListModel.setCtl4(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl4());
-                    customerAccountListModel.setStatus(resSearchCustomerAccount.getBody().getAccountList().get(i).getStatus());
-                    customerAccountListModel.setDate(resSearchCustomerAccount.getBody().getAccountList().get(i).getDate());
-                    customerAccountListModel.setName(resSearchCustomerAccount.getBody().getAccountList().get(i).getName());
-                    customerAccountListModel.setCitizenId(resSearchCustomerAccount.getBody().getAccountList().get(i).getCitizenId());
-                    customerAccountListModel.setCurr(resSearchCustomerAccount.getBody().getAccountList().get(i).getCurr());
-                    listModelList.add(customerAccountListModel);
+                    log.debug("::::::::::::::::::::::::::::::::::::  accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }
+                customerAccountModel = new CustomerAccountModel();
+                customerAccountModel.setResCode(resSearchCustomerAccount.getHeader().getResCode());
+                customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
 
+                //Audit Data
+                rmAuditor.add("userId", "customerAccountService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), Util.getLinkKey("userId"));
+
+                //Check Success
+                log.debug("::::::::::::::::::::::::::::::::::::  requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());
+                if (resSearchCustomerAccount.getHeader().getResCode().equals("0000")) {
+                    List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
+
+                    //checkSearchResult
+                    if (resSearchCustomerAccount.getBody().getAccountList() != null && resSearchCustomerAccount.getBody().getAccountList().size() > 0) {
+                        CustomerAccountListModel customerAccountListModel = null;
+
+                        for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
+                            customerAccountListModel = new CustomerAccountListModel();
+                            customerAccountListModel.setRel(resSearchCustomerAccount.getBody().getAccountList().get(i).getRel());
+                            customerAccountListModel.setCd(resSearchCustomerAccount.getBody().getAccountList().get(i).getCd());
+                            customerAccountListModel.setpSO(resSearchCustomerAccount.getBody().getAccountList().get(i).getPSO());
+                            customerAccountListModel.setAppl(resSearchCustomerAccount.getBody().getAccountList().get(i).getAppl());
+                            customerAccountListModel.setAccountNo(resSearchCustomerAccount.getBody().getAccountList().get(i).getAccountNo());
+                            customerAccountListModel.setTrlr(resSearchCustomerAccount.getBody().getAccountList().get(i).getTrlr());
+                            customerAccountListModel.setBalance(resSearchCustomerAccount.getBody().getAccountList().get(i).getBalance());
+                            customerAccountListModel.setDir(resSearchCustomerAccount.getBody().getAccountList().get(i).getDir());
+                            customerAccountListModel.setProd(resSearchCustomerAccount.getBody().getAccountList().get(i).getProd());
+                            customerAccountListModel.setCtl1(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl1());
+                            customerAccountListModel.setCtl2(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl2());
+                            customerAccountListModel.setCtl3(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl3());
+                            customerAccountListModel.setCtl4(resSearchCustomerAccount.getBody().getAccountList().get(i).getCtl4());
+                            customerAccountListModel.setStatus(resSearchCustomerAccount.getBody().getAccountList().get(i).getStatus());
+                            customerAccountListModel.setDate(resSearchCustomerAccount.getBody().getAccountList().get(i).getDate());
+                            customerAccountListModel.setName(resSearchCustomerAccount.getBody().getAccountList().get(i).getName());
+                            customerAccountListModel.setCitizenId(resSearchCustomerAccount.getBody().getAccountList().get(i).getCitizenId());
+                            customerAccountListModel.setCurr(resSearchCustomerAccount.getBody().getAccountList().get(i).getCurr());
+                            listModelList.add(customerAccountListModel);
+                        }
+
+                    }
+                    customerAccountModel.setAccountBody(listModelList);
+
+                } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
+                    throw new ValidationException(exceptionMsg.get("501"));
+                } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
+                    log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
+                    List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
+                    log.info(listModelList.size() + "");
+                    customerAccountModel.setAccountBody(listModelList);
+                } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
+                    throw new ValidationException(exceptionMsg.get("502"));
+                }
+                //check null
+            } else {
+                log.warn("::::::::::::::::::::::::::::::::: resSearchCustomerAccount : Null");
+                //Audit Data
+                rmAuditor.add("userid", "customerAccountService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCustomerAccount : Null", new Date(), Util.getLinkKey("userId"));
             }
-            customerAccountModel.setAccountBody(listModelList);
 
-        } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
-            throw new ValidationException(exceptionMsg.get("501"));
-        } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
-            log.debug(":::::::::::::::::::::::::::::::::::: Data Not Found!");
-            List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
-            log.info(listModelList.size()+"");
-            customerAccountModel.setAccountBody(listModelList);
-        } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
-            throw new ValidationException(exceptionMsg.get("502"));
-        }
-         //check null
-        }else{
-           log.warn("::::::::::::::::::::::::::::::::: resSearchCustomerAccount : Null");
-        }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             log.error(":::::::::::::::::::::::::::::::::::: Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid","customerAccountService",actionDesc,requestTime, ActionResult.FAILED,e.getMessage(),new Date(),Util.getLinkKey("userId"));
+            rmAuditor.add("userid", "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), Util.getLinkKey("userId"));
         }
 
         log.debug("::::::::::::::::::::::::::::::::::::  CorporateService() END");
         return customerAccountModel;
     }
-
-
 
 
     // Services
@@ -514,8 +529,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
         EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
         EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 individualAddress);
 //                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
@@ -532,8 +547,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 corporateAddress);
 //        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
@@ -541,6 +556,7 @@ public class RMService implements Serializable {
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;
     }
+
     private ResSearchCustomerAccount callServiceCustomerAccount(ReqSearchCustomerAccount reqSearch) throws Exception {
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() START");
         ResSearchCustomerAccount resSearchCustomerAccount = null;
@@ -548,8 +564,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);
         EAISearchCustomerAccount eaiSearchCa = service.getEAISearchCustomerAccount();
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,requestTimeout);
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,connectTimeout);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 customerAccountAddress);
 
@@ -558,7 +574,6 @@ public class RMService implements Serializable {
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() END");
         return resSearchCustomerAccount;
     }
-
 
 
 }
