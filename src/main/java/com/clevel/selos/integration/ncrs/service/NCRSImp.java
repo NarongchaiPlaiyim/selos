@@ -5,7 +5,7 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.httppost.Post;
 import com.clevel.selos.integration.ncrs.models.request.*;
-import com.clevel.selos.integration.ncrs.models.response.NCRSResponse;
+import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
 
 
 import com.clevel.selos.system.Config;
@@ -52,7 +52,7 @@ public class NCRSImp implements NCRS, Serializable{
     private String timeOut;
 
     @Override
-    public NCRSResponse requestOnline(NCRSModel ncrsModel) throws Exception {
+    public NCRSResponseModel requestOnline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
         log.debug("=========================================NCRS requestOnline(NCRSModel : {})",ncrsModel.toString());
         String CPUTOCPU_ENQUIRY = "BB01001";
@@ -60,14 +60,14 @@ public class NCRSImp implements NCRS, Serializable{
     }
 
     @Override
-    public NCRSResponse requestOffline(NCRSModel ncrsModel) throws Exception {
+    public NCRSResponseModel requestOffline(NCRSModel ncrsModel) throws Exception {
         if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
         log.debug("=========================================NCRS requestOffline(NCRSModel : {})",ncrsModel.toString());
         String BATCHOFFLINE_ENQUIRY_ENTRY = "FF01001";
         return request(ncrsModel, BATCHOFFLINE_ENQUIRY_ENTRY);
     }
 
-    private NCRSResponse request(NCRSModel ncrsModel, String command)throws Exception{
+    private NCRSResponseModel request(NCRSModel ncrsModel, String command)throws Exception{
         String memberRef = ncrsModel.getMemberref();
         String enqPurpose = ncrsModel.getEnqpurpose();
         String enqAmount = ncrsModel.getEnqamount();
@@ -80,7 +80,7 @@ public class NCRSImp implements NCRS, Serializable{
         String result = null;
         XStream xStream = null;
         NCRSRequest ncrsRequest = null;
-        NCRSResponse ncrsResponse = null;
+        NCRSResponseModel ncrsResponse = null;
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequest.class);
         log.debug("=========================================NCRS Command code : {}",command);
@@ -96,8 +96,8 @@ public class NCRSImp implements NCRS, Serializable{
         result = post.sendPost(xml, url, Integer.parseInt(timeOut));
         if(!"".equals(result)){
 //            log.debug("=========================================NCRS Response : {}",result);
-            xStream.processAnnotations(NCRSResponse.class);
-            ncrsResponse = (NCRSResponse)xStream.fromXML(result);
+            xStream.processAnnotations(NCRSResponseModel.class);
+            ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
             return ncrsResponse;
         }else{
 //            log.debug("=========================================NCRS Response : {}",result);
