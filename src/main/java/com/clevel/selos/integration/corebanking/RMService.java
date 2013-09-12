@@ -1,13 +1,11 @@
 package com.clevel.selos.integration.corebanking;
 
-import com.clevel.selos.dao.audit.RMActivityDAO;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.RMmodel.CustomerAccountListModel;
 import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
-import com.clevel.selos.model.db.audit.RMActivity;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -293,7 +291,7 @@ public class RMService implements Serializable {
         log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}", reqSearch.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}", reqSearch.getBody().toString());
         try {
-            ResSearchCorporateCustomer resSearchCorporateCustomer =callServiceCorporate(reqSearch);
+            ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
             if (resSearchCorporateCustomer != null) {
                 //responseTime
                 Date responseTime = new Date();
@@ -324,7 +322,7 @@ public class RMService implements Serializable {
                     corporateModel.setCitizenId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                     corporateModel.setEstDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
 
-          //personal list session
+                    //personal list session
                     if (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection() != null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList() != null &&
                             resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size() > 0)) {
                         int corporateListSize = resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size();
@@ -439,7 +437,7 @@ public class RMService implements Serializable {
         log.debug("::::::::::::::::::::::::::::::::::::  requestHeaderData : {}", reqSearch.getHeader().toString());
         log.debug("::::::::::::::::::::::::::::::::::::  requestBodyData : {}", reqSearch.getBody().toString());
         try {
-            ResSearchCustomerAccount resSearchCustomerAccount =  callServiceCustomerAccount(reqSearch);
+            ResSearchCustomerAccount resSearchCustomerAccount = callServiceCustomerAccount(reqSearch);
             if (resSearchCustomerAccount != null) {
                 //responseTime
                 Date responseTime = new Date();
@@ -533,8 +531,6 @@ public class RMService implements Serializable {
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 individualAddress);
-//                "http://10.175.140.18:7809/EAISearchIndividualCustomer");
-
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceIndividual() END");
         return resSearchIndividualCustomer;
@@ -551,7 +547,6 @@ public class RMService implements Serializable {
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 corporateAddress);
-//        "http://10.175.140.18:7807/EAISearchCorporateCustomer");
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCorporate() END");
         return resSearchCorporateCustomer;
@@ -568,8 +563,6 @@ public class RMService implements Serializable {
         ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
         ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 customerAccountAddress);
-
-//        "http://10.175.140.18:7809/services/EAISearchCustomerAccount");
         resSearchCustomerAccount = eaiSearchCa.searchCustomerAccount(reqSearch);
         log.debug("::::::::::::::::::::::::::::::::::::  callServiceCustomerAccount() END");
         return resSearchCustomerAccount;
