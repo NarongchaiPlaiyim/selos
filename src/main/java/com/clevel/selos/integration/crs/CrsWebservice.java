@@ -70,8 +70,8 @@ public class CrsWebservice {
                              @WebParam String accountNo10,
                              @WebParam String appInDateUW,
                              @WebParam Date createDate) {
-
-        log.debug("::::::::::::::::::::::::::  csrService");
+        log.debug("csrService : START");
+        log.debug("csrService : Check CANumber ");
         CRSData crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
 
 
@@ -85,15 +85,17 @@ public class CrsWebservice {
             savebase.setCaNumber(caNumber);
             try {
                 //create database record
+                log.debug("csrService : Create database record ");
                 crsAuditor.add(savebase);
 
             } catch (NonUniqueResultException x) {
                 x.printStackTrace();
+                log.debug("csrService Exception : {}",x.getMessage());
                 return "Fail";
             }
 
         }
-
+        log.debug("csrService : END");
         return message;
     }
 
