@@ -40,61 +40,63 @@ public class CrsWebservice {
 
 
     @WebMethod
-    public String csrService(@WebParam String jobName,
-                             @WebParam String caNumber,
-                             @WebParam String oldCaNumber,
-                             @WebParam String accountNo1,
-                             @WebParam String customerId,
-                             @WebParam String customerName,
-                             @WebParam String citizenId,
-                             @WebParam int requestType,
-                             @WebParam int customerType,
-                             @WebParam String bdmId,
-                             @WebParam String hubCode,
-                             @WebParam String regionCode,
-                             @WebParam String uwId,
-                             @WebParam String appInDateBDM,
-                             @WebParam String finalApproved,
-                             @WebParam String parallel,
-                             @WebParam String pending,
-                             @WebParam String caExist,
-                             @WebParam String caEnd,
-                             @WebParam String accountNo2,
-                             @WebParam String accountNo3,
-                             @WebParam String accountNo4,
-                             @WebParam String accountNo5,
-                             @WebParam String accountNo6,
-                             @WebParam String accountNo7,
-                             @WebParam String accountNo8,
-                             @WebParam String accountNo9,
-                             @WebParam String accountNo10,
-                             @WebParam String appInDateUW,
-                             @WebParam Date createDate) {
+    public String csrService(@WebParam(name = "jobName") String jobName,
+                             @WebParam(name = "caNumber") String caNumber,
+                             @WebParam(name = "oldCaNumber") String oldCaNumber,
+                             @WebParam(name = "accountNo1") String accountNo1,
+                             @WebParam(name = "customerId") String customerId,
+                             @WebParam(name = "customerName") String customerName,
+                             @WebParam(name = "citizenId") String citizenId,
+                             @WebParam(name = "requestType") int requestType,
+                             @WebParam(name = "customerType") int customerType,
+                             @WebParam(name = "bdmId") String bdmId,
+                             @WebParam(name = "hubCode") String hubCode,
+                             @WebParam(name = "regionCode") String regionCode,
+                             @WebParam(name = "uwId") String uwId,
+                             @WebParam(name = "appInDateBDM") String appInDateBDM,
+                             @WebParam(name = "finalApproved") String finalApproved,
+                             @WebParam(name = "parallel") String parallel,
+                             @WebParam(name = "pending") String pending,
+                             @WebParam(name = "caExist") String caExist,
+                             @WebParam(name = "caEnd") String caEnd,
+                             @WebParam(name = "accountNo2") String accountNo2,
+                             @WebParam(name = "accountNo3") String accountNo3,
+                             @WebParam(name = "accountNo4") String accountNo4,
+                             @WebParam(name = "accountNo5") String accountNo5,
+                             @WebParam(name = "accountNo6") String accountNo6,
+                             @WebParam(name = "accountNo7") String accountNo7,
+                             @WebParam(name = "accountNo8") String accountNo8,
+                             @WebParam(name = "accountNo9") String accountNo9,
+                             @WebParam(name = "accountNo10") String accountNo10,
+                             @WebParam(name = "appInDateUW") String appInDateUW,
+                             @WebParam(name = "createDate") Date createDate) {
         log.debug("csrService : START");
         log.debug("csrService : Check CANumber ");
-        CRSData crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
+        CRSData crsData = null;
+        try {
+            //Search Ca
+            crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
 
+        } catch (NonUniqueResultException x) {
+            x.printStackTrace();
+            log.debug("csrService Exception : {}", x.getMessage());
+            return "Fail";
+        }
 
         if (crsData != null) {
-            message = "HAVA A DATA";
+                message = "HAVA A DATA";
 
-        } else {
-            message = "NO DATA";
+        } else             {
+                message = "NO DATA";
 
-            CRSData savebase = new CRSData();
-            savebase.setCaNumber(caNumber);
-            try {
+                CRSData savebase = new CRSData();
+                savebase.setCaNumber(caNumber);
+
                 //create database record
                 log.debug("csrService : Create database record ");
                 crsAuditor.add(savebase);
 
-            } catch (NonUniqueResultException x) {
-                x.printStackTrace();
-                log.debug("csrService Exception : {}",x.getMessage());
-                return "Fail";
             }
-
-        }
         log.debug("csrService : END");
         return message;
     }
