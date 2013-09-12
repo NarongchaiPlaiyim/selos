@@ -84,19 +84,19 @@ public class CrsWebservice {
         }
 
         if (crsData != null) {
-                message = "HAVA A DATA";
+            message = "HAVA A DATA";
 
-        } else             {
-                message = "NO DATA";
+        } else {
+            message = "NO DATA";
 
-                CRSData savebase = new CRSData();
-                savebase.setCaNumber(caNumber);
+            CRSData savebase = new CRSData();
+            savebase.setCaNumber(caNumber);
 
-                //create database record
-                log.debug("csrService : Create database record ");
-                crsAuditor.add(savebase);
+            //create database record
+            log.debug("csrService : Create database record ");
+            crsAuditor.add(savebase);
 
-            }
+        }
         log.debug("csrService : END");
         return message;
     }
