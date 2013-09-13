@@ -19,6 +19,7 @@ public class CustomerInfoView implements Serializable {
     private CustomerEntity customerEntity;
     private BorrowerType borrowerType;
     private Relation relation;
+    private Reference reference;
     private String citizenId;
     private String registrationId;
     private String cardAuthorizeBy;
@@ -26,6 +27,7 @@ public class CustomerInfoView implements Serializable {
     private String customerId;
     private String serviceSegment;
     private Boolean collateralOwner;
+    private BigDecimal percentShare;
     private Title titleTh;
     private Title titleEn;
     private String firstNameTh;
@@ -48,7 +50,8 @@ public class CustomerInfoView implements Serializable {
     private AddressView currentAddress;
     private AddressView workAddress;
     private AddressView registerAddress;
-    private AddressType mailingAddress;
+    private AddressType mailingAddressType;
+    private BigDecimal approxIncome;
     private String mobileNumber;
     private String faxNumber;
     private String email;
@@ -118,6 +121,14 @@ public class CustomerInfoView implements Serializable {
         this.relation = relation;
     }
 
+    public Reference getReference() {
+        return reference;
+    }
+
+    public void setReference(Reference reference) {
+        this.reference = reference;
+    }
+
     public String getCitizenId() {
         return citizenId;
     }
@@ -172,6 +183,14 @@ public class CustomerInfoView implements Serializable {
 
     public void setCollateralOwner(Boolean collateralOwner) {
         this.collateralOwner = collateralOwner;
+    }
+
+    public BigDecimal getPercentShare() {
+        return percentShare;
+    }
+
+    public void setPercentShare(BigDecimal percentShare) {
+        this.percentShare = percentShare;
     }
 
     public Title getTitleTh() {
@@ -350,12 +369,20 @@ public class CustomerInfoView implements Serializable {
         this.registerAddress = registerAddress;
     }
 
-    public AddressType getMailingAddress() {
-        return mailingAddress;
+    public AddressType getMailingAddressType() {
+        return mailingAddressType;
     }
 
-    public void setMailingAddress(AddressType mailingAddress) {
-        this.mailingAddress = mailingAddress;
+    public void setMailingAddressType(AddressType mailingAddressType) {
+        this.mailingAddressType = mailingAddressType;
+    }
+
+    public BigDecimal getApproxIncome() {
+        return approxIncome;
+    }
+
+    public void setApproxIncome(BigDecimal approxIncome) {
+        this.approxIncome = approxIncome;
     }
 
     public String getMobileNumber() {
@@ -432,6 +459,7 @@ public class CustomerInfoView implements Serializable {
                 .append("customerEntity", customerEntity)
                 .append("borrowerType", borrowerType)
                 .append("relation", relation)
+                .append("reference", reference)
                 .append("citizenId", citizenId)
                 .append("registrationId", registrationId)
                 .append("cardAuthorizeBy", cardAuthorizeBy)
@@ -439,6 +467,7 @@ public class CustomerInfoView implements Serializable {
                 .append("customerId", customerId)
                 .append("serviceSegment", serviceSegment)
                 .append("collateralOwner", collateralOwner)
+                .append("percentShare", percentShare)
                 .append("titleTh", titleTh)
                 .append("titleEn", titleEn)
                 .append("firstNameTh", firstNameTh)
@@ -461,7 +490,8 @@ public class CustomerInfoView implements Serializable {
                 .append("currentAddress", currentAddress)
                 .append("workAddress", workAddress)
                 .append("registerAddress", registerAddress)
-                .append("mailingAddress", mailingAddress)
+                .append("mailingAddressType", mailingAddressType)
+                .append("approxIncome", approxIncome)
                 .append("mobileNumber", mobileNumber)
                 .append("faxNumber", faxNumber)
                 .append("email", email)
