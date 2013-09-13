@@ -1,0 +1,54 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="bizProductViewDlgForm">
+        <table class="content_form">
+
+            <tr>
+                <td class="title"><h:outputText value="#{msg.get('app.productType')}"/> : </td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.productType}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : </td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.percentSalesVolumn}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText value="#{msg.get('app.percentEBIT')}"/> : </td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.percentEBIT}"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText value="#{msg.get('app.productDetail')}"/> : </td>
+                <td>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.productDetail}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="btnSaveBizProductView"
+                            value="Save"
+                            styleClass="small"
+                            action="#{businessInfoDetail.onSaveBizProductView()}"
+                            update=":bizProductViewTable"
+                            oncomplete="bizProductViewDlg.hide()"
+                            />
+
+
+                    <p:commandButton value="Cancel" styleClass="small" onclick="bizProductViewDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+
+</ui:composition>
