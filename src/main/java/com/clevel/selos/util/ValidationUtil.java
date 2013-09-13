@@ -36,8 +36,21 @@ public class ValidationUtil {
         }
     }
     public static boolean isValueInRange(int min,int max,String string) {
-        return (string.length() >= min) && (string.length() <= max);
+        if (!isNull(string)) {
+            return (string.length() >= min) && (string.length() <= max);
+        } else {
+            return false;
+        }
     }
+
+    public static boolean isValueInRange(int min,int max,ArrayList arrayList) {
+        if(null!=arrayList) {
+            return (arrayList.size() >= min) && (arrayList.size() <= max);
+        } else {
+            return false;
+        }
+    }
+
     public static boolean isGreaterThan(int max,String string) {
         if (!isNull(string)) {
             return max < string.length();
@@ -58,6 +71,14 @@ public class ValidationUtil {
         } else {
             return true;
         }
+    }
+    public static boolean isInteger(String string) {
+        try {
+            Integer.parseInt(string);
+        } catch(NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
 

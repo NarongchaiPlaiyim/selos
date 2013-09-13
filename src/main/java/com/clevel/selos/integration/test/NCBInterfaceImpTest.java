@@ -25,7 +25,7 @@ public class NCBInterfaceImpTest implements NCBInterface, Serializable {
 
     @Override
     public NCRSResponseModel request(NCRSModel ncrsModel) throws Exception {
-        log.debug("=========================================NCRS request(NCRSModel : {})",ncrsModel.toString());
+        log.debug("NCRS request(NCRSModel : {})",ncrsModel.toString());
         String path = "D:\\Response.TXT".replace("\\","/");
         BufferedReader reader = new BufferedReader(new FileReader(path));
         StringBuilder stringBuffer = new StringBuilder();
@@ -43,7 +43,7 @@ public class NCBInterfaceImpTest implements NCBInterface, Serializable {
 
     @Override
     public NCCRSResponseModel request(NCCRSModel nccrsModel) throws Exception {
-        log.debug("=========================================NCCRS request(NCRSModel : {})",nccrsModel.toString());
+        log.debug("NCCRS request(NCRSModel : {})",nccrsModel.toString());
         String path = "D:\\Response.XML".replace("\\","/");
         BufferedReader reader = new BufferedReader(new FileReader(path));
         StringBuilder stringBuffer = new StringBuilder();

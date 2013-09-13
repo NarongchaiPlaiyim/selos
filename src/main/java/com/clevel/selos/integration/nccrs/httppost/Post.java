@@ -42,7 +42,7 @@ public class Post implements Serializable {
         if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
         if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
 
-        log.debug("=========================================NCCRS sendPost. url : {}", url);
+        log.debug("NCCRS sendPost. url : {}", url);
         String result = "";
         DefaultHttpClient client = null;
         HttpPost post = null;
@@ -65,7 +65,7 @@ public class Post implements Serializable {
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
-            log.debug("=========================================NCCRS sendPost. The request has succeeded");
+            log.debug("NCCRS sendPost. The request has succeeded");
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder builder = new StringBuilder();
             String line = "";
@@ -75,7 +75,7 @@ public class Post implements Serializable {
             result = builder.toString();
             return result;
         }else{
-            log.error("=========================================NCCRS sendPost. The request has failed, Error code is ",resCode);
+            log.error("NCCRS sendPost. The request has failed, Error code is ",resCode);
             return result;
         }
     }
