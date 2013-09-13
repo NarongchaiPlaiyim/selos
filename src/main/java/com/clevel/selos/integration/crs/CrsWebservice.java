@@ -73,15 +73,15 @@ public class CrsWebservice {
         log.debug("csrService : START");
         log.debug("csrService : Check CANumber ");
         CRSData crsData = null;
-        try {
-            //Search Ca
-            crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
+                try {
+                    //Search Ca
+                    crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
 
-        } catch (NonUniqueResultException x) {
-            x.printStackTrace();
-            log.debug("csrService Exception : {}", x.getMessage());
-            return "Fail";
-        }
+                } catch (NonUniqueResultException x) {
+                    x.printStackTrace();
+                    log.debug("csrService Exception : {}", x.getMessage());
+                    return "Fail";
+                }
 
         if (crsData != null) {
             message = "HAVA A DATA";
