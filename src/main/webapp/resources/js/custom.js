@@ -38,3 +38,11 @@ function handlePrescreenProposeCreditRequest(xhr, status, args) {
         proposeCollateralDlg.hide();
     }
 }
+
+
+
+function handleFullappNcbRequest(xhr, status, args) {
+    if(args.functionComplete){
+        ncbDlg.hide();
+    }
+}
