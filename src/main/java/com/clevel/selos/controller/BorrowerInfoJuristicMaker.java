@@ -73,8 +73,10 @@ public class BorrowerInfoJuristicMaker implements Serializable {
     @PostConstruct
     public void onCreation() {
         raceList = nationalityDAO.findAll();
-        //titleList = titleDAO.findAllJuristic();
-        //provinceList = provinceDAO.findAllOrderByName();
+        CustomerEntity customerEntity =new CustomerEntity();
+        customerEntity.setId(2);
+        titleList = titleDAO.getListByCustomerEntity(customerEntity);
+        provinceList = provinceDAO.getListOrderByParameter("name");
         relationList = relationDAO.findAll();
         addressTypeList = addressTypeDAO.findAll();
         nationalityList = nationalityDAO.findAll();
