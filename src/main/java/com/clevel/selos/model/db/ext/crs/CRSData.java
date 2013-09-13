@@ -79,6 +79,39 @@ public class CRSData implements Serializable {
     public CRSData() {
     }
 
+    public CRSData(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate) {
+        this.jobName = jobName;
+        this.caNumber = caNumber;
+        this.oldCaNumber = oldCaNumber;
+        this.accountNo1 = accountNo1;
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.citizenId = citizenId;
+        this.requestType = requestType;
+        this.customerType = customerType;
+        this.bdmId = bdmId;
+        this.hubCode = hubCode;
+        this.regionCode = regionCode;
+        this.uwId = uwId;
+        this.appInDateBDM = appInDateBDM;
+        this.finalApproved = finalApproved;
+        this.parallel = parallel;
+        this.pending = pending;
+        this.caExist = caExist;
+        this.caEnd = caEnd;
+        this.accountNo2 = accountNo2;
+        this.accountNo3 = accountNo3;
+        this.accountNo4 = accountNo4;
+        this.accountNo5 = accountNo5;
+        this.accountNo6 = accountNo6;
+        this.accountNo7 = accountNo7;
+        this.accountNo8 = accountNo8;
+        this.accountNo9 = accountNo9;
+        this.accountNo10 = accountNo10;
+        this.appInDateUW = appInDateUW;
+        this.createDate = createDate;
+    }
+
     public long getId() {
         return id;
     }

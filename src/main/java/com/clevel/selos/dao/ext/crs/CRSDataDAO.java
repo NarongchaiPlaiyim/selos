@@ -15,4 +15,13 @@ public class CRSDataDAO extends GenericDAO<CRSData,Long> {
     public CRSDataDAO() {
     }
 
+    public boolean isExist(String caNumber) {
+        log.debug("isExist. (caNumber: {})",caNumber);
+
+        boolean exist = isRecordExist(Restrictions.eq("caNumber", caNumber));
+
+        log.debug("isExist. (result: {})", exist);
+        return exist;
+    }
+
 }

@@ -66,3 +66,5 @@ WINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWINWI
       (ID)
       ENABLE VALIDATE);
 
+##### Web Service URL #####
+WebSphere: http://<host>:<port>/selos/CaseCreationService/CaseCreationService.wsdl
