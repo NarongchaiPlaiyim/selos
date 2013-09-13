@@ -5,69 +5,69 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="stakeholderDlgForm">
+    <h:form id="stakeholderViewDlgForm">
         <table class="content_form">
             <tr>
                 <td class="title">  <h:outputText value="#{businessInfoDetail.dlgStakeName}"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.name}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholderView.name}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder Contact :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactName')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.contactName}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholderView.contactName}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder phoneNo :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.phoneNo')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.phoneNo}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholderView.phoneNo}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder contactYear :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.contactYear')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.contactYear}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholderView.contactYear}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder percentSalesVolumn :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentSalesVolumn}"/>
+                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentSalesVolumn}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder percentCash :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentCash')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCash}"/>
+                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentCash}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder percentCredit :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentCredit')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholder.percentCredit}"/>
+                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentCredit}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title">Stakeholder creditTerm :</td>
+                <td class="title"><h:outputText value="#{msg.get('app.creditTerm')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholder.creditTerm}"/>
+                    <p:inputText value="#{businessInfoDetail.stakeholderView.creditTerm}"/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            id="btnSaveStakeholder"
+                            id="btnSaveStakeholderView"
                             value="Save"
                             styleClass="small"
-                            action="#{businessInfoDetail.onSaveStakeholder()}"
+                            action="#{businessInfoDetail.onSaveStakeholderView()}"
                             update=":supplierTable,:buyerTable,:supplierTotalTable,:buyerTotalTable"
-                            oncomplete="stakeholderDlg.hide()"
+                            oncomplete="stakeholderViewDlg.hide()"
                      />
 
 
-                    <p:commandButton value="Cancel" styleClass="small" onclick="stakeholderDlg.hide()"/>
+                    <p:commandButton value="Cancel" styleClass="small" onclick="stakeholderViewDlg.hide()"/>
                 </td>
             </tr>
         </table>

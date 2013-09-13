@@ -19,10 +19,10 @@ public class TitleDAO extends GenericDAO<Title,Integer> {
     public TitleDAO() {
     }
 
-    public List<Title> getListByCustomerType(CustomerEntity customerEntity) {
+    public List<Title> getListByCustomerEntity(CustomerEntity customerEntity) {
         log.info("getListByCustomerType. (businessGroup: {})", customerEntity);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customerType", customerEntity));
+        criteria.add(Restrictions.eq("customerEntity", customerEntity));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
         log.info("getListByCustomerType. (result size: {})",titles.size());

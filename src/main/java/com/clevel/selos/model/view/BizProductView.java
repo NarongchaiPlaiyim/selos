@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Time: 11:05 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizProduct {
+public class BizProductView {
 
     private String no;
     private String productType;

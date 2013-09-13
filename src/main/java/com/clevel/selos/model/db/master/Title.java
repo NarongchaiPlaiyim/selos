@@ -19,7 +19,7 @@ public class Title implements Serializable {
     @Column(name = "titleEn")
     private String titleEn;
     @OneToOne
-    @JoinColumn(name="customertype_id")
+    @JoinColumn(name="customerEntity_id")
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;

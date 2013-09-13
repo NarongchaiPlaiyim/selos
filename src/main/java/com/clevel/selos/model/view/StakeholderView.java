@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Time: 11:56 น.
  * To change this template use File | Settings | File Templates.
  */
-public class Stakeholder {
+public class StakeholderView {
 
     private BigDecimal no;
     private String name;
