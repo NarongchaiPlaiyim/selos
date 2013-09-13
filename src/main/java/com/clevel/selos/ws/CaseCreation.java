@@ -1,12 +1,9 @@
 package com.clevel.selos.ws;
 
-import com.clevel.selos.dao.ext.crs.CRSDataDAO;
-import com.clevel.selos.model.db.ext.crs.CRSData;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.criterion.Restrictions;
+import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.model.db.history.CaseCreationHistory;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -18,7 +15,7 @@ public class CaseCreation implements WSCaseCreation {
     @Inject
     Logger log;
     @Inject
-    CRSDataDAO crsDataDAO;
+    CaseCreationHistoryDAO caseCreationHistoryDAO;
     @Inject
     WSDataPersist wsDataPersist;
 
@@ -59,29 +56,38 @@ public class CaseCreation implements WSCaseCreation {
                              @WebParam(name = "appInDateUW") String appInDateUW) {
         //todo: update log
         log.debug("newCase. ()");
+        CaseCreationResponse caseCreationResponse = null;
 
-        //validate duplicate CA
-        if (crsDataDAO.isExist(caNumber)) {
-            return new CaseCreationResponse(2,"Duplicate CA found in system!");
+        //handle all un-expected exception
+        try {
+            //validate duplicate CA
+            if (caseCreationHistoryDAO.isExist(caNumber)) {
+                return new CaseCreationResponse(2,"Duplicate CA found in system!");
+            }
+
+            //validate all input parameter
+            //todo: validate all input parameter here
+
+
+            Date now = new Date();
+
+            //todo: create new case in BPM and update caseCreationHistory status
+
+
+            //all validation passed including new case creation in BPM.
+            CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
+                    bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
+                    accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,"SUCCEED","");
+            wsDataPersist.addNewCase(caseCreationHistory);
+
+            // return succeed
+            caseCreationResponse = new CaseCreationResponse(0,"Create new case success.");
+        } catch (Exception e) {
+            log.error("Exception while creating new case!.",e);
+            caseCreationResponse = new CaseCreationResponse(12,"System exception!");
         }
 
-        //validate all input parameter
-        //todo: validate all input parameter here
-
-
-        Date now = new Date();
-        CRSData crsData = new CRSData(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
-                bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
-                accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now);
-        wsDataPersist.addNewCase(crsData);
-
-        //todo: create new case in BPM and update crsData status
-
-
-        // return succeed
-        CaseCreationResponse caseCreationResponse = new CaseCreationResponse(0,"Create new case success.");
-
-        log.debug("newCase. ({})",caseCreationResponse);
+        log.debug("{}",caseCreationResponse);
         return caseCreationResponse;
     }
 }

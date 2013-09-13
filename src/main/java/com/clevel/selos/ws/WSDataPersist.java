@@ -1,10 +1,8 @@
 package com.clevel.selos.ws;
 
-import com.clevel.selos.dao.ext.crs.CRSDataDAO;
-import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 
-import com.clevel.selos.model.db.ext.crs.CRSData;
-import org.hibernate.criterion.Restrictions;
+import com.clevel.selos.model.db.history.CaseCreationHistory;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -18,14 +16,14 @@ public class WSDataPersist {
     @Inject
     Logger log;
     @Inject
-    CRSDataDAO crsDataDAO;
+    CaseCreationHistoryDAO caseCreationHistoryDAO;
 
     @Inject
     public WSDataPersist() {
     }
 
-    public void addNewCase(CRSData crsData) {
-        log.debug("addNewCase. ({})",crsData);
-        crsDataDAO.persist(crsData);
+    public void addNewCase(CaseCreationHistory caseCreationHistory) {
+        log.debug("addNewCase. ({})", caseCreationHistory);
+        caseCreationHistoryDAO.persist(caseCreationHistory);
     }
 }

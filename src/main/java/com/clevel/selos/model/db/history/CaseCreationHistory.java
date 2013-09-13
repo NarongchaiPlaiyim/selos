@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db.ext.crs;
+package com.clevel.selos.model.db.history;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -8,15 +8,15 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "ext_crs")
-public class CRSData implements Serializable {
+@Table(name = "his_case_creation")
+public class CaseCreationHistory implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_CRS_ID", sequenceName="SEQ_EXT_CRS_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_CRS_ID")
+    @SequenceGenerator(name="SEQ_HIS_CASE_CREATION_ID", sequenceName="SEQ_HIS_CASE_CREATION_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_CASE_CREATION_ID")
     private long id;
     @Column(name="job_name", length = 2)
     private String jobName;
-    @Column(name="ca_number", length = 30)
+    @Column(name="ca_number", length = 30, nullable = false)
     private String caNumber;
     @Column(name="old_ca_number", length = 30)
     private String oldCaNumber;
@@ -75,11 +75,15 @@ public class CRSData implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;
+    @Column(name="create_status", length = 10)
+    private String status;
+    @Column(name="create_status_detail")
+    private String statusDetail;
 
-    public CRSData() {
+    public CaseCreationHistory() {
     }
 
-    public CRSData(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate) {
+    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, String status, String statusDetail) {
         this.jobName = jobName;
         this.caNumber = caNumber;
         this.oldCaNumber = oldCaNumber;
@@ -110,6 +114,8 @@ public class CRSData implements Serializable {
         this.accountNo10 = accountNo10;
         this.appInDateUW = appInDateUW;
         this.createDate = createDate;
+        this.status = status;
+        this.statusDetail = statusDetail;
     }
 
     public long getId() {
@@ -360,6 +366,22 @@ public class CRSData implements Serializable {
         this.createDate = createDate;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatusDetail() {
+        return statusDetail;
+    }
+
+    public void setStatusDetail(String statusDetail) {
+        this.statusDetail = statusDetail;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -394,6 +416,8 @@ public class CRSData implements Serializable {
                 append("accountNo10", accountNo10).
                 append("appInDateUW", appInDateUW).
                 append("createDate", createDate).
+                append("status", status).
+                append("statusDetail", statusDetail).
                 toString();
     }
 }
