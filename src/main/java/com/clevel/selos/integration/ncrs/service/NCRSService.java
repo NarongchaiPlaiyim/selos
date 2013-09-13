@@ -34,52 +34,52 @@ public class NCRSService implements Serializable {
     public void process(NCRSModel ncrsModel){
 
         /*try {
-            log.debug("=========================================NCRS process.");
+            log.debug("NCRS process.");
             NCRSResponse ncrsResponse = ncrsInterfaceImpTest.request(ncrsModel);
             NameModel nameModel = ncrsResponse.getBodyModel().getTransaction().getName();
-            log.debug("=========================================NCRS TrackingID. {}",ncrsResponse.getBodyModel().getTransaction().getTrackingid());
-            log.debug("=========================================NCRS DateOfBirth. {}",nameModel.getDateofbirth());
+            log.debug("NCRS TrackingID. {}",ncrsResponse.getBodyModel().getTransaction().getTrackingid());
+            log.debug("NCRS DateOfBirth. {}",nameModel.getDateofbirth());
             IdModel idModel = ncrsResponse.getBodyModel().getTransaction().getId();
             idModel.getIdnumber();
 
         } catch (Exception e) {
-            log.error("=========================================NCRS Exception : {}", e);
+            log.error("NCRS Exception : {}", e);
         }  */
 
-        log.debug("=========================================NCRS process.");
+        log.debug("NCRS process.");
         try {
             //validationImp.validation(ncrsModel);
 
-            log.debug("=========================================NCRS process. Call  : requestOnline(NCRSModel)");
+            log.debug("NCRS process. Call  : requestOnline(NCRSModel)");
             NCRSResponseModel ncrsResponse =  ncrsImp.requestOnline(ncrsModel);
 
             if(null!=ncrsResponse){
                 if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
                     //The response (Online) has succeeded
-                    log.debug("=========================================NCRS The response (Online) has succeeded");
+                    log.debug("NCRS The response (Online) has succeeded");
                     //The response will be return (XML Transaction record)
-                    log.debug("=========================================NCRS User id is {}",ncrsResponse.getHeaderModel().getUser());
-                    log.debug("=========================================NCRS Password id is {}",ncrsResponse.getHeaderModel().getPassword());
-                    log.debug("=========================================NCRS Command id is {}",ncrsResponse.getHeaderModel().getCommand());
+                    log.debug("NCRS User id is {}",ncrsResponse.getHeaderModel().getUser());
+                    log.debug("NCRS Password id is {}",ncrsResponse.getHeaderModel().getPassword());
+                    log.debug("NCRS Command id is {}",ncrsResponse.getHeaderModel().getCommand());
 
                 }else {
-                    log.debug("=========================================NCRS The response (Online) has failed");
-                    log.debug("=========================================NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
+                    log.debug("NCRS The response (Online) has failed");
+                    log.debug("NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
                     //Exception NCB
                     //if you want to know Error message
                     //response.getBodyModel().getErrormsg();
                     //throw new ValidationException("Exception : NCB");
                 }
             }else {
-                log.debug("=========================================NCRS process. Response form requestOnline is null");
-                log.debug("=========================================NCRS process. Call  : requestOffline(NCRSModel)");
+                log.debug("NCRS process. Response form requestOnline is null");
+                log.debug("NCRS process. Call  : requestOffline(NCRSModel)");
                 ncrsResponse =  ncrsImp.requestOffline(ncrsModel);
                 if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
                     //The response (Offline) has succeeded
-                    log.debug("=========================================NCRS The response (Offline) has succeeded");
+                    log.debug("NCRS The response (Offline) has succeeded");
 
-                    log.debug("=========================================NCRS Tracking id is {}",ncrsResponse.getBodyModel().getsTrackingid());
-                    log.debug("=========================================NCRS Result id is {}",ncrsResponse.getBodyModel().getsResult());
+                    log.debug("NCRS Tracking id is {}",ncrsResponse.getBodyModel().getsTrackingid());
+                    log.debug("NCRS Result id is {}",ncrsResponse.getBodyModel().getsResult());
                     ncrsResponse.getBodyModel().getsResult();
                     //The response will be return (trackingid and result)
 
@@ -88,8 +88,8 @@ public class NCRSService implements Serializable {
                     //response.getBodyModel().getsResult();
 
                 }else {
-                    log.debug("=========================================NCRS The response (Offline) has failed");
-                    log.debug("=========================================NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
+                    log.debug("NCRS The response (Offline) has failed");
+                    log.debug("NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
                     //if you want to know Error message
                     //response.getBodyModel().getErrormsg();
                     // I don't know...
@@ -97,7 +97,7 @@ public class NCRSService implements Serializable {
 
             }
         } catch (Exception e) {
-            log.error("=========================================NCRS Exception : ", e);
+            log.error("NCRS Exception : ", e);
         }
     }
 

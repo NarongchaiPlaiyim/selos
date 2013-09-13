@@ -27,25 +27,27 @@ public class TUEFEnquiryNameModel{
         this.dateofbirth = dateofbirth;
     }
 
+    public String getFamilyname() {
+        return familyname;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    public String getDateofbirth() {
+        return dateofbirth;
+    }
+
     public TUEFEnquiryNameModel(String familyname, String firstname, String middlename, String dateofbirth) {
         this.familyname = familyname;
         this.firstname = firstname;
         this.middlename = middlename;
         this.dateofbirth = dateofbirth;
-    }
-
-    public void validation()throws Exception{
-        if(ValidationUtil.isNull(familyname))throw new ValidationException("familyname is null");
-        if(ValidationUtil.isGreaterThan(50, familyname))throw new ValidationException("Length of familyname is more than 50");
-
-        if(ValidationUtil.isNull(firstname))throw new ValidationException("firstname is null");
-        if(ValidationUtil.isGreaterThan(30, firstname))throw new ValidationException("Length of firstname is more than 30");
-
-        if(!ValidationUtil.isNull(middlename) && ValidationUtil.isGreaterThan(26, middlename))throw new ValidationException("Length of middlename is more than 26");
-
-        if(ValidationUtil.isNull(dateofbirth))throw new ValidationException("dateofbirth is null");
-        if(ValidationUtil.isGreaterThan(8, dateofbirth))throw new ValidationException("Length of dateofbirth is more than 8");
-
     }
 
     @Override

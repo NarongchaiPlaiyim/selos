@@ -49,7 +49,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
-        log.debug("::::::::::::::::::::::::::::::::::::  getIndividualInfo()");
+        log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("P");
@@ -59,7 +59,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustName("");
         searchIndividual.setCustSurname("");
         searchIndividual.setRadSelectSearch("card");
-        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {} ",searchIndividual.toString());
+        log.debug("RequestValue : {} ",searchIndividual.toString());
 
         IndividualModel individualModel = rmService.individualService(searchIndividual);
         return individualModel;
@@ -68,7 +68,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CorporateModel getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
-        log.debug("::::::::::::::::::::::::::::::::::::  getCorporateInfo()");
+        log.debug("getCorporateInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
         searchIndividual.setReqId(reqId);
         searchIndividual.setCustType("C");
@@ -77,7 +77,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustId(custId);
         searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch("card");
-        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchIndividual.toString());
+        log.debug("requestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.corporateService(searchIndividual);
         return corporateModel;
     }
@@ -85,7 +85,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CustomerAccountModel getCustomerAccountInfo(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
 
-        log.debug("::::::::::::::::::::::::::::::::::::  getCustomerAccountInfo()");
+        log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
         searchCustomerAccountModel.setReqId(reqId);
         searchCustomerAccountModel.setAcronym(acronym);
@@ -94,7 +94,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 //        searchCustomerAccountModel.setSessionId(sessionId);
         searchCustomerAccountModel.setCustNbr(custNbr);
         searchCustomerAccountModel.setRadSelectSearch("code");
-        log.debug("::::::::::::::::::::::::::::::::::::  RequestValue : {}",searchCustomerAccountModel.toString());
+        log.debug("RequestValue : {}",searchCustomerAccountModel.toString());
         CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
 
         return  customerAccountModel;
