@@ -1,11 +1,7 @@
 package com.clevel.selos.integration.ncrs.service;
 
-import com.clevel.selos.exception.ValidationException;
-import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMessage;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
@@ -15,18 +11,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NCRSModel implements Serializable {
-    @Inject
-    @ValidationMessage
-    Message message;
-
-//    @Inject
-//    @NCB
-//    Logger log;
 
     private String memberref;
-    private String enqpurpose;
-    private String enqamount;
-    private String consent;
+    private String enqpurpose = "01";
+    private String enqamount = "0";
+    private String consent = "Y";
     private String disputeenquiry;
     private ArrayList<TUEFEnquiryNameModel> nameList;
     private ArrayList<TUEFEnquiryIdModel> idList;

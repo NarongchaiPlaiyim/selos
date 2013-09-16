@@ -64,7 +64,8 @@ public class ValidationUtilTest {
         assertEquals("expected true.", true, ValidationUtil.isNull(null));
         assertEquals("expected false.", false, ValidationUtil.isNull(""));
         assertEquals("expected true.", true, ValidationUtil.isNull("null"));
-
+        assertEquals("expected true.", true, ValidationUtil.isNull("nulL"));
+        assertEquals("expected true.", true, ValidationUtil.isNull("nUll"));
 
         String middlename = "123456789012345678901234567890";
         assertEquals("expected true.", true, !ValidationUtil.isNull(middlename)&& ValidationUtil.isGreaterThan(26, middlename));

@@ -1,46 +1,31 @@
-package com.clevel.selos.integration.crs;
+package com.clevel.selos.ws;
 
-
-import com.clevel.selos.dao.ext.crs.CRSDataDAO;
-import com.clevel.selos.exception.ValidationException;
-import com.clevel.selos.model.db.ext.crs.CRSData;
-import com.clevel.selos.system.ext.CRSAuditor;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.criterion.Restrictions;
+import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.model.db.history.CaseCreationHistory;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 
 @WebService
-public class CrsWebservice {
-    private String message = new String("Hello , ");
-
-
+public class CaseCreation implements WSCaseCreation {
     @Inject
     Logger log;
+    @Inject
+    CaseCreationHistoryDAO caseCreationHistoryDAO;
+    @Inject
+    WSDataPersist wsDataPersist;
 
     @Inject
-    CRSDataDAO crsDataDAO;
-
-    @Inject
-    CRSAuditor crsAuditor;
-
-    @Inject
-    public CrsWebservice() {
-
+    public CaseCreation() {
     }
 
-
+    @Override
     @WebMethod
-    public String csrService(@WebParam(name = "jobName") String jobName,
+    public CaseCreationResponse newCase(@WebParam(name = "jobName") String jobName,
                              @WebParam(name = "caNumber") String caNumber,
                              @WebParam(name = "oldCaNumber") String oldCaNumber,
                              @WebParam(name = "accountNo1") String accountNo1,
@@ -68,37 +53,41 @@ public class CrsWebservice {
                              @WebParam(name = "accountNo8") String accountNo8,
                              @WebParam(name = "accountNo9") String accountNo9,
                              @WebParam(name = "accountNo10") String accountNo10,
-                             @WebParam(name = "appInDateUW") String appInDateUW,
-                             @WebParam(name = "createDate") Date createDate) {
-        log.debug("csrService : START");
-        log.debug("csrService : Check CANumber ");
-        CRSData crsData = null;
-                try {
-                    //Search Ca
-                    crsData = crsDataDAO.findOneByCriteria(Restrictions.eq("caNumber", caNumber));
+                             @WebParam(name = "appInDateUW") String appInDateUW) {
+        //todo: update log
+        log.debug("newCase. ()");
+        CaseCreationResponse caseCreationResponse = null;
 
-                } catch (NonUniqueResultException x) {
-                    x.printStackTrace();
-                    log.debug("csrService Exception : {}", x.getMessage());
-                    return "Fail";
-                }
+        //handle all un-expected exception
+        try {
+            //validate duplicate CA
+            if (caseCreationHistoryDAO.isExist(caNumber)) {
+                return new CaseCreationResponse(2,"Duplicate CA found in system!");
+            }
 
-        if (crsData != null) {
-            message = "HAVA A DATA";
+            //validate all input parameter
+            //todo: validate all input parameter here
 
-        } else {
-            message = "NO DATA";
 
-            CRSData savebase = new CRSData();
-            savebase.setCaNumber(caNumber);
+            Date now = new Date();
 
-            //create database record
-            log.debug("csrService : Create database record ");
-            crsAuditor.add(savebase);
+            //todo: create new case in BPM and update caseCreationHistory status
 
+
+            //all validation passed including new case creation in BPM.
+            CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
+                    bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
+                    accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,"SUCCEED","");
+            wsDataPersist.addNewCase(caseCreationHistory);
+
+            // return succeed
+            caseCreationResponse = new CaseCreationResponse(0,"Create new case success.");
+        } catch (Exception e) {
+            log.error("Exception while creating new case!.",e);
+            caseCreationResponse = new CaseCreationResponse(12,"System exception!");
         }
-        log.debug("csrService : END");
-        return message;
-    }
 
+        log.debug("{}",caseCreationResponse);
+        return caseCreationResponse;
+    }
 }

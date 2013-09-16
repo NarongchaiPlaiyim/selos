@@ -22,8 +22,8 @@ public class BodyModel {
     
     //@XStreamImplicit(itemFieldName = "trackingid")
     private ArrayList<TrackingIdModel> trackingidd = new ArrayList<TrackingIdModel>();
-    
-    @XStreamImplicit(itemFieldName = "trackingid")
+
+    @XStreamImplicit(itemFieldName = "trackingid")//The response of TS01001
     private ArrayList<String> trackingid = new ArrayList<String>();
     
     

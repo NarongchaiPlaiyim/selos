@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,10 +55,11 @@ public class FullappNcb implements Serializable {
     private int rowIndex;
 
     //test
-    private double monthly ;
-
+    private double monthly;
+    private boolean genTextBoxFlag;
     //test
     private NcbRecordView ncbRecordView;
+    private NcbRecordView selectNcbRecordItem;
     private List<NcbRecordView> ncbRecordViewList;
 
     @Inject
@@ -78,7 +80,7 @@ public class FullappNcb implements Serializable {
 
         log.info("onCreation.");
         modeForButton = "add";
-
+        genTextBoxFlag=false;
         if (ncbRecordView == null) {
             ncbRecordView = new NcbRecordView();
         }
@@ -115,8 +117,8 @@ public class FullappNcb implements Serializable {
             dlgCurrentPayment = new TDRCondition();
         }
 
-        if(dlgHistoryPayment == null){
-           dlgHistoryPayment = new TDRCondition();
+        if (dlgHistoryPayment == null) {
+            dlgHistoryPayment = new TDRCondition();
         }
 
         accountStatusList = accountStatusDAO.findAll();
@@ -134,72 +136,171 @@ public class FullappNcb implements Serializable {
         //*** Reset form ***//
         log.info("onAddNcbRecord ::: Reset Form");
         ncbRecordView = new NcbRecordView();
+        ncbRecordView.setAccountStatus(new AccountStatus());
+        ncbRecordView.setAccountType(new AccountType());
+        ncbRecordView.setCurrentPayment(new TDRCondition());
+        ncbRecordView.setHistoryPayment(new TDRCondition());
         modeForButton = "add";
+        genTextBoxFlag = false;
     }
 
-    public void onEditNcbDetail(int row){
-       rowIndex = row;
+    public void onEditNcbDetail() {  //copy row that choose to dialog
+        log.info("rowIndex {} ", rowIndex);
+        modeForButton = "edit";
+        log.info("onEditNcbDetail ::: selectNcbRecordItem  : {}", selectNcbRecordItem.toString());
+        log.info("rowIndex :::   : {}", rowIndex);
+        log.info("ncbRecordViewList.size() :::   : {}", ncbRecordViewList.size());
+
+        if (rowIndex < ncbRecordViewList.size()) {
+            ncbRecordView = new NcbRecordView();
+            AccountType accountTypeEdit = selectNcbRecordItem.getAccountType();
+            AccountStatus accountStatusEdit = selectNcbRecordItem.getAccountStatus();
+            TDRCondition conditionCurrentEdit = selectNcbRecordItem.getCurrentPayment();
+            TDRCondition conditionHistoryEdit = selectNcbRecordItem.getHistoryPayment();
+
+            ncbRecordView.setAccountType(accountTypeEdit);
+            ncbRecordView.setAccountStatus(accountStatusEdit);
+            ncbRecordView.setCurrentPayment(conditionCurrentEdit);
+            ncbRecordView.setHistoryPayment(conditionHistoryEdit);
+            ncbRecordView.setTMBAccount(selectNcbRecordItem.getTMBAccount());
+            ncbRecordView.setDateOfInfo(selectNcbRecordItem.getDateOfInfo());
+            ncbRecordView.setAccountOpenDate(selectNcbRecordItem.getAccountOpenDate());
+            ncbRecordView.setLimit(selectNcbRecordItem.getLimit());
+            ncbRecordView.setOutstanding(selectNcbRecordItem.getOutstanding());
+            ncbRecordView.setInstallment(selectNcbRecordItem.getInstallment());
+            ncbRecordView.setDateOfDebtRestructuring(selectNcbRecordItem.getDateOfDebtRestructuring());
+            ncbRecordView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
+            ncbRecordView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
+            ncbRecordView.setRefinanceFlag(selectNcbRecordItem.getRefinanceFlag());
+            ncbRecordView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
+        }
     }
 
-    public void onDeleteNcbDetail(int row){
-        rowIndex = row;
+    public void onDeleteNcbDetail() {
+        log.info("onDeleteNcbDetail ::: selectNcbRecordItem: {}", selectNcbRecordItem);
+        ncbRecordViewList.remove(selectNcbRecordItem);
     }
 
     public void onSaveNcbRecord() {
         log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
-        FacesMessage msg = null;
         boolean complete = false;
 
         log.info("  dlgAccountType : {}", dlgAccountType.getId());
         log.info("  dlgAccountStatus :  {}", dlgAccountStatus.getId());
         log.info("  dlgCurrentPayment :  {}", dlgCurrentPayment.getId());
         log.info("  dlgHistoryPayment :  {}", dlgHistoryPayment.getId());
-        AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
-        AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
-        TDRCondition tdrConditionCurrent = tdrConditionDAO.findById(dlgCurrentPayment.getId());
-        TDRCondition tdrConditionHistory = tdrConditionDAO.findById(dlgHistoryPayment.getId());
 
 
-        if (modeForButton.equalsIgnoreCase("add")) {
+        if (dlgAccountType.getId() != 0 && dlgAccountStatus.getId() != 0 && dlgCurrentPayment.getId() != 0 && dlgHistoryPayment.getId() != 0) {
+            if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
 
-            NcbRecordView ncbAdd = new NcbRecordView();
-            ncbAdd.setAccountType(accountType);
-            ncbAdd.setAccountStatus(accountStatus);
-            ncbAdd.setTMBAccount(ncbRecordView.getTMBAccount());
-            ncbAdd.setDateOfInfo(ncbRecordView.getDateOfInfo());
-            ncbAdd.setAccountOpenDate(ncbRecordView.getAccountOpenDate());
-            ncbAdd.setLimit(ncbRecordView.getLimit());
-            ncbAdd.setOutstanding(ncbRecordView.getOutstanding());
-            ncbAdd.setInstallment(ncbRecordView.getInstallment());
-            ncbAdd.setDateOfDebtRestructuring(ncbRecordView.getDateOfDebtRestructuring());
-            ncbAdd.setCurrentPayment(tdrConditionCurrent);
-            ncbAdd.setHistoryPayment(tdrConditionHistory);
-            ncbAdd.setNoOfOutstandingPaymentIn12months(ncbRecordView.getNoOfOutstandingPaymentIn12months());
-            ncbAdd.setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
-            ncbAdd.setRefinanceFlag(ncbRecordView.getRefinanceFlag());
-            ncbAdd.setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
+                AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
+                AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
+                TDRCondition tdrConditionCurrent = tdrConditionDAO.findById(dlgCurrentPayment.getId());
+                TDRCondition tdrConditionHistory = tdrConditionDAO.findById(dlgHistoryPayment.getId());
 
-       log.info("ncbRecordView.getNoOfmonthsPayment   >> " + ncbRecordView.getNoOfmonthsPayment());
+                NcbRecordView ncbAdd = new NcbRecordView();
+                ncbAdd.setAccountType(accountType);
+                ncbAdd.setAccountStatus(accountStatus);
+                ncbAdd.setTMBAccount(ncbRecordView.getTMBAccount());
+                ncbAdd.setDateOfInfo(ncbRecordView.getDateOfInfo());
+                ncbAdd.setAccountOpenDate(ncbRecordView.getAccountOpenDate());
+                ncbAdd.setLimit(ncbRecordView.getLimit());
+                ncbAdd.setOutstanding(ncbRecordView.getOutstanding());
+                ncbAdd.setInstallment(ncbRecordView.getInstallment());
+                ncbAdd.setDateOfDebtRestructuring(ncbRecordView.getDateOfDebtRestructuring());
+                ncbAdd.setCurrentPayment(tdrConditionCurrent);
+                ncbAdd.setHistoryPayment(tdrConditionHistory);
+                ncbAdd.setNoOfOutstandingPaymentIn12months(ncbRecordView.getNoOfOutstandingPaymentIn12months());
+                ncbAdd.setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
+                ncbAdd.setRefinanceFlag(ncbRecordView.getRefinanceFlag());
+                ncbAdd.setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
 
-            if(!(ncbRecordView.getNoOfmonthsPayment().equals(""))){
-                ncbAdd.setMonthsPaymentFlag(true);
-                monthly = 1000.00;
+                log.info("ncbRecordView.getNoOfmonthsPayment   >> " + ncbRecordView.getNoOfmonthsPayment());
+
+                if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
+                    ncbAdd.setMonthsPaymentFlag(true);
+                    monthly = 1000.00;
+                } else {
+                    ncbAdd.setMonthsPaymentFlag(false);
+                }
+                log.info("ncbAdd.isMonthsPaymentFlag   {} ", ncbAdd.isMonthsPaymentFlag());
+
+                ncbRecordViewList.add(ncbAdd);
+                log.info("add finish");
+
+            } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
+                log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
+
+                AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
+                AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
+                TDRCondition tdrConditionCurrent = tdrConditionDAO.findById(dlgCurrentPayment.getId());
+                TDRCondition tdrConditionHistory = tdrConditionDAO.findById(dlgHistoryPayment.getId());
+
+                ncbRecordViewList.get(rowIndex).setAccountType(accountType);
+                ncbRecordViewList.get(rowIndex).setAccountStatus(accountStatus);
+                ncbRecordViewList.get(rowIndex).setCurrentPayment(tdrConditionCurrent);
+                ncbRecordViewList.get(rowIndex).setHistoryPayment(tdrConditionHistory);
+                ncbRecordViewList.get(rowIndex).setTMBAccount(ncbRecordView.getTMBAccount());
+//                log.info("onsave mode edit :: ncbRecordView.getDateOfInfo() {} " , ncbRecordView.getDateOfInfo());
+                ncbRecordViewList.get(rowIndex).setDateOfInfo(ncbRecordView.getDateOfInfo());
+                ncbRecordViewList.get(rowIndex).setAccountOpenDate(ncbRecordView.getAccountOpenDate());
+                ncbRecordViewList.get(rowIndex).setLimit(ncbRecordView.getLimit());
+                ncbRecordViewList.get(rowIndex).setOutstanding(ncbRecordView.getOutstanding());
+                ncbRecordViewList.get(rowIndex).setInstallment(ncbRecordView.getInstallment());
+                ncbRecordViewList.get(rowIndex).setDateOfDebtRestructuring(ncbRecordView.getDateOfDebtRestructuring());
+                ncbRecordViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbRecordView.getNoOfOutstandingPaymentIn12months());
+                ncbRecordViewList.get(rowIndex).setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
+                ncbRecordViewList.get(rowIndex).setRefinanceFlag(ncbRecordView.getRefinanceFlag());
+                ncbRecordViewList.get(rowIndex).setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
+
+                if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
+                    ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(true);
+                    monthly = 1000.00;
+                } else {
+                    ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(false);
+                }
+
+            } else {
+                log.info("onSaveNcbRecord ::: Undefined modeForbutton !!");
             }
-            else
-            {
-                ncbAdd.setMonthsPaymentFlag(false);
-            }
-        log.info("ncbAdd.isMonthsPaymentFlag   >> " + ncbAdd.isMonthsPaymentFlag());
 
-            ncbRecordViewList.add(ncbAdd);
+            complete = true;
 
-        } else if (modeForButton.equalsIgnoreCase("edit")) {
+        } else {
 
+            log.info("onSaveNcbRecord ::: validation failed.");
+            complete = false;
         }
 
-        log.info("add finish");
+        log.info("  complete >>>>  :  {}", complete);
+
+        context.addCallbackParam("functionComplete", complete);
+
+    }
+
+    public void onblurToGenMoneyOfmonthsPayment(){
+
+//        log.info("  ncbRecordView.getNoOfmonthsPayment() >>>>  :  {}", ncbRecordView.getNoOfmonthsPayment());
+        log.info("  ncbRecordView.getNoOfmonthsPaymentList() >>>>  :  {}", ncbRecordView.getNoOfmonthsPaymentList());
+
+
+//        if(ncbRecordView.getNoOfmonthsPayment() > 0){
+//            genTextBoxFlag=true;
+//        }
+//        else{
+//            genTextBoxFlag=false;
+//        }
+    }
+
+    public boolean isGenTextBoxFlag() {
+        return genTextBoxFlag;
+    }
+
+    public void setGenTextBoxFlag(boolean genTextBoxFlag) {
+        this.genTextBoxFlag = genTextBoxFlag;
     }
 
     public double getMonthly() {
@@ -304,5 +405,13 @@ public class FullappNcb implements Serializable {
 
     public void setDlgHistoryPayment(TDRCondition dlgHistoryPayment) {
         this.dlgHistoryPayment = dlgHistoryPayment;
+    }
+
+    public NcbRecordView getSelectNcbRecordItem() {
+        return selectNcbRecordItem;
+    }
+
+    public void setSelectNcbRecordItem(NcbRecordView selectNcbRecordItem) {
+        this.selectNcbRecordItem = selectNcbRecordItem;
     }
 }

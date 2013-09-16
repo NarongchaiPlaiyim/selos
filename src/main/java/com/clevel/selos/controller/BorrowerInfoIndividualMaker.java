@@ -79,7 +79,7 @@ public class BorrowerInfoIndividualMaker implements Serializable {
         raceList = nationalityDAO.findAll();
         CustomerEntity customerEntity =new CustomerEntity();
         customerEntity.setId(1);
-        titleList = titleDAO.getListByCustomerType(customerEntity);
+        titleList = titleDAO.getListByCustomerEntity(customerEntity);
         provinceList = provinceDAO.getListOrderByParameter("name");
         relationList = relationDAO.findAll();
         addressTypeList = addressTypeDAO.findAll();
@@ -89,8 +89,6 @@ public class BorrowerInfoIndividualMaker implements Serializable {
 
         raceID = 178;
         nationalityID = 178;
-
-
     }
 
     public void onChangeProvince() {
@@ -121,9 +119,20 @@ public class BorrowerInfoIndividualMaker implements Serializable {
         }
     }
 
-    public void onSearchRMIndividual( String cusId) {
+    public void onSearchRMIndividual() {
+
         IndividualModel individualModel;
-        //individualModel = rmInterfaceImpl.getIndividualInfo(1,1,"",RMInterface.DocumentType.CITIZEN_ID);
+        try{
+            individualModel = rmInterfaceImpl.getIndividualInfo("","","",RMInterface.DocumentType.CITIZEN_ID);
+
+            log.info("after get individualModel from RM is {}",individualModel);
+
+        }catch (Exception ex){
+            log.error("error");
+        }finally {
+
+        }
+
 
     }
 

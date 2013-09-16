@@ -43,7 +43,7 @@ public class Post implements Serializable {
         if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
         if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
 
-        log.debug("=========================================NCRS sendPost. url : {}", url);
+        log.debug("NCRS sendPost. url : {}", url);
         String result = "";
         DefaultHttpClient client = null;
         HttpPost post = null;
@@ -53,8 +53,9 @@ public class Post implements Serializable {
 
         params = new BasicHttpParams();
         int minute = 60000;
-        HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
         HttpConnectionParams.setSoTimeout(params, minute*timeOut);
+        HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
+
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
@@ -65,7 +66,7 @@ public class Post implements Serializable {
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
-            log.debug("=========================================NCRS sendPost. The request has succeeded");
+            log.debug("NCRS sendPost. The request has succeeded");
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder builder = new StringBuilder();
             String line = "";
@@ -75,8 +76,8 @@ public class Post implements Serializable {
             result = builder.toString();
             return result;
         }else{
-            log.error("=========================================NCRS sendPost. The request has failed, Error code is ",resCode);
-            return result;
+            log.error("NCRS sendPost. The request has failed, Error code is ",resCode);
+            throw new Exception("The request has failed, Error code is "+resCode);
         }
     }
 
