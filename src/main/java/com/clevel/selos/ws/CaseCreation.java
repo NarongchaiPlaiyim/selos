@@ -2,6 +2,7 @@ package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -66,7 +67,95 @@ public class CaseCreation implements WSCaseCreation {
             }
 
             //validate all input parameter
-            //todo: validate all input parameter here
+            if(!ValidationUtil.isEqualRange(2,jobName.length())){
+                return new CaseCreationResponse(2,"jobName Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,caNumber.length())){
+                return new CaseCreationResponse(2,"caNumber Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,oldCaNumber.length())){
+                return new CaseCreationResponse(2,"oldCaNumber Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo1.length())){
+                return new CaseCreationResponse(2,"accountNo1 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,customerId.length())){
+                return new CaseCreationResponse(2,"customerId Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(255,customerName.length())){
+                return new CaseCreationResponse(2,"customerName Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(13,citizenId.length())){
+                return new CaseCreationResponse(2,"citizenId Invalid Lenght!");
+            }
+            if(!ValidationUtil.isEqualRange(1,requestType)){    //*
+                return new CaseCreationResponse(2,"requestType Invalid Lenght!");
+            }
+            if(!ValidationUtil.isEqualRange(1,customerType)){    //*
+                return new CaseCreationResponse(2,"customerType Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(5,bdmId.length())){
+                return new CaseCreationResponse(2,"bdmId Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(4,hubCode.length())){
+                return new CaseCreationResponse(2,"hubCode Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(4,regionCode.length())){
+                return new CaseCreationResponse(2,"regionCode Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(5,uwId.length())){
+                return new CaseCreationResponse(2,"uwId Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(10,appInDateBDM.length())){
+                return new CaseCreationResponse(2,"appInDateBDM Invalid Lenght!");
+            }
+            if(!ValidationUtil.isEqualRange(1,finalApproved.length())){
+                return new CaseCreationResponse(2,"finalApproved Invalid Lenght!");
+            }
+            if(!ValidationUtil.isEqualRange(1,parallel.length())){
+                return new CaseCreationResponse(2,"parallel Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(1,pending.length())){
+                return new CaseCreationResponse(2,"pending Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(1,caExist.length())){
+                return new CaseCreationResponse(2,"caExist Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(1,caEnd.length())){
+                return new CaseCreationResponse(2,"caEnd Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo2.length())){
+                return new CaseCreationResponse(2,"accountNo2 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo3.length())){
+                return new CaseCreationResponse(2,"accountNo3 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo4.length())){
+                return new CaseCreationResponse(2,"accountNo4 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo5.length())){
+                return new CaseCreationResponse(2,"accountNo5 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo6.length())){
+                return new CaseCreationResponse(2,"accountNo6 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo7.length())){
+                return new CaseCreationResponse(2,"accountNo7 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo8.length())){
+                return new CaseCreationResponse(2,"accountNo8 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo9.length())){
+                return new CaseCreationResponse(2,"accountNo9 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(30,accountNo10.length())){
+                return new CaseCreationResponse(2,"accountNo10 Invalid Lenght!");
+            }
+            if(ValidationUtil.isGreaterThan(10,appInDateUW.length())){
+                return new CaseCreationResponse(2,"appInDateUW Invalid Lenght!");
+            }
+
+
 
 
             Date now = new Date();
