@@ -31,8 +31,25 @@ public class ValidationImp implements Validation, Serializable {
         if(ValidationUtil.isNull(model.getMemberref()) && ValidationUtil.isGreaterThan(25, model.getMemberref())){
             throw new ValidationException("Length of memberref is more than 25");
         }
-        if(!"01".equals(model.getEnqpurpose())||!"02".equals(model.getEnqpurpose())){
-            throw new ValidationException(message.get("105"));
+
+        String enqPurpose = null;
+        if(!ValidationUtil.isValueInRange(2,2,model.getEnqpurpose())){
+            throw new ValidationException(message.get("104"));
+        } else {
+            enqPurpose = model.getEnqpurpose();
+            boolean flag = true;
+            for (int i=1;i<=2;i++) {
+                if (!enqPurpose.equals("0" + i)) {
+                    continue;
+                } else {
+                    flag = false;
+                    return;
+                }
+            }
+            if(flag){
+                throw new ValidationException(message.get("105"));
+                //Values are 01 new application or 02 review credit
+            }
         }
 
         //if(!ValidationUtil.isNull(enqamount) && ValidationUtil.isGreaterThan(9, enqamount))throw new ValidationException("Length of enqamount is more than 9");
