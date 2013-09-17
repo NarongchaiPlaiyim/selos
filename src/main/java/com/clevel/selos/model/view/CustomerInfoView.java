@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -62,7 +63,58 @@ public class CustomerInfoView implements Serializable {
     private String reason;
 
     public CustomerInfoView(){
+        reset();
+    }
 
+    public void reset(){
+        this.id = new BigDecimal(0);
+        this.searchBy = 0;
+        this.searchId = "";
+        this.documentType = new DocumentType();
+        this.customerEntity = new CustomerEntity();
+        this.borrowerType = new BorrowerType();
+        this.relation = new Relation();
+        this.reference = new Reference();
+        this.citizenId = "";
+        this.registrationId = "";
+        this.cardAuthorizeBy = "";
+        this.documentExpiredDate = new Date();
+        this.customerId = "";
+        this.serviceSegment = "";
+        this.collateralOwner = false;
+        this.percentShare = new BigDecimal(0);
+        this.titleTh = new Title();
+        this.titleEn = new Title();
+        this.firstNameTh = "";
+        this.lastNameTh = "";
+        this.firstNameEn = "";
+        this.lastNameEn = "";
+        this.dateOfBirth = new Date();
+        this.dateOfRegister = new Date();
+        //this.gender = new Gender(0);
+        this.age = 0;
+        this.origin = new Nationality();
+        this.nationality = new Nationality();
+        this.education = new Education();
+        this.occupation = new Occupation();
+        this.maritalStatus = new MaritalStatus();
+        this.numberOfChild = 0;
+        this.childrenList = new ArrayList<ChildrenView>();
+        this.citizenCountry = new Country();
+        this.registrationCountry = new Country();
+        this.currentAddress = new AddressView();
+        this.workAddress = new AddressView();
+        this.registerAddress = new AddressView();
+        this.mailingAddressType = new AddressType();
+        this.approxIncome = new BigDecimal(0);
+        this.mobileNumber = "";
+        this.faxNumber = "";
+        this.email = "";
+        this.kycLevel = new KYCLevel();
+        this.convenantFlag = false;
+        this.ewsFlag = false;
+        this.reviewFlag = false;
+        this.reason = "";
     }
 
     public BigDecimal getId() {
