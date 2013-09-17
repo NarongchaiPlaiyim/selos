@@ -2,9 +2,12 @@ package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -21,7 +24,15 @@ public class CaseCreation implements WSCaseCreation {
     WSDataPersist wsDataPersist;
 
     @Inject
+    @ValidationMessage
+    Message validationMsg;
+
+    @Inject
     public CaseCreation() {
+    }
+    @PostConstruct
+    public void onCreate(){
+
     }
 
     @Override
@@ -55,7 +66,7 @@ public class CaseCreation implements WSCaseCreation {
                              @WebParam(name = "accountNo9") String accountNo9,
                              @WebParam(name = "accountNo10") String accountNo10,
                              @WebParam(name = "appInDateUW") String appInDateUW) {
-        //todo: update log
+
         log.debug("newCase. ()");
         CaseCreationResponse caseCreationResponse = null;
 
@@ -82,16 +93,16 @@ public class CaseCreation implements WSCaseCreation {
             if(ValidationUtil.isGreaterThan(30,customerId.length())){
                 return new CaseCreationResponse(2,"customerId Invalid Lenght!");
             }
-            if(ValidationUtil.isGreaterThan(255,customerName.length())){
+            if(ValidationUtil.isGreaterThan(150,customerName.length())){
                 return new CaseCreationResponse(2,"customerName Invalid Lenght!");
             }
-            if(ValidationUtil.isGreaterThan(13,citizenId.length())){
+            if(!ValidationUtil.isEqualRange(13,citizenId.length())){
                 return new CaseCreationResponse(2,"citizenId Invalid Lenght!");
             }
-            if(!ValidationUtil.isEqualRange(1,requestType)){    //*
+            if(!ValidationUtil.isEqualRange(1,requestType)){
                 return new CaseCreationResponse(2,"requestType Invalid Lenght!");
             }
-            if(!ValidationUtil.isEqualRange(1,customerType)){    //*
+            if(!ValidationUtil.isEqualRange(1,customerType)){
                 return new CaseCreationResponse(2,"customerType Invalid Lenght!");
             }
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
