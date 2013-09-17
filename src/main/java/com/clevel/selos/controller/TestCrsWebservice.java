@@ -1,17 +1,17 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.integration.crs.CrsWebservice;
+import com.clevel.selos.ws.CaseCreation;
+import com.clevel.selos.ws.CaseCreationResponse;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
-import java.util.Date;
 
 @ManagedBean(name = "crs")
 public class TestCrsWebservice {
 
     @Inject
-    CrsWebservice crsWebservice;
+    CaseCreation crsWebservice;
 
 
     public TestCrsWebservice(){
@@ -21,20 +21,27 @@ public class TestCrsWebservice {
 
     @PostConstruct
     public void onCreate(){
-
     }
 
-    private String test;
+    private CaseCreationResponse caseCreationResponse;
 
     public void callservice(){
-                 test=crsWebservice.csrService("",getTest(),"","","","","",0,0,"","","","","","","","","","","","","","","","","","","","",new Date());
+        caseCreationResponse=crsWebservice.newCase("", "12345", "", "", "", "", "", 0, 0, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
-    public String getTest() {
-        return test;
+    public CaseCreation getCrsWebservice() {
+        return crsWebservice;
     }
 
-    public void setTest(String test) {
-        this.test = test;
+    public void setCrsWebservice(CaseCreation crsWebservice) {
+        this.crsWebservice = crsWebservice;
+    }
+
+    public CaseCreationResponse getCaseCreationResponse() {
+        return caseCreationResponse;
+    }
+
+    public void setCaseCreationResponse(CaseCreationResponse caseCreationResponse) {
+        this.caseCreationResponse = caseCreationResponse;
     }
 }

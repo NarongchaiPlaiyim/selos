@@ -9,6 +9,8 @@
 <h:head>
     <title>SE-LOS : NCB Record Detail</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
 </h:head>
 
 <h:body>
@@ -195,110 +197,6 @@
         <table class="table_content">
             <tr>
                 <td>
-<!--                    <p:dataTable id="resultNcbDetail1" var="item" value="#{fullappNcb.ncbRecordViewList}"
-                                 paginator="false" rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
-
-                        <p:column headerText="No." styleClass="center" style="width:22px;">
-                            <h:outputText value="#{rowIndex+1}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
-                                  style="width: 110px;">
-                            <h:outputText value="#{item.accountType.name}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center" style="width: 25px;">
-                            <h:selectBooleanCheckbox value="#{item.TMBAccount}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"
-                                  style="width: 70px;">
-                            <h:outputText value="#{item.accountStatus.name}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center" style="width: 90px;">
-                            <h:outputText  value="#{item.dateOfInfo}" />
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center"
-                                  style="width: 90px;">
-                            <h:outputText value="#{item.accountOpenDate}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.limit')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.limit}">
-                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.outstanding}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.installment')}" styleClass="center" style="width: 80px;">
-                            <h:outputText value="#{item.installment}">
-                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
-                                  style="width: 100px;">
-                            <h:outputText value="#{item.dateOfDebtRestructuring}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center"
-                                  style="width: 110px;">
-                            <h:outputText value="#{item.currentPayment.description}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center"
-                                  style="width: 110px;">
-                            <h:outputText value="#{item.historyPayment.description}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}" styleClass="center"
-                                  style="width: 120px;">
-                            <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"
-                                  style="width: 110px;">
-                            <h:inputText value="#{item.noOfOverLimit}"/>
-                        </p:column>
-
-                        <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center" style="width: 30px;">
-                            <h:selectBooleanCheckbox value="#{item.refinanceFlag}"/>
-                        </p:column>
-
-                        <p:column headerText="" styleClass="center" style="width:54px;">
-                            <p:commandButton icon="ui-icon-pencil"
-                                             action="#{fullappNcb.onEditNcbDetail(rowIndex)}"
-                                             update=":ncbDlgForm"
-                                             oncomplete="ncbDlg.show();"/>
-                            <p:commandButton icon="ui-icon-trash"
-                                             title="Remove"
-                                             action="#{fullappNcb.onDeleteNcbDetail(rowIndex)}"
-                                             update=":frmMain:resultNcbDetail"/>
-                        </p:column>
-
-
-                            <p:columnGroup type="footer" rendered="#{item.refinanceFlag}" >
-                                <p:row>
-                                    <p:column colspan="4"  footerText="#{item.noOfmonthsPayment}"/>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}1   #{fullappNcb.monthly}"></p:column>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}2" ><h:outputText value="#{item.installment}"/></p:column>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}3" ><h:outputText value="#{item.installment}"/></p:column>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}4" ><h:outputText value="#{item.installment}"/></p:column>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}5" ><h:outputText value="#{item.installment}"/></p:column>
-                                    <p:column colspan="2" styleClass="left"  footerText="#{msg.get('app.monthNo')}6" ><h:outputText value="#{item.installment}"/></p:column>
-                                </p:row>
-                            </p:columnGroup>
-
-                    </p:dataTable>-->
-
-                    <!-- -->
 
                     <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordViewList}" rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
                         <p:columnGroup type="header">
@@ -333,7 +231,7 @@
                             </p:column>
 
                             <p:column>
-                                <h:selectBooleanCheckbox value="#{item.TMBAccount}"/>
+                                <h:outputText value="#{item.TMBAccount}"/>
                             </p:column>
 
                             <p:column>
@@ -341,11 +239,15 @@
                             </p:column>
 
                             <p:column>
-                                <h:outputText  value="#{item.dateOfInfo}" />
+                                <h:outputText value="#{item.dateOfInfo}"  id="dateOfInfo">
+                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.accountOpenDate}"/>
+                                <h:outputText value="#{item.accountOpenDate}"  id="accountOpenDate">
+                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column>
@@ -367,7 +269,9 @@
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.dateOfDebtRestructuring}"/>
+                                <h:outputText value="#{item.dateOfDebtRestructuring}"  id="dateOfDebtRestructuring">
+                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column>
@@ -383,22 +287,29 @@
                             </p:column>
 
                             <p:column>
-                                <h:inputText value="#{item.noOfOverLimit}"/>
+                                <h:outputText value="#{item.noOfOverLimit}"/>
                             </p:column>
 
                             <p:column>
-                                <h:selectBooleanCheckbox value="#{item.refinanceFlag}"/>
+                                <h:outputText value="#{item.refinanceFlag}"/>
                             </p:column>
 
                             <p:column>
                                 <p:commandButton icon="ui-icon-pencil"
-                                                 action="#{fullappNcb.onEditNcbDetail(rowIndex)}"
+                                                 action="#{fullappNcb.onEditNcbDetail()}"
                                                  update=":ncbDlgForm"
-                                                 oncomplete="ncbDlg.show();"/>
-                                <p:commandButton icon="ui-icon-trash"
-                                                 title="Remove"
-                                                 action="#{fullappNcb.onDeleteNcbDetail(rowIndex)}"
-                                                 update=":frmMain:resultNcbDetail"/>
+                                                 oncomplete="ncbDlg.show();">
+                                <f:setPropertyActionListener value="#{item}"
+                                                             target="#{fullappNcb.selectNcbRecordItem}"/>
+                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                             target="#{fullappNcb.rowIndex}"/>
+                                </p:commandButton>
+                                <p:commandButton title="Remove"
+                                                 icon="ui-icon-trash"
+                                                 oncomplete="confirmDeleteNcbRecordDlg.show()" >
+                                    <f:setPropertyActionListener value="#{item}"
+                                                                 target="#{fullappNcb.selectNcbRecordItem}"/>
+                                </p:commandButton>
                             </p:column>
 
                             <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
@@ -434,9 +345,18 @@
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" width="520" height="500">
+          modal="true" width="520" height="550">
     <ui:include src="dialog/fullappNcbDialog.xhtml"/>
 </p:dialog>
+
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteNcbRecordDialog"/>
+    <ui:param name="name" value="confirmDeleteNcbRecordDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteNcbRecord"/>
+    <ui:param name="controller" value="#{fullappNcb}"/>
+    <ui:param name="action" value="onDeleteNcbDetail"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
 
 </h:body>
 </f:view>
