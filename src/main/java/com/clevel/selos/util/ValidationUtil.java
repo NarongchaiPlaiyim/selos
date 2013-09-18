@@ -29,7 +29,7 @@ public class ValidationUtil {
         return (field == null) || "".equalsIgnoreCase(field.trim());
     }
     public static boolean isNull(String string){
-        if(string == null || "null".equals(string.toLowerCase())){
+        if(string == null || "null".equals(string.toLowerCase().trim())){
             return true;
         }else{
             return false;
