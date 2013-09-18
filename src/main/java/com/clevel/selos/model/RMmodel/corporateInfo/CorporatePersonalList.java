@@ -1,4 +1,4 @@
-package com.clevel.selos.model.RMmodel;
+package com.clevel.selos.model.RMmodel.corporateInfo;
 
 import java.io.Serializable;
 

@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.IndividualModel;
+import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -123,9 +123,9 @@ public class BorrowerInfoIndividualMaker implements Serializable {
 
         IndividualModel individualModel;
         try{
-            individualModel = rmInterfaceImpl.getIndividualInfo("","","",RMInterface.DocumentType.CITIZEN_ID);
+//            individualModel = rmInterfaceImpl.getIndividualInfo("","","",RMInterface.DocumentType.CITIZEN_ID);
 
-            log.info("after get individualModel from RM is {}",individualModel);
+//            log.info("after get individualModel from RM is {}",individualModel);
 
         }catch (Exception ex){
             log.error("error");
