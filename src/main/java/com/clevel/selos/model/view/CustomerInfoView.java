@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CustomerInfoView implements Serializable {
     private CustomerEntity customerEntity;
     private BorrowerType borrowerType;
     private Relation relation;
+    private Reference reference;
     private String citizenId;
     private String registrationId;
     private String cardAuthorizeBy;
@@ -26,6 +28,7 @@ public class CustomerInfoView implements Serializable {
     private String customerId;
     private String serviceSegment;
     private Boolean collateralOwner;
+    private BigDecimal percentShare;
     private Title titleTh;
     private Title titleEn;
     private String firstNameTh;
@@ -48,7 +51,8 @@ public class CustomerInfoView implements Serializable {
     private AddressView currentAddress;
     private AddressView workAddress;
     private AddressView registerAddress;
-    private AddressType mailingAddress;
+    private AddressType mailingAddressType;
+    private BigDecimal approxIncome;
     private String mobileNumber;
     private String faxNumber;
     private String email;
@@ -59,7 +63,58 @@ public class CustomerInfoView implements Serializable {
     private String reason;
 
     public CustomerInfoView(){
+        reset();
+    }
 
+    public void reset(){
+        this.id = new BigDecimal(0);
+        this.searchBy = 0;
+        this.searchId = "";
+        this.documentType = new DocumentType();
+        this.customerEntity = new CustomerEntity();
+        this.borrowerType = new BorrowerType();
+        this.relation = new Relation();
+        this.reference = new Reference();
+        this.citizenId = "";
+        this.registrationId = "";
+        this.cardAuthorizeBy = "";
+        this.documentExpiredDate = new Date();
+        this.customerId = "";
+        this.serviceSegment = "";
+        this.collateralOwner = false;
+        this.percentShare = new BigDecimal(0);
+        this.titleTh = new Title();
+        this.titleEn = new Title();
+        this.firstNameTh = "";
+        this.lastNameTh = "";
+        this.firstNameEn = "";
+        this.lastNameEn = "";
+        this.dateOfBirth = new Date();
+        this.dateOfRegister = new Date();
+        //this.gender = new Gender(0);
+        this.age = 0;
+        this.origin = new Nationality();
+        this.nationality = new Nationality();
+        this.education = new Education();
+        this.occupation = new Occupation();
+        this.maritalStatus = new MaritalStatus();
+        this.numberOfChild = 0;
+        this.childrenList = new ArrayList<ChildrenView>();
+        this.citizenCountry = new Country();
+        this.registrationCountry = new Country();
+        this.currentAddress = new AddressView();
+        this.workAddress = new AddressView();
+        this.registerAddress = new AddressView();
+        this.mailingAddressType = new AddressType();
+        this.approxIncome = new BigDecimal(0);
+        this.mobileNumber = "";
+        this.faxNumber = "";
+        this.email = "";
+        this.kycLevel = new KYCLevel();
+        this.convenantFlag = false;
+        this.ewsFlag = false;
+        this.reviewFlag = false;
+        this.reason = "";
     }
 
     public BigDecimal getId() {
@@ -118,6 +173,14 @@ public class CustomerInfoView implements Serializable {
         this.relation = relation;
     }
 
+    public Reference getReference() {
+        return reference;
+    }
+
+    public void setReference(Reference reference) {
+        this.reference = reference;
+    }
+
     public String getCitizenId() {
         return citizenId;
     }
@@ -172,6 +235,14 @@ public class CustomerInfoView implements Serializable {
 
     public void setCollateralOwner(Boolean collateralOwner) {
         this.collateralOwner = collateralOwner;
+    }
+
+    public BigDecimal getPercentShare() {
+        return percentShare;
+    }
+
+    public void setPercentShare(BigDecimal percentShare) {
+        this.percentShare = percentShare;
     }
 
     public Title getTitleTh() {
@@ -350,12 +421,20 @@ public class CustomerInfoView implements Serializable {
         this.registerAddress = registerAddress;
     }
 
-    public AddressType getMailingAddress() {
-        return mailingAddress;
+    public AddressType getMailingAddressType() {
+        return mailingAddressType;
     }
 
-    public void setMailingAddress(AddressType mailingAddress) {
-        this.mailingAddress = mailingAddress;
+    public void setMailingAddressType(AddressType mailingAddressType) {
+        this.mailingAddressType = mailingAddressType;
+    }
+
+    public BigDecimal getApproxIncome() {
+        return approxIncome;
+    }
+
+    public void setApproxIncome(BigDecimal approxIncome) {
+        this.approxIncome = approxIncome;
     }
 
     public String getMobileNumber() {
@@ -425,51 +504,54 @@ public class CustomerInfoView implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("\nid", id)
-                .append("\nsearchBy", searchBy)
-                .append("\nsearchId", searchId)
-                .append("\ndocumentType", documentType)
-                .append("\ncustomerEntity", customerEntity)
-                .append("\nborrowerType", borrowerType)
-                .append("\nrelation", relation)
-                .append("\ncitizenId", citizenId)
-                .append("\nregistrationId", registrationId)
-                .append("\ncardAuthorizeBy", cardAuthorizeBy)
-                .append("\ndocumentExpiredDate", documentExpiredDate)
-                .append("\ncustomerId", customerId)
-                .append("\nserviceSegment", serviceSegment)
-                .append("\ncollateralOwner", collateralOwner)
-                .append("\ntitleTh", titleTh)
-                .append("\ntitleEn", titleEn)
-                .append("\nfirstNameTh", firstNameTh)
-                .append("\nlastNameTh", lastNameTh)
-                .append("\nfirstNameEn", firstNameEn)
-                .append("\nlastNameEn", lastNameEn)
-                .append("\ndateOfBirth", dateOfBirth)
-                .append("\ndateOfRegister", dateOfRegister)
-                .append("\ngender", gender)
-                .append("\nage", age)
-                .append("\norigin", origin)
-                .append("\nnationality", nationality)
-                .append("\neducation", education)
-                .append("\noccupation", occupation)
-                .append("\nmaritalStatus", maritalStatus)
-                .append("\nnumberOfChild", numberOfChild)
-                .append("\nchildrenList", childrenList)
-                .append("\ncitizenCountry", citizenCountry)
-                .append("\nregistrationCountry", registrationCountry)
-                .append("\ncurrentAddress", currentAddress)
-                .append("\nworkAddress", workAddress)
-                .append("\nregisterAddress", registerAddress)
-                .append("\nmailingAddress", mailingAddress)
-                .append("\nmobileNumber", mobileNumber)
-                .append("\nfaxNumber", faxNumber)
-                .append("\nemail", email)
-                .append("\nkycLevel", kycLevel)
-                .append("\nconvenantFlag", convenantFlag)
-                .append("\newsFlag", ewsFlag)
-                .append("\nreviewFlag", reviewFlag)
-                .append("\nreason", reason)
+                .append("id", id)
+                .append("searchBy", searchBy)
+                .append("searchId", searchId)
+                .append("documentType", documentType)
+                .append("customerEntity", customerEntity)
+                .append("borrowerType", borrowerType)
+                .append("relation", relation)
+                .append("reference", reference)
+                .append("citizenId", citizenId)
+                .append("registrationId", registrationId)
+                .append("cardAuthorizeBy", cardAuthorizeBy)
+                .append("documentExpiredDate", documentExpiredDate)
+                .append("customerId", customerId)
+                .append("serviceSegment", serviceSegment)
+                .append("collateralOwner", collateralOwner)
+                .append("percentShare", percentShare)
+                .append("titleTh", titleTh)
+                .append("titleEn", titleEn)
+                .append("firstNameTh", firstNameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("firstNameEn", firstNameEn)
+                .append("lastNameEn", lastNameEn)
+                .append("dateOfBirth", dateOfBirth)
+                .append("dateOfRegister", dateOfRegister)
+                .append("gender", gender)
+                .append("age", age)
+                .append("origin", origin)
+                .append("nationality", nationality)
+                .append("education", education)
+                .append("occupation", occupation)
+                .append("maritalStatus", maritalStatus)
+                .append("numberOfChild", numberOfChild)
+                .append("childrenList", childrenList)
+                .append("citizenCountry", citizenCountry)
+                .append("registrationCountry", registrationCountry)
+                .append("currentAddress", currentAddress)
+                .append("workAddress", workAddress)
+                .append("registerAddress", registerAddress)
+                .append("mailingAddressType", mailingAddressType)
+                .append("approxIncome", approxIncome)
+                .append("mobileNumber", mobileNumber)
+                .append("faxNumber", faxNumber)
+                .append("email", email)
+                .append("kycLevel", kycLevel)
+                .append("convenantFlag", convenantFlag)
+                .append("ewsFlag", ewsFlag)
+                .append("reviewFlag", reviewFlag)
+                .append("reason", reason)
                 .toString();
     }
 }

@@ -158,7 +158,10 @@ public class BusinessInfoDetailMaker implements Serializable {
             }
         }
         if(supplierList.size()>0){
-            stakeholderTemp = supplierList.get(rowIndex);
+            //stakeholderTemp = supplierList.get(rowIndex);
+            stakeholderTemp = new StakeholderView();
+            stakeholderTemp.setPercentCredit(supplierList.get(row).getPercentCredit());
+            stakeholderTemp.setPercentCash(supplierList.get(row).getPercentCash());
             log.info("stakeholderTemp Temp file {}",stakeholderTemp);
 
         }

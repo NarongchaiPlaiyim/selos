@@ -1260,6 +1260,10 @@ body .ui-tooltip {
 .ui-selectonemenu-list-item {
     font-size: 12px!important;
 }
+.ui-radiobutton-box {
+    border: 1px solid #bfbfbf!important;
+    background: transparent!important;
+}
 /*
 .ui-selectonemenu .ui-selectonemenu-trigger {
     border-right: 1px solid!important;
