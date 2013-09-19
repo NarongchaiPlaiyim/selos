@@ -7,29 +7,28 @@
 
     <h:form id="bizProductViewDlgForm">
         <table class="content_form">
-
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.productType')}"/> : </td>
+                <td class="title"><h:outputText value="#{msg.get('app.productType')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.productType}"/>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.productType}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : </td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.percentSalesVolumn}"/>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.percentSalesVolumn}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.percentEBIT')}"/> : </td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentEBIT')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.percentEBIT}"/>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.percentEBIT}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.productDetail')}"/> : </td>
+                <td class="title"><h:outputText value="#{msg.get('app.productDetail')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.productDetail}"/>
+                    <p:inputText value="#{businessInfoDetail.bizProductView.productDetail}" required="true"/>
                 </td>
             </tr>
 
@@ -40,11 +39,10 @@
                             value="Save"
                             styleClass="small"
                             action="#{businessInfoDetail.onSaveBizProductView()}"
-                            update=":bizProductViewTable"
-                            oncomplete="bizProductViewDlg.hide()"
+                            process=":bizProductViewDlgForm"
+                            update=":frmMain:bizProductViewTable,:bizProductViewDlgForm"
+                            oncomplete="handleFullappBizProductRequest(xhr, status, args)"
                             />
-
-
                     <p:commandButton value="Cancel" styleClass="small" onclick="bizProductViewDlg.hide()"/>
                 </td>
             </tr>

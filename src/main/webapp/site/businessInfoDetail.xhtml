@@ -9,9 +9,13 @@
     <h:head>
         <title>Customer Info.</title>
         <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
         <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
             <ui:include src="../resources/header_logo.xhtml" />
@@ -46,39 +50,37 @@
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizType')}"/> : </td>
-                            <td colspan="5"><select style="width: 400px">
+                            <td colspan="5">
+                                <select style="width: 400px">
                                 <option>- โปรดระบุ -</option>
-                            </select></td>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizGroup')}"/> : </td>
                             <td colspan="5">
-                                <h:form id="businessGroupForm" styleClass="panel" style="width:230px">
-                                    <h:selectOneListbox styleClass="largest" size="1" value="#{businessInfoDetail.bizGroupId}"
-                                id="businessGroupId">
-                                <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                <f:selectItems value="#{businessInfoDetail.businessGroupList}"
-                                               var="businessGroup"
-                                               itemLabel="#{businessGroup.name}"
-                                               itemValue="#{businessGroup.id}"/>
-                                <p:ajax listener="#{businessInfoDetail.onChangeBusinessGroup()}" update=":businessDescriptionForm" />
-                            </h:selectOneListbox>
-                        </h:form>
+                                <p:selectOneMenu styleClass="largest" size="1" value="#{businessInfoDetail.bizGroupId}"
+                                    id="businessGroupId">
+                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                    <f:selectItems value="#{businessInfoDetail.businessGroupList}"
+                                                   var="businessGroup"
+                                                   itemLabel="#{businessGroup.name}"
+                                                   itemValue="#{businessGroup.id}"/>
+                                    <p:ajax listener="#{businessInfoDetail.onChangeBusinessGroup()}" update=":frmMain:businessDescriptionId" />
+                                </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="line-height: 15px;"><h:outputText value="#{msg.get('app.bizDesc')}"/> : </td>
                             <td colspan="5">
-                                <h:form id="businessDescriptionForm" styleClass="panel" style="width:230px">
-                                    <h:selectOneListbox styleClass="largest" size="1"
+                                    <p:selectOneMenu styleClass="largest" size="1"
                                                         id="businessDescriptionId">
                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                         <f:selectItems value="#{businessInfoDetail.businessDescriptionList}"
                                                        var="businessDescription"
                                                        itemLabel="#{businessDescription.name}"
                                                        itemValue="#{businessDescription.id}"/>
-                                    </h:selectOneListbox>
-                                </h:form>
+                                    </p:selectOneMenu>
                             </td>
                         </tr>
                         <tr>
@@ -106,8 +108,14 @@
                         </tr>
                         <tr>
                             <td class="left" colspan="6">
-                                <h:outputText value="#{msg.get('app.bizProductDetail')}"/> :   <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddBizProductView()}" update=":bizProductViewDlgForm" oncomplete="bizProductViewDlg.show()"/>
-
+                                <h:outputText value="#{msg.get('app.bizProductDetail')}"/> :
+                                <p:commandButton id="btnAddBizProduct"
+                                           value="#{msg.get('app.addButton')}"
+                                           styleClass="smaller"
+                                           process="@this"
+                                           actionListener="#{businessInfoDetail.onAddBizProductView()}"
+                                           update=":bizProductViewDlgForm"
+                                           oncomplete="bizProductViewDlg.show()"/>
                             </td>
                         </tr>
 
@@ -140,14 +148,22 @@
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
-                                                         action="#{businessInfoDetail.onEditBizProductView(rowIndex)}"
-                                                         update=":bizProductViewDialog"
-                                                         process=":bizProductViewTable"
-                                                         oncomplete="bizProductViewDlg.show();"/>
-                                        <p:commandButton icon="ui-icon-trash"
-                                                         title="Remove"
-                                                         action="#{businessInfoDetail.onDeleteBizProductView(rowIndex)}"
-                                                         update=":bizProductViewTable"/>
+                                                         action="#{businessInfoDetail.onEditBizProductView()}"
+                                                         update=":bizProductViewDlgForm"
+                                                         process=":frmMain:bizProductViewTable"
+                                                         oncomplete="bizProductViewDlg.show();">
+                                            <f:setPropertyActionListener value="#{bizProductView}"
+                                                                         target="#{businessInfoDetail.selectBizProduct}"/>
+                                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                                         target="#{businessInfoDetail.rowIndex}"/>
+                                        </p:commandButton>
+                                        <p:commandButton title="Remove" process="@this"
+                                                         icon="ui-icon-trash"
+                                                         oncomplete="confirmDeleteBizProductDlg.show()" >
+                                            <f:setPropertyActionListener value="#{bizProductView}"
+                                                                         target="#{businessInfoDetail.selectBizProduct}"/>
+                                        </p:commandButton>
+
                                     </p:column>
                                 </p:dataTable>
                             </td>
@@ -156,7 +172,13 @@
                             <td class="title" colspan="6">
                                 <h:outputText value="#{msg.get('app.supplierDetail')}"/> :
                                 <p:spacer width="5px"/>
-                                <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddStakeholderView('supplier')}"  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"/>
+                                <p:commandButton value="Add" styleClass="small"
+                                                 process="@this"
+                                                 actionListener="#{businessInfoDetail.onAddStakeholderView()}"
+                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                <f:setPropertyActionListener value="supplier"
+                                                             target="#{businessInfoDetail.stakeType}"/>
+                                </p:commandButton>
                             </td>
                         </tr>
 
@@ -164,7 +186,7 @@
                             <td colspan="6" >
 
                                 <p:dataTable style="width: 100%;"
-                                            id="supplierTable"
+                                             id="supplierTable"
                                              var="supplierItem"
                                              value="#{businessInfoDetail.supplierList}"
                                              paginator="false"
@@ -200,14 +222,27 @@
                                     <p:column headerText="" style="width:8%;">
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit"
-                                                         action="#{businessInfoDetail.onEditStakeholderView(rowIndex,'supplier')}"
-                                                         update=":stakeholderViewDlgForm,:supplierTotalTable"
-                                                         process=":supplierTable"
-                                                         oncomplete="stakeholderViewDlg.show();"/>
+                                                         action="#{businessInfoDetail.onEditStakeholderView}"
+                                                         update=":stakeholderViewDlgForm,:frmMain:supplierTotalTable"
+                                                         process=":frmMain:supplierTable"
+                                                         oncomplete="stakeholderViewDlg.show();">
+                                            <f:setPropertyActionListener value="supplier"
+                                                                         target="#{businessInfoDetail.stakeType}"/>
+                                            <f:setPropertyActionListener value="#{supplierItem}"
+                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
+                                            <f:setPropertyActionListener value="#{rowIndex}"
+                                                                         target="#{businessInfoDetail.rowIndex}"/>
+                                        </p:commandButton>
+
                                         <p:commandButton icon="ui-icon-trash"
-                                                         title="Remove"
-                                                         action="#{businessInfoDetail.onDeleteStakeholderView(rowIndex,'supplier')}"
-                                                         update=":supplierTable,:supplierTotalTable"/>
+                                                         title="Remove" process="@this"
+                                                         oncomplete="confirmDeleteStakeholderDlg.show()">
+                                            <f:setPropertyActionListener value="#{supplierItem}"
+                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
+                                            <f:setPropertyActionListener value="supplier"
+                                                                         target="#{businessInfoDetail.stakeType}"/>
+
+                                        </p:commandButton>
                                     </p:column>
                                 </p:dataTable>
                                 <p:panelGrid id="supplierTotalTable" style="width: 100%;" >
@@ -263,6 +298,7 @@
                             </td>
 
                         </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
                         </tr>
@@ -270,7 +306,13 @@
                             <td class="title" colspan="6">
                                 <h:outputText value="#{msg.get('app.buyerDetail')}"/> :
                                 <p:spacer width="5px"/>
-                                <p:commandButton value="Add" styleClass="small" actionListener="#{businessInfoDetail.onAddStakeholderView('buyer')}" update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()"/>
+                                <p:commandButton value="Add" styleClass="small"
+                                                 process="@this"
+                                                 actionListener="#{businessInfoDetail.onAddStakeholderView()}"
+                                                 update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
+                                    <f:setPropertyActionListener value="buyer"
+                                                                 target="#{businessInfoDetail.stakeType}"/>
+                                </p:commandButton>
                             </td>
                         </tr>
 
@@ -313,15 +355,31 @@
                                         <h:outputText value="#{buyerItem.creditTerm}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
-                                    <p:commandButton icon="ui-icon-pencil"
-                                                     action="#{businessInfoDetail.onEditStakeholderView(rowIndex,'buyer')}"
-                                                     update=":stakeholderViewDlgForm,:supplierTotalTable"
-                                                     process=":buyerTable"
-                                                     oncomplete="stakeholderViewDlg.show();"/>
-                                    <p:commandButton icon="ui-icon-trash"
-                                                     title="Remove"
-                                                     action="#{businessInfoDetail.onDeleteStakeholderView(rowIndex,'buyer')}"
-                                                     update=":buyerTable,:buyerTotalTable"/>
+                                        <p:commandButton icon="ui-icon-pencil"
+                                                         title="Edit"
+                                                         action="#{businessInfoDetail.onEditStakeholderView}"
+                                                         update=":stakeholderViewDlgForm,:frmMain:buyerTotalTable"
+                                                         process=":frmMain:buyerTable"
+                                                         oncomplete="stakeholderViewDlg.show();">
+                                        <f:setPropertyActionListener value="buyer"
+                                                                     target="#{businessInfoDetail.stakeType}"/>
+                                        <f:setPropertyActionListener value="#{buyerItem}"
+                                                                     target="#{businessInfoDetail.selectStakeholer}"/>
+                                        <f:setPropertyActionListener value="#{rowIndex}"
+                                                                     target="#{businessInfoDetail.rowIndex}"/>
+                                        </p:commandButton>
+
+                                        <p:commandButton icon="ui-icon-trash"
+                                                         title="Remove" process="@this"
+                                                         oncomplete="confirmDeleteStakeholderDlg.show()">
+
+                                            <f:setPropertyActionListener value="#{buyerItem}"
+                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
+                                            <f:setPropertyActionListener value="buyer"
+                                                                         target="#{businessInfoDetail.stakeType}"/>
+
+                                        </p:commandButton>
+
                                     </p:column>
                                 </p:dataTable>
                                 <p:panelGrid id="buyerTotalTable" style="width: 100%;" >
@@ -375,7 +433,6 @@
                                 </p:panelGrid>
                             </td>
                         </tr>
-                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
                         </tr>
@@ -519,15 +576,40 @@
             <!-- Start Footer -->
             <ui:include src="../resources/footer.xhtml" />
             <!-- End Footer -->
+            <h:inputHidden id="pagename" value="mnuprescreen"/>
+            <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </div>
-        <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"
-                  modal="true" width="500" height="300">
-            <ui:include src="dialog/fullscreenStakeholderDialog.xhtml"/>
-        </p:dialog>
-        <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg"
-                  modal="true" width="500" height="300">
-            <ui:include src="dialog/fullscreenBizProductDialog.xhtml"/>
-        </p:dialog>
+        </h:form>
+        </p:panel>
+
+    <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"
+              modal="true" width="500" height="300">
+        <ui:include src="dialog/fullscreenStakeholderDialog.xhtml"/>
+    </p:dialog>
+
+    <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg"
+              modal="true" width="500" height="300">
+        <ui:include src="dialog/fullscreenBizProductDialog.xhtml"/>
+    </p:dialog>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteBizProductDialog"/>
+        <ui:param name="name" value="confirmDeleteBizProductDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteBizProduct"/>
+        <ui:param name="controller" value="#{businessInfoDetail}"/>
+        <ui:param name="action" value="onDeleteBizProductView"/>
+        <ui:param name="update" value=":frmMain:bizProductViewTable"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteStakeholderDialog"/>
+        <ui:param name="name" value="confirmDeleteStakeholderDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteStakeholder"/>
+        <ui:param name="controller" value="#{businessInfoDetail}"/>
+        <ui:param name="action" value="onDeleteStakeholderView"/>
+        <ui:param name="update" value=":frmMain:supplierTable,:frmMain:buyerTable,:frmMain:supplierTotalTable,:frmMain:buyerTotalTable"/>
+    </ui:include>
+
     </h:body>
 </f:view>
 </html>

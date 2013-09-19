@@ -9,6 +9,8 @@
     <h:head>
         <title>Business Info.</title>
         <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
         <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
@@ -39,7 +41,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                <table class="table_content" >
                                     <tr>
                                         <th style="width:30px; line-height: 15px;"></th>
                                         <th style="width:70px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizCode')}"/></th>

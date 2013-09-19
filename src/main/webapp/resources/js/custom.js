@@ -47,6 +47,11 @@ function handleFullappNcbRequest(xhr, status, args) {
     }
 }
 
+function handleFullappBizProductRequest(xhr, status, args) {
+    if(args.functionComplete){
+        bizProductViewDlg.hide();
+}
+
 function handleFullappTcgRequest(xhr, status, args) {
     if(args.functionComplete){
         tcgDlg.hide();
