@@ -1,9 +1,17 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.dao.master.AccountStatusDAO;
+import com.clevel.selos.dao.master.AccountTypeDAO;
+import com.clevel.selos.dao.master.SettlementStatusDAO;
+import com.clevel.selos.dao.master.TDRConditionDAO;
+import com.clevel.selos.model.db.master.AccountStatus;
+import com.clevel.selos.model.db.master.AccountType;
+import com.clevel.selos.model.db.master.SettlementStatus;
+import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.model.view.MoneyPaymentView;
 import com.clevel.selos.model.view.NcbRecordView;
+import com.clevel.selos.model.view.NcbResultView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -12,10 +20,8 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,12 +61,13 @@ public class FullappNcb implements Serializable {
     private int rowIndex;
 
     //test
-    private double monthly;
+
     private boolean genTextBoxFlag;
     //test
     private NcbRecordView ncbRecordView;
     private NcbRecordView selectNcbRecordItem;
     private List<NcbRecordView> ncbRecordViewList;
+    private NcbResultView ncbResultView ;
 
     @Inject
     private AccountStatusDAO accountStatusDAO;
@@ -81,12 +88,17 @@ public class FullappNcb implements Serializable {
         log.info("onCreation.");
         modeForButton = "add";
         genTextBoxFlag=false;
+
         if (ncbRecordView == null) {
             ncbRecordView = new NcbRecordView();
         }
 
         if (ncbRecordViewList == null) {
             ncbRecordViewList = new ArrayList<NcbRecordView>();
+        }
+
+        if(ncbResultView == null){
+            ncbResultView = new NcbResultView();
         }
 
         if (accountStatusList == null) {
@@ -123,7 +135,7 @@ public class FullappNcb implements Serializable {
 
         accountStatusList = accountStatusDAO.findAll();
         accountTypeList = accountTypeDAO.findAll();
-        settlementStatusList = settlementStatusDAO.findAll();
+//        settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
 
     }
@@ -140,8 +152,12 @@ public class FullappNcb implements Serializable {
         ncbRecordView.setAccountType(new AccountType());
         ncbRecordView.setCurrentPayment(new TDRCondition());
         ncbRecordView.setHistoryPayment(new TDRCondition());
+        ncbRecordView.setTMBAccount("Y");
+        ncbRecordView.setRefinanceFlag("Y");
         modeForButton = "add";
         genTextBoxFlag = false;
+
+        //test default for first section
     }
 
     public void onEditNcbDetail() {  //copy row that choose to dialog
@@ -173,6 +189,15 @@ public class FullappNcb implements Serializable {
             ncbRecordView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
             ncbRecordView.setRefinanceFlag(selectNcbRecordItem.getRefinanceFlag());
             ncbRecordView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
+            ncbRecordView.setMoneyPaymentViewList(selectNcbRecordItem.getMoneyPaymentViewList());
+
+            if(selectNcbRecordItem.getNoOfmonthsPayment() > 0){
+                genTextBoxFlag = true;
+            }
+            else{
+                genTextBoxFlag = false;
+            }
+
         }
     }
 
@@ -186,6 +211,7 @@ public class FullappNcb implements Serializable {
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
+        String  moneyTotal = "";
 
         log.info("  dlgAccountType : {}", dlgAccountType.getId());
         log.info("  dlgAccountStatus :  {}", dlgAccountStatus.getId());
@@ -222,14 +248,27 @@ public class FullappNcb implements Serializable {
 
                 if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
                     ncbAdd.setMonthsPaymentFlag(true);
-                    monthly = 1000.00;
+
+                    log.info("ncbRecordView.getMoneyPaymentViewList().size() ::: {}",ncbRecordView.getMoneyPaymentViewList().size());
+
+                    ncbAdd.setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
+
+                    for(int i=0;i<ncbRecordView.getMoneyPaymentViewList().size();i++)
+                    {
+                        log.info("ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment()   >> {} " , ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment());
+                        moneyTotal += " เดือนที่#"+ (i+1) + " : " +ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment() + " บาท ";
+                        ncbAdd.setMoneyTotal(moneyTotal);
+                    }
+
                 } else {
                     ncbAdd.setMonthsPaymentFlag(false);
+                    ncbAdd.setMoneyTotal("");
                 }
                 log.info("ncbAdd.isMonthsPaymentFlag   {} ", ncbAdd.isMonthsPaymentFlag());
 
                 ncbRecordViewList.add(ncbAdd);
                 log.info("add finish");
+                log.info(" ncbRecordViewList.getMoneyPaymentViewList().size() ::: {} ", ncbRecordViewList.get(0).getMoneyPaymentViewList().size());
 
             } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
                 log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
@@ -255,10 +294,18 @@ public class FullappNcb implements Serializable {
                 ncbRecordViewList.get(rowIndex).setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
                 ncbRecordViewList.get(rowIndex).setRefinanceFlag(ncbRecordView.getRefinanceFlag());
                 ncbRecordViewList.get(rowIndex).setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
+                ncbRecordViewList.get(rowIndex).setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
 
                 if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
                     ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(true);
-                    monthly = 1000.00;
+
+                    for(int i=0;i<ncbRecordView.getMoneyPaymentViewList().size();i++)
+                    {
+                        log.info("ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment()   >> {} " , ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment());
+                        moneyTotal += " เดือนที่#"+ (i+1) + " : " +ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment();
+                        ncbRecordViewList.get(rowIndex).setMoneyTotal(moneyTotal);
+                    }
+
                 } else {
                     ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(false);
                 }
@@ -281,18 +328,26 @@ public class FullappNcb implements Serializable {
 
     }
 
-    public void onblurToGenMoneyOfmonthsPayment(){
+    public void onblurToGenMoneyOfmonthsPayment()
+    {
+        if( ncbRecordView.getMoneyPaymentViewList().size() > 0){
+            ncbRecordView.getMoneyPaymentViewList().removeAll(ncbRecordView.getMoneyPaymentViewList());
+        }
 
-//        log.info("  ncbRecordView.getNoOfmonthsPayment() >>>>  :  {}", ncbRecordView.getNoOfmonthsPayment());
-        log.info("  ncbRecordView.getNoOfmonthsPaymentList() >>>>  :  {}", ncbRecordView.getNoOfmonthsPaymentList());
+        log.info("  ncbRecordView.getNoOfmonthsPayment() >>>>  :  {}", ncbRecordView.getNoOfmonthsPayment());
 
+        if(ncbRecordView.getNoOfmonthsPayment() > 0){
+            genTextBoxFlag = true;
 
-//        if(ncbRecordView.getNoOfmonthsPayment() > 0){
-//            genTextBoxFlag=true;
-//        }
-//        else{
-//            genTextBoxFlag=false;
-//        }
+            for( int i = 0 ; i < ncbRecordView.getNoOfmonthsPayment() ; i++){
+                ncbRecordView.getMoneyPaymentViewList().add(new MoneyPaymentView());
+            }
+
+            log.info("ncbRecordView.getMoneyPaymentViewList().size():: {} " ,ncbRecordView.getMoneyPaymentViewList().size());
+        }
+        else{
+            genTextBoxFlag = false;
+        }
     }
 
     public boolean isGenTextBoxFlag() {
@@ -301,14 +356,6 @@ public class FullappNcb implements Serializable {
 
     public void setGenTextBoxFlag(boolean genTextBoxFlag) {
         this.genTextBoxFlag = genTextBoxFlag;
-    }
-
-    public double getMonthly() {
-        return monthly;
-    }
-
-    public void setMonthly(double monthly) {
-        this.monthly = monthly;
     }
 
     public List<AccountStatus> getAccountStatusList() {
@@ -413,5 +460,13 @@ public class FullappNcb implements Serializable {
 
     public void setSelectNcbRecordItem(NcbRecordView selectNcbRecordItem) {
         this.selectNcbRecordItem = selectNcbRecordItem;
+    }
+
+    public NcbResultView getNcbResultView() {
+        return ncbResultView;
+    }
+
+    public void setNcbResultView(NcbResultView ncbResultView) {
+        this.ncbResultView = ncbResultView;
     }
 }

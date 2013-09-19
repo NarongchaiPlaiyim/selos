@@ -46,3 +46,9 @@ function handleFullappNcbRequest(xhr, status, args) {
         ncbDlg.hide();
     }
 }
+
+function handleFullappTcgRequest(xhr, status, args) {
+    if(args.functionComplete){
+        tcgDlg.hide();
+    }
+}

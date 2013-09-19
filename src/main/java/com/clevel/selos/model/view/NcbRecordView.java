@@ -35,29 +35,74 @@ public class NcbRecordView {
     private String noOfOverLimit;
     private String refinanceFlag;
     private boolean monthsPaymentFlag;
-
-
     private AccountType accountType;
     private AccountStatus accountStatus;
     private SettlementStatus settlementStatus;
     private TDRCondition currentPayment;
     private TDRCondition historyPayment;
+    private List<MonthsPaymentView> noOfmonthsPaymentList;
+    private int noOfmonthsPayment;
+    private List<MoneyPaymentView> moneyPaymentViewList;
+    private String moneyTotal;
 
-    private List<Integer> noOfmonthsPaymentList;
-    private int   noOfmonthsPayment;
 
-    public NcbRecordView(){
-        noOfmonthsPaymentList = new ArrayList<Integer>();
-        for( int i = 1 ; i < 13 ; i++){
-            noOfmonthsPaymentList.add(i);
-        }
+    public NcbRecordView() {
+        reset();
     }
 
-    public List<Integer> getNoOfmonthsPaymentList() {
+    public void reset() {
+        this.isTMBAccount = "";
+        this.dateOfInfo = new Date();
+        this.accountOpenDate = new Date();
+        this.limit = new BigDecimal(0);
+        this.outstanding = new BigDecimal(0);
+        this.installment = new BigDecimal(0);
+        this.dateOfDebtRestructuring = new Date();
+        this.typeOfCurrentPayment = "";
+        this.typeOfHistoryPayment = "";
+        this.noOfOutstandingPaymentIn12months = "";
+        this.noOfOverLimit = "";
+        this.refinanceFlag = "";
+        this.monthsPaymentFlag = true;
+        this.accountType = new AccountType();
+        this.accountStatus = new AccountStatus();
+        this.settlementStatus = new SettlementStatus();
+        this.currentPayment = new TDRCondition();
+        this.historyPayment = new TDRCondition();
+        this.noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
+        this.noOfmonthsPayment = 0;
+        this.moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
+        this.moneyTotal = "";
+
+        noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
+        for (int i = 1; i < 13; i++) {
+            noOfmonthsPaymentList.add(new MonthsPaymentView(i));
+        }
+        moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
+
+    }
+
+    public String getMoneyTotal() {
+        return moneyTotal;
+    }
+
+    public void setMoneyTotal(String moneyTotal) {
+        this.moneyTotal = moneyTotal;
+    }
+
+    public List<MoneyPaymentView> getMoneyPaymentViewList() {
+        return moneyPaymentViewList;
+    }
+
+    public void setMoneyPaymentViewList(List<MoneyPaymentView> moneyPaymentViewList) {
+        this.moneyPaymentViewList = moneyPaymentViewList;
+    }
+
+    public List<MonthsPaymentView> getNoOfmonthsPaymentList() {
         return noOfmonthsPaymentList;
     }
 
-    public void setNoOfmonthsPaymentList(List<Integer> noOfmonthsPaymentList) {
+    public void setNoOfmonthsPaymentList(List<MonthsPaymentView> noOfmonthsPaymentList) {
         this.noOfmonthsPaymentList = noOfmonthsPaymentList;
     }
 
@@ -214,6 +259,7 @@ public class NcbRecordView {
         this.refinanceFlag = refinanceFlag;
     }
 
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -229,13 +275,15 @@ public class NcbRecordView {
                 .append("noOfOutstandingPaymentIn12months", noOfOutstandingPaymentIn12months)
                 .append("noOfOverLimit", noOfOverLimit)
                 .append("refinanceFlag", refinanceFlag)
-                .append("noOfmonthsPayment", noOfmonthsPayment)
                 .append("monthsPaymentFlag", monthsPaymentFlag)
                 .append("accountType", accountType)
                 .append("accountStatus", accountStatus)
                 .append("settlementStatus", settlementStatus)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
+                .append("noOfmonthsPaymentList", noOfmonthsPaymentList)
+                .append("noOfmonthsPayment", noOfmonthsPayment)
+                .append("moneyPaymentViewList", moneyPaymentViewList)
                 .toString();
     }
 }

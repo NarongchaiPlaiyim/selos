@@ -16,8 +16,6 @@ public class TUEFResponseModel {
     @XStreamImplicit(itemFieldName = "subject")
     private ArrayList<SubjectModel> subject = new ArrayList<SubjectModel>();
 
-    
-
     public TUEFResponseModel(Responsedata responsedata, TUEFResponseHeaderModel header ,ArrayList<SubjectModel> subject) {
         this.responsedata = responsedata;
         this.header = header;
