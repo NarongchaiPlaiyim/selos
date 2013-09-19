@@ -10,6 +10,7 @@ import com.clevel.selos.util.Util;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TranformIndividual implements Serializable{
@@ -31,11 +32,13 @@ public class TranformIndividual implements Serializable{
         customerInfoView.setCitizenId(individualModel.getCitizenID());
         customerInfoView.setFirstNameTh(individualModel.getFirstname());
         customerInfoView.setLastNameTh(individualModel.getLastname());
-        customerInfoView.setCustomerId(individualModel.getDocumentType());
-        customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
-//        customerInfoView.setCustomerEntity("");
         customerInfoView.setFirstNameEn(individualModel.getFirstnameEN());
         customerInfoView.setLastNameEn(individualModel.getLastnameEN());
+        customerInfoView.setCustomerId(individualModel.getDocumentType());
+//        customerInfoView.setDocumentType("");
+        customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
+        customerInfoView.setServiceSegment("");
+//        customerInfoView.setCustomerEntity("");
         customerInfoView.setSearchBy(0);
         customerInfoView.setSearchId("");
 //        customerInfoView.setBorrowerType("");
@@ -45,8 +48,11 @@ public class TranformIndividual implements Serializable{
         customerInfoView.setGender(Gender.MALE);
         customerInfoView.setAge(0);
 //        customerInfoView.setOrigin("");
+//        customerInfoView.setNationality("");
+//        customerInfoView.setEducation("");
 //        customerInfoView.setOccupation("");
 //        customerInfoView.setCitizenCountry("");
+//        customerInfoView.setRegistrationCountry("");
         customerInfoView.setMobileNumber("");
         customerInfoView.setFaxNumber("");
         customerInfoView.setEmail("");
@@ -57,14 +63,16 @@ public class TranformIndividual implements Serializable{
         customerInfoView.setReviewFlag(false);
         customerInfoView.setReason("");
         customerInfoView.setNumberOfChild(0);
-        customerInfoView.setNumberOfChild(0);
+        customerInfoView.setChildrenList(null);
 //        customerInfoView.setApproxIncome("");
 //        customerInfoView.setMaritalStatus("");
         customerInfoView.setRegistrationId("");
+        customerInfoView.setDateOfBirth(new Date());
         customerInfoView.setDateOfRegister(new Date());
 //        customerInfoView.setRelation("");
 //        customerInfoView.setReference("");
-
+        customerInfoView.setCollateralOwner(false);
+        customerInfoView.setPercentShare(new BigDecimal(0));
 
 
         //Workaddress
