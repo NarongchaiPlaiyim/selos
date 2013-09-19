@@ -99,12 +99,12 @@ public class CaseCreation implements WSCaseCreation {
             if(!ValidationUtil.isEqualRange(13,citizenId.length())){
                 return new CaseCreationResponse(2,"citizenId Invalid Lenght!");
             }
-            if(!ValidationUtil.isEqualRange(1,requestType)){
-                return new CaseCreationResponse(2,"requestType Invalid Lenght!");
-            }
-            if(!ValidationUtil.isEqualRange(1,customerType)){
-                return new CaseCreationResponse(2,"customerType Invalid Lenght!");
-            }
+//            if(!ValidationUtil.isEqualRange(1,requestType+"".length())){
+//                return new CaseCreationResponse(2,"requestType Invalid Lenght!");
+//            }
+//            if(!ValidationUtil.isEqualRange(1,customerType+"".length())){
+//                return new CaseCreationResponse(2,"customerType Invalid Lenght!");
+//            }
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
                 return new CaseCreationResponse(2,"bdmId Invalid Lenght!");
             }

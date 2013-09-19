@@ -34,6 +34,11 @@ public class IndividualModel implements Serializable {
     private String marriageStatus;
     private String nationality;
     private String numberOfChild;
+
+    private String titleEN;
+    private String firstnameEN;
+    private String lastnameEN;
+
     //spouse
     private Spouse spouse;
 
@@ -238,5 +243,32 @@ public class IndividualModel implements Serializable {
 
     public void setPersonalLists(List<IndividualPersonalList> personalLists) {
         this.personalLists = personalLists;
+    }
+
+    ////////////////
+
+
+    public String getLastnameEN() {
+        return lastnameEN;
+    }
+
+    public void setLastnameEN(String lastnameEN) {
+        this.lastnameEN = lastnameEN;
+    }
+
+    public String getTitleEN() {
+        return titleEN;
+    }
+
+    public void setTitleEN(String titleEN) {
+        this.titleEN = titleEN;
+    }
+
+    public String getFirstnameEN() {
+        return firstnameEN;
+    }
+
+    public void setFirstnameEN(String firstnameEN) {
+        this.firstnameEN = firstnameEN;
     }
 }

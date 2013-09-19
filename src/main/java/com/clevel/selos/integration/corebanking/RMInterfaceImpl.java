@@ -5,8 +5,10 @@ import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +24,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     @Inject
     RMService rmService;
+
+    @Inject
+    TranformIndividual tranformIndividual;
 
     @Inject
     @Config(name = "interface.rm.customerAccount.acronym")
@@ -65,15 +70,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         log.debug("RequestValue : {} ",searchIndividual.toString());
 
         IndividualModel individualModel = rmService.individualService(searchIndividual);
-        CustomerInfoView customerInfoView =new CustomerInfoView();
 
-        customerInfoView.setCitizenId(individualModel.getCitizenID());
-        customerInfoView.setFirstNameTh(individualModel.getFirstname());
-        customerInfoView.setLastNameTh(individualModel.getLastname());
-        customerInfoView.setCustomerId(individualModel.getDocumentType());
-//        customerInfoView.setDocumentExpiredDate(individualModel.getDocumentExpiredDate());
 
-        return customerInfoView;
+        return tranformIndividual.tranform(individualModel);
     }
 
     @Override

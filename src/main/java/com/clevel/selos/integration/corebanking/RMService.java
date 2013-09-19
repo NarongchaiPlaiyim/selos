@@ -167,7 +167,7 @@ public class RMService implements Serializable {
 
 
                 //Audit Data
-//                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime,linkKey);
+                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime,linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -189,19 +189,7 @@ public class RMService implements Serializable {
                     log.debug("=================================== {}",resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setDocumentExpiredDate(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setCusType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustType());
-                    // TelephoneType1 = M  move telephoneNumber1 to Mobile (1)
-                    if(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType1().equals("M")){
-
-                    }
-                    // TelephoneType1 = B  move telephoneNumber1 to Working Address- Contact Number move extension1 to Working Address - Ext Number
-                    if(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType1().equals("B")){
-                             resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().setTelephoneNbr1("");
-                             resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().setOffExtension1("");
-                    }
-                    // TelephoneType1 = R move telephoneNumber1 to  Personal Information- Home Number move extension1 to Personal Information - Ext Number
-                    if(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType1().equals("R")){
-
-                    }
+//
                     individualModel.setPhoneNo(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1());
                     individualModel.setExtension(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension1());
                     //
@@ -220,6 +208,9 @@ public class RMService implements Serializable {
                     individualModel.setOccupationCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getOccupationCode1());
                     individualModel.setBizCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusType1());
 
+                    individualModel.setTitleEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitleEng());
+                    individualModel.setFirstnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
+                    individualModel.setLastnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
                     //set HomeAddress
                     String homeAddressLine1[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
                     String homeAddressLine3[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
@@ -285,13 +276,13 @@ public class RMService implements Serializable {
             } else {
                 log.warn("resSearchIndividualCustomer : Null");
                 //Audit Data
-//                rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
+                rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
             }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
-//            rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+            rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
         }
         log.debug("IndividualService() END");
         return individualModel;
