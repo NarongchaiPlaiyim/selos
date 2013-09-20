@@ -68,6 +68,11 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         return entity;
     }
 
+    public T save(T entity) {
+        getSession().save(entity);
+        return entity;
+    }
+
     public void persist(List<T> entities) {
         for (T entity: entities) {
             getSession().saveOrUpdate(entity);

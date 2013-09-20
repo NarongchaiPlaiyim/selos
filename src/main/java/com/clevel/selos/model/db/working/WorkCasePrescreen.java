@@ -12,11 +12,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_case")
-public class WorkCase implements Serializable {
+@Table(name = "wrk_case_prescreen")
+public class WorkCasePrescreen implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CASE_ID", sequenceName = "SEQ_WRK_CASE_ID", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_ID")
+    @SequenceGenerator(name="SEQ_WRK_CASE_PRESCREEN_ID", sequenceName = "SEQ_WRK_CASE_PRESCREEN_ID", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_PRESCREEN_ID")
     @Column(name="id", nullable=false)
     private long id;
 
@@ -34,7 +34,7 @@ public class WorkCase implements Serializable {
     @JoinColumn(name="casestatus_id")
     private CaseStatus caseStatus;
 
-    @OneToMany(mappedBy="workCase")
+    @OneToMany(mappedBy="workCasePrescreen")
     private List<Customer> customerList;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,10 +48,6 @@ public class WorkCase implements Serializable {
     @OneToOne
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
-
-
-    public WorkCase() {
-    }
 
     public long getId() {
         return id;
@@ -127,16 +123,16 @@ public class WorkCase implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("caNumber", caNumber).
-                append("fnCaseId", fnCaseId).
-                append("workflowStep", workflowStep).
-                append("caseStatus", caseStatus).
-                append("customerList", customerList).
-                append("createDate", createDate).
-                append("modifyDate", modifyDate).
-                append("modifyBy", modifyBy).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("caNumber", caNumber)
+                .append("fnCaseId", fnCaseId)
+                .append("workflowStep", workflowStep)
+                .append("caseStatus", caseStatus)
+                .append("customerList", customerList)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

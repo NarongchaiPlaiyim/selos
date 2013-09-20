@@ -1,25 +1,33 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.PrescreenDAO;
+import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.integration.corebanking.model.CustomerInfo;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.service.PrescreenService;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -61,6 +69,9 @@ public class PrescreenMaker implements Serializable {
     //*** Result table List ***//
     private List<FacilityView> facilityViewList;
     private List<CustomerInfoView> customerInfoViewList;
+    private List<CustomerInfoView> borrowerInfoViewList;
+    private List<CustomerInfoView> guarantorInfoViewList;
+    private List<CustomerInfoView> relatedInfoViewList;
     private List<BusinessInfoView> businessInfoViewList;
     private List<CollateralView> proposeCollateralViewList;
 
@@ -78,6 +89,8 @@ public class PrescreenMaker implements Serializable {
 
     private CollateralView proposeCollateral;
     private CollateralView selectProposeCollateralItem;
+
+    private PrescreenView prescreenView;
 
     private String modeForButton;
     private int rowIndex;
@@ -114,6 +127,21 @@ public class PrescreenMaker implements Serializable {
     private NationalityDAO nationalityDAO;
     @Inject
     private MaritalStatusDAO maritalStatusDAO;
+    @Inject
+    private PrescreenDAO prescreenDAO;
+    @Inject
+    private WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    private WorkflowStepDAO workflowStepDAO;
+    @Inject
+    private CaseStatusDAO caseStatusDAO;
+    @Inject
+    private ProvinceDAO provinceDAO;
+    @Inject
+    private UserDAO userDAO;
+
+    @Inject
+    private PrescreenService prescreenService;
 
 
     public PrescreenMaker() {
@@ -166,48 +194,17 @@ public class PrescreenMaker implements Serializable {
 
         if(borrowerInfo == null){
             borrowerInfo = new CustomerInfoView();
-            borrowerInfo.setDocumentType(new DocumentType());
-            borrowerInfo.setCustomerEntity(new CustomerEntity());
-            borrowerInfo.setBorrowerType(new BorrowerType());   //TODO temporary to remove
-            borrowerInfo.setRelation(new Relation());
-            borrowerInfo.setReference(new Reference());
-            borrowerInfo.setTitleTh(new Title());
-            borrowerInfo.setOrigin(new Nationality());
-            borrowerInfo.setNationality(new Nationality());
-            borrowerInfo.setEducation(new Education());
-            borrowerInfo.setOccupation(new Occupation());
-            borrowerInfo.setMaritalStatus(new MaritalStatus());
-            borrowerInfo.setChildrenList(new ArrayList<ChildrenView>());
-            borrowerInfo.setCitizenCountry(new Country());
-            borrowerInfo.setRegistrationCountry(new Country());
-            borrowerInfo.setCurrentAddress(new AddressView());
-            borrowerInfo.setWorkAddress(new AddressView());
-            borrowerInfo.setRegisterAddress(new AddressView());
-            borrowerInfo.setMailingAddressType(new AddressType());
-            borrowerInfo.setKycLevel(new KYCLevel());
+            borrowerInfo.reset();
         }
 
         if(spouseInfo == null) {
             spouseInfo = new CustomerInfoView();
-            spouseInfo.setDocumentType(new DocumentType());
-            spouseInfo.setCustomerEntity(new CustomerEntity());
-            spouseInfo.setBorrowerType(new BorrowerType());   //TODO temporary to remove
-            spouseInfo.setRelation(new Relation());
-            spouseInfo.setReference(new Reference());
-            spouseInfo.setTitleTh(new Title());
-            spouseInfo.setOrigin(new Nationality());
-            spouseInfo.setNationality(new Nationality());
-            spouseInfo.setEducation(new Education());
-            spouseInfo.setOccupation(new Occupation());
-            spouseInfo.setMaritalStatus(new MaritalStatus());
-            spouseInfo.setChildrenList(new ArrayList<ChildrenView>());
-            spouseInfo.setCitizenCountry(new Country());
-            spouseInfo.setRegistrationCountry(new Country());
-            spouseInfo.setCurrentAddress(new AddressView());
-            spouseInfo.setWorkAddress(new AddressView());
-            spouseInfo.setRegisterAddress(new AddressView());
-            spouseInfo.setMailingAddressType(new AddressType());
-            spouseInfo.setKycLevel(new KYCLevel());
+            spouseInfo.reset();
+        }
+
+        if(prescreenView == null){
+            prescreenView = new PrescreenView();
+            prescreenView.reset();
         }
     }
 
@@ -331,13 +328,21 @@ public class PrescreenMaker implements Serializable {
         borrowerInfo = new CustomerInfoView();
         spouseInfo = new CustomerInfoView();
 
+        borrowerInfo.reset();
+        spouseInfo.reset();
     }
 
     public void onEditCustomerInfo() {
+        log.info("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
+
+        modeForButton = "edit";
 
     }
 
     public void onSaveCustomerInfo() {
+        log.info("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
+        //** validate form **//
+
 
     }
 
@@ -347,6 +352,15 @@ public class PrescreenMaker implements Serializable {
 
     public void onSearchCustomerInfo() {
 
+    }
+
+    public void onChangeCustomerEntity(){
+        log.info("onChangeCustomerEntity ::: Custoemr Entity : {}", borrowerInfo.getCustomerEntity().getId());
+        titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
+    }
+
+    public void onChangeMaritalStatus(){
+        log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
 
     // *** Function For BusinessInfoView *** //
@@ -484,6 +498,28 @@ public class PrescreenMaker implements Serializable {
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen(){
         //*** validate forms ***//
+        log.info("onSavePrescreen ::: prescreenView : {}", prescreenView);
+        Prescreen prescreen = new Prescreen();
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(new Long(1));
+        log.info("onSavePrescreen ::: sWorkcasePrescreen : {}", workCasePrescreen);
+        Province businessLocation = provinceDAO.findById(10);
+        log.info("onSavePrescreen ::: businessLocation : {}", businessLocation);
+        User user = userDAO.findById(new Long(1));
+        log.info("onSavePrescreen ::: user : {}", user);
+        prescreen.setWorkCasePrescreen(workCasePrescreen);
+        prescreen.setBusinessLocation(businessLocation);
+        prescreen.setCreateDate(new Date());
+        prescreen.setExpectedSubmitDate(prescreenView.getExpectedSubmitDate());
+        prescreen.setRefinance(prescreenView.isRefinance());
+        prescreen.setTcg(prescreenView.isTcg());
+        prescreen.setModifyBy(user);
+        prescreen.setModifyDate(DateTime.now().toDate());
+        prescreen.setCreateDate(DateTime.now().toDate());
+        prescreenService.save(prescreen);
+
+        /*Province province = provinceDAO.findById(11);
+        province.setName("testtest");
+        provinceDAO.persist(province);*/
 
     }
 
@@ -878,5 +914,37 @@ public class PrescreenMaker implements Serializable {
 
     public void setSelectCustomerInfoItem(CustomerInfoView selectCustomerInfoItem) {
         this.selectCustomerInfoItem = selectCustomerInfoItem;
+    }
+
+    public PrescreenView getPrescreenView() {
+        return prescreenView;
+    }
+
+    public void setPrescreenView(PrescreenView prescreenView) {
+        this.prescreenView = prescreenView;
+    }
+
+    public List<CustomerInfoView> getBorrowerInfoViewList() {
+        return borrowerInfoViewList;
+    }
+
+    public void setBorrowerInfoViewList(List<CustomerInfoView> borrowerInfoViewList) {
+        this.borrowerInfoViewList = borrowerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getGuarantorInfoViewList() {
+        return guarantorInfoViewList;
+    }
+
+    public void setGuarantorInfoViewList(List<CustomerInfoView> guarantorInfoViewList) {
+        this.guarantorInfoViewList = guarantorInfoViewList;
+    }
+
+    public List<CustomerInfoView> getRelatedInfoViewList() {
+        return relatedInfoViewList;
+    }
+
+    public void setRelatedInfoViewList(List<CustomerInfoView> relatedInfoViewList) {
+        this.relatedInfoViewList = relatedInfoViewList;
     }
 }

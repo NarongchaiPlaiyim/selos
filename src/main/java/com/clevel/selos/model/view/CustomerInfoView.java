@@ -61,9 +61,10 @@ public class CustomerInfoView implements Serializable {
     private boolean ewsFlag;
     private boolean reviewFlag;
     private String reason;
+    private CustomerInfoView spouse;
 
     public CustomerInfoView(){
-        reset();
+        //reset();
     }
 
     public void reset(){
@@ -115,6 +116,7 @@ public class CustomerInfoView implements Serializable {
         this.ewsFlag = false;
         this.reviewFlag = false;
         this.reason = "";
+        this.spouse = new CustomerInfoView();
     }
 
     public BigDecimal getId() {
@@ -499,6 +501,14 @@ public class CustomerInfoView implements Serializable {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public CustomerInfoView getSpouse() {
+        return spouse;
+    }
+
+    public void setSpouse(CustomerInfoView spouse) {
+        this.spouse = spouse;
     }
 
     @Override

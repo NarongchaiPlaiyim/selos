@@ -21,6 +21,19 @@ $(document).ready(function() {
     })
 });
 
+function removeWindowsScrollbar(){
+    $("body").attr("style","overflow-y: hidden");
+}
+function showWindowsScrollbar(){
+    $("body").attr("style","overflow-y: scroll");
+}
+
+function handlePrescreenCustomerInfoRequest(xhr, status, args) {
+    if(args.functionComplete){
+        customerDlg.hide();
+    }
+}
+
 function handlePrescreenFacilityRequest(xhr, status, args) {
     if(args.functionComplete){
         facilityDlg.hide();
