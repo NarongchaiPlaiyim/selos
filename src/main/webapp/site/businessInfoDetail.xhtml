@@ -39,7 +39,7 @@
                         <tr>
                             <td class="title" style="width: 250px"> <h:outputText value="#{msg.get('app.businessInfoDetail')}"/> : </td>
                             <td colspan="5">
-                                <p:inputText styleClass="width: 400px;" value=""/>
+                                <p:inputText styleClass="width: 400px;" value="#{businessInfoDetail.bizInfoFullApp.businessInfoDetail}"/>
                             </td>
                         </tr>
                         <tr>
@@ -87,21 +87,21 @@
                             <td class="title"><h:outputText value="#{msg.get('app.bizCode')}"/> : </td>
                             <td style="width: 200px"><p:inputText styleClass="large" value=""/></td>
                             <td class="title" style="width: 100px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> : </td>
-                            <td><p:inputText styleClass="medium" value=""/></td>
+                            <td><p:inputText styleClass="medium" value="#{businessInfoDetail.bizInfoFullApp.incomeFactor}"/></td>
                             <td class="title" style="width: 220px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/> :</td>
-                            <td><p:inputText styleClass="medium" value=""/></td>
+                            <td><p:inputText styleClass="medium" value="#{businessInfoDetail.bizInfoFullApp.adjustedIncomeFactior}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.comment')}"/> </td>
-                            <td colspan="5"><p:inputText styleClass="width: 400px;" value=""/></td>
+                            <td colspan="5"><p:inputText styleClass="width: 400px;" value="#{businessInfoDetail.bizInfoFullApp.comment}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.percentBusiness')}"/> : </td>
-                            <td colspan="5"><p:inputText styleClass="small" value="##.00"/></td>
+                            <td colspan="5"><p:inputText styleClass="small" value="#{businessInfoDetail.bizInfoFullApp.percentBusiness}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizPermission')}"/> : </td>
-                            <td colspan="5" class="title"><input type="radio" value="N" name="bizPermission" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
+                            <td colspan="5" class="title"><input type="radio" value="#{businessInfoDetail.bizInfoFullApp.bizPermission}" name="bizPermission" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
                         </tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
@@ -447,56 +447,56 @@
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardAccountReceivable')}"/>  </td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardAccountReceivable}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardAccountPayable')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardAccountPayable}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardStock')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardStock }"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.averagePurchaseAmount')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.averagePayableAmount')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.averagePayableAmount}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockDurationBDM')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockDurationBDM}"/></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentCash')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentCash')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockDurationUW')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockDurationUW}"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentCredit')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCredit}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentCredit')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentCredit}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockValueBDM')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockValueBDM}"/></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentLocal')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentLocal}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentLocal')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentLocal}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockValueUW')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockValueUW}"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentForeign')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentForeign}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentForeign')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentForeign}"/></td>
                                         <td colspan="2" style="width: 250px;line-height: 15px"></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchaseTerm')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchaseTerm}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payableTerm')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payableTerm}"/></td>
                                         <td colspan="2" style="width: 250px;line-height: 15px"></td>
                                     </tr>
                                     <tr style="background-color: #efefef">

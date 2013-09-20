@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.BizInfoFullView;
 import com.clevel.selos.model.view.BizProductView;
 import com.clevel.selos.model.view.StakeholderView;
 import com.clevel.selos.system.message.Message;
@@ -33,8 +34,6 @@ public class BusinessInfoDetailMaker implements Serializable {
     @Inject
     Message msg;
 
-
-
     private String stakeType;
     private BigDecimal supplierVolumnSum1;
     private BigDecimal supplierVolumnSum2;
@@ -60,6 +59,8 @@ public class BusinessInfoDetailMaker implements Serializable {
     private List<BusinessDescription> businessDescriptionList;
     private StakeholderView stakeholderTemp;
     private StakeholderView selectStakeholer;
+
+    private BizInfoFullView bizInfoFullApp;
 
     @Inject
     Logger log;
@@ -147,9 +148,11 @@ public class BusinessInfoDetailMaker implements Serializable {
     }
 
     public void onAddStakeholderView(){
-        stakeholderView = new StakeholderView();
-        onSetLabelStakeholder();
+        log.info("onAddStakeholderView >>> label is  " + stakeType );
         modeForButton = "add";
+        onSetLabelStakeholder();
+        stakeholderView = new StakeholderView();
+
     }
 
     public void onEditStakeholderView() {
@@ -160,6 +163,7 @@ public class BusinessInfoDetailMaker implements Serializable {
     }
 
     private void onSetLabelStakeholder(){
+        log.info("onSetLabelStakeholder >>> label is  " + stakeType );
 
         if(stakeType.equalsIgnoreCase("supplier")){
             dlgStakeName = msg.get("app.supplierName");
@@ -441,5 +445,13 @@ public class BusinessInfoDetailMaker implements Serializable {
 
     public void setStakeType(String stakeType) {
         this.stakeType = stakeType;
+    }
+
+    public BizInfoFullView getBizInfoFullApp() {
+        return bizInfoFullApp;
+    }
+
+    public void setBizInfoFullApp(BizInfoFullView bizInfoFullApp) {
+        this.bizInfoFullApp = bizInfoFullApp;
     }
 }
