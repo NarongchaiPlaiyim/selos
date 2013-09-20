@@ -68,9 +68,7 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        CustomerInfoView customerInfoView ;
-        //callservice
-        customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
                          searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
 
 
@@ -85,38 +83,11 @@ public class TestService implements Serializable{
 
     public void corporate() throws Exception {
 
-        corporateModel=new CorporateModel();
-        corporateModel = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(), searchIndividual.getType(),
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(), searchIndividual.getType(),
                 searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
-        //showData
-//        StringBuffer result=new StringBuffer();
-//        result.append("==================== Corporate Data Demo ===================");
-//        result.append("\n responseCode : "+ corporateModel.getResCode());
-//        result.append("\n responseDesc : "+ corporateModel.getResDesc());
-//        result.append("\n searchResult : "+ corporateModel.getSearchResult());
-//
-//        result.append("\n\n ===== personal Detail Section =====");
-//        result.append("\n title : "+ corporateModel.getTitle());
-//        result.append("\n custNbr : "+ corporateModel.getCustNbr());
-//        result.append("\n citizenId : "+ corporateModel.getCitizenId());
-//        result.append("\n thaiName1 : "+ corporateModel.getThaiName1());
-//        result.append("\n cId : "+ corporateModel.getcId());
-//        result.append("\n estDate : "+ corporateModel.getEstDate());
-//        result.append("\n\n ===== personal List Section =====");
-//
-//        if(corporateModel.getPersonalList()!=null ){
-//            result.append("\n personalListSize : "+ corporateModel.getPersonalList().size());
-//            for(int i=0;i< corporateModel.getPersonalList().size();i++){
-//                result.append("\n custNbr1 : "+ corporateModel.getPersonalList().get(i).getCustNbr1());
-//                result.append("\n cId1 : "+ corporateModel.getPersonalList().get(i).getcId1());
-//                result.append("\n citizenId1 : "+ corporateModel.getPersonalList().get(i).getCitizenId1());
-//                result.append("\n title1 : "+ corporateModel.getPersonalList().get(i).getTitle1());
-//            }
-//        }else{
-//            result.append("\n personalListSize : null");
-//        }
-//
-//        printDetail=result.toString();
+
+
+        printDetail=customerInfoView.toString();
     }
 
     public void customerAccount() throws Exception {

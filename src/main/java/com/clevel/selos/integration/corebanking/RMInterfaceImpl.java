@@ -29,6 +29,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     TranformIndividual tranformIndividual;
 
     @Inject
+    TranformCorporate tranformCorporate;
+
+    @Inject
     @Config(name = "interface.rm.customerAccount.acronym")
     String acronym;
 
@@ -76,7 +79,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CorporateModel getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
         log.debug("getCorporateInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -89,7 +92,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setRadSelectSearch("card");
         log.debug("requestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.corporateService(searchIndividual);
-        return corporateModel;
+
+        return tranformCorporate.tranform(corporateModel);
     }
 
     @Override

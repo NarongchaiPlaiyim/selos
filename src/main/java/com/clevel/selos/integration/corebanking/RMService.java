@@ -8,6 +8,7 @@ import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporatePersonalList;
+import com.clevel.selos.model.RMmodel.corporateInfo.RegistrationAddress;
 import com.clevel.selos.model.RMmodel.individualInfo.ContactDetails;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
 import com.clevel.selos.model.RMmodel.individualInfo.Spouse;
@@ -323,109 +324,105 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("017"));
         }
         log.debug("Validate Pass!");
-//        com.tmb.sme.data.requestsearchcorporatecustomer.Header header = new com.tmb.sme.data.requestsearchcorporatecustomer.Header();
-//        header.setReqID(searchIndividual.getReqId());
+        com.tmb.sme.data.requestsearchcorporatecustomer.Header header = new com.tmb.sme.data.requestsearchcorporatecustomer.Header();
+        header.setReqID(searchIndividual.getReqId());
+
+        com.tmb.sme.data.requestsearchcorporatecustomer.Body body = new com.tmb.sme.data.requestsearchcorporatecustomer.Body();
+        body.setCustType(searchIndividual.getCustType());
+        body.setType(searchIndividual.getType());
+        body.setCustId(searchIndividual.getCustId());
+        body.setCustNbr(searchIndividual.getCustNbr());
+        body.setCustName(searchIndividual.getCustName());
+        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
+
+        ReqSearchCorporateCustomer reqSearch = new ReqSearchCorporateCustomer();
+        reqSearch.setHeader(header);
+        reqSearch.setBody(body);
+        //actionDesc
+        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
 //
-//        com.tmb.sme.data.requestsearchcorporatecustomer.Body body = new com.tmb.sme.data.requestsearchcorporatecustomer.Body();
-//        body.setCustType(searchIndividual.getCustType());
-//        body.setType(searchIndividual.getType());
-//        body.setCustId(searchIndividual.getCustId());
-//        body.setCustNbr(searchIndividual.getCustNbr());
-//        body.setCustName(searchIndividual.getCustName());
-//        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
-//
-//        ReqSearchCorporateCustomer reqSearch = new ReqSearchCorporateCustomer();
-//        reqSearch.setHeader(header);
-//        reqSearch.setBody(body);
-//        //actionDesc
-//        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
-//
-//        //requestTime
-//        Date requestTime = new Date();
-//        String linkKey=Util.getLinkKey("userId");
-//        log.debug("LinkKey : {}",linkKey);
-//        log.debug("============================ Request ==============================");
-//        log.debug("requestServiceTime : {}", new Date());
-//        log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
-//        log.debug("requestBodyData : {}", reqSearch.getBody().toString());
-//        try {
-//            ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
-//            if (resSearchCorporateCustomer != null) {
-//                //responseTime
-//                Date responseTime = new Date();
-//                log.debug("============================ Response ==============================");
-//                log.debug("responseServiceTime : {}", new Date());
-//                log.debug("responseHeaderData : {}", resSearchCorporateCustomer.getHeader().toString());
-//                log.debug("responseBodyData : {}", resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
-//                corporateModel = new CorporateModel();
-//                corporateModel.setResCode(resSearchCorporateCustomer.getHeader().getResCode());
-//                corporateModel.setResDesc(resSearchCorporateCustomer.getHeader().getResDesc());
-//
-//                //Audit Data
+        //requestTime
+        Date requestTime = new Date();
+        String linkKey=Util.getLinkKey("userId");
+        log.debug("LinkKey : {}",linkKey);
+        log.debug("============================ Request ==============================");
+        log.debug("requestServiceTime : {}", new Date());
+        log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
+        log.debug("requestBodyData : {}", reqSearch.getBody().toString());
+        try {
+            ResSearchCorporateCustomer resSearchCorporateCustomer = callServiceCorporate(reqSearch);
+            if (resSearchCorporateCustomer != null) {
+                //responseTime
+                Date responseTime = new Date();
+                log.debug("============================ Response ==============================");
+                log.debug("responseServiceTime : {}", new Date());
+                log.debug("responseHeaderData : {}", resSearchCorporateCustomer.getHeader().toString());
+                log.debug("responseBodyData : {}", resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
+
+
+                //Audit Data
 //                rmAuditor.add("userId", "corporateService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
-//
-//                //Check Success
-//                log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
-//                if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
-//                    corporateModel.setSearchResult(resSearchCorporateCustomer.getBody().getSearchResult());
-//                    //checkSearchResult
-//                    if (corporateModel.getSearchResult().equals("CL")) {
-//                        throw new ValidationException(validationMsg.get("007"));
-//                    }
-//                    //personal detail session
-//                    corporateModel.setTitle(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
-//                    corporateModel.setCustNbr(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
-//                    corporateModel.setThaiName1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1());
+
+                //Check Success
+                log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
+                if (resSearchCorporateCustomer.getHeader().getResCode().equals("0000")) {
+                    corporateModel = new CorporateModel();
+                    //checkSearchResult
+                    if (resSearchCorporateCustomer.getBody().getSearchResult().equals("CL")) {
+                        throw new ValidationException(validationMsg.get("007"));
+                    }
+                    //personal detail session
+                    corporateModel.setTitleTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
+                    corporateModel.setTmbCusID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
+                    corporateModel.setCompanyNameTH1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1());
 //                    corporateModel.setcId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
-//                    corporateModel.setCitizenId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
-//                    corporateModel.setEstDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
-//
-//                    //personal list session
-//                    if (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection() != null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList() != null &&
-//                            resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size() > 0)) {
-//                        int corporateListSize = resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().size();
-//
-//                        CorporatePersonalList corporatePersonalList = null;
-//                        List<CorporatePersonalList> list = new ArrayList<CorporatePersonalList>();
-//                        if (corporateListSize != 0) {
-//                            for (int i = 0; i < corporateListSize; i++) {
-//                                corporatePersonalList = new CorporatePersonalList();
-//                                corporatePersonalList.setCustNbr1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCustNbr1());
-//                                corporatePersonalList.setcId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCId1());
-//                                corporatePersonalList.setCitizenId1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getCitizenCId1());
-//                                corporatePersonalList.setTitle1(resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList().get(i).getTitle1());
-//
-//                                list.add(corporatePersonalList);
-//                            }
-//                            corporateModel.setPersonalList(list);
-//                        }
-//                    }
-//                    log.debug("responseCode: {}", corporateModel.getResCode());
-//                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
-//                    throw new ValidationException(exceptionMsg.get("501"));
-//                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-//                    log.debug("Data Not Found!");
-//                    List<CorporatePersonalList> listModelList = new ArrayList<CorporatePersonalList>();
-//                    CorporatePersonalList corporatePersonalList = new CorporatePersonalList();
-//                    listModelList.add(corporatePersonalList);
-//                    corporateModel.setPersonalList(listModelList);
-//
-//
-//                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
-//                    throw new ValidationException(exceptionMsg.get("502"));
-//                }  //check null
-//            } else {
-//                log.warn(" resSearchCorporateCustomer : Null");
-//                //Audit Data
+                    corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
+                    corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
+                    corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
+                    corporateModel.setSubdistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon());
+                    corporateModel.setDistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper());
+                    corporateModel.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity());
+                    corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
+                    corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
+                    corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
+
+                    RegistrationAddress registrationAddress=new RegistrationAddress();
+                    registrationAddress.setSubdistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon());
+                    registrationAddress.setDistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper());
+                    registrationAddress.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity2());
+                    registrationAddress.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry2());
+                    registrationAddress.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode2());
+//                    registrationAddress.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIs);
+                    registrationAddress.setPhoneNo(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTelephoneNumber1());
+                    registrationAddress.setExtension(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getExtension1());
+                    registrationAddress.setContactName(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getContactPerson());
+                    registrationAddress.setContactPhoneNo(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTelephoneNbr());
+
+
+                    corporateModel.setRegistrationAddress(registrationAddress);
+
+                    log.debug("responseCode: {}", resSearchCorporateCustomer.getHeader().getResCode());
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
+                    throw new ValidationException(exceptionMsg.get("501"));
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
+                    log.debug("Data Not Found!");
+                    corporateModel=new CorporateModel();
+
+                } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
+                    throw new ValidationException(exceptionMsg.get("502"));
+                }  //check null
+            } else {
+                log.warn(" resSearchCorporateCustomer : Null");
+                //Audit Data
 //                rmAuditor.add("userid", "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            log.error("Exception :{}", e.getMessage());
-//            //Audit Data
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Exception :{}", e.getMessage());
+            //Audit Data
 //            rmAuditor.add("userid", "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-//        }
-//        log.debug("CorporateService() END");
+        }
+        log.debug("CorporateService() END");
         return corporateModel;
     }
 

@@ -65,7 +65,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CorporateModel getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateModel corporateModel = new CorporateModel();
@@ -103,7 +103,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 //            }
 //            log.debug("responseCode: {}", corporateModel.getResCode());
 
-        return corporateModel;
+        return null;
     }
 
     @Override
