@@ -8,7 +8,7 @@ import com.clevel.selos.model.db.master.TCGCollateralType;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "rel_potential_tcgcollateralQ")
+@Table(name = "rel_potential_tcgcollateral")
 public class PotentialColToTCGCol {
     @Id
     @Column(name = "id")

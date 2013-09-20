@@ -21,6 +21,19 @@ $(document).ready(function() {
     })
 });
 
+function removeWindowsScrollbar(){
+    $("body").attr("style","overflow-y: hidden");
+}
+function showWindowsScrollbar(){
+    $("body").attr("style","overflow-y: scroll");
+}
+
+function handlePrescreenCustomerInfoRequest(xhr, status, args) {
+    if(args.functionComplete){
+        customerDlg.hide();
+    }
+}
+
 function handlePrescreenFacilityRequest(xhr, status, args) {
     if(args.functionComplete){
         facilityDlg.hide();
@@ -39,11 +52,15 @@ function handlePrescreenProposeCreditRequest(xhr, status, args) {
     }
 }
 
-
-
 function handleFullappNcbRequest(xhr, status, args) {
     if(args.functionComplete){
         ncbDlg.hide();
+    }
+}
+
+function handleFullappBizProductRequest(xhr, status, args) {
+    if(args.functionComplete){
+        bizProductViewDlg.hide();
     }
 }
 

@@ -18,7 +18,7 @@ public class Title implements Serializable {
     private String titleTh;
     @Column(name = "titleEn")
     private String titleEn;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="customerEntity_id")
     private CustomerEntity customerEntity;
     @Column(name = "active")

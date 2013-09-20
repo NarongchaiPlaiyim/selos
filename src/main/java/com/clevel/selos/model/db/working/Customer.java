@@ -23,6 +23,10 @@ public class Customer implements Serializable {
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
+    @ManyToOne
+    @JoinColumn(name="workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
     @OneToOne
     @JoinColumn(name="customertype_id")
     private CustomerEntity customerEntity;

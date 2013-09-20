@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
