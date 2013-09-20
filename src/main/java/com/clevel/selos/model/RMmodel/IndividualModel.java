@@ -1,5 +1,8 @@
 package com.clevel.selos.model.RMmodel;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,5 +104,22 @@ public class IndividualModel implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqId", reqId)
+                .append("resCode", resCode)
+                .append("resDesc", resDesc)
+                .append("searchResult", searchResult)
+                .append("lastPageFlag", lastPageFlag)
+                .append("title", title)
+                .append("custId", custId)
+                .append("name", name)
+                .append("telephone1", telephone1)
+                .append("personalLists", personalLists)
+                .toString();
     }
 }

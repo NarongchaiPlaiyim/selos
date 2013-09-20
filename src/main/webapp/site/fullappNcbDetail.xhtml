@@ -56,32 +56,17 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <select class="smaller" disabled="disabled">
-            <option>7</option>
-        </select>
-        <p:spacer width="2" height="0"/>
-        <select class="smaller" disabled="disabled">
-            <option>ก.พ.</option>
-        </select>
-        <p:spacer width="2" height="0"/>
-        <select class="smaller" disabled="disabled">
-            <option>2556</option>
-        </select>
+        <p:inputText value="#{fullappNcb.ncbResultView.ncbCheckingDate}" id="checkingDate"  disabled="true"/>
     </td>
 </tr>
+
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <select class="smaller" disabled="disabled">
-            <option>2</option>
-        </select>
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        <p:inputText value="#{fullappNcb.ncbResultView.noOfNCBCheckIn6months}"   disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -90,7 +75,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <input type="text" value="P" class="larger" disabled="disabled"/>
+        <p:inputText  value="#{fullappNcb.ncbResultView.paymentClass}"   disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -99,11 +84,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:inputText value="ไม่ค้างชำระหรือค้างชำระ 0-30 วัน" disabled="true"></h:inputText>
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        <p:inputText  value="#{fullappNcb.ncbResultView.typeOfCurrentPayment}"   disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -112,11 +93,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:inputText value="ไม่ค้างชำระหรือค้างชำระ 0-30 วัน" disabled="true"></h:inputText>
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        <p:inputText  value="#{fullappNcb.ncbResultView.typeOfHistoryPayment}"  disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -125,12 +102,10 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <input type="radio" name="isNPL" value="Y"/> Yes
-        <input type="radio" name="isNPL" value="N"/> No.
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.nplFlag}"   disabled="true" >
+            <f:selectItem itemLabel="Yes" itemValue="Y"/>
+            <f:selectItem itemLabel="No" itemValue="N"/>
+        </h:selectOneRadio>
     </td>
 </tr>
 <tr>
@@ -139,12 +114,10 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <input type="radio" name="isTDR" value="Y"/> Yes
-        <input type="radio" name="isTDR" value="N"/> No.
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        <h:selectOneRadio id="TDRFlag" value="#{fullappNcb.ncbResultView.tdrFlag}"   disabled="true" >
+            <f:selectItem itemLabel="Yes" itemValue="Y"/>
+            <f:selectItem itemLabel="No" itemValue="N"/>
+        </h:selectOneRadio>
     </td>
 </tr>
 <tr>
@@ -153,29 +126,28 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
+        <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>
+<!--       <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
                             value="#{fullappNcb.ncbRecordView.settlementStatus.id}" disabled="true">
             <f:selectItems value="#{fullappNcb.settlementStatusList}"
                            var="dlgSettlementStatusList"
                            itemLabel="#{dlgSettlementStatusList.name}"
                            itemValue="#{dlgSettlementStatusList.id}"/>
 
-        </h:selectOneListbox>
-
-        <div style="width: 90px;height: 20px; line-height:20px;display: inline-block"
-             class="result_green center">GREEN
-        </div>
+        </h:selectOneListbox>-->
     </td>
 </tr>
 <tr>
     <td style="vertical-align: top" class="title">
         <h:outputText value="#{msg.get('app.remark')}"/>
     </td>
-    <td><h:inputTextarea cols="60" rows="3" name="remark" disabled="true"/></td>
+    <td>
+        <p:inputTextarea cols="60" rows="3" name="remark" value="#{fullappNcb.ncbResultView.remark}" disabled="true"/>
+    </td>
 </tr>
 <tr>
     <td colspan="100%">
-        <div class="separate"><!-- --></div>
+        <div class="separate"></div>
     </td>
 </tr>
 <tr>
@@ -314,8 +286,8 @@
 
                             <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
                                 <p:row>
-                                    <p:column colspan="4"  style="text-align: right" footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
-                                    <p:column colspan="12" style="text-align: left"  footerText="#{msg.get('app.monthNo1')} : #{fullappNcb.monthly} #{msg.get('app.monthNo2')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo3')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo4')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo5')} : #{fullappNcb.monthly}  #{msg.get('app.monthNo6')} : #{fullappNcb.monthly}"></p:column>
+                                    <p:column colspan="4"  style="text-align: center" footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
+                                    <p:column colspan="12" style="text-align: left"  footerText="#{item.moneyTotal}"></p:column>
                                 </p:row>
                             </p:columnGroup>
 

@@ -53,6 +53,9 @@ public class TransactionModel {
     @XStreamAlias("tuefresponse")
     private TUEFResponseModel tuefresponse;
 
+    @XStreamAlias("tueferror")
+    private TUEFErrorModel tueferror;
+
     public TransactionModel(String trackingid, String user, String transactiondate, String mediacode, String disputeenquiry, IdModel id, NameModel name, String enquirypurpose, String enquirymount, String consent, String memberref, String enquirydate, String responsedate, TUEFEnquiryModel tuefenquiry, TUEFResponseModel tuefresponse) {
         this.trackingid = trackingid;
         this.user = user;

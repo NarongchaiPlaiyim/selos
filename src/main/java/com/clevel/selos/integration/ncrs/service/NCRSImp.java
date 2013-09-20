@@ -79,7 +79,7 @@ public class NCRSImp implements NCRS, Serializable{
 
     @Override
     public NCRSResponseModel requestOnline(NCRSModel ncrsModel) throws Exception {
-        if (null==ncrsModel) throw new ValidationException(message.get("validation.101"));
+        if (null==ncrsModel) throw new ValidationException(message.get("101"));
 
         String userId = "userId";
         StringBuilder stringBuilder = null;
