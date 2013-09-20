@@ -21,8 +21,12 @@ public class CorporateModel implements Serializable{
     //Personal Detail Section
     private String tmbCusID;
     private String titleTH;
-    private String companyNameTH;
-    private String companyNameEN;
+    private String companyNameTH1;
+    private String companyNameTH2;
+    private String companyNameTH3;
+    private String companyNameEN1;
+    private String companyNameEN2;
+    private String companyNameEN3;
     private String registrationID;
     private String registrationDate;
     private String registrationCountry;

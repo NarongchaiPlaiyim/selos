@@ -76,6 +76,10 @@ public class TestService implements Serializable{
 
 
         printDetail=customerInfoView.toString();
+        printDetail+=customerInfoView.getWorkAddress().toString();
+        printDetail+=customerInfoView.getCurrentAddress().toString();
+        printDetail+=customerInfoView.getRegisterAddress().toString();
+
     }
 
 

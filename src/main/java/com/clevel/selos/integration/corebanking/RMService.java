@@ -167,7 +167,7 @@ public class RMService implements Serializable {
 
 
                 //Audit Data
-                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime,linkKey);
+//                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime,linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -276,13 +276,13 @@ public class RMService implements Serializable {
             } else {
                 log.warn("resSearchIndividualCustomer : Null");
                 //Audit Data
-                rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
+//                rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
             }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+//            rmAuditor.add("userid", "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
         }
         log.debug("IndividualService() END");
         return individualModel;
