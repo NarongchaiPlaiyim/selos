@@ -1,6 +1,7 @@
 package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
@@ -26,14 +27,10 @@ public class CaseCreation implements WSCaseCreation {
 
     @Inject
     @ValidationMessage
-    Message validationMsg;
+    Message msg;
 
     @Inject
     public CaseCreation() {
-    }
-    @PostConstruct
-    public void onCreate(){
-
     }
 
     @Override
@@ -75,7 +72,7 @@ public class CaseCreation implements WSCaseCreation {
         try {
             //validate duplicate CA
             if (caseCreationHistoryDAO.isExist(caNumber)) {
-                return new CaseCreationResponse(2,"Duplicate CA found in system!");
+                return new CaseCreationResponse(2,msg.get("051"));
             }
 
             //validate all input parameter
@@ -178,13 +175,13 @@ public class CaseCreation implements WSCaseCreation {
             //all validation passed including new case creation in BPM.
             CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
                     bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
-                    accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,"SUCCEED","");
+                    accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now, IntegrationStatus.SUCCESS,"","REF001");
             wsDataPersist.addNewCase(caseCreationHistory);
 
             // return succeed
-            caseCreationResponse = new CaseCreationResponse(0,"Create new case success.");
+            caseCreationResponse = new CaseCreationResponse(0,"Create new case success.","REF001");
         } catch (Exception e) {
-            log.error("Exception while creating new case!.",e);
+            log.error("Exception while creating new case!",e);
             caseCreationResponse = new CaseCreationResponse(12,"System exception!");
         }
 

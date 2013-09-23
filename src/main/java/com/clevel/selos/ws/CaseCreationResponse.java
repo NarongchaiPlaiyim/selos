@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class CaseCreationResponse {
     int code;
     String message;
+    String appRefNumber;
 
     public CaseCreationResponse() {
     }
@@ -13,6 +14,12 @@ public class CaseCreationResponse {
     public CaseCreationResponse(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    public CaseCreationResponse(int code, String message, String appRefNumber) {
+        this.code = code;
+        this.message = message;
+        this.appRefNumber = appRefNumber;
     }
 
     public int getCode() {
@@ -31,11 +38,20 @@ public class CaseCreationResponse {
         this.message = message;
     }
 
+    public String getAppRefNumber() {
+        return appRefNumber;
+    }
+
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("code", code).
                 append("message", message).
+                append("appRefNumber", appRefNumber).
                 toString();
     }
 }
