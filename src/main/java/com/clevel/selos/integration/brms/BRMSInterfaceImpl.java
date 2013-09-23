@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.test;
+package com.clevel.selos.integration.brms;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
@@ -7,22 +7,24 @@ import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
+import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
-import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Alternative
-public class BRMInterfaceImplTest implements BRMSInterface{
+@Default
+public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     @Inject
     @BRMS
     Logger log;
 
     @Inject
-    public BRMInterfaceImplTest() {
+    public BRMSInterfaceImpl() {
     }
 
     @Override
@@ -35,19 +37,25 @@ public class BRMInterfaceImplTest implements BRMSInterface{
 
         List<PreScreenResponse> preScreenResponseList = new ArrayList<PreScreenResponse>();
 
-        GroupResultData groupResultData = new GroupResultData();
-        groupResultData.setColor(RuleColorResult.RED);
-        groupResultData.setDeviationFlag("No Deviation");
-        groupResultData.setRejectGroupCode("P");
-
         PreScreenResponse preScreenResponse = new PreScreenResponse();
         preScreenResponse.setRuleName("Group_Result_Final_AppLevel");
-        preScreenResponse.setRuleOrder("3010");
-        preScreenResponse.setBorrowerResult(false);
-        preScreenResponse.setGroupResult(true);
-        preScreenResponse.setGroupResultData(groupResultData);
-
+        preScreenResponse.setRuleOrder("2010");
+        preScreenResponse.setType("Group Result");
+        preScreenResponse.setPersonalId("");
+        preScreenResponse.setColor(RuleColorResult.GREEN);
+        preScreenResponse.setDeviationFlag("No Deviation");
+        preScreenResponse.setRejectGroupCode("P");
         preScreenResponseList.add(preScreenResponse);
+
+        PreScreenResponse preScreenResponse2 = new PreScreenResponse();
+        preScreenResponse2.setRuleName("Decision_Matrix_NCB_DB");
+        preScreenResponse2.setRuleOrder("1010");
+        preScreenResponse2.setType("");
+        preScreenResponse2.setPersonalId("1234567890123");
+        preScreenResponse2.setColor(RuleColorResult.RED);
+        preScreenResponse2.setDeviationFlag("");
+        preScreenResponse2.setRejectGroupCode("");
+        preScreenResponseList.add(preScreenResponse2);
 
         return preScreenResponseList;
     }
