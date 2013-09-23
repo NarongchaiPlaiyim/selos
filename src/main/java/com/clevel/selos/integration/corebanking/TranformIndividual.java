@@ -81,7 +81,8 @@ public class TranformIndividual implements Serializable{
         workAddress.setMoo(individualModel.getWorkAddress().getAddressMoo());
         workAddress.setBuilding(individualModel.getWorkAddress().getAddressBuilding());
         workAddress.setRoad(individualModel.getWorkAddress().getAddressStreet());
-//        workAddress.setSubDistrict("");
+
+//        workAddress.setSubDistrict();
 //        workAddress.setDistrict("");
 //        workAddress.setProvince("");
 //        workAddress.setAddressType("");

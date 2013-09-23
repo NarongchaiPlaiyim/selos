@@ -95,6 +95,7 @@ public class AddressView {
     }
 
     public void setSubDistrict(SubDistrict subDistrict) {
+
         this.subDistrict = subDistrict;
     }
 

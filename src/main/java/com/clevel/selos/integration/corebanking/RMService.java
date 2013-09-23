@@ -256,6 +256,7 @@ public class RMService implements Serializable {
                     workContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine2());
                     workContactDetails.setSubdistrict(workAddressLine3[0]);
                     workContactDetails.setDistrict(workAddressLine3[1]);
+//                    log.debug("TEST  "+workAddressLine3[0]+ "   "+workAddressLine3[1]);
                     workContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCity());
                     workContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusPostalCd());
                     workContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCtry());
