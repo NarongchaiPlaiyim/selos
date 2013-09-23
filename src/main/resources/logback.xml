@@ -102,16 +102,17 @@
     <logger name="ECM" level="DEBUG" additivity="false">
         <appender-ref ref="ECM-FILE"/>
     </logger>
-    <!--Daily rolling file appender -->
-    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
-        <!--<File>/tmp/logs/debug.log</File>-->
-        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
-            <!--<FileNamePattern>/tmp/logs/debug.%d{yyyy-MM-dd}.log</FileNamePattern>-->
-        <!--</rollingPolicy>-->
-        <!--<encoder>-->
-            <!--<pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>-->
-        <!--</encoder>-->
-    <!--</appender>-->
+
+    <appender name="WS-FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/tmp/logs/slos-WS.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="WS" level="DEBUG" additivity="false">
+        <appender-ref ref="WS-FILE"/>
+    </logger>
 
     <logger name="com.clevel" level="DEBUG"/>
     <logger name="org.hibernate" level="INFO"/>

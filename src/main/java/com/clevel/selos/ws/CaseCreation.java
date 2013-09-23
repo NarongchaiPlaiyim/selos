@@ -17,6 +17,7 @@ import java.util.Date;
 @WebService
 public class CaseCreation implements WSCaseCreation {
     @Inject
+    @WS
     Logger log;
     @Inject
     CaseCreationHistoryDAO caseCreationHistoryDAO;
