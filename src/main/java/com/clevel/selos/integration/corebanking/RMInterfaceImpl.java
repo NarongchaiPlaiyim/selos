@@ -3,13 +3,17 @@ package com.clevel.selos.integration.corebanking;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.RMmodel.*;
+import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
+import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.model.view.AddressView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.xml.bind.JAXBElement;
 import java.io.Serializable;
 
 @Default
@@ -20,6 +24,12 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     @Inject
     RMService rmService;
+
+    @Inject
+    TranformIndividual tranformIndividual;
+
+    @Inject
+    TranformCorporate tranformCorporate;
 
     @Inject
     @Config(name = "interface.rm.customerAccount.acronym")
@@ -47,7 +57,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView
+    getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
         log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -62,11 +73,13 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         log.debug("RequestValue : {} ",searchIndividual.toString());
 
         IndividualModel individualModel = rmService.individualService(searchIndividual);
-        return individualModel;
+
+
+        return tranformIndividual.tranform(individualModel);
     }
 
     @Override
-    public CorporateModel getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
         log.debug("getCorporateInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -79,7 +92,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setRadSelectSearch("card");
         log.debug("requestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.corporateService(searchIndividual);
-        return corporateModel;
+
+        return tranformCorporate.tranform(corporateModel);
     }
 
     @Override

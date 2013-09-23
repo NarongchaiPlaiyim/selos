@@ -1,4 +1,4 @@
-package com.clevel.selos.model.RMmodel;
+package com.clevel.selos.model.RMmodel.individualInfo;
 
 import java.io.Serializable;
 

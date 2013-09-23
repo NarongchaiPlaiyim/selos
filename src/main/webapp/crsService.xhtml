@@ -11,8 +11,8 @@
     </h:head>
     <h:body>
         <h:form>
-        <p:inputText  id="kk" value="#{crs.test}"/>
-        <p:commandButton value="testService" actionListener="#{crs.callservice}" update="@form"/>
+        <p:inputText value="#{crs.caseCreationResponse}"/>
+        <p:commandButton value="testService" actionListener="#{crs.callservice()}" update="@form"/>
         </h:form>
 
     </h:body>

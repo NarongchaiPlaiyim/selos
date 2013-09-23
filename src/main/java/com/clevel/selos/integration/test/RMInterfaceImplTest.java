@@ -1,9 +1,11 @@
 package com.clevel.selos.integration.test;
 
-import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.RMmodel.*;
+import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
+import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.model.view.CustomerInfoView;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
@@ -25,19 +27,20 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
 
     @Override
-    public IndividualModel getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
 
         log.debug("======= IndividualServiceTest =======");
-        IndividualModel individualModel = new IndividualModel();
-        individualModel.setResCode("0000");
-        individualModel.setResDesc("SUCCESS");
-        individualModel.setSearchResult("CD");
-        individualModel.setLastPageFlag("");
-            //personal detail session
-            individualModel.setTitle("นาย");
-            individualModel.setName("พสุ กุญ");
-            individualModel.setCustId("CI");
-            individualModel.setTelephone1("000023780");
+        CustomerInfoView customerInfoView=new CustomerInfoView();
+//        IndividualModel individualModel = new IndividualModel();
+//        individualModel.setResCode("0000");
+//        individualModel.setResDesc("SUCCESS");
+//        individualModel.setSearchResult("CD");
+//        individualModel.setLastPageFlag("");
+//            //personal detail session
+//            individualModel.setTitle("นาย");
+//            individualModel.setName("พสุ กุญ");
+//            individualModel.setCustId("CI");
+//            individualModel.setTelephone1("000023780");
 
 ////          //personal list session
 //            if (resSearchIndividualCustomer.getBody().getPersonalListSection() != null && (resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList() != null && resSearchIndividualCustomer.getBody().getPersonalListSection().getPersonalList().size() > 0)) {
@@ -58,25 +61,25 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 //            }
 //            log.debug("responseCode: {}", individualModel.getResCode());
 //      }
-        return individualModel;
+        return customerInfoView;
     }
 
     @Override
-    public CorporateModel getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getCorporateInfo(String reqid, String type, String custId, DocumentType documentType) throws Exception {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateModel corporateModel = new CorporateModel();
-        corporateModel.setResCode("0000");
-        corporateModel.setResDesc("SUCCESS");
-        corporateModel.setSearchResult("CD");
-
-            //personal detail session
-            corporateModel.setTitle("");
-            corporateModel.setCustNbr("00000001180946");
-            corporateModel.setThaiName1("นาย พสุ กุญ");
-            corporateModel.setcId("TN");
-            corporateModel.setCitizenId("1013305588");
-            corporateModel.setEstDate("00/00/0000");
+//        corporateModel.setResCode("0000");
+//        corporateModel.setResDesc("SUCCESS");
+//        corporateModel.setSearchResult("CD");
+//
+//            //personal detail session
+//            corporateModel.setTitle("");
+//            corporateModel.setCustNbr("00000001180946");
+//            corporateModel.setThaiName1("นาย พสุ กุญ");
+//            corporateModel.setcId("TN");
+//            corporateModel.setCitizenId("1013305588");
+//            corporateModel.setEstDate("00/00/0000");
 
 //          //personal list session
 //            if (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection() != null && (resSearchCorporateCustomer.getBody().getCorporateCustomerListSection().getCorporateList() != null &&
@@ -100,7 +103,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 //            }
 //            log.debug("responseCode: {}", corporateModel.getResCode());
 
-        return corporateModel;
+        return null;
     }
 
     @Override

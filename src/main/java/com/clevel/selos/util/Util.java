@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 public class Util {
@@ -21,6 +19,17 @@ public class Util {
 
     public static String createDateString(Date date) {
         return createDateString(date,"yyyy-MM-dd");
+    }
+    public static Date convertStringToDateBuddhist(String dateStr) {
+        Date dateD = new Date();
+        try {
+            DateFormat formatter;
+            formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            dateD = (Date) formatter.parse(dateStr);
+
+        } catch (ParseException e) {
+        }
+        return dateD;
     }
 
     public static String formatNumber(double value) {
