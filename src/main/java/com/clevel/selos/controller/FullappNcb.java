@@ -54,8 +54,9 @@ public class FullappNcb implements Serializable {
 
     private AccountType dlgAccountType;
     private AccountStatus dlgAccountStatus;
-    private TDRCondition dlgCurrentPayment;
-    private TDRCondition dlgHistoryPayment;
+    private SettlementStatus dlgCurrentPayment;
+    private SettlementStatus dlgHistoryPayment;
+    private TDRCondition tdrCondition;
 
     private String modeForButton;
     private int rowIndex;
@@ -126,16 +127,20 @@ public class FullappNcb implements Serializable {
         }
 
         if (dlgCurrentPayment == null) {
-            dlgCurrentPayment = new TDRCondition();
+            dlgCurrentPayment = new SettlementStatus();
         }
 
         if (dlgHistoryPayment == null) {
-            dlgHistoryPayment = new TDRCondition();
+            dlgHistoryPayment = new SettlementStatus();
+        }
+
+        if(tdrCondition == null){
+            tdrCondition = new TDRCondition();
         }
 
         accountStatusList = accountStatusDAO.findAll();
         accountTypeList = accountTypeDAO.findAll();
-//        settlementStatusList = settlementStatusDAO.findAll();
+        settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
 
     }
@@ -150,8 +155,8 @@ public class FullappNcb implements Serializable {
         ncbRecordView = new NcbRecordView();
         ncbRecordView.setAccountStatus(new AccountStatus());
         ncbRecordView.setAccountType(new AccountType());
-        ncbRecordView.setCurrentPayment(new TDRCondition());
-        ncbRecordView.setHistoryPayment(new TDRCondition());
+        ncbRecordView.setCurrentPayment(new SettlementStatus());
+        ncbRecordView.setHistoryPayment(new SettlementStatus());
         ncbRecordView.setTMBAccount("Y");
         ncbRecordView.setRefinanceFlag("Y");
         modeForButton = "add";
@@ -171,8 +176,8 @@ public class FullappNcb implements Serializable {
             ncbRecordView = new NcbRecordView();
             AccountType accountTypeEdit = selectNcbRecordItem.getAccountType();
             AccountStatus accountStatusEdit = selectNcbRecordItem.getAccountStatus();
-            TDRCondition conditionCurrentEdit = selectNcbRecordItem.getCurrentPayment();
-            TDRCondition conditionHistoryEdit = selectNcbRecordItem.getHistoryPayment();
+            SettlementStatus conditionCurrentEdit = selectNcbRecordItem.getCurrentPayment();
+            SettlementStatus conditionHistoryEdit = selectNcbRecordItem.getHistoryPayment();
 
             ncbRecordView.setAccountType(accountTypeEdit);
             ncbRecordView.setAccountStatus(accountStatusEdit);
@@ -224,8 +229,8 @@ public class FullappNcb implements Serializable {
 
                 AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
-                TDRCondition tdrConditionCurrent = tdrConditionDAO.findById(dlgCurrentPayment.getId());
-                TDRCondition tdrConditionHistory = tdrConditionDAO.findById(dlgHistoryPayment.getId());
+                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(dlgCurrentPayment.getId());
+                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(dlgHistoryPayment.getId());
 
                 NcbRecordView ncbAdd = new NcbRecordView();
                 ncbAdd.setAccountType(accountType);
@@ -275,8 +280,8 @@ public class FullappNcb implements Serializable {
 
                 AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
                 AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
-                TDRCondition tdrConditionCurrent = tdrConditionDAO.findById(dlgCurrentPayment.getId());
-                TDRCondition tdrConditionHistory = tdrConditionDAO.findById(dlgHistoryPayment.getId());
+                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(dlgCurrentPayment.getId());
+                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(dlgHistoryPayment.getId());
 
                 ncbRecordViewList.get(rowIndex).setAccountType(accountType);
                 ncbRecordViewList.get(rowIndex).setAccountStatus(accountStatus);
@@ -438,19 +443,19 @@ public class FullappNcb implements Serializable {
         this.dlgAccountStatus = dlgAccountStatus;
     }
 
-    public TDRCondition getDlgCurrentPayment() {
+    public SettlementStatus getDlgCurrentPayment() {
         return dlgCurrentPayment;
     }
 
-    public void setDlgCurrentPayment(TDRCondition dlgCurrentPayment) {
+    public void setDlgCurrentPayment(SettlementStatus dlgCurrentPayment) {
         this.dlgCurrentPayment = dlgCurrentPayment;
     }
 
-    public TDRCondition getDlgHistoryPayment() {
+    public SettlementStatus getDlgHistoryPayment() {
         return dlgHistoryPayment;
     }
 
-    public void setDlgHistoryPayment(TDRCondition dlgHistoryPayment) {
+    public void setDlgHistoryPayment(SettlementStatus dlgHistoryPayment) {
         this.dlgHistoryPayment = dlgHistoryPayment;
     }
 
@@ -468,5 +473,13 @@ public class FullappNcb implements Serializable {
 
     public void setNcbResultView(NcbResultView ncbResultView) {
         this.ncbResultView = ncbResultView;
+    }
+
+    public TDRCondition getTdrCondition() {
+        return tdrCondition;
+    }
+
+    public void setTdrCondition(TDRCondition tdrCondition) {
+        this.tdrCondition = tdrCondition;
     }
 }

@@ -126,15 +126,15 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>
-<!--       <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
-                            value="#{fullappNcb.ncbRecordView.settlementStatus.id}" disabled="true">
-            <f:selectItems value="#{fullappNcb.settlementStatusList}"
-                           var="dlgSettlementStatusList"
-                           itemLabel="#{dlgSettlementStatusList.name}"
-                           itemValue="#{dlgSettlementStatusList.id}"/>
+       <!-- <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>-->
+       <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
+                            value="#{fullappNcb.ncbRecordView.tdrCondition.id}" disabled="true">
+            <f:selectItems value="#{fullappNcb.tdrConditionList}"
+                           var="dlgTDRConditionList"
+                           itemLabel="#{dlgTDRConditionList.description}"
+                           itemValue="#{dlgTDRConditionList.id}"/>
 
-        </h:selectOneListbox>-->
+        </h:selectOneListbox>
     </td>
 </tr>
 <tr>
@@ -247,11 +247,11 @@
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.currentPayment.description}"/>
+                                <h:outputText value="#{item.currentPayment.name}"/>
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.historyPayment.description}"/>
+                                <h:outputText value="#{item.historyPayment.name}"/>
                             </p:column>
 
                             <p:column>
