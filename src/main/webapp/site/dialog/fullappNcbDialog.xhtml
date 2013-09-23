@@ -144,9 +144,9 @@
                          size="1"
                          required="true">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
-            <f:selectItems value="#{fullappNcb.tdrConditionList}"
+            <f:selectItems value="#{fullappNcb.settlementStatusList}"
                            var="dlgtdrCurrentList"
-                           itemLabel="#{dlgtdrCurrentList.description}"
+                           itemLabel="#{dlgtdrCurrentList.name}"
                            itemValue="#{dlgtdrCurrentList.id}"/>
         </p:selectOneMenu>
 
@@ -164,9 +164,9 @@
                          size="1"
                          required="true">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
-            <f:selectItems value="#{fullappNcb.tdrConditionList}"
+            <f:selectItems value="#{fullappNcb.settlementStatusList}"
                            var="dlgHistoryList"
-                           itemLabel="#{dlgHistoryList.description}"
+                           itemLabel="#{dlgHistoryList.name}"
                            itemValue="#{dlgHistoryList.id}"/>
         </p:selectOneMenu>
     </td>
