@@ -19,6 +19,9 @@ public class DocumentType implements Serializable {
     private CustomerEntity customerEntity;
     @JoinColumn(name="active")
     private int active;
+    @Column(name="type")
+    private String type;
+
 
     public DocumentType() {
     }
@@ -55,13 +58,23 @@ public class DocumentType implements Serializable {
         this.active = active;
     }
 
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("customerEntity", customerEntity).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("description", description)
+                .append("customerEntity", customerEntity)
+                .append("active", active)
+                .append("type", type)
+                .toString();
     }
 }
