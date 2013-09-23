@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.TDRCondition;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +21,8 @@ import java.util.List;
  * Time: 15:31 น.
  * To change this template use File | Settings | File Templates.
  */
-public class NcbRecordView {
+public class NcbRecordView implements Serializable {
+
 
     private String isTMBAccount;
     private Date dateOfInfo;
@@ -37,9 +39,9 @@ public class NcbRecordView {
     private boolean monthsPaymentFlag;
     private AccountType accountType;
     private AccountStatus accountStatus;
-    private SettlementStatus settlementStatus;
-    private TDRCondition currentPayment;
-    private TDRCondition historyPayment;
+    private TDRCondition tdrCondition;
+    private SettlementStatus currentPayment;
+    private SettlementStatus historyPayment;
     private List<MonthsPaymentView> noOfmonthsPaymentList;
     private int noOfmonthsPayment;
     private List<MoneyPaymentView> moneyPaymentViewList;
@@ -66,9 +68,9 @@ public class NcbRecordView {
         this.monthsPaymentFlag = true;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
-        this.settlementStatus = new SettlementStatus();
-        this.currentPayment = new TDRCondition();
-        this.historyPayment = new TDRCondition();
+        this.tdrCondition = new TDRCondition();
+        this.currentPayment = new SettlementStatus();
+        this.historyPayment = new SettlementStatus();
         this.noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
         this.noOfmonthsPayment = 0;
         this.moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
@@ -78,6 +80,7 @@ public class NcbRecordView {
         for (int i = 1; i < 13; i++) {
             noOfmonthsPaymentList.add(new MonthsPaymentView(i));
         }
+
         moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
 
     }
@@ -219,30 +222,6 @@ public class NcbRecordView {
         this.accountStatus = accountStatus;
     }
 
-    public SettlementStatus getSettlementStatus() {
-        return settlementStatus;
-    }
-
-    public void setSettlementStatus(SettlementStatus settlementStatus) {
-        this.settlementStatus = settlementStatus;
-    }
-
-    public TDRCondition getCurrentPayment() {
-        return currentPayment;
-    }
-
-    public void setCurrentPayment(TDRCondition currentPayment) {
-        this.currentPayment = currentPayment;
-    }
-
-    public TDRCondition getHistoryPayment() {
-        return historyPayment;
-    }
-
-    public void setHistoryPayment(TDRCondition historyPayment) {
-        this.historyPayment = historyPayment;
-    }
-
     public String getTMBAccount() {
         return isTMBAccount;
     }
@@ -259,6 +238,29 @@ public class NcbRecordView {
         this.refinanceFlag = refinanceFlag;
     }
 
+    public TDRCondition getTdrCondition() {
+        return tdrCondition;
+    }
+
+    public void setTdrCondition(TDRCondition tdrCondition) {
+        this.tdrCondition = tdrCondition;
+    }
+
+    public SettlementStatus getCurrentPayment() {
+        return currentPayment;
+    }
+
+    public void setCurrentPayment(SettlementStatus currentPayment) {
+        this.currentPayment = currentPayment;
+    }
+
+    public SettlementStatus getHistoryPayment() {
+        return historyPayment;
+    }
+
+    public void setHistoryPayment(SettlementStatus historyPayment) {
+        this.historyPayment = historyPayment;
+    }
 
     @Override
     public String toString() {
@@ -278,12 +280,13 @@ public class NcbRecordView {
                 .append("monthsPaymentFlag", monthsPaymentFlag)
                 .append("accountType", accountType)
                 .append("accountStatus", accountStatus)
-                .append("settlementStatus", settlementStatus)
+                .append("tdrCondition", tdrCondition)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
                 .append("noOfmonthsPaymentList", noOfmonthsPaymentList)
                 .append("noOfmonthsPayment", noOfmonthsPayment)
                 .append("moneyPaymentViewList", moneyPaymentViewList)
+                .append("moneyTotal", moneyTotal)
                 .toString();
     }
 }

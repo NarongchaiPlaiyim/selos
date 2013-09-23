@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.brms.model.response;
 
+import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.response.data.BorrowerResultData;
 import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
 
@@ -8,21 +9,23 @@ import java.util.List;
 public class PreScreenResponse {
     public String ruleName;
     public String ruleOrder;
-    public boolean groupResult;
-    public boolean borrowerResult;
-    public GroupResultData groupResultData; //Null if groupResult = false
-    public List<BorrowerResultData> borrowerResultDataList; //Null if borrowerResult = false;
+    public String type;
+    public String personalId;
+    public RuleColorResult color;
+    public String deviationFlag;
+    public String rejectGroupCode;
 
     public PreScreenResponse() {
     }
 
-    public PreScreenResponse(String ruleName, String ruleOrder, boolean groupResult, boolean borrowerResult, GroupResultData groupResultData, List<BorrowerResultData> borrowerResultDataList) {
+    public PreScreenResponse(String ruleName, String ruleOrder, String type, String personalId, RuleColorResult color, String deviationFlag, String rejectGroupCode) {
         this.ruleName = ruleName;
         this.ruleOrder = ruleOrder;
-        this.groupResult = groupResult;
-        this.borrowerResult = borrowerResult;
-        this.groupResultData = groupResultData;
-        this.borrowerResultDataList = borrowerResultDataList;
+        this.type = type;
+        this.personalId = personalId;
+        this.color = color;
+        this.deviationFlag = deviationFlag;
+        this.rejectGroupCode = rejectGroupCode;
     }
 
     public String getRuleName() {
@@ -41,35 +44,43 @@ public class PreScreenResponse {
         this.ruleOrder = ruleOrder;
     }
 
-    public boolean isGroupResult() {
-        return groupResult;
+    public String getType() {
+        return type;
     }
 
-    public void setGroupResult(boolean groupResult) {
-        this.groupResult = groupResult;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public boolean isBorrowerResult() {
-        return borrowerResult;
+    public String getPersonalId() {
+        return personalId;
     }
 
-    public void setBorrowerResult(boolean borrowerResult) {
-        this.borrowerResult = borrowerResult;
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
     }
 
-    public GroupResultData getGroupResultData() {
-        return groupResultData;
+    public RuleColorResult getColor() {
+        return color;
     }
 
-    public void setGroupResultData(GroupResultData groupResultData) {
-        this.groupResultData = groupResultData;
+    public void setColor(RuleColorResult color) {
+        this.color = color;
     }
 
-    public List<BorrowerResultData> getBorrowerResultDataList() {
-        return borrowerResultDataList;
+    public String getDeviationFlag() {
+        return deviationFlag;
     }
 
-    public void setBorrowerResultDataList(List<BorrowerResultData> borrowerResultDataList) {
-        this.borrowerResultDataList = borrowerResultDataList;
+    public void setDeviationFlag(String deviationFlag) {
+        this.deviationFlag = deviationFlag;
+    }
+
+    public String getRejectGroupCode() {
+        return rejectGroupCode;
+    }
+
+    public void setRejectGroupCode(String rejectGroupCode) {
+        this.rejectGroupCode = rejectGroupCode;
     }
 }

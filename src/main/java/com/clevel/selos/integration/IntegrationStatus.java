@@ -1,10 +1,10 @@
 package com.clevel.selos.integration;
 
-public enum IntegrationResult {
-    SUCCESS(1),FAILED(2);
+public enum IntegrationStatus {
+    SUCCESS(0),SENDING(1),FAILED(2);
     int value;
 
-    IntegrationResult(int value) {
+    IntegrationStatus(int value) {
         this.value = value;
     }
 

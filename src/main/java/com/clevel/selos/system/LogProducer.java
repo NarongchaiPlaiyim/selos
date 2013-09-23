@@ -1,6 +1,7 @@
 package com.clevel.selos.system;
 
 import com.clevel.selos.integration.*;
+import com.clevel.selos.ws.WS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,7 @@ public class LogProducer {
     private static final String LOGGER_NAME_BRMS = "BRMS";
     private static final String LOGGER_NAME_BPM = "BPM";
     private static final String LOGGER_NAME_ECM = "ECM";
+    private static final String LOGGER_NAME_WS = "WS";
 
     @Produces
     Logger createLogger(InjectionPoint injectionPoint) {
@@ -68,5 +70,11 @@ public class LogProducer {
     @ECM
     Logger createECMLogger() {
         return LoggerFactory.getLogger(LOGGER_NAME_ECM);
+    }
+
+    @Produces
+    @WS
+    Logger createWSLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_WS);
     }
 }
