@@ -1,7 +1,11 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.busiensscontrol.FullAppBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.BizProduct;
+import com.clevel.selos.model.db.working.BizStakeholder;
 import com.clevel.selos.model.view.BizInfoFullView;
 import com.clevel.selos.model.view.BizProductView;
 import com.clevel.selos.model.view.StakeholderView;
@@ -27,20 +31,20 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ViewScoped
-@ManagedBean(name = "businessInfoDetail")
-public class BusinessInfoDetailMaker implements Serializable {
+@ManagedBean(name = "bizInfoDetail")
+public class BizInfoDetailMaker implements Serializable {
 
     @NormalMessage
     @Inject
     Message msg;
 
     private String stakeType;
-    private BigDecimal supplierVolumnSum1;
-    private BigDecimal supplierVolumnSum2;
+    private BigDecimal supplierVolumeSum1;
+    private BigDecimal supplierVolumeSum2;
     private BigDecimal supplierTermSum;
 
-    private BigDecimal buyerVolumnSum1;
-    private BigDecimal buyerVolumnSum2;
+    private BigDecimal buyerVolumeSum1;
+    private BigDecimal buyerVolumeSum2;
     private BigDecimal buyerTermSum;
 
     private int rowIndex;
@@ -58,9 +62,12 @@ public class BusinessInfoDetailMaker implements Serializable {
     private List<BusinessGroup> businessGroupList;
     private List<BusinessDescription> businessDescriptionList;
     private StakeholderView stakeholderTemp;
-    private StakeholderView selectStakeholer;
+    private StakeholderView selectStakeholder;
 
     private BizInfoFullView bizInfoFullApp;
+
+    private BusinessGroup bizGroup;
+    private BusinessDescription bizDesc;
 
     @Inject
     Logger log;
@@ -68,8 +75,9 @@ public class BusinessInfoDetailMaker implements Serializable {
     private BusinessGroupDAO businessGroupDAO;
     @Inject
     private BusinessDescriptionDAO businessDescriptionDAO;
-
-    public BusinessInfoDetailMaker(){
+    @Inject
+    FullAppBusinessControl fullAppBusinessControl;
+    public BizInfoDetailMaker(){
 
     }
 
@@ -81,16 +89,22 @@ public class BusinessInfoDetailMaker implements Serializable {
         supplierList = new ArrayList<StakeholderView>();
         buyerList = new ArrayList<StakeholderView>();
         businessGroupList = businessGroupDAO.findAll();
+        bizInfoFullApp = new BizInfoFullView();
+        bizGroup = new BusinessGroup();
+        bizDesc = new BusinessDescription();
+
+        bizInfoFullApp.setBizDesc(bizDesc);
+        bizInfoFullApp.setBizGroup(bizGroup);
+
     }
 
     public void onChangeBusinessGroup(){
         log.info("onChangeBusinessGroup >>> begin ");
-
-
+        bizGroupId = bizInfoFullApp.getBizGroup().getId();
         BusinessGroup businessGroup = businessGroupDAO.findById(bizGroupId);
         log.info("onChangeBusinessGroup :::: businessGroup ::: ", businessGroup);
-
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(businessGroup);
+        log.info("onChangeBusinessGroup :::: businessDescriptionList Size ::: ", businessDescriptionList.size());
     }
 
     public void onAddBizProductView(){
@@ -107,7 +121,7 @@ public class BusinessInfoDetailMaker implements Serializable {
         //*** Check list size ***//
         if( rowIndex < bizProductViewList.size() ) {
             bizProductView.setProductType(selectBizProduct.getProductType());
-            bizProductView.setPercentSalesVolumn(selectBizProduct.getPercentSalesVolumn());
+            bizProductView.setPercentSalesVolume(selectBizProduct.getPercentSalesVolume());
             bizProductView.setPercentEBIT(selectBizProduct.getPercentEBIT());
             bizProductView.setProductDetail(selectBizProduct.getProductDetail());
         }
@@ -125,7 +139,7 @@ public class BusinessInfoDetailMaker implements Serializable {
         log.info( "context.addCallbackParam " );
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if(!bizProductView.getProductType().equals("")&&!bizProductView.getProductDetail().equals("")&&!bizProductView.getPercentSalesVolumn().equals("")&&!bizProductView.getPercentEBIT().equals("")){
+        if(!bizProductView.getProductType().equals("")&&!bizProductView.getProductDetail().equals("")&&!bizProductView.getPercentSalesVolume().equals("")&&!bizProductView.getPercentEBIT().equals("")){
             if(modeForButton.equalsIgnoreCase("add")){
                 log.info("onSaveBizProductView add >>> begin ");
                 bizProductViewList.add(bizProductView);
@@ -135,7 +149,7 @@ public class BusinessInfoDetailMaker implements Serializable {
                 BizProductView bizTemp;
                 bizTemp = bizProductViewList.get(rowIndex);
                 bizTemp.setProductType(bizProductView.getProductType());
-                bizTemp.setPercentSalesVolumn(bizProductView.getPercentSalesVolumn());
+                bizTemp.setPercentSalesVolume(bizProductView.getPercentSalesVolume());
                 bizTemp.setPercentEBIT(bizProductView.getPercentEBIT());
                 bizTemp.setProductDetail(bizProductView.getProductDetail());
 
@@ -159,15 +173,16 @@ public class BusinessInfoDetailMaker implements Serializable {
         modeForButton = "edit";
         onSetLabelStakeholder();
         stakeholderView = new StakeholderView();
-        stakeholderView = onSetStakeholder(stakeholderView,selectStakeholer);
+        stakeholderView.setStakeholderType(stakeType);
+        stakeholderView = onSetStakeholder(stakeholderView,selectStakeholder);
     }
 
     private void onSetLabelStakeholder(){
-        log.info("onSetLabelStakeholder >>> label is  " + stakeType );
 
-        if(stakeType.equalsIgnoreCase("supplier")){
+
+        if(stakeType.equalsIgnoreCase("1")){
             dlgStakeName = msg.get("app.supplierName");
-        }else if(stakeType.equalsIgnoreCase("buyer")){
+        }else if(stakeType.equalsIgnoreCase("2")){
             dlgStakeName =msg.get("app.buyerName");
         }
 
@@ -180,7 +195,7 @@ public class BusinessInfoDetailMaker implements Serializable {
         stakeholderMaster.setContactName(stakeholderChild.getContactName());
         stakeholderMaster.setPhoneNo(stakeholderChild.getPhoneNo());
         stakeholderMaster.setContactYear(stakeholderChild.getContactYear());
-        stakeholderMaster.setPercentSalesVolumn(stakeholderChild.getPercentSalesVolumn());
+        stakeholderMaster.setPercentSalesVolume(stakeholderChild.getPercentSalesVolume());
         stakeholderMaster.setPercentCash(stakeholderChild.getPercentCash());
         stakeholderMaster.setPercentCredit(stakeholderChild.getPercentCredit());
         stakeholderMaster.setCreditTerm(stakeholderChild.getCreditTerm());
@@ -189,15 +204,15 @@ public class BusinessInfoDetailMaker implements Serializable {
     }
 
     public void onDeleteStakeholderView() {
-        log.info("onDeleteStakeholderView is " + selectStakeholer);
+        log.info("onDeleteStakeholderView is " + selectStakeholder);
 
         log.info("onDeleteStakeholderView stakeType is " + stakeType);
 
-        if(stakeType.equalsIgnoreCase("supplier")){
-            supplierList.remove(selectStakeholer);
+        if(stakeType.equalsIgnoreCase("1")){
+            supplierList.remove(selectStakeholder);
             calSumStakeholderView(supplierList, stakeType);
-        }else if(stakeType.equalsIgnoreCase("buyer")){
-            buyerList.remove(selectStakeholer);
+        }else if(stakeType.equalsIgnoreCase("2")){
+            buyerList.remove(selectStakeholder);
             calSumStakeholderView(buyerList, stakeType);
         }
     }
@@ -211,14 +226,14 @@ public class BusinessInfoDetailMaker implements Serializable {
         StakeholderView  stakeholderRow;
 
         if(modeForButton.equalsIgnoreCase("add")){
-             if(stakeType.equals("supplier")){
+             if(stakeType.equals("1")){
                 supplierList.add(stakeholderView);
                 supplier =calSumStakeholderView(supplierList, stakeType);
                  if(!supplier){
                      supplierList.remove(stakeholderView);
                      calSumStakeholderView(supplierList, stakeType);
                  }
-             }else if(stakeType.equals("buyer")){
+             }else if(stakeType.equals("2")){
                 buyerList.add(stakeholderView);
                  buyer = calSumStakeholderView(buyerList, stakeType);
                  if(!buyer){
@@ -227,7 +242,7 @@ public class BusinessInfoDetailMaker implements Serializable {
                  }
              }
         }else if(modeForButton.equalsIgnoreCase("edit")){
-            if(stakeType.equals("supplier")){
+            if(stakeType.equals("1")){
                  stakeholderRow = supplierList.get(rowIndex);
                  stakeholderRow = onSetStakeholder(stakeholderRow,stakeholderView);
                  supplierList.set(rowIndex, stakeholderRow);
@@ -239,7 +254,7 @@ public class BusinessInfoDetailMaker implements Serializable {
                      calSumStakeholderView(supplierList, stakeType);
                  }
 
-            }else if(stakeType.equals("buyer")){
+            }else if(stakeType.equals("2")){
                 stakeholderRow = buyerList.get(rowIndex);
                 stakeholderRow = onSetStakeholder(stakeholderRow,stakeholderView);
                 buyerList.set(rowIndex, stakeholderRow);
@@ -267,7 +282,7 @@ public class BusinessInfoDetailMaker implements Serializable {
 
             //log.info("stakeholdersCal getPercentCredit{} " + i + " is " + stakeholdersCal);
 
-            summ1 += stakeholdersCal.getPercentSalesVolumn().doubleValue();
+            summ1 += stakeholdersCal.getPercentSalesVolume().doubleValue();
             summ2 += stakeholdersCal.getPercentCredit().doubleValue() + stakeholdersCal.getPercentCash().doubleValue();
             summ3 += stakeholdersCal.getCreditTerm().intValue();
 
@@ -278,17 +293,111 @@ public class BusinessInfoDetailMaker implements Serializable {
             return false;
         }
 
-        if(stakeType.equals("supplier")){
-            supplierVolumnSum1 = new BigDecimal(summ1);
-            supplierVolumnSum2 = new BigDecimal(summ2);
+        if(stakeType.equals("1")){
+            supplierVolumeSum1 = new BigDecimal(summ1);
+            supplierVolumeSum2 = new BigDecimal(summ2);
             supplierTermSum = new BigDecimal(summ3);
-        }else if(stakeType.equals("buyer")){
-            buyerVolumnSum1 = new BigDecimal(summ1);
-            buyerVolumnSum2 = new BigDecimal(summ2);
+        }else if(stakeType.equals("2")){
+            buyerVolumeSum1 = new BigDecimal(summ1);
+            buyerVolumeSum2 = new BigDecimal(summ2);
             buyerTermSum = new BigDecimal(summ3);
         }
 
         return true;
+    }
+
+    public void onSaveBizInfoView(){
+        //log.info( " bizInfoFullApp is " + bizInfoFullApp);
+
+        /*log.info( " bizProductViewList is " + bizProductViewList);
+        bizInfoFullApp.setBizProductViewList(bizProductViewList);
+
+        log.info( " supplierList is " + supplierList);
+        bizInfoFullApp.setSupplierList(supplierList);
+
+        log.info( " buyerList is " + buyerList);
+        bizInfoFullApp.setBuyerList(buyerList);*/
+        //convert View to DB
+        BizInfoDetail   bizInfoDetail ;
+        bizInfoDetail = new BizInfoDetail();
+        bizInfoDetail.setBizInfoText(bizInfoFullApp.getBizInfoText());
+        bizInfoDetail.setBusinessType(bizInfoFullApp.getBizType());
+        bizInfoDetail.setBusinessGroup(bizInfoFullApp.getBizGroup());
+        bizInfoDetail.setBusinessDescription(bizInfoFullApp.getBizDesc());
+        bizInfoDetail.setBizCode(bizInfoFullApp.getBizCode());
+        bizInfoDetail.setBizComment(bizInfoFullApp.getBizComment());
+        bizInfoDetail.setIncomeFactor(bizInfoFullApp.getIncomeFactor());
+        bizInfoDetail.setAdjustedIncomeFactor(bizInfoFullApp.getAdjustedIncomeFactor());
+        bizInfoDetail.setPercentBiz(bizInfoFullApp.getPercentBiz());
+
+        StakeholderView stakeholderTemp;
+        BizStakeholder bizStakeholderTemp;
+
+        BizProductView bizProductViewTemp;
+        BizProduct bizProductTemp;
+
+        List<BizStakeholder> bizSupplierList;
+
+        List<BizStakeholder> bizBuyerList;
+
+        List<BizProduct> bizProductList;
+        bizProductList = new ArrayList<BizProduct>();
+
+        log.info( " bizProductViewList Size is " + bizProductViewList.size());
+        for (int i =0;i<bizProductViewList.size();i++){
+            bizProductViewTemp = bizProductViewList.get(i);
+            log.info( " stakeholderTemp is " + bizProductViewTemp);
+            bizProductTemp = onBizProductTransform(bizProductViewTemp);
+            log.info( " bizStakeholderTemp is " + bizProductTemp);
+            bizProductList.add(bizProductTemp);
+        }
+
+        log.info( " bizProductViewList is " + supplierList.size());
+        bizSupplierList = new ArrayList<BizStakeholder>();
+        for (int i =0;i<supplierList.size();i++){
+            stakeholderTemp = supplierList.get(i);
+            log.info( " stakeholderTemp is " + stakeholderTemp);
+            bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
+            log.info( " bizStakeholderTemp is " + bizStakeholderTemp);
+            bizSupplierList.add( bizStakeholderTemp);
+        }
+
+        log.info( " bizProductViewList is " + buyerList.size());
+        bizBuyerList = new ArrayList<BizStakeholder>();
+        for (int i =0;i<buyerList.size();i++){
+            stakeholderTemp = buyerList.get(i);
+            log.info( " stakeholderTemp is " + stakeholderTemp);
+            bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
+            log.info( " bizStakeholderTemp is " + bizStakeholderTemp);
+            bizBuyerList.add(bizStakeholderTemp);
+        }
+
+
+        bizInfoDetail.setSupplierList(bizSupplierList);
+        bizInfoDetail.setBuyerList(bizSupplierList);
+        bizInfoDetail.setSupplierList(bizSupplierList);
+        log.info( "bizInfoDetail before persist is " + bizInfoDetail );
+        // xxxxx
+
+        //save to DB
+        fullAppBusinessControl.onSaveBizInfoDetailToDB(bizInfoDetail);
+
+    }
+
+    private BizStakeholder onStakeholderTransform(StakeholderView stakeholderView){
+        BizStakeholder bizStakeholderTran;
+
+        bizStakeholderTran = new BizStakeholder();
+        bizStakeholderTran.setContactName(stakeholderView.getContactName());
+        return  bizStakeholderTran;
+    }
+
+    private BizProduct onBizProductTransform(BizProductView bizProductView){
+        BizProduct bizProductTran;
+
+        bizProductTran = new BizProduct();
+        bizProductTran.setProductDetail(bizProductView.getProductDetail());
+        return  bizProductTran;
     }
 
     public StakeholderView getStakeholderView() {
@@ -347,8 +456,6 @@ public class BusinessInfoDetailMaker implements Serializable {
         this.bizProductView = bizProductView;
     }
 
-
-
     public String getDlgStakeName() {
         return dlgStakeName;
     }
@@ -365,8 +472,6 @@ public class BusinessInfoDetailMaker implements Serializable {
         this.bizGroupId = bizGroupId;
     }
 
-
-
     public BigDecimal getBuyerTermSum() {
         return buyerTermSum;
     }
@@ -375,20 +480,20 @@ public class BusinessInfoDetailMaker implements Serializable {
         this.buyerTermSum = buyerTermSum;
     }
 
-    public BigDecimal getBuyerVolumnSum2() {
-        return buyerVolumnSum2;
+    public BigDecimal getBuyerVolumeSum2() {
+        return buyerVolumeSum2;
     }
 
-    public void setBuyerVolumnSum2(BigDecimal buyerVolumnSum2) {
-        this.buyerVolumnSum2 = buyerVolumnSum2;
+    public void setBuyerVolumeSum2(BigDecimal buyerVolumeSum2) {
+        this.buyerVolumeSum2 = buyerVolumeSum2;
     }
 
-    public BigDecimal getBuyerVolumnSum1() {
-        return buyerVolumnSum1;
+    public BigDecimal getBuyerVolumeSum1() {
+        return buyerVolumeSum1;
     }
 
-    public void setBuyerVolumnSum1(BigDecimal buyerVolumnSum1) {
-        this.buyerVolumnSum1 = buyerVolumnSum1;
+    public void setBuyerVolumeSum1(BigDecimal buyerVolumeSum1) {
+        this.buyerVolumeSum1 = buyerVolumeSum1;
     }
 
     public BigDecimal getSupplierTermSum() {
@@ -399,20 +504,20 @@ public class BusinessInfoDetailMaker implements Serializable {
         this.supplierTermSum = supplierTermSum;
     }
 
-    public BigDecimal getSupplierVolumnSum2() {
-        return supplierVolumnSum2;
+    public BigDecimal getSupplierVolumeSum2() {
+        return supplierVolumeSum2;
     }
 
-    public void setSupplierVolumnSum2(BigDecimal supplierVolumnSum2) {
-        this.supplierVolumnSum2 = supplierVolumnSum2;
+    public void setSupplierVolumeSum2(BigDecimal supplierVolumeSum2) {
+        this.supplierVolumeSum2 = supplierVolumeSum2;
     }
 
-    public BigDecimal getSupplierVolumnSum1() {
-        return supplierVolumnSum1;
+    public BigDecimal getSupplierVolumeSum1() {
+        return supplierVolumeSum1;
     }
 
-    public void setSupplierVolumnSum1(BigDecimal supplierVolumnSum1) {
-        this.supplierVolumnSum1 = supplierVolumnSum1;
+    public void setSupplierVolumeSum1(BigDecimal supplierVolumeSum1) {
+        this.supplierVolumeSum1 = supplierVolumeSum1;
     }
 
     public BizProductView getSelectBizProduct() {
@@ -423,12 +528,12 @@ public class BusinessInfoDetailMaker implements Serializable {
         this.selectBizProduct = selectBizProduct;
     }
 
-    public StakeholderView getSelectStakeholer() {
-        return selectStakeholer;
+    public StakeholderView getSelectStakeholder() {
+        return selectStakeholder;
     }
 
-    public void setSelectStakeholer(StakeholderView selectStakeholer) {
-        this.selectStakeholer = selectStakeholer;
+    public void setSelectStakeholder(StakeholderView selectStakeholder) {
+        this.selectStakeholder = selectStakeholder;
     }
 
     public int getRowIndex() {

@@ -3,6 +3,8 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.BusinessType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
  */
 public class BizInfoFullView {
 
-    private String businessInfoDetail;
+    private String bizInfoText;
     private String tradeType;
     private BusinessType bizType;
     private BusinessGroup bizGroup;
@@ -24,9 +26,9 @@ public class BizInfoFullView {
     private String bizCode;
     private BigDecimal incomeFactor;
     private BigDecimal adjustedIncomeFactor;
-    private BigDecimal percentBusiness;
+    private BigDecimal percentBiz;
     private String bizPermission;
-    private String comment;
+    private String bizComment;
     private BigDecimal standardAccountReceivable;
     private BigDecimal averagePurchaseAmount;
     private BigDecimal purchasePercentCash;
@@ -51,12 +53,12 @@ public class BizInfoFullView {
     private List<StakeholderView> supplierList;
     private List<StakeholderView> buyerList;
 
-    public String getBusinessInfoDetail() {
-        return businessInfoDetail;
+    public String getBizInfoText() {
+        return bizInfoText;
     }
 
-    public void setBusinessInfoDetail(String businessInfoDetail) {
-        this.businessInfoDetail = businessInfoDetail;
+    public void setBizInfoText(String bizInfoText) {
+        this.bizInfoText = bizInfoText;
     }
 
     public String getTradeType() {
@@ -115,12 +117,12 @@ public class BizInfoFullView {
         this.adjustedIncomeFactor = adjustedIncomeFactor;
     }
 
-    public BigDecimal getPercentBusiness() {
-        return percentBusiness;
+    public BigDecimal getPercentBiz() {
+        return percentBiz;
     }
 
-    public void setPercentBusiness(BigDecimal percentBusiness) {
-        this.percentBusiness = percentBusiness;
+    public void setPercentBiz(BigDecimal percentBiz) {
+        this.percentBiz = percentBiz;
     }
 
     public String getBizPermission() {
@@ -131,12 +133,12 @@ public class BizInfoFullView {
         this.bizPermission = bizPermission;
     }
 
-    public String getComment() {
-        return comment;
+    public String getBizComment() {
+        return bizComment;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setBizComment(String bizComment) {
+        this.bizComment = bizComment;
     }
 
     public BigDecimal getStandardAccountReceivable() {
@@ -315,4 +317,43 @@ public class BizInfoFullView {
         this.buyerList = buyerList;
     }
 
+    @Override
+    public String toString() {
+
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("bizInfoText", bizInfoText)
+                .append("tradeType", tradeType)
+                .append("bizType", bizType)
+                .append("bizGroup", bizGroup)
+                .append("bizDesc", bizDesc)
+                .append("bizCode", bizCode)
+                .append("incomeFactor", incomeFactor)
+                .append("adjustedIncomeFactor", adjustedIncomeFactor)
+                .append("percentBiz", percentBiz)
+                .append("bizPermission", bizPermission)
+                .append("bizComment", bizComment)
+                .append("standardAccountReceivable", standardAccountReceivable)
+                .append("averagePurchaseAmount", averagePurchaseAmount)
+                .append("purchasePercentCash", purchasePercentCash)
+                .append("purchasePercentCredit", purchasePercentCredit)
+                .append("purchasePercentLocal", purchasePercentLocal)
+                .append("purchasePercentForeign", purchasePercentForeign)
+                .append("purchaseTerm", purchaseTerm)
+                .append("standardAccountPayable", standardAccountPayable)
+                .append("averagePayableAmount", averagePayableAmount)
+                .append("payablePercentCash", payablePercentCash)
+                .append("payablePercentCredit", payablePercentCredit)
+                .append("payablePercentLocal", payablePercentLocal)
+                .append("payablePercentForeign", payablePercentForeign)
+                .append("payableTerm", payableTerm)
+                .append("standardStock", standardStock)
+                .append("stockDurationBDM", stockDurationBDM)
+                .append("stockDurationUW", stockDurationUW)
+                .append("stockValueBDM", stockValueBDM)
+                .append("stockValueUW", stockValueUW)
+                .append("bizProductViewList", bizProductViewList)
+                .append("supplierList", supplierList)
+                .append("buyerList", buyerList)
+                .toString();
+    }
 }
