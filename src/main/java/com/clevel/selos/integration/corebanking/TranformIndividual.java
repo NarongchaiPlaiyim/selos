@@ -54,56 +54,40 @@ public class TranformIndividual implements Serializable{
     ReferenceDAO referenceDAO;
     @Inject
     AddressTypeDAO addressTypeDAO;
+    @Inject
+    MaritalStatusDAO maritalStatusDAO;
 
     public CustomerInfoView tranform(IndividualModel individualModel){
 
         CustomerInfoView customerInfoView =new CustomerInfoView();
 
         customerInfoView.setCitizenId(individualModel.getCitizenID());
+        customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
         customerInfoView.setFirstNameTh(individualModel.getFirstname());
         customerInfoView.setLastNameTh(individualModel.getLastname());
-        customerInfoView.setFirstNameEn(individualModel.getFirstnameEN());
-        customerInfoView.setLastNameEn(individualModel.getLastnameEN());
+//        customerInfoView.setTitleEn(titleDAO.findOneByCriteria(Restrictions.eq("titleEn", individualModel.getTitleEN())));
+//        customerInfoView.setFirstNameEn(individualModel.getFirstnameEN());
+//        customerInfoView.setLastNameEn(individualModel.getLastnameEN());
         customerInfoView.setCustomerId(individualModel.getDocumentType());
         customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("type", individualModel.getDocumentType())));
         customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
-//        customerInfoView.setServiceSegment(individualModel.get);
-//        customerInfoView.setCustomerEntity(customerEntityDAO.findOneByCriteria(Restrictions.eq("","")));
-        customerInfoView.setSearchBy(0);  //**
-        customerInfoView.setSearchId("");     //**
-//        customerInfoView.setBorrowerType("");
-        customerInfoView.setCardAuthorizeBy("");
-        customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
-        customerInfoView.setTitleEn(titleDAO.findOneByCriteria(Restrictions.eq("titleEn", individualModel.getTitleEN())));
-        customerInfoView.setGender(Gender.MALE);      //*
-        customerInfoView.setAge(0);       //*
-//        customerInfoView.setOrigin(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getRace()))); //**
-//        customerInfoView.setNationality("");
-//        customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("","")));
-//        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("","")));
-        customerInfoView.setCitizenCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getNationality())));
-//        customerInfoView.setRegistrationCountry("");      //*
-        customerInfoView.setMobileNumber("");             //*
-        customerInfoView.setFaxNumber("");                //*
-//        customerInfoView.setEmail(individualModel);    //*
-//        customerInfoView.setMailingAddressType("");   //*
-//        customerInfoView.setKycLevel(kycLevelDAO.findOneByCriteria(Restrictions.eq("","")));  //*
-//        customerInfoView.setConvenantFlag(false);
-//        customerInfoView.setEwsFlag(false);
-//        customerInfoView.setReviewFlag(false);
-//        customerInfoView.setReason("");
-        customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-        customerInfoView.setChildrenList(null);       //*
-//        customerInfoView.setApproxIncome("");     //*
-//        customerInfoView.setMaritalStatus("");        //**
-//        customerInfoView.setRegistrationId("");    //**
         customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
-//        customerInfoView.setDateOfRegister(new Date()); //*
-//        customerInfoView.setRelation(relationDAO.findOneByCriteria(Restrictions.eq("",""))); //*
-//        customerInfoView.setReference(referenceDAO.findOneByCriteria(Restrictions.eq("",""))); //*
-        customerInfoView.setCollateralOwner(false);
-//        customerInfoView.setPercentShare(new BigDecimal(0));
+        if(individualModel.getGender().equals("M")){
+        customerInfoView.setGender(Gender.MALE);
+        }else if(individualModel.getGender().equals("F")){
+        customerInfoView.setGender(Gender.FEMALE);
+        }
+        customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getEducationBackground())));
+        customerInfoView.setOrigin(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getRace())));  //***
+        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
+        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
+        customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
+        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
+        //bizCode not mapping file
+        customerInfoView.setMobileNumber("");
+        customerInfoView.setFaxNumber("");
 
+        //spouse not mapping file
 
         //Workaddress
         AddressView workAddress=new AddressView();
@@ -111,8 +95,8 @@ public class TranformIndividual implements Serializable{
         workAddress.setMoo(individualModel.getWorkAddress().getAddressMoo());
         workAddress.setBuilding(individualModel.getWorkAddress().getAddressBuilding());
         workAddress.setRoad(individualModel.getWorkAddress().getAddressStreet());
-        workAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getSubdistrict().replace("แขวง",""))));
-        workAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getDistrict().replace("เขต",""))));
+        workAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getSubdistrict())));
+        workAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getDistrict())));
         workAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getProvince())));
         workAddress.setAddressType(addressTypeDAO.findById(3));
         workAddress.setPostalCode(individualModel.getWorkAddress().getPostcode());
@@ -124,8 +108,8 @@ public class TranformIndividual implements Serializable{
         currentAddress.setMoo(individualModel.getCurrentAddress().getAddressMoo());
         currentAddress.setBuilding(individualModel.getCurrentAddress().getAddressBuilding());
         currentAddress.setRoad(individualModel.getCurrentAddress().getAddressStreet());
-        currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getSubdistrict().replace("แขวง",""))));
-        currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getDistrict().replace("เขต",""))));
+        currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getSubdistrict())));
+        currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getDistrict())));
         currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getProvince())));
         currentAddress.setAddressType(addressTypeDAO.findById(1));
         currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
@@ -138,8 +122,8 @@ public class TranformIndividual implements Serializable{
         homeAddress.setMoo(individualModel.getHomeAddress().getAddressMoo());
         homeAddress.setBuilding(individualModel.getHomeAddress().getAddressBuilding());
         homeAddress.setRoad(individualModel.getHomeAddress().getAddressStreet());
-        homeAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getSubdistrict().replace("แขวง",""))));
-        homeAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getDistrict().replace("เขต",""))));
+        homeAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getSubdistrict())));
+        homeAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getDistrict())));
         homeAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getProvince())));
         homeAddress.setAddressType(addressTypeDAO.findById(2));
         homeAddress.setPostalCode(individualModel.getHomeAddress().getPostcode());

@@ -17,6 +17,10 @@ public class Util {
         return sdf.format(date);
     }
 
+    public static String replaceStringToBlank(String str,String replaceValue){
+
+        return str.replace(replaceValue,"");
+    }
     public static String createDateString(Date date) {
         return createDateString(date,"yyyy-MM-dd");
     }

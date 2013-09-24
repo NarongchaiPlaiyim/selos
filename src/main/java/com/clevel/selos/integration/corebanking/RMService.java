@@ -12,6 +12,7 @@ import com.clevel.selos.model.RMmodel.corporateInfo.RegistrationAddress;
 import com.clevel.selos.model.RMmodel.individualInfo.ContactDetails;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
 import com.clevel.selos.model.RMmodel.individualInfo.Spouse;
+import com.clevel.selos.model.RMmodel.individualInfo.Telephone;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -150,8 +151,8 @@ public class RMService implements Serializable {
 
         //requestTime
         Date requestTime = new Date();
-        String linkKey=Util.getLinkKey("userId");
-        log.debug("LinkKey : {}",linkKey);
+        String linkKey = Util.getLinkKey("userId");
+        log.debug("LinkKey : {}", linkKey);
         log.debug("============================ Request ==============================");
         log.debug("requestServiceTime : {}", new Date());
         log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
@@ -168,7 +169,7 @@ public class RMService implements Serializable {
 
 
                 //Audit Data
-                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime,linkKey);
+                rmAuditor.add("userId", "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -182,17 +183,33 @@ public class RMService implements Serializable {
                     individualModel.setTmbCusID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustNbr());
                     individualModel.setTitleTH(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
                     //spilt Name
-                    String name[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName().split(" ");
-                    individualModel.setFirstname(name[0]);
-                    individualModel.setLastname(name[1]);
+                    String name[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName().split(" ");
+                    int nameSize = name.length - 1;
+                    if (nameSize >= 0) {
+                        individualModel.setFirstname(name[0]);
+                    }
+                    if (nameSize >= 1) {
+                        individualModel.setLastname(name[1]);
+                    }
                     individualModel.setDocumentType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
                     individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
-                    log.debug("=================================== {}",resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
+                    log.debug("=================================== {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setDocumentExpiredDate(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setCusType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustType());
 //
-                    individualModel.setPhoneNo(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1());
-                    individualModel.setExtension(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension1());
+                    individualModel.setTelephoneNumber1(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension1()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType1()));
+                    individualModel.setTelephoneNumber2(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber2()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension2()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType2()));
+                    individualModel.setTelephoneNumber3(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber3()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension3()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType3()));
+                    individualModel.setTelephoneNumber4(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber4()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension4()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType4()));
+
                     //
                     individualModel.setDateOfBirth(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getDateOfBirth());
                     individualModel.setGender(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getGender());
@@ -202,9 +219,18 @@ public class RMService implements Serializable {
                     individualModel.setNationality(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getIsoCitizenCtry());  //****
                     individualModel.setNumberOfChild(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNoOfChildren());
                     //spouse
-                    String spouseName[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseName().split(" ");
-                    individualModel.setSpouse(new Spouse(spouseName[0],spouseName[1],resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseTin()
-                            ,resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseDateOfBirth()));
+                    String spouseName[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseName().split(" ");
+                    String spouse1 = "", spouse2 = "";
+                    int spouseSize = spouseName.length - 1;
+                    if (spouseSize >= 0) {
+                        spouse1 = spouseName[0];
+                    }
+                    if (spouseSize >= 1) {
+                        spouse2 = spouseName[1];
+                    }
+
+                    individualModel.setSpouse(new Spouse(spouse1, spouse2, resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseTin()
+                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseDateOfBirth()));
 
                     individualModel.setOccupationCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getOccupationCode1());
                     individualModel.setBizCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusType1());
@@ -213,15 +239,29 @@ public class RMService implements Serializable {
                     individualModel.setFirstnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
                     individualModel.setLastnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
                     //set HomeAddress
-                    String homeAddressLine1[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
-                    String homeAddressLine3[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
-                    ContactDetails homeContactDetails=new ContactDetails();
-                    homeContactDetails.setAddressNo(homeAddressLine1[0]);
-                    homeContactDetails.setAddressMoo(homeAddressLine1[1]);
-                    homeContactDetails.setAddressBuilding(homeAddressLine1[2]);
+                    String homeAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
+                    String homeAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
+                    ContactDetails homeContactDetails = new ContactDetails();
+                    //validateSpiltSize
+                    int homeAddressLineSize1 = homeAddressLine1.length - 1;
+                    if (homeAddressLineSize1 >= 0) {
+                        homeContactDetails.setAddressNo(homeAddressLine1[0]);
+                    }
+                    if (homeAddressLineSize1 >= 1) {
+                        homeContactDetails.setAddressMoo(homeAddressLine1[1]);
+                    }
+                    if (homeAddressLineSize1 >= 2) {
+                        homeContactDetails.setAddressBuilding(homeAddressLine1[2]);
+                    }
                     homeContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine2());
-                    homeContactDetails.setSubdistrict(homeAddressLine3[0]);
-                    homeContactDetails.setDistrict(homeAddressLine3[1]);
+                    //validateSpiltSize
+                    int homeAddressLineSize3 = homeAddressLine3.length - 1;
+                    if (homeAddressLineSize3 >= 0) {
+                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], "แขวง"));
+                    }
+                    if (homeAddressLineSize3 >= 1) {
+                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], "เขต"));
+                    }
                     homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
                     homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
                     homeContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCtry());
@@ -230,15 +270,29 @@ public class RMService implements Serializable {
 
 
                     //set CurrentAddress
-                    String currentAddressLine1[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine1().split(" ");
-                    String currentAddressLine3[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine3().split(" ");
-                    ContactDetails currentContactDetails=new ContactDetails();
-                    currentContactDetails.setAddressNo(currentAddressLine1[0]);
-                    currentContactDetails.setAddressMoo(currentAddressLine1[1]);
-                    currentContactDetails.setAddressBuilding(currentAddressLine1[2]);
+                    String currentAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine1().split(" ");
+                    String currentAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine3().split(" ");
+                    ContactDetails currentContactDetails = new ContactDetails();
+                    //validateSpiltSize
+                    int currentAddressLineSize1 = currentAddressLine1.length - 1;
+                    if (currentAddressLineSize1 >= 0) {
+                        currentContactDetails.setAddressNo(currentAddressLine1[0]);
+                    }
+                    if (currentAddressLineSize1 >= 1) {
+                        currentContactDetails.setAddressMoo(currentAddressLine1[1]);
+                    }
+                    if (currentAddressLineSize1 >= 2) {
+                        currentContactDetails.setAddressBuilding(currentAddressLine1[2]);
+                    }
                     currentContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine2());
-                    currentContactDetails.setSubdistrict(currentAddressLine3[0]);
-                    currentContactDetails.setDistrict(currentAddressLine3[1]);
+                    //validateSpiltSize
+                    int currentAddressLineSize3 = currentAddressLine3.length - 1;
+                    if (currentAddressLineSize3 >= 0) {
+                        currentContactDetails.setSubdistrict(Util.replaceStringToBlank(currentAddressLine3[0], "แขวง"));
+                    }
+                    if (currentAddressLineSize3 >= 1) {
+                        currentContactDetails.setDistrict(Util.replaceStringToBlank(currentAddressLine3[1], "เขต"));
+                    }
                     currentContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCity());
                     currentContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegPostalCd());
                     currentContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCtry());
@@ -247,16 +301,29 @@ public class RMService implements Serializable {
 
 
                     //set WorkAddress
-                    String workAddressLine1[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine1().split(" ");
-                    String workAddressLine3[]=resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine3().split(" ");
-                    ContactDetails workContactDetails=new ContactDetails();
-                    workContactDetails.setAddressNo(workAddressLine1[0]);
-                    workContactDetails.setAddressMoo(workAddressLine1[1]);
-                    workContactDetails.setAddressBuilding(workAddressLine1[2]);
+                    String workAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine1().split(" ");
+                    String workAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine3().split(" ");
+                    ContactDetails workContactDetails = new ContactDetails();
+                    //validateSpiltSize
+                    int workAddressLineSize1 = workAddressLine1.length - 1;
+                    if (workAddressLineSize1 >= 0) {
+                        workContactDetails.setAddressNo(workAddressLine1[0]);
+                    }
+                    if (workAddressLineSize1 >= 1) {
+                        workContactDetails.setAddressMoo(workAddressLine1[1]);
+                    }
+                    if (workAddressLineSize1 >= 2) {
+                        workContactDetails.setAddressBuilding(workAddressLine1[2]);
+                    }
                     workContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine2());
-                    workContactDetails.setSubdistrict(workAddressLine3[0]);
-                    workContactDetails.setDistrict(workAddressLine3[1]);
-//                    log.debug("TEST  "+workAddressLine3[0]+ "   "+workAddressLine3[1]);
+                    //ValidateSpiltSize
+                    int workAddressLineSize3 = workAddressLine3.length - 1;
+                    if (workAddressLineSize3 >= 0) {
+                        workContactDetails.setSubdistrict(Util.replaceStringToBlank(workAddressLine3[0], "แขวง"));
+                    }
+                    if (workAddressLineSize3 >= 1) {
+                        workContactDetails.setDistrict(Util.replaceStringToBlank(workAddressLine3[1], "เขต"));
+                    }
                     workContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCity());
                     workContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusPostalCd());
                     workContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCtry());
@@ -344,8 +411,8 @@ public class RMService implements Serializable {
 //
         //requestTime
         Date requestTime = new Date();
-        String linkKey=Util.getLinkKey("userId");
-        log.debug("LinkKey : {}",linkKey);
+        String linkKey = Util.getLinkKey("userId");
+        log.debug("LinkKey : {}", linkKey);
         log.debug("============================ Request ==============================");
         log.debug("requestServiceTime : {}", new Date());
         log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
@@ -386,8 +453,8 @@ public class RMService implements Serializable {
                     corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
-
-                    RegistrationAddress registrationAddress=new RegistrationAddress();
+//                    corporateModel.s
+                    RegistrationAddress registrationAddress = new RegistrationAddress();
                     registrationAddress.setSubdistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon());
                     registrationAddress.setDistrict(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper());
                     registrationAddress.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity2());
@@ -407,7 +474,7 @@ public class RMService implements Serializable {
                     throw new ValidationException(exceptionMsg.get("501"));
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    corporateModel=new CorporateModel();
+                    corporateModel = new CorporateModel();
 
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
                     throw new ValidationException(exceptionMsg.get("502"));
@@ -487,8 +554,8 @@ public class RMService implements Serializable {
 
         //requestTime
         Date requestTime = new Date();
-        String linkKey=Util.getLinkKey("userId");
-        log.debug("LinkKey : {}",linkKey);
+        String linkKey = Util.getLinkKey("userId");
+        log.debug("LinkKey : {}", linkKey);
         log.debug("============================ Request ==============================");
         log.debug("requestServiceTime : {}", requestTime);
         log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
@@ -568,7 +635,7 @@ public class RMService implements Serializable {
             e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
-            rmAuditor.add("userid", "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(),linkKey);
+            rmAuditor.add("userid", "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
         }
 
         log.debug("CorporateService() END");

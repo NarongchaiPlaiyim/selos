@@ -77,91 +77,91 @@ public class CaseCreation implements WSCaseCreation {
 
             //validate all input parameter
             if(!ValidationUtil.isEqualRange(2,jobName.length())){
-                return new CaseCreationResponse(2,"jobName Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("052"));
             }
             if(ValidationUtil.isGreaterThan(30,caNumber.length())){
-                return new CaseCreationResponse(2,"caNumber Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("053"));
             }
             if(ValidationUtil.isGreaterThan(30,oldCaNumber.length())){
-                return new CaseCreationResponse(2,"oldCaNumber Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("054"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo1.length())){
-                return new CaseCreationResponse(2,"accountNo1 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("055"));
             }
             if(ValidationUtil.isGreaterThan(30,customerId.length())){
-                return new CaseCreationResponse(2,"customerId Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("056"));
             }
             if(ValidationUtil.isGreaterThan(150,customerName.length())){
-                return new CaseCreationResponse(2,"customerName Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("057"));
             }
             if(!ValidationUtil.isEqualRange(13,citizenId.length())){
-                return new CaseCreationResponse(2,"citizenId Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("058"));
             }
 //            if(!ValidationUtil.isEqualRange(1,requestType+"".length())){
-//                return new CaseCreationResponse(2,"requestType Invalid Lenght!");
+//                return new CaseCreationResponse(2,msg.get("059"));
 //            }
 //            if(!ValidationUtil.isEqualRange(1,customerType+"".length())){
-//                return new CaseCreationResponse(2,"customerType Invalid Lenght!");
+//                return new CaseCreationResponse(2,msg.get("060"));
 //            }
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
-                return new CaseCreationResponse(2,"bdmId Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("061"));
             }
             if(ValidationUtil.isGreaterThan(4,hubCode.length())){
-                return new CaseCreationResponse(2,"hubCode Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("062"));
             }
             if(ValidationUtil.isGreaterThan(4,regionCode.length())){
-                return new CaseCreationResponse(2,"regionCode Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("063"));
             }
             if(ValidationUtil.isGreaterThan(5,uwId.length())){
-                return new CaseCreationResponse(2,"uwId Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("064"));
             }
             if(ValidationUtil.isGreaterThan(10,appInDateBDM.length())){
-                return new CaseCreationResponse(2,"appInDateBDM Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("065"));
             }
             if(!ValidationUtil.isEqualRange(1,finalApproved.length())){
-                return new CaseCreationResponse(2,"finalApproved Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("066"));
             }
             if(!ValidationUtil.isEqualRange(1,parallel.length())){
-                return new CaseCreationResponse(2,"parallel Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("067"));
             }
             if(ValidationUtil.isGreaterThan(1,pending.length())){
-                return new CaseCreationResponse(2,"pending Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("068"));
             }
             if(ValidationUtil.isGreaterThan(1,caExist.length())){
-                return new CaseCreationResponse(2,"caExist Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("069"));
             }
             if(ValidationUtil.isGreaterThan(1,caEnd.length())){
-                return new CaseCreationResponse(2,"caEnd Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("070"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo2.length())){
-                return new CaseCreationResponse(2,"accountNo2 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("071"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo3.length())){
-                return new CaseCreationResponse(2,"accountNo3 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("072"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo4.length())){
-                return new CaseCreationResponse(2,"accountNo4 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("073"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo5.length())){
-                return new CaseCreationResponse(2,"accountNo5 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("074"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo6.length())){
-                return new CaseCreationResponse(2,"accountNo6 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("075"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo7.length())){
-                return new CaseCreationResponse(2,"accountNo7 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("076"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo8.length())){
-                return new CaseCreationResponse(2,"accountNo8 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("077"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo9.length())){
-                return new CaseCreationResponse(2,"accountNo9 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("078"));
             }
             if(ValidationUtil.isGreaterThan(30,accountNo10.length())){
-                return new CaseCreationResponse(2,"accountNo10 Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("079"));
             }
             if(ValidationUtil.isGreaterThan(10,appInDateUW.length())){
-                return new CaseCreationResponse(2,"appInDateUW Invalid Lenght!");
+                return new CaseCreationResponse(2,msg.get("053"));
             }
 
 

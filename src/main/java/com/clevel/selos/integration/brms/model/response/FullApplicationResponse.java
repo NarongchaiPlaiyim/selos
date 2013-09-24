@@ -11,6 +11,6 @@ public class FullApplicationResponse extends PreScreenResponse{
     }
 
     public FullApplicationResponse(String ruleName, String ruleOrder, boolean groupResult, boolean borrowerResult, GroupResultData groupResultData, List<BorrowerResultData> borrowerResultDataList) {
-        super(ruleName, ruleOrder, groupResult, borrowerResult, groupResultData, borrowerResultDataList);
+//        super(ruleName, ruleOrder, groupResult, borrowerResult, groupResultData, borrowerResultDataList);
     }
 }

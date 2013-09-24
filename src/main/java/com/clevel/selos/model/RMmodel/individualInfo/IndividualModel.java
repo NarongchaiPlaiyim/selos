@@ -25,8 +25,6 @@ public class IndividualModel implements Serializable {
     private String citizenID;
     private String documentExpiredDate;
     private String cusType;
-    private String phoneNo;
-    private String extension;
     private String dateOfBirth;
     private String gender;
     private String educationBackground;
@@ -34,6 +32,11 @@ public class IndividualModel implements Serializable {
     private String marriageStatus;
     private String nationality;
     private String numberOfChild;
+
+    private Telephone telephoneNumber1;
+    private Telephone telephoneNumber2;
+    private Telephone telephoneNumber3;
+    private Telephone telephoneNumber4;
 
     private String titleEN;
     private String firstnameEN;
@@ -115,22 +118,6 @@ public class IndividualModel implements Serializable {
 
     public void setCusType(String cusType) {
         this.cusType = cusType;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
     }
 
     public String getDateOfBirth() {
@@ -270,5 +257,37 @@ public class IndividualModel implements Serializable {
 
     public void setFirstnameEN(String firstnameEN) {
         this.firstnameEN = firstnameEN;
+    }
+
+    public Telephone getTelephoneNumber1() {
+        return telephoneNumber1;
+    }
+
+    public void setTelephoneNumber1(Telephone telephoneNumber1) {
+        this.telephoneNumber1 = telephoneNumber1;
+    }
+
+    public Telephone getTelephoneNumber2() {
+        return telephoneNumber2;
+    }
+
+    public void setTelephoneNumber2(Telephone telephoneNumber2) {
+        this.telephoneNumber2 = telephoneNumber2;
+    }
+
+    public Telephone getTelephoneNumber3() {
+        return telephoneNumber3;
+    }
+
+    public void setTelephoneNumber3(Telephone telephoneNumber3) {
+        this.telephoneNumber3 = telephoneNumber3;
+    }
+
+    public Telephone getTelephoneNumber4() {
+        return telephoneNumber4;
+    }
+
+    public void setTelephoneNumber4(Telephone telephoneNumber4) {
+        this.telephoneNumber4 = telephoneNumber4;
     }
 }
