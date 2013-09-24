@@ -10,25 +10,25 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.productType')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.productType}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductView.productType}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolume')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.percentSalesVolumn}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductView.percentSalesVolume}" required="true"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentEBIT')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.percentEBIT}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductView.percentEBIT}" required="true"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.productDetail')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.bizProductView.productDetail}" required="true"/>
+                    <p:inputText value="#{bizInfoDetail.bizProductView.productDetail}" required="true"/>
                 </td>
             </tr>
 
@@ -38,7 +38,7 @@
                             id="btnSaveBizProductView"
                             value="Save"
                             styleClass="small"
-                            action="#{businessInfoDetail.onSaveBizProductView()}"
+                            action="#{bizInfoDetail.onSaveBizProductView()}"
                             process=":bizProductViewDlgForm"
                             update=":frmMain:bizProductViewTable,:bizProductViewDlgForm"
                             oncomplete="handleFullappBizProductRequest(xhr, status, args)"

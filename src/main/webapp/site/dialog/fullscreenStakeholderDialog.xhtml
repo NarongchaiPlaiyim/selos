@@ -8,51 +8,51 @@
     <h:form id="stakeholderViewDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title">  <h:outputText value="#{businessInfoDetail.dlgStakeName}"/></td>
+                <td class="title">  <h:outputText value="#{bizInfoDetail.dlgStakeName}"/></td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholderView.name}"/>
+                    <p:inputText value="#{bizInfoDetail.stakeholderView.name}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactName')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholderView.contactName}"/>
+                    <p:inputText value="#{bizInfoDetail.stakeholderView.contactName}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.phoneNo')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholderView.phoneNo}"/>
+                    <p:inputText value="#{bizInfoDetail.stakeholderView.phoneNo}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactYear')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholderView.contactYear}"/>
+                    <p:inputText value="#{bizInfoDetail.stakeholderView.contactYear}"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolumn')}"/> : </td>
+                <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolume')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentSalesVolumn}"/>
+                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentSalesVolume}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentCash')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentCash}"/>
+                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentCash}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentCredit')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{businessInfoDetail.stakeholderView.percentCredit}"/>
+                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentCredit}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.creditTerm')}"/> : </td>
                 <td>
-                    <p:inputText value="#{businessInfoDetail.stakeholderView.creditTerm}"/>
+                    <p:inputText value="#{bizInfoDetail.stakeholderView.creditTerm}"/>
                 </td>
             </tr>
             <tr>
@@ -61,7 +61,7 @@
                             id="btnSaveStakeholderView"
                             value="Save"
                             styleClass="small"
-                            action="#{businessInfoDetail.onSaveStakeholderView()}"
+                            action="#{bizInfoDetail.onSaveStakeholderView()}"
                             update=":frmMain:supplierTable,:frmMain:buyerTable,:frmMain:supplierTotalTable,:frmMain:buyerTotalTable"
                             oncomplete="stakeholderViewDlg.hide()"
                      />
