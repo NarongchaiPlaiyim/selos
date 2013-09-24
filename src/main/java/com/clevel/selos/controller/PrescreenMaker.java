@@ -3,27 +3,30 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
-import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.service.PrescreenService;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.PrescreenTransform;
+import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.awt.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -139,9 +142,10 @@ public class PrescreenMaker implements Serializable {
     private ProvinceDAO provinceDAO;
     @Inject
     private UserDAO userDAO;
-
     @Inject
     private PrescreenService prescreenService;
+    @Inject
+    private PrescreenTransform prescreenTransform;
 
 
     public PrescreenMaker() {
@@ -152,6 +156,14 @@ public class PrescreenMaker implements Serializable {
     public void onCreation() {
 
         log.info("onCreation");
+
+        HttpSession session = FacesUtil.getSession(true);
+        long workCasePrescreenId = new Long(session.getAttribute("workCasePrescreenId").toString());
+        workCasePrescreenId = 1;
+
+        WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+
+        prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));
 
         modeForButton = "add";
 
