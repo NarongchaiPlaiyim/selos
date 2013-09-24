@@ -17,7 +17,17 @@ public abstract class MessageProvider implements Message {
     protected ResourceBundle messageEn;
 
     protected ResourceBundle getBundle() {
-        HttpSession httpSession = FacesUtil.getSession(false);
+        HttpSession httpSession = null;
+        try {
+            httpSession = FacesUtil.getSession(false);
+        } catch (Exception e) {
+            if (messageEn == null) {
+                log.debug("Face session is null. load service resources.");
+                messageEn = ResourceBundle.getBundle(resource, new Locale("en", "US"));
+            }
+            log.debug("Return service message resources. (En)");
+            return messageEn;
+        }
         if (Language.TH == httpSession.getAttribute("language")) {
             if (messageTh == null) {
                 log.debug("Load resource: {} (Th)",resource);

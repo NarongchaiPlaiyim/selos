@@ -1,8 +1,5 @@
 package com.clevel.selos.model.view;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * User: acer

@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.brms;
+package com.clevel.selos.integration.test;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.BRMS;
@@ -7,24 +7,22 @@ import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
 import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
+import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Default
-public class BRMInterfaceImpl implements BRMSInterface,Serializable{
+@Alternative
+public class BRMSInterfaceImplTest implements BRMSInterface{
     @Inject
     @BRMS
     Logger log;
 
     @Inject
-    public BRMInterfaceImpl() {
+    public BRMSInterfaceImplTest() {
     }
 
     @Override
@@ -34,23 +32,28 @@ public class BRMInterfaceImpl implements BRMSInterface,Serializable{
             log.error("preScreenRequest is null for request");
             throw new ValidationException("002");
         }
-        /*//todo call service
-        return new ArrayList<PreScreenResponse>();*/
-        List<PreScreenResponse> preScreenResponseList = new ArrayList<PreScreenResponse>();
 
-        GroupResultData groupResultData = new GroupResultData();
-        groupResultData.setColor(RuleColorResult.RED);
-        groupResultData.setDeviationFlag("No Deviation");
-        groupResultData.setRejectGroupCode("P");
+        List<PreScreenResponse> preScreenResponseList = new ArrayList<PreScreenResponse>();
 
         PreScreenResponse preScreenResponse = new PreScreenResponse();
         preScreenResponse.setRuleName("Group_Result_Final_AppLevel");
-        preScreenResponse.setRuleOrder("3010");
-        preScreenResponse.setBorrowerResult(false);
-        preScreenResponse.setGroupResult(true);
-        preScreenResponse.setGroupResultData(groupResultData);
-
+        preScreenResponse.setRuleOrder("2010");
+        preScreenResponse.setType("Group Result");
+        preScreenResponse.setPersonalId("");
+        preScreenResponse.setColor(RuleColorResult.GREEN);
+        preScreenResponse.setDeviationFlag("No Deviation");
+        preScreenResponse.setRejectGroupCode("P");
         preScreenResponseList.add(preScreenResponse);
+
+        PreScreenResponse preScreenResponse2 = new PreScreenResponse();
+        preScreenResponse2.setRuleName("Decision_Matrix_NCB_DB");
+        preScreenResponse2.setRuleOrder("1010");
+        preScreenResponse2.setType("");
+        preScreenResponse2.setPersonalId("1234567890123");
+        preScreenResponse2.setColor(RuleColorResult.RED);
+        preScreenResponse2.setDeviationFlag("");
+        preScreenResponse2.setRejectGroupCode("");
+        preScreenResponseList.add(preScreenResponse2);
 
         return preScreenResponseList;
     }

@@ -10,8 +10,8 @@ import java.math.BigDecimal;
 @Table(name="wrk_prescreen_collateral")
 public class PrescreenCollateral implements Serializable{
     @Id
-    @SequenceGenerator(name="SEQ_WRK_PRESCREEN_COLLATERAL_ID", sequenceName="SEQ_WRK_PRESCREEN_COLLATERAL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PRESCREEN_COLLATERAL_ID")
+    @SequenceGenerator(name="SEQ_WRK_PS_COLL_ID", sequenceName="SEQ_WRK_PS_COLL_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PS_COLL_ID")
     private long id;
 
     @ManyToOne

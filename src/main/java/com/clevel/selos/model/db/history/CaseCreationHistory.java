@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.history;
 
+import com.clevel.selos.integration.IntegrationStatus;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -76,14 +77,16 @@ public class CaseCreationHistory implements Serializable {
     @Column(name="create_date")
     private Date createDate;
     @Column(name="create_status", length = 10)
-    private String status;
+    private IntegrationStatus status;
     @Column(name="create_status_detail")
     private String statusDetail;
+    @Column(name="app_ref_number")
+    private String appRefNumber;
 
     public CaseCreationHistory() {
     }
 
-    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, String status, String statusDetail) {
+    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, IntegrationStatus status, String statusDetail, String appRefNumber) {
         this.jobName = jobName;
         this.caNumber = caNumber;
         this.oldCaNumber = oldCaNumber;
@@ -116,6 +119,7 @@ public class CaseCreationHistory implements Serializable {
         this.createDate = createDate;
         this.status = status;
         this.statusDetail = statusDetail;
+        this.appRefNumber = appRefNumber;
     }
 
     public long getId() {
@@ -366,11 +370,11 @@ public class CaseCreationHistory implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getStatus() {
+    public IntegrationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(IntegrationStatus status) {
         this.status = status;
     }
 
@@ -380,6 +384,14 @@ public class CaseCreationHistory implements Serializable {
 
     public void setStatusDetail(String statusDetail) {
         this.statusDetail = statusDetail;
+    }
+
+    public String getAppRefNumber() {
+        return appRefNumber;
+    }
+
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
     }
 
     @Override
@@ -418,6 +430,7 @@ public class CaseCreationHistory implements Serializable {
                 append("createDate", createDate).
                 append("status", status).
                 append("statusDetail", statusDetail).
+                append("appRefNumber", appRefNumber).
                 toString();
     }
 }
