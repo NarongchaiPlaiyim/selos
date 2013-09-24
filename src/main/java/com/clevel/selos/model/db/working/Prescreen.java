@@ -2,6 +2,8 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -46,8 +48,16 @@ public class Prescreen implements Serializable {
     private Date modifyDate;
 
     @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
+
+    public  Prescreen(){
+
+    }
 
     public long getId() {
         return id;
@@ -121,11 +131,36 @@ public class Prescreen implements Serializable {
         this.modifyDate = modifyDate;
     }
 
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
     public User getModifyBy() {
         return modifyBy;
     }
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCasePrescreen", workCasePrescreen)
+                .append("expectedSubmitDate", expectedSubmitDate)
+                .append("businessLocation", businessLocation)
+                .append("registerDate", registerDate)
+                .append("tcg", tcg)
+                .append("refinance", refinance)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

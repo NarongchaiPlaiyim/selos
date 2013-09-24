@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -37,12 +38,16 @@ public class PrescreenChecker implements Serializable {
     private List<CustomerInfoView> customerInfoViewList;
     private String[] citizenID;
 
+    @Inject
+    CustomerDAO customerDAO;
+
     public PrescreenChecker(){
 
     }
 
     @PostConstruct
     public void onCreation() {
+
         //TODO Generate row for textbox to check Citizen id
         /*if(customerInfoViewList == null){
             customerInfoViewList = new ArrayList<CustomerInfoView>();

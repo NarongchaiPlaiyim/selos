@@ -3,13 +3,16 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PrescreenView implements Serializable {
-    private BigDecimal id;
+public class PrescreenView implements Serializable{
+    private long id;
     private ProductGroup productGroup;
     private Date expectedSubmitDate;
     private Province businessLocation;
@@ -17,6 +20,10 @@ public class PrescreenView implements Serializable {
     private Date referDate;
     private boolean tcg;
     private boolean refinance;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
     public PrescreenView(){
 
@@ -31,11 +38,11 @@ public class PrescreenView implements Serializable {
         this.refinance = false;
     }
 
-    public BigDecimal getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -93,5 +100,55 @@ public class PrescreenView implements Serializable {
 
     public void setRefinance(boolean refinance) {
         this.refinance = refinance;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("productGroup", productGroup)
+                .append("expectedSubmitDate", expectedSubmitDate)
+                .append("businessLocation", businessLocation)
+                .append("registerDate", registerDate)
+                .append("referDate", referDate)
+                .append("tcg", tcg)
+                .append("refinance", refinance)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

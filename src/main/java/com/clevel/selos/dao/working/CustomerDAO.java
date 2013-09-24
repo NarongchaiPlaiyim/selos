@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.List;
 
 public class CustomerDAO extends GenericDAO<Customer,Long> {
     @Inject
@@ -14,4 +15,5 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
     @Inject
     public CustomerDAO() {
     }
+
 }

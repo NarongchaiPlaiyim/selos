@@ -28,4 +28,20 @@ public class PrescreenBusinessControl extends BusinessControl {
         workCasePrescreenDAO.delete(workCasePrescreen);
     }
 
+    public WorkCasePrescreen getWorkCase(long caseId) throws Exception{
+        WorkCasePrescreen workCasePrescreen = new WorkCasePrescreen();
+        try{
+            workCasePrescreen = workCasePrescreenDAO.findById(caseId);
+            log.info("getWorkCasePrescreen : {}", workCasePrescreen);
+            if(workCasePrescreen == null){
+                throw new Exception("no data found.");
+            }
+        } catch (Exception ex){
+            log.info("getWorkCasePrescreen ::: error : {}", ex.toString());
+            throw new Exception(ex.getMessage());
+        }
+
+        return workCasePrescreen;
+    }
+
 }
