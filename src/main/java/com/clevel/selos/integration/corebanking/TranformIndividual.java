@@ -35,8 +35,6 @@ public class TranformIndividual implements Serializable{
     @Inject
     DocumentTypeDAO documentTypeDAO;
     @Inject
-    CustomerEntityDAO customerEntityDAO;
-    @Inject
     TitleDAO titleDAO;
     @Inject
     NationalityDAO nationalityDAO;
@@ -83,11 +81,11 @@ public class TranformIndividual implements Serializable{
         customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
         customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
-        //bizCode not mapping file
+        //bizCode not mapping
         customerInfoView.setMobileNumber("");
         customerInfoView.setFaxNumber("");
 
-        //spouse not mapping file
+
 
         //Workaddress
         AddressView workAddress=new AddressView();
@@ -113,6 +111,7 @@ public class TranformIndividual implements Serializable{
         currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getCurrentAddress().getProvince())));
         currentAddress.setAddressType(addressTypeDAO.findById(1));
         currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
+                                     //     Not Find country countryCode
 
         customerInfoView.setCurrentAddress(currentAddress);
 

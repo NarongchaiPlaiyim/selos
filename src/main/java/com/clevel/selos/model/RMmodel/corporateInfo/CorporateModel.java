@@ -15,12 +15,8 @@ public class CorporateModel implements Serializable{
     //Personal Detail Section
     private String tmbCusID;
     private String titleTH;
-    private String companyNameTH1;
-    private String companyNameTH2;
-    private String companyNameTH3;
-    private String companyNameEN1;
-    private String companyNameEN2;
-    private String companyNameEN3;
+    private String companyNameTH;
+    private String companyNameEN;
     private String registrationID;
     private String registrationDate;
     private String registrationCountry;
@@ -50,53 +46,23 @@ public class CorporateModel implements Serializable{
         this.titleTH = titleTH;
     }
 
-    public String getCompanyNameTH1() {
-        return companyNameTH1;
+    public String getCompanyNameTH() {
+        return companyNameTH;
     }
 
-    public void setCompanyNameTH1(String companyNameTH1) {
-        this.companyNameTH1 = companyNameTH1;
+    public void setCompanyNameTH(String companyNameTH) {
+        this.companyNameTH = companyNameTH;
     }
 
-    public String getCompanyNameTH2() {
-        return companyNameTH2;
+
+    public String getCompanyNameEN() {
+        return companyNameEN;
     }
 
-    public void setCompanyNameTH2(String companyNameTH2) {
-        this.companyNameTH2 = companyNameTH2;
+    public void setCompanyNameEN(String companyNameEN) {
+        this.companyNameEN = companyNameEN;
     }
 
-    public String getCompanyNameTH3() {
-        return companyNameTH3;
-    }
-
-    public void setCompanyNameTH3(String companyNameTH3) {
-        this.companyNameTH3 = companyNameTH3;
-    }
-
-    public String getCompanyNameEN1() {
-        return companyNameEN1;
-    }
-
-    public void setCompanyNameEN1(String companyNameEN1) {
-        this.companyNameEN1 = companyNameEN1;
-    }
-
-    public String getCompanyNameEN2() {
-        return companyNameEN2;
-    }
-
-    public void setCompanyNameEN2(String companyNameEN2) {
-        this.companyNameEN2 = companyNameEN2;
-    }
-
-    public String getCompanyNameEN3() {
-        return companyNameEN3;
-    }
-
-    public void setCompanyNameEN3(String companyNameEN3) {
-        this.companyNameEN3 = companyNameEN3;
-    }
 
     public String getRegistrationID() {
         return registrationID;

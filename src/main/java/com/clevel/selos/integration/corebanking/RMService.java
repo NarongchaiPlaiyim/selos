@@ -442,8 +442,12 @@ public class RMService implements Serializable {
                     //personal detail session
                     corporateModel.setTitleTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
                     corporateModel.setTmbCusID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
-                    corporateModel.setCompanyNameTH1(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1());
-//                    corporateModel.setcId(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
+                    corporateModel.setCompanyNameTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1()
+                            + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName2()
+                            + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName3());
+                    corporateModel.setCompanyNameEN(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName1()
+                            + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName2()
+                            + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName3());
                     corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
