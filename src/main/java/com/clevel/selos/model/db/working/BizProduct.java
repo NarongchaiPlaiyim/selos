@@ -89,4 +89,12 @@ public class BizProduct {
     public void setProductDetail(String productDetail) {
         this.productDetail = productDetail;
     }
+
+    public BizInfoDetail getBizInfoDetail() {
+        return bizInfoDetail;
+    }
+
+    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
+        this.bizInfoDetail = bizInfoDetail;
+    }
 }

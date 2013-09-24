@@ -56,6 +56,14 @@ public class BizStakeholder {
     public BizStakeholder() {
     }
 
+    public BizInfoDetail getBizInfoDetail() {
+        return bizInfoDetail;
+    }
+
+    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
+        this.bizInfoDetail = bizInfoDetail;
+    }
+
     public long getId() {
         return id;
     }

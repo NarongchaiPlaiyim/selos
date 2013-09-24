@@ -337,46 +337,39 @@ public class BizInfoDetailMaker implements Serializable {
         BizProduct bizProductTemp;
 
         List<BizStakeholder> bizSupplierList;
-
         List<BizStakeholder> bizBuyerList;
-
         List<BizProduct> bizProductList;
-        bizProductList = new ArrayList<BizProduct>();
 
-        log.info( " bizProductViewList Size is " + bizProductViewList.size());
+        bizProductList = new ArrayList<BizProduct>();
         for (int i =0;i<bizProductViewList.size();i++){
             bizProductViewTemp = bizProductViewList.get(i);
-            log.info( " stakeholderTemp is " + bizProductViewTemp);
             bizProductTemp = onBizProductTransform(bizProductViewTemp);
-            log.info( " bizStakeholderTemp is " + bizProductTemp);
             bizProductList.add(bizProductTemp);
         }
 
-        log.info( " bizProductViewList is " + supplierList.size());
         bizSupplierList = new ArrayList<BizStakeholder>();
         for (int i =0;i<supplierList.size();i++){
             stakeholderTemp = supplierList.get(i);
-            log.info( " stakeholderTemp is " + stakeholderTemp);
             bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
-            log.info( " bizStakeholderTemp is " + bizStakeholderTemp);
+            bizStakeholderTemp.setStakeholderType(new BigDecimal(1));
             bizSupplierList.add( bizStakeholderTemp);
         }
 
-        log.info( " bizProductViewList is " + buyerList.size());
         bizBuyerList = new ArrayList<BizStakeholder>();
         for (int i =0;i<buyerList.size();i++){
             stakeholderTemp = buyerList.get(i);
-            log.info( " stakeholderTemp is " + stakeholderTemp);
             bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
-            log.info( " bizStakeholderTemp is " + bizStakeholderTemp);
+            bizStakeholderTemp.setStakeholderType(new BigDecimal(2));
             bizBuyerList.add(bizStakeholderTemp);
         }
+        log.info( " bizProductList is " + bizProductList.size());
+        log.info( " bizSupplierList is " + bizSupplierList.size());
+        log.info( " bizBuyerList is " + bizBuyerList.size());
 
-
+        bizInfoDetail.setBizProductList(bizProductList);
+        bizInfoDetail.setBuyerList(bizBuyerList);
         bizInfoDetail.setSupplierList(bizSupplierList);
-        bizInfoDetail.setBuyerList(bizSupplierList);
-        bizInfoDetail.setSupplierList(bizSupplierList);
-        log.info( "bizInfoDetail before persist is " + bizInfoDetail );
+        //log.info( "bizInfoDetail before persist is " + bizInfoDetail );
         // xxxxx
 
         //save to DB
