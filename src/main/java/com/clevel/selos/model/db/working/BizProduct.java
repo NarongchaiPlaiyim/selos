@@ -1,30 +1,60 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.db.working;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Rangsun
- * Date: 6/9/2556
- * Time: 11:05 น.
+ * Date: 23/9/2556
+ * Time: 9:57 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizProductView {
+@Entity
+@Table(name = "wrk_biz_product")
+public class BizProduct {
 
-    private String no;
+    @Id
+    @SequenceGenerator(name="SEQ_WRK_BIZ_PRODUCT_ID", sequenceName="SEQ_WRK_BIZ_PRODUCT_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_PRODUCT_ID")
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name="biz_info_detail_id")
+    private BizInfoDetail bizInfoDetail;
+
+
+    @Column(name = "no")
+    private long no;
+
+    @Column(name = "product_type")
     private String productType;
+
+    @Column(name = "percent_sales_volume")
     private BigDecimal percentSalesVolume;
+
+    @Column(name = "percent_ebit")
     private BigDecimal percentEBIT;
+
+    @Column(name = "product_detail")
     private String productDetail;
 
-    public String getNo() {
+    public BizProduct() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getNo() {
         return no;
     }
 
-    public void setNo(String no) {
+    public void setNo(long no) {
         this.no = no;
     }
 
@@ -60,22 +90,11 @@ public class BizProductView {
         this.productDetail = productDetail;
     }
 
-    public void reset(){
-        no = "";
-        productType ="";
-        percentSalesVolume = new BigDecimal(0.0);;
-        percentEBIT = new BigDecimal(0.0);
-        productDetail = "";
+    public BizInfoDetail getBizInfoDetail() {
+        return bizInfoDetail;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("no", no)
-                .append("productType", productType)
-                .append("percentSalesVolume", percentSalesVolume)
-                .append("percentEBIT", percentEBIT)
-                .append("productDetail", productDetail)
-                .toString();
+    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
+        this.bizInfoDetail = bizInfoDetail;
     }
 }

@@ -39,7 +39,7 @@
                         <tr>
                             <td class="title" style="width: 250px"> <h:outputText value="#{msg.get('app.businessInfoDetail')}"/> : </td>
                             <td colspan="5">
-                                <p:inputText styleClass="width: 400px;" value="#{businessInfoDetail.bizInfoFullApp.businessInfoDetail}"/>
+                                <p:inputText styleClass="width: 400px;" value="#{bizInfoDetail.bizInfoFullApp.bizInfoText}"/>
                             </td>
                         </tr>
                         <tr>
@@ -59,24 +59,24 @@
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizGroup')}"/> : </td>
                             <td colspan="5">
-                                <p:selectOneMenu styleClass="largest" size="1" value="#{businessInfoDetail.bizGroupId}"
+                                <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoDetail.bizInfoFullApp.bizGroup.id}"
                                     id="businessGroupId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                    <f:selectItems value="#{businessInfoDetail.businessGroupList}"
+                                    <f:selectItems value="#{bizInfoDetail.businessGroupList}"
                                                    var="businessGroup"
                                                    itemLabel="#{businessGroup.name}"
                                                    itemValue="#{businessGroup.id}"/>
-                                    <p:ajax listener="#{businessInfoDetail.onChangeBusinessGroup()}" update=":frmMain:businessDescriptionId" />
+                                    <p:ajax listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain:businessDescriptionId" />
                                 </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title" style="line-height: 15px;"><h:outputText value="#{msg.get('app.bizDesc')}"/> : </td>
                             <td colspan="5">
-                                    <p:selectOneMenu styleClass="largest" size="1"
+                                    <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoDetail.bizInfoFullApp.bizDesc.id}"
                                                         id="businessDescriptionId">
                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                        <f:selectItems value="#{businessInfoDetail.businessDescriptionList}"
+                                        <f:selectItems value="#{bizInfoDetail.businessDescriptionList}"
                                                        var="businessDescription"
                                                        itemLabel="#{businessDescription.name}"
                                                        itemValue="#{businessDescription.id}"/>
@@ -85,26 +85,35 @@
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizCode')}"/> : </td>
-                            <td style="width: 200px"><p:inputText styleClass="large" value=""/></td>
+                            <td style="width: 200px"><p:inputText styleClass="large" value="#{bizInfoDetail.bizInfoFullApp.bizCode}"/></td>
                             <td class="title" style="width: 100px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> : </td>
-                            <td><p:inputText styleClass="medium" value="#{businessInfoDetail.bizInfoFullApp.incomeFactor}"/></td>
+                            <td><p:inputText styleClass="medium" value="#{bizInfoDetail.bizInfoFullApp.incomeFactor}"/></td>
                             <td class="title" style="width: 220px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/> :</td>
-                            <td><p:inputText styleClass="medium" value="#{businessInfoDetail.bizInfoFullApp.adjustedIncomeFactior}"/></td>
+                            <td><p:inputText styleClass="medium" value="#{bizInfoDetail.bizInfoFullApp.adjustedIncomeFactor}"/></td>
                         </tr>
                         <tr>
-                            <td class="title"><h:outputText value="#{msg.get('app.comment')}"/> </td>
-                            <td colspan="5"><p:inputText styleClass="width: 400px;" value="#{businessInfoDetail.bizInfoFullApp.comment}"/></td>
+                            <td class="title"><h:outputText value="#{msg.get('app.bizComment')}"/> </td>
+                            <td colspan="5"><p:inputText styleClass="width: 400px;" value="#{bizInfoDetail.bizInfoFullApp.bizComment}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.percentBusiness')}"/> : </td>
-                            <td colspan="5"><p:inputText styleClass="small" value="#{businessInfoDetail.bizInfoFullApp.percentBusiness}"/></td>
+                            <td colspan="5"><p:inputText styleClass="small" value="#{bizInfoDetail.bizInfoFullApp.percentBiz}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizPermission')}"/> : </td>
-                            <td colspan="5" class="title"><input type="radio" value="#{businessInfoDetail.bizInfoFullApp.bizPermission}" name="bizPermission" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
+                            <td colspan="5" class="title"><input type="radio" value="#{bizInfoDetail.bizInfoFullApp.bizPermission}" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
                         </tr>
                         <tr>
-                            <td colspan="6"><p:separator/></td>
+                            <td colspan="6" style="text-align: center;"><p:separator/>
+                                <p:commandButton id="btnAddBizInfoDetailTest"
+                                                 value="Save DB Test"
+                                                 styleClass="smaller"
+                                                 process=":frmMain"
+                                                 actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
+                                                 update=":frmMain"
+                                />
+
+                            </td>
                         </tr>
                         <tr>
                             <td class="left" colspan="6">
@@ -113,7 +122,7 @@
                                            value="#{msg.get('app.addButton')}"
                                            styleClass="smaller"
                                            process="@this"
-                                           actionListener="#{businessInfoDetail.onAddBizProductView()}"
+                                           actionListener="#{bizInfoDetail.onAddBizProductView()}"
                                            update=":bizProductViewDlgForm"
                                            oncomplete="bizProductViewDlg.show()"/>
                             </td>
@@ -124,7 +133,7 @@
 
                                 <p:dataTable id="bizProductViewTable"
                                              var="bizProductView"
-                                             value="#{businessInfoDetail.bizProductViewList}"
+                                             value="#{bizInfoDetail.bizProductViewList}"
                                              paginator="false"
                                              rowKey="#{bizProductView.name}"
                                              rowIndexVar="rowIndex"
@@ -136,8 +145,8 @@
                                     <p:column headerText="#{msg.get('app.productType')}" styleClass="center" style="width: 110px;">
                                         <h:outputText value="#{bizProductView.productType}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizProductView.percentSalesVolumn}"/>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizProductView.percentSalesVolume}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentEBIT')}" styleClass="center" style="width: 110px;">
                                         <h:outputText value="#{bizProductView.percentEBIT}"/>
@@ -148,20 +157,20 @@
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
-                                                         action="#{businessInfoDetail.onEditBizProductView()}"
+                                                         action="#{bizInfoDetail.onEditBizProductView()}"
                                                          update=":bizProductViewDlgForm"
                                                          process=":frmMain:bizProductViewTable"
                                                          oncomplete="bizProductViewDlg.show();">
                                             <f:setPropertyActionListener value="#{bizProductView}"
-                                                                         target="#{businessInfoDetail.selectBizProduct}"/>
+                                                                         target="#{bizInfoDetail.selectBizProduct}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
-                                                                         target="#{businessInfoDetail.rowIndex}"/>
+                                                                         target="#{bizInfoDetail.rowIndex}"/>
                                         </p:commandButton>
                                         <p:commandButton title="Remove" process="@this"
                                                          icon="ui-icon-trash"
                                                          oncomplete="confirmDeleteBizProductDlg.show()" >
                                             <f:setPropertyActionListener value="#{bizProductView}"
-                                                                         target="#{businessInfoDetail.selectBizProduct}"/>
+                                                                         target="#{bizInfoDetail.selectBizProduct}"/>
                                         </p:commandButton>
 
                                     </p:column>
@@ -174,10 +183,10 @@
                                 <p:spacer width="5px"/>
                                 <p:commandButton value="Add" styleClass="small"
                                                  process="@this"
-                                                 actionListener="#{businessInfoDetail.onAddStakeholderView()}"
+                                                 action="#{bizInfoDetail.onAddStakeholderView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
-                                <f:setPropertyActionListener value="supplier"
-                                                             target="#{businessInfoDetail.stakeType}"/>
+                                <f:setPropertyActionListener value="1"
+                                                             target="#{bizInfoDetail.stakeType}"/>
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -188,7 +197,7 @@
                                 <p:dataTable style="width: 100%;"
                                              id="supplierTable"
                                              var="supplierItem"
-                                             value="#{businessInfoDetail.supplierList}"
+                                             value="#{bizInfoDetail.supplierList}"
                                              paginator="false"
                                              rowKey="#{supplier.name}"
                                              rowIndexVar="rowIndex">
@@ -207,8 +216,8 @@
                                     <p:column headerText="#{msg.get('app.contactYear')}" style="width:11%;">
                                         <h:outputText value="#{supplierItem.contactYear}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.percentSalesVolumn}"/>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" style="width:11%;">
+                                        <h:outputText value="#{supplierItem.percentSalesVolume}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentCash')}" style="width:11%;">
                                         <h:outputText value="#{supplierItem.percentCash}"/>
@@ -222,25 +231,25 @@
                                     <p:column headerText="" style="width:8%;">
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit"
-                                                         action="#{businessInfoDetail.onEditStakeholderView}"
+                                                         action="#{bizInfoDetail.onEditStakeholderView}"
                                                          update=":stakeholderViewDlgForm,:frmMain:supplierTotalTable"
                                                          process=":frmMain:supplierTable"
                                                          oncomplete="stakeholderViewDlg.show();">
-                                            <f:setPropertyActionListener value="supplier"
-                                                                         target="#{businessInfoDetail.stakeType}"/>
+                                            <f:setPropertyActionListener value="1"
+                                                                         target="#{bizInfoDetail.stakeType}"/>
                                             <f:setPropertyActionListener value="#{supplierItem}"
-                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
+                                                                         target="#{bizInfoDetail.selectStakeholder}"/>
                                             <f:setPropertyActionListener value="#{rowIndex}"
-                                                                         target="#{businessInfoDetail.rowIndex}"/>
+                                                                         target="#{bizInfoDetail.rowIndex}"/>
                                         </p:commandButton>
 
                                         <p:commandButton icon="ui-icon-trash"
                                                          title="Remove" process="@this"
                                                          oncomplete="confirmDeleteStakeholderDlg.show()">
                                             <f:setPropertyActionListener value="#{supplierItem}"
-                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
-                                            <f:setPropertyActionListener value="supplier"
-                                                                         target="#{businessInfoDetail.stakeType}"/>
+                                                                         target="#{bizInfoDetail.selectStakeholder}"/>
+                                            <f:setPropertyActionListener value="1"
+                                                                         target="#{bizInfoDetail.stakeType}"/>
 
                                         </p:commandButton>
                                     </p:column>
@@ -265,13 +274,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="right" style="width:11%;">
-                                            <h:inputText value="#{businessInfoDetail.supplierVolumnSum1}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum1}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" colspan="2" >
-                                            <h:inputText value="#{businessInfoDetail.supplierVolumnSum2}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:11%;">
-                                            <h:inputText value="#{businessInfoDetail.supplierTermSum}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:8%;">
 
@@ -282,11 +291,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="right" style="width: 11%;" >
-                                            <h:inputText value="#{businessInfoDetail.supplierVolumnSum2}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="right" style="width: 11%;">
-                                            <h:inputText value="#{businessInfoDetail.supplierTermSum}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">
@@ -308,10 +317,10 @@
                                 <p:spacer width="5px"/>
                                 <p:commandButton value="Add" styleClass="small"
                                                  process="@this"
-                                                 actionListener="#{businessInfoDetail.onAddStakeholderView()}"
+                                                 action="#{bizInfoDetail.onAddStakeholderView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
-                                    <f:setPropertyActionListener value="buyer"
-                                                                 target="#{businessInfoDetail.stakeType}"/>
+                                    <f:setPropertyActionListener value="2"
+                                                                 target="#{bizInfoDetail.stakeType}"/>
                                 </p:commandButton>
                             </td>
                         </tr>
@@ -320,7 +329,7 @@
                             <td colspan="6">
                                 <p:dataTable id="buyerTable"
                                              var="buyerItem"
-                                             value="#{businessInfoDetail.buyerList}"
+                                             value="#{bizInfoDetail.buyerList}"
                                              paginator="false"
                                              rowKey="#{buyer.name}"
                                              style="width: 100%;"
@@ -342,8 +351,8 @@
                                     <p:column headerText="#{msg.get('app.contactYear')}" styleClass="center" style="width: 30px;">
                                         <h:outputText value="#{buyerItem.contactYear}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentSalesVolumn')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{buyerItem.percentSalesVolumn}"/>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{buyerItem.percentSalesVolume}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentCash')}" styleClass="center" style="width: 140px;">
                                         <h:outputText value="#{buyerItem.percentCash}"/>
@@ -357,16 +366,16 @@
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit"
-                                                         action="#{businessInfoDetail.onEditStakeholderView}"
+                                                         action="#{bizInfoDetail.onEditStakeholderView}"
                                                          update=":stakeholderViewDlgForm,:frmMain:buyerTotalTable"
                                                          process=":frmMain:buyerTable"
                                                          oncomplete="stakeholderViewDlg.show();">
-                                        <f:setPropertyActionListener value="buyer"
-                                                                     target="#{businessInfoDetail.stakeType}"/>
+                                        <f:setPropertyActionListener value="2"
+                                                                     target="#{bizInfoDetail.stakeType}"/>
                                         <f:setPropertyActionListener value="#{buyerItem}"
-                                                                     target="#{businessInfoDetail.selectStakeholer}"/>
+                                                                     target="#{bizInfoDetail.selectStakeholder}"/>
                                         <f:setPropertyActionListener value="#{rowIndex}"
-                                                                     target="#{businessInfoDetail.rowIndex}"/>
+                                                                     target="#{bizInfoDetail.rowIndex}"/>
                                         </p:commandButton>
 
                                         <p:commandButton icon="ui-icon-trash"
@@ -374,9 +383,9 @@
                                                          oncomplete="confirmDeleteStakeholderDlg.show()">
 
                                             <f:setPropertyActionListener value="#{buyerItem}"
-                                                                         target="#{businessInfoDetail.selectStakeholer}"/>
-                                            <f:setPropertyActionListener value="buyer"
-                                                                         target="#{businessInfoDetail.stakeType}"/>
+                                                                         target="#{bizInfoDetail.selectStakeholder}"/>
+                                            <f:setPropertyActionListener value="2"
+                                                                         target="#{bizInfoDetail.stakeType}"/>
 
                                         </p:commandButton>
 
@@ -402,13 +411,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="center" style="width:11%;">
-                                            <h:inputText value="#{businessInfoDetail.buyerVolumnSum1}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum1}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:22%;" colspan="2" >
-                                            <h:inputText value="#{businessInfoDetail.buyerVolumnSum2}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="center" style="width:11%;">
-                                            <h:inputText value="#{businessInfoDetail.buyerTermSum}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="center" style="width:8%;">
 
@@ -419,11 +428,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="center" style="width: 11%;" >
-                                            <h:inputText value="#{businessInfoDetail.buyerVolumnSum2}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width: 11%;">
-                                            <h:inputText value="#{businessInfoDetail.buyerTermSum}" size="5" />
+                                            <h:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">
@@ -447,68 +456,57 @@
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardAccountReceivable')}"/>  </td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardAccountReceivable}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.standardAccountReceivable}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardAccountPayable')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardAccountPayable}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.standardAccountPayable}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.standardStock')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.standardStock }"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.standardStock }"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.averagePurchaseAmount')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.averagePayableAmount')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.averagePayableAmount}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.averagePayableAmount}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockDurationBDM')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockDurationBDM}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.stockDurationBDM}"/></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentCash')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchasePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentCash')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentCash}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.payablePercentCash}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockDurationUW')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockDurationUW}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.stockDurationUW}"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentCredit')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentCredit}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchasePercentCredit}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentCredit')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentCredit}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.payablePercentCredit}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockValueBDM')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockValueBDM}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.stockValueBDM}"/></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentLocal')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentLocal}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchasePercentLocal}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentLocal')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentLocal}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.payablePercentLocal}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.stockValueUW')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.stockValueUW}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.stockValueUW}"/></td>
                                     </tr>
                                     <tr style="background-color: #efefef">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchasePercentForeign')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchasePercentForeign}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchasePercentForeign}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payablePercentForeign')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payablePercentForeign}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.payablePercentForeign}"/></td>
                                         <td colspan="2" style="width: 250px;line-height: 15px"></td>
                                     </tr>
                                     <tr style="background-color: #FAFAFA">
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.purchaseTerm')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.purchaseTerm}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.purchaseTerm}"/></td>
                                         <td style="width: 250px;line-height: 15px"><h:outputText value="#{msg.get('app.payableTerm')}"/></td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{businessInfoDetail.bizInfoFullApp.payableTerm}"/></td>
+                                        <td><p:inputText styleClass="right" style="width: 110px;" value="#{bizInfoDetail.bizInfoFullApp.payableTerm}"/></td>
                                         <td colspan="2" style="width: 250px;line-height: 15px"></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td colspan="2" ></td>
-                                        <td style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
-                                        <td colspan="3"><p:inputText styleClass="width: 510px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td colspan="2" ></td>
-                                        <td style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
-                                        <td><p:inputText styleClass="right" style="width: 110px;" value="##"/></td>
-                                        <td colspan="2" ></td>
                                     </tr>
                                 </table>
                             </td>
@@ -518,44 +516,6 @@
                             <td colspan="100%"><p:separator/></td>
                         </tr>
                         <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
-                        <tr>
-                            <td colspan="6" class="title">กรณีมี Trade Finance กับ TMB โปรดระบุ</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content"  style="width: 1140px">
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">ชื่อผู้ติดต่อ :</td>
-                                        <td style="width: 970px"><p:inputText styleClass="right" style="width: 250px;" value=""/>
-                                            <p:spacer width="2px"/>โทรศัพท์ : <p:inputText styleClass="small right" value=""/>
-                                            <p:spacer width="2px"/>ศูนย์ต่างประเทศใช้บริการ : <p:inputText styleClass="small right" value=""/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">Current Address :</td>
-                                        <td><p:inputText styleClass="right" style="width: 600px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #fafafa">
-                                        <td style="width: 250px;line-height: 15px">Register Address :</td>
-                                        <td><p:inputText styleClass="right" style="width: 600px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">E-Mail Address :</td>
-                                        <td><p:spacer width="2px"/>Import : <p:inputText styleClass="largest" value=""/>
-                                            <p:spacer width="2px"/>Export : <p:inputText styleClass="largest" value=""/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #fafafa">
-                                        <td style="width: 250px;line-height: 15px">รหัสสาขาที่ลูกค้าใช้บัญชีอื่นฝาก: :</td>
-                                        <td><p:inputText styleClass="small" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">รหัสหน่วยงานที่ดูแลสาขา :</td>
-                                        <td><p:inputText styleClass="small" value=""/></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
                         <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
                         <tr>
                             <td colspan="100%"><p:separator/></td>
@@ -563,7 +523,14 @@
                         <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
                         <tr>
                             <td colspan="6" class="center">
-                                <p:commandButton value="Save"   styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+                                <p:commandButton id="btnAddBizInfoDetailFull"
+                                                 value="Save DB"
+                                                 styleClass="smaller"
+                                                 process=":frmMain"
+                                                 actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
+                                                 update=":frmMain"
+                                        />
+
                                 <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
                             </td>
                         </tr>
@@ -596,7 +563,7 @@
         <ui:param name="id" value="confirmDeleteBizProductDialog"/>
         <ui:param name="name" value="confirmDeleteBizProductDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteBizProduct"/>
-        <ui:param name="controller" value="#{businessInfoDetail}"/>
+        <ui:param name="controller" value="#{bizInfoDetail}"/>
         <ui:param name="action" value="onDeleteBizProductView"/>
         <ui:param name="update" value=":frmMain:bizProductViewTable"/>
     </ui:include>
@@ -605,7 +572,7 @@
         <ui:param name="id" value="confirmDeleteStakeholderDialog"/>
         <ui:param name="name" value="confirmDeleteStakeholderDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteStakeholder"/>
-        <ui:param name="controller" value="#{businessInfoDetail}"/>
+        <ui:param name="controller" value="#{bizInfoDetail}"/>
         <ui:param name="action" value="onDeleteStakeholderView"/>
         <ui:param name="update" value=":frmMain:supplierTable,:frmMain:buyerTable,:frmMain:supplierTotalTable,:frmMain:buyerTotalTable"/>
     </ui:include>

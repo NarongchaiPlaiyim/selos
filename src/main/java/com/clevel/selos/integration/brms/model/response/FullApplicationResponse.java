@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.brms.model.response;
 
+import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.response.data.BorrowerResultData;
 import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
 
@@ -10,7 +11,7 @@ public class FullApplicationResponse extends PreScreenResponse{
         super();
     }
 
-    public FullApplicationResponse(String ruleName, String ruleOrder, boolean groupResult, boolean borrowerResult, GroupResultData groupResultData, List<BorrowerResultData> borrowerResultDataList) {
-//        super(ruleName, ruleOrder, groupResult, borrowerResult, groupResultData, borrowerResultDataList);
+    public FullApplicationResponse(String ruleName, String ruleOrder, String type, String personalId, RuleColorResult color, String deviationFlag, String rejectGroupCode) {
+        super(ruleName, ruleOrder, type, personalId, color, deviationFlag, rejectGroupCode);
     }
 }

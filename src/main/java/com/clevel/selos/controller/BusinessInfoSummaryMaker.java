@@ -61,15 +61,15 @@ public class BusinessInfoSummaryMaker implements Serializable {
 
         bizInfoFullView = new BizInfoFullView();
 
-        bizInfoFullView.setComment("Comment 1");
+        bizInfoFullView.setBizComment("Comment 1");
         bizInfoFullViewList.add(bizInfoFullView);
 
         bizInfoFullView = new BizInfoFullView();
-        bizInfoFullView.setComment("Comment 2");
+        bizInfoFullView.setBizComment("Comment 2");
         bizInfoFullViewList.add(bizInfoFullView);
 
         bizInfoFullView = new BizInfoFullView();
-        bizInfoFullView.setComment("Comment 3");
+        bizInfoFullView.setBizComment("Comment 3");
         bizInfoFullViewList.add(bizInfoFullView);
 
         return bizInfoFullViewList;

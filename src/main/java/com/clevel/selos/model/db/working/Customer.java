@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="wrk_customer")
@@ -66,6 +67,9 @@ public class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name="relation_id")
     private Relation relation;
+
+    @OneToMany(mappedBy="customer")
+    private List<NCB> ncbList;
 
     public Customer() {
     }
@@ -172,6 +176,22 @@ public class Customer implements Serializable {
 
     public void setDocumentType(DocumentType documentType) {
         this.documentType = documentType;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
+    public List<NCB> getNcbList() {
+        return ncbList;
+    }
+
+    public void setNcbList(List<NCB> ncbList) {
+        this.ncbList = ncbList;
     }
 
     @Override

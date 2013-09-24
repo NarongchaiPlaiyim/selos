@@ -1,29 +1,33 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
-import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.service.PrescreenService;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.PrescreenTransform;
+import com.clevel.selos.util.FacesUtil;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.awt.event.ActionEvent;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -76,7 +80,7 @@ public class PrescreenMaker implements Serializable {
     private List<CollateralView> proposeCollateralViewList;
 
     //*** Variable for view ***//
-    private ProductGroup selectProductGroup;
+    //private ProductGroup selectProductGroup;
     private FacilityView facility;
     private FacilityView selectFacilityItem;
 
@@ -139,9 +143,12 @@ public class PrescreenMaker implements Serializable {
     private ProvinceDAO provinceDAO;
     @Inject
     private UserDAO userDAO;
-
     @Inject
     private PrescreenService prescreenService;
+    @Inject
+    private PrescreenTransform prescreenTransform;
+    @Inject
+    private PrescreenBusinessControl prescreenBusinessControl;
 
 
     public PrescreenMaker() {
@@ -152,6 +159,14 @@ public class PrescreenMaker implements Serializable {
     public void onCreation() {
 
         log.info("onCreation");
+
+        /*HttpSession session = FacesUtil.getSession(true);
+        long workCasePrescreenId = new Long(session.getAttribute("workCasePrescreenId").toString());
+        workCasePrescreenId = 1;
+
+        WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+
+        prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
 
         modeForButton = "add";
 
@@ -173,9 +188,9 @@ public class PrescreenMaker implements Serializable {
 
         onLoadSelectList();
 
-        if(selectProductGroup == null){
+        /*if(selectProductGroup == null){
             selectProductGroup = new ProductGroup();
-        }
+        }*/
 
         if(facility == null){
             facility = new FacilityView();
@@ -248,7 +263,7 @@ public class PrescreenMaker implements Serializable {
     // *** Function For Facility *** //
     public void onAddFacility() {
         log.info("onAddFacility ::: ");
-        log.info("onAddFacility ::: selectProductGroup : {}", selectProductGroup);
+        log.info("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
 
         //*** Reset form ***//
         log.info("onAddFacility ::: Reset Form");
@@ -280,7 +295,7 @@ public class PrescreenMaker implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
 
-        log.info("onSaveFacility ::: selectProductGroup.getId() : {} ", selectProductGroup.getId());
+        log.info("onSaveFacility ::: prescreen.productgroup.getId() : {} ", prescreenView.getProductGroup().getId());
         log.info("onSaveFacility ::: facility.getProductProgram().getId() : {} ", facility.getProductProgram().getId());
         log.info("onSaveFacility ::: facility.getCreditType().getId() : {} ", facility.getCreditType().getId());
         log.info("onSaveFacility ::: facility.getRequestAmount : {}", facility.getRequestAmount());
@@ -495,6 +510,27 @@ public class PrescreenMaker implements Serializable {
 
     }
 
+    // *** Function for Prescreen Initial *** //
+    public void onSavePrescreenInitial(){
+
+        log.info("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
+        log.info("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        session.setAttribute("workCasePrescreenId", 1);
+        long workCasePrescreenId = Long.parseLong(session.getAttribute("workCasePrescreenId").toString());
+
+        if(prescreenView.getId() == 0){
+            prescreenView.setCreateDate(DateTime.now().toDate());
+            //prescreenView.setCreateBy();
+        }
+        prescreenView.setModifyDate(DateTime.now().toDate());
+        //prescreenView.setModifyBy();
+        prescreenView.setBusinessLocation(null);
+        prescreenBusinessControl.savePrescreenInitial(prescreenView, facilityViewList, workCasePrescreenId);
+    }
+
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen(){
         //*** validate forms ***//
@@ -534,8 +570,8 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeProductGroup(){
-        log.info("onChangeProductGroup ::: selectProductGroup : {}", selectProductGroup);
-        ProductGroup productGroup = productGroupDAO.findById(selectProductGroup.getId());
+        log.info("onChangeProductGroup ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
+        ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
 
         //*** Get Product Program List from Product Group ***//
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
@@ -804,13 +840,13 @@ public class PrescreenMaker implements Serializable {
         this.businessInfoViewList = businessInfoViewList;
     }
 
-    public ProductGroup getSelectProductGroup() {
+    /*public ProductGroup getSelectProductGroup() {
         return selectProductGroup;
     }
 
     public void setSelectProductGroup(ProductGroup selectProductGroup) {
         this.selectProductGroup = selectProductGroup;
-    }
+    }*/
 
     public FacilityView getFacility() {
         return facility;
