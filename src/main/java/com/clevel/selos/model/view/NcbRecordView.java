@@ -46,7 +46,12 @@ public class NcbRecordView implements Serializable {
     private int noOfmonthsPayment;
     private List<MoneyPaymentView> moneyPaymentViewList;
     private String moneyTotal;
-
+    private BigDecimal month1;
+    private BigDecimal month2;
+    private BigDecimal month3;
+    private BigDecimal month4;
+    private BigDecimal month5;
+    private BigDecimal month6;
 
     public NcbRecordView() {
         reset();
@@ -75,13 +80,21 @@ public class NcbRecordView implements Serializable {
         this.noOfmonthsPayment = 0;
         this.moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
         this.moneyTotal = "";
+        this.month1 = new BigDecimal(0);
+        this.month2 = new BigDecimal(0);
+        this.month3 = new BigDecimal(0);
+        this.month4 = new BigDecimal(0);
+        this.month5 = new BigDecimal(0);
+        this.month6 = new BigDecimal(0);
+
 
         noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
-        for (int i = 1; i < 13; i++) {
+        for (int i = 1; i < 7; i++) {
             noOfmonthsPaymentList.add(new MonthsPaymentView(i));
         }
 
         moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
+
 
     }
 
@@ -262,31 +275,53 @@ public class NcbRecordView implements Serializable {
         this.historyPayment = historyPayment;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("isTMBAccount", isTMBAccount)
-                .append("dateOfInfo", dateOfInfo)
-                .append("accountOpenDate", accountOpenDate)
-                .append("limit", limit)
-                .append("outstanding", outstanding)
-                .append("installment", installment)
-                .append("dateOfDebtRestructuring", dateOfDebtRestructuring)
-                .append("typeOfCurrentPayment", typeOfCurrentPayment)
-                .append("typeOfHistoryPayment", typeOfHistoryPayment)
-                .append("noOfOutstandingPaymentIn12months", noOfOutstandingPaymentIn12months)
-                .append("noOfOverLimit", noOfOverLimit)
-                .append("refinanceFlag", refinanceFlag)
-                .append("monthsPaymentFlag", monthsPaymentFlag)
-                .append("accountType", accountType)
-                .append("accountStatus", accountStatus)
-                .append("tdrCondition", tdrCondition)
-                .append("currentPayment", currentPayment)
-                .append("historyPayment", historyPayment)
-                .append("noOfmonthsPaymentList", noOfmonthsPaymentList)
-                .append("noOfmonthsPayment", noOfmonthsPayment)
-                .append("moneyPaymentViewList", moneyPaymentViewList)
-                .append("moneyTotal", moneyTotal)
-                .toString();
+    public BigDecimal getMonth1() {
+        return month1;
     }
+
+    public void setMonth1(BigDecimal month1) {
+        this.month1 = month1;
+    }
+
+    public BigDecimal getMonth2() {
+        return month2;
+    }
+
+    public void setMonth2(BigDecimal month2) {
+        this.month2 = month2;
+    }
+
+    public BigDecimal getMonth3() {
+        return month3;
+    }
+
+    public void setMonth3(BigDecimal month3) {
+        this.month3 = month3;
+    }
+
+    public BigDecimal getMonth4() {
+        return month4;
+    }
+
+    public void setMonth4(BigDecimal month4) {
+        this.month4 = month4;
+    }
+
+    public BigDecimal getMonth5() {
+        return month5;
+    }
+
+    public void setMonth5(BigDecimal month5) {
+        this.month5 = month5;
+    }
+
+    public BigDecimal getMonth6() {
+        return month6;
+    }
+
+    public void setMonth6(BigDecimal month6) {
+        this.month6 = month6;
+    }
+
+
 }

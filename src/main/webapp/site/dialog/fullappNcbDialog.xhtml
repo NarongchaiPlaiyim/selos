@@ -17,7 +17,7 @@
                          value="#{fullappNcb.dlgAccountType.id}"
                          styleClass="largest"
                          size="1"
-                         required="true">
+                         required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
             <f:selectItems value="#{fullappNcb.accountTypeList}"
                            var="dlgAccountTypeList"
@@ -33,7 +33,8 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:selectOneRadio id="radioTmbAccount" value="#{fullappNcb.ncbRecordView.TMBAccount}">
+        <h:selectOneRadio id="radioTmbAccount" value="#{fullappNcb.ncbRecordView.TMBAccount}"
+                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="Yes" itemValue="Y"/>
             <f:selectItem itemLabel="No" itemValue="N"/>
         </h:selectOneRadio>
@@ -49,7 +50,7 @@
                          value="#{fullappNcb.dlgAccountStatus.id}"
                          styleClass="largest"
                          size="1"
-                         required="true">
+                         required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
             <f:selectItems value="#{fullappNcb.accountStatusList}"
                            var="dlgAccountStatusList"
@@ -66,9 +67,9 @@
     </td>
     <td>
         <p:calendar value="#{fullappNcb.ncbRecordView.dateOfInfo}" id="dateOfInfo" pattern="d/M/yyyy"
-                    showOn="button" required="true">
-<!--            <f:convertDateTime pattern="d/M/yyyy"/>
-            <p:ajax event="blur" update=":ncbDlgForm:dateOfInfo"/>-->
+                    showOn="button" required="#{not empty param[addRowData.clientId]}">
+            <!--            <f:convertDateTime pattern="d/M/yyyy"/>
+                        <p:ajax event="blur" update=":ncbDlgForm:dateOfInfo"/>-->
         </p:calendar>
     </td>
 </tr>
@@ -79,7 +80,7 @@
     </td>
     <td>
         <p:calendar value="#{fullappNcb.ncbRecordView.accountOpenDate}" id="accountOpenDate" pattern="d/M/yyyy"
-                    showOn="button" required="true"/>
+                    showOn="button" required="#{not empty param[addRowData.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -89,7 +90,7 @@
     </td>
     <td>
         <p:inputText id="limit" styleClass="large right numeric"
-                     value="#{fullappNcb.ncbRecordView.limit}" required="true">
+                     value="#{fullappNcb.ncbRecordView.limit}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:limit"/>
         </p:inputText>
@@ -102,7 +103,7 @@
     </td>
     <td>
         <p:inputText id="outstanding" styleClass="large right numeric"
-                     value="#{fullappNcb.ncbRecordView.outstanding}" required="true">
+                     value="#{fullappNcb.ncbRecordView.outstanding}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
         </p:inputText>
@@ -115,7 +116,7 @@
     </td>
     <td>
         <p:inputText id="installment" styleClass="large right numeric"
-                     value="#{fullappNcb.ncbRecordView.installment}" required="true">
+                     value="#{fullappNcb.ncbRecordView.installment}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:installment"/>
         </p:inputText>
@@ -128,7 +129,7 @@
     </td>
     <td>
         <p:calendar value="#{fullappNcb.ncbRecordView.dateOfDebtRestructuring}" pattern="d/M/yyyy"
-                    id="dateOfDebtRestructuring" showOn="button" required="true"/>
+                    id="dateOfDebtRestructuring" showOn="button" required="#{not empty param[addRowData.clientId]}"/>
 
     </td>
 </tr>
@@ -142,7 +143,7 @@
                          value="#{fullappNcb.dlgCurrentPayment.id}"
                          style="width: 200px;"
                          size="1"
-                         required="true">
+                         required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
             <f:selectItems value="#{fullappNcb.settlementStatusList}"
                            var="dlgtdrCurrentList"
@@ -162,7 +163,7 @@
                          value="#{fullappNcb.dlgHistoryPayment.id}"
                          style="width: 200px;"
                          size="1"
-                         required="true">
+                         required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
             <f:selectItems value="#{fullappNcb.settlementStatusList}"
                            var="dlgHistoryList"
@@ -178,7 +179,8 @@
     </td>
     <td>
         <p:inputText name="noOfOutstandingPaymentIn12months"
-                     value="#{fullappNcb.ncbRecordView.noOfOutstandingPaymentIn12months}" required="true"/>
+                     value="#{fullappNcb.ncbRecordView.noOfOutstandingPaymentIn12months}"
+                     required="#{not empty param[addRowData.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -187,7 +189,8 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText name="noOfOverLimit" value="#{fullappNcb.ncbRecordView.noOfOverLimit}" required="true"/>
+        <p:inputText name="noOfOverLimit" value="#{fullappNcb.ncbRecordView.noOfOverLimit}"
+                     required="#{not empty param[addRowData.clientId]}"/>
     </td>
 </tr>
 <tr>
@@ -196,7 +199,8 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:selectOneRadio id="radioRefinanceFlag" value="#{fullappNcb.ncbRecordView.refinanceFlag}" required="true">
+        <h:selectOneRadio id="radioRefinanceFlag" value="#{fullappNcb.ncbRecordView.refinanceFlag}"
+                          required="#{not empty param[addRowData.clientId]}">
             <f:selectItem itemLabel="Yes" itemValue="Y"/>
             <f:selectItem itemLabel="No" itemValue="N"/>
         </h:selectOneRadio>
@@ -214,7 +218,7 @@
                            itemLabel="#{dlgNoOfMonth.month}"
                            itemValue="#{dlgNoOfMonth.month}"/>
             <p:ajax event="change"
-                    listener="#{fullappNcb.onblurToGenMoneyOfmonthsPayment}"
+                    listener="#{fullappNcb.onchangeToGenMoneyOfmonthsPayment}"
                     process=":ncbDlgForm"
                     update=":ncbDlgForm"/>
         </h:selectOneMenu>
@@ -222,26 +226,110 @@
 </tr>
 <tr>
     <td colspan="2" class="center">
-        <p:panel style="border-width: 0;width: 500" id="monthsPaymentPanel" rendered="#{fullappNcb.genTextBoxFlag}">
-            <table class="content_form">
-                <p:dataTable id="monthsPayment" var="itemMoneyPayment"
-                             value="#{fullappNcb.ncbRecordView.moneyPaymentViewList}"
-                             paginator="false" rowKey="#{itemMoneyPayment.moneyPayment}" rowIndexVar="rowIndex">
+<!--        <p:panel style="border-width: 0;width: 500" id="monthsPaymentPanel" rendered="#{fullappNcb.genTextBoxFlag}">
+               <table class="content_form">
+                   <p:dataTable id="monthsPayment" var="itemMoneyPayment"
+                                value="#{fullappNcb.ncbRecordView.moneyPaymentViewList}"
+                                paginator="false" rowKey="#{itemMoneyPayment.moneyPayment}" rowIndexVar="rowIndex">
 
-                    <p:column styleClass="left" style="width:195px;">
-                        <h:outputText value="เดือนที่#{rowIndex+1}"/>
-                    </p:column>
+                       <p:column styleClass="left" style="width:195px;">
+                           <h:outputText value="เดือนที่#{rowIndex+1}"/>
+                       </p:column>
 
-                    <p:column styleClass="left">
-                        <p:inputText value="#{itemMoneyPayment.moneyPayment}" styleClass="large right numeric"
-                                     required="#{fullappNcb.genTextBoxFlag}">
+                      <p:column styleClass="left">
+                           <p:inputText value="#{itemMoneyPayment.moneyPayment}" styleClass="large right numeric"
+                                        required="#{(fullappNcb.genTextBoxFlag) and (not empty param[addRowData.clientId])}" >
+                               <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                               <p:ajax event="blur" update=":ncbDlgForm:monthsPaymentPanel"/>
+                           </p:inputText>
+                       </p:column>
+
+                   </p:dataTable>
+               </table>
+           </p:panel>-->
+        <p:panel style="border-width: 0;width: 500" rendered="#{fullappNcb.genTextBoxFlag}">
+
+            <h:form id="moneysForm">
+                <table class="content_form">
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;">
+                            <h:outputText value="เดือนที่ 1:" rendered="#{fullappNcb.monthRender1}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender1}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month1" value="#{fullappNcb.ncbRecordView.month1}" rendered="#{fullappNcb.monthRender1}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month1"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;" >
+                            <h:outputText value="เดือนที่ 2:" rendered="#{fullappNcb.monthRender2}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender2}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month2"
+                                         value="#{fullappNcb.ncbRecordView.month2}" rendered="#{fullappNcb.monthRender2}">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":ncbDlgForm:monthsPaymentPanel"/>
+                            <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month2"/>
                         </p:inputText>
-                    </p:column>
-
-                </p:dataTable>
-            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;">
+                            <h:outputText value="เดือนที่ 3:" rendered="#{fullappNcb.monthRender3}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender3}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month3"
+                                         value="#{fullappNcb.ncbRecordView.month3}" rendered="#{fullappNcb.monthRender3}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month3"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;">
+                            <h:outputText value="เดือนที่ 4:" rendered="#{fullappNcb.monthRender4}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender4}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month4"
+                                         value="#{fullappNcb.ncbRecordView.month4}" rendered="#{fullappNcb.monthRender4}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month4"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;">
+                            <h:outputText value="เดือนที่ 5:" rendered="#{fullappNcb.monthRender5}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender5}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month5"
+                                         value="#{fullappNcb.ncbRecordView.month5}" rendered="#{fullappNcb.monthRender5}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month5"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="width: 195px;text-align: left;">
+                            <h:outputText value="เดือนที่ 6:" rendered="#{fullappNcb.monthRender6}"/>
+                            <h:outputLabel value="*" styleClass="require-field" rendered="#{fullappNcb.monthRender6}"/>
+                        </td>
+                        <td>
+                            <p:inputText id="month6"
+                                         value="#{fullappNcb.ncbRecordView.month6}" rendered="#{fullappNcb.monthRender6}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month6"/>
+                            </p:inputText>
+                        </td>
+                    </tr>
+                </table>
+            </h:form>
         </p:panel>
     </td>
 </tr>
@@ -249,6 +337,7 @@
     <td colspan="2" class="center">
         <p:commandButton
                 id="save"
+                binding="#{addRowData}"
                 value="#{msg.get('app.saveButton')}"
                 styleClass="small"
                 actionListener="#{fullappNcb.onSaveNcbRecord}"
