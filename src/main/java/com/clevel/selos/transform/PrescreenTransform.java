@@ -1,12 +1,17 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.db.working.PrescreenFacility;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.FacilityView;
 import com.clevel.selos.model.view.PrescreenView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PrescreenTransform extends Transform {
 
-    public Prescreen transform(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen){
+    public Prescreen transformToModel(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen){
         Prescreen prescreen = new Prescreen();
 
         if(prescreenView.getId() != 0){
@@ -25,7 +30,7 @@ public class PrescreenTransform extends Transform {
         return prescreen;
     }
 
-    public PrescreenView transform(Prescreen prescreen){
+    public PrescreenView transformToView(Prescreen prescreen){
         PrescreenView prescreenView = new PrescreenView();
 
         prescreenView.setId(prescreen.getId());
@@ -40,4 +45,6 @@ public class PrescreenTransform extends Transform {
 
         return prescreenView;
     }
+
+
 }

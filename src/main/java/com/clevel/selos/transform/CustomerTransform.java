@@ -5,13 +5,13 @@ import com.clevel.selos.model.view.CustomerInfoView;
 
 public class CustomerTransform extends Transform {
 
-    public CustomerInfoView transform(Customer customer){
+    public CustomerInfoView transformToView(Customer customer){
         CustomerInfoView customerInfoView = new CustomerInfoView();
 
         return customerInfoView;
     }
 
-    public Customer transform(CustomerInfoView customerInfoView){
+    public Customer transformToModel(CustomerInfoView customerInfoView){
         Customer customer = new Customer();
 
         return customer;

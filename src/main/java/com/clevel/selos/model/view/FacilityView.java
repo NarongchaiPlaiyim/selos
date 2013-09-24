@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 public class FacilityView {
 
-    private BigDecimal id;
+    private long id;
     private String facilityName;
     private BigDecimal requestAmount;
     private String productProgramName;
@@ -20,6 +20,14 @@ public class FacilityView {
     private CreditType creditType ;
 
     public FacilityView(){
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getFacilityName() {
@@ -37,7 +45,6 @@ public class FacilityView {
     public void setRequestAmount(BigDecimal requestAmount) {
         this.requestAmount = requestAmount;
     }
-
 
     public String getProductProgramName() {
         return productProgramName;
