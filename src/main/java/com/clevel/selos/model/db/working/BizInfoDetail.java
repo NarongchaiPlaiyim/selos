@@ -8,6 +8,7 @@ import com.clevel.selos.model.db.master.BusinessType;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -18,12 +19,15 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="wrk_businessinfo_detail")
-public class BusinessInfoDetail implements Serializable {
+@Table(name="wrk_biz_info_detail")
+public class BizInfoDetail implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_BIZ_INFO_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_INFO_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_DETAIL_ID")
     private long id;
+
+    @Column(name="biz_info_text")
+    private String bizInfoText;
 
     @OneToOne
     @JoinColumn(name="business_type_id")
@@ -37,8 +41,8 @@ public class BusinessInfoDetail implements Serializable {
     @JoinColumn(name="business_desc_id")
     private BusinessDescription businessDescription;
 
-    @Column(name="business_code")
-    private String businessCode;
+    @Column(name="biz_code")
+    private String bizCode;
 
     @Column(name="income_factor")
     private BigDecimal incomeFactor;
@@ -46,14 +50,27 @@ public class BusinessInfoDetail implements Serializable {
     @Column(name="adjusted_income_factor")
     private BigDecimal adjustedIncomeFactor;
 
-    @Column(name="business_comment")
-    private String businessComment;
+    @Column(name="biz_comment")
+    private String bizComment;
 
-    @Column(name="precent_business")
-    private BigDecimal percentBusiness;
+    @Column(name="precent_biz")
+    private BigDecimal percentBiz;
 
-    @Column(name="business_permission")
-    private String businessPermission;
+    @Column(name="biz_permission")
+    private String bizPermission;
+
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizStakeholder> supplierList;
+
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizStakeholder> buyerList;
+
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizProduct> bizProductList;
+
+
+    public BizInfoDetail() {
+    }
 
     public long getId() {
         return id;
@@ -87,12 +104,12 @@ public class BusinessInfoDetail implements Serializable {
         this.businessDescription = businessDescription;
     }
 
-    public String getBusinessCode() {
-        return businessCode;
+    public String getBizCode() {
+        return bizCode;
     }
 
-    public void setBusinessCode(String businessCode) {
-        this.businessCode = businessCode;
+    public void setBizCode(String bizCode) {
+        this.bizCode = bizCode;
     }
 
     public BigDecimal getIncomeFactor() {
@@ -111,27 +128,59 @@ public class BusinessInfoDetail implements Serializable {
         this.adjustedIncomeFactor = adjustedIncomeFactor;
     }
 
-    public String getBusinessComment() {
-        return businessComment;
+    public String getBizComment() {
+        return bizComment;
     }
 
-    public void setBusinessComment(String businessComment) {
-        this.businessComment = businessComment;
+    public void setBizComment(String bizComment) {
+        this.bizComment = bizComment;
     }
 
-    public BigDecimal getPercentBusiness() {
-        return percentBusiness;
+    public BigDecimal getPercentBiz() {
+        return percentBiz;
     }
 
-    public void setPercentBusiness(BigDecimal percentBusiness) {
-        this.percentBusiness = percentBusiness;
+    public void setPercentBiz(BigDecimal percentBiz) {
+        this.percentBiz = percentBiz;
     }
 
-    public String getBusinessPermission() {
-        return businessPermission;
+    public String getBizPermission() {
+        return bizPermission;
     }
 
-    public void setBusinessPermission(String businessPermission) {
-        this.businessPermission = businessPermission;
+    public void setBizPermission(String bizPermission) {
+        this.bizPermission = bizPermission;
+    }
+
+    public String getBizInfoText() {
+        return bizInfoText;
+    }
+
+    public void setBizInfoText(String bizInfoText) {
+        this.bizInfoText = bizInfoText;
+    }
+
+    public List<BizStakeholder> getSupplierList() {
+        return supplierList;
+    }
+
+    public void setSupplierList(List<BizStakeholder> supplierList) {
+        this.supplierList = supplierList;
+    }
+
+    public List<BizStakeholder> getBuyerList() {
+        return buyerList;
+    }
+
+    public void setBuyerList(List<BizStakeholder> buyerList) {
+        this.buyerList = buyerList;
+    }
+
+    public List<BizProduct> getBizProductList() {
+        return bizProductList;
+    }
+
+    public void setBizProductList(List<BizProduct> bizProductList) {
+        this.bizProductList = bizProductList;
     }
 }
