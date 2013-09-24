@@ -24,6 +24,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,15 +61,19 @@ public class FullappNcb implements Serializable {
 
     private String modeForButton;
     private int rowIndex;
-
-    //test
+    private boolean monthRender1;
+    private boolean monthRender2;
+    private boolean monthRender3;
+    private boolean monthRender4;
+    private boolean monthRender5;
+    private boolean monthRender6;
 
     private boolean genTextBoxFlag;
     //test
     private NcbRecordView ncbRecordView;
     private NcbRecordView selectNcbRecordItem;
     private List<NcbRecordView> ncbRecordViewList;
-    private NcbResultView ncbResultView ;
+    private NcbResultView ncbResultView;
 
     @Inject
     private AccountStatusDAO accountStatusDAO;
@@ -88,7 +93,7 @@ public class FullappNcb implements Serializable {
 
         log.info("onCreation.");
         modeForButton = "add";
-        genTextBoxFlag=false;
+        genTextBoxFlag = false;
 
         if (ncbRecordView == null) {
             ncbRecordView = new NcbRecordView();
@@ -98,7 +103,7 @@ public class FullappNcb implements Serializable {
             ncbRecordViewList = new ArrayList<NcbRecordView>();
         }
 
-        if(ncbResultView == null){
+        if (ncbResultView == null) {
             ncbResultView = new NcbResultView();
         }
 
@@ -134,7 +139,7 @@ public class FullappNcb implements Serializable {
             dlgHistoryPayment = new SettlementStatus();
         }
 
-        if(tdrCondition == null){
+        if (tdrCondition == null) {
             tdrCondition = new TDRCondition();
         }
 
@@ -143,6 +148,12 @@ public class FullappNcb implements Serializable {
         settlementStatusList = settlementStatusDAO.findAll();
         tdrConditionList = tdrConditionDAO.findAll();
 
+        monthRender1 = false;
+        monthRender2 = false;
+        monthRender3 = false;
+        monthRender4 = false;
+        monthRender5 = false;
+        monthRender6 = false;
     }
 
 
@@ -195,11 +206,17 @@ public class FullappNcb implements Serializable {
             ncbRecordView.setRefinanceFlag(selectNcbRecordItem.getRefinanceFlag());
             ncbRecordView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
             ncbRecordView.setMoneyPaymentViewList(selectNcbRecordItem.getMoneyPaymentViewList());
+            ncbRecordView.setMonth1(selectNcbRecordItem.getMonth1());
+            ncbRecordView.setMonth2(selectNcbRecordItem.getMonth2());
+            ncbRecordView.setMonth3(selectNcbRecordItem.getMonth3());
+            ncbRecordView.setMonth4(selectNcbRecordItem.getMonth4());
+            ncbRecordView.setMonth5(selectNcbRecordItem.getMonth5());
+            ncbRecordView.setMonth6(selectNcbRecordItem.getMonth6());
 
-            if(selectNcbRecordItem.getNoOfmonthsPayment() > 0){
+            if (selectNcbRecordItem.getNoOfmonthsPayment() > 0) {
                 genTextBoxFlag = true;
-            }
-            else{
+                toSetRenderedFlag(selectNcbRecordItem.getNoOfmonthsPayment());
+            } else {
                 genTextBoxFlag = false;
             }
 
@@ -216,7 +233,8 @@ public class FullappNcb implements Serializable {
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
-        String  moneyTotal = "";
+        String moneyTotal = "";
+        List<BigDecimal>  moneys;
 
         log.info("  dlgAccountType : {}", dlgAccountType.getId());
         log.info("  dlgAccountStatus :  {}", dlgAccountStatus.getId());
@@ -248,22 +266,42 @@ public class FullappNcb implements Serializable {
                 ncbAdd.setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
                 ncbAdd.setRefinanceFlag(ncbRecordView.getRefinanceFlag());
                 ncbAdd.setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
+                ncbAdd.setMonth1(ncbRecordView.getMonth1());
+                ncbAdd.setMonth2(ncbRecordView.getMonth2());
+                ncbAdd.setMonth3(ncbRecordView.getMonth3());
+                ncbAdd.setMonth4(ncbRecordView.getMonth4());
+                ncbAdd.setMonth5(ncbRecordView.getMonth5());
+                ncbAdd.setMonth6(ncbRecordView.getMonth6());
+
+                moneys = new ArrayList<BigDecimal>();
+                moneys.add(ncbRecordView.getMonth1());
+                moneys.add(ncbRecordView.getMonth2());
+                moneys.add(ncbRecordView.getMonth3());
+                moneys.add(ncbRecordView.getMonth4());
+                moneys.add(ncbRecordView.getMonth5());
+                moneys.add(ncbRecordView.getMonth6());
 
                 log.info("ncbRecordView.getNoOfmonthsPayment   >> " + ncbRecordView.getNoOfmonthsPayment());
 
                 if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
                     ncbAdd.setMonthsPaymentFlag(true);
 
-                    log.info("ncbRecordView.getMoneyPaymentViewList().size() ::: {}",ncbRecordView.getMoneyPaymentViewList().size());
+                    for(int i = 0 ; i<moneys.size() ; i ++){
+                        if(i < ncbRecordView.getNoOfmonthsPayment()){
+                            moneyTotal += " เดือนที่#"+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
+                            ncbAdd.setMoneyTotal(moneyTotal);
+                        }
+                    }
 
-                    ncbAdd.setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
+                  /*  ncbAdd.setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
 
                     for(int i=0;i<ncbRecordView.getMoneyPaymentViewList().size();i++)
                     {
                         log.info("ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment()   >> {} " , ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment());
                         moneyTotal += " เดือนที่#"+ (i+1) + " : " +ncbAdd.getMoneyPaymentViewList().get(i).getMoneyPayment() + " บาท ";
                         ncbAdd.setMoneyTotal(moneyTotal);
-                    }
+
+                    }*/
 
                 } else {
                     ncbAdd.setMonthsPaymentFlag(false);
@@ -288,7 +326,6 @@ public class FullappNcb implements Serializable {
                 ncbRecordViewList.get(rowIndex).setCurrentPayment(tdrConditionCurrent);
                 ncbRecordViewList.get(rowIndex).setHistoryPayment(tdrConditionHistory);
                 ncbRecordViewList.get(rowIndex).setTMBAccount(ncbRecordView.getTMBAccount());
-//                log.info("onsave mode edit :: ncbRecordView.getDateOfInfo() {} " , ncbRecordView.getDateOfInfo());
                 ncbRecordViewList.get(rowIndex).setDateOfInfo(ncbRecordView.getDateOfInfo());
                 ncbRecordViewList.get(rowIndex).setAccountOpenDate(ncbRecordView.getAccountOpenDate());
                 ncbRecordViewList.get(rowIndex).setLimit(ncbRecordView.getLimit());
@@ -300,16 +337,39 @@ public class FullappNcb implements Serializable {
                 ncbRecordViewList.get(rowIndex).setRefinanceFlag(ncbRecordView.getRefinanceFlag());
                 ncbRecordViewList.get(rowIndex).setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
                 ncbRecordViewList.get(rowIndex).setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
+                ncbRecordViewList.get(rowIndex).setMonth1(ncbRecordView.getMonth1());
+                ncbRecordViewList.get(rowIndex).setMonth2(ncbRecordView.getMonth2());
+                ncbRecordViewList.get(rowIndex).setMonth3(ncbRecordView.getMonth3());
+                ncbRecordViewList.get(rowIndex).setMonth4(ncbRecordView.getMonth4());
+                ncbRecordViewList.get(rowIndex).setMonth5(ncbRecordView.getMonth5());
+                ncbRecordViewList.get(rowIndex).setMonth6(ncbRecordView.getMonth6());
+
+                moneys = new ArrayList<BigDecimal>();
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth1());
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth2());
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth3());
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth4());
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth5());
+                moneys.add(ncbRecordViewList.get(rowIndex).getMonth6());
 
                 if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
                     ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(true);
 
-                    for(int i=0;i<ncbRecordView.getMoneyPaymentViewList().size();i++)
-                    {
-                        log.info("ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment()   >> {} " , ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment());
-                        moneyTotal += " เดือนที่#"+ (i+1) + " : " +ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment();
-                        ncbRecordViewList.get(rowIndex).setMoneyTotal(moneyTotal);
+                    if ((ncbRecordView.getNoOfmonthsPayment() != 0)) {
+                        ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(true);
+
+                        for(int i = 0 ; i<moneys.size() ; i ++){
+                            if(i < ncbRecordView.getNoOfmonthsPayment()){
+                                moneyTotal += " เดือนที่#"+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
+                                ncbRecordViewList.get(rowIndex).setMoneyTotal(moneyTotal);
+                            }
+                        }
                     }
+                    /*for (int i = 0; i < ncbRecordView.getMoneyPaymentViewList().size(); i++) {
+                        log.info("ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment()   >> {} ", ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment());
+                        moneyTotal += " เดือนที่#" + (i + 1) + " : " + ncbRecordViewList.get(rowIndex).getMoneyPaymentViewList().get(i).getMoneyPayment();
+                        ncbRecordViewList.get(rowIndex).setMoneyTotal(moneyTotal);
+                    }*/
 
                 } else {
                     ncbRecordViewList.get(rowIndex).setMonthsPaymentFlag(false);
@@ -333,26 +393,56 @@ public class FullappNcb implements Serializable {
 
     }
 
-    public void onblurToGenMoneyOfmonthsPayment()
-    {
-        if( ncbRecordView.getMoneyPaymentViewList().size() > 0){
+    public void onchangeToGenMoneyOfmonthsPayment() {
+        if (ncbRecordView.getMoneyPaymentViewList().size() > 0) {
             ncbRecordView.getMoneyPaymentViewList().removeAll(ncbRecordView.getMoneyPaymentViewList());
         }
 
         log.info("  ncbRecordView.getNoOfmonthsPayment() >>>>  :  {}", ncbRecordView.getNoOfmonthsPayment());
 
-        if(ncbRecordView.getNoOfmonthsPayment() > 0){
+        if (ncbRecordView.getNoOfmonthsPayment() > 0) {
             genTextBoxFlag = true;
+            toSetRenderedFlag(ncbRecordView.getNoOfmonthsPayment());
 
-            for( int i = 0 ; i < ncbRecordView.getNoOfmonthsPayment() ; i++){
-                ncbRecordView.getMoneyPaymentViewList().add(new MoneyPaymentView());
-            }
+            /*log.info("ncbRecordView.getMoneyPaymentViewList().size():: {} " ,ncbRecordView.getMoneyPaymentViewList().size());
 
-            log.info("ncbRecordView.getMoneyPaymentViewList().size():: {} " ,ncbRecordView.getMoneyPaymentViewList().size());
-        }
-        else{
+            for(int i = 0 ; i< ncbRecordView.getNoOfmonthsPayment() ;i ++){
+               ncbRecordView.getMoneyPaymentViewList().add(new MoneyPaymentView());
+            }*/
+
+        } else {
             genTextBoxFlag = false;
         }
+    }
+
+    public void toSetRenderedFlag(int noOfMonth){
+
+        ArrayList<Boolean> rendered = new ArrayList<Boolean>();
+
+        for (int i = 0; i < 6; i++) {
+            if (i < noOfMonth) {
+                rendered.add(Boolean.TRUE);
+            } else if (i >= noOfMonth) {
+                rendered.add(Boolean.FALSE);
+            }
+
+            log.info("rendered.get(i).booleanValue() {} ", rendered.get(i).booleanValue());
+        }
+
+        monthRender1 = rendered.get(0).booleanValue();
+        monthRender2 = rendered.get(1).booleanValue();
+        monthRender3 = rendered.get(2).booleanValue();
+        monthRender4 = rendered.get(3).booleanValue();
+        monthRender5 = rendered.get(4).booleanValue();
+        monthRender6 = rendered.get(5).booleanValue();
+    }
+
+
+    // *** Function for NCB ***//
+    public void onSaveNcb() {
+//        log.info("ncbRecordView.getMoneyPaymentViewList().size() :: {}",ncbRecordView.getMoneyPaymentViewList().size());
+//        log.info("ncbRecordView.getMoneyPaymentViewList().get(0).getMoneyPayment() :: {}",ncbRecordView.getMoneyPaymentViewList().get(0).getMoneyPayment());
+
     }
 
     public boolean isGenTextBoxFlag() {
@@ -481,5 +571,53 @@ public class FullappNcb implements Serializable {
 
     public void setTdrCondition(TDRCondition tdrCondition) {
         this.tdrCondition = tdrCondition;
+    }
+
+    public boolean isMonthRender1() {
+        return monthRender1;
+    }
+
+    public void setMonthRender1(boolean monthRender1) {
+        this.monthRender1 = monthRender1;
+    }
+
+    public boolean isMonthRender2() {
+        return monthRender2;
+    }
+
+    public void setMonthRender2(boolean monthRender2) {
+        this.monthRender2 = monthRender2;
+    }
+
+    public boolean isMonthRender3() {
+        return monthRender3;
+    }
+
+    public void setMonthRender3(boolean monthRender3) {
+        this.monthRender3 = monthRender3;
+    }
+
+    public boolean isMonthRender4() {
+        return monthRender4;
+    }
+
+    public void setMonthRender4(boolean monthRender4) {
+        this.monthRender4 = monthRender4;
+    }
+
+    public boolean isMonthRender5() {
+        return monthRender5;
+    }
+
+    public void setMonthRender5(boolean monthRender5) {
+        this.monthRender5 = monthRender5;
+    }
+
+    public boolean isMonthRender6() {
+        return monthRender6;
+    }
+
+    public void setMonthRender6(boolean monthRender6) {
+        this.monthRender6 = monthRender6;
     }
 }
