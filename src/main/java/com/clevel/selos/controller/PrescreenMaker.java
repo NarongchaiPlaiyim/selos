@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
@@ -79,7 +80,7 @@ public class PrescreenMaker implements Serializable {
     private List<CollateralView> proposeCollateralViewList;
 
     //*** Variable for view ***//
-    private ProductGroup selectProductGroup;
+    //private ProductGroup selectProductGroup;
     private FacilityView facility;
     private FacilityView selectFacilityItem;
 
@@ -146,6 +147,8 @@ public class PrescreenMaker implements Serializable {
     private PrescreenService prescreenService;
     @Inject
     private PrescreenTransform prescreenTransform;
+    @Inject
+    private PrescreenBusinessControl prescreenBusinessControl;
 
 
     public PrescreenMaker() {
@@ -157,13 +160,13 @@ public class PrescreenMaker implements Serializable {
 
         log.info("onCreation");
 
-        HttpSession session = FacesUtil.getSession(true);
+        /*HttpSession session = FacesUtil.getSession(true);
         long workCasePrescreenId = new Long(session.getAttribute("workCasePrescreenId").toString());
         workCasePrescreenId = 1;
 
         WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
 
-        prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));
+        prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
 
         modeForButton = "add";
 
@@ -185,9 +188,9 @@ public class PrescreenMaker implements Serializable {
 
         onLoadSelectList();
 
-        if(selectProductGroup == null){
+        /*if(selectProductGroup == null){
             selectProductGroup = new ProductGroup();
-        }
+        }*/
 
         if(facility == null){
             facility = new FacilityView();
@@ -260,7 +263,7 @@ public class PrescreenMaker implements Serializable {
     // *** Function For Facility *** //
     public void onAddFacility() {
         log.info("onAddFacility ::: ");
-        log.info("onAddFacility ::: selectProductGroup : {}", selectProductGroup);
+        log.info("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
 
         //*** Reset form ***//
         log.info("onAddFacility ::: Reset Form");
@@ -292,7 +295,7 @@ public class PrescreenMaker implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
 
-        log.info("onSaveFacility ::: selectProductGroup.getId() : {} ", selectProductGroup.getId());
+        log.info("onSaveFacility ::: prescreen.productgroup.getId() : {} ", prescreenView.getProductGroup().getId());
         log.info("onSaveFacility ::: facility.getProductProgram().getId() : {} ", facility.getProductProgram().getId());
         log.info("onSaveFacility ::: facility.getCreditType().getId() : {} ", facility.getCreditType().getId());
         log.info("onSaveFacility ::: facility.getRequestAmount : {}", facility.getRequestAmount());
@@ -507,6 +510,27 @@ public class PrescreenMaker implements Serializable {
 
     }
 
+    // *** Function for Prescreen Initial *** //
+    public void onSavePrescreenInitial(){
+
+        log.info("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
+        log.info("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
+
+        HttpSession session = FacesUtil.getSession(true);
+
+        session.setAttribute("workCasePrescreenId", 1);
+        long workCasePrescreenId = Long.parseLong(session.getAttribute("workCasePrescreenId").toString());
+
+        if(prescreenView.getId() == 0){
+            prescreenView.setCreateDate(DateTime.now().toDate());
+            //prescreenView.setCreateBy();
+        }
+        prescreenView.setModifyDate(DateTime.now().toDate());
+        //prescreenView.setModifyBy();
+        prescreenView.setBusinessLocation(null);
+        prescreenBusinessControl.savePrescreenInitial(prescreenView, facilityViewList, workCasePrescreenId);
+    }
+
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen(){
         //*** validate forms ***//
@@ -546,8 +570,8 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeProductGroup(){
-        log.info("onChangeProductGroup ::: selectProductGroup : {}", selectProductGroup);
-        ProductGroup productGroup = productGroupDAO.findById(selectProductGroup.getId());
+        log.info("onChangeProductGroup ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
+        ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
 
         //*** Get Product Program List from Product Group ***//
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
@@ -816,13 +840,13 @@ public class PrescreenMaker implements Serializable {
         this.businessInfoViewList = businessInfoViewList;
     }
 
-    public ProductGroup getSelectProductGroup() {
+    /*public ProductGroup getSelectProductGroup() {
         return selectProductGroup;
     }
 
     public void setSelectProductGroup(ProductGroup selectProductGroup) {
         this.selectProductGroup = selectProductGroup;
-    }
+    }*/
 
     public FacilityView getFacility() {
         return facility;
