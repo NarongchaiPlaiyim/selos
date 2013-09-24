@@ -23,8 +23,12 @@ public class WorkCase implements Serializable {
     @Column(name="ca_number", length = 30, nullable=false)
     private String caNumber;
 
-    @Column(name="fn_case_id")
-    private String fnCaseId;
+    @Column(name="wob_number")
+    private String wobNumber;
+    @Column(name="lock")
+    private int lock;
+    @Column(name="lock_user")
+    private String lockUser;
 
     @OneToOne
     @JoinColumn(name="workflowstep_id")
@@ -69,12 +73,28 @@ public class WorkCase implements Serializable {
         this.caNumber = caNumber;
     }
 
-    public String getFnCaseId() {
-        return fnCaseId;
+    public String getWobNumber() {
+        return wobNumber;
     }
 
-    public void setFnCaseId(String fnCaseId) {
-        this.fnCaseId = fnCaseId;
+    public void setWobNumber(String wobNumber) {
+        this.wobNumber = wobNumber;
+    }
+
+    public int getLock() {
+        return lock;
+    }
+
+    public void setLock(int lock) {
+        this.lock = lock;
+    }
+
+    public String getLockUser() {
+        return lockUser;
+    }
+
+    public void setLockUser(String lockUser) {
+        this.lockUser = lockUser;
     }
 
     public WorkflowStep getWorkflowStep() {
@@ -130,7 +150,9 @@ public class WorkCase implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("caNumber", caNumber).
-                append("fnCaseId", fnCaseId).
+                append("wobNumber", wobNumber).
+                append("lock", lock).
+                append("lockUser", lockUser).
                 append("workflowStep", workflowStep).
                 append("caseStatus", caseStatus).
                 append("customerList", customerList).
