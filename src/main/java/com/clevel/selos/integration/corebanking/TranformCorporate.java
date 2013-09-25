@@ -2,7 +2,6 @@ package com.clevel.selos.integration.corebanking;
 
 
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -39,7 +38,7 @@ public class TranformCorporate implements Serializable{
         customerInfoView.setFirstNameEn(corporateModel.getCompanyNameEN());
         customerInfoView.setCitizenId(corporateModel.getRegistrationID());
         customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
-        customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("",corporateModel.getRegistrationCountry())));
+        customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationCountry())));
 
         //CurrentAddress
         AddressView currentAddress=new AddressView();
@@ -49,6 +48,7 @@ public class TranformCorporate implements Serializable{
         currentAddress.setPostalCode(corporateModel.getPostcode());
 
         customerInfoView.setCurrentAddress(currentAddress);
+
 
         return customerInfoView;
     }
