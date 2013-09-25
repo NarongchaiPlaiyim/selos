@@ -75,12 +75,12 @@ public class TranformIndividual implements Serializable{
         }else if(individualModel.getGender().equals("F")){
         customerInfoView.setGender(Gender.FEMALE);
         }
-        customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getEducationBackground())));
-        customerInfoView.setOrigin(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getRace())));  //***
-        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
-        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
+//        customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getEducationBackground())));
+//        customerInfoView.setOrigin(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getRace())));  //***
+//        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
+//        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
+//        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
         //bizCode not mapping
         customerInfoView.setMobileNumber("");
         customerInfoView.setFaxNumber("");

@@ -2,7 +2,6 @@ package com.clevel.selos.integration.corebanking;
 
 
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -49,6 +48,7 @@ public class TranformCorporate implements Serializable{
         currentAddress.setPostalCode(corporateModel.getPostcode());
 
         customerInfoView.setCurrentAddress(currentAddress);
+
 
         return customerInfoView;
     }
