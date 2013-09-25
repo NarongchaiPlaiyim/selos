@@ -5,6 +5,7 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.nccrs.models.request.*;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.nccrs.httppost.Post;
+import com.clevel.selos.integration.ncrs.models.request.CriteriaModel;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -192,10 +193,10 @@ public class NCCRSImp implements NCCRS, Serializable {
     private NCCRSRequestModel createFindModel(NCCRSModel model, String command){
        NCCRSRequestModel nccrsRequest = null;
 
-       nccrsRequest = new NCCRSRequestModel(
-               new HeaderModel(id, pass, command),
-               new BodyModel(
-                       new CriteriaModel(Util.createDateString(new Date(),"YYYYMMdd"), model.getRegistId(), id)));
+//       nccrsRequest = new NCCRSRequestModel(
+//               new HeaderModel(id, pass, command),
+//               new BodyModel(
+                       //new CriteriaModel(Util.createDateString(new Date(),"YYYYMMdd"), model.getRegistId(), id)));
        return nccrsRequest;
    }
     private NCCRSRequestModel createReadModel(String trackingId, String command){

@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.nccrs.models.request;
 
 
+import com.clevel.selos.integration.ncrs.models.request.CriteriaModel;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.util.ArrayList;
 import java.util.List;
