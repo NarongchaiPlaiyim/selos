@@ -22,6 +22,11 @@ public class CaseCreationResponse {
         this.appRefNumber = appRefNumber;
     }
 
+    public void setValue(WSResponse wsResponse, String message) {
+        setCode(wsResponse.code());
+        setMessage(message);
+    }
+
     public int getCode() {
         return code;
     }

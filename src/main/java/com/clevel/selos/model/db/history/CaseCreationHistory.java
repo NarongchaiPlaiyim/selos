@@ -15,68 +15,68 @@ public class CaseCreationHistory implements Serializable {
     @SequenceGenerator(name="SEQ_HIS_CASE_CREATION_ID", sequenceName="SEQ_HIS_CASE_CREATION_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_CASE_CREATION_ID")
     private long id;
-    @Column(name="job_name", length = 2)
+    @Column(name="job_name")
     private String jobName;
-    @Column(name="ca_number", length = 30, nullable = false)
+    @Column(name="ca_number", nullable = false)
     private String caNumber;
-    @Column(name="old_ca_number", length = 30)
+    @Column(name="old_ca_number")
     private String oldCaNumber;
-    @Column(name="account_no1", length = 30)
+    @Column(name="account_no1")
     private String accountNo1;
-    @Column(name="customer_id", length = 30)
+    @Column(name="customer_id")
     private String customerId;
-    @Column(name="customer_name", length = 255)
+    @Column(name="customer_name")
     private String customerName;
-    @Column(name="citizen_id", length = 13)
+    @Column(name="citizen_id")
     private String citizenId;
     @Column(name="request_type")
     private int requestType;
     @Column(name="customer_type")
     private int customerType;
-    @Column(name="bdm_id", length = 5)
+    @Column(name="bdm_id")
     private String bdmId;
-    @Column(name="hub_code", length = 4)
+    @Column(name="hub_code")
     private String hubCode;
-    @Column(name="region_code", length = 4)
+    @Column(name="region_code")
     private String regionCode;
-    @Column(name="uw_id", length = 5)
+    @Column(name="uw_id")
     private String uwId;
-    @Column(name="appindate_bdm", length = 10)
+    @Column(name="appindate_bdm")
     private String appInDateBDM;
-    @Column(name="final_approved", length = 1)
+    @Column(name="final_approved")
     private String finalApproved;
-    @Column(name="parallel", length = 1)
+    @Column(name="parallel")
     private String parallel;
-    @Column(name="pending", length = 1)
+    @Column(name="pending")
     private String pending;
-    @Column(name="ca_exist", length = 1)
+    @Column(name="ca_exist")
     private String caExist;
-    @Column(name="ca_end", length = 1)
+    @Column(name="ca_end")
     private String caEnd;
-    @Column(name="account_no2", length = 30)
+    @Column(name="account_no2")
     private String accountNo2;
-    @Column(name="account_no3", length = 30)
+    @Column(name="account_no3")
     private String accountNo3;
-    @Column(name="account_no4", length = 30)
+    @Column(name="account_no4")
     private String accountNo4;
-    @Column(name="account_no5", length = 30)
+    @Column(name="account_no5")
     private String accountNo5;
-    @Column(name="account_no6", length = 30)
+    @Column(name="account_no6")
     private String accountNo6;
-    @Column(name="account_no7", length = 30)
+    @Column(name="account_no7")
     private String accountNo7;
-    @Column(name="account_no8", length = 30)
+    @Column(name="account_no8")
     private String accountNo8;
-    @Column(name="account_no9", length = 30)
+    @Column(name="account_no9")
     private String accountNo9;
-    @Column(name="account_no10", length = 30)
+    @Column(name="account_no10")
     private String accountNo10;
-    @Column(name="appindate_uw", length = 10)
+    @Column(name="appindate_uw")
     private String appInDateUW;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;
-    @Column(name="create_status", length = 10)
+    @Column(name="create_status")
     private IntegrationStatus status;
     @Column(name="create_status_detail")
     private String statusDetail;
