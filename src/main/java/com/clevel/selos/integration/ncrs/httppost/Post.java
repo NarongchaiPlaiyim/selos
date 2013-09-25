@@ -65,8 +65,12 @@ public class Post implements Serializable {
         post = new HttpPost(url);
         post.setHeader("User-Agent", "Mozilla/5.0");
         urlParameters = new ArrayList<NameValuePair>();
-        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.ASCII));
+        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
         urlParameters.add(new BasicNameValuePair("q", xml));
+
+        log.debug("\nNCRS Request : \n{}",xml);
+
+
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {

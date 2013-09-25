@@ -296,7 +296,7 @@ public class NCRSImp implements NCRS, Serializable{
                         throw new Exception("NCB Exception "+resultDesc);
                     }
                 } else {
-                    //responseModel  is null
+                    log.error("NCRS Response model is null");
                 }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
@@ -419,7 +419,7 @@ public class NCRSImp implements NCRS, Serializable{
             ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
             return ncrsResponse;
         }else{
-            log.debug("NCRS Response : {}",result);
+            log.error("NCRS Response error : {}",result);
             return ncrsResponse;
         }
     }
