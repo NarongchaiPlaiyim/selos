@@ -5,7 +5,6 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.nccrs.models.request.*;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.nccrs.httppost.Post;
-import com.clevel.selos.integration.ncrs.models.request.CriteriaModel;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -163,13 +162,13 @@ public class NCCRSImp implements NCCRS, Serializable {
         xStream.processAnnotations(NCCRSRequestModel.class);
         log.debug("NCCRS Command code : {}",command);
         nccrsRequest = new NCCRSRequestModel(
-                           new HeaderModel(id,pass,command),
-                           new BodyModel(
-                               new H2HRequestModel(registType, registId, companyName,
-                                                   inqPurose, productType, memberRef,
-                                                   confirmConsent, language),
-                               new AttributeModel(historicalBalanceReport)
-                           ));
+                new HeaderModel(id,pass,command),
+                new BodyModel(
+                        new H2HRequestModel(registType, registId, companyName,
+                                inqPurose, productType, memberRef,
+                                confirmConsent, language),
+                        new AttributeModel(historicalBalanceReport)
+                ));
         xml = xStream.toXML(nccrsRequest);
         log.debug("NCCRS Request : \n{}",xml);
         result = post.sendPost(xml, url, Integer.parseInt(timeOut));
@@ -191,14 +190,14 @@ public class NCCRSImp implements NCCRS, Serializable {
         return nccrsRequest;
     }
     private NCCRSRequestModel createFindModel(NCCRSModel model, String command){
-       NCCRSRequestModel nccrsRequest = null;
+        NCCRSRequestModel nccrsRequest = null;
 
-//       nccrsRequest = new NCCRSRequestModel(
-//               new HeaderModel(id, pass, command),
-//               new BodyModel(
-                       //new CriteriaModel(Util.createDateString(new Date(),"YYYYMMdd"), model.getRegistId(), id)));
-       return nccrsRequest;
-   }
+        /*nccrsRequest = new NCCRSRequestModel(
+                new HeaderModel(id, pass, command),
+                new BodyModel(
+                        new CriteriaModel(Util.createDateString(new Date(),"YYYYMMdd"), model.getRegistId(), id))); */
+        return nccrsRequest;
+    }
     private NCCRSRequestModel createReadModel(String trackingId, String command){
         NCCRSRequestModel nccrsRequest = null;
         nccrsRequest = new NCCRSRequestModel(
