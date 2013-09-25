@@ -39,7 +39,7 @@ public class TranformCorporate implements Serializable{
         customerInfoView.setFirstNameEn(corporateModel.getCompanyNameEN());
         customerInfoView.setCitizenId(corporateModel.getRegistrationID());
         customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
-        customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("",corporateModel.getRegistrationCountry())));
+        customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationCountry())));
 
         //CurrentAddress
         AddressView currentAddress=new AddressView();
