@@ -23,13 +23,16 @@ public class BPMInterfaceImpl implements BPMInterface {
     public BPMInterfaceImpl() {
     }
 
-    public void createCase() throws SELOSBPMException {
+    @Override
+    public void createCase(String bdmUsername, String caNumber) throws SELOSBPMException {
         log.debug("createCase.");
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName("");
         userDTO.setPassword("");
         BPMServiceImpl bpmService = new BPMServiceImpl(userDTO);
-        Map<String,String> caseParameter = new HashMap<String, String>();
-//        bpmService.launchWorkflow(caseParameter,"processName");
+        HashMap<String,String> caseParameter = new HashMap<String, String>();
+        caseParameter.put("BDMUserName",bdmUsername);
+        caseParameter.put("CANumber",caNumber);
+        bpmService.launchCase(caseParameter);
     }
 }

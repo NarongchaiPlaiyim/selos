@@ -1,6 +1,7 @@
 package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.system.message.Message;
@@ -24,6 +25,8 @@ public class CaseCreation implements WSCaseCreation {
     CaseCreationHistoryDAO caseCreationHistoryDAO;
     @Inject
     WSDataPersist wsDataPersist;
+    @Inject
+    BPMInterface bpmInterface;
 
     @Inject
     @ValidationMessage
@@ -164,15 +167,11 @@ public class CaseCreation implements WSCaseCreation {
                 return new CaseCreationResponse(2,msg.get("053"));
             }
 
-
-
-
-            Date now = new Date();
-
-            //todo: create new case in BPM and update caseCreationHistory status
-
+            //call BPM create case service
+            bpmInterface.createCase(caNumber,"BDMUsername"); //todo: how to get BDM Username for create case?
 
             //all validation passed including new case creation in BPM.
+            Date now = new Date();
             CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
                     bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
                     accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now, IntegrationStatus.SUCCESS,"","REF001");
