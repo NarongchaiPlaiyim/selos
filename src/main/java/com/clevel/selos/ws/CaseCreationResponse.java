@@ -11,20 +11,16 @@ public class CaseCreationResponse {
     public CaseCreationResponse() {
     }
 
-    public CaseCreationResponse(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
     public CaseCreationResponse(int code, String message, String appRefNumber) {
         this.code = code;
         this.message = message;
         this.appRefNumber = appRefNumber;
     }
 
-    public void setValue(WSResponse wsResponse, String message) {
+    public void setValue(WSResponse wsResponse, String message, String appRefNumber) {
         setCode(wsResponse.code());
         setMessage(message);
+        setAppRefNumber(appRefNumber);
     }
 
     public int getCode() {
