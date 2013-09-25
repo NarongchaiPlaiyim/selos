@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.ncrs.service;
+package com.clevel.selos.integration.ncrs.ncrsmodel;
 
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
@@ -12,16 +12,42 @@ import java.util.ArrayList;
 
 public class NCRSModel implements Serializable {
 
+    private String userId;
+    private String CANumber;
+    private String appRefNumber;
     private String memberref;
     private String enqpurpose = "01";
     private String enqamount = "0";
     private String consent = "Y";
-    private String disputeenquiry;
-    private ArrayList<TUEFEnquiryNameModel> nameList;
-    private ArrayList<TUEFEnquiryIdModel> idList;
+    private ArrayList<NCRSInputModel> inputModel;
+    private String trackingId;
 
     @Inject
     public NCRSModel() {
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCANumber() {
+        return CANumber;
+    }
+
+    public void setCANumber(String CANumber) {
+        this.CANumber = CANumber;
+    }
+
+    public String getAppRefNumber() {
+        return appRefNumber;
+    }
+
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
     }
 
     public String getMemberref() {
@@ -56,28 +82,20 @@ public class NCRSModel implements Serializable {
         this.consent = consent;
     }
 
-    public String getDisputeenquiry() {
-        return disputeenquiry;
+    public ArrayList<NCRSInputModel> getInputModel() {
+        return inputModel;
     }
 
-    public void setDisputeenquiry(String disputeenquiry) {
-        this.disputeenquiry = disputeenquiry;
+    public void setInputModel(ArrayList<NCRSInputModel> inputModel) {
+        this.inputModel = inputModel;
     }
 
-    public ArrayList<TUEFEnquiryNameModel> getNameList() {
-        return nameList;
+    public String getTrackingId() {
+        return trackingId;
     }
 
-    public void setNameList(ArrayList<TUEFEnquiryNameModel> nameList) {
-        this.nameList = nameList;
-    }
-
-    public ArrayList<TUEFEnquiryIdModel> getIdList() {
-        return idList;
-    }
-
-    public void setIdList(ArrayList<TUEFEnquiryIdModel> idList) {
-        this.idList = idList;
+    public void setTrackingId(String trackingId) {
+        this.trackingId = trackingId;
     }
 
     @Override
@@ -87,9 +105,6 @@ public class NCRSModel implements Serializable {
                 .append("enqpurpose", enqpurpose)
                 .append("enqamount", enqamount)
                 .append("consent", consent)
-                .append("disputeenquiry", disputeenquiry)
-                .append("nameList", nameList.toString())
-                .append("idList", idList.toString())
                 .toString();
     }
 }

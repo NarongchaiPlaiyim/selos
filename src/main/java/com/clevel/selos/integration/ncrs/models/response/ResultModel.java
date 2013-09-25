@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("result")
-public class ResultModel {
+public class ResultModel  implements Serializable {
     
     @XStreamAlias("result")
     private String result;

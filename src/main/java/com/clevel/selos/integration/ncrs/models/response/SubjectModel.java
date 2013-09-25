@@ -2,10 +2,12 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @XStreamAlias("subject")
-public class SubjectModel {
+public class SubjectModel implements Serializable {
     @XStreamImplicit(itemFieldName = "name")
     private ArrayList<SubjectNameModel> name = new ArrayList<SubjectNameModel>();
     

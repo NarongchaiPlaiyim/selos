@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.ncrs.models.response;
-public class NameModel {
+
+import java.io.Serializable;
+
+public class NameModel implements Serializable {
     private String familyname;
     private String firstname;
     private String middlename;

@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.ncrs.models.response;
-public class IdModel {
+
+import java.io.Serializable;
+
+public class IdModel implements Serializable {
     private String idtype;
     private String idnumber;
     private String issuecountry;

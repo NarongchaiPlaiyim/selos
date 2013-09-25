@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("dispute")
-public class SubjectIdDisputeModel {
+public class SubjectIdDisputeModel implements Serializable {
     
     @XStreamAlias("disputedate")
     private String disputedate;

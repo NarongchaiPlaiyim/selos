@@ -5,7 +5,7 @@ import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.nccrs.service.NCCRSModel;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
-import com.clevel.selos.integration.ncrs.service.NCRSModel;
+import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 

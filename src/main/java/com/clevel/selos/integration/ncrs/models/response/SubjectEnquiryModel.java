@@ -1,10 +1,12 @@
 package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-public class SubjectEnquiryModel {
+public class SubjectEnquiryModel  implements Serializable {
     
     private String idtype;
     private String idnumber;

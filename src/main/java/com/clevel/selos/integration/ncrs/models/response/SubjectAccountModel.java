@@ -2,10 +2,12 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @XStreamAlias("account")
-public class SubjectAccountModel {
+public class SubjectAccountModel implements Serializable {
     
     
     private String membercode;

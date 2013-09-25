@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("history")
-public class HistoryModel {
+public class HistoryModel implements Serializable {
     
     @XStreamAlias("asofdate")
     private String asofdate;

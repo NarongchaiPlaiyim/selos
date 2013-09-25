@@ -1,9 +1,13 @@
 package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 @XStreamAlias("transaction")
-public class TransactionModel {
+public class TransactionModel  implements Serializable {
     
     @XStreamAlias("trackingid")
     private String trackingid;
@@ -19,13 +23,13 @@ public class TransactionModel {
     
     @XStreamAlias("disputeenquiry")
     private String disputeenquiry;
-    
-    @XStreamAlias("id")
-    private IdModel id;
-    
-    @XStreamAlias("name")
-    private NameModel name;
-    
+
+    @XStreamImplicit(itemFieldName = "id")
+    private ArrayList<IdModel> id = new ArrayList<IdModel>();
+
+    @XStreamImplicit(itemFieldName = "name")
+    private ArrayList<NameModel> name = new ArrayList<NameModel>();
+
     @XStreamAlias("enquirypurpose")
     private String enquirypurpose;
     
@@ -56,24 +60,6 @@ public class TransactionModel {
     @XStreamAlias("tueferror")
     private TUEFErrorModel tueferror;
 
-    public TransactionModel(String trackingid, String user, String transactiondate, String mediacode, String disputeenquiry, IdModel id, NameModel name, String enquirypurpose, String enquirymount, String consent, String memberref, String enquirydate, String responsedate, TUEFEnquiryModel tuefenquiry, TUEFResponseModel tuefresponse) {
-        this.trackingid = trackingid;
-        this.user = user;
-        this.transactiondate = transactiondate;
-        this.mediacode = mediacode;
-        this.disputeenquiry = disputeenquiry;
-        this.id = id;
-        this.name = name;
-        this.enquirypurpose = enquirypurpose;
-        this.enquiryamount = enquirymount;
-        this.consent = consent;
-        this.memberref = memberref;
-        this.enquirydate = enquirydate;
-        this.responsedate = responsedate;
-        this.tuefenquiry = tuefenquiry;
-        this.tuefresponse = tuefresponse;
-    }
-
     public String getTrackingid() {
         return trackingid;
     }
@@ -94,12 +80,16 @@ public class TransactionModel {
         return disputeenquiry;
     }
 
-    public IdModel getId() {
+    public ArrayList<IdModel> getId() {
         return id;
     }
 
-    public NameModel getName() {
+    public ArrayList<NameModel> getName() {
         return name;
+    }
+
+    public String getEnquiryamount() {
+        return enquiryamount;
     }
 
     public String getEnquirypurpose() {
@@ -137,5 +127,12 @@ public class TransactionModel {
     public String getEnquirystatus() {
         return enquirystatus;
     }
-    
+
+    public TUEFErrorModel getTueferror() {
+        return tueferror;
+    }
+
+    public void setTueferror(TUEFErrorModel tueferror) {
+        this.tueferror = tueferror;
+    }
 }

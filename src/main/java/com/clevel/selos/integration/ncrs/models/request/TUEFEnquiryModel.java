@@ -2,10 +2,12 @@ package com.clevel.selos.integration.ncrs.models.request;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @XStreamAlias("tuefenquiry")
-public class TUEFEnquiryModel {
+public class TUEFEnquiryModel implements Serializable {
     
     
     @XStreamAlias("header")
