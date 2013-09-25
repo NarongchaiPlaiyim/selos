@@ -2,6 +2,7 @@ package com.clevel.selos.integration.nccrs.service;
 
 import com.clevel.selos.dao.export.NCBIExportDAO;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.nccrs.service.NCBIExportModel;
 import com.clevel.selos.model.db.export.NCBIExport;
 import org.slf4j.Logger;
 
@@ -25,24 +26,24 @@ public class NCBIExportImp implements Serializable {
 
     public void add(NCBIExportModel exportModel){
 
-        String staffId = exportModel.getStaffId();
-        String requestNo = exportModel.getRequestNo();
-        String inquiryType = exportModel.getInquiryType();
-        String customerType = exportModel.getCustomerType();
-        String customerDocumentType = exportModel.getCustomerDocumentType();
-        String juristicType = exportModel.getJuristicType();
-        String customerId = exportModel.getCustomerId();
-        String countryCode = exportModel.getCountryCode();
-        String titleCode  = exportModel.getTitleCode();
-        String firstName = exportModel.getFirstName();
-        String lastName = exportModel.getLastName();
-        String juristicName = exportModel.getJuristicName();
-        String caNumber = exportModel.getCaNumber();
-        String caution = exportModel.getCaution();
-        String referenceTel = exportModel.getReferenceTel();
-        String inquiryStatus = exportModel.getInquiryStatus();
-        Date inquiryDate  = exportModel.getInquiryDate();
-        String officeCode = exportModel.getOfficeCode();
+        String staffId =                exportModel.getStaffId();
+        String requestNo =              exportModel.getRequestNo();
+        String inquiryType =            exportModel.getInquiryType();
+        String customerType =           exportModel.getCustomerType();
+        String customerDocumentType =   exportModel.getCustomerDocumentType();
+        String juristicType =           exportModel.getJuristicType();
+        String customerId =             exportModel.getCustomerId();
+        String countryCode =            exportModel.getCountryCode();
+        String titleCode  =             exportModel.getTitleCode();
+        String firstName =              exportModel.getFirstName();
+        String lastName =               exportModel.getLastName();
+        String juristicName =           exportModel.getJuristicName();
+        String caNumber =               exportModel.getCaNumber();
+        String caution =                exportModel.getCaution();
+        String referenceTel =           exportModel.getReferenceTel();
+        String inquiryStatus =          exportModel.getInquiryStatus();
+        Date inquiryDate  =             exportModel.getInquiryDate();
+        String officeCode =             exportModel.getOfficeCode();
 
         ncbiExportDAO.persist(new NCBIExport(
                 staffId, requestNo, inquiryType, customerType, customerDocumentType,

@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.ncrs.models.response;
-public class EnquiryModel {
+
+import java.io.Serializable;
+
+public class EnquiryModel implements Serializable {
     
     private String enqdate;
     private String enqtime;

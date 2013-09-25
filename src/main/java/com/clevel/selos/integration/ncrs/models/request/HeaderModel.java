@@ -2,9 +2,11 @@ package com.clevel.selos.integration.ncrs.models.request;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 
 @XStreamAlias("header")
-public class HeaderModel {
+public class HeaderModel implements Serializable {
     
     @XStreamAlias("user")
     private String user;

@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("header")
-public class TUEFEnquiryHeaderModel {
+public class TUEFEnquiryHeaderModel implements Serializable {
     
     @XStreamAlias("memberref")
     private String memberref;

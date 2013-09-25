@@ -6,8 +6,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 @XStreamAlias("name")
-public class TUEFEnquiryNameModel{
+public class TUEFEnquiryNameModel implements Serializable {
     
     @XStreamAlias("familyname")
     private String familyname;
@@ -21,10 +23,9 @@ public class TUEFEnquiryNameModel{
     @XStreamAlias("dateofbirth")
     private String dateofbirth;
 
-    public TUEFEnquiryNameModel(String familyname, String firstname, String dateofbirth) {
+    public TUEFEnquiryNameModel(String familyname, String firstname) {
         this.familyname = familyname;
         this.firstname = firstname;
-        this.dateofbirth = dateofbirth;
     }
 
     public String getFamilyname() {

@@ -6,8 +6,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+
 @XStreamAlias("id")
-public class TUEFEnquiryIdModel {
+public class TUEFEnquiryIdModel implements Serializable {
     
     @XStreamAlias("idtype")
     private String idtype;

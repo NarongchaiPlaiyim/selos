@@ -2,11 +2,13 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @XStreamAlias("body")
-public class BodyModel {
+public class BodyModel implements Serializable {
     
     @XStreamAlias("transaction")
     private TransactionModel transaction;
