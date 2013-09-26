@@ -4,6 +4,7 @@ package com.clevel.selos.integration.ncrs.httppost;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +17,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
@@ -63,19 +62,21 @@ public class Post implements Serializable {
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
-        post.setHeader("User-Agent", "Mozilla/5.0");
+        post.setHeader(HTTP.USER_AGENT, "Mozilla/5.0");
+        post.setHeader("Accept-Charset", HTTP.UTF_8);
         urlParameters = new ArrayList<NameValuePair>();
-        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
+
+        //ByteBuffer encode = Charset.forName("UTF-8").encode(XML);
+
+
         urlParameters.add(new BasicNameValuePair("q", xml));
-
-        log.debug("\nNCRS Request : \n{}",xml);
-
-
+        //Charset.forName("UTF-8").encode(myString)
+        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
+//        post.setEntity(new UrlEncodedFormEntity(urlParameters, Charset.forName(HTTP.UTF_8)));
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
             log.debug("NCRS The request has succeeded");
-
 //            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-11"), 8);
             rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             builder = new StringBuilder();
@@ -85,7 +86,7 @@ public class Post implements Serializable {
             }
             return builder!=null?builder.toString():"";
         }else{
-            throw new ValidationException("The request has failed, Error code is "+resCode);
+            throw new Exception("The request has failed, Error code is "+resCode);
         }
 
 

@@ -3,6 +3,7 @@ package com.clevel.selos.integration.ncrs.service;
 
 import com.clevel.selos.dao.ext.ncb.NCBResultDAO;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.ext.ncb.NCBResult;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -26,13 +27,25 @@ public class NCBResultImp implements Serializable {
     public NCBResultImp() {
     }
 
-    public void add(String appRefNumber, String customerType, String customerId, Date inquiryDate, String result, String reason){
-        ncbResult.persist(new NCBResult(appRefNumber, customerType, customerId, inquiryDate, result, reason));
+    public void add(String appRefNumber, String customerType, String customerId, Date inquiryDate, ActionResult actionResult, String reason){
+        ncbResult.persist(new NCBResult(appRefNumber, customerType, customerId, inquiryDate, actionResult.toString(), reason));
     }
 
     public List<NCBResult> getListByAppRefNumber(String appRefNumber){
-        log.debug("NCRS Call checkAppRefNumber({})", appRefNumber);
+        log.debug("NCRS Call getListByAppRefNumber({})", appRefNumber);
         return ncbResult.findByCriteria(Restrictions.eq("appRefNumber", appRefNumber));
+    }
+
+    public boolean isFAILED(String appRefNumber, String customerId){
+        log.debug("NCRS Call isFAILED({}, {})", appRefNumber, customerId);
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        return "FAILED".equals(model.getResult())?true:false;
+    }
+
+    public boolean isEXCEPTION(String appRefNumber, String customerId){
+        log.debug("NCRS Call isEXCEPTION({}, {})", appRefNumber, customerId);
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        return "EXCEPTION".equals(model.getResult())?true:false;
     }
 
     public boolean isChecked(String appRefNumber){
@@ -40,13 +53,20 @@ public class NCBResultImp implements Serializable {
         return  ncbResult.isExist(appRefNumber);
     }
 
-    public void update(String appRefNumber, String customerId, String result){
+    public void updateSUCCEED(String appRefNumber, String customerId, String trackingId){
+        log.debug("NCRS Call updateSUCCEED({}, {})", appRefNumber, customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        model.setResult(result);
+        model.setResult("SUCCEED");
+        model.setReason(trackingId);
         ncbResult.save(model);
     }
 
-    public void test(String appRefNumber, String result){
-//        ncbResult.findByCriteria(Restrictions.eq());
+    public void checkStatus(String appRefNumber, String customerId, String trackingId){
+        log.debug("NCRS Call checkStatus({}, {})", appRefNumber, customerId);
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        if (!"SUCCEED".equals(model.getResult())){
+            updateSUCCEED(appRefNumber, customerId, trackingId);
+            log.debug("NCRS Call checkStatus({}, {}) updated", appRefNumber, customerId);
+        }
     }
 }

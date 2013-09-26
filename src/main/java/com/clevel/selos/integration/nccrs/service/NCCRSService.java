@@ -39,8 +39,10 @@ public class NCCRSService implements Serializable {
             log.error("NCCRS Exception : {}", e);
         }  */
 
-        log.debug("NCCRS process.");
-        try {
+        log.debug("NCCRS process()");
+
+
+        /*try {
 
             log.debug("NCCRS process. Call  : requestOnline(NCRSModel)");
 
@@ -90,7 +92,7 @@ public class NCCRSService implements Serializable {
             }
         } catch (Exception e) {
             log.error("NCCRS Exception : {}", e);
-        }
+        }*/
 
     }
 }

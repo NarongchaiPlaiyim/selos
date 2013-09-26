@@ -53,35 +53,35 @@ public class Util {
 
 
     public static boolean isNull(String string){
-        if(string == null || "null".equals(string.toLowerCase())){
+        if(string == null || "null".equals(string.toLowerCase().trim())){
             return true;
         }else{
             return false;
         }
     }
 
-    public boolean checkLength(String string, int length){
+    public static boolean checkLength(String string, int length){
         if(null!=string){
             return string.length()<=length?true:false;
         }else{
             return false;
         }
     }
-    public boolean checkSize(ArrayList arrayList, int size){
+    public static boolean checkSize(ArrayList arrayList, int size){
         if(null!=arrayList){
             return arrayList.size()>=size?true:false;
         }else{
             return false;
         }
     }
-    public String convertNullToBlank(String string){
+    public static String convertNullToBlank(String string){
         if(string != null || !"null".equals(string.toLowerCase())){
             return "";
         }else{
             return string;
         }
     }
-    public List convertNullToEmpeyList(List list){
+    public static List convertNullToEmpeyList(List list){
         return list!=null?list: Collections.EMPTY_LIST;
     }
 

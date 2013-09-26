@@ -23,6 +23,7 @@
             <from-outcome>BUSINESS</from-outcome>
             <to-view-id>/site/welcome.xhtml</to-view-id>
             <redirect/>
+
         </navigation-case>
         <navigation-case>
             <from-action>#{loginBean.login}</from-action>

@@ -7,6 +7,7 @@ import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncrs.ncrsmodel.ResponseNCRSModel;
 import com.clevel.selos.integration.ncrs.vaildation.ValidationImp;
 import com.clevel.selos.integration.test.NCBInterfaceImpTest;
+import com.clevel.selos.model.db.ext.ncb.NCBResult;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NCRSService implements Serializable {
     @Inject
@@ -79,8 +81,6 @@ public class NCRSService implements Serializable {
         }*/
 
         ArrayList<ResponseNCRSModel> responseModelArrayList = null;
-
-
         if(true){//
         try {
             log.debug("NCRS process()");
@@ -89,19 +89,19 @@ public class NCRSService implements Serializable {
             if (!flag){
                 responseModelArrayList = ncrsImp.requestOnline(ncrsModel);
                 for (ResponseNCRSModel responseModel : responseModelArrayList){
-                    if("FAILED".equals(responseModel.getResult())){
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    if("FAILED".equals(responseModel.getActionResult())){
+                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getActionResult(), responseModel.getReason());
                     } else {
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getActionResult(), responseModel.getReason());
                     }
                 }
             } else {
                 responseModelArrayList =  ncrsImp.requestOffline(ncrsModel);
                 for (ResponseNCRSModel responseModel : responseModelArrayList){
-                    if("FAILED".equals(responseModel.getResult())){
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    if("FAILED".equals(responseModel.getActionResult())){
+                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getActionResult(), responseModel.getReason());
                     } else {
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getActionResult(), responseModel.getReason());
                     }
                 }
             }
