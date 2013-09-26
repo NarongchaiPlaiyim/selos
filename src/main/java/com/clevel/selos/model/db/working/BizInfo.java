@@ -59,13 +59,13 @@ public class BizInfo implements Serializable {
     @Column(name="biz_permission")
     private String bizPermission;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy="bizInfo")
     private List<BizStakeHolderDetail> supplierList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy="bizInfo")
     private List<BizStakeHolderDetail> buyerList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy="bizInfo")
     private List<BizProductDetail> bizProductList;
 
     @ManyToOne

@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 public class BizStakeHolderDetail {
 
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID")
+    @SequenceGenerator(name="SEQ_WRK_BIZ_STAKE_HOLDER_ID", sequenceName="SEQ_WRK_BIZ_STAKE_HOLDER_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_STAKE_HOLDER_ID")
     private long id;
 
     @ManyToOne
