@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * Time: 22:15 น.
  * To change this template use File | Settings | File Templates.
  */
-public class TcgCalculateView {
+public class TCGView {
     private String isTCG;
     private BigDecimal requestLimitRequiredTCG;
     private BigDecimal requestLimitNotRequiredTCG;
@@ -22,7 +22,7 @@ public class TcgCalculateView {
     private String collateralRuleResult;
     private BigDecimal requestTCGAmount;
 
-    public TcgCalculateView(){
+    public TCGView(){
         reset();
     }
 

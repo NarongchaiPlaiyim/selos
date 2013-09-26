@@ -7,7 +7,7 @@ package com.clevel.selos.model.view;
  * Time: 15:31 น.
  * To change this template use File | Settings | File Templates.
  */
-public class NcbSumView {
+public class NCBSummaryView {
 
     private String cusName;
     private String cusType;
@@ -20,7 +20,7 @@ public class NcbSumView {
     private String tdrPaymentCondition;
 
 
-    public NcbSumView(){
+    public NCBSummaryView(){
     }
 
     public String getCusName() {

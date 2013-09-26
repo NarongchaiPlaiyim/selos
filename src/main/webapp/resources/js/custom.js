@@ -52,7 +52,7 @@ function handlePrescreenProposeCreditRequest(xhr, status, args) {
     }
 }
 
-function handleFullappNcbRequest(xhr, status, args) {
+function handlencbInfoRequest(xhr, status, args) {
     if(args.functionComplete){
         ncbDlg.hide();
     }
@@ -64,7 +64,7 @@ function handleFullappBizProductRequest(xhr, status, args) {
     }
 }
 
-function handleFullappTcgRequest(xhr, status, args) {
+function handletcgInfoRequest(xhr, status, args) {
     if(args.functionComplete){
         tcgDlg.hide();
     }

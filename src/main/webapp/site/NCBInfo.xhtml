@@ -56,7 +56,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.checkingDate}" id="checkingDate" disabled="true"/>
+        <p:inputText value="#{ncbInfo.NCBInfoView.checkingDate}" id="checkingDate" disabled="true"/>
     </td>
 </tr>
 
@@ -66,7 +66,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.checkIn6Month}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.NCBInfoView.checkIn6Month}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -75,7 +75,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.paymentClass}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.NCBInfoView.paymentClass}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -84,7 +84,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.currentPaymentType}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.NCBInfoView.currentPaymentType}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -93,7 +93,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.historyPaymentType}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.NCBInfoView.historyPaymentType}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -106,41 +106,41 @@
             <table class="content_form">
                 <tr>
                     <td class="title" style="width: 160px;">
-                        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.nplFlag}">
+                        <h:selectOneRadio id="NPLFlag" value="#{ncbInfo.NCBInfoView.nplFlag}">
                             <f:selectItem itemLabel="Yes" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
                         </h:selectOneRadio>
                      </td>
                     <td class="title">
-                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.nplTMBFlag}"/>
+                        <h:selectBooleanCheckbox value="#{ncbInfo.NCBInfoView.nplTMBFlag}"/>
                         <h:outputText value="TMB :"></h:outputText>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplTMBMonth}">
-                  <!--          <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.nplTMBMonth}">
+                  <!--          <f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months"
                                            itemLabel="#{months.Month}"
                                            itemValue="#{months.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplTMBYear}">
-                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.nplTMBYear}">
+                            <!--<f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months2"
                                            itemLabel="#{months2.Month}"
                                            itemValue="#{months2.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.nplOtherFlag}"/><h:outputText
+                        <h:selectBooleanCheckbox value="#{ncbInfo.NCBInfoView.nplOtherFlag}"/><h:outputText
                             value="Other :"/>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplOtherMonth}">
-                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.nplOtherMonth}">
+                            <!--<f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months3"
                                            itemLabel="#{months3.Month}"
                                            itemValue="#{months3.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplOtherYear}">
-                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.nplOtherYear}">
+                            <!--<f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months4"
                                            itemLabel="#{months4.Month}"
                                            itemValue="#{months4.value}"/>-->
@@ -161,41 +161,41 @@
             <table class="content_form">
                 <tr>
                     <td class="title" style="width: 160px;">
-                        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.tdrFlag}">
+                        <h:selectOneRadio id="NPLFlag" value="#{ncbInfo.NCBInfoView.tdrFlag}">
                             <f:selectItem itemLabel="Yes" itemValue="true"/>
                             <f:selectItem itemLabel="No" itemValue="false"/>
                         </h:selectOneRadio>
                     </td>
                     <td class="title">
-                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.tdrTMBFlag}"/>
+                        <h:selectBooleanCheckbox value="#{ncbInfo.NCBInfoView.tdrTMBFlag}"/>
                         <h:outputText value="TMB :"></h:outputText>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrTMBMonth}">
-                           <!-- <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.tdrTMBMonth}">
+                           <!-- <f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months"
                                            itemLabel="#{months.Month}"
                                            itemValue="#{months.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrTMBYear}">
-                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.tdrTMBYear}">
+                            <!--<f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months2"
                                            itemLabel="#{months2.Month}"
                                            itemValue="#{months2.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.tdrOhterFlag}"/><h:outputText
+                        <h:selectBooleanCheckbox value="#{ncbInfo.NCBInfoView.tdrOhterFlag}"/><h:outputText
                             value="Other :"/>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrOtherMonth}">
-                           <!-- <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.tdrOtherMonth}">
+                           <!-- <f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months3"
                                            itemLabel="#{months3.Month}"
                                            itemValue="#{months3.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrOtherYear}">
-                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                        <h:selectOneMenu value="#{ncbInfo.NCBInfoView.tdrOtherYear}">
+                            <!--<f:selectItems value="#{ncbInfo.NCBInfoView.monthsList}"
                                            var="months4"
                                            itemLabel="#{months4.Month}"
                                            itemValue="#{months4.value}"/>-->
@@ -212,10 +212,10 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <!-- <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>-->
+        <!-- <p:inputText   value="#{ncbInfo.NCBInfoView.tdrPaymentCondition}"   disabled="true"/>-->
         <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
-                            value="#{fullappNcb.ncbRecordView.tdrCondition.id}" disabled="true">
-            <f:selectItems value="#{fullappNcb.tdrConditionList}"
+                            value="#{ncbInfo.NCBDetailView.tdrCondition.id}" disabled="true">
+            <f:selectItems value="#{ncbInfo.tdrConditionList}"
                            var="dlgTDRConditionList"
                            itemLabel="#{dlgTDRConditionList.description}"
                            itemValue="#{dlgTDRConditionList.id}"/>
@@ -228,7 +228,7 @@
         <h:outputText value="#{msg.get('app.remark')}"/>
     </td>
     <td>
-        <p:inputTextarea cols="60" rows="3" name="remark" value="#{fullappNcb.ncbResultView.remark}" disabled="true"/>
+        <p:inputTextarea cols="60" rows="3" name="remark" value="#{ncbInfo.NCBInfoView.remark}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -243,7 +243,7 @@
                 value="#{msg.get('app.addButton')}"
                 styleClass="smaller"
                 process="@this"
-                actionListener="#{fullappNcb.onAddNcbRecord}"
+                actionListener="#{ncbInfo.onAddNcbRecord}"
                 update=":ncbDlgForm"
                 oncomplete="ncbDlg.show();">
             <p:resetInput target=":ncbDlgForm"/>
@@ -256,8 +256,8 @@
             <tr>
                 <td>
 
-                    <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordViewList}"
-                                 rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.NCBDetailViewList}"
+                                 rowKey="#{item.NCBDetailView}" rowIndexVar="rowIndex">
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column headerText="No." styleClass="center" style="width:22px;"/>
@@ -292,7 +292,7 @@
                                 <p:column headerText="BUTTON" styleClass="center" style="width:60px;"/>
                             </p:row>
                         </p:columnGroup>
-                        <p:subTable var="item1" value="#{fullappNcb.ncbRecordView}">
+                        <p:subTable var="item1" value="#{ncbInfo.NCBDetailView}">
                             <f:facet name="header">
                             </f:facet>
                             <p:column>
@@ -369,19 +369,19 @@
 
                             <p:column>
                                 <p:commandButton icon="ui-icon-pencil"
-                                                 action="#{fullappNcb.onEditNcbDetail()}"
+                                                 action="#{ncbInfo.onEditNcbDetail()}"
                                                  update=":ncbDlgForm"
                                                  oncomplete="ncbDlg.show();">
                                     <f:setPropertyActionListener value="#{item}"
-                                                                 target="#{fullappNcb.selectNcbRecordItem}"/>
+                                                                 target="#{ncbInfo.selectNcbRecordItem}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}"
-                                                                 target="#{fullappNcb.rowIndex}"/>
+                                                                 target="#{ncbInfo.rowIndex}"/>
                                 </p:commandButton>
                                 <p:commandButton title="Remove"
                                                  icon="ui-icon-trash"
                                                  oncomplete="confirmDeleteNcbRecordDlg.show()">
                                     <f:setPropertyActionListener value="#{item}"
-                                                                 target="#{fullappNcb.selectNcbRecordItem}"/>
+                                                                 target="#{ncbInfo.selectNcbRecordItem}"/>
                                 </p:commandButton>
                             </p:column>
 
@@ -408,7 +408,7 @@
         <p:commandButton id="btnSave" value="Save"
                          styleClass="medium"
                          process=":frmMain"
-                         action="#{fullappNcb.onSaveNcb()}"
+                         action="#{ncbInfo.onSaveNcb()}"
                          update=":frmMain"/>
     </td>
 </tr>
@@ -430,14 +430,14 @@
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
           modal="true" width="520" height="550">
-    <ui:include src="dialog/fullappNcbDialog.xhtml"/>
+    <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 
 <ui:include src="dialog/confirmDeleteDlg.xhtml">
     <ui:param name="id" value="confirmDeleteNcbRecordDialog"/>
     <ui:param name="name" value="confirmDeleteNcbRecordDlg"/>
     <ui:param name="formId" value="frmConfirmDeleteNcbRecord"/>
-    <ui:param name="controller" value="#{fullappNcb}"/>
+    <ui:param name="controller" value="#{ncbInfo}"/>
     <ui:param name="action" value="onDeleteNcbDetail"/>
     <ui:param name="update" value=":frmMain"/>
 </ui:include>

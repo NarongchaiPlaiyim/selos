@@ -20,7 +20,7 @@ import java.util.List;
  * Time: 15:31 น.
  * To change this template use File | Settings | File Templates.
  */
-public class NcbRecordView implements Serializable {
+public class NCBDetailView implements Serializable {
 
     private long id;
     private boolean isTMBAccount;
@@ -41,9 +41,7 @@ public class NcbRecordView implements Serializable {
     private TDRCondition tdrCondition;
     private SettlementStatus currentPayment;
     private SettlementStatus historyPayment;
-    private List<MonthsPaymentView> noOfmonthsPaymentList;
     private int noOfmonthsPayment;
-    private List<MoneyPaymentView> moneyPaymentViewList;
     private String moneyTotal;
     private BigDecimal month1;
     private BigDecimal month2;
@@ -52,7 +50,7 @@ public class NcbRecordView implements Serializable {
     private BigDecimal month5;
     private BigDecimal month6;
 
-    public NcbRecordView() {
+    public NCBDetailView() {
         reset();
     }
 
@@ -75,9 +73,7 @@ public class NcbRecordView implements Serializable {
         this.tdrCondition = new TDRCondition();
         this.currentPayment = new SettlementStatus();
         this.historyPayment = new SettlementStatus();
-        this.noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
         this.noOfmonthsPayment = 0;
-        this.moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
         this.moneyTotal = "";
         this.month1 = new BigDecimal(0);
         this.month2 = new BigDecimal(0);
@@ -85,15 +81,6 @@ public class NcbRecordView implements Serializable {
         this.month4 = new BigDecimal(0);
         this.month5 = new BigDecimal(0);
         this.month6 = new BigDecimal(0);
-
-
-        noOfmonthsPaymentList = new ArrayList<MonthsPaymentView>();
-        for (int i = 1; i < 7; i++) {
-            noOfmonthsPaymentList.add(new MonthsPaymentView(i));
-        }
-
-        moneyPaymentViewList = new ArrayList<MoneyPaymentView>();
-
 
     }
 
@@ -111,22 +98,6 @@ public class NcbRecordView implements Serializable {
 
     public void setMoneyTotal(String moneyTotal) {
         this.moneyTotal = moneyTotal;
-    }
-
-    public List<MoneyPaymentView> getMoneyPaymentViewList() {
-        return moneyPaymentViewList;
-    }
-
-    public void setMoneyPaymentViewList(List<MoneyPaymentView> moneyPaymentViewList) {
-        this.moneyPaymentViewList = moneyPaymentViewList;
-    }
-
-    public List<MonthsPaymentView> getNoOfmonthsPaymentList() {
-        return noOfmonthsPaymentList;
-    }
-
-    public void setNoOfmonthsPaymentList(List<MonthsPaymentView> noOfmonthsPaymentList) {
-        this.noOfmonthsPaymentList = noOfmonthsPaymentList;
     }
 
     public int getNoOfmonthsPayment() {
@@ -353,9 +324,7 @@ public class NcbRecordView implements Serializable {
                 .append("tdrCondition", tdrCondition)
                 .append("currentPayment", currentPayment)
                 .append("historyPayment", historyPayment)
-                .append("noOfmonthsPaymentList", noOfmonthsPaymentList)
                 .append("noOfmonthsPayment", noOfmonthsPayment)
-                .append("moneyPaymentViewList", moneyPaymentViewList)
                 .append("moneyTotal", moneyTotal)
                 .append("month1", month1)
                 .append("month2", month2)

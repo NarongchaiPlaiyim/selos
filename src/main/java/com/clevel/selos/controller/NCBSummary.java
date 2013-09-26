@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.model.view.NcbSumView;
+import com.clevel.selos.model.view.NCBSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -18,8 +18,8 @@ import java.util.List;
 
 
 @ViewScoped
-@ManagedBean(name = "fullappNcbSum")
-public class FullappNcbSum implements Serializable {
+@ManagedBean(name = "ncbSummary")
+public class NCBSummary implements Serializable {
 
 
     @Inject
@@ -37,10 +37,10 @@ public class FullappNcbSum implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
-    private List<NcbSumView> ncbSumList;
-    private NcbSumView ncbSum;
+    private List<NCBSummaryView> ncbSumList;
+    private NCBSummaryView ncbSum;
 
-    public FullappNcbSum() {
+    public NCBSummary() {
 
     }
 
@@ -50,7 +50,7 @@ public class FullappNcbSum implements Serializable {
         log.info("onCreation.");
 
         if(ncbSumList == null){
-            ncbSumList = new ArrayList<NcbSumView>();
+            ncbSumList = new ArrayList<NCBSummaryView>();
         }
 
     }
@@ -60,19 +60,19 @@ public class FullappNcbSum implements Serializable {
 
     }
 
-    public NcbSumView getNcbSum() {
+    public NCBSummaryView getNcbSum() {
         return ncbSum;
     }
 
-    public void setNcbSum(NcbSumView ncbSum) {
+    public void setNcbSum(NCBSummaryView ncbSum) {
         this.ncbSum = ncbSum;
     }
 
-    public List<NcbSumView> getNcbSumList() {
+    public List<NCBSummaryView> getNcbSumList() {
         return ncbSumList;
     }
 
-    public void setNcbSumList(List<NcbSumView> ncbSumList) {
+    public void setNcbSumList(List<NCBSummaryView> ncbSumList) {
         this.ncbSumList = ncbSumList;
     }
 }

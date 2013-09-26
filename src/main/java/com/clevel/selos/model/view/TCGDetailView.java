@@ -17,7 +17,7 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 
-public class TcgCalRecordView {
+public class TCGDetailView {
     private BigDecimal appraisalAmount;
     private BigDecimal ltvValue;
     private String isProposeInThisRequest;
@@ -26,7 +26,7 @@ public class TcgCalRecordView {
     private TCGCollateralType tcgCollateralType;
     private PotentialColToTCGCol potentialColToTCGCol;
 
-    public TcgCalRecordView(){
+    public TCGDetailView(){
         reset();
     }
 
