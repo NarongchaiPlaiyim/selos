@@ -1,7 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.BizProductDetail;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -13,11 +13,11 @@ import javax.inject.Inject;
  * Time: 16:02 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
+public class BizProductDetailDAO extends GenericDAO<BizProductDetail,Long> {
     @Inject
     private Logger log;
 
     @Inject
-    public BizInfoDetailDAO() {
+    public BizProductDetailDAO() {
     }
 }

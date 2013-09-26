@@ -1,36 +1,83 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.db.working;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Rangsun
- * Date: 5/9/2556
- * Time: 11:56 น.
+ * Date: 23/9/2556
+ * Time: 9:58 น.
  * To change this template use File | Settings | File Templates.
  */
-public class StakeholderView {
+@Entity
+@Table(name = "wrk_biz_stake_holder_detail")
+public class BizStakeHolderDetail {
 
+    @Id
+    @SequenceGenerator(name="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_STAKE_HOLDER_DETAIL_ID")
+    private long id;
+
+    @ManyToOne
+    @JoinColumn(name="biz_info_id")
+    private BizInfo bizInfo;
+
+    @Column(name = "stake_Holder_type")
+    private String stakeHolderType;
+
+    @Column(name = "no")
     private long no;
-    private String stakeholderType;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "contact_name")
     private String contactName;
+
+    @Column(name = "phone_no")
     private String phoneNo;
+
+    @Column(name = "contact_year")
     private String contactYear;
+
+    @Column(name = "precent_sale_volume")
     private BigDecimal percentSalesVolume;
+
+    @Column(name = "percent_cash")
     private BigDecimal percentCash;
+
+    @Column(name = "precent_credit")
     private BigDecimal percentCredit;
+
+    @Column(name = "credit_term")
     private BigDecimal creditTerm;
 
-    public String getStakeholderType() {
-        return stakeholderType;
+    public BizStakeHolderDetail() {
     }
 
-    public void setStakeholderType(String stakeholderType) {
-        this.stakeholderType = stakeholderType;
+    public BizInfo getBizInfo() {
+        return bizInfo;
+    }
+
+    public void setBizInfo(BizInfo bizInfo) {
+        this.bizInfo = bizInfo;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getStakeHolderType() {
+        return stakeHolderType;
+    }
+
+    public void setStakeHolderType(String stakeHolderType) {
+        this.stakeHolderType = stakeHolderType;
     }
 
     public long getNo() {
@@ -103,21 +150,5 @@ public class StakeholderView {
 
     public void setCreditTerm(BigDecimal creditTerm) {
         this.creditTerm = creditTerm;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("no", no)
-                .append("stakeholderType", stakeholderType)
-                .append("name", name)
-                .append("contactName", contactName)
-                .append("phoneNo", phoneNo)
-                .append("contactYear", contactYear)
-                .append("percentSalesVolume", percentSalesVolume)
-                .append("percentCash", percentCash)
-                .append("percentCredit", percentCredit)
-                .append("creditTerm", creditTerm)
-                .toString();
     }
 }

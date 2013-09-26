@@ -19,8 +19,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="wrk_biz_info_detail")
-public class BizInfoDetail implements Serializable {
+@Table(name="wrk_biz_info")
+public class BizInfo implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_BIZ_INFO_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_INFO_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_DETAIL_ID")
@@ -59,21 +59,21 @@ public class BizInfoDetail implements Serializable {
     @Column(name="biz_permission")
     private String bizPermission;
 
-    @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizStakeholder> supplierList;
+    @OneToMany(mappedBy="bizInfo")
+    private List<BizStakeHolderDetail> supplierDetailList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizStakeholder> buyerList;
+    @OneToMany(mappedBy="bizInfo")
+    private List<BizStakeHolderDetail> buyerDetailList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizProduct> bizProductList;
+    @OneToMany(mappedBy="bizInfo")
+    private List<BizProductDetail> bizProductDetailList;
 
     @ManyToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
 
-    public BizInfoDetail() {
+    public BizInfo() {
     }
 
     public long getId() {
@@ -164,27 +164,35 @@ public class BizInfoDetail implements Serializable {
         this.bizInfoText = bizInfoText;
     }
 
-    public List<BizStakeholder> getSupplierList() {
-        return supplierList;
+    public List<BizStakeHolderDetail> getSupplierDetailList() {
+        return supplierDetailList;
     }
 
-    public void setSupplierList(List<BizStakeholder> supplierList) {
-        this.supplierList = supplierList;
+    public void setSupplierDetailList(List<BizStakeHolderDetail> supplierDetailList) {
+        this.supplierDetailList = supplierDetailList;
     }
 
-    public List<BizStakeholder> getBuyerList() {
-        return buyerList;
+    public List<BizStakeHolderDetail> getBuyerDetailList() {
+        return buyerDetailList;
     }
 
-    public void setBuyerList(List<BizStakeholder> buyerList) {
-        this.buyerList = buyerList;
+    public void setBuyerDetailList(List<BizStakeHolderDetail> buyerDetailList) {
+        this.buyerDetailList = buyerDetailList;
     }
 
-    public List<BizProduct> getBizProductList() {
-        return bizProductList;
+    public List<BizProductDetail> getBizProductDetailList() {
+        return bizProductDetailList;
     }
 
-    public void setBizProductList(List<BizProduct> bizProductList) {
-        this.bizProductList = bizProductList;
+    public void setBizProductDetailList(List<BizProductDetail> bizProductDetailList) {
+        this.bizProductDetailList = bizProductDetailList;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
     }
 }
