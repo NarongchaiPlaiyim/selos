@@ -2,11 +2,14 @@ package com.clevel.selos.system.message;
 
 import com.clevel.selos.model.Language;
 import com.clevel.selos.util.FacesUtil;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public abstract class MessageProvider implements Message {
@@ -52,4 +55,14 @@ public abstract class MessageProvider implements Message {
         FacesUtil.getSession(false).setAttribute("language", Language.EN);
     }
 
+    @SuppressWarnings("unchecked")
+    public String get(String key,String... vars) {
+        String text = get(key);
+        Map valuesMap = new HashMap();
+        int index = 0;
+        for (String var : vars) {
+            valuesMap.put(""+(index++), var);
+        }
+        return StrSubstitutor.replace(text, valuesMap);
+    }
 }

@@ -80,16 +80,25 @@
                                                        var="businessDescription"
                                                        itemLabel="#{businessDescription.name}"
                                                        itemValue="#{businessDescription.id}"/>
+                                        <p:ajax listener="#{bizInfoDetail.onChangeBusinessDesc()}" update=":frmMain:bizCode" />
                                     </p:selectOneMenu>
                             </td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizCode')}"/> : </td>
-                            <td style="width: 200px"><p:inputText styleClass="large" value="#{bizInfoDetail.bizInfoFullApp.bizCode}"/></td>
+                            <td style="width: 200px">
+                                <p:inputText styleClass="large" id="bizCode" value="#{bizInfoDetail.bizInfoFullApp.bizCode}"/>
+
+                            </td>
                             <td class="title" style="width: 100px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> : </td>
                             <td><p:inputText styleClass="medium" value="#{bizInfoDetail.bizInfoFullApp.incomeFactor}"/></td>
                             <td class="title" style="width: 220px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/> :</td>
-                            <td><p:inputText styleClass="medium" value="#{bizInfoDetail.bizInfoFullApp.adjustedIncomeFactor}"/></td>
+                            <td>
+                                <p:inputText styleClass="medium" id="adjustedIncomeFactor" value="#{bizInfoDetail.bizInfoFullApp.adjustedIncomeFactor}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    <p:ajax event="blur" update=":frmMain:adjustedIncomeFactor"/>
+                                </p:inputText>
+                            </td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizComment')}"/> </td>
@@ -97,23 +106,19 @@
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.percentBusiness')}"/> : </td>
-                            <td colspan="5"><p:inputText styleClass="small" value="#{bizInfoDetail.bizInfoFullApp.percentBiz}"/></td>
+                            <td colspan="5">
+                                <p:inputText styleClass="small" id="percentBiz" value="#{bizInfoDetail.bizInfoFullApp.percentBiz}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    <p:ajax event="blur" update=":frmMain:percentBiz"/>
+                                </p:inputText>
+                            </td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.bizPermission')}"/> : </td>
                             <td colspan="5" class="title"><input type="radio" value="#{bizInfoDetail.bizInfoFullApp.bizPermission}" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
                         </tr>
                         <tr>
-                            <td colspan="6" style="text-align: center;"><p:separator/>
-                                <p:commandButton id="btnAddBizInfoDetailTest"
-                                                 value="Save DB Test"
-                                                 styleClass="smaller"
-                                                 process=":frmMain"
-                                                 actionListener="#{bizInfoDetail.onSaveBizInfoView()}"
-                                                 update=":frmMain"
-                                />
-
-                            </td>
+                            <td colspan="6" style="text-align: center;"><p:separator/></td>
                         </tr>
                         <tr>
                             <td class="left" colspan="6">
@@ -133,14 +138,14 @@
 
                                 <p:dataTable id="bizProductViewTable"
                                              var="bizProductView"
-                                             value="#{bizInfoDetail.bizProductViewList}"
+                                             value="#{bizInfoDetail.bizInfoFullApp.bizProductViewList}"
                                              paginator="false"
-                                             rowKey="#{bizProductView.name}"
+                                             rowKey="#{bizProductView.no}"
                                              rowIndexVar="rowIndex"
                                              style="width: 100%">
 
                                     <p:column headerText="" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                        <h:outputText value="#{bizProductView.no}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.productType')}" styleClass="center" style="width: 110px;">
                                         <h:outputText value="#{bizProductView.productType}"/>
@@ -197,12 +202,12 @@
                                 <p:dataTable style="width: 100%;"
                                              id="supplierTable"
                                              var="supplierItem"
-                                             value="#{bizInfoDetail.supplierList}"
+                                             value="#{bizInfoDetail.bizInfoFullApp.supplierList}"
                                              paginator="false"
                                              rowKey="#{supplier.name}"
                                              rowIndexVar="rowIndex">
                                     <p:column headerText="" style="width:4%;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                        <h:outputText value="#{supplierItem.no}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.supplierName')}" style="width:11%;">
                                         <h:outputText value="#{supplierItem.name}"/>
@@ -274,13 +279,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="right" style="width:11%;">
-                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum1}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.supplierVolumeSum1}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" colspan="2" >
-                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:11%;">
-                                            <h:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:8%;">
 
@@ -291,11 +296,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="right" style="width: 11%;" >
-                                            <h:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.supplierVolumeSum2}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="right" style="width: 11%;">
-                                            <h:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.supplierTermSum}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">
@@ -329,14 +334,14 @@
                             <td colspan="6">
                                 <p:dataTable id="buyerTable"
                                              var="buyerItem"
-                                             value="#{bizInfoDetail.buyerList}"
+                                             value="#{bizInfoDetail.bizInfoFullApp.buyerList}"
                                              paginator="false"
                                              rowKey="#{buyer.name}"
                                              style="width: 100%;"
                                              rowIndexVar="rowIndex">
 
                                     <p:column headerText="" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                        <h:outputText value="#{buyerItem.no}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.buyerName')}" styleClass="center" style="width: 110px;">
                                         <h:outputText value="#{buyerItem.name}"/>
@@ -411,13 +416,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="center" style="width:11%;">
-                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum1}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.buyerVolumeSum1}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:22%;" colspan="2" >
-                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="center" style="width:11%;">
-                                            <h:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="center" style="width:8%;">
 
@@ -428,11 +433,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="center" style="width: 11%;" >
-                                            <h:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.buyerVolumeSum2}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width: 11%;">
-                                            <h:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
+                                            <p:inputText value="#{bizInfoDetail.buyerTermSum}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">

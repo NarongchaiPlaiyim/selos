@@ -68,6 +68,10 @@ public class BizInfoDetail implements Serializable {
     @OneToMany(mappedBy="bizInfoDetail")
     private List<BizProduct> bizProductList;
 
+    @ManyToOne
+    @JoinColumn(name="workcase_id")
+    private WorkCase workCase;
+
 
     public BizInfoDetail() {
     }

@@ -50,6 +50,7 @@ public class BizInfoDetailMaker implements Serializable {
     private int rowIndex;
     private String modeForButton;
     private String dlgStakeName;
+    private String bizCode;
     private int bizGroupId;
 
     private StakeholderView stakeholderView;
@@ -83,13 +84,20 @@ public class BizInfoDetailMaker implements Serializable {
 
     @PostConstruct
     public void onCreation(){
-        stakeholderView = new StakeholderView();
-        bizProductView = new BizProductView();
+        bizInfoFullApp = new BizInfoFullView();
+
         bizProductViewList = new ArrayList<BizProductView>();
         supplierList = new ArrayList<StakeholderView>();
         buyerList = new ArrayList<StakeholderView>();
+
+        bizInfoFullApp.setBizProductViewList(bizProductViewList);
+        bizInfoFullApp.setSupplierList(supplierList);
+        bizInfoFullApp.setBuyerList(buyerList);
+
+        stakeholderView = new StakeholderView();
+        bizProductView = new BizProductView();
+
         businessGroupList = businessGroupDAO.findAll();
-        bizInfoFullApp = new BizInfoFullView();
         bizGroup = new BusinessGroup();
         bizDesc = new BusinessDescription();
 
@@ -107,10 +115,18 @@ public class BizInfoDetailMaker implements Serializable {
         log.info("onChangeBusinessGroup :::: businessDescriptionList Size ::: ", businessDescriptionList.size());
     }
 
+    public void onChangeBusinessDesc(){
+        log.info("onChangeBusinessDesc >>> begin ");
+        bizGroupId = bizInfoFullApp.getBizDesc().getId();
+        BusinessDescription businessDesc = businessDescriptionDAO.findById(bizGroupId);
+        log.info("onChangeBusinessGroup :::: businessDesc ::: ", businessDesc);
+        bizInfoFullApp.setBizCode(businessDesc.getTmbCode());
+        log.info("onChangeBusinessGroup :::: bizInfoFullApp ::: ", bizInfoFullApp.getBizCode());
+    }
+
     public void onAddBizProductView(){
         log.info("onAddBizProductView >>> begin ");
         bizProductView = new BizProductView();
-        bizProductView.reset();
         modeForButton = "add";
     }
 
@@ -142,6 +158,8 @@ public class BizInfoDetailMaker implements Serializable {
         if(!bizProductView.getProductType().equals("")&&!bizProductView.getProductDetail().equals("")&&!bizProductView.getPercentSalesVolume().equals("")&&!bizProductView.getPercentEBIT().equals("")){
             if(modeForButton.equalsIgnoreCase("add")){
                 log.info("onSaveBizProductView add >>> begin ");
+
+                bizProductView.setNo(bizProductViewList.size()+1);
                 bizProductViewList.add(bizProductView);
                 bizProductView = new BizProductView();
             }else if(modeForButton.equalsIgnoreCase("edit")){
@@ -227,6 +245,7 @@ public class BizInfoDetailMaker implements Serializable {
 
         if(modeForButton.equalsIgnoreCase("add")){
              if(stakeType.equals("1")){
+                stakeholderView.setNo(supplierList.size()+1);
                 supplierList.add(stakeholderView);
                 supplier =calSumStakeholderView(supplierList, stakeType);
                  if(!supplier){
@@ -234,7 +253,8 @@ public class BizInfoDetailMaker implements Serializable {
                      calSumStakeholderView(supplierList, stakeType);
                  }
              }else if(stakeType.equals("2")){
-                buyerList.add(stakeholderView);
+                 stakeholderView.setNo(buyerList.size()+1);
+                 buyerList.add(stakeholderView);
                  buyer = calSumStakeholderView(buyerList, stakeType);
                  if(!buyer){
                      buyerList.remove(stakeholderView);
@@ -309,71 +329,9 @@ public class BizInfoDetailMaker implements Serializable {
     public void onSaveBizInfoView(){
         //log.info( " bizInfoFullApp is " + bizInfoFullApp);
 
-        /*log.info( " bizProductViewList is " + bizProductViewList);
-        bizInfoFullApp.setBizProductViewList(bizProductViewList);
-
-        log.info( " supplierList is " + supplierList);
-        bizInfoFullApp.setSupplierList(supplierList);
-
-        log.info( " buyerList is " + buyerList);
-        bizInfoFullApp.setBuyerList(buyerList);*/
-        //convert View to DB
-        BizInfoDetail   bizInfoDetail ;
-        bizInfoDetail = new BizInfoDetail();
-        bizInfoDetail.setBizInfoText(bizInfoFullApp.getBizInfoText());
-        bizInfoDetail.setBusinessType(bizInfoFullApp.getBizType());
-        bizInfoDetail.setBusinessGroup(bizInfoFullApp.getBizGroup());
-        bizInfoDetail.setBusinessDescription(bizInfoFullApp.getBizDesc());
-        bizInfoDetail.setBizCode(bizInfoFullApp.getBizCode());
-        bizInfoDetail.setBizComment(bizInfoFullApp.getBizComment());
-        bizInfoDetail.setIncomeFactor(bizInfoFullApp.getIncomeFactor());
-        bizInfoDetail.setAdjustedIncomeFactor(bizInfoFullApp.getAdjustedIncomeFactor());
-        bizInfoDetail.setPercentBiz(bizInfoFullApp.getPercentBiz());
-
-        StakeholderView stakeholderTemp;
-        BizStakeholder bizStakeholderTemp;
-
-        BizProductView bizProductViewTemp;
-        BizProduct bizProductTemp;
-
-        List<BizStakeholder> bizSupplierList;
-        List<BizStakeholder> bizBuyerList;
-        List<BizProduct> bizProductList;
-
-        bizProductList = new ArrayList<BizProduct>();
-        for (int i =0;i<bizProductViewList.size();i++){
-            bizProductViewTemp = bizProductViewList.get(i);
-            bizProductTemp = onBizProductTransform(bizProductViewTemp);
-            bizProductList.add(bizProductTemp);
-        }
-
-        bizSupplierList = new ArrayList<BizStakeholder>();
-        for (int i =0;i<supplierList.size();i++){
-            stakeholderTemp = supplierList.get(i);
-            bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
-            bizStakeholderTemp.setStakeholderType(new BigDecimal(1));
-            bizSupplierList.add( bizStakeholderTemp);
-        }
-
-        bizBuyerList = new ArrayList<BizStakeholder>();
-        for (int i =0;i<buyerList.size();i++){
-            stakeholderTemp = buyerList.get(i);
-            bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
-            bizStakeholderTemp.setStakeholderType(new BigDecimal(2));
-            bizBuyerList.add(bizStakeholderTemp);
-        }
-        log.info( " bizProductList is " + bizProductList.size());
-        log.info( " bizSupplierList is " + bizSupplierList.size());
-        log.info( " bizBuyerList is " + bizBuyerList.size());
-
-        bizInfoDetail.setBizProductList(bizProductList);
-        bizInfoDetail.setBuyerList(bizBuyerList);
-        bizInfoDetail.setSupplierList(bizSupplierList);
-        //log.info( "bizInfoDetail before persist is " + bizInfoDetail );
-        // xxxxx
 
         //save to DB
-        fullAppBusinessControl.onSaveBizInfoDetailToDB(bizInfoDetail);
+        fullAppBusinessControl.onSaveBizInfoDetailToDB(bizInfoFullApp);
 
     }
 

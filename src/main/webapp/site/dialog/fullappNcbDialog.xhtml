@@ -35,8 +35,8 @@
     <td>
         <h:selectOneRadio id="radioTmbAccount" value="#{fullappNcb.ncbRecordView.TMBAccount}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="Y"/>
-            <f:selectItem itemLabel="No" itemValue="N"/>
+            <f:selectItem itemLabel="Yes" itemValue="true"/>
+            <f:selectItem itemLabel="No" itemValue="false"/>
         </h:selectOneRadio>
     </td>
 </tr>
@@ -201,8 +201,8 @@
     <td>
         <h:selectOneRadio id="radioRefinanceFlag" value="#{fullappNcb.ncbRecordView.refinanceFlag}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="Y"/>
-            <f:selectItem itemLabel="No" itemValue="N"/>
+            <f:selectItem itemLabel="Yes" itemValue="true"/>
+            <f:selectItem itemLabel="No" itemValue="false"/>
         </h:selectOneRadio>
     </td>
 </tr>

@@ -14,17 +14,17 @@ import java.math.BigDecimal;
  */
 public class BizProductView {
 
-    private String no;
+    private long no;
     private String productType;
     private BigDecimal percentSalesVolume;
     private BigDecimal percentEBIT;
     private String productDetail;
 
-    public String getNo() {
+    public long getNo() {
         return no;
     }
 
-    public void setNo(String no) {
+    public void setNo(long no) {
         this.no = no;
     }
 
@@ -58,14 +58,6 @@ public class BizProductView {
 
     public void setProductDetail(String productDetail) {
         this.productDetail = productDetail;
-    }
-
-    public void reset(){
-        no = "";
-        productType ="";
-        percentSalesVolume = new BigDecimal(0.0);;
-        percentEBIT = new BigDecimal(0.0);
-        productDetail = "";
     }
 
     @Override

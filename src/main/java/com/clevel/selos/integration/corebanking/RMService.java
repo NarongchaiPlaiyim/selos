@@ -7,7 +7,6 @@ import com.clevel.selos.model.RMmodel.CustomerAccountListModel;
 import com.clevel.selos.model.RMmodel.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporatePersonalList;
 import com.clevel.selos.model.RMmodel.corporateInfo.RegistrationAddress;
 import com.clevel.selos.model.RMmodel.individualInfo.ContactDetails;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
@@ -101,11 +100,11 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("010"));
         }
         //Validate CustType
-        if (!ValidationUtil.isEqualRange(1, searchIndividual.getCustType().length())) {
+        if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             throw new ValidationException(validationMsg.get("011"));
         }
         //Validate Type
-        if (!ValidationUtil.isEqualRange(2, searchIndividual.getType().length())) {
+        if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
@@ -368,11 +367,11 @@ public class RMService implements Serializable {
             throw new ValidationException(validationMsg.get("010"));
         }
         //Validate CustType
-        if (!ValidationUtil.isEqualRange(1, searchIndividual.getCustType().length())) {
+        if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             throw new ValidationException(validationMsg.get("011"));
         }
         //Validate Type
-        if (!ValidationUtil.isEqualRange(2, searchIndividual.getType().length())) {
+        if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             throw new ValidationException(validationMsg.get("012"));
         }
         //Validate CustId
