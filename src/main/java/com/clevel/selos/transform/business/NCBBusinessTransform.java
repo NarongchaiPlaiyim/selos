@@ -9,7 +9,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
-import com.clevel.selos.model.view.NcbRecordView;
+import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.util.Util;
 
@@ -72,36 +72,36 @@ public class NCBBusinessTransform extends BusinessTransform {
                                 if(subjectAccountModelResults.size() > 0){
                                     // transform all account to ncb detail and summary
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
-                                        NcbRecordView ncbRecordView = new NcbRecordView();
+                                        NCBDetailView ncbDetailView = new NCBDetailView();
                                         //set accountType
                                         AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
-                                        ncbRecordView.setAccountType(accountType);
+                                        ncbDetailView.setAccountType(accountType);
                                         //set tmb account
-                                        ncbRecordView.setTMBAccount(false);
+                                        ncbDetailView.setTMBAccount(false);
                                         if(subjectAccountModel.getShortname().equals(TMB_BANK)){ //todo: change to master
-                                            ncbRecordView.setTMBAccount(true);
+                                            ncbDetailView.setTMBAccount(true);
                                         }
                                         //set account status
                                         AccountStatus accountStatus = accountStatusDAO.getIndividualByCode(subjectAccountModel.getAccountstatus());
-                                        ncbRecordView.setAccountStatus(accountStatus);
+                                        ncbDetailView.setAccountStatus(accountStatus);
                                         //set date of info
-                                        ncbRecordView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getAsofdate()));
+                                        ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getAsofdate()));
                                         //set open date
-                                        ncbRecordView.setAccountOpenDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getOpendate()));
+                                        ncbDetailView.setAccountOpenDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getOpendate()));
                                         //set credit limit
-                                        ncbRecordView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit())); //todo: check if null
+                                        ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit())); //todo: check if null
                                         //set outstanding amount
-                                        ncbRecordView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed())); //todo: check if null
+                                        ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed())); //todo: check if null
                                         //set installment
-                                        ncbRecordView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount())); //todo: check if null
+                                        ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount())); //todo: check if null
                                         //set restructure date
-                                        ncbRecordView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate())); //todo: check if null
+                                        ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate())); //todo: check if null
                                         //set current payment
                                         SettlementStatus settlementStatus = new SettlementStatus();
                                         if(subjectAccountModel.getPaymt01()!=null){
                                             settlementStatus = settlementStatusDAO.getIndividualByCode(subjectAccountModel.getPaymt01());
                                         }
-                                        ncbRecordView.setCurrentPayment(settlementStatus);
+                                        ncbDetailView.setCurrentPayment(settlementStatus);
                                         //set history payment
                                     }
 
