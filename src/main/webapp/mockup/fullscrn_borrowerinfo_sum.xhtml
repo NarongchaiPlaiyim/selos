@@ -8,19 +8,19 @@
 
     <h:head>
         <title>SE-LOS : Template</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
     </h:head>
     <h:body>
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="resources/header_detail_fullapp_bdm.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="../resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Customer Info. Summary</div>
@@ -32,29 +32,56 @@
                             <td colspan="100%"><div class="separate"><!-- --></div></td>
                         </tr>
                         <tr>
-                            <td class="title top">Borrower:</td>
+                            <td><select class="medium">
+                                <option>- Please select -</option>
+                                <option>Individual</option>
+                                <option>Juristic</option>
+                            </select><p:spacer width="5px"/><p:commandButton value="Add" styleClass="small"/></td>
+
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="100%" class="title top">Borrower:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%">
                                 <table class="table_content" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:210px;">Customer Name</th>
-                                        <th style="width:100px;">Customer Type</th>
-                                        <th style="width:140px;">Relationship</th>
-                                        <th style="width:30px;">Age</th>
-                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
-                                        <th style="width:90px;">Customer ID</th>
-                                        <th style="width:50px;"></th>
+                                        <th style="width:20px;" rowspan="2"></th>
+                                        <th style="width:200px;" rowspan="2">Customer Name</th>
+                                        <!--th style="width:70px;" rowspan="2">Entity</th-->
+                                        <th style="width:140px;" colspan="2">ID</th>
+                                        <th style="width:200px;" colspan="2">Relationship</th>
+                                        <th style="width:250px;" colspan="2">Reference</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">% Share</th>
+                                        <th style="width:40px;" rowspan="2">Age</th>
+                                        <th style="width:40px;" rowspan="2">KYC</th>
+                                        <th style="width:40px;" rowspan="2">CSI</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">Worth-
+                                            iness</th>
+                                        <th style="width:50px;" rowspan="2"></th>
+                                    </tr>
+                                    <tr><th style="width:80px;">Personal</th>
+                                        <th style="width:60px;">TMB</th>
+                                        <th style="width:150px;">Type</th>
+                                        <th style="width:50px; line-height: 15px;">Coll. Owner</th>
+                                        <th style="width:125px; line-height: 15px;">Ind. Level</th>
+                                        <th style="width:125px; line-height: 15px;">Jus. Level</th>
                                     </tr>
                                     <tr>
                                         <td class="center">1</td>
                                         <td>Mr.A Example</td>
-                                        <td class="center">Individual</td>
-                                        <td class="center"></td>
+                                        <!--td>Individual</td-->
+                                        <td>312320123123</td>
+                                        <td>30232</td>
+                                        <td>Borrower</td>
+                                        <td class="center">-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td class="center">-</td>
                                         <td class="center">48</td>
-                                        <td class="center">312320123123</td>
-                                        <td class="center">30232</td>
+                                        <td class="center">1</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
                                         <td class="option">
                                             <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_indv.jsf');return;"/>
                                         </td>
@@ -62,13 +89,20 @@
                                     <tr>
                                         <td class="center">2</td>
                                         <td>Mrs.B Example</td>
-                                        <td class="center">Individual</td>
-                                        <td class="center"></td>
+                                        <!--td>Individual</td-->
+                                        <td>412420124124</td>
+                                        <td>30234</td>
+                                        <td>Borrower</td>
+                                        <td class="center">-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td class="center">-</td>
                                         <td class="center">36</td>
-                                        <td class="center">412420124124</td>
-                                        <td class="center">30234</td>
+                                        <td class="center">1</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
                                         <td class="option">
-                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_juris.jsf');return;"/>
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_indv.jsf');return;"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -78,32 +112,53 @@
                             <td colspan="100%"><p:spacer width="2"/></td>
                         </tr>
                         <tr>
-                            <td class="title top">Guarantor :</td>
+                            <td colspan="100%" class="title top">Guarantor :</td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="100%">
                                 <table class="table_content" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:210px;">Customer Name</th>
-                                        <th style="width:100px;">Customer Type</th>
-                                        <th style="width:140px;">Relationship</th>
-                                        <th style="width:30px;">Age</th>
-                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
-                                        <th style="width:90px;">Customer ID</th>
-                                        <th style="width:50px;"></th>
+                                        <th style="width:20px;" rowspan="2"></th>
+                                        <th style="width:200px;" rowspan="2">Customer Name</th>
+                                        <!--th style="width:70px;" rowspan="2">Entity</th-->
+                                        <th style="width:140px;" colspan="2">ID</th>
+                                        <th style="width:200px;" colspan="2">Relationship</th>
+                                        <th style="width:250px;" colspan="2">Reference</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">% Share</th>
+                                        <th style="width:40px;" rowspan="2">Age</th>
+                                        <th style="width:40px;" rowspan="2">KYC</th>
+                                        <th style="width:40px;" rowspan="2">CSI</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">Worth-
+                                            iness</th>
+                                        <th style="width:50px;" rowspan="2"></th>
+                                    </tr>
+                                    <tr><th style="width:80px;">Personal</th>
+                                        <th style="width:60px;">TMB</th>
+                                        <th style="width:150px;">Type</th>
+                                        <th style="width:50px; line-height: 15px;">Coll. Owner</th>
+                                        <th style="width:125px; line-height: 15px;">Ind. Level</th>
+                                        <th style="width:125px; line-height: 15px;">Jus. Level</th>
+
                                     </tr>
                                     <tr>
                                         <td class="center">1</td>
                                         <td>Mr.C Guarantor</td>
-                                        <td class="center">Individual</td>
-                                        <td class="center">Owner of collateral</td>
+                                        <!--td>Individual</td-->
+                                        <td>312320123123</td>
+                                        <td>40432</td>
+                                        <td>Guarantor</td>
+                                        <td class="center">Y</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
                                         <td class="center">30</td>
-                                        <td class="center">312320123123</td>
-                                        <td class="center">40432</td>
+
+                                        <td class="center"></td>
+                                        <td class="center"></td>
+                                        <td class="center"></td>
                                         <td class="option">
                                             <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                                            <!--p:commandButton icon="ui-icon-trash" title="Remove"/-->
+                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -113,35 +168,52 @@
                             <td colspan="100%"><p:spacer width="2" height="2px"/></td>
                         </tr>
                         <tr>
-                            <td class="title top">Related :</td>
+                            <td colspan="100%" class="title top">Related :</td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="100%">
                                 <table class="table_content" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:210px;">Customer Name</th>
-                                        <th style="width:100px;">Customer Type</th>
-                                        <th style="width:120px;">Borrower Type</th>
-                                        <th style="width:140px;">Relationship</th>
-                                        <th style="width:30px;">Age</th>
-                                        <th style="width:130px;">Citizen ID /<br/> Registration ID</th>
-                                        <th style="width:90px;">Customer ID</th>
-                                        <th style="width:50px;"></th>
+                                        <th style="width:20px;" rowspan="2"></th>
+                                        <th style="width:200px;" rowspan="2">Customer Name</th>
+                                        <!--th style="width:70px;" rowspan="2">Entity</th-->
+                                        <th style="width:140px;" colspan="2">ID</th>
+                                        <th style="width:200px;" colspan="2">Relationship</th>
+                                        <th style="width:250px;" colspan="2">Reference</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">% Share</th>
+                                        <th style="width:40px;" rowspan="2">Age</th>
+                                        <th style="width:40px;" rowspan="2">KYC</th>
+                                        <th style="width:40px;" rowspan="2">CSI</th>
+                                        <th style="width:40px;line-height: 15px;" rowspan="2">Worth-
+                                            iness</th>
+                                        <th style="width:50px;" rowspan="2"></th>
+                                    </tr>
+                                    <tr><th style="width:80px;">Personal</th>
+                                        <th style="width:60px;">TMB</th>
+                                        <th style="width:150px;">Type</th>
+                                        <th style="width:50px; line-height: 15px;">Coll. Owner</th>
+                                        <th style="width:125px; line-height: 15px;">Ind. Level</th>
+                                        <th style="width:125px; line-height: 15px;">Jus. Level</th>
                                     </tr>
                                     <tr>
                                         <td class="center">1</td>
                                         <td>Mr.D Related</td>
-                                        <td class="center">Individual</td>
-                                        <td class="center">Related Person</td>
-                                        <td class="center">Shareholders</td>
+                                        <!--td>Individual</td-->
+
+                                        <td>312320123123</td>
+                                        <td>50637</td>
+                                        <td style="line-height: 15px;">Indirect Rel.</td>
+                                        <td class="center">-</td>
+                                        <td style="line-height: 15px">Spouse of Mrs.B Example</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
                                         <td class="center">30</td>
-                                        <td class="center">312320123123</td>
-                                        <td class="center">50637</td>
-                                        <!--<td class="result_red"></td>-->
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
                                         <td class="option">
                                             <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                                            <!--p:commandButton icon="ui-icon-trash" title="Remove"/-->
+                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
                                         </td>
                                     </tr>
                                 </table>
@@ -153,7 +225,7 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml" />
             <!-- End Footer -->
         </div>
     </h:body>

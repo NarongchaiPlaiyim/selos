@@ -2,40 +2,41 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
-import com.clevel.selos.model.view.NcbRecordView;
+import com.clevel.selos.model.view.NCBDetailView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class NCBDetailTransform extends Transform{
 
-    public List<NCBDetail> transformToModel(List<NcbRecordView> ncbRecordViewList ,NCB ncb){
+    public List<NCBDetail> transformToModel(List<NCBDetailView> NCBDetailViewList,NCB ncb){
         List<NCBDetail> NCBDetailList = new ArrayList<NCBDetail>();
 
-        for(NcbRecordView ncbRecordView : ncbRecordViewList){
+        for(NCBDetailView NCBDetailView : NCBDetailViewList){
             NCBDetail ncbDetail = new NCBDetail();
-            ncbDetail.setId(ncbRecordView.getId());
+            ncbDetail.setId(NCBDetailView.getId());
             ncbDetail.setNcb(ncb);
-            ncbDetail.setAccountStatus(ncbRecordView.getAccountStatus());
-            ncbDetail.setAccountType(ncbRecordView.getAccountType());
-            ncbDetail.setAccountOpenDate(ncbRecordView.getAccountOpenDate());
-            ncbDetail.setAccountTBMFlag(ncbRecordView.isTMBAccount());
-            ncbDetail.setCurrentPayment(ncbRecordView.getCurrentPayment());
-            ncbDetail.setHistoryPayment(ncbRecordView.getHistoryPayment());
-            ncbDetail.setAsOfDate(ncbRecordView.getDateOfInfo());
-            ncbDetail.setLastReStructureDate(ncbRecordView.getDateOfDebtRestructuring());
-            ncbDetail.setInstallment(ncbRecordView.getInstallment());
-            ncbDetail.setRefinanceFlag(ncbRecordView.isRefinanceFlag());
-            ncbDetail.setOutstanding(ncbRecordView.getOutstanding());
-            ncbDetail.setOutstandingIn12Month(ncbRecordView.getNoOfOutstandingPaymentIn12months());
-            ncbDetail.setNoOfMonthPayment(ncbRecordView.getNoOfmonthsPayment());
-            ncbDetail.setLimit(ncbRecordView.getLimit());
-            ncbDetail.setMonth1(ncbRecordView.getMonth1());
-            ncbDetail.setMonth2(ncbRecordView.getMonth2());
-            ncbDetail.setMonth3(ncbRecordView.getMonth3());
-            ncbDetail.setMonth4(ncbRecordView.getMonth4());
-            ncbDetail.setMonth5(ncbRecordView.getMonth5());
-            ncbDetail.setMonth6(ncbRecordView.getMonth6());
+            ncbDetail.setAccountStatus(NCBDetailView.getAccountStatus());
+            ncbDetail.setAccountType(NCBDetailView.getAccountType());
+            ncbDetail.setAccountOpenDate(NCBDetailView.getAccountOpenDate());
+            ncbDetail.setAccountTBMFlag(NCBDetailView.isTMBAccount());
+            ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
+            ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
+            ncbDetail.setAsOfDate(NCBDetailView.getDateOfInfo());
+            ncbDetail.setLastReStructureDate(NCBDetailView.getDateOfDebtRestructuring());
+            ncbDetail.setInstallment(NCBDetailView.getInstallment());
+            ncbDetail.setRefinanceFlag(NCBDetailView.isRefinanceFlag());
+            ncbDetail.setOutstanding(NCBDetailView.getOutstanding());
+            ncbDetail.setOutstandingIn12Month(NCBDetailView.getNoOfOutstandingPaymentIn12months());
+            ncbDetail.setNoOfMonthPayment(NCBDetailView.getNoOfmonthsPayment());
+            ncbDetail.setLimit(NCBDetailView.getLimit());
+            ncbDetail.setMonth1(NCBDetailView.getMonth1());
+            ncbDetail.setMonth2(NCBDetailView.getMonth2());
+            ncbDetail.setMonth3(NCBDetailView.getMonth3());
+            ncbDetail.setMonth4(NCBDetailView.getMonth4());
+            ncbDetail.setMonth5(NCBDetailView.getMonth5());
+            ncbDetail.setMonth6(NCBDetailView.getMonth6());
 
             NCBDetailList.add(ncbDetail);
         }
@@ -44,7 +45,7 @@ public class NCBDetailTransform extends Transform{
         return NCBDetailList;
     }
 
-    public List<NcbRecordView> transformToView(List<NCBDetail> ncbDetailList ,NCB ncb){
+    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList ,NCB ncb){
 
         return null;
 
