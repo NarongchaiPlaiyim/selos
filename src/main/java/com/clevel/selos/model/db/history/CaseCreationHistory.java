@@ -77,6 +77,7 @@ public class CaseCreationHistory implements Serializable {
     @Column(name="create_date")
     private Date createDate;
     @Column(name="create_status")
+    @Enumerated(EnumType.STRING)
     private IntegrationStatus status;
     @Column(name="create_status_detail")
     private String statusDetail;

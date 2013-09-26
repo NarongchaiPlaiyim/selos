@@ -31,7 +31,7 @@ public class FullAppBusinessControl extends BusinessControl {
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
     @Inject
-    NcbDetailTransform ncbDetailTransform;
+    NCBDetailTransform ncbDetailTransform;
     @Inject
     NcbTransform ncbTransform;
     @Inject

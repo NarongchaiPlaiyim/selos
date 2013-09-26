@@ -63,11 +63,10 @@ public class BPMInterfaceImpl implements BPMInterface {
         log.debug("createCase. (detail: {})",caseCreationHistory);
         boolean success = true;
 
-        wsDataPersist.addNewCase(caseCreationHistory);
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserName("");
-        userDTO.setPassword("");
+        userDTO.setUserName(bpmUsername);
+        userDTO.setPassword(bpmPassword);
         HashMap<String,String> caseParameter = new HashMap<String, String>();
         caseParameter.put("BDMUserName", caseCreationHistory.getBdmId());
         caseParameter.put("CANumber", caseCreationHistory.getCaNumber());
@@ -77,8 +76,11 @@ public class BPMInterfaceImpl implements BPMInterface {
             bpmService.launchCase(caseParameter);
         } catch (SELOSBPMException e) {
             success = false;
+            caseCreationHistory.setStatus(IntegrationStatus.FAILED);
             log.error("Exception while create case in BPM!",e);
         }
+
+        wsDataPersist.addNewCase(caseCreationHistory);
         return success;
     }
 }
