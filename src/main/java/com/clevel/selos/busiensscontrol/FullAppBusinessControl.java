@@ -1,24 +1,13 @@
 package com.clevel.selos.busiensscontrol;
 
-import com.clevel.selos.dao.working.BizInfoDetailDAO;
-import com.clevel.selos.dao.working.BizProductDAO;
-import com.clevel.selos.dao.working.BizStakeholderDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.model.db.working.BizInfoDetail;
-import com.clevel.selos.model.db.working.BizProduct;
-import com.clevel.selos.model.db.working.BizStakeholder;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.view.BizInfoFullView;
-import com.clevel.selos.model.view.BizProductView;
-import com.clevel.selos.model.view.StakeholderView;
-import com.clevel.selos.transform.BizInfoDetailTransform;
-import com.clevel.selos.transform.BizProductTransform;
-import com.clevel.selos.transform.BizStakeholderTransform;
+import com.clevel.selos.dao.working.*;
+import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.transform.*;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +30,14 @@ public class FullAppBusinessControl extends BusinessControl {
     BizStakeholderTransform bizStakeholderTransform;
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    NcbDetailTransform ncbDetailTransform;
+    @Inject
+    NcbTransform ncbTransform;
+    @Inject
+    NCBDAO ncbDAO;
+    @Inject
+    NCBDetailDAO ncbDetailDAO;
 
     public FullAppBusinessControl(){
 
@@ -155,6 +152,28 @@ public class FullAppBusinessControl extends BusinessControl {
 //            bizStakeholderTemp = onStakeholderTransform(stakeholderTemp);
 //            bizStakeholderTemp.setStakeholderType(new BigDecimal(2));
 //            bizBuyerList.add(bizStakeholderTemp);
+
+    }
+
+
+
+    public void onSaveNCBToDB(NcbResultView ncbResultView , List<NcbRecordView> ncbRecordViewList){
+        try{
+            log.info("onSaveNCBToDB begin");
+
+            NCB ncb = ncbTransform.transformToModel(ncbResultView);
+            ncbDAO.persist(ncb);
+            log.info("persist ncb");
+            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbRecordViewList,ncb) ;
+            ncbDetailDAO.persist(ncbDetailList);
+        }catch (Exception e){
+            log.error( "onSaveNCBToDB error" + e);
+        }finally{
+
+            log.info( "onSaveNCBToDB end" );
+        }
+
+
 
     }
 }

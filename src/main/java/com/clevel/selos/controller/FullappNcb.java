@@ -1,14 +1,11 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.dao.master.AccountStatusDAO;
-import com.clevel.selos.dao.master.AccountTypeDAO;
-import com.clevel.selos.dao.master.SettlementStatusDAO;
-import com.clevel.selos.dao.master.TDRConditionDAO;
-import com.clevel.selos.model.db.master.AccountStatus;
-import com.clevel.selos.model.db.master.AccountType;
-import com.clevel.selos.model.db.master.SettlementStatus;
-import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.busiensscontrol.FullAppBusinessControl;
+import com.clevel.selos.dao.master.*;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.MoneyPaymentView;
 import com.clevel.selos.model.view.NcbRecordView;
 import com.clevel.selos.model.view.NcbResultView;
@@ -16,6 +13,8 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -23,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -83,6 +83,12 @@ public class FullappNcb implements Serializable {
     private SettlementStatusDAO settlementStatusDAO;
     @Inject
     private TDRConditionDAO tdrConditionDAO;
+    @Inject
+    FullAppBusinessControl fullAppBusinessControl;
+    @Inject
+    private UserDAO userDAO;
+    @Inject
+    private CustomerEntityDAO customerEntityDAO;
 
     public FullappNcb() {
 
@@ -154,6 +160,7 @@ public class FullappNcb implements Serializable {
         monthRender4 = false;
         monthRender5 = false;
         monthRender6 = false;
+
     }
 
 
@@ -168,8 +175,8 @@ public class FullappNcb implements Serializable {
         ncbRecordView.setAccountType(new AccountType());
         ncbRecordView.setCurrentPayment(new SettlementStatus());
         ncbRecordView.setHistoryPayment(new SettlementStatus());
-        ncbRecordView.setTMBAccount("Y");
-        ncbRecordView.setRefinanceFlag("Y");
+        ncbRecordView.setTMBAccount(false);
+        ncbRecordView.setRefinanceFlag(false);
         modeForButton = "add";
         genTextBoxFlag = false;
 
@@ -194,7 +201,7 @@ public class FullappNcb implements Serializable {
             ncbRecordView.setAccountStatus(accountStatusEdit);
             ncbRecordView.setCurrentPayment(conditionCurrentEdit);
             ncbRecordView.setHistoryPayment(conditionHistoryEdit);
-            ncbRecordView.setTMBAccount(selectNcbRecordItem.getTMBAccount());
+            ncbRecordView.setTMBAccount(selectNcbRecordItem.isTMBAccount());
             ncbRecordView.setDateOfInfo(selectNcbRecordItem.getDateOfInfo());
             ncbRecordView.setAccountOpenDate(selectNcbRecordItem.getAccountOpenDate());
             ncbRecordView.setLimit(selectNcbRecordItem.getLimit());
@@ -203,7 +210,7 @@ public class FullappNcb implements Serializable {
             ncbRecordView.setDateOfDebtRestructuring(selectNcbRecordItem.getDateOfDebtRestructuring());
             ncbRecordView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
             ncbRecordView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
-            ncbRecordView.setRefinanceFlag(selectNcbRecordItem.getRefinanceFlag());
+            ncbRecordView.setRefinanceFlag(selectNcbRecordItem.isRefinanceFlag());
             ncbRecordView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
             ncbRecordView.setMoneyPaymentViewList(selectNcbRecordItem.getMoneyPaymentViewList());
             ncbRecordView.setMonth1(selectNcbRecordItem.getMonth1());
@@ -253,7 +260,7 @@ public class FullappNcb implements Serializable {
                 NcbRecordView ncbAdd = new NcbRecordView();
                 ncbAdd.setAccountType(accountType);
                 ncbAdd.setAccountStatus(accountStatus);
-                ncbAdd.setTMBAccount(ncbRecordView.getTMBAccount());
+                ncbAdd.setTMBAccount(ncbRecordView.isTMBAccount());
                 ncbAdd.setDateOfInfo(ncbRecordView.getDateOfInfo());
                 ncbAdd.setAccountOpenDate(ncbRecordView.getAccountOpenDate());
                 ncbAdd.setLimit(ncbRecordView.getLimit());
@@ -264,7 +271,7 @@ public class FullappNcb implements Serializable {
                 ncbAdd.setHistoryPayment(tdrConditionHistory);
                 ncbAdd.setNoOfOutstandingPaymentIn12months(ncbRecordView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
-                ncbAdd.setRefinanceFlag(ncbRecordView.getRefinanceFlag());
+                ncbAdd.setRefinanceFlag(ncbRecordView.isRefinanceFlag());
                 ncbAdd.setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
                 ncbAdd.setMonth1(ncbRecordView.getMonth1());
                 ncbAdd.setMonth2(ncbRecordView.getMonth2());
@@ -325,7 +332,7 @@ public class FullappNcb implements Serializable {
                 ncbRecordViewList.get(rowIndex).setAccountStatus(accountStatus);
                 ncbRecordViewList.get(rowIndex).setCurrentPayment(tdrConditionCurrent);
                 ncbRecordViewList.get(rowIndex).setHistoryPayment(tdrConditionHistory);
-                ncbRecordViewList.get(rowIndex).setTMBAccount(ncbRecordView.getTMBAccount());
+                ncbRecordViewList.get(rowIndex).setTMBAccount(ncbRecordView.isTMBAccount());
                 ncbRecordViewList.get(rowIndex).setDateOfInfo(ncbRecordView.getDateOfInfo());
                 ncbRecordViewList.get(rowIndex).setAccountOpenDate(ncbRecordView.getAccountOpenDate());
                 ncbRecordViewList.get(rowIndex).setLimit(ncbRecordView.getLimit());
@@ -334,7 +341,7 @@ public class FullappNcb implements Serializable {
                 ncbRecordViewList.get(rowIndex).setDateOfDebtRestructuring(ncbRecordView.getDateOfDebtRestructuring());
                 ncbRecordViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbRecordView.getNoOfOutstandingPaymentIn12months());
                 ncbRecordViewList.get(rowIndex).setNoOfOverLimit(ncbRecordView.getNoOfOverLimit());
-                ncbRecordViewList.get(rowIndex).setRefinanceFlag(ncbRecordView.getRefinanceFlag());
+                ncbRecordViewList.get(rowIndex).setRefinanceFlag(ncbRecordView.isRefinanceFlag());
                 ncbRecordViewList.get(rowIndex).setNoOfmonthsPayment(ncbRecordView.getNoOfmonthsPayment());
                 ncbRecordViewList.get(rowIndex).setMoneyPaymentViewList(ncbRecordView.getMoneyPaymentViewList());
                 ncbRecordViewList.get(rowIndex).setMonth1(ncbRecordView.getMonth1());
@@ -439,10 +446,19 @@ public class FullappNcb implements Serializable {
 
 
     // *** Function for NCB ***//
-    public void onSaveNcb() {
-//        log.info("ncbRecordView.getMoneyPaymentViewList().size() :: {}",ncbRecordView.getMoneyPaymentViewList().size());
-//        log.info("ncbRecordView.getMoneyPaymentViewList().get(0).getMoneyPayment() :: {}",ncbRecordView.getMoneyPaymentViewList().get(0).getMoneyPayment());
+    public void onSaveNcb() {     // call transform  and then call businessControl
+        log.info("onSaveNcb:::: {} ", ncbResultView.toString());
+        //Customer customerSave = customerEntityDAO.findById();
 
+//        HttpSession session = FacesUtil.getSession(true);
+//        session.setAttribute("workCaseId", 1);
+//        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+
+        //save to DB
+        TDRCondition tdrConditionSave = tdrConditionDAO.findById(tdrCondition.getId());
+        ncbResultView.setTdrCondition(tdrConditionSave);
+
+        fullAppBusinessControl.onSaveNCBToDB(ncbResultView,ncbRecordViewList);
     }
 
     public boolean isGenTextBoxFlag() {
