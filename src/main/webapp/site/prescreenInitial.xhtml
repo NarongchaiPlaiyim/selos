@@ -129,7 +129,48 @@
                             <tr>
                                 <td class="title">Customer Information </td>
                                 <td>
-                                    <!--<p:commandButton value="Add" styleClass="smaller" onclick="customerDlg.show()"/>-->
+                                    <p:commandButton id="btnAddCustomerInfo"
+                                                     value="Add"
+                                                     styleClass="smaller"
+                                                     process="@this"
+                                                     actionListener="#{prescreenMaker.onAddCustomerInfo()}"
+                                                     update=":customerDlgForm"
+                                                     oncomplete="customerDlg.show();">
+                                        <p:resetInput target=":customerDlgForm" />
+                                    </p:commandButton>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title top">Borrower :</td>
+                                <td>
+                                    <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.borrowerInfoViewList}"
+                                                 paginator="false" rowKey="#{item.id}" rowIndexVar="rowIndex">
+
+                                        <p:column headerText="" styleClass="center" style="width:22px;">
+                                            <h:outputText value="#{rowIndex+1}"/>
+                                        </p:column>
+
+
+
+                                        <p:column headerText="" styleClass="center" style="width:54px;">
+                                            <p:commandButton title="Edit"
+                                                             icon="ui-icon-pencil"
+                                                             action="#{prescreenMaker.onEditCustomerInfo()}"
+                                                             update=":customerDlgForm"
+                                                             oncomplete="customerDlg.show();">
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{prescreenMaker.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteCustomerDlg.show()" >
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
                                 </td>
                             </tr>
                             <tr>
@@ -285,6 +326,22 @@
           modal="true" width="800" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteFacilityDialog"/>
+    <ui:param name="name" value="confirmDeleteFacilityDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteFacility"/>
+    <ui:param name="controller" value="#{prescreenMaker}"/>
+    <ui:param name="action" value="onDeleteFacility"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
+<ui:include src="dialog/confirmDeleteDlg.xhtml">
+    <ui:param name="id" value="confirmDeleteCustomerDialog"/>
+    <ui:param name="name" value="confirmDeleteCustomerDlg"/>
+    <ui:param name="formId" value="frmConfirmDeleteCustomer"/>
+    <ui:param name="controller" value="#{prescreenMaker}"/>
+    <ui:param name="action" value="onDeleteCustomer"/>
+    <ui:param name="update" value=":frmMain"/>
+</ui:include>
 </h:body>
 </f:view>
 </html>

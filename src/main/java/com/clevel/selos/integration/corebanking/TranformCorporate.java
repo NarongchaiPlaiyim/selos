@@ -16,8 +16,6 @@ public class TranformCorporate implements Serializable{
     @Inject
     DocumentTypeDAO documentTypeDAO;
     @Inject
-    CustomerEntityDAO customerEntityDAO;
-    @Inject
     TitleDAO titleDAO;
     @Inject
     CountryDAO countryDAO;
@@ -48,7 +46,8 @@ public class TranformCorporate implements Serializable{
         currentAddress.setPostalCode(corporateModel.getPostcode());
         currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getCountry())));
         currentAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getCountry())));
-
+        currentAddress.setPhoneNumber(corporateModel.getRegistrationAddress().getPhoneNo());
+        currentAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
         customerInfoView.setCurrentAddress(currentAddress);
 
 

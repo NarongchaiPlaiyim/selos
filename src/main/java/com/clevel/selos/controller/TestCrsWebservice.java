@@ -19,6 +19,7 @@ public class TestCrsWebservice {
 
     }
 
+    private String testValue;
 
     @PostConstruct
     public void onCreate(){
@@ -27,8 +28,8 @@ public class TestCrsWebservice {
     private CaseCreationResponse caseCreationResponse;
 
     public void callservice(){
-        System.out.println("====================================================================");
-        caseCreationResponse=crsWebservice.newCase("KK", new Date()+"", "2323", "", "", "", "1100800722229", 0, 0, "", "", "", "", "", "0", "0", "", "", "", "", "", "", "", "", "", "", "", "", "");
+
+        caseCreationResponse=crsWebservice.newCase("KK", new Date()+"", "2323", "", "", "", getTestValue(), 0, 0, "", "", "", "", "", "0", "0", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
     public CaseCreation getCrsWebservice() {
@@ -45,5 +46,13 @@ public class TestCrsWebservice {
 
     public void setCaseCreationResponse(CaseCreationResponse caseCreationResponse) {
         this.caseCreationResponse = caseCreationResponse;
+    }
+
+    public String getTestValue() {
+        return testValue;
+    }
+
+    public void setTestValue(String testValue) {
+        this.testValue = testValue;
     }
 }

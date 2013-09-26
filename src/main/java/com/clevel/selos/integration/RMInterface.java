@@ -10,7 +10,7 @@ public interface RMInterface {
     enum DocumentType {CITIZEN_ID,PASSPORT}
     enum SearchBy {CITIZEN_ID,TMBCUS_ID}
 
-    public CustomerInfoView getIndividualInfo(String tmbCusID,String registrationID,DocumentType documentType,SearchBy searchBy)throws Exception;
-    public CustomerInfoView getCorporateInfo(String tmbCusID,String registrationID,DocumentType documentType,SearchBy searchBy)throws Exception;
-    public CustomerAccountModel getCustomerAccountInfo(String tmbCusID,String registrationID,DocumentType documentType,SearchBy searchBy) throws Exception;
+    public CustomerInfoView getIndividualInfo(String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
+    public CustomerInfoView getCorporateInfo(String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
+    public CustomerAccountModel getCustomerAccountInfo(String customerId,DocumentType documentType,SearchBy searchBy) throws Exception;
 }

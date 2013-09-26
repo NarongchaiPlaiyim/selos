@@ -3,9 +3,12 @@ package com.clevel.selos.busiensscontrol;
 import com.clevel.selos.dao.working.PrescreenFacilityDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.PrescreenFacility;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.FacilityView;
 import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.transform.PrescreenFacilityTransform;
@@ -34,7 +37,26 @@ public class PrescreenBusinessControl extends BusinessControl {
     WorkCasePrescreenDAO workCasePrescreenDAO;
 
     @Inject
+    RMInterface rmInterface;
+
+    @Inject
     public PrescreenBusinessControl(){
+
+    }
+
+    //** function for integration **//
+    public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+        CustomerInfoView customerInfoSearch = new CustomerInfoView();
+        if(customerInfoView.getCustomerEntity().getId() == 1) {
+            //customerInfoSearch = rmInterface.getIndividualInfo();
+        } else if(customerInfoView.getCustomerEntity().getId()==2){
+            //customerInfoSearch = rmInterface.getCorporateInfo();
+        }
+        return customerInfoSearch;
+    }
+
+    public void getBankStatementFromDWH(){
+
 
     }
 

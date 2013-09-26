@@ -8,19 +8,19 @@
 
     <h:head>
         <title>Business Info.</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
     </h:head>
     <h:body>
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="resources/header_detail_fullapp_bdm.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="../resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Business Info. Summary</div>
@@ -31,14 +31,207 @@
                         <tr>
                             <td colspan="100%"><div class="separate"><!-- --></div></td>
                         </tr>
+                        <tr>
+                            <td><h2>รายละเอียดสถานประกอบการ</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="title top">ชื่อสถานประกอบการ :</td>
+                            <td colspan="3"><input type="text" class="largest_m" value=""/></td>
+                        </tr>
+                        <tr>
+                            <td class="title top">สถานประกอบการเป็นที่เช่า :</td>
+                            <td colspan="3"><input type="radio" name="isRental" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px"/>
+                                <input type="radio" name="isRental" value="Y"/><p:spacer width="5px"/>Yes<p:spacer width="15px"/>
+                                <select class="smaller" name="date">
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                </select><p:spacer width="2" height="0"/>
+                                    <select class="smaller" name="month">
+                                        <option value="1">เม.ย.</option>
+                                        <option value="2">พ.ค.</option>
+                                        <option value="3">มิ.ย.</option>
+                                    </select><p:spacer width="2" height="0"/>
+                                    <select class="smaller" name="year">
+                                        <option value="1">2555</option>
+                                        <option value="2">2556</option>
+                                    </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title top">ที่อยู่สถานประกอบการ :</td>
+                            <td colspan="3">
+                                <table class="table_noborder">
+                                    <tr>
+                                        <td class="title left">เลขที่</td>
+                                        <td class="left"><input type="text" class="smallest"/></td>
+                                        <td class="title right">หมู่ที่</td>
+                                        <td class="left"><input type="text" class="smallest"/></td>
+                                        <td class="title right">อาคาร/หมู่บ้าน</td>
+                                        <td class="left"><input type="text" class="large"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title left">ตรอก/ซอย/ถนน</td>
+                                        <td class="left" colspan="5"><input type="text" style="width:400px;"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="5">
+                                            <select class="large">
+                                                <option>จังหวัด</option>
+                                            </select>
+                                            <select class="large">
+                                                <option>อำเภอ</option>
+                                            </select>
+                                            <select class="large">
+                                                <option>ตำบล</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">รหัสไปรษณีย์</td>
+                                        <td colspan="5"><input type="text" class="medium"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">ประเทศ :</td>
+                                        <td colspan="5">
+                                            <select class="large">
+                                                <option>- โปรดระบุ -</option>
+                                            </select></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">โทรศัพท์สถานประกอบการ : </td>
+                            <td colspan="3"><input type="text" class="large"/><p:spacer width="5px"/>ต่อ<p:spacer width="5px"/><input type="text" class="smaller"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title">วันจดทะเบียนพาณิชย์ :</td>
+                            <td colspan="3"><select class="smaller" name="date">
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                            </select><p:spacer width="2" height="0"/>
+                                <select class="smaller" name="month">
+                                    <option value="1">เม.ย.</option>
+                                    <option value="2">พ.ค.</option>
+                                    <option value="3">มิ.ย.</option>
+                                </select><p:spacer width="2" height="0"/>
+                                <select class="smaller" name="year">
+                                    <option value="1">2555</option>
+                                    <option value="2">2556</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title">วันก่อตั้งกิจการ/อ้างอิงประสบการณ์ :</td>
+                            <td colspan="3"><select class="smaller" name="date">
+                                <option value="1">01</option>
+                                <option value="2">02</option>
+                                <option value="3">03</option>
+                            </select><p:spacer width="2" height="0"/>
+                                <select class="smaller" name="month">
+                                    <option value="1">เม.ย.</option>
+                                    <option value="2">พ.ค.</option>
+                                    <option value="3">มิ.ย.</option>
+                                </select><p:spacer width="2" height="0"/>
+                                <select class="smaller" name="year">
+                                    <option value="1">2555</option>
+                                    <option value="2">2556</option>
+                                </select><p:spacer width="20" height="0"/>
+                                <select class="largest" name="year">
+                                    <option value="1">วันที่เริ่มบริหารกิจการ</option>
+                                    <option value="2">Business Permission</option>
+                                </select></td>
+                        </tr>
 
                         <tr>
-                            <td class="left">
+                            <td class="title">งบการเงินปีล่าสุด :</td>
+                            <td colspan="3"><select class="smaller" name="year">
+                                    <option value="1">2555</option>
+                                    <option value="2">2556</option>
+                                </select></td>
+                        </tr>
+                        <tr>
+                            <td class="title top">สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน :</td>
+                            <td colspan="3"><input type="text" class="medium right" value="#,###,###.00"/><p:spacer width="5px"/>บาท</td>
+                        </tr>
+                        <tr>
+                            <td class="title top">จำนวนแรงงาน :</td>
+                            <td colspan="3"><input type="text" class="medium right" value="#"/><p:spacer width="5px"/>คน</td>
+                        </tr>
+                        <tr><td colspan="100%"><p:spacer width="2px"/></td></tr>
+                        <tr><td colspan="100%"><p:separator/></td></tr>
+                        <tr>
+                            <td colspan="100%"><h2>Income</h2></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width: 200px;">รายการ</th>
+                                        <th style="width: 150px;">จำนวน</th>
+                                        <th style="width: 150px;">%ยอดขาย</th>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td class="center top">ยอดขาย/รายได้</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="100.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #e6e6e6">
+                                        <td class="center top">ต้นทุนการผลิต</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td class="center top">กำไรเบื้องต้น</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #e6e6e6">
+                                        <td class="center top">หัก ค่าใช้จ่ายในการดำเนินงาน</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td class="center top">กำไรก่อนหักดอกเบี้ยและภาษี</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #e6e6e6">
+                                        <td class="center top">หัก ดอกเบี้ย</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #FAFAFA">
+                                        <td class="center top">หัก ภาษี</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #e6e6e6">
+                                        <td class="center top">กำไรสุทธิ</td>
+                                        <td class="center top"><input type="text" class="medium right" value="###,###,###.00"/></td>
+                                        <td class="center top"><input type="text" class="medium right" value="##.0"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:spacer width="5px;"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:spacer width="5px"/></td>
+                        </tr>
+                        <tr>
+                            <td class="left" colspan="100%">
                                 <p:commandButton value="Add" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_detail.jsf');return;"/>
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td colspan="100%">
                                 <table class="table_content" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <th style="width:30px; line-height: 15px;"></th>
@@ -69,7 +262,7 @@
                                         <td class="right">-</td>
                                         <td class="right">-</td>
                                         <td class="right">-</td>
-                                        <td class="right">ผ่าน</td>
+                                        <td class="center">ผ่าน</td>
                                         <td class="option">
                                             <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_bizinfo_detail.jsf');return;"/>
                                         </td>
@@ -82,10 +275,10 @@
                                     </tr>
                                     <tr style="background-color:#f8d0b6;">
                                         <td colspan="8">WEIGHT</td>
-                                        <td class="center">-</td>
+                                        <td class="right">-</td>
                                         <td class="right">0.00</td>
-                                        <td class="center">-</td>
-                                        <td class="center">-</td>
+                                        <td class="right">-</td>
+                                        <td class="right">-</td>
                                         <td class="center">-</td>
                                         <td class="center"></td>
                                     </tr>
@@ -93,7 +286,19 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="100%"><p:spacer width="2"/></td>
+                            <td colspan="100%"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" class="center">
+                                <p:commandButton value="Save" styleClass="small"/>
+                                <p:commandButton value="Cancel" styleClass="small"/>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -101,7 +306,7 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml" />
             <!-- End Footer -->
         </div>
     </h:body>
