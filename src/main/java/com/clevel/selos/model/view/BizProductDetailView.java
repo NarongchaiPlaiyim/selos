@@ -1,54 +1,24 @@
-package com.clevel.selos.model.db.working;
+package com.clevel.selos.model.view;
 
-import javax.persistence.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Rangsun
- * Date: 23/9/2556
- * Time: 9:57 น.
+ * Date: 6/9/2556
+ * Time: 11:05 น.
  * To change this template use File | Settings | File Templates.
  */
-@Entity
-@Table(name = "wrk_biz_product")
-public class BizProduct {
+public class BizProductDetailView {
 
-    @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_PRODUCT_ID", sequenceName="SEQ_WRK_BIZ_PRODUCT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_PRODUCT_ID")
-    private long id;
-
-    @ManyToOne
-    @JoinColumn(name="biz_info_detail_id")
-    private BizInfoDetail bizInfoDetail;
-
-
-    @Column(name = "no")
     private long no;
-
-    @Column(name = "product_type")
     private String productType;
-
-    @Column(name = "percent_sales_volume")
     private BigDecimal percentSalesVolume;
-
-    @Column(name = "percent_ebit")
     private BigDecimal percentEBIT;
-
-    @Column(name = "product_detail")
     private String productDetail;
-
-    public BizProduct() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public long getNo() {
         return no;
@@ -90,11 +60,14 @@ public class BizProduct {
         this.productDetail = productDetail;
     }
 
-    public BizInfoDetail getBizInfoDetail() {
-        return bizInfoDetail;
-    }
-
-    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
-        this.bizInfoDetail = bizInfoDetail;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("no", no)
+                .append("productType", productType)
+                .append("percentSalesVolume", percentSalesVolume)
+                .append("percentEBIT", percentEBIT)
+                .append("productDetail", productDetail)
+                .toString();
     }
 }

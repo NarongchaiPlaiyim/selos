@@ -19,8 +19,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
-@Table(name="wrk_biz_info_detail")
-public class BizInfoDetail implements Serializable {
+@Table(name="wrk_biz_info")
+public class BizInfo implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_WRK_BIZ_INFO_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_INFO_DETAIL_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_DETAIL_ID")
@@ -60,20 +60,20 @@ public class BizInfoDetail implements Serializable {
     private String bizPermission;
 
     @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizStakeholder> supplierList;
+    private List<BizStakeHolderDetail> supplierList;
 
     @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizStakeholder> buyerList;
+    private List<BizStakeHolderDetail> buyerList;
 
     @OneToMany(mappedBy="bizInfoDetail")
-    private List<BizProduct> bizProductList;
+    private List<BizProductDetail> bizProductList;
 
     @ManyToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
 
-    public BizInfoDetail() {
+    public BizInfo() {
     }
 
     public long getId() {
@@ -164,27 +164,27 @@ public class BizInfoDetail implements Serializable {
         this.bizInfoText = bizInfoText;
     }
 
-    public List<BizStakeholder> getSupplierList() {
+    public List<BizStakeHolderDetail> getSupplierList() {
         return supplierList;
     }
 
-    public void setSupplierList(List<BizStakeholder> supplierList) {
+    public void setSupplierList(List<BizStakeHolderDetail> supplierList) {
         this.supplierList = supplierList;
     }
 
-    public List<BizStakeholder> getBuyerList() {
+    public List<BizStakeHolderDetail> getBuyerList() {
         return buyerList;
     }
 
-    public void setBuyerList(List<BizStakeholder> buyerList) {
+    public void setBuyerList(List<BizStakeHolderDetail> buyerList) {
         this.buyerList = buyerList;
     }
 
-    public List<BizProduct> getBizProductList() {
+    public List<BizProductDetail> getBizProductList() {
         return bizProductList;
     }
 
-    public void setBizProductList(List<BizProduct> bizProductList) {
+    public void setBizProductList(List<BizProductDetail> bizProductList) {
         this.bizProductList = bizProductList;
     }
 }

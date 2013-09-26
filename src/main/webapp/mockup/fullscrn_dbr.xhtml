@@ -8,19 +8,19 @@
 
         <h:head>
             <title>Financial Info.</title>
-            <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-            <script type="text/javascript" src="../resources/js/superfish.js"></script>
+            <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+            <script type="text/javascript" src="resources/js/superfish.js"></script>
         </h:head>
         <h:body>
             <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="resources/header_detail_fullapp.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="../resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
             <div id="content_name">Debt Burden Ratio</div>
@@ -42,10 +42,10 @@
 
             </tr>
                 <tr>
-                    <td class="title" style="width: 200px">รายได้ต่อเดือน (Adjusted by BDM) : </td>
+                    <td class="title" style="width: 200px">รายได้ต่อเดือน (Adjusted) : </td>
                     <td><input type="text" class="small" value=""/></td>
-                    <td class="title" style="width: 200px">income factor (Adjusted by UW) : </td>
-                    <td colspan="3"><input type="text" class="small" value=""/></td>
+                    <!--td class="title" style="width: 200px">income factor (Adjusted by UW) : </td>
+                    <td colspan="3"><input type="text" class="small" value=""/></td-->
                 </tr>
                 <tr>
                     <td class="title" style="width: 150px">รายได้เงินเดือนต่อเดือน : </td>
@@ -53,11 +53,9 @@
 
                 </tr>
                 <tr>
-                    <td class="title" style="width: 200px">รวมภาระหนี้/เดือน ณ ปัจจุบัน : </td>
-                    <td><input type="text" class="small" value=""/></td>
                     <td class="title" style="width: 200px">รายได้สุทธิ/เดือน ณ ปัจจุบัน : </td>
                     <td><input type="text" class="small" value=""/></td>
-                    <td class="title" style="width: 150px; line-height: 15px">รายได้สุทธิ/เดือน ณ ปัจจุบัน :</td>
+                    <td class="title" style="width: 200px">รวมภาระหนี้/เดือน ณ ปัจจุบัน : </td>
                     <td><input type="text" class="small" value=""/></td>
 
                 </tr>
@@ -102,7 +100,7 @@
                         <td class="right">8,809.00</td>
                         <td class="right">2,100.00</td>
                     </tr>
-                    <tr style="background-color:#f8d0b6;">
+                    <tr style="background-color:#f4f8b6;">
                         <td colspan="5">รวมภาระหนี้/เดือน</td>
                         <td class="right">609,909.00</td>
                     </tr>
@@ -110,13 +108,14 @@
                 </td>
             </tr>
             <tr>
+                <td colspan="6" style="line-height: 15px"><p:spacer width="5px;"/></td>
+            </tr>
+            <tr>
                 <td colspan="6"><div class="separate"><!-- --></div></td>
             </tr>
             <tr>
-                <td colspan="6"><h2>ภาระหนี้ส่วนของผู้เกี่ยวข้อง</h2></td>
-            </tr>
-            <tr>
-                <td class="title" colspan="6"><p:spacer width="5px"/><p:commandButton value="Add" styleClass="small"/></td>
+                <td><h2>ภาระหนี้ส่วนของผู้เกี่ยวข้อง</h2></td>
+                <td colspan="5"><p:commandButton value="Add" styleClass="small" onclick="relatedDBRDlg.show();"/></td>
             </tr>
             <tr>
                 <td colspan="6">
@@ -132,32 +131,17 @@
                     </tr>
                     <tr>
                         <td class="center">1</td>
-                        <td class="center"><input type="text" class="largest" value="Mr. D Related"/></td>
-                        <td class="center"><select class="larger">
-                            <option>- โปรดระบุ -</option>
-                            <option>สินเชื่อบุคคล (เงินกู้)</option>
-                        </select></td>
-                        <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
-                        <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
-                        <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
+                        <td class="center">Mr. D Related</td>
+                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
+                        <td class="right">###,###.00</td>
+                        <td class="right">###,###.00</td>
+                        <td class="right">###,###.00</td>
                         <td class="option">
+                            <p:commandButton icon="ui-icon-pencil" title="Edit"/>
                             <p:commandButton icon="ui-icon-trash" title="Remove"/>
                         </td>
                     </tr>
-                        <tr>
-                            <td class="center">2</td>
-                            <td class="center"><input type="text" class="largest" value=""/></td>
-                            <td class="center"><select class="larger">
-                                <option>- โปรดระบุ -</option>
-                                <option>สินเชื่อบุคคล (เงินกู้)</option>
-                            </select></td>
-                            <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
-                            <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
-                            <td class="right"><input type="text" class="medium" value="###,###.00"/></td>
-                            <td class="option">
-                                <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                            </td>
-                        </tr>
+
                         <tr style="background-color:#f4f8b6;">
                             <td colspan="5">รวมภาระหนี้/เดือน</td>
                             <td class="right">###,###.00</td>
@@ -185,8 +169,12 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml" />
             <!-- End Footer -->
+                <p:dialog id="relatedDBR" header="Related Debt. Account Information" widgetVar="relatedDBRDlg"
+                          modal="true" width="450px;">
+                    <ui:include src="resources/dialog/addRelatedDBR.xhtml" />
+                </p:dialog>
             </div>
         </h:body>
     </f:view>

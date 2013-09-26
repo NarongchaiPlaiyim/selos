@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 14:34 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizInfoFullView {
+public class BizInfoView {
 
     private String bizInfoText;
     private String tradeType;
@@ -49,9 +49,9 @@ public class BizInfoFullView {
     private BigDecimal stockValueBDM;
     private BigDecimal stockValueUW;
 
-    private List<BizProductView> bizProductViewList;
-    private List<StakeholderView> supplierList;
-    private List<StakeholderView> buyerList;
+    private List<BizProductDetailView> bizProductDetailViewList;
+    private List<BizStakeHolderDetailView> supplierDetailList;
+    private List<BizStakeHolderDetailView> buyerDetailList;
 
     public String getBizInfoText() {
         return bizInfoText;
@@ -293,28 +293,28 @@ public class BizInfoFullView {
         this.stockValueUW = stockValueUW;
     }
 
-    public List<BizProductView> getBizProductViewList() {
-        return bizProductViewList;
+    public List<BizProductDetailView> getBizProductDetailViewList() {
+        return bizProductDetailViewList;
     }
 
-    public void setBizProductViewList(List<BizProductView> bizProductViewList) {
-        this.bizProductViewList = bizProductViewList;
+    public void setBizProductDetailViewList(List<BizProductDetailView> bizProductDetailViewList) {
+        this.bizProductDetailViewList = bizProductDetailViewList;
     }
 
-    public List<StakeholderView> getSupplierList() {
-        return supplierList;
+    public List<BizStakeHolderDetailView> getBuyerDetailList() {
+        return buyerDetailList;
     }
 
-    public void setSupplierList(List<StakeholderView> supplierList) {
-        this.supplierList = supplierList;
+    public void setBuyerDetailList(List<BizStakeHolderDetailView> buyerDetailList) {
+        this.buyerDetailList = buyerDetailList;
     }
 
-    public List<StakeholderView> getBuyerList() {
-        return buyerList;
+    public List<BizStakeHolderDetailView> getSupplierDetailList() {
+        return supplierDetailList;
     }
 
-    public void setBuyerList(List<StakeholderView> buyerList) {
-        this.buyerList = buyerList;
+    public void setSupplierDetailList(List<BizStakeHolderDetailView> supplierDetailList) {
+        this.supplierDetailList = supplierDetailList;
     }
 
     @Override
@@ -351,9 +351,9 @@ public class BizInfoFullView {
                 .append("stockDurationUW", stockDurationUW)
                 .append("stockValueBDM", stockValueBDM)
                 .append("stockValueUW", stockValueUW)
-                .append("bizProductViewList", bizProductViewList)
-                .append("supplierList", supplierList)
-                .append("buyerList", buyerList)
+                .append("bizProductDetailViewList", bizProductDetailViewList)
+                .append("supplierDetailList", supplierDetailList)
+                .append("buyerDetailList", buyerDetailList)
                 .toString();
     }
 }
