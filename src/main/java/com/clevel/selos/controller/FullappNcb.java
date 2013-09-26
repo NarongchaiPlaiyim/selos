@@ -458,7 +458,7 @@ public class FullappNcb implements Serializable {
         TDRCondition tdrConditionSave = tdrConditionDAO.findById(tdrCondition.getId());
         ncbResultView.setTdrCondition(tdrConditionSave);
 
-        fullAppBusinessControl.onSaveNCBToDB(ncbResultView,ncbRecordViewList);
+        //fullAppBusinessControl.onSaveNCBToDB(ncbResultView,ncbRecordViewList);
     }
 
     public boolean isGenTextBoxFlag() {

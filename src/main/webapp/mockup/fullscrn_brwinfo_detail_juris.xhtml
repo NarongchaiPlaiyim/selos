@@ -8,19 +8,19 @@
 
 <h:head>
     <title>Customer Info.</title>
-    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/superfish.js"></script>
 </h:head>
 <h:body>
 <div id="main_container">
 <!-- Start Header Logo -->
-    <ui:include src="../resources/header_logo.xhtml"/>
+    <ui:include src="resources/header_logo.xhtml"/>
     <!-- End Header Logo -->
     <!-- Start Header Detail -->
-    <ui:include src="../resources/header_detail.xhtml"/>
+    <ui:include src="resources/header_detail_fullapp_bdm.xhtml"/>
     <!-- End Header Detail -->
     <!-- Start Menu -->
-    <ui:include src="../resources/menubar_fullapp.xhtml"/>
+    <ui:include src="resources/menubar_fullapp.xhtml"/>
     <!-- End Menu -->
     <div id="content_container">
     <div id="content_name">Borrower Info. Detail Juristic</div>
@@ -36,30 +36,42 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="title" style="width: 150px">Borrower Type :</td>
-                    <td colspan="3">
+                    <td class="title">Search by :</td>
+                    <td colspan="3"><input type="radio" name="searchBy"/>Registration ID <input type="radio" name="searchBy"/>TMB Customer ID <input type="text" class="medium"/><p:spacer width="5"/><p:commandButton value="Search" styleClass="medium" style="margin-top:-3px;"/></td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><p:separator/></td>
+                </tr>
+                <tr>
+                    <td colspan="100%"><p:commandButton value="Refresh Interface Info" styleClass="larger"/></td>
+                </tr>
+                <tr>
+                    <td class="title" style="width: 180px">Relationship:</td>
+                    <td style="width: 350px;">
                         <select class="larger" disabled="disabled">
                             <option>-- Please Select --</option>
                             <option selected="selected">Borrower</option>
                             <option>Co-Borrower</option>
-                            <option>Owner of collateral</option>
                         </select>
                     </td>
+                    <td class="title" style="width: 150px">Collateral Owner: </td>
+                    <td><input type="radio" name="isCollOwner" value="Y" /> Yes
+                        <input type="radio" name="isCollOwner" value="N"/> No</td>
                 </tr>
                 <tr>
-                    <td class="title">Relationship :</td>
-                    <td colspan="3">
+                    <td class="title">Reference :</td>
+                    <td>
                         <select class="larger">
                             <option>-- Please Select --</option>
                             <option>Director</option>
                             <option>Shareholder</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
                     <td class="title">จำนวนหุ้น :</td>
-                    <td colspan="3"><input type="text" class="larger" value="" name="shareAmount"/></td>
+                    <td><input type="text" class="larger" value="" name="shareAmount"/></td>
+
                 </tr>
+
                 <tr>
                     <td class="title">ประเภทเอกสาร :</td>
                     <td colspan="3"><select class="larger" disabled="disabled">
@@ -69,6 +81,23 @@
                 <tr>
                     <td class="title top" style="line-height: 15px;">เลขทะเบียนนิติบุคคล (Registration No.) :</td>
                     <td colspan="3"><input type="text" class="larger" disabled="disabled" value="1231231231233"/></td>
+                </tr>
+                <tr>
+                    <td class="title">วันที่ออกบัตร :</td>
+                    <td colspan="3"><select class="smaller" name="date">
+                        <option value="1">01</option>
+                        <option value="2">02</option>
+                        <option value="3">03</option>
+                    </select><p:spacer width="2" height="0"/>
+                        <select class="smaller" name="month">
+                            <option value="1">เม.ย.</option>
+                            <option value="2">พ.ค.</option>
+                            <option value="3">มิ.ย.</option>
+                        </select><p:spacer width="2" height="0"/>
+                        <select class="smaller" name="year">
+                            <option value="1">2555</option>
+                            <option value="2">2556</option>
+                        </select></td>
                 </tr>
                 <tr>
                     <td class="title">วันที่จดทะเบียนนิติบุคคล :</td>
@@ -110,6 +139,12 @@
                     <td colspan="3"><input type="text" class="large" name="cusId" disabled="disabled" value="112233"/></td>
                 </tr>
                 <tr>
+                    <td class="title">ประเภทธุรกิจ :</td>
+                    <td colspan="3"><select class="largest">
+                        <option>- โปรดระบุ -</option>
+                    </select></td>
+                </tr>
+                <tr>
                     <td class="title">ทุนจดทะเบียน :</td>
                     <td colspan="3"><input type="text" class="largest right" name="registerAmount" value="#,###,###.00"/><p:spacer width="5px"/>บาท</td>
                 </tr>
@@ -126,42 +161,80 @@
                     <td colspan="3"><input type="text" class="largest right" name="shareAmount" value="#,###"/></td>
                 </tr>
                 <tr>
+                    <td class="title">แหล่งที่มาของรายได้หลัก :</td>
+                    <td><select class="large">
+                        <option>- โปรดระบุ -</option>
+                    </select></td>
+                    <td class="title">ประเทศที่มาของรายได้หลัก :</td>
+                    <td><select class="large">
+                        <option>- โปรดระบุ -</option>
+                    </select></td>
+                </tr>
+                <tr>
                     <td colspan="100%"><p:spacer width="2"/></td>
                 </tr>
                 <tr>
                     <td colspan="100%"><h2>ตารางแสดงข้อมูลกรรมการผู้มีอำนาจลงนาม, กรรมการ และผู้ถือหุ้น</h2></td>
                 </tr>
                 <tr>
-                    <td colspan="4">
-                    <table class="table_content" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <th style="width:30px;"></th>
-                            <th style="width:210px;">Name</th>
-                            <th style="width:130px;">Citizen ID /<br/>Registration ID</th>
-                            <th style="width:90px;">Customer ID</th>
-                            <th style="width:140px;">Relationship</th>
-                            <th style="width:120px;">Shares Holding</th>
-                            <th style="width:120px;">% Shares</th>
-                            <th style="width:120px;">Borrower Type</th>
-                            <th style="width:30px;">Age</th>
-                            <th style="width:50px;"></th>
-                        </tr>
-                        <tr>
-                            <td class="center">1</td>
-                            <td>Mr.F Share Example</td>
-                            <td class="center">3121232112321</td>
-                            <td class="center"></td>
-                            <td class="center">กรรมการผู้มีอำนาจลงนาม</td>
-                            <td class="right">5,100</td>
-                            <td class="right">51</td>
-                            <td class="center">ผู้ค้ำประกัน</td>
-                            <td class="center">45</td>
-                            <td class="option">
-                                <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                                <!--p:commandButton icon="ui-icon-trash" title="Remove"/-->
-                            </td>
-                        </tr>
-                    </table>
+                    <td class="left" colspan="100%">
+                        <p:commandButton value="Add" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_detail.jsf');return;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="100%">
+                        <table class="table_content" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th style="width:30px;" rowspan="2"></th>
+                                <th style="width:200px;" rowspan="2">Customer Name</th>
+                                <!--th style="width:70px;" rowspan="2">Entity</th-->
+                                <th style="width:200px;" colspan="2">ID</th>
+                                <th style="width:250px;" colspan="2">Relationship</th>
+                                <th style="width:250px;" colspan="2">Reference</th>
+                                <th style="width:50px;line-height: 15px;" rowspan="2">% Share</th>
+                                <th style="width:50px;" rowspan="2">Age</th>
+                                <th style="width:50px;" rowspan="2"></th>
+                            </tr>
+                            <tr><th style="width:120px;">Personal</th>
+                                <th style="width:80px;">TMB</th>
+                                <th style="width:150px;">Type</th>
+                                <th style="width:50px; line-height: 15px;">Coll. Owner</th>
+                                <th style="width:125px; line-height: 15px;">Ind. Level</th>
+                                <th style="width:125px; line-height: 15px;">Jus. Level</th>
+                            </tr>
+                            <tr>
+                                <td class="center">1</td>
+                                <td>Mr.A Example</td>
+                                <!--td>Individual</td-->
+                                <td>312320123123</td>
+                                <td>30232</td>
+                                <td>Borrower</td>
+                                <td class="center">-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="center">-</td>
+                                <td class="center">48</td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_indv.jsf');return;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="center">2</td>
+                                <td>Mrs.B Example</td>
+                                <!--td>Individual</td-->
+                                <td>412420124124</td>
+                                <td>30234</td>
+                                <td>Borrower</td>
+                                <td class="center">-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="center">-</td>
+                                <td class="center">36</td>
+                                <td class="option">
+                                    <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('fullscrn_brwinfo_detail_indv.jsf');return;"/>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
@@ -209,6 +282,13 @@
                                 <td colspan="5"><input type="text" class="medium"/></td>
                             </tr>
                             <tr>
+                                <td class="title">ประเทศ :</td>
+                                <td colspan="5">
+                                    <select class="large">
+                                        <option>- โปรดระบุ -</option>
+                                    </select></td>
+                            </tr>
+                            <tr>
                                 <td class="title">โทรศัพท์ :</td>
                                 <td colspan="5"><input type="text" class="large"/> ต่อ <input type="text" class="smaller"/></td>
                             </tr>
@@ -219,7 +299,7 @@
                     <td colspan="100%"><p:spacer width="2" height="10px"/></td>
                 </tr>
                 <tr>
-                    <td class="title top">ที่อยู่สถานประกอบการ :</td>
+                    <td class="title top">ที่อยู่สถานที่ประกอบการ :</td>
                     <td colspan="3"><input type="radio" name="bizAddressFlag" value="0"/> ที่อยู่จดทะเบียน
                         <input type="radio" name="bizAddressFlag" value="1"/> อื่นๆ
                     </td>
@@ -259,7 +339,14 @@
                                 <td colspan="5"><input type="text" class="medium"/></td>
                             </tr>
                             <tr>
-                                <td class="title">โทรศัพท์สถานประกอบการ :</td>
+                                <td class="title">ประเทศ :</td>
+                                <td colspan="5">
+                                    <select class="large">
+                                        <option>- โปรดระบุ -</option>
+                                    </select></td>
+                            </tr>
+                            <tr>
+                                <td class="title">โทรศัพท์ :</td>
                                 <td colspan="5"><input type="text" class="large"/> ต่อ <input type="text" class="smaller"/></td>
                             </tr>
                         </table>
@@ -285,7 +372,8 @@
                     <td class="title">ที่อยู่ในการจัดส่งเอกสาร :</td>
                     <td colspan="3">
                         <select class="large">
-                            <option>ที่อยู่สถานที่ประกอบการ</option>
+                            <option>- โปรดระบุ -</option>
+                            <option>ที่อยู่จดทะเบียน</option>
                         </select></td>
                 </tr>
                 <tr>
@@ -304,9 +392,12 @@
                     </select></td>
                 </tr>
                 <tr>
+                    <td class="title">KYC Reason :</td>
+                    <td colspan="3"><textarea cols="100px;" rows="3"/></td>
+                </tr>
+                <tr>
                     <td class="title">Convenant Flag :</td>
                     <td colspan="3"><input type="radio" name="convenanFlag" value="Y"/> Yes <p:spacer width="5"/><input type="radio" name="convenanFlag" value="N"/><p:spacer width="2"/> No
-                        <p:spacer width="20px"/><span class="title">EWS Flag : </span><input type="radio" name="ewsFlag" value="Y"/> Yes <p:spacer width="5"/><input type="radio" name="ewsFlag" value="N"/><p:spacer width="2"/> No
                         <p:spacer width="20px"/><span class="title">Review Flag : </span><input type="radio" name="reviewFlag" value="Y"/> Yes <p:spacer width="5"/><input type="radio" name="reviewFlag" value="N"/><p:spacer width="2"/> No
                     </td>
                 </tr>
@@ -315,28 +406,24 @@
                     <td colspan="3"><input type="text" style="width: 400px"/></td>
                 </tr>
                 <tr>
-                    <td class="title">Datamart :</td>
-                    <td colspan="3"><input type="radio" name="dataMartFlag" value="P"/> Pass <p:spacer width="5"/><input type="radio" name="dataMartFlag" value="F"/> Fail </td>
-                </tr>
-                <tr>
                     <td class="title top" style="line-height: 15px">ความน่าเชื่อถือด้านสินเชื่อ และชื่อเสียงด้านการเงิน :</td>
                     <td class="top" colspan="3"><input type="radio" name="reliabilityFlag" value="P"/> Pass <p:spacer width="5"/><input type="radio" name="reliabilityFlag" value="F"/> Fail <p:spacer width="5"/><input type="radio" name="reliabilityFlag" value="F"/> N/A</td>
                 </tr>
 
                 <tr class="top">
-                    <td class="title">CPIC Code :</td>
+                    <td class="title">CSI Code :</td>
                     <td class="top" colspan="3"><table class="table_content" cellpadding="0" cellspacing="0">
                         <tr>
                             <th style="width:30px;"></th>
-                            <th style="width:100px;">CPIC Code</th>
+                            <th style="width:100px;">CSI Code</th>
                             <th style="width:50px;">Year</th>
                         </tr>
                         <tr>
                             <td class="center">1</td>
-                            <td class="center">CPIC Code</td>
+                            <td class="center">Warning L3</td>
                             <td class="center">XXXX</td>
                         </tr>
-                        </table>
+                    </table>
                     </td>
                 </tr>
                 <tr>
@@ -359,7 +446,7 @@
     </div>
     <div class="clear"></div>
     <!-- Start Footer -->
-    <ui:include src="../resources/footer.xhtml"/>
+    <ui:include src="resources/footer.xhtml"/>
     <!-- End Footer -->
 </div>
 </h:body>

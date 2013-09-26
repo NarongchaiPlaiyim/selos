@@ -8,19 +8,19 @@
 
 <h:head>
     <title>SE-LOS : Summary</title>
-    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+    <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/superfish.js"></script>
 </h:head>
 <h:body>
 <div id="main_container">
 <!-- Start Header Logo -->
-<ui:include src="../resources/header_logo.xhtml"/>
+<ui:include src="resources/header_logo.xhtml"/>
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<ui:include src="../resources/header_detail_fullapp.xhtml"/>
+<ui:include src="resources/header_detail_fullapp_bdm.xhtml"/>
 <!-- End Header Detail -->
 <!-- Start Menu -->
-<ui:include src="../resources/menubar_fullapp.xhtml"/>
+<ui:include src="resources/menubar_fullapp.xhtml"/>
 <!-- End Menu -->
 <div id="content_container">
 <div id="content_name">Decision</div>
@@ -42,60 +42,101 @@
 <tr>
     <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
         <tr>
+            <th colspan="10">Commercial Credit</th>
+        </tr>
+        <tr>
             <th style="width: 30px;"></th>
-            <th style="width: 150px;">Borrower Name</th>
-            <th style="width: 150px;">Product Program</th>
-            <th style="width: 150px;">Credit Type</th>
-            <th style="width: 100px;">Product code</th>
-            <th style="width: 100px;">Project code</th>
-            <th style="width: 100px;">Limit</th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 120px;">Code</th>
+            <th style="width: 130px;">Limit</th>
             <th style="width: 100px;">Outstanding</th>
             <th style="width: 100px; line-height: 15px">Installment</th>
-            <th colspan="2" style="width: 180px; line-height: 15px">Int/Fee (%)</th>
-            <th style="width: 100px; line-height: 15px">Tenor (Months)</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+
         </tr>
-        <tr style="background-color: #FAFAFA">
+        <tr class="top" style="background-color: #FAFAFA">
             <td class="center">1</td>
-            <td class="center">Mr. A Example</td>
-            <td class="center">TMB SME SmartBiz</td>
-            <td class="center">Loan</td>
-            <td class="center"></td>
-            <td class="center"></td>
+            <td class="left" style="line-height: 15px;">Mr. A Example<br/>
+                Acc No.: 012-3-45678-9 Suf. 001<br/>
+                Acc Status: 01-Normal</td>
+            <td class="left">SmartBiz</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
             <td class="right">###,###.00</td>
             <td class="right">###,###.00</td>
             <td class="right">###,###.00</td>
-            <td style="border-right: none;padding-right: 2px;">MOR</td>
-            <td style="border-left: none; padding-left: 2px">+1.75</td>
-            <td class="right">###,###.00</td>
+            <td class="right">MOR + #.##</td>
+            <td class="right">##</td>
+
         </tr>
-        <tr class="top"  style="background-color: #e6e6e6">
-            <td class="center" rowspan="2">2</td>
-            <td class="center" rowspan="2">Mr. A Example</td>
-            <td class="center" rowspan="2">Top Up Bancassurance</td>
-            <td class="center" rowspan="2">OD</td>
-            <td class="center" rowspan="2"></td>
-            <td class="center" rowspan="2"></td>
-            <td class="right" rowspan="2">###,###.00</td>
-            <td class="right" rowspan="2">###,###.00</td>
+        <tr class="top" style="background-color: #e6e6e6">
+            <td class="center">2</td>
+            <td class="left" style="line-height: 15px;">Mr. B Example<br/>
+                Acc No.: XXX-X-XXXXX-X<br/>Suf 000<br/>
+                Acc. Status:01-Normal</td>
+            <td class="left">SmartBiz</td>
+            <td class="left">FX</td>
+            <td class="left">-</td>
+            <td class="left" style="line-height: 15px;">Notional: 10,000,000<br/>
+                PCE: 10%<br/>
+                PCE Limit: 100,000</td>
             <td class="right">###,###.00</td>
-            <td style="border-right: none;padding-right: 2px;">MOR</td>
-            <td style="border-left: none;padding-left: 2px">+1.25</td>
-            <td class="right">###,###.00</td>
+            <td class="right">-</td>
+            <td class="right">2.00</td>
+            <td class="right">-</td>
+
         </tr>
-        <tr  style="background-color: #e6e6e6">
-            <td class="right">###,###.00</td>
-            <td class="center" style="border-right: none;padding-right: 2px;">MLR</td>
-            <td style="border-left: none;padding-left: 2px">+1.50</td>
-            <td class="right">###,###.00</td>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center" rowspan="3">3</td>
+            <td class="left" style="line-height: 15px;">Mr. A Example
+                Acc No.: XXX-X-XXXXX-X<br/>Suf 000<br/>
+                Acc. Status:01-Normal</td>
+            <td class="left">SmartBiz</td>
+            <td class="left">OD</td>
+            <td class="left" style="line-height: 15px;">Product: 101<br/>
+                Project: 94</td>
+            <td class="right">10,000,000.00</td>
+            <td class="right">9,600,000.00</td>
+            <td class="right">-</td>
+            <td class="right">MOR + 2.00</td>
+            <td class="right">-</td>
+
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="left"></td>
+            <td class="left">SmartBiz</td>
+            <td class="left"></td>
+            <td class="left"></td>
+            <td class="right">7,000,000.00</td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="right"></td>
+
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="left"></td>
+            <td class="left">F-Cash</td>
+            <td class="left"></td>
+            <td class="left"></td>
+            <td class="right">3,000,000.00</td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="right"></td>
+            <td class="right"></td>
 
         </tr>
         <tr style="background-color: #ffffff;">
-            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="12"></td>
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
         </tr>
-        <tr style="background-color:#e6e6e6;">
-            <td colspan="6">Total Exposure</td>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
             <td class="right">###,###.00</td>
-            <td colspan="5"></td>
+            <td colspan="4"></td>
         </tr>
     </table>
     </td>
@@ -104,7 +145,7 @@
     <td colspan="2"><p:spacer/></td>
 </tr>
 <tr>
-    <td colspan="2" style="line-height: 15px;" class="title">Condition</td>
+    <td colspan="2" style="line-height: 15px;" class="title">Condition commercial credit</td>
 </tr>
 <tr>
     <td colspan="2">
@@ -127,77 +168,271 @@
         </table>
     </td>
 </tr>
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="10">Retail Credit</th>
+        </tr>
+        <tr>
+            <th style="width: 30px;"></th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 150px;">Code</th>
+            <th style="width: 100px;">Limit</th>
+            <th style="width: 100px;">Outstanding</th>
+            <th style="width: 100px; line-height: 15px">Installment</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center">1</td>
+            <td class="left" style="line-height: 15px;">Mr. A Example<br/>
+                Acc No.: 123-6-45678-9 Suf. 001<br/>
+                Acc Status: 01-Normal</td>
+            <td class="left">-</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
+            <td class="right">10,000,000.00</td>
+            <td class="right">8,760,000.00</td>
+            <td class="right">200,000.00</td>
+            <td class="right">MLR + 2.50</td>
+            <td class="right">48</td>
+
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
+            <td class="right">8,760,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="10">App in RLOS Process</th>
+        </tr>
+        <tr>
+            <th style="width: 30px;"></th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 150px;">Code</th>
+            <th style="width: 100px;">Limit</th>
+            <th style="width: 100px;">Outstanding</th>
+            <th style="width: 100px; line-height: 15px">Installment</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center">1</td>
+            <td class="left" style="line-height: 15px;">Mrs. B Example<br/>
+                Acc No.: -<br/>
+                Acc Status: -</td>
+            <td class="left">-</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
+            <td class="right">10,000,000.00</td>
+            <td class="right">8,760,000.00</td>
+            <td class="right">200,000.00</td>
+            <td class="right">MLR + 2.50</td>
+            <td class="right">48</td>
+
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
+            <td class="right">8,760,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Borrower - Grand Total Exposure</td>
+            <td class="right"> 36,380,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    </td>
+</tr>
+
 <tr><td colspan="6"><p:spacer width="2px"/></td></tr>
 <tr>
     <td colspan="2" class="title">Related Person</td>
 </tr>
 <tr>
-    <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
-            <tr>
-                <th style="width: 30px;"></th>
-                <th style="width: 150px;">Related Name</th>
-                <th style="width: 150px;">Product Program</th>
-                <th style="width: 150px;">Credit Type</th>
-                <th style="width: 100px;">Product code</th>
-                <th style="width: 100px;">Project code</th>
-                <th style="width: 100px;">Limit</th>
-                <th style="width: 100px;">Outstanding</th>
-                <th style="width: 100px; line-height: 15px">Installment</th>
-                <th colspan="2" style="width: 180px; line-height: 15px">Int/Fee (%)</th>
-                <th style="width: 100px; line-height: 15px">Tenor (Months)</th>
-            </tr>
-            <tr style="background-color: #FAFAFA">
-                <td class="center">1</td>
-                <td class="left">Mr. D Related</td>
-                <td class="left">TMB SME SmartBiz</td>
-                <td class="center">OD</td>
-                <td class="center"></td>
-                <td class="center"></td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="center" style="border-right: none;padding-right: 2px;">MOR</td>
-                <td style="border-left: none; padding-left: 2px"> +1.50</td>
-                <td class="right">###,###.00</td>
-            </tr>
-            <tr class="top" style="background-color: #e6e6e6">
-                <td class="center" rowspan="2">2</td>
-                <td class="left" rowspan="2"></td>
-                <td class="left" rowspan="2">Top Up Bancassurance</td>
-                <td class="center" rowspan="2">Loan</td>
-                <td class="center" rowspan="2"></td>
-                <td class="center" rowspan="2"></td>
-                <td class="right" rowspan="2">###,###.00</td>
-                <td class="right" rowspan="2">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="center" style="border-right: none;padding-right: 2px;">MLR</td>
-                <td style="border-left: none;padding-left: 2px"> +0.75</td>
-                <td class="right">###,###.00</td>
-            </tr>
-            <tr>
-                <td class="right" style="background-color: #e6e6e6">###,###.00</td>
-                <td class="right" style="border-right: none;padding-right: 2px;">MOR</td>
-                <td class="center" style="border-left: none;padding-left: 2px"> +1.00</td>
-                <td class="right">###,###.00</td>
-            </tr>
-            <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="12"></td>
-            </tr>
-            <tr style="background-color:#e6e6e6;">
-                <td colspan="6">Total Exposure</td>
-                <td class="right">###,###.00</td>
-                <td colspan="5"></td>
-            </tr>
-            <tr>
-                <td style="height: 10px; border-left: none; border-right: none" colspan="12"><h2>Total Borrower &amp; Related Person</h2></td>
-            </tr>
-            <tr style="background-color:#e6e6e6;">
-                <td colspan="6">Total Group Exposure</td>
-                <td class="right">###,###.00</td>
-                <td colspan="5"></td>
-            </tr>
-        </table>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="10">Commercial Credit</th>
+        </tr>
+        <tr>
+            <th style="width: 30px;"></th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 150px;">Code</th>
+            <th style="width: 100px;">Limit</th>
+            <th style="width: 100px;">Outstanding</th>
+            <th style="width: 100px; line-height: 15px">Installment</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center">1</td>
+            <td class="left" style="line-height: 15px;">Mr. D Related.<br/>
+                Acc No.: 012-3-45678-9 Suf. 001<br/>
+                Acc Status: 01-Normal</td>
+            <td class="left">SmartBiz</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
+            <td class="right">###,###.00</td>
+            <td class="right">###,###.00</td>
+            <td class="right">###,###.00</td>
+            <td class="right">MOR + #.##</td>
+            <td class="right">##</td>
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
+            <td class="right">###,###.00</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="10">Retail Credit</th>
+        </tr>
+        <tr>
+            <th style="width: 30px;"></th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 150px;">Code</th>
+            <th style="width: 100px;">Limit</th>
+            <th style="width: 100px;">Outstanding</th>
+            <th style="width: 100px; line-height: 15px">Installment</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center">1</td>
+            <td class="left" style="line-height: 15px;">Mr. D Related<br/>
+                Acc No.: 123-6-45678-9 Suf. 001<br/>
+                Acc Status: 01-Normal</td>
+            <td class="left">-</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
+            <td class="right">10,000,000.00</td>
+            <td class="right">8,760,000.00</td>
+            <td class="right">200,000.00</td>
+            <td class="right">MLR + 2.50</td>
+            <td class="right">48</td>
+
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
+            <td class="right">8,760,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="2"><p:spacer/></td>
+</tr>
+<tr>
+    <td colspan="2"><table class="table_content" cellpadding="0" cellspacing="0">
+        <tr>
+            <th colspan="10">App in RLOS Process</th>
+        </tr>
+        <tr>
+            <th style="width: 30px;"></th>
+            <th style="width: 300px;">Account</th>
+            <th style="width: 150px;line-height: 15px;">Product Program</th>
+            <th style="width: 120px;">Credit Type</th>
+            <th style="width: 150px;">Code</th>
+            <th style="width: 100px;">Limit</th>
+            <th style="width: 100px;">Outstanding</th>
+            <th style="width: 100px; line-height: 15px">Installment</th>
+            <th style="width: 100px; line-height: 15px">Int/Fee (%)</th>
+            <th style="width: 80px; line-height: 15px;padding-left: 0px;padding-right: 0px;">Tenor (Months)</th>
+            <!--th style="width: 50px;"></th-->
+        </tr>
+        <tr class="top" style="background-color: #FAFAFA">
+            <td class="center">1</td>
+            <td class="left" style="line-height: 15px;">Mr. D Related<br/>
+                Acc No.: -<br/>
+                Acc Status: -</td>
+            <td class="left">-</td>
+            <td class="left">Loan</td>
+            <td class="left" style="line-height: 15px;">Product: EAC1<br/>Project: 90074</td>
+            <td class="right">10,000,000.00</td>
+            <td class="right">8,760,000.00</td>
+            <td class="right">200,000.00</td>
+            <td class="right">MLR + 2.50</td>
+            <td class="right">48</td>
+            <!--td class="center"></td-->
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Total Exposure</td>
+            <td class="right">8,760,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Related - Grand Total Exposure</td>
+            <td class="right"> 36,380,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+        <tr style="background-color: #ffffff;">
+            <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
+        </tr>
+        <tr style="background-color:#f4f8b6;">
+            <td></td>
+            <td colspan="4">Borrower and Related - Grand Total Exposure</td>
+            <td class="right"> 36,380,000.00</td>
+            <td colspan="4"></td>
+        </tr>
+    </table>
     </td>
 </tr>
 <tr>
@@ -217,39 +452,53 @@
         <table class="table_content" cellpadding="0" cellspacing="0">
             <tr>
                 <th style="width: 30px;"></th>
-                <th style="width: 450px;">Collateral Type</th>
-                <th style="width: 150px;">Credit Type</th>
-                <th style="width: 300px;">ประเภทนิติกรรม</th>
+                <th style="width: 400px;">Collateral Type</th>
+                <th style="width: 200px;">Credit Type</th>
+                <th style="width: 200px;">ประเภทนิติกรรม</th>
                 <th style="width: 100px;">ราคาประมาณ</th>
                 <th style="width: 100px;">ราคาประเมิน</th>
                 <th style="width: 100px;">จำนำ/จำนอง</th>
             </tr>
             <tr style="background-color: #FAFAFA">
-                <td rowspan="1" class="center">1</td>
+                <td class="center">1</td>
                 <td style="border-bottom: none"><table class="table_noborder">
-                    <tr><td>ศักยภาพหลักประกัน :</td>
-                        <td>Core Asset</td></tr>
-                    <tr><td>ประเภทหลักประกัน :</td>
-                        <td>อาคารพาณิชย์</td></tr>
-                    <tr><td>กรรมสิทธิ์ :</td>
-                        <td>นาย เอ ตัวอย่าง</td></tr>
-                    <tr><td>ความเกี่ยวพัน :</td>
-                        <td>ผู้กู้</td></tr>
-                    <tr><td>วันที่ประเมิน :</td>
-                        <td>05/05/2012</td></tr>
-                    <tr><td>เลขที่ :</td>
-                        <td>ฉ. ####, ฉ. ๒๒๒๒</td></tr>
+                    <tr><td class="title" style="widht:120px;line-height: 15px;">ศักยภาพหลักประกัน :</td>
+                        <td style="line-height: 15px;">Core Asset</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">ประเภทหลักประกัน :</td>
+                        <td style="line-height: 15px;">อาคารพาณิชย์</td></tr>
+                    <tr><td class="title"  style="line-height: 15px;">กรรมสิทธิ์ :</td>
+                        <td style="line-height: 15px;">นาย เอ ตัวอย่าง</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">ความเกี่ยวพัน :</td>
+                        <td style="line-height: 15px;">ผู้กู้</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">วันที่ประเมิน :</td>
+                        <td style="line-height: 15px;">05/05/2012</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">เลขที่ :</td>
+                        <td style="line-height: 15px;">ฉ. ####, ฉ. ๒๒๒๒"</td></tr>
                     <tr>
-                        <td>ที่อยู่ :</td>
-                        <td></td>
+                        <td class="title" style="line-height: 15px;">ที่อยู่ :</td>
+                        <td style="line-height: 15px;">122 ตัวอย่างที่อยู่ แขวง ตัวอย่าง เขต ตัวอย่าง จ.ตัวอย่าง</td>
                     </tr>
                     <tr>
-                        <td>หมายเหตุ :</td>
-                        <td></td>
+                        <td class="title" style="line-height: 15px;">หมายเหตุ :</td>
+                        <td style="line-height: 15px;">ตัวอย่างหมายเหตุ, Remark Example</td>
                     </tr>
                 </table></td>
-                <td class="center top">Smart Biz O/D , Loan</td>
-                <td class="center top">จำนำเป็นประกัน</td>
+                <td class="left top" style="width: 250px;">
+                    <table class="table_noborder">
+                        <tr class="top">
+                            <td style="widht:120px;line-height: 15px;" colspan="2">Mr. A Example<br/>
+                                Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                                Acc. Status: 01-Normal<br/>
+                                SmartBiz, OD<p:spacer width="5"/> ###,###.00
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="line-height: 15px;"></td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td class="left top">จำนำเป็นประกัน</td>
                 <td class="right top">###,###.00</td>
                 <td class="right top">###,###.00</td>
                 <td class="right top">##,###,###.00</td>
@@ -257,7 +506,7 @@
             <tr style="background-color: #ffffff;">
                 <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="7"></td>
             </tr>
-            <tr style="background-color:#e6e6e6;">
+            <tr style="background-color:#f4f8b6;">
                 <td colspan="4">Total</td>
                 <td class="right">###,###.00</td>
                 <td class="right">###,###.00</td>
@@ -275,9 +524,9 @@
         <table class="table_content" cellpadding="0" cellspacing="0">
             <tr>
                 <th style="width: 30px;"></th>
-                <th style="width: 450px;">Collateral Type</th>
-                <th style="width: 150px;">Credit Type</th>
-                <th style="width: 300px;">ประเภทนิติกรรม</th>
+                <th style="width: 400px;">Collateral Type</th>
+                <th style="width: 200px;">Credit Type</th>
+                <th style="width: 200px;">ประเภทนิติกรรม</th>
                 <th style="width: 100px;">ราคาประมาณ</th>
                 <th style="width: 100px;">ราคาประเมิน</th>
                 <th style="width: 100px;">จำนำ/จำนอง</th>
@@ -285,38 +534,42 @@
             <tr style="background-color: #FAFAFA">
                 <td class="center">1</td>
                 <td style="border-bottom: none"><table class="table_noborder">
-                    <tr><td>ศักยภาพหลักประกัน :</td>
-                        <td>Core Asset</td></tr>
-                    <tr><td>ประเภทหลักประกัน :</td>
-                        <td>อาคารพาณิช</td></tr>
-                    <tr><td>กรรมสิทธิ์ :</td>
-                        <td>นาย ดี รีเรทเต็ด</td></tr>
-                    <tr><td>ความเกี่ยวพัน :</td>
-                        <td>ผู้เกี่ยวข้อง</td></tr>
-                    <tr><td>วันที่ประเมิน :</td>
-                        <td>05/05/2012</td></tr>
-                    <tr><td>เลขที่ :</td>
-                        <td>ฉ. ####, ฉ. ๓๓๓๓</td></tr>
-                    <tr>
-                        <td>ที่อยู่ :</td>
-                        <td></td>
+                    <tr><td class="title" style="width: 120px; line-height: 15px;">ศักยภาพหลักประกัน :</td>
+                        <td style="line-height: 15px;">Core Asset</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">ประเภทหลักประกัน :</td>
+                        <td style="line-height: 15px;">อาคารพาณิช</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">กรรมสิทธิ์ :</td>
+                        <td style="line-height: 15px;">นาย เอ ตัวอย่าง</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">ความเกี่ยวพัน :</td>
+                        <td style="line-height: 15px;">ผู้กู้</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">วันที่ประเมิน :</td>
+                        <td style="line-height: 15px;">05/05/2012</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">เลขที่ :</td>
+                        <td style="line-height: 15px;">ฉ. ####, ฉ. ๓๓๓๓</td></tr>
+                    <tr><td class="title" style="line-height: 15px;">ที่อยู่ :</td>
+                        <td style="line-height: 15px;">123 ตัวอย่างที่อยู่ แขวง ตัวอย่าง เขต ตัวอย่าง จ.ตัวอย่าง</td>
                     </tr>
-                    <tr>
-                        <td>หมายเหตุ :</td>
-                        <td></td>
+                    <tr><td class="title" style="line-height: 15px;">หมายเหตุ :</td>
+                        <td style="line-height: 15px;"></td>
                     </tr>
                 </table></td>
-                <td class="center top">Smart Biz O/D , Loan</td>
-                <td class="center top">จำนำเป็นประกัน</td>
-                <td class="right top">###,###.00</td>
-                <td class="right top">###,###.00</td>
+                <td class="left top" style="width: 250px;">
+                    <table class="table_noborder">
+                        <tr><td style="widht:120px;line-height: 15px;" colspan="2">Mr. D Example<br/>
+                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                            Acc. Status: 01-Normal<br/>
+                            SmartBiz, OD<p:spacer width="5"/> ###,###.00
+                        </td></tr>
+                    </table></td>
+                <td class="left top">จำนองเป็นประกัน</td>
+                <td class="right top">#,###,###.00</td>
+                <td class="right top">#,###,###.00</td>
                 <td class="right top">##,###,###.00</td>
             </tr>
-
             <tr style="background-color: #ffffff;">
                 <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="7"></td>
             </tr>
-            <tr style="background-color:#e6e6e6;">
+            <tr style="background-color:#f4f8b6;">
                 <td colspan="4">Total</td>
                 <td class="right">###,###.00</td>
                 <td class="right">###,###.00</td>
@@ -339,27 +592,48 @@
 </tr>
 <tr>
     <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
+        <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
             <tr>
                 <th style="width: 30px;"></th>
-                <th style="width: 270px;">Guarantor Name</th>
-                <th style="width: 150px;">Ref.</th>
-                <th style="width: 180px;">Credit Type</th>
-                <th style="width: 120px;">Limit</th>
+                <th style="width: 200px;">Guarantor Name</th>
+                <th style="width: 100px;">Ref.</th>
+                <th style="width: 650px;">Credit Type</th>
+                <th style="width: 130px;">Mortgage Value</th>
+                <!--th style="width: 50px;"></th-->
             </tr>
-            <tr style="background-color: #FAFAFA">
+            <tr>
                 <td class="center top">1</td>
-                <td class="center top">Mr. C Guarantor</td>
-                <td class="center top"></td>
-                <td class="center">Smart Biz O/D , Loan</td>
-                <td class="right top">##,###,###.00</td>
+                <td class="top">บสย. Flood</td>
+                <td class="center top">##-#####</td>
+                <td><table class="table_noborder">
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;" >Mr. A Example<br/>
+                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                            Acc. Status: 01-Normal<br/></td>
+                        <td style="line-height: 15px;">SmartBiz Loan</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;">Mr. A Example<br/>
+                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                            Acc. Status: 01-Normal<br/></td>
+                        <td style="line-height: 15px;">SmartBiz OD</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                </table></td>
+                <td class="center top">##,###,###.00</td>
+                <!--td class="option top">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
             </tr>
-            <tr style="background-color: #e6e6e6">
-                <td class="center top">2</td>
-                <td class="center top">บสย. Flood</td>
-                <td class="center top"></td>
-                <td class="center">Smart Biz Loan</td>
-                <td class="right top">##,###,###.00</td>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="5"></td>
+            </tr>
+            <tr style="background-color:#f4f8b6;">
+                <td colspan="4">Total</td>
+                <td class="right">##,###,###.00</td>
             </tr>
         </table>
     </td>
@@ -385,49 +659,122 @@
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Product code</th>
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Project code</th>
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Limit</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Standard)</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Suggest)</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Final)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Standard Price(%)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Suggest Price(%)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Final Price(%)</th>
                 <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Installment</th>
                 <th style="width: 80px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Tenor (Months)</th>
                 <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Front End Fee %</th>
+                <!--th style="width: 50px;"></th-->
             </tr>
             <tr style="background-color: #FAFAFA">
-                <td class="center" rowspan="2" style="padding-right: 2px; padding-left: 2px;">1</td>
-                <td class="center" rowspan="2" style="padding-right: 2px; padding-left: 2px;">New</td>
-                <td class="center" rowspan="2">Y</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">TMB SME SmartBiz</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">OD</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">101</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">94</td>
-                <td class="right" style="padding-right: 2px; padding-left: 2px;">#,###,###.00</td>
-                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px">MOR</td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"> +2.00</td>
-                <td class="center" style="border-right: none;padding-right: 2px;">MOR</td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"> +2.00</td>
-                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px">MOR</td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"> +1.75</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">0.00</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">1.75</td>
+                <td class="center" rowspan="2">1</td>
+                <td class="center" rowspan="2">New</td>
+                <td class="center" rowspan="2">N</td>
+                <td class="left">TMB SME SmartBiz</td>
+                <td class="left">Loan</td>
+                <td class="center"></td>
+                <td class="center"></td>
+                <td class="right">###,###.00</td>
+                <td class="left">MOR + 1.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="right">###,###.00</td>
+                <td class="right"></td>
+                <td class="right">1.75</td>
+                <!--td class="option top" rowspan="2">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
             </tr>
             <tr class="top" style="background-color: #fafafa;">
-                <td class="left" colspan="14" style="padding-top: 5px;">วัดถุประสงค์: หมุนเวียนกิจการ</td>
+                <td class="left" colspan="11"><table class="table_noborder">
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Purpose : </td>
+                        <td style="line-height: 15px;">Loan Purpose Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Remark : </td>
+                        <td style="line-height: 15px;">Remark Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Disbursement : </td>
+                        <td style="line-height: 15px;">Clean Loan 7 days</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">One Bank One Day : </td>
+                        <td style="line-height: 15px;">Yes</td>
+                    </tr>
+                </table></td>
+            </tr>
+            <tr  class="top" style="background-color: #e6e6e6">
+                <td class="center" rowspan="4">2</td>
+                <td class="center" rowspan="4">New</td>
+                <td class="center" rowspan="4">Y</td>
+                <td class="center" rowspan="3">TMB SME SmartBiz</td>
+                <td class="center" rowspan="3">OD</td>
+                <td class="center" rowspan="3"></td>
+                <td class="center" rowspan="3"></td>
+                <td class="right" rowspan="3">###,###.00</td>
+                <td class="left">MOR + 1.00</td>
+                <td class="left">MOR + 1.75</td>
+                <td class="left">MOR + 1.75</td>
+                <td class="right">###,###.00</td>
+                <td class="right">6</td>
+                <td class="right" rowspan="3">1.75</td>
+                <!--td class="option" rowspan="4">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="left">MOR + 1.25</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="right">###,###.00</td>
+                <td class="center">6</td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.50</td>
+                <td class="left">MOR + 2.50</td>
+                <td class="right">###,###.00</td>
+                <td class="center">24</td>
+            </tr>
+            <tr class="top" style="background-color: #e6e6e6;">
+                <td class="left" colspan="11"><table class="table_noborder">
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Purpose : </td>
+                        <td style="line-height: 15px;">Loan Purpose Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Remark : </td>
+                        <td style="line-height: 15px;">Remark Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Disbursement : </td>
+                        <td style="line-height: 15px;">Normal Disbursements</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">One Bank One Day : </td>
+                        <td style="line-height: 15px;">No</td>
+                    </tr>
+                </table></td>
             </tr>
             <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="17"></td>
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="14"></td>
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
-                <td class="title left" colspan="4" style="border-right: none;border-left: none">Total</td>
+                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Proposed Credit</td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
-                <td style="border-left: none; border-right: none" colspan="11"></td>
+                <td style="border-left: none; border-right: none" colspan="6"></td>
             </tr>
         </table>
     </td>
 </tr>
 
-
+<tr>
+    <td colspan="2" style="line-height: 10px;"><p:spacer width="2"/></td>
+</tr>
 
 
 <tr>
@@ -442,12 +789,16 @@
 <tr>
     <td colspan="2"><input type="radio" name="cusType" checked="true" value="N"/> Normal <p:spacer width="5px"/><input type="radio" name="cusType" value="P"/> Prime </td>
 </tr>
+<!--tr>
+    <td class="left middle">Tier: <input type="text" class="smallest" value=""/><p:spacer width="5px"/><p:commandButton value="Add" styleClass="small" onclick="proposeCreditDlg.show()"/></td>
+    <td style="text-align: right"></td>
+</tr-->
 <tr>
     <td colspan="2">
         <table class="table_content" cellpadding="0" cellspacing="0">
             <tr>
                 <th style="width: 30px; padding-right: 2px; padding-left: 2px;"></th>
-                <th style="width: 150px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Decision</th>
+                <th style="width: 100px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Decision</th>
                 <th style="width: 70px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Type</th>
                 <th style="width: 70px;line-height: 15px; padding-right: 2px; padding-left: 2px;">Refinance</th>
                 <th style="width: 150px;padding-right: 2px; padding-left: 2px;">Product Program</th>
@@ -455,82 +806,134 @@
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Product code</th>
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Project code</th>
                 <th style="width: 100px;padding-right: 2px; padding-left: 2px;">Limit</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Standard)</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Suggest)</th>
-                <th colspan="2" style="width: 180px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Int/Fee (%) (Final)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Standard Price(%)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Suggest Price(%)</th>
+                <th style="width: 150px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Final Price(%)</th>
                 <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Installment</th>
                 <th style="width: 80px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Tenor (Months)</th>
                 <th style="width: 100px; line-height: 15px;padding-right: 2px; padding-left: 2px;">Front End Fee %</th>
+                <!--th style="width: 50px;"></th-->
             </tr>
             <tr style="background-color: #FAFAFA">
-                <td class="center" rowspan="2" style="padding-right: 2px; padding-left: 2px;">1</td>
-                <td class="left top" rowspan="2" style="padding-right: 2px; padding-left: 2px;width: 150px;"><div style="display: inline-block;width: 150px;">Approved: <input type="radio" value="Y" name="creditDecision"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="creditDecision"/> No</div></td>
-                <td class="left top" rowspan="2" style="padding-right: 2px; padding-left: 2px;">New</td>
-                <td class="center top" rowspan="2">Y</td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">
-                    <select class="large">
-                        <option>- Please Select -</option>
-                        <option>TMB SME SmartBiz</option>
-                        <option>Top Up Bancassurance</option>
-                    </select>
-                </td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;">
-                    <select class="large">
-                        <option>Loan</option>
-                        <option>OD</option>
-                    </select>
-                </td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="productCode" value=""/></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small" name="projectCode" value=""/></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
-                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
-                    <option>MOR</option>
-                    <option>MLR</option>
-                </select></td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
-                <td class="center" style="border-right: none;padding-right: 2px;"><select style="width: 60px;">
-                    <option>MOR</option>
-                    <option>MLR</option>
-                </select></td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
-                <td class="center" style="border-right: none;padding-right: 2px; padding-left: 2px"><select style="width: 60px;">
-                    <option>MOR</option>
-                    <option>MLR</option>
-                </select></td>
-                <td style="border-left: none; padding-left: 2px; padding-right: 2px;"><input type="text" class="smallest_4s right" value=""/></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="###,###.00"/></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value=""/></td>
-                <td class="center" style="padding-right: 2px; padding-left: 2px;"><input type="text" class="small right" value="1.75"/></td>
+                <td class="center" rowspan="2">1</td>
+                <td class="left top" rowspan="2" style="padding-right: 2px; padding-left: 2px;width: 150px;">Approved: <div style="display: inline-block;width: 150px;"><input type="radio" value="Y" name="creditDecision" disabled="disabled"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="creditDecision" disabled="disabled"/> No</div></td>
+                <td class="center" rowspan="2">New</td>
+                <td class="center" rowspan="2">N</td>
+                <td class="left">TMB SME SmartBiz</td>
+                <td class="left">Loan</td>
+                <td class="center"></td>
+                <td class="center"></td>
+                <td class="right">###,###.00</td>
+                <td class="left">MOR + 1.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="right">###,###.00</td>
+                <td class="right"></td>
+                <td class="right">1.75</td>
+                <!--td class="option top" rowspan="2">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
             </tr>
             <tr class="top" style="background-color: #fafafa;">
-                <td class="left" colspan="14" style="padding-top: 5px;">วัดถุประสงค์: <textarea rows="3" cols="150" name="purpose">หมุนเวียนกิจการ</textarea></td>
+                <td class="left" colspan="11"><table class="table_noborder">
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Purpose : </td>
+                        <td style="line-height: 15px;">Loan Purpose Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Remark : </td>
+                        <td style="line-height: 15px;">Remark Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Disbursement : </td>
+                        <td style="line-height: 15px;">Clean Loan 7 days</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">One Bank One Day : </td>
+                        <td style="line-height: 15px;">Yes</td>
+                    </tr>
+                </table></td>
+            </tr>
+            <tr  class="top" style="background-color: #e6e6e6">
+                <td class="center" rowspan="4">2</td>
+                <td class="left top" rowspan="4" style="padding-right: 2px; padding-left: 2px;width: 150px;">Approved: <div style="display: inline-block;width: 150px;"><input type="radio" value="Y" name="creditDecision" disabled="disabled"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="creditDecision" disabled="disabled"/> No</div></td>
+                <td class="center" rowspan="4">New</td>
+                <td class="center" rowspan="4">Y</td>
+                <td class="center" rowspan="3">TMB SME SmartBiz</td>
+                <td class="center" rowspan="3">OD</td>
+                <td class="center" rowspan="3"></td>
+                <td class="center" rowspan="3"></td>
+                <td class="right" rowspan="3">###,###.00</td>
+                <td class="left">MOR + 1.00</td>
+                <td class="left">MOR + 1.75</td>
+                <td class="left">MOR + 1.75</td>
+                <td class="right">###,###.00</td>
+                <td class="right">6</td>
+                <td class="right" rowspan="3">1.75</td>
+                <!--td class="option" rowspan="4">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="left">MOR + 1.25</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.00</td>
+                <td class="right">###,###.00</td>
+                <td class="right">6</td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="left">MOR + 2.00</td>
+                <td class="left">MOR + 2.50</td>
+                <td class="left">MOR + 2.50</td>
+                <td class="right">###,###.00</td>
+                <td class="right">24</td>
+            </tr>
+            <tr class="top" style="background-color: #e6e6e6;">
+                <td class="left" colspan="11"><table class="table_noborder">
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Purpose : </td>
+                        <td style="line-height: 15px;">Loan Purpose Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Remark : </td>
+                        <td style="line-height: 15px;">Remark Example</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">Disbursement : </td>
+                        <td style="line-height: 15px;">Normal Disbursements</td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="line-height: 15px;">One Bank One Day : </td>
+                        <td style="line-height: 15px;">No</td>
+                    </tr>
+                </table></td>
             </tr>
             <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="15"></td>
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
-                <td class="title left" colspan="7" style="border-right: none;border-left: none">Total Approve Credit</td>
+                <td class="title left" colspan="7" style="border-right: none;border-left: none">Total Approved Credit</td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
-                <td style="border-left: none; border-right: none" colspan="9"></td>
+                <td style="border-left: none; border-right: none" colspan="6"></td>
             </tr>
             <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="15"></td>
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
                 <td class="title left" colspan="7" style="border-right: none;border-left: none">Total Borrower Exposure</td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
-                <td style="border-left: none; border-right: none" colspan="9"></td>
+                <td style="border-left: none; border-right: none" colspan="6"></td>
             </tr>
             <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="18"></td>
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="15"></td>
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
                 <td class="title left" colspan="7" style="border-right: none;border-left: none">Total Group Exposure</td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
-                <td style="border-left: none; border-right: none" colspan="9"></td>
+                <td style="border-left: none; border-right: none" colspan="6"></td>
             </tr>
         </table>
     </td>
@@ -566,68 +969,124 @@
     <td colspan="2"><h2>Proposed Collateral</h2></td>
 </tr>
 <tr>
-    <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
+    <td colspan="100%">
+        <table>
             <tr>
-                <th style="width: 30px;"></th>
-                <th style="width: 450px;">Collateral Type</th>
-                <th style="width: 150px;">Credit Type</th>
-                <th style="width: 100px;">ภาระหนี้/วงเงินเดิม</th>
-                <th style="width: 300px;">ประเภทนิติกรรม</th>
-                <th style="width: 100px;">ราคาประมาณ</th>
-                <th style="width: 100px;">ราคาประเมิน</th>
-                <th style="width: 100px;">สินเชื่อตามเกณฑ์</th>
-                <th style="width: 100px;">จำนำ/จำนอง</th>
+                <td class="title" style="width:150px;">JOB ID :</td>
+                <td colspan="3" style="width: 200px;">#001<p:spacer width="20px;" height="20px;"/><input type="checkbox" value="Y" name="requestAppraisal"/><p:spacer width="5px;"/>Request Appraisal</td>
             </tr>
-            <tr class="top" style="background-color: #FAFAFA">
-                <td class="center">1</td>
-                <td style="border-bottom: none"><table class="table_noborder">
-                    <tr><td>ศักยภาพหลักประกัน :</td>
-                        <td>Core Asset</td></tr>
-                    <tr><td>ประเภทหลักประกัน :</td>
-                        <td>อาคารพาณิชย</td></tr>
-                    <tr><td>กรรมสิทธิ์ :</td>
-                        <td>นาย เอ ตัวอย่าง</td></tr>
-                    <tr><td>ความเกี่ยวพัน :</td>
-                        <td>ผู้ก</td></tr>
-                    <tr><td>วันที่ประเมิน :</td>
-                        <td>05/08/2012</td></tr>
-                    <tr><td>เลขที่ :</td>
-                        <td>ฉ. ####, ฉ. ๔๔๔๔</td></tr>
-                    <tr>
-                        <td>ที่อยู่ :</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>หมายเหตุ :</td>
-                        <td></td>
-                    </tr>
-                </table></td>
-                <td class="center top">Smart Biz O/D</td>
-                <td class="right">###,###.00</td>
-                <td class="center top">จำนำเป็นประกัน</td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="right">##,###,###.00</td>
-                <td class="right">##,###,###.00</td>
+            <tr>
+                <td class="title" style="width:150px;">AAD Decision :</td>
+                <td colspan="3" >Accept</td>
             </tr>
+            <tr>
+                <td class="title" style="width:150px;">Reason :</td>
+                <td colspan="3" >Reason Example</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Remark :</td>
+                <td colspan="3">Remark Example</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Usage :</td>
+                <td>Use</td>
 
-            <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="9"></td>
             </tr>
-            <tr style="background-color:#e6e6e6;">
-                <td colspan="3">Total</td>
-                <td class="right">0.00</td>
-                <td class="center"></td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="right">##,###,###.00</td>
+            <tr>
+                <td class="title" style="width:150px;">Type of Usage :</td>
+                <td colspan="3">Type of Usage</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Mortgage Condition :</td>
+                <td colspan="3">Mortgage Condition XXX</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Credit Type :</td>
+                <td class="3"><table class="table_content" style="width: 100%;">
+                    <tr>
+                        <th></th>
+                        <th>Account</th>
+                        <th>Product Program</th>
+                        <th>Credit Facility</th>
+                        <th>Limit</th>
+                    </tr>
+                    <tr>
+                        <td class="center">1</td>
+                        <td class="left" style="line-height: 15px;">Mr. A Example<br/>
+                            Acc No.: 012-3-45678-9 Suf. 001<br/>
+                            Acc Status: 01-Normal</td>
+                        <td>SmartBiz</td>
+                        <td>Loan</td>
+                        <td class="title right">###,###.00</td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%"><p:separator/></td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Potential :</td>
+                <td>Core Asset</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Title deed :</td>
+                <td>12, 1234</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Address :</td>
+                <td colspan="3">Jompol, Jatujak, Bankok</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;line-height: 15px;">Head Coll - Appraisal Value :</td>
+                <td colspan="3">3,000,000.00</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Head Coll Type:</td>
+                <td>Land and Building</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table class="table_content">
+                        <tr>
+                            <th style="width: 30px;"></th>
+                            <th style="width: 300px;">Sub Coll type</th>
+                            <th style="width: 120px;">Title Deed</th>
+                            <th style="width: 220px;">Collateral Owner</th>
+                            <th style="width: 200px;">Reference</th>
+                            <th style="width: 200px;">Mortgate Type</th>
+                            <th style="width: 200px;">Condition</th>
+                            <th style="width: 120px;">Appraisal Value</th>
+                            <th style="width: 120px;">Mortgage Value</th>
+                        </tr>
+                        <tr class="top">
+                            <td class="center">1</td>
+                            <td style="line-height: 15px;">Land<br/>Address : 3000 Jompol, Jatujak, Bangkok</td>
+                            <td>ฉ. 12345</td>
+                            <td style="line-height: 15px;">Mr. A Example<br/>Land Office : Ladpraow</td>
+                            <td style="line-height: 15px;">Borrower</td>
+                            <td>จำนอง</td>
+                            <td></td>
+                            <td class="right">2,000,000.00</td>
+                            <td class="right">3,200,000.00</td>
+                        </tr>
+                        <tr class="top">
+                            <td class="center">2</td>
+                            <td style="line-height: 15px;">นส3<br/>Address : 3000 Jompol, Jatujak, Bangkok</td>
+                            <td>นส3. 12</td>
+                            <td style="line-height: 15px;">Mr. A Example<br/>Land Office : Ladpraow</td>
+                            <td></td>
+                            <td style="line-height: 15px;">จำนอง, บันทึกผูกพันสัญญาเดิม</td>
+                            <td>โฉนด 1234</td>
+                            <td class="right">200,000.00</td>
+                            <td class="right">480,000.00</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
     </td>
 </tr>
-
 <tr>
     <td colspan="2"><p:spacer/></td>
 </tr>
@@ -635,87 +1094,132 @@
     <td colspan="2"><h2>Approved Collateral</h2></td>
 </tr>
 <tr>
-    <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
+    <td colspan="100%">
+        <table>
             <tr>
-                <th style="width: 30px;"></th>
-                <th style="width: 150px;">Decision</th>
-                <th style="width: 450px;">Collateral Type</th>
-                <th style="width: 150px;">Credit Type</th>
-                <th style="width: 150px;">ภาระหนี้/วงเงินเดิม</th>
-                <th style="width: 250px;">ประเภทนิติกรรม</th>
-                <th style="width: 100px;">ราคาประมาณ</th>
-                <th style="width: 100px;">ราคาประเมิน</th>
-                <th style="width: 100px;">สินเชื่อตามเกณฑ์</th>
-                <th style="width: 100px;">จำนำ/จำนอง</th>
+                <td class="title" style="width:150px;">JOB ID :</td>
+                <td colspan="3" style="width: 200px;">#001 <!--p:spacer width="20px" height="10px;"/><p:commandButton value="Edit" styleClass="small"/><p:spacer width="20px" height="10px;"/><p:commandButton value="Delete" styleClass="small"/--></td>
+
             </tr>
-            <tr class="top" style="background-color: #FAFAFA">
-                <td rowspan="2" class="center">1</td>
-                <td class="left top" rowspan="2" style="padding-right: 2px; padding-left: 2px;width: 150px;"><div style="display: inline-block;width: 150px;">Approved: <input type="radio" value="Y" name="creditDecision"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="creditDecision"/> No</div></td>
-                <td style="border-bottom: none;width: 450px;"><table class="table_noborder" style="width: 400px">
-                    <tr><td>ศักยภาพหลักประกัน :</td>
-                        <td><select class="large">
-                            <option>Core Asset</option>
-                        </select></td></tr>
-                    <tr><td>ประเภทหลักประกัน :</td>
-                        <td><select style="width: 250px">
-                            <option>อาคารพาณิชย์</option>
-                        </select></td></tr>
-                    <tr><td>กรรมสิทธิ์ :</td>
-                        <td><input type="text" class="larger" value="นาย เอ ตัวอย่าง"/></td></tr>
-                    <tr><td>ความเกี่ยวพัน :</td>
-                        <td><select  style="width: 250px">
-                            <option>ผู้กู้</option>
-                        </select></td></tr>
-                    <tr><td>วันที่ประเมิน :</td>
-                        <td><input type="text" class="medium" value="05/05/2012"/></td></tr>
-                    <tr><td>เลขที่ :</td>
-                        <td><input type="text" class="medium" value="ฉ. ####, ฉ. ๒๒๒๒"/></td></tr>
-                </table></td>
-                <td class="center top"><textarea rows="5" cols="20">Smart Biz O/D , Loan</textarea></td>
-                <td class="center"><input type="text" class="small right" value="0.00"/></td>
-                <td class="center top">
-                    <select style="width: 250px">
-                        <option>จำนำเป็นประกัน</option>
-                    </select>
+            <tr>
+                <td class="title" style="width:150px;">AAD Decision :</td>
+                <td colspan="3" >Accept</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Reason :</td>
+                <td colspan="3" >Reason Example</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Remark :</td>
+                <td colspan="3">Remark Example</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Usage :</td>
+                <td>Use</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Type of Usage :</td>
+                <td colspan="3">Type of Usage</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">UW Decision :</td>
+                <td colspan="3">Approved: <div style="display: inline-block;width: 100px;"><input type="radio" value="Y" name="collateralDecision" disabled="disabled"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="collateralDecision" disabled="disabled"/> No</div></td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">UW Remark :</td>
+                <td colspan="3" >Remark Example</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Mortgage Condition :</td>
+                <td colspan="3">Mortgage Condition XXX</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Credit Type :</td>
+                <td class="3"><table class="table_content" style="width: 100%;">
+                    <tr>
+                        <th></th>
+                        <th>Account</th>
+                        <th>Product Program</th>
+                        <th>Credit Facility</th>
+                        <th>Limit</th>
+                    </tr>
+                    <tr>
+                        <td class="center">1</td>
+                        <td class="left" style="line-height: 15px;">Mr. A Example<br/>
+                            Acc No.: 012-3-45678-9 Suf. 001<br/>
+                            Acc Status: 01-Normal</td>
+                        <td>SmartBiz</td>
+                        <td>Loan</td>
+                        <td class="title right">###,###.00</td>
+                    </tr>
+                </table>
                 </td>
-                <td class="center"><input type="text" class="small right" value="###,###.00"/></td>
-                <td class="center"><input type="text" class="small right" value="###,###.00"/></td>
-                <td class="center"><input type="text" class="small right" value="##,###,###.00"/></td>
-                <td class="center"><input type="text" class="small right" value="##,###,###.00"/></td>
             </tr>
             <tr>
-                <td colspan="5">
-                    <table class="table_noborder">
+                <td colspan="100%"><p:separator/></td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Potential :</td>
+                <td>Core Asset</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Title deed :</td>
+                <td>12, 1234</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Address :</td>
+                <td colspan="3">Jompol, Jatujak, Bankok</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;line-height: 15px;">Head Coll - Appraisal Value :</td>
+                <td colspan="3">3,000,000.00</td>
+            </tr>
+            <tr>
+                <td class="title" style="width:150px;">Head Coll Type:</td>
+                <td>Land and Building</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table class="table_content">
                         <tr>
-                            <td>ที่อยู่ :</td>
-                            <td><input type="text" style="width: 700px" value=""/></td>
+                            <th style="width: 30px;"></th>
+                            <th style="width: 300px;">Sub Coll type</th>
+                            <th style="width: 120px;">Title Deed</th>
+                            <th style="width: 220px;">Collateral Owner</th>
+                            <th style="width: 200px;">Reference</th>
+                            <th style="width: 200px;">Mortgate Type</th>
+                            <th style="width: 200px;">Condition</th>
+                            <th style="width: 120px;">Appraisal Value</th>
+                            <th style="width: 120px;">Mortgage Value</th>
                         </tr>
-                        <tr>
-                            <td>หมายเหตุ :</td>
-                            <td><input type="text" style="width: 700px" value=""/></td>
+                        <tr class="top">
+                            <td class="center">1</td>
+                            <td style="line-height: 15px;">Land<br/>Address : 3000 Jompol, Jatujak, Bangkok</td>
+                            <td>ฉ. 12345</td>
+                            <td style="line-height: 15px;">Mr. A Example<br/>Land Office : Ladpraow</td>
+                            <td style="line-height: 15px;">Borrower</td>
+                            <td>จำนอง</td>
+                            <td></td>
+                            <td class="right">2,000,000.00</td>
+                            <td class="right">3,200,000.00</td>
+                        </tr>
+                        <tr class="top">
+                            <td class="center">2</td>
+                            <td style="line-height: 15px;">นส3<br/>Address : 3000 Jompol, Jatujak, Bangkok</td>
+                            <td>นส3. 12</td>
+                            <td style="line-height: 15px;">Mr. A Example<br/>Land Office : Ladpraow</td>
+                            <td></td>
+                            <td style="line-height: 15px;">จำนอง, บันทึกผูกพันสัญญาเดิม</td>
+                            <td>โฉนด 1234</td>
+                            <td class="right">200,000.00</td>
+                            <td class="right">480,000.00</td>
                         </tr>
                     </table>
                 </td>
-
-            </tr>
-
-            <tr style="background-color: #ffffff;">
-                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="10"></td>
-            </tr>
-            <tr style="background-color:#e6e6e6;">
-                <td colspan="4">Total</td>
-                <td class="right">0.00</td>
-                <td></td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="right">###,###.00</td>
-                <td class="center">##,###,###.00</td>
             </tr>
         </table>
     </td>
 </tr>
-
 <tr>
     <td colspan="2"><p:spacer/></td>
 </tr>
@@ -727,46 +1231,100 @@
 </tr>
 <tr>
     <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
+        <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
             <tr>
                 <th style="width: 30px;"></th>
-                <th style="width: 270px;">Guarantor Name</th>
-                <th style="width: 150px;">Ref.</th>
-                <th style="width: 180px;">Credit Type</th>
-                <th style="width: 120px;">Limit</th>
+                <th style="width: 250px;">Guarantor Name</th>
+                <th style="width: 120px;">Ref.</th>
+                <th style="width: 550px;">Credit Type</th>
+                <th style="width: 130px;">Mortgage Value</th>
+
             </tr>
-            <tr style="background-color: #fafafa">
+            <tr>
                 <td class="center top">1</td>
-                <td class="center top">บสย.</td>
-                <td class="center top"></td>
-                <td class="center">Smart Biz Loan</td>
+                <td class="top">บสย. Flood</td>
+                <td class="center top">##-#####</td>
+                <td><table class="table_noborder">
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;" >Mr. A Example<br/>
+                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                            Acc. Status: 01-Normal<br/></td>
+                        <td style="line-height: 15px;">SmartBiz Loan</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;">-</td>
+                        <td style="line-height: 15px;">SmartBiz OD</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                </table></td>
                 <td class="center top">##,###,###.00</td>
+
+            </tr>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="5"></td>
+            </tr>
+            <tr style="background-color:#f4f8b6;">
+                <td colspan="4">Total</td>
+                <td class="right">##,###,###.00</td>
+
             </tr>
         </table>
     </td>
-</tr>
-<tr><td colspan="2"><p:spacer width="2px"/></td></tr>
+</tr><tr><td colspan="2"><p:spacer width="2px"/></td></tr>
 <tr>
     <td colspan="2"><h2>Approved Guarantor</h2></td>
 </tr>
+<!--tr>
+    <td class="left middle"><p:commandButton value="Add" styleClass="small" onclick="proposeGuarantorDlg.show()"/></td>
+    <td><a style="cursor: pointer;" href="#">[View Change]</a></td>
+</tr-->
 <tr>
     <td colspan="2">
-        <table class="table_content" cellpadding="0" cellspacing="0">
+        <table class="table_content" cellpadding="0" cellspacing="0" style="width: 100%">
             <tr>
                 <th style="width: 30px;"></th>
-                <th style="width: 150px;">Decision</th>
-                <th style="width: 270px;">Guarantor Name</th>
-                <th style="width: 150px;">Ref.</th>
-                <th style="width: 180px;">Credit Type</th>
-                <th style="width: 120px;">Limit</th>
+                <th style="width: 100px;">Decision</th>
+                <th style="width: 200px;">Guarantor Name</th>
+                <th style="width: 120px;">Ref.</th>
+                <th style="width: 550px;">Credit Type</th>
+                <th style="width: 130px;">Mortgage Value</th>
+                <!--th style="width: 50px;"></th-->
             </tr>
-            <tr style="background-color: #fafafa">
+            <tr>
                 <td class="center top">1</td>
-                <td class="left top" rowspan="2" style="padding-right: 2px; padding-left: 2px;width: 150px;"><div style="display: inline-block;width: 150px;">Approved: <input type="radio" value="Y" name="creditDecision"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="creditDecision"/> No</div></td>
-                <td class="center top"><input type="text" style="width: 250px" value="บสย."/></td>
-                <td class="center top"><input type="text" class="medium" value=""/></td>
-                <td class="center"><textarea rows="5" cols="20">Smart Biz Loan</textarea></td>
-                <td class="center top"><input type="text" class="medium right" value="##,###,###.00"/></td>
+                <td class="left top" style="padding-right: 2px; padding-left: 2px;width: 100px;">Approved: <div style="display: inline-block;width: 100px;"><input type="radio" value="Y" name="guarantorDecision" disabled="disabled"/> Yes <p:spacer width="5px"/><input type="radio" value="N" name="guarantorDecision" disabled="disabled"/> No</div></td>
+                <td class="top">Mr. C Guarantor</td>
+                <td class="center top">##-#####</td>
+                <td><table class="table_noborder">
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;" >Mr. A Example<br/>
+                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                            Acc. Status: 01-Normal<br/></td>
+                        <td style="line-height: 15px;">SmartBiz Loan</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                    <tr>
+                        <td style="widht:120px;line-height: 15px;">-</td>
+                        <td style="line-height: 15px;">SmartBiz OD</td>
+                        <td>#,###,###.00</td>
+                        <td>Guarantee Amt. #,###,###.00</td>
+                    </tr>
+                </table></td>
+                <td class="center top">##,###,###.00</td>
+                <!--td class="option top">
+                    <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/></td-->
+            </tr>
+            <tr style="background-color: #ffffff;">
+                <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="6"></td>
+            </tr>
+            <tr style="background-color:#f4f8b6;">
+                <td colspan="5">Total</td>
+                <td class="right">##,###,###.00</td>
             </tr>
         </table>
     </td>
@@ -849,21 +1407,61 @@
 
 <tr><td colspan="2"><p:spacer width="2"/></td></tr>
 <tr><td colspan="2"><p:separator/></td></tr>
-<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr><td colspan="2"><h2>Written/Approval History</h2></td></tr>
 <tr>
-    <td colspan="2" class="center">
-        <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-        <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+    <td colspan="2">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width: 30px;"></th>
+                <th style="width: 150px;">Action</th>
+                <th style="width: 200px;">Action By</th>
+                <th style="width: 150px;">Role</th>
+                <th style="width: 200px;">Position</th>
+                <th style="width: 180px;">Date</th>
+                <th style="width: 320px;">Comments</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Written</td>
+                <td>Mr. ABDM Maker</td>
+                <td>ABDM</td>
+                <td>ผู้ช่วยผู้จัดการพัฒนาธุรกิจ</td>
+                <td>15/02/2556 10:05</td>
+                <td>-</td>
+            </tr>
+            <tr style="background-color: #e6e6e6;">
+                <td>2</td>
+                <td>Produced</td>
+                <td>Mr. BDM Maker</td>
+                <td>BDM</td>
+                <td>ผู้จัดการพัฒนาธุรกิจ</td>
+                <td>20/02/2556 10:05</td>
+                <td>-</td>
+            </tr>
+        </table>
     </td>
 </tr>
+<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr><td colspan="2"><p:separator/></td></tr>
+<tr>
+    <td colspan="2" class="center">
+        <p:commandButton value="Save" styleClass="small" />
+        <p:commandButton value="Cancel" styleClass="small" />
+    </td>
+</tr>
+
 </table>
 </div>
 <div class="bottom_line"></div>
 </div>
 <div class="clear"></div>
 <!-- Start Footer -->
-<ui:include src="../resources/footer.xhtml"/>
+<ui:include src="resources/footer.xhtml"/>
 <!-- End Footer -->
+<p:dialog id="proposeCredit" header="Approve Credit Information" widgetVar="proposeCreditDlg"
+          modal="true" width="700px;">
+    <ui:include src="resources/dialog/addProposeCreditFacility.xhtml" />
+</p:dialog>
 </div>
 </h:body>
 </f:view>

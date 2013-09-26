@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.NCB;
 import org.slf4j.Logger;
 

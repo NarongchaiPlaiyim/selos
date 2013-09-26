@@ -5,83 +5,344 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
     <h:head>
-        <title>SE-LOS : Template</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
+        <title>SE-LOS : Basic Info</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
     </h:head>
     <h:body>
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="../resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo_fullapp_bdm.xhtml" />
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="../resources/header_detail.xhtml" />
+            <ui:include src="resources/header_detail_fullapp_bdm.xhtml" />
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="../resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Basic Information</div>
                 <div id="content">
                     <table id="content_form">
                         <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
-                            <span style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>></tr>
+                            <span style="cursor: pointer;font-style: oblique">[View Track Change]</span>
+                            </td></tr>
                         <tr>
-                            <td class="title" style="width: 150px">CA No.:</td>
-                            <td style="width: 250px">04731660051802013007</td>
-                            <td class="title" style="width: 150px">Ref CA No.:</td>
-                            <td><input type="text" value="" class="large" name="refCANo"/><p:commandButton value="View Related CA" styleClass="medium" onclick="ncbDlg.hide()"/>
-                                <p:commandButton value="Duplicate Last CA" styleClass="large" onclick="ncbDlg.hide()"/></td>
+                            <td colspan="100%"><p:separator/></td>
                         </tr>
                         <tr>
-                            <td class="title">Request Type:</td>
-                            <td colspan=""><select name="requestType" disabled="disabled" class="largest">
-                                <option value="new">New Request</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Product Group :</td>
-                            <td colspan="3">
-                                <select class="largest">
-                                    <option>- Please Select -</option>
-                                    <option selected="selected">SmartBiz</option>
-                                    <option>F-Cash</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Product Program:</td>
-                            <td colspan="3">
-                                <select class="largest">
-                                    <option>TMB SME SmartBiz</option>
-                                    <option>Top Up Bancassurance</option>
-                                </select><p:spacer width="2"/> <p:commandButton value="Add" styleClass="small"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td colspan="3"><table class="table_content" style="width: 350px" cellpadding="0" cellspacing="0">
+                            <td style="width: 20px;"></td>
+                            <td><table>
                                 <tr>
-                                    <th style="width:30px;"></th>
-                                    <th style="width:270px;">Product Program</th>
-                                    <th style="width:50px;"></th>
+                                    <td colspan="100%"><p:commandButton value="Refresh Interface Info" styleClass="larger"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="center">1</td>
-                                    <td>TMB SME SmartBiz</td>
-                                    <td><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+                                    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5px" height="5px"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 160px">CA No.:</td>
+                                    <td colspan="3"><input type="text" class="largest" value="04731660051802013007"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title" style="width: 160px">Ref CA No.:</td>
+                                    <td colspan="3"><input type="text" value="" class="largest" name="refCANo"/><p:commandButton value="Duplicate CA" styleClass="large"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Request Type:</td>
+                                    <td colspan="3"><select name="requestType" disabled="disabled" class="largest">
+                                        <option value="new">New Request</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Product Group :</td>
+                                    <td colspan="3">
+                                        <select class="largest">
+                                            <option>- Please Select -</option>
+                                            <option selected="selected">SmartBiz</option>
+                                            <option>F-Cash</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Product Program:</td>
+                                    <td colspan="3">
+                                        <select class="largest">
+                                            <option>TMB SME SmartBiz</option>
+                                            <option>Top Up Bancassurance</option>
+                                        </select><p:spacer width="2"/><p:commandButton value="Add" styleClass="small"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="3"><table class="table_content" style="width: 350px" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <th style="width:30px;"></th>
+                                            <th style="width:270px;">Product Program</th>
+                                            <th style="width:50px;"></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="center">1</td>
+                                            <td>TMB SME SmartBiz</td>
+                                            <td><p:commandButton icon="ui-icon-trash" title="Remove"/></td>
+                                        </tr>
+                                    </table></td>
+                                </tr>
+                                <tr><td colspan="100%" style="line-height: 15px;"><p:spacer width="2px;"/></td></tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="3"><div style="width: 600px;background-color: #bbeeff; border: solid 1px #0470BB;padding: 5px 10px 5px 10px;border-spacing: 0px">
+                                        <table style="width: 600px; border: none; background-color: #bbeeff;"  cellpadding="0" cellspacing="0">
+                                            <tr style="border: none;">
+                                                <td class="title" style="width: 100px;" colspan="2">Characteristic</td>
+
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td style="line-height: 15px;width: 80px;"></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="noFeePay" value="Y"/><p:spacer width="5px;"/>Unpaid fee at the time of application / Unpaid insurance in TMB</td>
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="noLG" value="Y"/><p:spacer width="5px;"/>No Pending Claim LG</td>
+                                            </tr>
+                                        </table>
+                                    </div></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="3"><div style="width: 600px;background-color: #bbeeff; border: solid 1px #0470BB;padding: 5px 10px 5px 10px;border-spacing: 0px">
+                                        <table style="width: 600px; border: none; background-color: #bbeeff;"  cellpadding="0" cellspacing="0">
+                                            <tr style="border: none;">
+                                                <td class="title" style="width: 100px;" colspan="2">Characteristic For F-Cash Program</td>
+
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td style="line-height: 15px;width: 80px;"></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="isAbility" value="Y"/><p:spacer width="5px;"/>ลูกหนี้มีความสามารถในการรับงานที่ออกหนังสือค้ำประกัน</td>
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="isNoComplainLGHistory" value="Y"/><p:spacer width="5px;"/>ต้องไม่มีประวัติ "L/G ถูกร้องเรียน"</td>
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="isNoAbandonTask" value="Y"/><p:spacer width="5px;"/>ต้องไม่มีประวัติ "เป็นผู้ละทิ้งงาน หรือ ถูกเพิกถอนใบอนุญาต"</td>
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="isNoDelayTask" value="Y"/><p:spacer width="5px;"/>ต้องไม่มีประวัติ "การทำงานล่าช้ากว่าปกติ"</td>
+                                            </tr>
+                                            <tr style="border: none;">
+                                                <td></td>
+                                                <td style="border: none;line-height: 12px;"><input type="checkbox" name="isBalance" value="Y"/><p:spacer width="5px;"/>ความเพียงพอของแหล่งทุน : ลูกนี้มีวงเงินทุนหมุนเวียนคงเหลือ หรือ เงินฝากปลอดภาระไม่น้อยกว่า 15% ของมูลค่างานที่ขอออก L/G </td>
+                                            </tr>
+                                        </table>
+                                    </div></td>
+                                </tr>
+                                <tr><td colspan="100%" style="line-height: 15px;"><p:spacer width="2px;"/></td></tr>
+                                <tr>
+                                    <td class="title">Special Program:</td>
+                                    <td colspan="3"><input type="radio" name="isSpecial" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px"/><input type="radio" id="isSpecialY" name="isSpecial" value="Y" checked="true"/><p:spacer width="5px"/>Yes<p:spacer width="5px;"/>
+                                        <p:spacer width="5px"/><select class="medium" id="specialProgramName">
+                                        <option>- Please Select -</option>
+                                        <option>BOT</option>
+                                        <option>GSB</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Refinance IN:</td>
+                                    <td><input type="radio" name="isRefinanceIN" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px"/><input type="radio" name="isRefinanceIN" value="Y"/><p:spacer width="5px"/>Yes
+                                        <p:spacer width="5px"/><select class="medium" id="refinanceInBankID">
+                                            <option>- Please Select -</option>
+                                            <option>BAAC</option>
+                                            <option>BAY</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Refinance OUT:</td>
+                                    <td><input type="radio" name="isRefinanceOUT" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px"/><input type="radio" name="isRefinanceOUT" value="Y"/><p:spacer width="5px"/>Yes
+                                        <p:spacer width="5px"/><select class="medium" id="refinanceOUTBankID">
+                                            <option>- Please Select -</option>
+                                            <option>BAAC</option>
+                                            <option>BAY</option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Risk Customer Type:</td>
+                                    <td><select class="largest" id="riskCusType">
+                                        <option>KOMB - One Man Enterprise</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Qualitative :</td>
+                                    <td><input type="radio" name="qualitative" value="A"/><p:spacer width="5px"/>A
+                                        <input type="radio" name="qualitative" value="B"/><p:spacer width="5px"/>B</td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Existing SME Customer :</td>
+                                    <td><input type="radio" name="isExistingCust" value="A"/><p:spacer width="5px"/>No
+                                        <input type="radio" name="isExistingCust" value="B"/><p:spacer width="5px"/>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Since :</td>
+                                    <td><input type="text" class="small" value="2555"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Last Review Date :</td>
+                                    <td><select class="smaller" style="height: 21px;" name="date">
+                                        <option value="1">01</option>
+                                        <option value="2">02</option>
+                                        <option value="3">03</option>
+                                    </select><p:spacer width="2" height="0"/>
+                                        <select class="smaller" name="month">
+                                            <option value="1">เม.ย.</option>
+                                            <option value="2">พ.ค.</option>
+                                            <option value="3">มิ.ย.</option>
+                                        </select><p:spacer width="2" height="0"/>
+                                        <select class="smaller" style="height: 21px;" name="year">
+                                            <option value="1">2555</option>
+                                            <option value="2">2556</option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Extended Review :</td>
+                                    <td><select class="smaller" style="height: 21px;" name="date">
+                                        <option value="1">01</option>
+                                        <option value="2">02</option>
+                                        <option value="3">03</option>
+                                    </select><p:spacer width="2" height="0"/>
+                                        <select class="smaller" name="month">
+                                            <option value="1">เม.ย.</option>
+                                            <option value="2">พ.ค.</option>
+                                            <option value="3">มิ.ย.</option>
+                                        </select><p:spacer width="2" height="0"/>
+                                        <select class="smaller" style="height: 21px;" name="year">
+                                            <option value="1">2555</option>
+                                            <option value="2">2556</option>
+                                        </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">SBF/SCF Score :</td>
+                                    <td><select id="scfScore" class="smaller">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title top">ขอสินเชื่อในนามเดิมหรือไม่ :</td>
+                                    <td class="top"><input type="radio" name="sameName" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px;"/><input type="radio" name="sameName" value="Y"/><p:spacer width="5px"/>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td class="title top" style="line-height: 15px;">ใช้สินเชื่อทางตรงกับ TMB อย่างน้อย 1 ปี :</td>
+                                    <td class="top"><input type="radio" name="oneYear" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px;"/><input type="radio" name="oneYear" value="Y"/><p:spacer width="5px"/>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td class="title top" style="line-height: 15px;">ผ่านการทำ Annual Review อย่างน้อย 1 ครั้ง :</td>
+                                    <td class="top"><input type="radio" name="annualReview" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px;"/><input type="radio" name="annualReview" value="Y"/><p:spacer width="5px"/>Yes</td>
+                                </tr>
+                                <tr>
+                                    <td class="title">รูปแบบการขอกู้</td>
+                                    <td><select class="largest" id="lendingType">
+                                        <option>- Please Select -</option>
+                                        <option>บุคคลธรรมดา</option>
+                                        <option>บุคคลธรรมดา อ้างอิง นิติบุคคล</option>
+                                        <option>นิติบุคคล</option>
+                                        <option>นิติบุคคล อ้างอิง บุคคลธรรมดา</option>
+                                        <option>นิติบุคคล อ้างอิง นิติบุคคล</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Name from CRS</td>
+                                    <td colspan="3"><input type="text" class="largest_m" value="MR. A Example"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title">Referal Name :</td>
+                                    <td colspan="3"><input type="text" name="referalName" class="largest" value=""/><p:spacer width="20px" height="5px"/><span class="title">ID :  </span><p:spacer width="5px" height="5px"/><input type="text" name="referalName" class="large" value=""/></td>
                                 </tr>
                             </table></td>
                         </tr>
                         <tr>
-                            <td class="title">เข้าร่วมโครงการพิเศษหรือไม่:</td>
-                            <td colspan="3"><input type="radio" name="isSpecial" value="N"/> No <input type="radio" name="isSpecial" value="Y"/> Yes</td>
+                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="2px" /></td>
                         </tr>
                         <tr>
-                            <td class="title">Refinance:</td>
-                            <td colspan="3"><input type="radio" name="isSpecial" value="N"/> No <input type="radio" name="isSpecial" value="Y"/> Yes</td>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20px;"></td>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td colspan="4"><h2>Opening Account Information</h2></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"><p:commandButton value="Add" styleClass="small" onclick="addOpeningAccountDlg.show()"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"><table class="table_content">
+                                            <tr>
+                                                <th></th>
+                                                <th style="width: 200px;">Account Name</th>
+                                                <th style="width: 200px;">Account Type</th>
+                                                <th style="width: 200px;">Product</th>
+                                                <th style="width: 200px;">Purpose</th>
+                                                <th style="width: 50px;"></th>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>Mr. A Example</td>
+                                                <td>Savings Account</td>
+                                                <td>-</td>
+                                                <td>เพื่อค้ำประกันสินเชื่อ</td>
+                                                <td><p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                                    <p:commandButton icon="ui-icon-trash" title="Delete"/></td>
+                                            </tr>
+
+                                        </table>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="2px" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+
+                        <tr>
+                            <td></td>
+                            <td><h2>BA Information</h2></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="100%"><table>
+                                <tr>
+                                    <td class="title" style="width: 160px">Apply BA :</td>
+                                    <td><input type="radio" name="isApplyBA" value="N"/><p:spacer width="5px"/>No<p:spacer width="5px;"/><input type="radio" name="isApplyBA" value="Y"/><p:spacer width="5px"/>Yes<p:spacer width="15px"/></td>
+
+                                </tr>
+                                <tr>
+                                    <td class="title">BA Payment Method :</td>
+                                    <td><input type="radio" name="isTopUpBA" value="Y"/><p:spacer width="5px"/>Top Up BA<p:spacer width="5px;"/><input type="radio" name="isTopUpBA" value="Y"/><p:spacer width="5px"/>Directly Pay by Customer</td>
+                                </tr>
+                            </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="2px" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" class="center">
+                                <p:commandButton value="Save" styleClass="small"/>
+                                <p:commandButton value="Cancel" styleClass="small"/>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -89,8 +350,12 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="../resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml" />
             <!-- End Footer -->
+            <p:dialog id="openingAccount" header="Opening Account Information" widgetVar="addOpeningAccountDlg"
+                      modal="true">
+                <ui:include src="resources/dialog/addOpeningAccount.xhtml" />
+            </p:dialog>
         </div>
     </h:body>
 </f:view>
