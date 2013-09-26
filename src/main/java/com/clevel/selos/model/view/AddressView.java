@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AddressType;
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.SubDistrict;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,6 +17,11 @@ public class AddressView {
     private District district;
     private SubDistrict subDistrict;
     private String postalCode;
+    private Country country;
+    private Country countryCode;
+    private String phoneNumber;
+    private String extension;
+
 
 
     public AddressView(){
@@ -107,6 +109,38 @@ public class AddressView {
         this.postalCode = postalCode;
     }
 
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public Country getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(Country countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -120,6 +154,10 @@ public class AddressView {
                 .append("district", district)
                 .append("subDistrict", subDistrict)
                 .append("postalCode", postalCode)
+                .append("country", country)
+                .append("countryCode", countryCode)
+                .append("phoneNumber", phoneNumber)
+                .append("extension", extension)
                 .toString();
     }
 }

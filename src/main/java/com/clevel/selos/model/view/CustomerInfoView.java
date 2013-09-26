@@ -61,6 +61,7 @@ public class CustomerInfoView implements Serializable {
     private boolean ewsFlag;
     private boolean reviewFlag;
     private String reason;
+    private BusinessType businessType;
     private CustomerInfoView spouse;
 
     public CustomerInfoView(){
@@ -510,6 +511,13 @@ public class CustomerInfoView implements Serializable {
     public void setSpouse(CustomerInfoView spouse) {
         this.spouse = spouse;
     }
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
+    }
 
     @Override
     public String toString() {
@@ -562,6 +570,8 @@ public class CustomerInfoView implements Serializable {
                 .append("ewsFlag", ewsFlag)
                 .append("reviewFlag", reviewFlag)
                 .append("reason", reason)
+                .append("businessType", businessType)
+                .append("spouse", spouse)
                 .toString();
     }
 }

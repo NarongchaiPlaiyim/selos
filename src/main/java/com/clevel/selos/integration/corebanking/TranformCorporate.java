@@ -46,6 +46,8 @@ public class TranformCorporate implements Serializable{
         currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getDistrict())));
         currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getProvince())));
         currentAddress.setPostalCode(corporateModel.getPostcode());
+        currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getCountry())));
+        currentAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getCountry())));
 
         customerInfoView.setCurrentAddress(currentAddress);
 
