@@ -41,10 +41,10 @@
 <table class="content_table_form">
 
 <tr>
-    <td style="width: 250px" class="title">
+    <td style="width: 50px" class="title">
         <h:outputText value="#{msg.get('app.ncbSummaryResult')}"/>
     </td>
-    <td>
+    <td style="width: 500px">
         <div style="width: 90px;height: 20px; line-height:20px;float: left;"
              class="result_green center">GREEN
         </div>
@@ -56,7 +56,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.ncbCheckingDate}" id="checkingDate"  disabled="true"/>
+        <p:inputText value="#{fullappNcb.ncbResultView.checkingDate}" id="checkingDate" disabled="true"/>
     </td>
 </tr>
 
@@ -66,7 +66,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText value="#{fullappNcb.ncbResultView.noOfNCBCheckIn6months}"   disabled="true"/>
+        <p:inputText value="#{fullappNcb.ncbResultView.checkIn6Month}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -75,7 +75,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText  value="#{fullappNcb.ncbResultView.paymentClass}"   disabled="true"/>
+        <p:inputText value="#{fullappNcb.ncbResultView.paymentClass}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -84,7 +84,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText  value="#{fullappNcb.ncbResultView.typeOfCurrentPayment}"   disabled="true"/>
+        <p:inputText value="#{fullappNcb.ncbResultView.currentPaymentType}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -93,7 +93,7 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText  value="#{fullappNcb.ncbResultView.typeOfHistoryPayment}"  disabled="true"/>
+        <p:inputText value="#{fullappNcb.ncbResultView.historyPaymentType}" disabled="true"/>
     </td>
 </tr>
 <tr>
@@ -102,10 +102,53 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.nplFlag}"   disabled="true" >
-            <f:selectItem itemLabel="Yes" itemValue="Y"/>
-            <f:selectItem itemLabel="No" itemValue="N"/>
-        </h:selectOneRadio>
+        <h:form>
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width: 160px;">
+                        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.nplFlag}">
+                            <f:selectItem itemLabel="Yes" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </h:selectOneRadio>
+                     </td>
+                    <td class="title">
+                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.nplTMBFlag}"/>
+                        <h:outputText value="TMB :"></h:outputText>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplTMBMonth}">
+                  <!--          <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months"
+                                           itemLabel="#{months.Month}"
+                                           itemValue="#{months.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplTMBYear}">
+                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months2"
+                                           itemLabel="#{months2.Month}"
+                                           itemValue="#{months2.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.nplOtherFlag}"/><h:outputText
+                            value="Other :"/>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplOtherMonth}">
+                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months3"
+                                           itemLabel="#{months3.Month}"
+                                           itemValue="#{months3.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.nplOtherYear}">
+                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months4"
+                                           itemLabel="#{months4.Month}"
+                                           itemValue="#{months4.value}"/>-->
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
     </td>
 </tr>
 <tr>
@@ -114,10 +157,53 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <h:selectOneRadio id="TDRFlag" value="#{fullappNcb.ncbResultView.tdrFlag}"   disabled="true" >
-            <f:selectItem itemLabel="Yes" itemValue="Y"/>
-            <f:selectItem itemLabel="No" itemValue="N"/>
-        </h:selectOneRadio>
+        <h:form>
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width: 160px;">
+                        <h:selectOneRadio id="NPLFlag" value="#{fullappNcb.ncbResultView.tdrFlag}">
+                            <f:selectItem itemLabel="Yes" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </h:selectOneRadio>
+                    </td>
+                    <td class="title">
+                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.tdrTMBFlag}"/>
+                        <h:outputText value="TMB :"></h:outputText>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrTMBMonth}">
+                           <!-- <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months"
+                                           itemLabel="#{months.Month}"
+                                           itemValue="#{months.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrTMBYear}">
+                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months2"
+                                           itemLabel="#{months2.Month}"
+                                           itemValue="#{months2.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectBooleanCheckbox value="#{fullappNcb.ncbResultView.tdrOhterFlag}"/><h:outputText
+                            value="Other :"/>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrOtherMonth}">
+                           <!-- <f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months3"
+                                           itemLabel="#{months3.Month}"
+                                           itemValue="#{months3.value}"/>-->
+                        </h:selectOneMenu>
+                        <p:spacer width="5px;"/>
+                        <h:selectOneMenu value="#{fullappNcb.ncbResultView.tdrOtherYear}">
+                            <!--<f:selectItems value="#{fullappNcb.ncbResultView.monthsList}"
+                                           var="months4"
+                                           itemLabel="#{months4.Month}"
+                                           itemValue="#{months4.value}"/>-->
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
     </td>
 </tr>
 <tr>
@@ -126,8 +212,8 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-       <!-- <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>-->
-       <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
+        <!-- <p:inputText   value="#{fullappNcb.ncbResultView.tdrPaymentCondition}"   disabled="true"/>-->
+        <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
                             value="#{fullappNcb.ncbRecordView.tdrCondition.id}" disabled="true">
             <f:selectItems value="#{fullappNcb.tdrConditionList}"
                            var="dlgTDRConditionList"
@@ -170,24 +256,39 @@
             <tr>
                 <td>
 
-                    <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordViewList}" rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
+                    <p:dataTable id="resultNcbDetail" var="item" value="#{fullappNcb.ncbRecordViewList}"
+                                 rowKey="#{item.ncbRecordView}" rowIndexVar="rowIndex">
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column headerText="No." styleClass="center" style="width:22px;"/>
-                                <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center" style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center" style="width: 25px;"/>
-                                <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"  style="width: 70px;"/>
-                                <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center" style="width: 90px;"/>
-                                <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center" style="width: 90px;"/>
-                                <p:column headerText="#{msg.get('app.limit')}" styleClass="center" style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center" style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.installment')}" styleClass="center" style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"  style="width: 100px;"/>
-                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center" style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center" style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}" styleClass="center" style="width: 120px;"/>
-                                <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"  style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center" style="width: 30px;"/>
+                                <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
+                                          style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center"
+                                          style="width: 25px;"/>
+                                <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"
+                                          style="width: 70px;"/>
+                                <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center"
+                                          style="width: 90px;"/>
+                                <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center"
+                                          style="width: 90px;"/>
+                                <p:column headerText="#{msg.get('app.limit')}" styleClass="center"
+                                          style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center"
+                                          style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.installment')}" styleClass="center"
+                                          style="width: 80px;"/>
+                                <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
+                                          style="width: 100px;"/>
+                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center"
+                                          style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center"
+                                          style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}"
+                                          styleClass="center" style="width: 120px;"/>
+                                <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"
+                                          style="width: 110px;"/>
+                                <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center"
+                                          style="width: 30px;"/>
                                 <p:column headerText="BUTTON" styleClass="center" style="width:60px;"/>
                             </p:row>
                         </p:columnGroup>
@@ -211,37 +312,37 @@
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.dateOfInfo}"  id="dateOfInfo">
+                                <h:outputText value="#{item.dateOfInfo}" id="dateOfInfo">
                                     <f:convertDateTime pattern="d/M/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.accountOpenDate}"  id="accountOpenDate">
+                                <h:outputText value="#{item.accountOpenDate}" id="accountOpenDate">
                                     <f:convertDateTime pattern="d/M/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
                                 <h:outputText value="#{item.limit}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
                                 <h:outputText value="#{item.outstanding}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
                                 <h:outputText value="#{item.installment}">
-                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
-                                <h:outputText value="#{item.dateOfDebtRestructuring}"  id="dateOfDebtRestructuring">
+                                <h:outputText value="#{item.dateOfDebtRestructuring}" id="dateOfDebtRestructuring">
                                     <f:convertDateTime pattern="d/M/yyyy"/>
                                 </h:outputText>
                             </p:column>
@@ -271,14 +372,14 @@
                                                  action="#{fullappNcb.onEditNcbDetail()}"
                                                  update=":ncbDlgForm"
                                                  oncomplete="ncbDlg.show();">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{fullappNcb.selectNcbRecordItem}"/>
-                                <f:setPropertyActionListener value="#{rowIndex}"
-                                                             target="#{fullappNcb.rowIndex}"/>
+                                    <f:setPropertyActionListener value="#{item}"
+                                                                 target="#{fullappNcb.selectNcbRecordItem}"/>
+                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                 target="#{fullappNcb.rowIndex}"/>
                                 </p:commandButton>
                                 <p:commandButton title="Remove"
                                                  icon="ui-icon-trash"
-                                                 oncomplete="confirmDeleteNcbRecordDlg.show()" >
+                                                 oncomplete="confirmDeleteNcbRecordDlg.show()">
                                     <f:setPropertyActionListener value="#{item}"
                                                                  target="#{fullappNcb.selectNcbRecordItem}"/>
                                 </p:commandButton>
@@ -286,8 +387,10 @@
 
                             <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
                                 <p:row>
-                                    <p:column colspan="4"  style="text-align: center" footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
-                                    <p:column colspan="12" style="text-align: left"  footerText="#{item.moneyTotal}"></p:column>
+                                    <p:column colspan="4" style="text-align: center"
+                                              footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
+                                    <p:column colspan="12" style="text-align: left"
+                                              footerText="#{item.moneyTotal}"></p:column>
                                 </p:row>
                             </p:columnGroup>
 
