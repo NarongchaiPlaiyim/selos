@@ -45,12 +45,6 @@ public class TranformIndividual implements Serializable{
     @Inject
     CountryDAO countryDAO;
     @Inject
-    KYCLevelDAO kycLevelDAO;
-    @Inject
-    RelationDAO relationDAO;
-    @Inject
-    ReferenceDAO referenceDAO;
-    @Inject
     AddressTypeDAO addressTypeDAO;
     @Inject
     MaritalStatusDAO maritalStatusDAO;

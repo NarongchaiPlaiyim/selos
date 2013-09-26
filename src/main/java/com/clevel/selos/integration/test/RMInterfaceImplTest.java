@@ -27,7 +27,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
 
     @Override
-    public CustomerInfoView getIndividualInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerInfoView getIndividualInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("======= IndividualServiceTest =======");
         CustomerInfoView customerInfoView=new CustomerInfoView();
@@ -65,7 +65,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CustomerInfoView getCorporateInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerInfoView getCorporateInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateModel corporateModel = new CorporateModel();
@@ -107,7 +107,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("======= CustomerAccountServiceTest =======");
 
