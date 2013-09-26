@@ -23,9 +23,9 @@ public class NCBInfoControl extends BusinessControl {
     @Inject
     Logger log;
     @Inject
-    NCBDetailTransform NCBDetailTransform;
+    com.clevel.selos.transform.NCBDetailTransform NCBDetailTransform;
     @Inject
-    NCBTransform NCBTransform;
+    com.clevel.selos.transform.NCBTransform NCBTransform;
     @Inject
     NCBDAO ncbDAO;
     @Inject
