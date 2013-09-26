@@ -6,8 +6,6 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
-import com.clevel.selos.transform.NCBDetailTransform;
-import com.clevel.selos.transform.NCBTransform;
 
 import org.slf4j.Logger;
 

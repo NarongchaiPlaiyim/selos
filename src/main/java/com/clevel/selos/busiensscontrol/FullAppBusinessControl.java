@@ -31,10 +31,6 @@ public class FullAppBusinessControl extends BusinessControl {
     @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
     @Inject
-    NCBDetailTransform ncbDetailTransform;
-    @Inject
-    NcbTransform ncbTransform;
-    @Inject
     NCBDAO ncbDAO;
     @Inject
     NCBDetailDAO ncbDetailDAO;
@@ -156,24 +152,4 @@ public class FullAppBusinessControl extends BusinessControl {
     }
 
 
-
-    public void onSaveNCBToDB(NcbResultView ncbResultView , List<NcbRecordView> ncbRecordViewList){
-        try{
-            log.info("onSaveNCBToDB begin");
-
-            NCB ncb = ncbTransform.transformToModel(ncbResultView);
-            ncbDAO.persist(ncb);
-            log.info("persist ncb");
-            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbRecordViewList,ncb) ;
-            ncbDetailDAO.persist(ncbDetailList);
-        }catch (Exception e){
-            log.error( "onSaveNCBToDB error" + e);
-        }finally{
-
-            log.info( "onSaveNCBToDB end" );
-        }
-
-
-
-    }
 }
