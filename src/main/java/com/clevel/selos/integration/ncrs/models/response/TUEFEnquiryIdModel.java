@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("id")
-public class TUEFEnquiryIdModel {
+public class TUEFEnquiryIdModel implements Serializable {
     
     @XStreamAlias("idtype")
     private String idtype;

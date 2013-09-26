@@ -1,18 +1,48 @@
 package com.clevel.selos.integration.ncbi.service;
 
+import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ncbi.model.NcbiRequestModel;
+import com.clevel.selos.integration.ncbi.model.RequestModel;
+import com.clevel.selos.integration.nccrs.service.NCBIExportImp;
+import com.thoughtworks.xstream.XStream;
+
 import javax.inject.Inject;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+
 
 public class NCBIService implements Serializable {
+    @Inject
+    @NCB
+    NCBIExportImp exportImp;
 
     @Inject
     public NCBIService() {
     }
 
     public void process(){
+
+
+        String xml = null;
+        String result = null;
+        XStream xStream = null;
+        NcbiRequestModel requestModel = null;
+
+        xStream = new XStream();
+        xStream.processAnnotations(NcbiRequestModel.class);
+
+        RequestModel model = new RequestModel();
+//        model.setCA_NUMBER();
+
+        ArrayList<RequestModel> modelArrayList = new ArrayList<RequestModel>();
+//        modelArrayList.add()
+        requestModel = new NcbiRequestModel(modelArrayList);
+
+        xml = xStream.toXML(requestModel);
+
         FileWriter fstream = null;
         BufferedWriter out = null;
         try {

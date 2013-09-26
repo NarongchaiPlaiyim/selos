@@ -1,14 +1,19 @@
 package com.clevel.selos.integration.ncrs.service;
 
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.nccrs.service.NCBIExportImp;
 import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
+import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncrs.ncrsmodel.ResponseNCRSModel;
 import com.clevel.selos.integration.ncrs.vaildation.ValidationImp;
+import com.clevel.selos.integration.test.NCBInterfaceImpTest;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class NCRSService implements Serializable {
     @Inject
@@ -25,6 +30,17 @@ public class NCRSService implements Serializable {
     @Inject
     ValidationImp validationImp;
 
+    @Inject
+    NCBInterfaceImpTest ncbInterfaceImpTest;
+
+    @Inject
+    @NCB
+    NCBIExportImp exportImp;
+
+    @Inject
+    @NCB
+    NCBResultImp resultImp;
+
     public final String ERROR = "ER01001";
 
     @Inject
@@ -35,70 +51,66 @@ public class NCRSService implements Serializable {
 
         /*try {
             log.debug("NCRS process.");
-            NCRSResponse ncrsResponse = ncrsInterfaceImpTest.request(ncrsModel);
+            NCRSResponseModel ncrsResponse = ncbInterfaceImpTest.request(ncrsModel);
             NameModel nameModel = ncrsResponse.getBodyModel().getTransaction().getName();
             log.debug("NCRS TrackingID. {}",ncrsResponse.getBodyModel().getTransaction().getTrackingid());
             log.debug("NCRS DateOfBirth. {}",nameModel.getDateofbirth());
+            log.debug("NCRS Test {}",ncrsResponse.getBodyModel().getErrormsg());
+            String test = ncrsResponse.getBodyModel().getErrormsg();
+
+            if ("null".equals(test)){
+                log.debug("NCRS Test {}","String is null");
+            }
+
+            if (null == test){
+                log.debug("NCRS Test {}","String is null pointer");
+            }
+
+            String user = ncrsResponse.getHeaderModel().getUser();
+
+            if (user == null)log.debug("NCRS User is null {}", user);
+            if ("".equals(user))log.debug("NCRS User is emtry {}", user);
+
             IdModel idModel = ncrsResponse.getBodyModel().getTransaction().getId();
             idModel.getIdnumber();
 
         } catch (Exception e) {
             log.error("NCRS Exception : {}", e);
-        }  */
+        }*/
 
-        log.debug("NCRS process.");
+        ArrayList<ResponseNCRSModel> responseModelArrayList = null;
+
+
+        if(true){//
         try {
-            //validationImp.validation(ncrsModel);
-
-            log.debug("NCRS process. Call  : requestOnline(NCRSModel)");
-            NCRSResponseModel ncrsResponse =  ncrsImp.requestOnline(ncrsModel);
-
-            if(null!=ncrsResponse){
-                if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
-                    //The response (Online) has succeeded
-                    log.debug("NCRS The response (Online) has succeeded");
-                    //The response will be return (XML Transaction record)
-                    log.debug("NCRS User id is {}",ncrsResponse.getHeaderModel().getUser());
-                    log.debug("NCRS Password id is {}",ncrsResponse.getHeaderModel().getPassword());
-                    log.debug("NCRS Command id is {}",ncrsResponse.getHeaderModel().getCommand());
-
-                }else {
-                    log.debug("NCRS The response (Online) has failed");
-                    log.debug("NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
-                    //Exception NCB
-                    //if you want to know Error message
-                    //response.getBodyModel().getErrormsg();
-                    //throw new ValidationException("Exception : NCB");
+            log.debug("NCRS process()");
+            boolean flag = resultImp.isChecked(ncrsModel.getAppRefNumber());
+            log.debug("NCRS flag is {}", flag);
+            if (!flag){
+                responseModelArrayList = ncrsImp.requestOnline(ncrsModel);
+                for (ResponseNCRSModel responseModel : responseModelArrayList){
+                    if("FAILED".equals(responseModel.getResult())){
+                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    } else {
+                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    }
                 }
-            }else {
-                log.debug("NCRS process. Response form requestOnline is null");
-                log.debug("NCRS process. Call  : requestOffline(NCRSModel)");
-                ncrsResponse =  ncrsImp.requestOffline(ncrsModel);
-                if(!ERROR.equals(ncrsResponse.getHeaderModel().getCommand())){
-                    //The response (Offline) has succeeded
-                    log.debug("NCRS The response (Offline) has succeeded");
-
-                    log.debug("NCRS Tracking id is {}",ncrsResponse.getBodyModel().getsTrackingid());
-                    log.debug("NCRS Result id is {}",ncrsResponse.getBodyModel().getsResult());
-                    ncrsResponse.getBodyModel().getsResult();
-                    //The response will be return (trackingid and result)
-
-                    //code
-                    //response.getBodyModel().getsTrackingid();
-                    //response.getBodyModel().getsResult();
-
-                }else {
-                    log.debug("NCRS The response (Offline) has failed");
-                    log.debug("NCRS The error message is {}",ncrsResponse.getBodyModel().getErrormsg());
-                    //if you want to know Error message
-                    //response.getBodyModel().getErrormsg();
-                    // I don't know...
+            } else {
+                responseModelArrayList =  ncrsImp.requestOffline(ncrsModel);
+                for (ResponseNCRSModel responseModel : responseModelArrayList){
+                    if("FAILED".equals(responseModel.getResult())){
+                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    } else {
+                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",responseModel.getIdNumber(), responseModel.getResult(), responseModel.getReason());
+                    }
                 }
-
             }
+
         } catch (Exception e) {
-            log.error("NCRS Exception : ", e);
+            log.error("NCRS Exception : {}", e.getMessage());
         }
+        }//
+
     }
 
 }

@@ -24,10 +24,10 @@ public class BizStakeholder {
     private BizInfoDetail bizInfoDetail;
 
     @Column(name = "stake_holder_type")
-    private BigDecimal stakeholderType;
+    private String stakeholderType;
 
     @Column(name = "no")
-    private BigDecimal no;
+    private long no;
 
     @Column(name = "name")
     private String name;
@@ -72,19 +72,19 @@ public class BizStakeholder {
         this.id = id;
     }
 
-    public BigDecimal getStakeholderType() {
+    public String getStakeholderType() {
         return stakeholderType;
     }
 
-    public void setStakeholderType(BigDecimal stakeholderType) {
+    public void setStakeholderType(String stakeholderType) {
         this.stakeholderType = stakeholderType;
     }
 
-    public BigDecimal getNo() {
+    public long getNo() {
         return no;
     }
 
-    public void setNo(BigDecimal no) {
+    public void setNo(long no) {
         this.no = no;
     }
 

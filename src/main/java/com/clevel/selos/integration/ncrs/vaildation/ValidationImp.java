@@ -4,8 +4,7 @@ package com.clevel.selos.integration.ncrs.vaildation;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.service.NCRSModel;
-import com.clevel.selos.integration.ncrs.vaildation.Validation;
+import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;
@@ -58,23 +57,23 @@ public class ValidationImp implements Validation, Serializable {
             throw new ValidationException(message.get("107"));
         }
 
-        if(!ValidationUtil.isValueInRange(1, 2, model.getNameList())){
-            //Name can't be more than 2 names
-        } else {
-            ArrayList<TUEFEnquiryNameModel> arrayList = model.getNameList();
-            for(TUEFEnquiryNameModel nameModel : arrayList){
-                validation(nameModel);
-            }
-        }
-
-        if(!ValidationUtil.isValueInRange(1, 4, model.getIdList())){
-            //ID can't be more than 4 ids
-        } else {
-            ArrayList<TUEFEnquiryIdModel> arrayList = model.getIdList();
-            for(TUEFEnquiryIdModel idModel : arrayList){
-                validation(idModel);
-            }
-        }
+//        if(!ValidationUtil.isValueInRange(1, 2, model.getNameList())){
+//            //Name can't be more than 2 names
+//        } else {
+//            ArrayList<TUEFEnquiryNameModel> arrayList = model.getNameList();
+//            for(TUEFEnquiryNameModel nameModel : arrayList){
+//                validation(nameModel);
+//            }
+//        }
+//
+//        if(!ValidationUtil.isValueInRange(1, 4, model.getIdList())){
+//            //ID can't be more than 4 ids
+//        } else {
+//            ArrayList<TUEFEnquiryIdModel> arrayList = model.getIdList();
+//            for(TUEFEnquiryIdModel idModel : arrayList){
+//                validation(idModel);
+//            }
+//        }
 
 
 

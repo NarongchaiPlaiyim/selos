@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("trackingid")
-public class TrackingIdModel {
+public class TrackingIdModel implements Serializable {
     @XStreamAlias("trackingid")
     private String trackingid;
 

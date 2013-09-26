@@ -68,8 +68,8 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        CustomerInfoView customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getReqId(),searchIndividual.getType(),
-                         searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getCustNbr(),
+                         searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CITIZEN_ID);
 
 
 
@@ -92,8 +92,8 @@ public class TestService implements Serializable{
 
     public void corporate() throws Exception {
 
-        CustomerInfoView customerInfoView = rmInterfaceImpl.getCorporateInfo(searchIndividual.getReqId(), searchIndividual.getType(),
-                searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID);
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getCorporateInfo(searchIndividual.getCustNbr(),
+                searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CITIZEN_ID);
 
 
         printDetail=customerInfoView.toString();
@@ -103,8 +103,8 @@ public class TestService implements Serializable{
 
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo(searchIndividual.getReqId(), searchIndividual.getType(),
-                searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID);
+        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo(searchIndividual.getCustNbr(),
+                searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.TMBCUS_ID);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");

@@ -3,9 +3,6 @@ package com.clevel.selos.integration.nccrs.vaildation;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.nccrs.service.NCCRSModel;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.service.NCRSModel;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;

@@ -25,7 +25,7 @@ public class WorkCase implements Serializable {
 
     @Column(name="wob_number")
     private String wobNumber;
-    @Column(name="lock")
+    @Column(name="case_lock")
     private int lock;
     @Column(name="lock_user")
     private String lockUser;
@@ -44,15 +44,17 @@ public class WorkCase implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;
+    @OneToOne
+    @JoinColumn(name="create_by")
+    private User createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name="modify_by")
     private User modifyBy;
-
 
     public WorkCase() {
     }
@@ -129,6 +131,14 @@ public class WorkCase implements Serializable {
         this.createDate = createDate;
     }
 
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
     public Date getModifyDate() {
         return modifyDate;
     }
@@ -157,6 +167,7 @@ public class WorkCase implements Serializable {
                 append("caseStatus", caseStatus).
                 append("customerList", customerList).
                 append("createDate", createDate).
+                append("createBy", createBy).
                 append("modifyDate", modifyDate).
                 append("modifyBy", modifyBy).
                 toString();

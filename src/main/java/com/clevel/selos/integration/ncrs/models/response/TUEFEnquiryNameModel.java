@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("name")
-public class TUEFEnquiryNameModel {
+public class TUEFEnquiryNameModel implements Serializable {
     
     @XStreamAlias("familyname")
     private String familyname;

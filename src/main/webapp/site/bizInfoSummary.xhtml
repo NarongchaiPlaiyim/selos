@@ -55,7 +55,7 @@
                                         <th style="width:60px; line-height: 15px;">AR</th>
                                         <th style="width:60px; line-height: 15px;">AP</th>
                                         <th style="width:60px; line-height: 15px;">INV</th>
-                                        <th style="width:70px; line-height: 15px;"><h:outputText value="#{msg.get('app.comment')}"/></th>
+                                        <th style="width:70px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizComment')}"/></th>
                                         <th style="width:50px;"></th>
                                     </tr>
                                     <tr>
@@ -73,7 +73,7 @@
                                         <td class="right">-</td>
                                         <td class="right">ผ่าน</td>
                                         <td class="option">
-                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('businessInfoDetail.jsf');return;"/>
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('bizInfoDetail.jsf');return;"/>
                                         </td>
                                     </tr>
                                     <tr style="background-color:#f4f8b6;">
@@ -105,9 +105,9 @@
                             <td colspan="6">
                                 <p:dataTable id="businessInfoTable"
                                              var="bizInfo"
-                                             value="#{businessInfoSummary.bizInfoFullViewList}"
+                                             value="#{bizInfoSummary.bizInfoFullViewList}"
                                              paginator="false"
-                                             rowKey="#{bizInfo.comment}"
+                                             rowKey="#{bizInfo.bizComment}"
                                              style="width: 100%;"
                                              rowIndexVar="rowIndex">
 
@@ -115,13 +115,13 @@
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{msg.get('app.comment')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfo.comment}"/>
+                                    <p:column headerText="#{msg.get('app.bizComment')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfo.bizComment}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit"
-                                                         action="#{businessInfoSummary.onViewDetail()}"
+                                                         action="#{bizInfoSummary.onViewDetail()}"
                                                          oncomplete="document.location.replace('businessInfoDetail.jsf');return;"
 
                                                         />

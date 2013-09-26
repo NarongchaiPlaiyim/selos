@@ -56,20 +56,34 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     }
 
+    private String documentTypeValue;
+    private String searchByValue;
     @Override
-    public CustomerInfoView
-    getIndividualInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getIndividualInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
-        searchIndividual.setReqId(reqId);
+
+        if(DocumentType.CITIZEN_ID==documentType){
+            documentTypeValue="CI";
+        }else if(DocumentType.PASSPORT==documentType){
+            documentTypeValue="PP";
+        }
+
+        if(SearchBy.CITIZEN_ID==searchBy){
+            searchByValue="card";
+        }else if(SearchBy.TMBCUS_ID==searchBy){
+            searchByValue="code";
+        }
+
+        searchIndividual.setReqId("generateBySystem");
         searchIndividual.setCustType("P");
-        searchIndividual.setType("CI");
-        searchIndividual.setCustNbr("");
-        searchIndividual.setCustId(custId);
+        searchIndividual.setType(documentTypeValue);
+        searchIndividual.setCustNbr(tmbCusID);
+        searchIndividual.setCustId(registrationID);
         searchIndividual.setCustName("");
         searchIndividual.setCustSurname("");
-        searchIndividual.setRadSelectSearch("card");
+        searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("RequestValue : {} ",searchIndividual.toString());
 
         IndividualModel individualModel = rmService.individualService(searchIndividual);
@@ -79,17 +93,29 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CustomerInfoView getCorporateInfo(String reqId, String type, String custId, DocumentType documentType) throws Exception {
+    public CustomerInfoView getCorporateInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
+
+        if(DocumentType.CITIZEN_ID==documentType){
+            documentTypeValue="CI";
+        }else if(DocumentType.PASSPORT==documentType){
+            documentTypeValue="PP";
+        }
+
+        if(SearchBy.CITIZEN_ID==searchBy){
+            searchByValue="card";
+        }else if(SearchBy.TMBCUS_ID==searchBy){
+            searchByValue="code";
+        }
 
         log.debug("getCorporateInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
-        searchIndividual.setReqId(reqId);
+        searchIndividual.setReqId("generateBySystem");
         searchIndividual.setCustType("C");
-        searchIndividual.setType("CI");
-        searchIndividual.setCustNbr("");
-        searchIndividual.setCustId(custId);
+        searchIndividual.setType(documentTypeValue);
+        searchIndividual.setCustNbr(tmbCusID);
+        searchIndividual.setCustId(registrationID);
         searchIndividual.setCustName("");
-        searchIndividual.setRadSelectSearch("card");
+        searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("requestValue : {}",searchIndividual.toString());
         CorporateModel corporateModel = rmService.corporateService(searchIndividual);
 
@@ -97,16 +123,16 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String reqId, String type, String custNbr, DocumentType documentType) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String tmbCusID, String registrationID, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
-        searchCustomerAccountModel.setReqId(reqId);
+        searchCustomerAccountModel.setReqId("generateBySystem");
         searchCustomerAccountModel.setAcronym(acronym);
         searchCustomerAccountModel.setProductCode(productCode);
 //        searchCustomerAccountModel.setServerURL(serverURL);
 //        searchCustomerAccountModel.setSessionId(sessionId);
-        searchCustomerAccountModel.setCustNbr(custNbr);
+        searchCustomerAccountModel.setCustNbr(tmbCusID);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("RequestValue : {}",searchCustomerAccountModel.toString());
         CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
