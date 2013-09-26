@@ -356,7 +356,16 @@ public class PrescreenMaker implements Serializable {
 
     public void onSaveCustomerInfo() {
         log.info("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete = false;
         //** validate form **//
+        //** TODO dynamic validation for ncb checking
+        if(borrowerInfo.getCustomerEntity().getId() != 0){
+
+        }
+
+
 
 
     }
@@ -366,7 +375,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
-
+        //borrowerInfo = prescreenBusinessControl
     }
 
     public void onChangeCustomerEntity(){
