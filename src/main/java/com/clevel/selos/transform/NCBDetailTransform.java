@@ -7,14 +7,7 @@ import com.clevel.selos.model.view.NcbRecordView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: acer
- * Date: 24/9/2556
- * Time: 19:49 น.
- * To change this template use File | Settings | File Templates.
- */
-public class NcbDetailTransform extends Transform{
+public class NCBDetailTransform extends Transform{
 
     public List<NCBDetail> transformToModel(List<NcbRecordView> ncbRecordViewList ,NCB ncb){
         List<NCBDetail> NCBDetailList = new ArrayList<NCBDetail>();
