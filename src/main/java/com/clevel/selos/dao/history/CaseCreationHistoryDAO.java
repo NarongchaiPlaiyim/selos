@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.history;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.ws.WSResponse;
 import org.hibernate.criterion.Restrictions;
@@ -19,7 +20,12 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory,Long>
     public boolean isExist(String caNumber) {
         log.debug("isExist. (caNumber: {})",caNumber);
 
-        boolean exist = isRecordExist(Restrictions.and(Restrictions.eq("caNumber", caNumber),Restrictions.eq("status", WSResponse.SUCCESS)));
+        boolean exist = isRecordExist(Restrictions.and(
+                Restrictions.eq("caNumber", caNumber),
+                Restrictions.or(
+                        Restrictions.eq("status", IntegrationStatus.SUCCESS),
+                        Restrictions.eq("status",IntegrationStatus.WAITING)))
+                );
 
         log.debug("isExist. (result: {})", exist);
         return exist;

@@ -85,7 +85,7 @@ public class CaseCreation implements WSCaseCreation {
         Date now = new Date();
         CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
                 bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
-                accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,IntegrationStatus.ADDED,"","");
+                accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,IntegrationStatus.WAITING,"","");
         CaseCreationResponse response = new CaseCreationResponse();
         //handle all un-expected exception
         try {
@@ -239,13 +239,18 @@ public class CaseCreation implements WSCaseCreation {
                 return response;
             }
 
+            //todo: generate ref number
+            caseCreationHistory.setAppRefNumber("REF001");
 
             //all validation passed including new case creation in BPM.
-            bpmInterface.createCase(caNumber,"BDMUsername"); //todo: how to get BDM Username for create case?
+            //todo: how to get BDM Username for create case?
+            if (bpmInterface.createCase(caseCreationHistory)) {
+                // return success
+                response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppRefNumber());
+            } else {
+                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppRefNumber());
+            }
 
-            addSuccessHistory(caseCreationHistory,"REF001"); //todo: generate ref number
-            // return success
-            response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),"REF001");
 
         } catch (Exception e) {
             log.error("Exception while creating new case!", e);
@@ -264,10 +269,10 @@ public class CaseCreation implements WSCaseCreation {
         wsDataPersist.addNewCase(caseCreationHistory);
     }
 
-    public void addSuccessHistory(CaseCreationHistory caseCreationHistory,String appRefNumber) {
-        log.debug("addSuccessHistory. (appRefNumber: {}, detail: {})",appRefNumber,caseCreationHistory);
-        caseCreationHistory.setStatus(IntegrationStatus.SUCCESS);
-        caseCreationHistory.setAppRefNumber(appRefNumber);
-        wsDataPersist.addNewCase(caseCreationHistory);
-    }
+//    public void addSuccessHistory(CaseCreationHistory caseCreationHistory,String appRefNumber) {
+//        log.debug("addSuccessHistory. (appRefNumber: {}, detail: {})",appRefNumber,caseCreationHistory);
+//        caseCreationHistory.setStatus(IntegrationStatus.SUCCESS);
+//        caseCreationHistory.setAppRefNumber(appRefNumber);
+//        wsDataPersist.addNewCase(caseCreationHistory);
+//    }
 }

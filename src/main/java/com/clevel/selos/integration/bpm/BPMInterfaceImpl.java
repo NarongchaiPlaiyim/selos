@@ -6,7 +6,10 @@ import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.IntegrationStatus;
+import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.ws.WSDataPersist;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
@@ -49,19 +52,33 @@ public class BPMInterfaceImpl implements BPMInterface {
     String bpmPassword;
 
     @Inject
+    WSDataPersist wsDataPersist;
+
+    @Inject
     public BPMInterfaceImpl() {
     }
 
     @Override
-    public void createCase(String bdmUsername, String caNumber) throws SELOSBPMException {
-        log.debug("createCase.");
+    public boolean createCase(CaseCreationHistory caseCreationHistory){
+        log.debug("createCase. (detail: {})",caseCreationHistory);
+        boolean success = true;
+
+        wsDataPersist.addNewCase(caseCreationHistory);
+
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName("");
         userDTO.setPassword("");
-        BPMServiceImpl bpmService = new BPMServiceImpl(userDTO);
         HashMap<String,String> caseParameter = new HashMap<String, String>();
-        caseParameter.put("BDMUserName",bdmUsername);
-        caseParameter.put("CANumber",caNumber);
-        bpmService.launchCase(caseParameter);
+        caseParameter.put("BDMUserName", caseCreationHistory.getBdmId());
+        caseParameter.put("CANumber", caseCreationHistory.getCaNumber());
+
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(userDTO);
+            bpmService.launchCase(caseParameter);
+        } catch (SELOSBPMException e) {
+            success = false;
+            log.error("Exception while create case in BPM!",e);
+        }
+        return success;
     }
 }
