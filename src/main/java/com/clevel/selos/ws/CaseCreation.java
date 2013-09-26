@@ -93,6 +93,7 @@ public class CaseCreation implements WSCaseCreation {
             if (caseCreationHistoryDAO.isExist(caNumber)) {
                 addFailedHistory(caseCreationHistory, msg.get("051"));
                 response.setValue(WSResponse.DUPLICATE_CA, msg.get("051"),"");
+                log.debug("{}",response);
                 return response;
             }
 
@@ -100,36 +101,43 @@ public class CaseCreation implements WSCaseCreation {
             if(!ValidationUtil.isValueEqual(2, jobName.length())){
                 addFailedHistory(caseCreationHistory,msg.get("1002","(jobName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(jobName)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,caNumber.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(jobName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(jobName)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,oldCaNumber.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(caNumber)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caNumber)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo1.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo1)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo1)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,customerId.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(customerId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerId)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(150,customerName.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(customerName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerName)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(13, citizenId.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(citizenId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(citizenId)"),"");
+                log.debug("{}",response);
                 return response;
             }
 //            if(!ValidationUtil.isValueEqual(1,requestType+"".length())){
@@ -141,101 +149,121 @@ public class CaseCreation implements WSCaseCreation {
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(bdmId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(bdmId)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(4,hubCode.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(hubCode)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(hubCode)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(4,regionCode.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(regionCode)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(regionCode)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(5,uwId.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(uwId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(uwId)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(10,appInDateBDM.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(appInDateBDM)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(appInDateBDM)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1, finalApproved.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(finalApproved)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(finalApproved)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1, parallel.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(parallel)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(parallel)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,pending.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(pending)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(pending)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,caExist.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(caExist)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caExist)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,caEnd.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(caEnd)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caEnd)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo2.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo2)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo2)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo3.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo3)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo3)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo4.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo4)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo4)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo5.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo5)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo5)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo6.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo6)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo6)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo7.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo7)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo7)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo8.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo8)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo8)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo9.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo9)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo9)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo10.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo10)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo10)"),"");
+                log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(10,appInDateUW.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(appInDateUW)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(appInDateUW)"),"");
+                log.debug("{}",response);
                 return response;
             }
 
