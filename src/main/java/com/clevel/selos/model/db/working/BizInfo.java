@@ -59,14 +59,14 @@ public class BizInfo implements Serializable {
     @Column(name="biz_permission")
     private String bizPermission;
 
-    @OneToMany(mappedBy="bizInfo")
-    private List<BizStakeHolderDetail> supplierDetailList;
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizStakeHolderDetail> supplierList;
 
-    @OneToMany(mappedBy="bizInfo")
-    private List<BizStakeHolderDetail> buyerDetailList;
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizStakeHolderDetail> buyerList;
 
-    @OneToMany(mappedBy="bizInfo")
-    private List<BizProductDetail> bizProductDetailList;
+    @OneToMany(mappedBy="bizInfoDetail")
+    private List<BizProductDetail> bizProductList;
 
     @ManyToOne
     @JoinColumn(name="workcase_id")
@@ -164,35 +164,27 @@ public class BizInfo implements Serializable {
         this.bizInfoText = bizInfoText;
     }
 
-    public List<BizStakeHolderDetail> getSupplierDetailList() {
-        return supplierDetailList;
+    public List<BizStakeHolderDetail> getSupplierList() {
+        return supplierList;
     }
 
-    public void setSupplierDetailList(List<BizStakeHolderDetail> supplierDetailList) {
-        this.supplierDetailList = supplierDetailList;
+    public void setSupplierList(List<BizStakeHolderDetail> supplierList) {
+        this.supplierList = supplierList;
     }
 
-    public List<BizStakeHolderDetail> getBuyerDetailList() {
-        return buyerDetailList;
+    public List<BizStakeHolderDetail> getBuyerList() {
+        return buyerList;
     }
 
-    public void setBuyerDetailList(List<BizStakeHolderDetail> buyerDetailList) {
-        this.buyerDetailList = buyerDetailList;
+    public void setBuyerList(List<BizStakeHolderDetail> buyerList) {
+        this.buyerList = buyerList;
     }
 
-    public List<BizProductDetail> getBizProductDetailList() {
-        return bizProductDetailList;
+    public List<BizProductDetail> getBizProductList() {
+        return bizProductList;
     }
 
-    public void setBizProductDetailList(List<BizProductDetail> bizProductDetailList) {
-        this.bizProductDetailList = bizProductDetailList;
-    }
-
-    public WorkCase getWorkCase() {
-        return workCase;
-    }
-
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
+    public void setBizProductList(List<BizProductDetail> bizProductList) {
+        this.bizProductList = bizProductList;
     }
 }

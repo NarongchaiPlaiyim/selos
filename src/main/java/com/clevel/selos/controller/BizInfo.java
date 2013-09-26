@@ -339,6 +339,22 @@ public class BizInfo implements Serializable {
         this.BizStakeHolderDetailView = BizStakeHolderDetailView;
     }
 
+    public List<BizStakeHolderDetailView> getSupplierDetailList() {
+        return supplierDetailList;
+    }
+
+    public void setSupplierList(List<BizStakeHolderDetailView> supplierDetailList) {
+        this.supplierDetailList = supplierDetailList;
+    }
+
+    public List<BizStakeHolderDetailView> getBuyerDetailList() {
+        return buyerDetailList;
+    }
+
+    public void setBuyerDetailList(List<BizStakeHolderDetailView> buyerDetailList) {
+        this.buyerDetailList = buyerDetailList;
+    }
+
     public List<BusinessGroup> getBusinessGroupList() {
         return businessGroupList;
     }
@@ -467,11 +483,11 @@ public class BizInfo implements Serializable {
         this.stakeType = stakeType;
     }
 
-    public BizInfoView getBizInfoView() {
+    public BizInfoView getBizInfoFullApp() {
         return bizInfoView;
     }
 
-    public void setBizInfoView(BizInfoView bizInfoView) {
+    public void setBizInfoFullApp(BizInfoView bizInfoView) {
         this.bizInfoView = bizInfoView;
     }
 }
