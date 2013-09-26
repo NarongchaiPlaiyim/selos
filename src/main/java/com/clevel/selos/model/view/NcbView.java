@@ -8,8 +8,8 @@ public class NcbView {
     private String idNumber;
     private ActionResult result;
     private String reason;
-    private NcbResultView ncbResultView;
-    private List<NcbRecordView> ncbRecordViews;
+    private NCBInfoView NCBInfoView;
+    private List<NCBDetailView> NCBDetailViews;
 
     public String getIdNumber() {
         return idNumber;
@@ -35,19 +35,19 @@ public class NcbView {
         this.reason = reason;
     }
 
-    public NcbResultView getNcbResultView() {
-        return ncbResultView;
+    public NCBInfoView getNCBInfoView() {
+        return NCBInfoView;
     }
 
-    public void setNcbResultView(NcbResultView ncbResultView) {
-        this.ncbResultView = ncbResultView;
+    public void setNCBInfoView(NCBInfoView NCBInfoView) {
+        this.NCBInfoView = NCBInfoView;
     }
 
-    public List<NcbRecordView> getNcbRecordViews() {
-        return ncbRecordViews;
+    public List<NCBDetailView> getNCBDetailViews() {
+        return NCBDetailViews;
     }
 
-    public void setNcbRecordViews(List<NcbRecordView> ncbRecordViews) {
-        this.ncbRecordViews = ncbRecordViews;
+    public void setNCBDetailViews(List<NCBDetailView> NCBDetailViews) {
+        this.NCBDetailViews = NCBDetailViews;
     }
 }

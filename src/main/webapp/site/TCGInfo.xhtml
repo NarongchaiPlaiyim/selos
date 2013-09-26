@@ -51,7 +51,7 @@
                                                     <h:outputText value="#{msg.get('app.isTCG')}" />:
                                                 </td>
                                                 <td>
-                                                    <h:selectOneRadio id="radio" value="#{fullappTcgCal.tcgCalculateView.TCG}" disabled="true">
+                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
                                                         <f:selectItem itemLabel="Yes" itemValue="Y"/>
                                                         <f:selectItem itemLabel="No" itemValue="N"/>
                                                     </h:selectOneRadio>
@@ -63,7 +63,7 @@
                                                     <h:outputLabel value="*" style="color:red;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitRequiredTCG"  value="#{fullappTcgCal.tcgCalculateView.requestLimitRequiredTCG}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="requestLimitRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -74,7 +74,7 @@
                                                     <h:outputLabel value="*" style="color:red;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitNotRequiredTCG"  value="#{fullappTcgCal.tcgCalculateView.requestLimitNotRequiredTCG}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="requestLimitNotRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -85,7 +85,7 @@
                                                     <h:outputLabel value="*" style="color:red;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="existingLoanRatioUnderSameCollateral"  value="#{fullappTcgCal.tcgCalculateView.existingLoanRatioUnderSameCollateral}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="existingLoanRatioUnderSameCollateral"  value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -96,7 +96,7 @@
                                                     <h:outputLabel value="*" style="color:red;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="existingLoanRatioNotUnderSameCollateral"  value="#{fullappTcgCal.tcgCalculateView.existingLoanRatioNotUnderSameCollateral}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="existingLoanRatioNotUnderSameCollateral"  value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -107,7 +107,7 @@
                                                     <h:outputLabel value="*" style="color:red;"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="tcbFloodAmount"  value="#{fullappTcgCal.tcgCalculateView.tcbFloodAmount}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="tcbFloodAmount"  value="#{tcgInfo.TCGView.tcbFloodAmount}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -125,7 +125,7 @@
                                                 value="#{msg.get('app.addButton')}"
                                                 styleClass="smaller"
                                                 process="@this"
-                                                actionListener="#{fullappTcgCal.onAddCollateralDetail}"
+                                                actionListener="#{tcgInfo.onAddCollateralDetail}"
                                                 update=":tcgDlgForm"
                                                 oncomplete="tcgDlg.show();">
                                             <p:resetInput target=":tcgDlgForm"/>
@@ -138,8 +138,8 @@
                                         <table class="table_content">
                                             <tr>
                                                 <td>
-                                                    <p:dataTable id="resultCollateralDetail" var="item" value="#{fullappTcgCal.tcgCalRecordViewList}"
-                                                                 paginator="false" rowKey="#{item.tcgCalRecordView}" rowIndexVar="rowIndex">
+                                                    <p:dataTable id="resultCollateralDetail" var="item" value="#{tcgInfo.TCGDetailViewList}"
+                                                                 paginator="false" rowKey="#{item.TCGDetailView}" rowIndexVar="rowIndex">
 
                                                         <p:column headerText="No." styleClass="center" style="width:20px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
@@ -172,20 +172,20 @@
 
                                                         <p:column>
                                                             <p:commandButton icon="ui-icon-pencil"
-                                                                             action="#{fullappTcgCal.onEditCollateralDetail()}"
+                                                                             action="#{tcgInfo.onEditCollateralDetail()}"
                                                                              update=":tcgDlgForm"
                                                                              process="@this"
                                                                              oncomplete="tcgDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{fullappTcgCal.selectCollateralItem}"/>
+                                                                                             target="#{tcgInfo.selectCollateralItem}"/>
                                                                 <f:setPropertyActionListener value="#{rowIndex}"
-                                                                                             target="#{fullappTcgCal.rowIndex}"/>
+                                                                                             target="#{tcgInfo.rowIndex}"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash"
                                                                              oncomplete="confirmDeleteTcgDlg.show()">
                                                                 <f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{fullappTcgCal.selectCollateralItem}"/>
+                                                                                             target="#{tcgInfo.selectCollateralItem}"/>
                                                             </p:commandButton>
                                                         </p:column>
 
@@ -193,15 +193,15 @@
                                                             <p:row>
                                                                 <p:column />
                                                                 <p:column colspan="2" footerText="Total มูลค่าหลักประกัน: " style="text-align:right"/>
-                                                                <p:column footerText="#{fullappTcgCal.sumAppraisalAmount}" styleClass="number" style="text-align:right" />
-                                                                <p:column footerText="#{fullappTcgCal.sumLtvValue}"  style="text-align:right"/>
+                                                                <p:column footerText="#{tcgInfo.sumAppraisalAmount}" styleClass="number" style="text-align:right" />
+                                                                <p:column footerText="#{tcgInfo.sumLtvValue}"  style="text-align:right"/>
                                                                 <p:column colspan="2" />
                                                             </p:row>
                                                             <p:row>
                                                                 <p:column />
                                                                 <p:column colspan="2" footerText="Total มูลค่าหลักประกันเสนอครั้งนี้: " style="text-align:right"/>
-                                                                <p:column footerText="#{fullappTcgCal.sumInThisAppraisalAmount}" style="text-align:right" />
-                                                                <p:column footerText="#{fullappTcgCal.sumInThisLtvValue}" style="text-align:right"/>
+                                                                <p:column footerText="#{tcgInfo.sumInThisAppraisalAmount}" style="text-align:right" />
+                                                                <p:column footerText="#{tcgInfo.sumInThisLtvValue}" style="text-align:right"/>
                                                                 <p:column colspan="2" />
                                                             </p:row>
                                                         </p:columnGroup>
@@ -233,7 +233,7 @@
                                                     <h:outputText value="#{msg.get('app.requestTCGAmount')}" />:
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestTCGAmount"  value="#{fullappTcgCal.tcgCalculateView.requestTCGAmount}" disabled="true">
+                                                    <p:inputText styleClass="large right" id="requestTCGAmount"  value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                     </p:inputText>
                                                 </td>
@@ -270,14 +270,14 @@
 
     <p:dialog id="tcgDialog" header="Collateral Information" widgetVar="tcgDlg"
               modal="true" width="700" height="200">
-        <ui:include src="dialog/fullappTcgDialog.xhtml"/>
+        <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteTcgDialog"/>
         <ui:param name="name" value="confirmDeleteTcgDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteTcgRecord"/>
-        <ui:param name="controller" value="#{fullappTcgCal}"/>
+        <ui:param name="controller" value="#{tcgInfo}"/>
         <ui:param name="action" value="onDeleteTcgDetail"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>

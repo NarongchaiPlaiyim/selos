@@ -14,7 +14,7 @@ import java.util.Date;
  * To change this template use File | Settings | File Templates.
  */
 
-public class NcbResultView implements Serializable {
+public class NCBInfoView implements Serializable {
     private long id;
     private Date checkingDate;
     private int checkIn6Month;
