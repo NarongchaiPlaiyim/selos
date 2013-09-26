@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.ncrs.models.response;
-public class HeaderModel {
+
+import java.io.Serializable;
+
+public class HeaderModel implements Serializable {
     private String user;
     private String password;
     private String command;

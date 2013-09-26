@@ -2,10 +2,12 @@ package com.clevel.selos.integration.ncrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @XStreamAlias("address")
-public class SubjectAddressModel {
+public class SubjectAddressModel implements Serializable {
     
     @XStreamAlias("line1")
     private String line1;

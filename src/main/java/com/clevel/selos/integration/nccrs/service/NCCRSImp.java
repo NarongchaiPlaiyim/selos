@@ -162,13 +162,57 @@ public class NCCRSImp implements NCCRS, Serializable {
         xStream.processAnnotations(NCCRSRequestModel.class);
         log.debug("NCCRS Command code : {}",command);
         nccrsRequest = new NCCRSRequestModel(
-                           new HeaderModel(id,pass,command),
-                           new BodyModel(
-                               new H2HRequestModel(registType, registId, companyName,
-                                                   inqPurose, productType, memberRef,
-                                                   confirmConsent, language),
-                               new AttributeModel(historicalBalanceReport)
-                           ));
+                new HeaderModel(id,pass,command),
+                new BodyModel(
+                        new H2HRequestModel(registType, registId, companyName,
+                                inqPurose, productType, memberRef,
+                                confirmConsent, language),
+                        new AttributeModel(historicalBalanceReport)
+                ));
+        xml = xStream.toXML(nccrsRequest);
+        log.debug("NCCRS Request : \n{}",xml);
+        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
+        if(!"".equals(result)){
+            log.debug("NCCRS Response : {}",result);
+            xStream.processAnnotations(NCCRSResponseModel.class);
+            nccrsResponse = (NCCRSResponseModel)xStream.fromXML(result);
+            return nccrsResponse;
+        }else{
+            log.debug("NCCRS Response : {}",result);
+            return nccrsResponse;
+        }
+    }
+
+
+
+    private NCCRSRequestModel createOnlineModel(NCCRSModel model, String command){
+        NCCRSRequestModel nccrsRequest = null;
+        return nccrsRequest;
+    }
+    private NCCRSRequestModel createFindModel(NCCRSModel model, String command){
+        NCCRSRequestModel nccrsRequest = null;
+
+        /*nccrsRequest = new NCCRSRequestModel(
+                new HeaderModel(id, pass, command),
+                new BodyModel(
+                        new CriteriaModel(Util.createDateString(new Date(),"YYYYMMdd"), model.getRegistId(), id))); */
+        return nccrsRequest;
+    }
+    private NCCRSRequestModel createReadModel(String trackingId, String command){
+        NCCRSRequestModel nccrsRequest = null;
+        nccrsRequest = new NCCRSRequestModel(
+                new HeaderModel(id, pass, command),
+                new BodyModel(trackingId));
+        return nccrsRequest;
+    }
+    private NCCRSResponseModel sendToHTTP(NCCRSRequestModel nccrsRequest) throws Exception {
+        NCCRSResponseModel nccrsResponse = null;
+        String xml = null;
+        String result = null;
+        XStream xStream = null;
+
+        xStream = new XStream();
+        xStream.processAnnotations(NCCRSRequestModel.class);
         xml = xStream.toXML(nccrsRequest);
         log.debug("NCCRS Request : \n{}",xml);
         result = post.sendPost(xml, url, Integer.parseInt(timeOut));

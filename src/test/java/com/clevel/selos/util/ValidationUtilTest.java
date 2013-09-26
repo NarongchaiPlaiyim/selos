@@ -42,6 +42,15 @@ public class ValidationUtilTest {
     }
 
     @Test
+    public void testIsGreaterThanString() throws Exception{
+        log.info("testIsGreaterThanString.");
+        assertEquals("expected true.", true, ValidationUtil.isGreaterThan(5, "xxxxxx"));
+        assertEquals("expected false.", false, ValidationUtil.isGreaterThan(5, "xxxxx"));
+        assertEquals("expected true.",true,ValidationUtil.isGreaterThan(5,null));
+        assertEquals("expected false.",false,ValidationUtil.isGreaterThan(5,""));
+    }
+
+    @Test
     public void testIsLessThan() throws Exception {
         log.info("testIsLessThan.");
         assertEquals("expected true.", true, ValidationUtil.isLessThan(10, 9));

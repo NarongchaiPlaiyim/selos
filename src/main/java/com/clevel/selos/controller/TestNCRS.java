@@ -5,7 +5,8 @@ import com.clevel.selos.integration.nccrs.service.NCCRSModel;
 import com.clevel.selos.integration.nccrs.service.NCCRSService;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.service.NCRSModel;
+import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSInputModel;
+import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncrs.service.NCRSService;
 import org.slf4j.Logger;
 
@@ -37,6 +38,11 @@ public class TestNCRS implements Serializable {
     private String consent = "Y";
     private String disputeenquiry;
 
+    private String idNumber = "3100300390029";
+    private String idNumber2= "3100504308002";
+    private String appRefNumber = "9999";
+    private String userId = "USERID";
+
     //NCCRS
     private String registType ="1140002";
     private String registId ="1000000000001";
@@ -56,21 +62,53 @@ public class TestNCRS implements Serializable {
         log.info("========================================= onClickNCRS");
         NCRSModel ncrsModel = new NCRSModel();
 
-        TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb", "19000101");
+        /*TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb");
         ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
         name.add(nameModel);
-        TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", "3111111111115");
-        TUEFEnquiryIdModel idModel2 = new TUEFEnquiryIdModel("02", "3111111111115");
+        TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", idNumber);
+        TUEFEnquiryIdModel idModel2 = new TUEFEnquiryIdModel("01", idNumber2);
         ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
         id.add(idModel);
-        id.add(idModel2);
+        id.add(idModel2);   */
+        ncrsModel.setUserId(userId);
         ncrsModel.setMemberref(memberref);
         ncrsModel.setEnqpurpose(enqpurpose);
         ncrsModel.setEnqamount(enqamount);
         ncrsModel.setConsent(consent);
-        ncrsModel.setIdList(id);
-        ncrsModel.setNameList(name);
+        ncrsModel.setAppRefNumber(appRefNumber);
 
+        NCRSInputModel inputModel = null;
+        ArrayList<NCRSInputModel> inputModelArrayList = new ArrayList<NCRSInputModel>();
+
+        inputModel = new NCRSInputModel();
+        inputModel.setIdTypeCitizen();
+        inputModel.setCitizenId(idNumber);
+        inputModel.setFirstName("พสุธร");
+        inputModel.setLastName("กุญชร");
+        inputModelArrayList.add(inputModel);
+
+        inputModel = new NCRSInputModel();
+        inputModel.setIdTypeCitizen();
+        inputModel.setCitizenId(idNumber2);
+        inputModel.setFirstName("ขวัญชัย");
+        inputModel.setLastName("อานุภาพ");
+        inputModelArrayList.add(inputModel);
+
+        inputModel = new NCRSInputModel();
+        inputModel.setIdTypeCitizen();
+        inputModel.setCitizenId("3101403233750");
+        inputModel.setFirstName("ประดิษฐ์");
+        inputModel.setLastName("ภัทรประสิทธิ์");
+        inputModelArrayList.add(inputModel);
+
+        inputModel = new NCRSInputModel();
+        inputModel.setIdTypeCitizen();
+        inputModel.setCitizenId("3149900124956");
+        inputModel.setFirstName("วิลาวัณย ");
+        inputModel.setLastName("อุปริกชาติพงษ์");
+        inputModelArrayList.add(inputModel);
+
+        ncrsModel.setInputModel(inputModelArrayList);
         ncrsService.process(ncrsModel);
 
     }
@@ -87,6 +125,22 @@ public class TestNCRS implements Serializable {
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
         nccrsService.process(nccrsModel);
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getAppRefNumber() {
+        return appRefNumber;
+    }
+
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
     }
 
     public String getResult() {
@@ -207,5 +261,21 @@ public class TestNCRS implements Serializable {
 
     public void setHistoricalBalanceReport(String historicalBalanceReport) {
         this.historicalBalanceReport = historicalBalanceReport;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public String getIdNumber2() {
+        return idNumber2;
+    }
+
+    public void setIdNumber2(String idNumber2) {
+        this.idNumber2 = idNumber2;
     }
 }

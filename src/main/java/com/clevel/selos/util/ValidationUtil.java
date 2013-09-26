@@ -19,8 +19,9 @@ public class ValidationUtil {
     public static boolean isLessThan(int min,int value) {
         return  value < min;
     }
-    public static boolean isEqualRange(int min,int value) {
-        return  value == min;
+
+    public static boolean isValueEqual(int expected, int value) {
+        return  value == expected;
     }
 
 
@@ -52,19 +53,13 @@ public class ValidationUtil {
     }
 
     public static boolean isGreaterThan(int max,String string) {
-        if (!isNull(string)) {
-            return max < string.length();
-        } else {
-            return true;
-        }
+        return isNull(string) || string.length() > max;
     }
+
     public static boolean isLessThan(int min,String string) {
-        if (!isNull(string)) {
-            return  string.length() < min;
-        } else {
-            return true;
-        }
+        return isNull(string) || string.length() < min;
     }
+
     public static boolean isLessThan(int min,ArrayList arrayList) {
         if (arrayList!=null) {
             return  arrayList.size() < min;
