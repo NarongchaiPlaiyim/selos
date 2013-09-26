@@ -14,7 +14,7 @@ import java.math.BigDecimal;
  */
 public class StakeholderView {
 
-    private BigDecimal no;
+    private long no;
     private String stakeholderType;
     private String name;
     private String contactName;
@@ -33,11 +33,11 @@ public class StakeholderView {
         this.stakeholderType = stakeholderType;
     }
 
-    public BigDecimal getNo() {
+    public long getNo() {
         return no;
     }
 
-    public void setNo(BigDecimal no) {
+    public void setNo(long no) {
         this.no = no;
     }
 

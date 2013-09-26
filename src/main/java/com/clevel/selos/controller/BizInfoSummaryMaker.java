@@ -2,6 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
+import com.clevel.selos.dao.working.BizInfoDetailDAO;
+import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.view.BizInfoFullView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -23,8 +25,8 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @ViewScoped
-@ManagedBean(name = "businessInfoSummary")
-public class BusinessInfoSummaryMaker implements Serializable {
+@ManagedBean(name = "bizInfoSummary")
+public class BizInfoSummaryMaker implements Serializable {
 
     @NormalMessage
     @Inject
@@ -37,6 +39,7 @@ public class BusinessInfoSummaryMaker implements Serializable {
 
 
     private List<BizInfoFullView> bizInfoFullViewList;
+    private List<BizInfoDetail> bizInfoDetailList;
 
     @Inject
     Logger log;
@@ -44,18 +47,24 @@ public class BusinessInfoSummaryMaker implements Serializable {
     private BusinessGroupDAO businessGroupDAO;
     @Inject
     private BusinessDescriptionDAO businessDescriptionDAO;
+    @Inject
+    private BizInfoDetailDAO bizInfoDetailDAO;
 
-    public BusinessInfoSummaryMaker(){
+    public BizInfoSummaryMaker(){
 
     }
 
     @PostConstruct
     public void onCreation(){
-        bizInfoFullViewList = getBusinessInfoList();
+        //bizInfoFullViewList = getBusinessInfoList();
+        log.info("onCreation bizInfoSum");
+        bizInfoFullViewList = getBusinessInfoListDB();
+        bizInfoDetailList = new ArrayList<BizInfoDetail>();
 
     }
 
     public List<BizInfoFullView> getBusinessInfoList(){
+        log.info("getBusinessInfoList bizInfoSum");
         bizInfoFullViewList = new ArrayList<BizInfoFullView>();
         BizInfoFullView bizInfoFullView;
 
@@ -74,6 +83,31 @@ public class BusinessInfoSummaryMaker implements Serializable {
 
         return bizInfoFullViewList;
     }
+
+    public List<BizInfoFullView> getBusinessInfoListDB(){
+        log.info("getBusinessInfoListDB bizInfoSum");
+        bizInfoDetailList = bizInfoDetailDAO.findAll();
+
+        bizInfoFullViewList = onTransformToView(bizInfoDetailList);
+
+        return bizInfoFullViewList;
+    }
+
+    private List<BizInfoFullView> onTransformToView(List<BizInfoDetail> bizInfoDetailList){
+        log.info("onTransformToView bizInfoSum");
+        bizInfoFullViewList = new ArrayList<BizInfoFullView>();
+        BizInfoFullView bizInfoFullView;
+        BizInfoDetail bizInfoDetail;
+        for(int i=0;i<bizInfoDetailList.size();i++){
+            bizInfoDetail =  bizInfoDetailList.get(i);
+            bizInfoFullView = new BizInfoFullView();
+            bizInfoFullView.setBizComment(bizInfoDetail.getBizComment());
+            bizInfoFullViewList.add(bizInfoFullView);
+        }
+        return bizInfoFullViewList;
+
+    }
+
     public void onViewDetail(){
         log.info(" success !! {}",true);
     }
