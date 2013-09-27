@@ -14,8 +14,6 @@ import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBSummaryView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.util.Util;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
