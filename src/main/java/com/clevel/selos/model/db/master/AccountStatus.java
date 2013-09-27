@@ -22,9 +22,9 @@ public class AccountStatus implements Serializable {
     @Column(name = "active")
     private int active;
     @Column(name = "individual_code")
-    private int individualCode;
+    private String individualCode;
     @Column(name = "juristic_code")
-    private int juristicCode;
+    private String juristicCode;
 
     public AccountStatus() {
     }
@@ -61,19 +61,19 @@ public class AccountStatus implements Serializable {
         this.active = active;
     }
 
-    public int getIndividualCode() {
+    public String getIndividualCode() {
         return individualCode;
     }
 
-    public void setIndividualCode(int individualCode) {
+    public void setIndividualCode(String individualCode) {
         this.individualCode = individualCode;
     }
 
-    public int getJuristicCode() {
+    public String getJuristicCode() {
         return juristicCode;
     }
 
-    public void setJuristicCode(int juristicCode) {
+    public void setJuristicCode(String juristicCode) {
         this.juristicCode = juristicCode;
     }
 

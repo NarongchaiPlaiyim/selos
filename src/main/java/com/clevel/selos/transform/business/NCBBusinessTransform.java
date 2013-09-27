@@ -29,7 +29,7 @@ public class NCBBusinessTransform extends BusinessTransform {
     private static final String TMB_BANK = "TMB";
     private static final String SUCCESS = "SUCCESS";
 
-    public List<NcbView> transform(List<ResponseNCRSModel> responseNCRSModels){
+    public List<NcbView> transformIndividual(List<ResponseNCRSModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
         if(responseNCRSModels!=null && responseNCRSModels.size()>0){
             ncbViews = new ArrayList<NcbView>();
@@ -102,7 +102,8 @@ public class NCBBusinessTransform extends BusinessTransform {
                                             settlementStatus = settlementStatusDAO.getIndividualByCode(subjectAccountModel.getPaymt01());
                                         }
                                         ncbDetailView.setCurrentPayment(settlementStatus);
-                                        //set history payment
+                                        //set history payment, worst settlement payment status
+
                                     }
 
                                 } else {
