@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -418,7 +419,7 @@ public class NCBInfo implements Serializable {
     // *** Function for NCB ***//
     public void onSaveNcb() {     // call transform  and then call businessControl
         log.info("onSaveNcb:::: {} ", NCBInfoView.toString());
-        //Customer customerSave = customerEntityDAO.findById();
+//        Customer customerSave = customerEntityDAO.findById(ncb);
 
         //save to DB
         TDRCondition tdrConditionSave = tdrConditionDAO.findById(tdrCondition.getId());
