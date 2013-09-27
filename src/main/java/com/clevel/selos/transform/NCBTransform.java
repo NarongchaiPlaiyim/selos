@@ -14,6 +14,8 @@ public class NCBTransform extends Transform {
         if(NCBInfoView.getId() != 0){
             ncb.setId(NCBInfoView.getId());
         }
+
+//        ncb.setCustomer();
         ncb.setCheckIn6Month(NCBInfoView.getCheckIn6Month());
         ncb.setCheckingDate(DateTime.now().toDate());
         ncb.setCurrentPaymentType(NCBInfoView.getCurrentPaymentType());
