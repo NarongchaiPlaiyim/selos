@@ -5,13 +5,7 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 import org.joda.time.DateTime;
 
-/**
- * Created with IntelliJ IDEA.
- * User: acer
- * Date: 24/9/2556
- * Time: 19:49 น.
- * To change this template use File | Settings | File Templates.
- */
+
 public class NCBTransform extends Transform {
 
     public NCB transformToModel(NCBInfoView NCBInfoView){
@@ -20,6 +14,8 @@ public class NCBTransform extends Transform {
         if(NCBInfoView.getId() != 0){
             ncb.setId(NCBInfoView.getId());
         }
+
+//        ncb.setCustomer();
         ncb.setCheckIn6Month(NCBInfoView.getCheckIn6Month());
         ncb.setCheckingDate(DateTime.now().toDate());
         ncb.setCurrentPaymentType(NCBInfoView.getCurrentPaymentType());

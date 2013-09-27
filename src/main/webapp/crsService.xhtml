@@ -11,8 +11,12 @@
     </h:head>
     <h:body>
         <h:form>
+            <p:panelGrid columns="2">
+        <p:outputLabel value="Test CitizenId"/>
+        <p:inputText value="#{crs.testValue}"/>
         <p:inputText value="#{crs.caseCreationResponse}"/>
         <p:commandButton value="testService" actionListener="#{crs.callservice()}" update="@form"/>
+            </p:panelGrid>
         </h:form>
 
     </h:body>

@@ -21,6 +21,10 @@ public class AccountStatus implements Serializable {
     private int dbrFlag;
     @Column(name = "active")
     private int active;
+    @Column(name = "individual_code")
+    private String individualCode;
+    @Column(name = "juristic_code")
+    private String juristicCode;
 
     public AccountStatus() {
     }
@@ -57,6 +61,22 @@ public class AccountStatus implements Serializable {
         this.active = active;
     }
 
+    public String getIndividualCode() {
+        return individualCode;
+    }
+
+    public void setIndividualCode(String individualCode) {
+        this.individualCode = individualCode;
+    }
+
+    public String getJuristicCode() {
+        return juristicCode;
+    }
+
+    public void setJuristicCode(String juristicCode) {
+        this.juristicCode = juristicCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -64,6 +84,8 @@ public class AccountStatus implements Serializable {
                 append("name", name).
                 append("dbrFlag", dbrFlag).
                 append("active", active).
+                append("individualCode", individualCode).
+                append("juristicCode", juristicCode).
                 toString();
     }
 }

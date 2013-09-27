@@ -140,12 +140,18 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-//            if(!ValidationUtil.isValueEqual(1,requestType+"".length())){
-//                return new CaseCreationResponse(2,msg.get("059"));
-//            }
-//            if(!ValidationUtil.isValueEqual(1,customerType+"".length())){
-//                return new CaseCreationResponse(2,msg.get("060"));
-//            }
+            if(!ValidationUtil.isValueEqual(1,String.valueOf(requestType).length())){
+                addFailedHistory(caseCreationHistory, msg.get("1002", "(requestType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(requestType)"),"");
+                log.debug("{}",response);
+                return response;
+            }
+            if(!ValidationUtil.isValueEqual(1,String.valueOf(customerType).length())){
+                addFailedHistory(caseCreationHistory, msg.get("1002", "(customerType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerType)"),"");
+                log.debug("{}",response);
+                return response;
+            }
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
                 addFailedHistory(caseCreationHistory, msg.get("1002", "(bdmId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(bdmId)"),"");
