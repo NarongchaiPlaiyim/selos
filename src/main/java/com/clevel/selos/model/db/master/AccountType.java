@@ -23,6 +23,10 @@ public class AccountType implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
+    @Column(name = "code")
+    private String code;
+    @Column(name = "name_en")
+    private String nameEn;
 
     public AccountType() {
     }
@@ -75,6 +79,22 @@ public class AccountType implements Serializable {
         this.active = active;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -84,6 +104,8 @@ public class AccountType implements Serializable {
                 append("wcFlag", wcFlag).
                 append("customerEntity", customerEntity).
                 append("active", active).
+                append("code", code).
+                append("nameEn", nameEn).
                 toString();
     }
 }

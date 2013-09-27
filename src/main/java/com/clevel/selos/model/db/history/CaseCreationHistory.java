@@ -79,7 +79,7 @@ public class CaseCreationHistory implements Serializable {
     @Column(name="create_status")
     @Enumerated(EnumType.STRING)
     private IntegrationStatus status;
-    @Column(name="create_status_detail")
+    @Column(name="create_status_detail", length = 500)
     private String statusDetail;
     @Column(name="app_ref_number")
     private String appRefNumber;

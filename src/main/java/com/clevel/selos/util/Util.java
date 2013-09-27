@@ -35,6 +35,32 @@ public class Util {
         return dateD;
     }
 
+    public static Date strYYYYMMDDtoDateFormat(String dateStr){
+        Date date = new Date();
+        if(dateStr==null){
+            return null;
+        }
+        try{
+            DateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.US);
+            date = (Date) formatter.parse(dateStr);
+        } catch (ParseException e) {
+        }
+        return date;
+    }
+
+    public static Date strToDateFormat(String dateStr, String format){
+        Date date = new Date();
+        if(dateStr==null){
+            return null;
+        }
+        try{
+            DateFormat formatter = new SimpleDateFormat(format, Locale.US);
+            date = (Date) formatter.parse(dateStr);
+        } catch (ParseException e) {
+        }
+        return date;
+    }
+
     public static String formatNumber(double value) {
         return numberFormat.format(value);
     }
