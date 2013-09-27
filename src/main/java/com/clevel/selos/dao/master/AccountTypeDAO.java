@@ -3,6 +3,7 @@ package com.clevel.selos.dao.master;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -19,33 +20,31 @@ public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
 
     public AccountType getIndividualByCode(String code){
         log.debug("getIndividualByCode. (code: {}",code);
+        if(!Util.isEmpty(code)){
+            //set for individual
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("customerEntity.id", 1));
+            criteria.add(Restrictions.eq("code", code));
+            AccountType accountType = (AccountType) criteria.uniqueResult();
 
-        //set for individual
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
-
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customerEntity", customerEntity));
-        criteria.add(Restrictions.eq("code", code));
-        AccountType accountType = (AccountType) criteria.uniqueResult();
-
-        log.debug("getIndividualByCode. (code: {})",code);
-        return accountType;
+            log.debug("getIndividualByCode. (accountType: {})",accountType);
+            return accountType;
+        }
+        return null;
     }
 
     public AccountType getJuristicByCode(String code){
         log.debug("getJuristicByCode. (code: {}",code);
+        if(!Util.isEmpty(code)){
+            //set for juristic
+            Criteria criteria = createCriteria();
+            criteria.add(Restrictions.eq("customerEntity.id", 2));
+            criteria.add(Restrictions.eq("code", code));
+            AccountType accountType = (AccountType) criteria.uniqueResult();
 
-        //set for juristic
-        CustomerEntity customerEntity = new CustomerEntity();
-        customerEntity.setId(1);
-
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("customerEntity", customerEntity));
-        criteria.add(Restrictions.eq("code", code));
-        AccountType accountType = (AccountType) criteria.uniqueResult();
-
-        log.debug("getJuristicByCode. (code: {})",code);
-        return accountType;
+            log.debug("getJuristicByCode. (accountType: {})",accountType);
+            return accountType;
+        }
+        return null;
     }
 }
