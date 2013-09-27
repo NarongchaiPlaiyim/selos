@@ -136,7 +136,7 @@
             <tr>
                 <td class="title">Customer Information </td>
                 <td>
-                    <!--<p:commandButton id="btnAddCustomerInfo"
+                    <p:commandButton id="btnAddCustomerInfo"
                                      value="Add"
                                      styleClass="smaller"
                                      process="@this"
@@ -144,7 +144,7 @@
                                      update=":customerDlgForm"
                                      oncomplete="customerDlg.show();">
                         <p:resetInput target=":customerDlgForm" />
-                    </p:commandButton>-->
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
@@ -491,12 +491,12 @@
     <!--<p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
               modal="true" width="400" height="150">
         <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
-    </p:dialog>
+    </p:dialog> -->
     <p:dialog id="customerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Customer Information" widgetVar="customerDlg"
               modal="true" width="800" height="500">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
-    <p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
+    <!--<p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
               modal="true">
         <ui:include src="dialog/prescreenBusinessDialog.xhtml"/>
     </p:dialog>

@@ -68,7 +68,7 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        CustomerInfoView customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CITIZEN_ID);
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getIndividualInfo(searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CUSTOMER_ID);
 
 
 
@@ -93,7 +93,7 @@ public class TestService implements Serializable{
 
     public void corporate() throws Exception {
 
-        CustomerInfoView customerInfoView = rmInterfaceImpl.getCorporateInfo(searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CITIZEN_ID);
+        CustomerInfoView customerInfoView = rmInterfaceImpl.getCorporateInfo(searchIndividual.getCustId(), RMInterface.DocumentType.CORPORATE_ID,RMInterface.SearchBy.CUSTOMER_ID);
 
 
         printDetail=customerInfoView.toString();
