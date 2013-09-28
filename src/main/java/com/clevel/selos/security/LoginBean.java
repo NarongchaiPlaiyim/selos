@@ -58,7 +58,7 @@ public class LoginBean {
             securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
             return "unSecured";
         }
-        UserDetail userDetail = new UserDetail(user.getUserName(), user.getRole().getName(), user.getRole().getRoleType().getRoleTypeName().name());
+        UserDetail userDetail = new UserDetail(user.getUserName(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         try {
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
             request.setDetails(new WebAuthenticationDetails(httpServletRequest));
@@ -72,7 +72,7 @@ public class LoginBean {
             HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("language", Language.EN);
 
-            securityAuditor.addSucceed(userDetail.getUserName(), "Login", "");
+            securityAuditor.addSucceed(userDetail.getUserName(), "Login", "",new Date());
             return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (AuthenticationException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
@@ -90,7 +90,7 @@ public class LoginBean {
         log.debug("logging out.");
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
-        securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "");
+        securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "",new Date());
         return "loggedOut";
     }
 
