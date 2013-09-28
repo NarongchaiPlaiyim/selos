@@ -296,17 +296,11 @@ public class CaseCreation implements WSCaseCreation {
         return response;
     }
 
-    public void addFailedHistory(CaseCreationHistory caseCreationHistory, String message) {
+    private void addFailedHistory(CaseCreationHistory caseCreationHistory, String message) {
         log.debug("addFailedHistory (message: {}, detail: {})",message,caseCreationHistory);
         caseCreationHistory.setStatus(IntegrationStatus.FAILED);
         caseCreationHistory.setStatusDetail(message);
         wsDataPersist.addNewCase(caseCreationHistory);
     }
 
-//    public void addSuccessHistory(CaseCreationHistory caseCreationHistory,String appRefNumber) {
-//        log.debug("addSuccessHistory. (appRefNumber: {}, detail: {})",appRefNumber,caseCreationHistory);
-//        caseCreationHistory.setStatus(IntegrationStatus.SUCCESS);
-//        caseCreationHistory.setAppRefNumber(appRefNumber);
-//        wsDataPersist.addNewCase(caseCreationHistory);
-//    }
 }
