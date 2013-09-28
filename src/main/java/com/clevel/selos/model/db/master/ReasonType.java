@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_reasontype")
+@Table(name = "mst_reason_type")
 public class ReasonType implements Serializable {
     @Id
     @Column(name = "id")

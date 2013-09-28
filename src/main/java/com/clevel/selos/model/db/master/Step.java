@@ -3,33 +3,35 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "mst_business_type")
-public class BusinessType implements Serializable {
+@Table(name = "mst_step")
+public class Step {
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "description")
     private String description;
+    @OneToOne
+    @JoinColumn(name = "stage_id")
+    private Stage stage;
+    @ManyToOne
+    @JoinColumn(name="role_id")
+    private Role role;
     @Column(name = "active")
     private int active;
 
-    public BusinessType() {
+    public Step() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,6 +51,22 @@ public class BusinessType implements Serializable {
         this.description = description;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public int getActive() {
         return active;
     }
@@ -63,6 +81,8 @@ public class BusinessType implements Serializable {
                 append("id", id).
                 append("name", name).
                 append("description", description).
+                append("stage", stage).
+                append("role", role.getId()).
                 append("active", active).
                 toString();
     }

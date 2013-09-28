@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_kyclevel")
+@Table(name = "mst_kyc_level")
 public class KYCLevel implements Serializable {
     @Id
     @Column(name = "id")

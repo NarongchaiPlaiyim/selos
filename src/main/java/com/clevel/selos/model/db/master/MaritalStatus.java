@@ -10,13 +10,15 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_maritalstatus")
+@Table(name = "mst_marital_status")
 public class MaritalStatus implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "rm_code")
+    private String rmCode;
     @Column(name = "active")
     private int active;
 
@@ -39,6 +41,14 @@ public class MaritalStatus implements Serializable {
         this.name = name;
     }
 
+    public String getRmCode() {
+        return rmCode;
+    }
+
+    public void setRmCode(String rmCode) {
+        this.rmCode = rmCode;
+    }
+
     public int getActive() {
         return active;
     }
@@ -52,6 +62,7 @@ public class MaritalStatus implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("name", name).
+                append("rmCode", rmCode).
                 append("active", active).
                 toString();
     }

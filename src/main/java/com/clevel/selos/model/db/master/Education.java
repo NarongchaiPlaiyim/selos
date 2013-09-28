@@ -17,10 +17,10 @@ public class Education implements Serializable {
     private int id;
     @Column(name = "code")
     private String code;
-    @Column(name = "nameEn")
-    private String nameEn;
-    @Column(name = "nameTh")
+    @Column(name = "name_th")
     private String nameTh;
+    @Column(name = "name_en")
+    private String nameEn;
     @Column(name = "active")
     private int active;
 
@@ -43,20 +43,20 @@ public class Education implements Serializable {
         this.code = code;
     }
 
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
-
     public String getNameTh() {
         return nameTh;
     }
 
     public void setNameTh(String nameTh) {
         this.nameTh = nameTh;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
     }
 
     public int getActive() {
@@ -72,8 +72,8 @@ public class Education implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("code", code).
-                append("nameEn", nameEn).
                 append("nameTh", nameTh).
+                append("nameEn", nameEn).
                 append("active", active).
                 toString();
     }

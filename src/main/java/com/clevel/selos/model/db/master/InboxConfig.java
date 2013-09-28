@@ -7,22 +7,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_business_type")
-public class BusinessType implements Serializable {
+@Table(name = "mst_inbox_config")
+public class InboxConfig {
     @Id
     @Column(name = "id")
     private int id;
     @Column(name = "name")
     private String name;
-    @Column(name = "description")
-    private String description;
+    @Column(name = "queue_name")
+    private String queueName;
+    @Column(name = "type")
+    private String type;
     @Column(name = "active")
     private int active;
 
-    public BusinessType() {
+    public InboxConfig() {
     }
 
     public int getId() {
@@ -41,12 +42,20 @@ public class BusinessType implements Serializable {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getQueueName() {
+        return queueName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getActive() {
@@ -62,7 +71,8 @@ public class BusinessType implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("name", name).
-                append("description", description).
+                append("queueName", queueName).
+                append("type", type).
                 append("active", active).
                 toString();
     }

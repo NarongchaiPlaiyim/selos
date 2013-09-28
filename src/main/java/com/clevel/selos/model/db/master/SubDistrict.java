@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_subdistrict")
+@Table(name = "mst_sub_district")
 public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")

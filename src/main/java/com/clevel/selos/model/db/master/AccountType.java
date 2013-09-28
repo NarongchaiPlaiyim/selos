@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_accounttype")
+@Table(name = "mst_account_type")
 public class AccountType implements Serializable {
     @Id
     @Column(name = "id")
@@ -19,14 +19,10 @@ public class AccountType implements Serializable {
     @Column(name = "wc_flag")
     private int wcFlag;
     @OneToOne
-    @JoinColumn(name="customertype_id")
+    @JoinColumn(name = "customerentity_id")
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
-    @Column(name = "code")
-    private String code;
-    @Column(name = "name_en")
-    private String nameEn;
 
     public AccountType() {
     }
@@ -79,22 +75,6 @@ public class AccountType implements Serializable {
         this.active = active;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -104,8 +84,6 @@ public class AccountType implements Serializable {
                 append("wcFlag", wcFlag).
                 append("customerEntity", customerEntity).
                 append("active", active).
-                append("code", code).
-                append("nameEn", nameEn).
                 toString();
     }
 }

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_collateraltype")
+@Table(name = "mst_collateral_type")
 public class CollateralType implements Serializable {
     @Id
     @Column(name = "id")

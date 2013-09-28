@@ -10,13 +10,15 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_userteam")
+@Table(name = "mst_user_team")
 public class UserTeam implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
     @Column(name = "name")
     private String name;
+    @Column(name = "description")
+    private String description;
     @Column(name = "active")
     private int active;
 
@@ -39,6 +41,14 @@ public class UserTeam implements Serializable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public int getActive() {
         return active;
     }
@@ -52,6 +62,7 @@ public class UserTeam implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("name", name).
+                append("description", description).
                 append("active", active).
                 toString();
     }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_documenttype")
+@Table(name = "mst_document_type")
 public class DocumentType implements Serializable {
     @Id
     @Column(name = "id")
@@ -15,13 +15,10 @@ public class DocumentType implements Serializable {
     @Column(name = "description")
     private String description;
     @OneToOne
-    @JoinColumn(name="customertype_id")
+    @JoinColumn(name="customerentity_id")
     private CustomerEntity customerEntity;
     @JoinColumn(name="active")
     private int active;
-    @Column(name="type")
-    private String type;
-
 
     public DocumentType() {
     }
@@ -58,23 +55,13 @@ public class DocumentType implements Serializable {
         this.active = active;
     }
 
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("description", description)
-                .append("customerEntity", customerEntity)
-                .append("active", active)
-                .append("type", type)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("description", description).
+                append("customerEntity", customerEntity).
+                append("active", active).
+                toString();
     }
 }

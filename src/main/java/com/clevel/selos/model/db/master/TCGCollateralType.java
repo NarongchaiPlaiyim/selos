@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_tcgcollateraltype")
+@Table(name = "mst_tcgcollateral_type")
 public class TCGCollateralType {
     @Id
     @Column(name = "id")
