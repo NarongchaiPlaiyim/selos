@@ -6,6 +6,7 @@ import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
+import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
@@ -91,184 +92,184 @@ public class CaseCreation implements WSCaseCreation {
         try {
             //validate duplicate CA
             if (caseCreationHistoryDAO.isExist(caNumber)) {
-                addFailedHistory(caseCreationHistory, msg.get("051"));
-                response.setValue(WSResponse.DUPLICATE_CA, msg.get("051"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.DUPLICATE_CA,"(CA: "+caNumber+")"));
+                response.setValue(WSResponse.DUPLICATE_CA, msg.get(ValidationMapping.DUPLICATE_CA,"(CA: "+caNumber+")"),"");
                 log.debug("{}",response);
                 return response;
             }
 
             //validate all input parameter
             if(!ValidationUtil.isValueEqual(2, jobName.length())){
-                addFailedHistory(caseCreationHistory,msg.get("1002","(jobName)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(jobName)"),"");
+                addFailedHistory(caseCreationHistory,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(jobName)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(jobName)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,caNumber.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(jobName)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(jobName)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(jobName)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(jobName)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,oldCaNumber.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(caNumber)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caNumber)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(caNumber)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(caNumber)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo1.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo1)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo1)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo1)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo1)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,customerId.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(customerId)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerId)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(customerId)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(customerId)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(150,customerName.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(customerName)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerName)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(customerName)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(customerName)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(13, citizenId.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(citizenId)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(citizenId)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(citizenId)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(citizenId)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1,String.valueOf(requestType).length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(requestType)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(requestType)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(requestType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(requestType)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1,String.valueOf(customerType).length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(customerType)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(customerType)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(customerType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(customerType)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(5,bdmId.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(bdmId)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(bdmId)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(bdmId)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(bdmId)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(4,hubCode.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(hubCode)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(hubCode)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(hubCode)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(hubCode)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(4,regionCode.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(regionCode)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(regionCode)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(regionCode)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(regionCode)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(5,uwId.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(uwId)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(uwId)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(uwId)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(uwId)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(10,appInDateBDM.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(appInDateBDM)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(appInDateBDM)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(appInDateBDM)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(appInDateBDM)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1, finalApproved.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(finalApproved)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(finalApproved)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(finalApproved)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(finalApproved)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(!ValidationUtil.isValueEqual(1, parallel.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(parallel)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(parallel)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(parallel)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(parallel)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,pending.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(pending)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(pending)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(pending)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(pending)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,caExist.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(caExist)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caExist)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(caExist)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(caExist)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(1,caEnd.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(caEnd)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(caEnd)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(caEnd)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(caEnd)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo2.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo2)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo2)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo2)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo2)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo3.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo3)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo3)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo3)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo3)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo4.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo4)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo4)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo4)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo4)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo5.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo5)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo5)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo5)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo5)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo6.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo6)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo6)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo6)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo6)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo7.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo7)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo7)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo7)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo7)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo8.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo8)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo8)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo8)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo8)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo9.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo9)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo9)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo9)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo9)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(30,accountNo10.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(accountNo10)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(accountNo10)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(accountNo10)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(accountNo10)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(ValidationUtil.isGreaterThan(10,appInDateUW.length())){
-                addFailedHistory(caseCreationHistory, msg.get("1002", "(appInDateUW)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get("1002","(appInDateUW)"),"");
+                addFailedHistory(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(appInDateUW)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(appInDateUW)"),"");
                 log.debug("{}",response);
                 return response;
             }
