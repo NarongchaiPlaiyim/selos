@@ -11,7 +11,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class LogProducer {
     private static final String LOGGER_NAME_RM = "RM";
     private static final String LOGGER_NAME_NCB = "NCB";
-    private static final String LOGGER_NAME_DWH = "DWH";
+    private static final String LOGGER_NAME_RLOS = "RLOS";
     private static final String LOGGER_NAME_EMAIL = "EMAIL";
     private static final String LOGGER_NAME_SAFEWATCH = "SAFEWATCH";
     private static final String LOGGER_NAME_BRMS = "BRMS";
@@ -37,9 +37,9 @@ public class LogProducer {
     }
 
     @Produces
-    @DWH
-    Logger createDWHLogger() {
-        return LoggerFactory.getLogger(LOGGER_NAME_DWH);
+    @RLOS
+    Logger createRLOSLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_RLOS);
     }
 
     @Produces

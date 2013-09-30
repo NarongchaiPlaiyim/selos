@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -19,7 +18,6 @@ import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Alternative;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -45,7 +43,7 @@ public class WelcomePage implements Serializable {
     @Email
     Logger emailLog;
     @Inject
-    @DWH
+    @RLOS
     Logger dwhLog;
     @Inject
     @BRMS
@@ -157,8 +155,8 @@ public class WelcomePage implements Serializable {
         emailLog.debug("test Email log. ({})",new Date());
     }
 
-    public void onActionDWH() {
-        dwhLog.debug("test DWH log. ({})",new Date());
+    public void onActionRLOS() {
+        dwhLog.debug("test RLOS log. ({})",new Date());
     }
 
     public void onActionBRMS() {
