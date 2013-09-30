@@ -9,17 +9,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "mst_businessdescription")
+@Table(name = "mst_business_desc")
 public class BusinessDescription implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @ManyToOne
-    @JoinColumn(name="businessgroup_id")
+    @OneToOne
+    @JoinColumn(name = "businessgroup_id")
     private BusinessGroup businessGroup;
     @Column(name = "name")
     private String name;
-    @Column(name = "tmbCode")
+    @Column(name = "tmb_Code")
     private String tmbCode;
     @Column(name = "income_factor")
     private BigDecimal incomeFactor;
@@ -51,9 +51,9 @@ public class BusinessDescription implements Serializable {
     private String businessPermission;
     @Column(name = "business_permission_desc")
     private String businessPermissionDesc;
-    @Column(name = "factory4",length = 500)
+    @Column(name = "factory4", length = 500)
     private String factory4;
-    @Column(name = "foodAndDrug",length = 500)
+    @Column(name = "food_and_drug", length = 500)
     private String foodAndDrug;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")

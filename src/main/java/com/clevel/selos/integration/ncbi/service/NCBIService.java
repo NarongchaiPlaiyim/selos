@@ -3,7 +3,7 @@ package com.clevel.selos.integration.ncbi.service;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncbi.model.NcbiRequestModel;
 import com.clevel.selos.integration.ncbi.model.RequestModel;
-import com.clevel.selos.integration.nccrs.service.NCBIExportImp;
+import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
 import com.thoughtworks.xstream.XStream;
 
 import javax.inject.Inject;

@@ -1,8 +1,8 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CaseStatus;
+import com.clevel.selos.model.db.master.Status;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.master.WorkflowStep;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,24 +19,22 @@ public class WorkCase implements Serializable {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_ID")
     @Column(name="id", nullable=false)
     private long id;
-
     @Column(name="ca_number", length = 30, nullable=false)
     private String caNumber;
-
+    @Column(name="app_ref_number", nullable=false)
+    private String appRefNumber;
     @Column(name="wob_number")
     private String wobNumber;
     @Column(name="case_lock")
     private int lock;
     @Column(name="lock_user")
     private String lockUser;
-
     @OneToOne
-    @JoinColumn(name="workflowstep_id")
-    private WorkflowStep workflowStep;
-
+    @JoinColumn(name="step_id")
+    private Step step;
     @OneToOne
-    @JoinColumn(name="casestatus_id")
-    private CaseStatus caseStatus;
+    @JoinColumn(name="status_id")
+    private Status status;
 
     @OneToMany(mappedBy="workCase")
     private List<Customer> customerList;
@@ -47,14 +45,19 @@ public class WorkCase implements Serializable {
     @OneToOne
     @JoinColumn(name="create_by")
     private User createBy;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_date")
     private Date modifyDate;
-
     @OneToOne
     @JoinColumn(name="modify_by")
     private User modifyBy;
+    @OneToOne
+    @JoinColumn(name="step_owner")
+    private User stepOwner;
+
+    @OneToOne
+    @JoinColumn(name="workcaseprescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
 
     public WorkCase() {
     }
@@ -73,6 +76,14 @@ public class WorkCase implements Serializable {
 
     public void setCaNumber(String caNumber) {
         this.caNumber = caNumber;
+    }
+
+    public String getAppRefNumber() {
+        return appRefNumber;
+    }
+
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
     }
 
     public String getWobNumber() {
@@ -99,20 +110,20 @@ public class WorkCase implements Serializable {
         this.lockUser = lockUser;
     }
 
-    public WorkflowStep getWorkflowStep() {
-        return workflowStep;
+    public Step getStep() {
+        return step;
     }
 
-    public void setWorkflowStep(WorkflowStep workflowStep) {
-        this.workflowStep = workflowStep;
+    public void setStep(Step step) {
+        this.step = step;
     }
 
-    public CaseStatus getCaseStatus() {
-        return caseStatus;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setCaseStatus(CaseStatus caseStatus) {
-        this.caseStatus = caseStatus;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public List<Customer> getCustomerList() {
@@ -155,21 +166,40 @@ public class WorkCase implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public User getStepOwner() {
+        return stepOwner;
+    }
+
+    public void setStepOwner(User stepOwner) {
+        this.stepOwner = stepOwner;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("caNumber", caNumber).
+                append("appRefNumber", appRefNumber).
                 append("wobNumber", wobNumber).
                 append("lock", lock).
                 append("lockUser", lockUser).
-                append("workflowStep", workflowStep).
-                append("caseStatus", caseStatus).
+                append("step", step).
+                append("status", status).
                 append("customerList", customerList).
                 append("createDate", createDate).
                 append("createBy", createBy).
                 append("modifyDate", modifyDate).
                 append("modifyBy", modifyBy).
+                append("stepOwner", stepOwner).
+                append("workCasePrescreen", workCasePrescreen).
                 toString();
     }
 }

@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_addresstype")
+@Table(name = "mst_address_type")
 public class AddressType implements Serializable {
     @Id
     @Column(name = "id")

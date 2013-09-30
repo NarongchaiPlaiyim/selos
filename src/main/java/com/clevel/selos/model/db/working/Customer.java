@@ -29,7 +29,7 @@ public class Customer implements Serializable {
     private WorkCasePrescreen workCasePrescreen;
 
     @OneToOne
-    @JoinColumn(name="customertype_id")
+    @JoinColumn(name="customerentity_id")
     private CustomerEntity customerEntity;
 
     @OneToOne
