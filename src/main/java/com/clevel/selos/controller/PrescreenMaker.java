@@ -2,6 +2,8 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
+import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.model.db.master.*;
@@ -22,11 +24,9 @@ import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Default;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -136,9 +136,9 @@ public class PrescreenMaker implements Serializable {
     @Inject
     private WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
-    private WorkflowStepDAO workflowStepDAO;
+    private StepDAO stepDAO;
     @Inject
-    private CaseStatusDAO caseStatusDAO;
+    private StatusDAO statusDAO;
     @Inject
     private ProvinceDAO provinceDAO;
     @Inject

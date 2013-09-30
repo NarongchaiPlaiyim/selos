@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.dao.master.PotentialColToTCGColDAO;
+import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.model.db.master.PotentialCollateral;

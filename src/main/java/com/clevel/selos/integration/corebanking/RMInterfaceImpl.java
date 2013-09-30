@@ -70,7 +70,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
             documentTypeValue="PP";
         }
 
-        if(SearchBy.CITIZEN_ID==searchBy){
+        if(SearchBy.CUSTOMER_ID==searchBy){
             searchByValue="card";
         }else if(SearchBy.TMBCUS_ID==searchBy){
             searchByValue="code";
@@ -95,13 +95,13 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CustomerInfoView getCorporateInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
-        if(DocumentType.CITIZEN_ID==documentType){
-            documentTypeValue="CI";
-        }else if(DocumentType.PASSPORT==documentType){
-            documentTypeValue="PP";
+        if(DocumentType.CORPORATE_ID==documentType){
+            documentTypeValue="SC";
+        }else{
+            documentTypeValue="SC";
         }
 
-        if(SearchBy.CITIZEN_ID==searchBy){
+        if(SearchBy.CUSTOMER_ID==searchBy){
             searchByValue="card";
         }else if(SearchBy.TMBCUS_ID==searchBy){
             searchByValue="code";

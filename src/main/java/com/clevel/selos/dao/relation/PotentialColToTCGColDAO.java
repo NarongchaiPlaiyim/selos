@@ -1,4 +1,4 @@
-package com.clevel.selos.dao.master;
+package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.master.PotentialCollateral;

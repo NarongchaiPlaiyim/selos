@@ -7,9 +7,11 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
+@Stateless
 public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription,Integer> {
     @Inject
     private Logger log;

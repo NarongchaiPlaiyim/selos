@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_credittype")
+@Table(name = "mst_credit_type")
 public class CreditType implements Serializable {
     @Id
     @Column(name = "id")
@@ -57,5 +57,13 @@ public class CreditType implements Serializable {
         this.active = active;
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("name", name).
+                append("description", description).
+                append("active", active).
+                toString();
+    }
 }

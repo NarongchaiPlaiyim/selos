@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "mst_potentialcollateral")
+@Table(name = "mst_potential_collateral")
 public class PotentialCollateral {
     @Id
     @Column(name = "id")

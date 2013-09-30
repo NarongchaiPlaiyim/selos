@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_productgroup")
+@Table(name = "mst_product_group")
 public class ProductGroup implements Serializable {
     @Id
     @Column(name = "id")
@@ -66,5 +66,4 @@ public class ProductGroup implements Serializable {
                 append("active", active).
                 toString();
     }
-
 }

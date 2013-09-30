@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_maritalstatus")
+@Table(name = "mst_marital_status")
 public class MaritalStatus implements Serializable {
     @Id
     @Column(name = "id")
