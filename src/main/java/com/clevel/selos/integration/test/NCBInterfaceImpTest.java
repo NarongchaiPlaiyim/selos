@@ -2,10 +2,10 @@ package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.NCBInterface;
-import com.clevel.selos.integration.nccrs.models.response.NCCRSResponseModel;
-import com.clevel.selos.integration.nccrs.service.NCCRSModel;
-import com.clevel.selos.integration.ncrs.models.response.NCRSResponseModel;
-import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.ncrs.models.response.NCRSResponseModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 
@@ -42,7 +42,7 @@ public class NCBInterfaceImpTest implements NCBInterface, Serializable {
     }
 
     @Override
-    public NCCRSResponseModel request(NCCRSModel nccrsModel) throws Exception {
+    public NCCRSResponseModel request(NCCRSInputModel nccrsModel) throws Exception {
         log.debug("NCCRS request(NCRSModel : {})",nccrsModel.toString());
         String path = "D:\\Response.XML".replace("\\","/");
         BufferedReader reader = new BufferedReader(new FileReader(path));

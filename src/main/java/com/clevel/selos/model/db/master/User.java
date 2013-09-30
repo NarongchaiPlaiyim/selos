@@ -25,8 +25,8 @@ public class User implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="last_logon")
     private Date lastLogon;
-    @Column(name="last_pc")
-    private String lastPC;
+    @Column(name="last_ip")
+    private String lastIP;
     @OneToOne
     @JoinColumn(name="team_id")
     private UserTeam team;
@@ -103,12 +103,12 @@ public class User implements Serializable {
         this.lastLogon = lastLogon;
     }
 
-    public String getLastPC() {
-        return lastPC;
+    public String getLastIP() {
+        return lastIP;
     }
 
-    public void setLastPC(String lastPC) {
-        this.lastPC = lastPC;
+    public void setLastIP(String lastIP) {
+        this.lastIP = lastIP;
     }
 
     public UserTeam getTeam() {
@@ -192,7 +192,7 @@ public class User implements Serializable {
                 append("buCode", buCode).
                 append("emailAddress", emailAddress).
                 append("lastLogon", lastLogon).
-                append("lastPC", lastPC).
+                append("lastIP", lastIP).
                 append("team", team).
                 append("zone", zone).
                 append("region", region).

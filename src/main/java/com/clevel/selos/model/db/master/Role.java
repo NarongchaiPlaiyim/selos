@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "mst_role")
@@ -16,9 +17,13 @@ public class Role implements Serializable {
     private String name;
     @Column(name = "description")
     private String description;
+    @Column(name = "system_name")
+    private String systemName;
     @OneToOne
     @JoinColumn(name="roletype_id")
     private RoleType roleType;
+    @OneToMany(mappedBy="role")
+    List<Step> stepList;
     @Column(name = "active")
     private int active;
 
@@ -49,12 +54,28 @@ public class Role implements Serializable {
         this.description = description;
     }
 
+    public String getSystemName() {
+        return systemName;
+    }
+
+    public void setSystemName(String systemName) {
+        this.systemName = systemName;
+    }
+
     public RoleType getRoleType() {
         return roleType;
     }
 
     public void setRoleType(RoleType roleType) {
         this.roleType = roleType;
+    }
+
+    public List<Step> getStepList() {
+        return stepList;
+    }
+
+    public void setStepList(List<Step> stepList) {
+        this.stepList = stepList;
     }
 
     public int getActive() {
@@ -71,7 +92,9 @@ public class Role implements Serializable {
                 append("id", id).
                 append("name", name).
                 append("description", description).
+                append("systemName", systemName).
                 append("roleType", roleType).
+                append("stepList", stepList).
                 append("active", active).
                 toString();
     }

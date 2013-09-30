@@ -1,13 +1,12 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.nccrs.service.NCCRSModel;
-import com.clevel.selos.integration.nccrs.service.NCCRSService;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryIdModel;
-import com.clevel.selos.integration.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSInputModel;
-import com.clevel.selos.integration.ncrs.ncrsmodel.NCRSModel;
-import com.clevel.selos.integration.ncrs.service.NCRSService;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.service.NCCRSService;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import org.slf4j.Logger;
 
 import javax.faces.bean.ManagedBean;
@@ -60,63 +59,64 @@ public class TestNCRS implements Serializable {
 
     public void onClickNCRS(){
         log.info("========================================= onClickNCRS");
-        NCRSModel ncrsModel = new NCRSModel();
+        NCRSModel ncrsModel = null;
+        ArrayList<NCRSModel> ncrsModelArrayList = new ArrayList<NCRSModel>();
 
-        /*TUEFEnquiryNameModel nameModel = new TUEFEnquiryNameModel("aa", "bb");
-        ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
-        name.add(nameModel);
-        TUEFEnquiryIdModel idModel = new TUEFEnquiryIdModel("01", idNumber);
-        TUEFEnquiryIdModel idModel2 = new TUEFEnquiryIdModel("01", idNumber2);
-        ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
-        id.add(idModel);
-        id.add(idModel2);   */
-        ncrsModel.setUserId(userId);
+
+
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setCitizenId(idNumber);
+        ncrsModel.setFirstName("พสุธร");
+        ncrsModel.setLastName("กุญชร");
         ncrsModel.setMemberref(memberref);
         ncrsModel.setEnqpurpose(enqpurpose);
         ncrsModel.setEnqamount(enqamount);
         ncrsModel.setConsent(consent);
-        ncrsModel.setAppRefNumber(appRefNumber);
+        ncrsModelArrayList.add(ncrsModel);
 
-        NCRSInputModel inputModel = null;
-        ArrayList<NCRSInputModel> inputModelArrayList = new ArrayList<NCRSInputModel>();
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setCitizenId(idNumber2);
+        ncrsModel.setFirstName("ขวัญชัย");
+        ncrsModel.setLastName("อานุภาพ");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
 
-        inputModel = new NCRSInputModel();
-        inputModel.setIdTypeCitizen();
-        inputModel.setCitizenId(idNumber);
-        inputModel.setFirstName("พสุธร");
-        inputModel.setLastName("กุญชร");
-        inputModelArrayList.add(inputModel);
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setCitizenId("3101403233750");
+        ncrsModel.setFirstName("ประดิษฐ์");
+        ncrsModel.setLastName("ภัทรประสิทธิ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
 
-        inputModel = new NCRSInputModel();
-        inputModel.setIdTypeCitizen();
-        inputModel.setCitizenId(idNumber2);
-        inputModel.setFirstName("ขวัญชัย");
-        inputModel.setLastName("อานุภาพ");
-        inputModelArrayList.add(inputModel);
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setCitizenId("3149900124956");
+        ncrsModel.setFirstName("วิลาวัณย ");
+        ncrsModel.setLastName("อุปริกชาติพงษ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
 
-        inputModel = new NCRSInputModel();
-        inputModel.setIdTypeCitizen();
-        inputModel.setCitizenId("3101403233750");
-        inputModel.setFirstName("ประดิษฐ์");
-        inputModel.setLastName("ภัทรประสิทธิ์");
-        inputModelArrayList.add(inputModel);
-
-        inputModel = new NCRSInputModel();
-        inputModel.setIdTypeCitizen();
-        inputModel.setCitizenId("3149900124956");
-        inputModel.setFirstName("วิลาวัณย ");
-        inputModel.setLastName("อุปริกชาติพงษ์");
-        inputModelArrayList.add(inputModel);
-
-        ncrsModel.setInputModel(inputModelArrayList);
-        ncrsService.process(ncrsModel);
+        NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber,  ncrsModelArrayList);
+        ncrsService.process(inputModel);
 
     }
     public void onClickNCCRS(){
         log.info("========================================= onClickNCCRS");
         NCCRSModel nccrsModel = new NCCRSModel();
         nccrsModel.setRegistType(registType);
-        nccrsModel.setRegistId(registId);
+        nccrsModel.setRegistIdCompanyLimited();
         nccrsModel.setCompanyName(companyName);
         nccrsModel.setInqPurose(inqPurose);
         nccrsModel.setProductType(productType);
@@ -124,7 +124,12 @@ public class TestNCRS implements Serializable {
         nccrsModel.setConfirmConsent(confirmConsent);
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
-        nccrsService.process(nccrsModel);
+
+        ArrayList<NCCRSModel> modelArrayList = new ArrayList<NCCRSModel>();
+        modelArrayList.add(nccrsModel);
+
+        NCCRSInputModel inputModel = new NCCRSInputModel("UESERIS", "0123456789012345", modelArrayList);
+        nccrsService.process(inputModel);
     }
 
     public String getUserId() {

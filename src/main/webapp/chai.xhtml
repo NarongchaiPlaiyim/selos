@@ -51,6 +51,7 @@
                         <h:outputText value=":"/>
                         <p:inputText id="cardId" value="#{calculateRiskLevelPage.cardId}"/>
 
+
                     </h:panelGrid>
 
                     <h:panelGrid id="Result" columns="3">
@@ -60,33 +61,20 @@
                     </h:panelGrid>
 
                     <h:panelGrid id="submit" columns="2">
-
                         <p:commandButton id="Submit" value="Submit" update="@form" action="#{calculateRiskLevelPage.onSubmit}" />
-                        <!--<h:commandButton value="Reset" type="reset" />-->
                         <p:commandButton value="Reset"  type="reset" />
-                        <!--update="all"-->
-
-                        <h:outputText id="outPut" value=""/>
-
                     </h:panelGrid>
+
+
+
                 </p:panel>
 
 
 
             </h:form>
-            <h:form id="NCB">
+            <h:form id="NCRS">
                 <p:panel id="HeaderNCB" header="NCB">
                     <h:panelGrid id="BodyHeaderNCB" columns="2">
-
-                        <h:outputText value="URL"/>
-                        <p:inputText id="NCBfirstName" value="#{TestNCRS.url}"/>
-
-                        <h:outputText value="id"/>
-                        <p:inputText id="NCBlastName" value="#{TestNCRS.id}"/>
-
-                        <h:outputText value="cardId"/>
-                        <p:inputText id="pass" value="#{TestNCRS.pass}"/>
-
 
                         <h:outputText value="memberref"/>
                         <p:inputText id="NCBmemberref" value="#{TestNCRS.memberref}"/>
@@ -103,11 +91,63 @@
                         <h:outputText value="disputeenquiry"/>
                         <p:inputText id="NCBdisputeenquiry" value="#{TestNCRS.disputeenquiry}"/>
 
-                        <p:commandButton id="SubmitBodyHeaderNCB" value="Submit" update="@form" action="#{TestNCRS.onClick}" />
+                        <h:outputText value="idNumber"/>
+                        <p:inputText id="idNumber" value="#{TestNCRS.idNumber}"/>
+
+                        <h:outputText value="idNumber2"/>
+                        <p:inputText id="idNumber2" value="#{TestNCRS.idNumber2}"/>
+
+                        <h:outputText value="appRefNumber"/>
+                        <p:inputText id="appRefNumber" value="#{TestNCRS.appRefNumber}"/>
+
+                        <h:outputText value="userId"/>
+                        <p:inputText id="userId" value="#{TestNCRS.userId}"/>
+
+                        <p:commandButton id="SubmitBodyHeaderNCB" value="NCRS" update="@form" action="#{TestNCRS.onClickNCRS()}" />
 
                     </h:panelGrid>
                 </p:panel>
             </h:form>
+
+
+
+            <h:form id="NCCRS">
+                <p:panel id="HeaderNCCRS" header="NCCRS">
+                    <h:panelGrid id="BodyHeaderNCCRS" columns="2">
+
+                        <h:outputText value="Regist Type"/>
+                        <p:inputText id="NCCRSRegistType" value="#{TestNCRS.registType}"/>
+
+                        <h:outputText value="Regist Id"/>
+                        <p:inputText id="NCCRSRegistId" value="#{TestNCRS.registId}"/>
+
+                        <h:outputText value="Company Name"/>
+                        <p:inputText id="NCCRSCompanyName" value="#{TestNCRS.companyName}"/>
+
+                        <h:outputText value="Inq Purose"/>
+                        <p:inputText id="NCCRSInqPurose" value="#{TestNCRS.inqPurose}"/>
+
+                        <h:outputText value="Product Type"/>
+                        <p:inputText id="NCCRSProductType" value="#{TestNCRS.productType}"/>
+
+                        <h:outputText value="Member Ref"/>
+                        <p:inputText id="NCCRSMemberRef" value="#{TestNCRS.memberRef}"/>
+
+                        <h:outputText value="Confirm Consent"/>
+                        <p:inputText id="NCCRSConfirmConsent" value="#{TestNCRS.confirmConsent}"/>
+
+                        <h:outputText value="Language"/>
+                        <p:inputText id="NCCRSLanguage" value="#{TestNCRS.language}"/>
+
+                        <h:outputText value="Historical Balance Report"/>
+                        <p:inputText id="NCCRSHistoricalBalanceReport" value="#{TestNCRS.historicalBalanceReport}"/>
+
+                        <p:commandButton id="SubmitBodyHeaderNCCRS" value="NCCRS" update="@form" action="#{TestNCRS.onClickNCCRS()}" />
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+
         </p:panel>
 
     </h:body>

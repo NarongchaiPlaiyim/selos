@@ -89,6 +89,10 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         }
     }
 
+//    public void evict(Class<T> entity) {
+//        getSession().evict(entity);
+//    }
+
     public boolean isRecordExist(Criterion... criterion) {
         List<T> list = findByCriteria(criterion);
         return list.size()>0;
