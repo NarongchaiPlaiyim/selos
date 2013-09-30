@@ -46,10 +46,17 @@ public class TranformCorporate implements Serializable{
         currentAddress.setPostalCode(corporateModel.getPostcode());
         currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getCountry())));
         currentAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getCountry())));
-        currentAddress.setPhoneNumber(corporateModel.getRegistrationAddress().getPhoneNo());
-        currentAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
         customerInfoView.setCurrentAddress(currentAddress);
 
+        AddressView registrationAddress=new AddressView();
+        registrationAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getSubdistrict())));
+        registrationAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getDistrict())));
+        registrationAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getProvince())));
+        registrationAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getCountry())));
+        registrationAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationAddress().getCountry())));
+        registrationAddress.setPhoneNumber(corporateModel.getRegistrationAddress().getPhoneNo());
+        registrationAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
+        customerInfoView.setRegisterAddress(registrationAddress);
 
         return customerInfoView;
     }

@@ -59,7 +59,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     private String documentTypeValue;
     private String searchByValue;
     @Override
-    public CustomerInfoView getIndividualInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerInfoView getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -86,14 +86,14 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("RequestValue : {} ",searchIndividual.toString());
 
-        IndividualModel individualModel = rmService.individualService(searchIndividual);
+        IndividualModel individualModel = rmService.individualService(searchIndividual,userId);
 
 
         return tranformIndividual.tranform(individualModel);
     }
 
     @Override
-    public CustomerInfoView getCorporateInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerInfoView getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         if(DocumentType.CORPORATE_ID==documentType){
             documentTypeValue="SC";
@@ -117,13 +117,13 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("requestValue : {}",searchIndividual.toString());
-        CorporateModel corporateModel = rmService.corporateService(searchIndividual);
+        CorporateModel corporateModel = rmService.corporateService(searchIndividual,userId);
 
         return tranformCorporate.tranform(corporateModel);
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
@@ -135,7 +135,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchCustomerAccountModel.setCustNbr(customerId);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("RequestValue : {}",searchCustomerAccountModel.toString());
-        CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
+        CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel,userId);
 
         return  customerAccountModel;
     }

@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "adt_dwh_activity")
-public class DWHActivity {
+public class ROLSActivity {
     @Id
     @SequenceGenerator(name="SEQ_ADT_DWH_ID", sequenceName="SEQ_ADT_DWH_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_DWH_ID")
@@ -34,10 +34,10 @@ public class DWHActivity {
     @Column(name = "link_key")
     private String linkKey;
 
-    public DWHActivity() {
+    public ROLSActivity() {
     }
 
-    public DWHActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
+    public ROLSActivity(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
         this.userId = userId;
         this.action = action;
         this.actionDesc = actionDesc;
