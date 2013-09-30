@@ -40,10 +40,10 @@
             <tr>
                 <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
                 <td>
-                    <!--<p:selectOneMenu id="selProdGroupId"
+                    <p:selectOneMenu id="selProdGroupId"
                                      styleClass="largest"
                                      size="1"
-                                     value="#{prescreenMaker.selectProductGroup.id}" >
+                                     value="#{prescreenMaker.prescreenView.productGroup.id}" >
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                        var="productGroupList"
@@ -58,13 +58,13 @@
                                          oncomplete="msgBoxFacilityDlg.hide()"
                                          update=":frmMain:resultTableFacility,:facilityDlgForm" />
                         <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
-                    </p:confirmDialog>-->
+                    </p:confirmDialog>
                 </td>
             </tr>
             <tr>
                 <td class="title">Product Program <h:outputText value="*" styleClass="require-field"/> :</td>
                 <td>
-                    <!--<p:commandButton id="btnAddFacility"
+                    <p:commandButton id="btnAddFacility"
                                      value="Add"
                                      styleClass="smaller"
                                      process="@this, selProdGroupId"
@@ -72,13 +72,13 @@
                                      update=":facilityDlgForm"
                                      oncomplete="facilityDlg.show();">
                         <p:resetInput target=":facilityDlgForm" />
-                    </p:commandButton>-->
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <!--<p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityViewList}"
+                    <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.facilityViewList}"
                                  paginator="false" rowKey="#{item.facility}" rowIndexVar="rowIndex">
 
                         <p:column headerText="" styleClass="center" style="width:22px;">
@@ -119,7 +119,7 @@
                                                              target="#{prescreenMaker.selectFacilityItem}"/>
                             </p:commandButton>
                         </p:column>
-                    </p:dataTable>-->
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -271,7 +271,7 @@
             <tr>
                 <td class="title">Business Information :</td>
                 <td>
-                    <!--<p:commandButton id="btnAddBusinessInfo"
+                    <p:commandButton id="btnAddBusinessInfo"
                                      value="Add"
                                      styleClass="smaller"
                                      process="@this"
@@ -279,13 +279,13 @@
                                      update=":businessDlgForm"
                                      oncomplete="businessDlg.show();">
                         <p:resetInput target=":businessDlgForm" />
-                    </p:commandButton>-->
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <!--<p:dataTable id="resulttableBusinessInformation"
+                    <p:dataTable id="resulttableBusinessInformation"
                                  var="businessResultItem"
                                  value="#{prescreenMaker.businessInfoViewList}"
                                  paginator="false"
@@ -346,7 +346,7 @@
                                                              target="#{prescreenMaker.selectBusinessInfoItem}"/>
                             </p:commandButton>
                         </p:column>
-                    </p:dataTable>-->
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -398,7 +398,7 @@
             <tr>
                 <td class="title">Collateral :</td>
                 <td>
-                    <!--<p:commandButton id="btnAddCollateral"
+                    <p:commandButton id="btnAddCollateral"
                                      value="Add"
                                      styleClass="smaller"
                                      process="@this"
@@ -406,13 +406,13 @@
                                      update=":proposeCollateralDlgForm"
                                      oncomplete="proposeCollateralDlg.show();">
                         <p:resetInput target=":proposeCollateralDlgForm" />
-                    </p:commandButton>-->
+                    </p:commandButton>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <!--<p:dataTable id="resultTableProposeCollateral" var="proposeCollateral"
+                    <p:dataTable id="resultTableProposeCollateral" var="proposeCollateral"
                                  value="#{prescreenMaker.proposeCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
                                  paginator="false" rowKey="#{proposeCollateral.id}" rowIndexVar="rowIndex">
 
@@ -452,7 +452,7 @@
                             </p:commandButton>
                         </p:column>
 
-                    </p:dataTable>-->
+                    </p:dataTable>
                 </td>
             </tr>
             <tr>
@@ -488,15 +488,15 @@
         </h:form>
     </p:panel>
 
-    <!--<p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+    <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
               modal="true" width="400" height="150">
         <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
-    </p:dialog> -->
+    </p:dialog>
     <p:dialog id="customerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Customer Information" widgetVar="customerDlg"
               modal="true" width="800" height="500">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
-    <!--<p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
+    <p:dialog id="businessDialog" header="Business Information" widgetVar="businessDlg"
               modal="true">
         <ui:include src="dialog/prescreenBusinessDialog.xhtml"/>
     </p:dialog>
@@ -527,7 +527,7 @@
         <ui:param name="controller" value="#{prescreenMaker}"/>
         <ui:param name="action" value="onDeleteProposeCollateral"/>
         <ui:param name="update" value=":frmMain"/>
-    </ui:include>-->
+    </ui:include>
 </h:body>
 </f:view>
 </html>

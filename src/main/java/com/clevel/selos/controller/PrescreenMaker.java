@@ -360,9 +360,34 @@ public class PrescreenMaker implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
         //** validate form **//
-        //** TODO dynamic validation for ncb checking
-        if(borrowerInfo.getCustomerEntity().getId() != 0){
+        if(customerInfoViewList == null){
+            customerInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(borrowerInfoViewList == null){
+            borrowerInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(guarantorInfoViewList == null){
+            guarantorInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(relatedInfoViewList == null){
+            relatedInfoViewList = new ArrayList<CustomerInfoView>();
+        }
 
+        //** TODO dynamic validation for ncb checking
+        log.info("onSaveCustomerInfo ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
+        log.info("onSaveCustomerInfo ::: relation : {}", borrowerInfo.getRelation());
+        if(borrowerInfo.getCustomerEntity().getId() != 0){
+            if(borrowerInfo.getCustomerEntity().getId() == 1){ //Individual
+                if(borrowerInfo.getRelation().getId() == 1){
+
+                }else if(borrowerInfo.getRelation().getId() == 2){
+
+                }else if(borrowerInfo.getRelation().getId() == 3){
+
+                }
+            }else if(borrowerInfo.getCustomerEntity().getId() == 2){ //Juristic
+
+            }
         }
 
 

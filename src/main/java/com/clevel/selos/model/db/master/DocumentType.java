@@ -12,18 +12,22 @@ public class DocumentType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @Column(name = "description")
     private String description;
+
     @OneToOne
     @JoinColumn(name="customertype_id")
     private CustomerEntity customerEntity;
-    @JoinColumn(name="active")
-    private int active;
-    @Column(name="type")
-    private String type;
 
+    @Column(name="active")
+    private int active;
+
+    @Column(name="rm_code")
+    private String rmCode;
 
     public DocumentType() {
+
     }
 
     public int getId() {
@@ -58,13 +62,12 @@ public class DocumentType implements Serializable {
         this.active = active;
     }
 
-
-    public String getType() {
-        return type;
+    public String getRmCode() {
+        return rmCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRmCode(String rmCode) {
+        this.rmCode = rmCode;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class DocumentType implements Serializable {
                 .append("description", description)
                 .append("customerEntity", customerEntity)
                 .append("active", active)
-                .append("type", type)
+                .append("rmCode", rmCode)
                 .toString();
     }
 }

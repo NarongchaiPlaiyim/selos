@@ -48,7 +48,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
         CustomerInfoView customerInfoSearch = new CustomerInfoView();
         if(customerInfoView.getCustomerEntity().getId() == 1) {
-            //customerInfoSearch = rmInterface.getIndividualInfo();
+            //getIndividualInfo(String customerId,DocumentType documentType,SearchBy searchBy)
+            //customerInfoView.getDocumentType().getId()
+            //customerInfoSearch = rmInterface.getIndividualInfo(customerInfoView.getSearchId(), );
         } else if(customerInfoView.getCustomerEntity().getId()==2){
             //customerInfoSearch = rmInterface.getCorporateInfo();
         }

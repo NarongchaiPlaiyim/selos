@@ -12,7 +12,7 @@
                     <td class="title" style="min-width: 124px; width: 124px; max-width: 124px;">Document Type :</td>
                     <td colspan="3">
                         <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
-                                         size="1" style="width: 200px;" required="true">
+                                         size="1" style="width: 200px;">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.documentTypeList}"
                                            var="docTypeItem"
@@ -24,13 +24,13 @@
                 <tr>
                     <td class="title">Search by :</td>
                     <td>
-                        <p:selectOneRadio id="dlgRadioBrSearchBy" value="">
-                            <f:selectItem itemLabel="Citizen ID" itemValue=""/>
-                            <f:selectItem itemLabel="TMB Customer ID" itemValue=""/>
+                        <p:selectOneRadio id="dlgRadioBrSearchBy" value="#{prescreenMaker.prescreenView.searchBy}" required="false">
+                            <f:selectItem itemLabel="Citizen ID" itemValue="1"/>
+                            <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
                         </p:selectOneRadio>
                     </td>
                     <td>
-                        <p:inputText id="dlgInputBrSearchText" value=""/>
+                        <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.prescreenView.searchId}"/>
                     </td>
                     <td>
                         <p:commandButton id="dlgSearchBrBtn" value="Search"/>
@@ -45,6 +45,7 @@
                                            itemLabel="#{customerEntityItem.description}"
                                            itemValue="#{customerEntityItem.id}"/>
                             <p:ajax event="change"
+                                    process="@form"
                                     listener="#{prescreenMaker.onChangeCustomerEntity()}"
                                     update=":customerDlgForm"/>
                         </p:selectOneRadio>
@@ -52,26 +53,191 @@
                 </tr>
             </table>
             <p:panel id="pnlIndividual" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id == 1}" style="border:0; margin:0; padding: 0;">
+            <table class="content_form" border="0" style="width:650px;">
+                <tr>
+                    <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Citizen ID :</td>
+                    <td colspan="3">
+                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" required="#{prescreenMaker.customerMandate.custName.required}" styleClass="large"/>-->
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">TMB Customer ID :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}" styleClass="large"/>
+                    </td>
+                    <td class="title right">Service Segment :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Relationship :</td>
+                    <td>
+                        <p:selectOneMenu id="dlgSelBrRelation" value="#{prescreenMaker.borrowerInfo.relation.id}"
+                                         size="1" style="width: 200px;">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{prescreenMaker.relationList}"
+                                           var="relationItem"
+                                           itemLabel="#{relationItem.description}"
+                                           itemValue="#{relationItem.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                    <td class="title right">Collateral Owner :</td>
+                    <td>
+                        <p:selectOneRadio value="#{prescreenMaker.borrowerInfo.collateralOwner}">
+                            <f:selectItem itemLabel="Yes" itemValue="true"/>
+                            <f:selectItem itemLabel="No" itemValue="false"/>
+                        </p:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Reference :</td>
+                    <td>
+                        <p:selectOneMenu id="dlgSelBrReference" value="#{prescreenMaker.borrowerInfo.reference.id}"
+                                         size="1" style="width: 200px;">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{prescreenMaker.referenceList}"
+                                           var="referenceItem"
+                                           itemLabel="#{referenceItem.description}"
+                                           itemValue="#{referenceItem.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                    <td class="title right">Percent Share :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Title :</td>
+                    <td colspan="3">
+                        <p:selectOneMenu id="dlgSelBrTitle" value="#{prescreenMaker.borrowerInfo.titleTh.id}"
+                                         size="1" style="width: 200px;">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{prescreenMaker.titleList}"
+                                           var="titleThItem"
+                                           itemLabel="#{titleThItem.titleTh}"
+                                           itemValue="#{titleThItem.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">First Name :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="large"/>
+                    </td>
+                    <td class="title right">Last Name :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.lastNameTh}" styleClass="large"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Date of Birth :</td>
+                    <td>
+                        <p:calendar id="dlgCalBrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfBirth}" showOn="button" />
+                    </td>
+                    <td class="title right">Age :</td>
+                    <td>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.age}" readonly="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Nationality :</td>
+                    <td colspan="3">
+                        <p:selectOneMenu id="dlgSelBrNationality" value="#{prescreenMaker.borrowerInfo.nationality.id}"
+                                         size="1" style="width: 200px;">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{prescreenMaker.nationalityList}"
+                                           var="nationalityItem"
+                                           itemLabel="#{nationalityItem.name}"
+                                           itemValue="#{nationalityItem.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title top">Mailing Address :</td>
+                    <td colspan="3" class="top">
+                        <table class="table_noborder">
+                            <tr>
+                                <td class="title left">Addr. No.</td>
+                                <td class="left">
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"/>
+                                </td>
+                                <td class="title right">Moo.</td>
+                                <td class="left">
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"/>
+                                </td>
+                                <td class="title right">Building</td>
+                                <td class="left">
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="small"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title left">Soi/Road</td>
+                                <td colspan="5" class="left">
+                                    <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.road}" styleClass="largest_m"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Postal Code :</td>
+                    <td colspan="3">
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Approx. Income :</td>
+                    <td colspan="3">
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small"/>
+                        <p:spacer width="5"/>Baht/Year
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">Marriage Status :</td>
+                    <td>
+                        <p:selectOneMenu id="dlgSelMarriageStatus" value="#{prescreenMaker.borrowerInfo.maritalStatus.id}"
+                                         size="1" style="width: 200px;">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{prescreenMaker.maritalStatusList}"
+                                           var="maritalStatusItem"
+                                           itemLabel="#{maritalStatusItem.name}"
+                                           itemValue="#{maritalStatusItem.id}"/>
+                            <p:ajax event="change"
+                                    process="@form" immediate="true" />
+                            <p:ajax event="change"
+                                    listener="#{prescreenMaker.onChangeMaritalStatus}"
+                                    update=":customerDlgForm"
+                                    process="@this" />
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+            </table>
+            <p:panel id="pnlSpouse" rendered="#{prescreenMaker.borrowerInfo.maritalStatus.id == 2}" style="border:0; margin:0; padding:0;">
                 <table class="content_form" border="0" style="width:650px;">
                     <tr>
-                        <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Citizen ID :</td>
-                        <td colspan="3"><p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" required="#{prescreenMaker.customerMandate.custName.required}" styleClass="large"/></td>
+                        <td class="title" colspan="4">Spouse Information :</td>
+                    </tr>
+                    <tr>
+                        <td class="title">Citizen ID :</td>
+                        <td colspan="3"><p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" styleClass="large"/></td>
                     </tr>
                     <tr>
                         <td class="title">TMB Customer ID :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}" styleClass="large"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.customerId}" styleClass="large"/>
                         </td>
-                        <td class="title right">Service Segment :</td>
+                        <td class="title">Service Segment :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.serviceSegment}" styleClass="large"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">Relationship :</td>
                         <td>
-                            <p:selectOneMenu id="dlgSelBrRelation" value="#{prescreenMaker.borrowerInfo.relation.id}"
-                                             size="1" style="width: 200px;" required="true">
+                            <p:selectOneMenu id="dlgSelSpRelation" value="#{prescreenMaker.spouseInfo.relation.id}"
+                                             size="1" style="width: 200px;">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{prescreenMaker.relationList}"
                                                var="relationItem"
@@ -79,9 +245,9 @@
                                                itemValue="#{relationItem.id}"/>
                             </p:selectOneMenu>
                         </td>
-                        <td class="title right">Collateral Owner :</td>
+                        <td class="title">Collateral Owner :</td>
                         <td>
-                            <p:selectOneRadio value="#{prescreenMaker.borrowerInfo.collateralOwner}">
+                            <p:selectOneRadio value="#{prescreenMaker.spouseInfo.collateralOwner}">
                                 <f:selectItem itemLabel="Yes" itemValue="true"/>
                                 <f:selectItem itemLabel="No" itemValue="false"/>
                             </p:selectOneRadio>
@@ -90,7 +256,7 @@
                     <tr>
                         <td class="title">Reference :</td>
                         <td>
-                            <p:selectOneMenu id="dlgSelBrReference" value="#{prescreenMaker.borrowerInfo.reference.id}"
+                            <p:selectOneMenu id="dlgSelSpReference" value="#{prescreenMaker.spouseInfo.reference.id}"
                                              size="1" style="width: 200px;">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{prescreenMaker.referenceList}"
@@ -99,16 +265,16 @@
                                                itemValue="#{referenceItem.id}"/>
                             </p:selectOneMenu>
                         </td>
-                        <td class="title right">Percent Share :</td>
+                        <td class="title">Percent Share :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">Title :</td>
                         <td colspan="3">
-                            <p:selectOneMenu id="dlgSelBrTitle" value="#{prescreenMaker.borrowerInfo.titleTh.id}"
-                                             size="1" style="width: 200px;" required="true">
+                            <p:selectOneMenu id="dlgSelSpTitle" value="#{prescreenMaker.spouseInfo.titleTh.id}"
+                                             size="1" style="width: 200px;">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{prescreenMaker.titleList}"
                                                var="titleThItem"
@@ -120,28 +286,28 @@
                     <tr>
                         <td class="title">First Name :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" required="true" styleClass="large"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.firstNameTh}" styleClass="large"/>
                         </td>
-                        <td class="title right">Last Name :</td>
+                        <td class="title">Last Name :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.lastNameTh}" styleClass="large"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.lastNameTh}" styleClass="large"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">Date of Birth :</td>
                         <td>
-                            <p:calendar id="dlgCalBrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfBirth}" showOn="button" />
+                            <p:calendar id="dlgCalSpDateOfBirth" value="#{prescreenMaker.spouseInfo.dateOfBirth}" showOn="button" />
                         </td>
-                        <td class="title right">Age :</td>
+                        <td class="title">Age :</td>
                         <td>
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.age}" readonly="true"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.age}" readonly="true"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">Nationality :</td>
                         <td colspan="3">
-                            <p:selectOneMenu id="dlgSelBrNationality" value="#{prescreenMaker.borrowerInfo.nationality.id}"
-                                             size="1" style="width: 200px;" required="true">
+                            <p:selectOneMenu id="dlgSelSpNationality" value="#{prescreenMaker.spouseInfo.nationality.id}"
+                                             size="1" style="width: 200px;">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{prescreenMaker.nationalityList}"
                                                var="nationalityItem"
@@ -157,21 +323,21 @@
                                 <tr>
                                     <td class="title left">Addr. No.</td>
                                     <td class="left">
-                                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"/>
+                                        <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.addressNo}" styleClass="smallest"/>
                                     </td>
                                     <td class="title right">Moo.</td>
                                     <td class="left">
-                                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"/>
+                                        <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.moo}" styleClass="smallest"/>
                                     </td>
                                     <td class="title right">Building</td>
                                     <td class="left">
-                                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.building}" styleClass="small"/>
+                                        <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.building}" styleClass="small"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="title left">Soi/Road</td>
                                     <td colspan="5" class="left">
-                                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.road}" styleClass="largest_m"/>
+                                        <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.road}" styleClass="largest_m"/>
                                     </td>
                                 </tr>
                             </table>
@@ -180,198 +346,36 @@
                     <tr>
                         <td class="title">Postal Code :</td>
                         <td colspan="3">
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.postalCode}" styleClass="small"/>
                         </td>
                     </tr>
                     <tr>
                         <td class="title">Approx. Income :</td>
                         <td colspan="3">
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" styleClass="small"/>
                             <p:spacer width="5"/>Baht/Year
                         </td>
                     </tr>
-                    <tr>
-                        <td class="title">Marriage Status :</td>
-                        <td>
-                            <p:selectOneMenu id="dlgSelMarriageStatus" value="#{prescreenMaker.borrowerInfo.maritalStatus.id}"
-                                             size="1" style="width: 200px;">
-                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                <f:selectItems value="#{prescreenMaker.maritalStatusList}"
-                                               var="maritalStatusItem"
-                                               itemLabel="#{maritalStatusItem.name}"
-                                               itemValue="#{maritalStatusItem.id}"/>
-                                <p:ajax event="change"
-                                        process="@form" immediate="true" />
-                                <p:ajax event="change"
-                                        listener="#{prescreenMaker.onChangeMaritalStatus}"
-                                        update=":customerDlgForm"
-                                        process="@this" />
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
                 </table>
-                <p:panel id="pnlSpouse" rendered="#{prescreenMaker.borrowerInfo.maritalStatus.id == 2}" style="border:0; margin:0; padding:0;">
-                    <table class="content_form" border="0" style="width:650px;">
-                        <tr>
-                            <td class="title" colspan="4">Spouse Information :</td>
-                        </tr>
-                        <tr>
-                            <td class="title">Citizen ID :</td>
-                            <td colspan="3"><p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" styleClass="large"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">TMB Customer ID :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.customerId}" styleClass="large"/>
-                            </td>
-                            <td class="title">Service Segment :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.serviceSegment}" styleClass="large"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Relationship :</td>
-                            <td>
-                                <p:selectOneMenu id="dlgSelSpRelation" value="#{prescreenMaker.spouseInfo.relation.id}"
-                                                 size="1" style="width: 200px;" required="true">
-                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                    <f:selectItems value="#{prescreenMaker.relationList}"
-                                                   var="relationItem"
-                                                   itemLabel="#{relationItem.description}"
-                                                   itemValue="#{relationItem.id}"/>
-                                </p:selectOneMenu>
-                            </td>
-                            <td class="title">Collateral Owner :</td>
-                            <td>
-                                <p:selectOneRadio value="#{prescreenMaker.spouseInfo.collateralOwner}">
-                                    <f:selectItem itemLabel="Yes" itemValue="true"/>
-                                    <f:selectItem itemLabel="No" itemValue="false"/>
-                                </p:selectOneRadio>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Reference :</td>
-                            <td>
-                                <p:selectOneMenu id="dlgSelSpReference" value="#{prescreenMaker.spouseInfo.reference.id}"
-                                                 size="1" style="width: 200px;" required="true">
-                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                    <f:selectItems value="#{prescreenMaker.referenceList}"
-                                                   var="referenceItem"
-                                                   itemLabel="#{referenceItem.description}"
-                                                   itemValue="#{referenceItem.id}"/>
-                                </p:selectOneMenu>
-                            </td>
-                            <td class="title">Percent Share :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Title :</td>
-                            <td colspan="3">
-                                <p:selectOneMenu id="dlgSelSpTitle" value="#{prescreenMaker.spouseInfo.titleTh.id}"
-                                                 size="1" style="width: 200px;" required="true">
-                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                    <f:selectItems value="#{prescreenMaker.titleList}"
-                                                   var="titleThItem"
-                                                   itemLabel="#{titleThItem.titleTh}"
-                                                   itemValue="#{titleThItem.id}"/>
-                                </p:selectOneMenu>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">First Name :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.firstNameTh}" styleClass="large"/>
-                            </td>
-                            <td class="title">Last Name :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.lastNameTh}" styleClass="large"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Date of Birth :</td>
-                            <td>
-                                <p:calendar id="dlgCalSpDateOfBirth" value="#{prescreenMaker.spouseInfo.dateOfBirth}" showOn="button" />
-                            </td>
-                            <td class="title">Age :</td>
-                            <td>
-                                <p:inputText value="#{prescreenMaker.spouseInfo.age}" readonly="true"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Nationality :</td>
-                            <td colspan="3">
-                                <p:selectOneMenu id="dlgSelSpNationality" value="#{prescreenMaker.spouseInfo.nationality.id}"
-                                                 size="1" style="width: 200px;" required="true">
-                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                    <f:selectItems value="#{prescreenMaker.nationalityList}"
-                                                   var="nationalityItem"
-                                                   itemLabel="#{nationalityItem.name}"
-                                                   itemValue="#{nationalityItem.id}"/>
-                                </p:selectOneMenu>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title top">Mailing Address :</td>
-                            <td colspan="3" class="top">
-                                <table class="table_noborder">
-                                    <tr>
-                                        <td class="title left">Addr. No.</td>
-                                        <td class="left">
-                                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.addressNo}" styleClass="smallest"/>
-                                        </td>
-                                        <td class="title right">Moo.</td>
-                                        <td class="left">
-                                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.moo}" styleClass="smallest"/>
-                                        </td>
-                                        <td class="title right">Building</td>
-                                        <td class="left">
-                                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.building}" styleClass="small"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title left">Soi/Road</td>
-                                        <td colspan="5" class="left">
-                                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.road}" styleClass="largest_m"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Postal Code :</td>
-                            <td colspan="3">
-                                <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.postalCode}" styleClass="small"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">Approx. Income :</td>
-                            <td colspan="3">
-                                <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" styleClass="small"/>
-                                <p:spacer width="5"/>Baht/Year
-                            </td>
-                        </tr>
-                    </table>
-                </p:panel>
+            </p:panel>
             </p:panel>
         </div>
-        <p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">
+        <!--<p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">-->
             <p:commandButton
                     rendered="#{prescreenMaker.modeForButton == 'add'}"
                     id="addCustomer"
                     value="Add"
                     styleClass="small"
                     action="#{prescreenMaker.onSaveCustomerInfo}"
-                    process=":customerDlgForm"
-                    update=":customerDlgForm :frmMain:resultTableFacility"
-                    oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
+                    process="@form"
+                    update=":customerDlgForm"
+                    oncomplete="handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
             <p:commandButton value="Cancel" styleClass="small"
                              process="@this" update=":customerDlgForm"
                              oncomplete="customerDlg.hide()">
                 <p:resetInput target=":customerDlgForm" />
             </p:commandButton>
-        </p:panel>
+        <!--</p:panel>-->
     </h:form>
 
 </ui:composition>
