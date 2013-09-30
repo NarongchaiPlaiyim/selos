@@ -44,7 +44,7 @@ public class WelcomePage implements Serializable {
     Logger emailLog;
     @Inject
     @RLOS
-    Logger dwhLog;
+    Logger rlosLog;
     @Inject
     @BRMS
     Logger brmsLog;
@@ -156,7 +156,7 @@ public class WelcomePage implements Serializable {
     }
 
     public void onActionRLOS() {
-        dwhLog.debug("test RLOS log. ({})",new Date());
+        rlosLog.debug("test RLOS log. ({})", new Date());
     }
 
     public void onActionBRMS() {
