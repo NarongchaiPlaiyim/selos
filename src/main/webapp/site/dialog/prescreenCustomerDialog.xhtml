@@ -24,16 +24,20 @@
                 <tr>
                     <td class="title">Search by :</td>
                     <td>
-                        <p:selectOneRadio id="dlgRadioBrSearchBy" value="#{prescreenMaker.prescreenView.searchBy}" required="false">
+                        <p:selectOneRadio id="dlgRadioBrSearchBy" value="#{prescreenMaker.borrowerInfo.searchBy}" required="false">
                             <f:selectItem itemLabel="Citizen ID" itemValue="1"/>
                             <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
                         </p:selectOneRadio>
                     </td>
                     <td>
-                        <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.prescreenView.searchId}"/>
+                        <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}"/>
                     </td>
                     <td>
-                        <p:commandButton id="dlgSearchBrBtn" value="Search"/>
+                        <p:commandButton id="dlgSearchBrBtn" value="Search"
+                                            process="@form"
+                                            action="#{prescreenMaker.onSearchCustomerInfo}"
+                                            update=":confirmDialog_test"
+                                            />
                     </td>
                 </tr>
                 <tr>
@@ -360,6 +364,7 @@
             </p:panel>
             </p:panel>
         </div>
+
         <!--<p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">-->
             <p:commandButton
                     rendered="#{prescreenMaker.modeForButton == 'add'}"
@@ -377,5 +382,5 @@
             </p:commandButton>
         <!--</p:panel>-->
     </h:form>
-
+    <p:blockUI widgetVar="blockUIContentForm" block="customerDlgForm" trigger=":customerDlgForm:dlgSearchBrBtn"/>
 </ui:composition>

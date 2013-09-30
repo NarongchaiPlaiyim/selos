@@ -23,8 +23,8 @@ public class DocumentType implements Serializable {
     @Column(name="active")
     private int active;
 
-    @Column(name="rm_code")
-    private String rmCode;
+    @Column(name="document_type_code")
+    private String documentTypeCode;
 
     public DocumentType() {
 
@@ -62,12 +62,12 @@ public class DocumentType implements Serializable {
         this.active = active;
     }
 
-    public String getRmCode() {
-        return rmCode;
+    public String getDocumentTypeCode() {
+        return documentTypeCode;
     }
 
-    public void setRmCode(String rmCode) {
-        this.rmCode = rmCode;
+    public void setDocumentTypeCode(String documentTypeCode) {
+        this.documentTypeCode = documentTypeCode;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DocumentType implements Serializable {
                 .append("description", description)
                 .append("customerEntity", customerEntity)
                 .append("active", active)
-                .append("rmCode", rmCode)
+                .append("documentTypeCode", documentTypeCode)
                 .toString();
     }
 }

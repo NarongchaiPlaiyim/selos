@@ -487,7 +487,16 @@
             </div>
         </h:form>
     </p:panel>
-
+    <p:panel id="confirmDialog_test" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}">
+        <p:commandButton value="YES"
+                         process="@this"
+                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
+                         oncomplete="msgBoxFacilityDlg.hide()" />
+        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+    </p:confirmDialog>
+    </p:panel>
     <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
               modal="true" width="400" height="150">
         <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>

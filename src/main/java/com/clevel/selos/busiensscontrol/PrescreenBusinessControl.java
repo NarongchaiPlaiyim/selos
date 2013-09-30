@@ -1,10 +1,12 @@
 package com.clevel.selos.busiensscontrol;
 
+import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.working.PrescreenFacilityDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.PrescreenFacility;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.db.working.Prescreen;
@@ -35,6 +37,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenFacilityDAO prescreenFacilityDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
+    @Inject
+    DocumentTypeDAO documentTypeDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -45,15 +49,47 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     //** function for integration **//
-    public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+    public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user) throws Exception{
         CustomerInfoView customerInfoSearch = new CustomerInfoView();
-        if(customerInfoView.getCustomerEntity().getId() == 1) {
-            //getIndividualInfo(String customerId,DocumentType documentType,SearchBy searchBy)
-            //customerInfoView.getDocumentType().getId()
-            //customerInfoSearch = rmInterface.getIndividualInfo(customerInfoView.getSearchId(), );
-        } else if(customerInfoView.getCustomerEntity().getId()==2){
-            //customerInfoSearch = rmInterface.getCorporateInfo();
+        log.info("getCustomerInfoFromRM ::: customerInfoView : {}", customerInfoView);
+        try{
+            String userId = Long.toString(user.getId());
+            DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
+            String documentTypeCode = masterDocumentType.getDocumentTypeCode();
+            log.info("getCustomerInfoFromRM ::: userId : {}", userId);
+            log.info("getCustomerInfoFromRM ::: documentType : {}", masterDocumentType);
+            log.info("getCustomerInfoFromRM ::: documentTypeCode : {}", documentTypeCode);
+
+            RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+            if(customerInfoView.getSearchBy() == 1){
+                searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+            }else if(customerInfoView.getSearchBy() == 2){
+                searcyBy = RMInterface.SearchBy.TMBCUS_ID;
+            }
+
+            RMInterface.DocumentType documentType = RMInterface.DocumentType.CITIZEN_ID;
+            if(documentTypeCode.equalsIgnoreCase("CI")){
+                documentType = RMInterface.DocumentType.CITIZEN_ID;
+            }else if(documentTypeCode.equalsIgnoreCase("PP")){
+                documentType = RMInterface.DocumentType.PASSPORT;
+            }else if(documentTypeCode.equalsIgnoreCase("SC")){
+                documentType = RMInterface.DocumentType.CORPORATE_ID;
+            }
+
+            log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
+            log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
+
+            if(customerInfoView.getCustomerEntity().getId() == 1) {
+                customerInfoSearch = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            } else if(customerInfoView.getCustomerEntity().getId() == 2){
+                customerInfoSearch = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            }
+        }catch (Exception ex){
+            log.info("error : {}", ex);
+            throw new Exception(ex.getMessage());
         }
+        log.info("getCustomerInfoFromRM ::: success!!");
+        log.info("getCustomerInfoFromRM ::: customerInfoSearch : {}", customerInfoSearch);
         return customerInfoSearch;
     }
 
