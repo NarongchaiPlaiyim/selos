@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
+import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
@@ -204,6 +205,13 @@ public class WelcomePage implements Serializable {
         BusinessDescription businessDescription = businessDescriptionDAO.findById(selectedBusinessDescription.getId());
         log.debug("{}",businessDescription);
         selectedText = "DESCRIPTION: "+businessDescription.getName();
+    }
+
+    @Inject
+    STPExecutor STPExecutor;
+    public void testStoredProcedure() {
+        log.debug("testStoredProcedure");
+        STPExecutor.getApplicationNumber();
     }
 
     public List<BusinessGroup> getBusinessGroups() {

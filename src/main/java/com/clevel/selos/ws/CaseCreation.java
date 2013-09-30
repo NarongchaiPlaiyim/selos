@@ -1,6 +1,7 @@
 package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
@@ -28,6 +29,8 @@ public class CaseCreation implements WSCaseCreation {
     WSDataPersist wsDataPersist;
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    STPExecutor stpExecutor;
 
     @Inject
     @NormalMessage
@@ -274,8 +277,9 @@ public class CaseCreation implements WSCaseCreation {
                 return response;
             }
 
-            //todo: generate ref number
-            caseCreationHistory.setAppRefNumber("REF001");
+            //generate ref number
+            String applicationNumber = stpExecutor.getApplicationNumber();
+            caseCreationHistory.setAppRefNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
             //todo: how to get BDM Username for create case?
