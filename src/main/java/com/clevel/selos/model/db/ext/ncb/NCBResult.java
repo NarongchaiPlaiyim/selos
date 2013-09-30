@@ -16,10 +16,10 @@ public class NCBResult implements Serializable {
     @Column(name="app_ref_number", length = 16)
     private String appRefNumber;
 
-    @Column(name="customer_type", length = 2)
+    @Column(name="customer_type", length = 7)
     private String customerType;
 
-    @Column(name="customer_id", length = 13)
+    @Column(name="customer_id", length = 500)
     private String customerId;
 
     @Temporal(TemporalType.TIMESTAMP)

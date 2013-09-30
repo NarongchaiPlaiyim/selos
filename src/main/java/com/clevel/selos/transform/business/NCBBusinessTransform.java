@@ -3,8 +3,8 @@ package com.clevel.selos.transform.business;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
-import com.clevel.selos.integration.ncrs.models.response.*;
-import com.clevel.selos.integration.ncrs.ncrsmodel.ResponseNCRSModel;
+import com.clevel.selos.integration.ncb.ncrs.models.response.*;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
@@ -29,14 +29,14 @@ public class NCBBusinessTransform extends BusinessTransform {
     private static final String TMB_BANK = "TMB";
     private static final String SUCCESS = "SUCCESS";
 
-    public List<NcbView> transform(List<ResponseNCRSModel> responseNCRSModels){
+    public List<NcbView> transform(List<NCRSOutputModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
         if(responseNCRSModels!=null && responseNCRSModels.size()>0){
             ncbViews = new ArrayList<NcbView>();
-            for(ResponseNCRSModel responseNCRSModel: responseNCRSModels){
+            for(NCRSOutputModel responseNCRSModel: responseNCRSModels){
                 NcbView ncbView = new NcbView();
                 ncbView.setIdNumber(responseNCRSModel.getIdNumber());
-                if(responseNCRSModel.getResult().equals(SUCCESS)){
+                if(responseNCRSModel.getActionResult().equals(SUCCESS)){
                     ncbView.setResult(ActionResult.SUCCEED);
 
                     //Transform NCB Account Logic
