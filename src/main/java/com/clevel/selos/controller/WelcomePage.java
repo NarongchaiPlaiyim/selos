@@ -211,7 +211,7 @@ public class WelcomePage implements Serializable {
     STPExecutor STPExecutor;
     public void testStoredProcedure() {
         log.debug("testStoredProcedure");
-        STPExecutor.getApplicationNumber();
+        STPExecutor.getApplicationNumber("XX");
     }
 
     public List<BusinessGroup> getBusinessGroups() {
