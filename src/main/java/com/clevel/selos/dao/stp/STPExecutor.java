@@ -1,6 +1,5 @@
 package com.clevel.selos.dao.stp;
 
-import com.clevel.selos.dao.audit.BPMActivityDAO;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -16,8 +15,6 @@ import javax.persistence.Query;
 public class STPExecutor {
     @Inject
     Logger log;
-    @Inject
-    BPMActivityDAO bpmActivityDAO;
     @PersistenceContext
     protected EntityManager em;
 
@@ -25,11 +22,11 @@ public class STPExecutor {
     public STPExecutor() {
     }
 
-    public String getApplicationNumber() {
+    public String getApplicationNumber(String segmentCode) {
         String applicationNumber = "";
         try {
             Query query = em.createNativeQuery("select SLOS.GETAPPLICATIONNUMBER(:param) from dual");
-            query.setParameter("param", "XX");
+            query.setParameter("param", segmentCode);
             applicationNumber = (String) query.getSingleResult();
 
             log.debug("applicationNumber: {}",applicationNumber);
