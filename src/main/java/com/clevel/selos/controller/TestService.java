@@ -97,6 +97,8 @@ public class TestService implements Serializable{
 
 
         printDetail=customerInfoView.toString();
+        printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
+        printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
     }
 
     public void customerAccount() throws Exception {
