@@ -107,7 +107,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId) throws Exception {
 
         log.debug("======= CustomerAccountServiceTest =======");
 

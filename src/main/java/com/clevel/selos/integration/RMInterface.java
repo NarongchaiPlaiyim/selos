@@ -11,5 +11,5 @@ public interface RMInterface {
 
     public CustomerInfoView getIndividualInfo(String userId,String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
     public CustomerInfoView getCorporateInfo(String userId,String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
-    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId,DocumentType documentType,SearchBy searchBy) throws Exception;
+    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId) throws Exception;
 }

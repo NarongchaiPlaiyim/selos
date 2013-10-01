@@ -123,7 +123,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId) throws Exception {
 
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
