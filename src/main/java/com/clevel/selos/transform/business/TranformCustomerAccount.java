@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.corebanking;
+package com.clevel.selos.transform.business;
 
 
 import java.io.Serializable;

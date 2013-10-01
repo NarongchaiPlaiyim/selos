@@ -1,4 +1,4 @@
-package com.clevel.selos.model.RMmodel.individualInfo;
+package com.clevel.selos.integration.corebanking.model.individualInfo;
 
 
 import org.apache.commons.lang3.builder.ToStringBuilder;

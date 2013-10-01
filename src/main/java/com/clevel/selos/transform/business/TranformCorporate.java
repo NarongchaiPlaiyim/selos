@@ -1,8 +1,8 @@
-package com.clevel.selos.integration.corebanking;
+package com.clevel.selos.transform.business;
 
 
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;

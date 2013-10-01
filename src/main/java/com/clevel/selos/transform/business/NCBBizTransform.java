@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class NCBBusinessTransform extends BusinessTransform {
+public class NCBBizTransform extends BusinessTransform {
     @Inject
     AccountTypeDAO accountTypeDAO;
     @Inject

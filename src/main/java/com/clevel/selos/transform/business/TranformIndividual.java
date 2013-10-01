@@ -1,9 +1,9 @@
-package com.clevel.selos.integration.corebanking;
+package com.clevel.selos.transform.business;
 
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.Gender;
-import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
@@ -12,8 +12,6 @@ import org.hibernate.criterion.Restrictions;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 public class TranformIndividual implements Serializable{
 
