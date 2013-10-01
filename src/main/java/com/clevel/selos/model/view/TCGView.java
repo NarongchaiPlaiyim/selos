@@ -13,7 +13,8 @@ import java.math.BigDecimal;
  * To change this template use File | Settings | File Templates.
  */
 public class TCGView {
-    private String isTCG;
+    private Long id;
+    private boolean isTCG;
     private BigDecimal requestLimitRequiredTCG;
     private BigDecimal requestLimitNotRequiredTCG;
     private BigDecimal existingLoanRatioUnderSameCollateral;
@@ -27,7 +28,7 @@ public class TCGView {
     }
 
     public void reset(){
-        this.isTCG ="Y";
+        this.isTCG = false;
         this.requestLimitRequiredTCG = new BigDecimal(0);
         this.requestLimitNotRequiredTCG = new BigDecimal(0);
         this.existingLoanRatioUnderSameCollateral = new BigDecimal(0);
@@ -35,6 +36,23 @@ public class TCGView {
         this.tcbFloodAmount = new BigDecimal(0);
         this.collateralRuleResult = "";
         this.requestTCGAmount = new BigDecimal(0);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public boolean isTCG() {
+        return isTCG;
+    }
+
+    public void setTCG(boolean TCG) {
+        isTCG = TCG;
     }
 
     public String getCollateralRuleResult() {
@@ -53,13 +71,6 @@ public class TCGView {
         this.requestTCGAmount = requestTCGAmount;
     }
 
-    public String getTCG() {
-        return isTCG;
-    }
-
-    public void setTCG(String TCG) {
-        isTCG = TCG;
-    }
 
     public BigDecimal getRequestLimitRequiredTCG() {
         return requestLimitRequiredTCG;
