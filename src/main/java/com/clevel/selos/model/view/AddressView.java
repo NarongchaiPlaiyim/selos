@@ -21,8 +21,8 @@ public class AddressView {
     private Country countryCode;
     private String phoneNumber;
     private String extension;
-
-
+    private String customerContact;
+    private String contactName;
 
     public AddressView(){
 
@@ -97,7 +97,6 @@ public class AddressView {
     }
 
     public void setSubDistrict(SubDistrict subDistrict) {
-
         this.subDistrict = subDistrict;
     }
 
@@ -141,6 +140,22 @@ public class AddressView {
         this.extension = extension;
     }
 
+    public String getCustomerContact() {
+        return customerContact;
+    }
+
+    public void setCustomerContact(String customerContact) {
+        this.customerContact = customerContact;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -158,6 +173,8 @@ public class AddressView {
                 .append("countryCode", countryCode)
                 .append("phoneNumber", phoneNumber)
                 .append("extension", extension)
+                .append("customerContact", customerContact)
+                .append("contactName", contactName)
                 .toString();
     }
 }

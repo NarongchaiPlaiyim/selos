@@ -268,6 +268,23 @@ public class PrescreenMaker implements Serializable {
         log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
     }
 
+    // *** Function for PreScreen *** //
+    public void onCheckPreScreen(){
+        // *** Validate Data for Check PreScreen *** //
+        boolean validate = validateCheckPrescreen(customerInfoViewList);
+        if(validate){
+            //PreScreenResponse preScreenResponse = prescreenBusinessControl.getPrescreenResultFromBRMS(customerInfoViewList);
+        }else{
+            // *** MessageBox show validation Failed. *** //
+        }
+    }
+
+    public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
+        boolean validate = false;
+
+        return validate;
+    }
+
     // *** Function For Facility *** //
     public void onAddFacility() {
         log.info("onAddFacility ::: ");
@@ -410,6 +427,7 @@ public class PrescreenMaker implements Serializable {
     public void onSearchCustomerInfo() {
         log.info("onSearchCustomerInfo :::");
         try{
+            prescreenBusinessControl.getBankStatementFromDWH(prescreenView, user);
             log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
             borrowerInfo = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
         }catch(Exception ex){
