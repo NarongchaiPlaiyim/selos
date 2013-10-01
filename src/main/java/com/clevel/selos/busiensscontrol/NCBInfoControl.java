@@ -7,8 +7,11 @@ import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 
+import com.clevel.selos.transform.NCBDetailTransform;
+import com.clevel.selos.transform.NCBTransform;
 import org.slf4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -19,25 +22,29 @@ import java.util.List;
  * Time: 16:01 น.
  * To change this template use File | Settings | File Templates.
  */
+
+@Stateless
 public class NCBInfoControl extends BusinessControl {
     @Inject
     Logger log;
     @Inject
-    com.clevel.selos.transform.NCBDetailTransform NCBDetailTransform;
+    NCBDetailTransform ncbDetailTransform;
     @Inject
-    com.clevel.selos.transform.NCBTransform NCBTransform;
+    NCBTransform ncbTransform;
     @Inject
     NCBDAO ncbDAO;
     @Inject
     NCBDetailDAO ncbDetailDAO;
+
+
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList){
         try{
             log.info("onSaveNCBToDB begin");
 
-            NCB ncb = NCBTransform.transformToModel(NCBInfoView);
+            NCB ncb = ncbTransform.transformToModel(NCBInfoView);
             ncbDAO.persist(ncb);
             log.info("persist ncb");
-            List<NCBDetail> ncbDetailList = NCBDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
+            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
             ncbDetailDAO.persist(ncbDetailList);
         }catch (Exception e){
             log.error( "onSaveNCBToDB error" + e);

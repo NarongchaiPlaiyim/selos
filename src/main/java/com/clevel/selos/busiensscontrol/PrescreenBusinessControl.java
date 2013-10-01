@@ -15,8 +15,9 @@ import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.FacilityView;
+import com.clevel.selos.model.view.PreScreenResponseView;
 import com.clevel.selos.model.view.PrescreenView;
-import com.clevel.selos.transform.PreScreenRequestTransform;
+import com.clevel.selos.transform.PreScreenResultTransform;
 import com.clevel.selos.transform.PrescreenFacilityTransform;
 import com.clevel.selos.transform.PrescreenTransform;
 import com.clevel.selos.util.Util;
@@ -39,7 +40,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     PrescreenFacilityTransform prescreenFacilityTransform;
     @Inject
-    PreScreenRequestTransform preScreenRequestTransform;
+    PreScreenResultTransform preScreenResultTransform;
 
     @Inject
     PrescreenDAO prescreenDAO;
@@ -124,13 +125,29 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     }
 
-    public List<PreScreenResponse> getPrescreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
+    public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
         //TODO Transform view model to prescreenRequest
-        PreScreenRequest preScreenRequest = preScreenRequestTransform.transformToRequest(customerInfoViewList);
+        PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
         List<PreScreenResponse> preScreenResponseList;
         preScreenResponseList = brmsInterface.checkPreScreenRule(preScreenRequest);
 
-        return preScreenResponseList;
+        List<PreScreenResponseView> preScreenResponseViewList = preScreenResultTransform.transformResponseToView(preScreenResponseList);
+
+        return preScreenResponseViewList;
+    }
+
+    public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
+        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
+        preScreenResponseViewList = preScreenResultTransform.tranformToCustomerResponse(prescreenResponseViews);
+
+        return preScreenResponseViewList;
+    }
+
+    public List<PreScreenResponseView> getPreScreenGroupResult(List<PreScreenResponseView> prescreenResponseViews){
+        List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
+        preScreenResponseViewList = preScreenResultTransform.tranformToGroupResponse(prescreenResponseViews);
+
+        return preScreenResponseViewList;
     }
 
     public void savePrescreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, long workCasePrescreenId){

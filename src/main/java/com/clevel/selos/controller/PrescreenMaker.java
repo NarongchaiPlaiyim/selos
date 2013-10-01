@@ -274,6 +274,7 @@ public class PrescreenMaker implements Serializable {
         boolean validate = validateCheckPrescreen(customerInfoViewList);
         if(validate){
             //PreScreenResponse preScreenResponse = prescreenBusinessControl.getPrescreenResultFromBRMS(customerInfoViewList);
+
         }else{
             // *** MessageBox show validation Failed. *** //
         }

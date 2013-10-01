@@ -18,9 +18,11 @@ import java.math.BigDecimal;
  */
 
 public class TCGDetailView {
+
+    private long id;
     private BigDecimal appraisalAmount;
     private BigDecimal ltvValue;
-    private String isProposeInThisRequest;
+    private boolean isProposeInThisRequest;
 
     private PotentialCollateral  potentialCollateral;
     private TCGCollateralType tcgCollateralType;
@@ -33,10 +35,19 @@ public class TCGDetailView {
     public void reset(){
        this.appraisalAmount = new BigDecimal(0);
        this.ltvValue = new BigDecimal(0);
-       this.isProposeInThisRequest ="";
+       this.isProposeInThisRequest = false;
        this.potentialCollateral = new PotentialCollateral();
        this.tcgCollateralType = new TCGCollateralType();
        this.potentialColToTCGCol = new PotentialColToTCGCol();
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public BigDecimal getAppraisalAmount() {
@@ -55,11 +66,11 @@ public class TCGDetailView {
         this.ltvValue = ltvValue;
     }
 
-    public String getProposeInThisRequest() {
+    public boolean isProposeInThisRequest() {
         return isProposeInThisRequest;
     }
 
-    public void setProposeInThisRequest(String proposeInThisRequest) {
+    public void setProposeInThisRequest(boolean proposeInThisRequest) {
         isProposeInThisRequest = proposeInThisRequest;
     }
 
