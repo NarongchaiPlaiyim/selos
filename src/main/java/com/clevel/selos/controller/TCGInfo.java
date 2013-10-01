@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.busiensscontrol.TCGInfoControl;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
@@ -70,6 +71,8 @@ public class TCGInfo implements Serializable {
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
+    @Inject
+    TCGInfoControl tcgBusinessControl ;
 
     public TCGInfo() {
 
@@ -126,9 +129,9 @@ public class TCGInfo implements Serializable {
         log.info("onAddCollateralDetail :: reset form");
         modeForButton = "add";
         TCGDetailView = new TCGDetailView();
-        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
-        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
-        TCGDetailView.setProposeInThisRequest("Y");
+//        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
+//        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
+        TCGDetailView.setProposeInThisRequest(false);
     }
 
     // onclick edit button
@@ -145,7 +148,7 @@ public class TCGInfo implements Serializable {
 
            TCGDetailView.setPotentialCollateral(potentialCollateralEdit);
            TCGDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-           TCGDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
+           TCGDetailView.setProposeInThisRequest(selectCollateralItem.isProposeInThisRequest());
            TCGDetailView.setLtvValue(selectCollateralItem.getLtvValue());
            TCGDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
 
@@ -174,7 +177,7 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewSave.setAppraisalAmount(TCGDetailView.getAppraisalAmount());
                 TCGDetailViewSave.setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
+                TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.isProposeInThisRequest());
 
                 TCGDetailViewList.add(TCGDetailViewSave);
 
@@ -187,7 +190,7 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewList.get(rowIndex).setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewList.get(rowIndex).setAppraisalAmount(TCGDetailView.getAppraisalAmount());
                 TCGDetailViewList.get(rowIndex).setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
+                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(TCGDetailView.isProposeInThisRequest());
 
             } else {
                 log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
@@ -245,14 +248,14 @@ public class TCGInfo implements Serializable {
 
                  if(typeAmt.equals("Appraisal"))
                  {
-                     if(TCGDetailViewList.get(i).getProposeInThisRequest().equals("Y"))
+                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                      {
                         sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
                      }
                  }
                  else if(typeAmt.equals("LTV"))
                  {
-                     if(TCGDetailViewList.get(i).getProposeInThisRequest().equals("Y"))
+                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                      {
                         sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
                      }
@@ -290,6 +293,10 @@ public class TCGInfo implements Serializable {
         }
     }*/
 
+    public void onSaveTcgInfo(){
+        log.info("onSaveTcgInfo ::: ");
+        tcgBusinessControl.onSaveTCGToDB(TCGView,TCGDetailViewList);
+    }
 
     public List<TCGDetailView> getTCGDetailViewList() {
         return TCGDetailViewList;
