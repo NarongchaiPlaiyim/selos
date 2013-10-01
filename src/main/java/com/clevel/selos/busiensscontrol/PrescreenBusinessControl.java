@@ -1,18 +1,16 @@
 package com.clevel.selos.busiensscontrol;
 
 import com.clevel.selos.dao.master.DocumentTypeDAO;
-import com.clevel.selos.dao.working.PrescreenFacilityDAO;
-import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
-import com.clevel.selos.dao.working.PrescreenDAO;
+import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.working.PrescreenFacility;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
-import com.clevel.selos.model.db.working.Prescreen;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.FacilityView;
 import com.clevel.selos.model.view.PreScreenResponseView;
@@ -49,7 +47,13 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
+    WorkCaseDAO workCaseDAO;
+    @Inject
+    StepDAO stepDAO;
+    @Inject
     DocumentTypeDAO documentTypeDAO;
+    @Inject
+    BRMSResultDAO brmsResultDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -62,6 +66,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     //** function for integration **//
+
+    // *** Function for RM *** //
     public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user) throws Exception{
         CustomerInfoView customerInfoSearch = new CustomerInfoView();
         log.info("getCustomerInfoFromRM ::: customerInfoView : {}", customerInfoView);
@@ -106,6 +112,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoSearch;
     }
 
+    // *** Function for DWH (BankStatement) *** //
     public void getBankStatementFromDWH(PrescreenView prescreenView, User user) throws Exception{
         Date expectedSubmitDate = prescreenView.getExpectedSubmitDate();
         //TODO if expected submit date less than 15 get current month -2 if more than 15 get current month -1
@@ -125,6 +132,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     }
 
+    // *** Function for BRMS (PreScreenRules) ***//
     public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
         //TODO Transform view model to prescreenRequest
         PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
@@ -150,6 +158,21 @@ public class PrescreenBusinessControl extends BusinessControl {
         return preScreenResponseViewList;
     }
 
+    public void savePreScreenResult(List<PreScreenResponseView> preScreenResponseViews, long workCasePreScreenId, long workCaseId, long stepId, User user){
+        WorkCasePrescreen workCasePrescreen = null;
+        WorkCase workCase = null;
+        Step step = null;
+
+        if(workCasePreScreenId != 0){ workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId); }
+        if(workCaseId != 0){ workCase = workCaseDAO.findById(workCaseId); }
+        if(stepId != 0){ step = stepDAO.findById(stepId); }
+
+        List<BRMSResult> brmsResultList = preScreenResultTransform.transformResultToModel(preScreenResponseViews, workCasePrescreen, workCase, step, user);
+
+        brmsResultDAO.persist(brmsResultList);
+    }
+
+    // *** Function for PreScreen Initial *** //
     public void savePrescreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, long workCasePrescreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen);

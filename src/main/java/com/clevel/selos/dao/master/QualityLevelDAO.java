@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.QualityLevel;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -17,7 +16,6 @@ public class QualityLevelDAO extends GenericDAO<QualityLevel, Long> {
     @Inject
     public QualityLevelDAO() {
     }
-
 
     @Override
     public List<QualityLevel> findAll() {

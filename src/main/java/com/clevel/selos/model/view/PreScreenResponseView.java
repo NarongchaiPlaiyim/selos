@@ -1,19 +1,34 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class PreScreenResponseView implements Serializable {
-    public String ruleName;
-    public String ruleOrder;
-    public String type;
-    public String personalId;
-    public RuleColorResult color;
-    public String deviationFlag;
-    public String rejectGroupCode;
+    private long id;
+    private String ruleName;
+    private String ruleOrder;
+    private String ruleType;
+    private RuleColorResult ruleColor;
+    private String personalId;
+    private String deviationFlag;
+    private String rejectGroupCode;
+    private User createBy;
+    private User modifyBy;
+    private Date createDate;
+    private Date modifyDate;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getRuleName() {
         return ruleName;
@@ -31,12 +46,20 @@ public class PreScreenResponseView implements Serializable {
         this.ruleOrder = ruleOrder;
     }
 
-    public String getType() {
-        return type;
+    public String getRuleType() {
+        return ruleType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setRuleType(String ruleType) {
+        this.ruleType = ruleType;
+    }
+
+    public RuleColorResult getRuleColor() {
+        return ruleColor;
+    }
+
+    public void setRuleColor(RuleColorResult ruleColor) {
+        this.ruleColor = ruleColor;
     }
 
     public String getPersonalId() {
@@ -45,14 +68,6 @@ public class PreScreenResponseView implements Serializable {
 
     public void setPersonalId(String personalId) {
         this.personalId = personalId;
-    }
-
-    public RuleColorResult getColor() {
-        return color;
-    }
-
-    public void setColor(RuleColorResult color) {
-        this.color = color;
     }
 
     public String getDeviationFlag() {
@@ -71,16 +86,53 @@ public class PreScreenResponseView implements Serializable {
         this.rejectGroupCode = rejectGroupCode;
     }
 
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("ruleName", ruleName)
                 .append("ruleOrder", ruleOrder)
-                .append("type", type)
+                .append("ruleType", ruleType)
+                .append("ruleColor", ruleColor)
                 .append("personalId", personalId)
-                .append("color", color)
                 .append("deviationFlag", deviationFlag)
                 .append("rejectGroupCode", rejectGroupCode)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
                 .toString();
     }
 }

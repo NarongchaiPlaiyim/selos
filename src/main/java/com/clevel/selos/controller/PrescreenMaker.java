@@ -94,9 +94,16 @@ public class PrescreenMaker implements Serializable {
     private CollateralView proposeCollateral;
     private CollateralView selectProposeCollateralItem;
 
+    private List<PreScreenResponseView> preScreenResponseViewList;
+    private List<PreScreenResponseView> preScreenResponseCustomerList;
+    private List<PreScreenResponseView> preScreenResponseGroupList;
+
     private PrescreenView prescreenView;
 
+    // *** Variable for Session *** //
     private User user;
+    private long workCasePreScreenId;
+    private long stepId;
 
     private String modeForButton;
     private String messageHeader;
@@ -169,7 +176,10 @@ public class PrescreenMaker implements Serializable {
         //workCasePrescreenId = 1;
 
         //WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
-        user = (User)session.getAttribute("user");      //*** Get user from session ***//
+        user = (User)session.getAttribute("user");
+        workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
+        stepId = Long.parseLong(session.getAttribute("stepId").toString());
+
         //TODO tempory to remove this.
         user = userDAO.findById(new Long(1));
         log.info("onCreation ::: user : {}", user);
@@ -273,8 +283,10 @@ public class PrescreenMaker implements Serializable {
         // *** Validate Data for Check PreScreen *** //
         boolean validate = validateCheckPrescreen(customerInfoViewList);
         if(validate){
-            //PreScreenResponse preScreenResponse = prescreenBusinessControl.getPrescreenResultFromBRMS(customerInfoViewList);
-
+            preScreenResponseViewList = prescreenBusinessControl.getPreScreenResultFromBRMS(customerInfoViewList);
+            prescreenBusinessControl.savePreScreenResult(preScreenResponseViewList, workCasePreScreenId, 0, stepId, user);
+            preScreenResponseCustomerList = prescreenBusinessControl.getPreScreenCustomerResult(preScreenResponseViewList);
+            preScreenResponseGroupList = prescreenBusinessControl.getPreScreenGroupResult(preScreenResponseViewList);
         }else{
             // *** MessageBox show validation Failed. *** //
         }
@@ -1069,5 +1081,29 @@ public class PrescreenMaker implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public List<PreScreenResponseView> getPreScreenResponseViewList() {
+        return preScreenResponseViewList;
+    }
+
+    public void setPreScreenResponseViewList(List<PreScreenResponseView> preScreenResponseViewList) {
+        this.preScreenResponseViewList = preScreenResponseViewList;
+    }
+
+    public List<PreScreenResponseView> getPreScreenResponseCustomerList() {
+        return preScreenResponseCustomerList;
+    }
+
+    public void setPreScreenResponseCustomerList(List<PreScreenResponseView> preScreenResponseCustomerList) {
+        this.preScreenResponseCustomerList = preScreenResponseCustomerList;
+    }
+
+    public List<PreScreenResponseView> getPreScreenResponseGroupList() {
+        return preScreenResponseGroupList;
+    }
+
+    public void setPreScreenResponseGroupList(List<PreScreenResponseView> preScreenResponseGroupList) {
+        this.preScreenResponseGroupList = preScreenResponseGroupList;
     }
 }
