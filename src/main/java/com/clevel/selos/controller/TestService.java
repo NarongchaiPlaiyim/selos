@@ -3,7 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
 import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.model.RMmodel.CardTypeView;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;

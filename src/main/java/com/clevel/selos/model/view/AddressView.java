@@ -23,6 +23,8 @@ public class AddressView {
     private String contactName;
     private String contactPhone;
 
+
+
     public AddressView(){
 
     }
@@ -96,6 +98,7 @@ public class AddressView {
     }
 
     public void setSubDistrict(SubDistrict subDistrict) {
+
         this.subDistrict = subDistrict;
     }
 
