@@ -105,7 +105,7 @@ public class TestService implements Serializable{
 
         CustomerAccountModel customerAccountModel =new CustomerAccountModel();
         //callservice
-        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo("win",searchIndividual.getCustNbr(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.TMBCUS_ID);
+        customerAccountModel = rmInterfaceImpl.getCustomerAccountInfo("win",searchIndividual.getCustNbr());
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");

@@ -23,8 +23,6 @@ public class AddressView {
     private String contactName;
     private String contactPhone;
 
-
-
     public AddressView(){
 
     }
