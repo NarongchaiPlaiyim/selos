@@ -279,15 +279,15 @@ public class CaseCreation implements WSCaseCreation {
 
             //generate ref number
             String applicationNumber = stpExecutor.getApplicationNumber("XX");   // todo: where to get segment code
-            caseCreationHistory.setAppRefNumber(applicationNumber+"01");
+            caseCreationHistory.setAppNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
             //todo: how to get BDM Username for create case?
             if (bpmInterface.createCase(caseCreationHistory)) {
                 // return success
-                response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppRefNumber());
+                response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppNumber());
             } else {
-                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppRefNumber());
+                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppNumber());
             }
 
 

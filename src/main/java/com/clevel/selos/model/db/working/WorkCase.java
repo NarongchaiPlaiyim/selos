@@ -21,8 +21,10 @@ public class WorkCase implements Serializable {
     private long id;
     @Column(name="ca_number", length = 30, nullable=false)
     private String caNumber;
-    @Column(name="app_ref_number", nullable=false)
-    private String appRefNumber;
+    @Column(name="app_number", nullable=false)
+    private String appNumber;
+    @Column(name="ref_app_number")
+    private String refAppNumber;
     @Column(name="wob_number")
     private String wobNumber;
     @Column(name="case_lock")
@@ -78,12 +80,12 @@ public class WorkCase implements Serializable {
         this.caNumber = caNumber;
     }
 
-    public String getAppRefNumber() {
-        return appRefNumber;
+    public String getAppNumber() {
+        return appNumber;
     }
 
-    public void setAppRefNumber(String appRefNumber) {
-        this.appRefNumber = appRefNumber;
+    public void setAppNumber(String appRefNumber) {
+        this.appNumber = appRefNumber;
     }
 
     public String getWobNumber() {
@@ -187,7 +189,8 @@ public class WorkCase implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("caNumber", caNumber).
-                append("appRefNumber", appRefNumber).
+                append("appNumber", appNumber).
+                append("refAppNumber", refAppNumber).
                 append("wobNumber", wobNumber).
                 append("lock", lock).
                 append("lockUser", lockUser).
