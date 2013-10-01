@@ -18,7 +18,6 @@ public class AddressView {
     private SubDistrict subDistrict;
     private String postalCode;
     private Country country;
-    private Country countryCode;
     private String phoneNumber;
     private String extension;
     private String contactName;
@@ -116,14 +115,6 @@ public class AddressView {
         this.country = country;
     }
 
-    public Country getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(Country countryCode) {
-        this.countryCode = countryCode;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -170,7 +161,6 @@ public class AddressView {
                 .append("subDistrict", subDistrict)
                 .append("postalCode", postalCode)
                 .append("country", country)
-                .append("countryCode", countryCode)
                 .append("phoneNumber", phoneNumber)
                 .append("extension", extension)
                 .append("contactName", contactName)
