@@ -27,10 +27,12 @@ public class NCBBusinessTransform extends BusinessTransform {
     @Inject
     SettlementStatusDAO settlementStatusDAO;
 
-    private static final String TMB_BANK = "TMB";
-    private static final String SUCCESS = "SUCCESS";
+    private final String TMB_BANK = "TMB";
+    private final String SUCCESS = "SUCCESS";
+    private final int SIX_MONTH = 6;
+    private final int TWELVE_MONTH = 12;
 
-    public List<NcbView> transform(List<NCRSOutputModel> responseNCRSModels){
+    public List<NcbView> transformIndividual(List<NCRSOutputModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
         List<NCBDetailView> ncbDetailViews = null;
         NCBSummaryView ncbSummaryView = null;
@@ -78,8 +80,16 @@ public class NCBBusinessTransform extends BusinessTransform {
                                     //declare field for summary data
                                     String currentWorstPaymentStatus = null;
                                     String worstPaymentStatus = null;
-
+                                    boolean isNPLTMB = false;
+                                    boolean isNPLOther = false;
+                                    String lastNPLDateTMB = null;
+                                    String lastNPLDateOther = null;
+                                    boolean isTDRTMB = false;
+                                    boolean isTDROther = false;
+                                    String lastTDRDateTMB = null;
+                                    String lastTDRDateOther = null;
                                     for(SubjectAccountModel subjectAccountModel : subjectAccountModelResults){
+                                        boolean isTMBAccount = false;
                                         NCBDetailView ncbDetailView = new NCBDetailView();
                                         //set accountType
                                         AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
@@ -88,6 +98,7 @@ public class NCBBusinessTransform extends BusinessTransform {
                                         ncbDetailView.setTMBAccount(false);
                                         if(subjectAccountModel.getShortname().equals(TMB_BANK)){ //todo: change to master
                                             ncbDetailView.setTMBAccount(true);
+                                            isTMBAccount = true;
                                         }
                                         //set account status
                                         AccountStatus accountStatus = accountStatusDAO.getIndividualByCode(subjectAccountModel.getAccountstatus());
@@ -103,7 +114,25 @@ public class NCBBusinessTransform extends BusinessTransform {
                                         //set installment
                                         ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount())); //todo: check if null
                                         //set restructure date
-                                        ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getLastrestructureddate())){
+                                            ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));
+                                            //get TDR last date
+                                            if(isTMBAccount){
+                                                isTDRTMB = true;
+                                                if(!Util.isEmpty(lastTDRDateTMB)){
+                                                    lastTDRDateTMB = subjectAccountModel.getCloseddate();
+                                                } else {
+                                                    lastTDRDateTMB = getLastDateYYYYMMDD(lastTDRDateTMB,subjectAccountModel.getCloseddate());
+                                                }
+                                            } else {
+                                                isTDROther = true;
+                                                if(!Util.isEmpty(lastTDRDateOther)){
+                                                    lastTDRDateOther = subjectAccountModel.getCloseddate();
+                                                } else {
+                                                    lastTDRDateOther = getLastDateYYYYMMDD(lastTDRDateOther,subjectAccountModel.getCloseddate());
+                                                }
+                                            }
+                                        }
                                         //set current payment
                                         SettlementStatus settlementStatus = new SettlementStatus();
                                         if(!Util.isEmpty(subjectAccountModel.getPaymt01())){
@@ -121,124 +150,328 @@ public class NCBBusinessTransform extends BusinessTransform {
                                         int numberOfOutStandingPayment = 0;
                                         int numberOfOverLimit = 0;
                                         if(!Util.isEmpty(subjectAccountModel.getAccountstatus()) && subjectAccountModel.getAccountstatus().equals("04")){
-                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate01(),12)){
+                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), TWELVE_MONTH)){
                                                 if(isOverLimit(subjectAccountModel.getPaymt01())){
                                                     numberOfOverLimit++;
                                                 }
-                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate01(),6)){
+                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), SIX_MONTH)){
                                                     worstCode = subjectAccountModel.getPaymt01();
                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt01())){
                                                         numberOfOutStandingPayment++;
                                                     }
+                                                    if(isNPLIndividual(subjectAccountModel.getPaymt01())){
+                                                        if(isTMBAccount){
+                                                            isNPLTMB = true;
+                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate01();
+                                                            } else {
+                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate01());
+                                                            }
+                                                        } else {
+                                                            isNPLOther = true;
+                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate01();
+                                                            } else {
+                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate01());
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate02(),12)){
+                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), TWELVE_MONTH)){
                                                     if(isOverLimit(subjectAccountModel.getPaymt02())){
                                                         numberOfOverLimit++;
                                                     }
-                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate02(), 6)){
+                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), SIX_MONTH)){
                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt02())){
                                                             numberOfOutStandingPayment++;
                                                         }
+                                                        if(isNPLIndividual(subjectAccountModel.getPaymt02())){
+                                                            if(isTMBAccount){
+                                                                isNPLTMB = true;
+                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate02();
+                                                                } else {
+                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate02());
+                                                                }
+                                                            } else {
+                                                                isNPLOther = true;
+                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate02();
+                                                                } else {
+                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate02());
+                                                                }
+                                                            }
+                                                        }
                                                     }
-                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate03(),12)){
+                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), TWELVE_MONTH)){
                                                         if(isOverLimit(subjectAccountModel.getPaymt03())){
                                                             numberOfOverLimit++;
                                                         }
-                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate03(), 6)){
+                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), SIX_MONTH)){
                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt03())){
                                                                 numberOfOutStandingPayment++;
                                                             }
+                                                            if(isNPLIndividual(subjectAccountModel.getPaymt03())){
+                                                                if(isTMBAccount){
+                                                                    isNPLTMB = true;
+                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate03();
+                                                                    } else {
+                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate03());
+                                                                    }
+                                                                } else {
+                                                                    isNPLOther = true;
+                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate03();
+                                                                    } else {
+                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate03());
+                                                                    }
+                                                                }
+                                                            }
                                                         }
-                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate04(),12)){
+                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), TWELVE_MONTH)){
                                                             if(isOverLimit(subjectAccountModel.getPaymt04())){
                                                                 numberOfOverLimit++;
                                                             }
-                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate04(), 6)){
+                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), SIX_MONTH)){
                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
                                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt04())){
                                                                     numberOfOutStandingPayment++;
                                                                 }
+                                                                if(isNPLIndividual(subjectAccountModel.getPaymt04())){
+                                                                    if(isTMBAccount){
+                                                                        isNPLTMB = true;
+                                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate04();
+                                                                        } else {
+                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate04());
+                                                                        }
+                                                                    } else {
+                                                                        isNPLOther = true;
+                                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate04();
+                                                                        } else {
+                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate04());
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
-                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate05(),12)){
+                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), TWELVE_MONTH)){
                                                                 if(isOverLimit(subjectAccountModel.getPaymt05())){
                                                                     numberOfOverLimit++;
                                                                 }
-                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate05(), 6)){
+                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), SIX_MONTH)){
                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
                                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt05())){
                                                                         numberOfOutStandingPayment++;
                                                                     }
+                                                                    if(isNPLIndividual(subjectAccountModel.getPaymt05())){
+                                                                        if(isTMBAccount){
+                                                                            isNPLTMB = true;
+                                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate05();
+                                                                            } else {
+                                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate05());
+                                                                            }
+                                                                        } else {
+                                                                            isNPLOther = true;
+                                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate05();
+                                                                            } else {
+                                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate05());
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
-                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate06(),12)){
+                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), TWELVE_MONTH)){
                                                                     if(isOverLimit(subjectAccountModel.getPaymt06())){
                                                                         numberOfOverLimit++;
                                                                     }
-                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate06(), 6)){
+                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), SIX_MONTH)){
                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
                                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt06())){
                                                                             numberOfOutStandingPayment++;
                                                                         }
+                                                                        if(isNPLIndividual(subjectAccountModel.getPaymt06())){
+                                                                            if(isTMBAccount){
+                                                                                isNPLTMB = true;
+                                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate06();
+                                                                                } else {
+                                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate06());
+                                                                                }
+                                                                            } else {
+                                                                                isNPLOther = true;
+                                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate06();
+                                                                                } else {
+                                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate06());
+                                                                                }
+                                                                            }
+                                                                        }
                                                                     }
-                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate07(),12)){
+                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), TWELVE_MONTH)){
                                                                         if(isOverLimit(subjectAccountModel.getPaymt07())){
                                                                             numberOfOverLimit++;
                                                                         }
-                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate07(), 6)){
+                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), SIX_MONTH)){
                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
                                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt07())){
                                                                                 numberOfOutStandingPayment++;
                                                                             }
+                                                                            if(isNPLIndividual(subjectAccountModel.getPaymt07())){
+                                                                                if(isTMBAccount){
+                                                                                    isNPLTMB = true;
+                                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate07();
+                                                                                    } else {
+                                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate07());
+                                                                                    }
+                                                                                } else {
+                                                                                    isNPLOther = true;
+                                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate07();
+                                                                                    } else {
+                                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate07());
+                                                                                    }
+                                                                                }
+                                                                            }
                                                                         }
-                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate08(),12)){
+                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), TWELVE_MONTH)){
                                                                             if(isOverLimit(subjectAccountModel.getPaymt08())){
                                                                                 numberOfOverLimit++;
                                                                             }
-                                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate08(), 6)){
+                                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), SIX_MONTH)){
                                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
                                                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt08())){
                                                                                     numberOfOutStandingPayment++;
                                                                                 }
+                                                                                if(isNPLIndividual(subjectAccountModel.getPaymt08())){
+                                                                                    if(isTMBAccount){
+                                                                                        isNPLTMB = true;
+                                                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate08();
+                                                                                        } else {
+                                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate08());
+                                                                                        }
+                                                                                    } else {
+                                                                                        isNPLOther = true;
+                                                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate08();
+                                                                                        } else {
+                                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate08());
+                                                                                        }
+                                                                                    }
+                                                                                }
                                                                             }
-                                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate09(),12)){
+                                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), TWELVE_MONTH)){
                                                                                 if(isOverLimit(subjectAccountModel.getPaymt09())){
                                                                                     numberOfOverLimit++;
                                                                                 }
-                                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate09(), 6)){
+                                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), SIX_MONTH)){
                                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
                                                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt09())){
                                                                                         numberOfOutStandingPayment++;
                                                                                     }
+                                                                                    if(isNPLIndividual(subjectAccountModel.getPaymt09())){
+                                                                                        if(isTMBAccount){
+                                                                                            isNPLTMB = true;
+                                                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate09();
+                                                                                            } else {
+                                                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate09());
+                                                                                            }
+                                                                                        } else {
+                                                                                            isNPLOther = true;
+                                                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate09();
+                                                                                            } else {
+                                                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate09());
+                                                                                            }
+                                                                                        }
+                                                                                    }
                                                                                 }
-                                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate10(),12)){
+                                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), TWELVE_MONTH)){
                                                                                     if(isOverLimit(subjectAccountModel.getPaymt10())){
                                                                                         numberOfOverLimit++;
                                                                                     }
-                                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate10(), 6)){
+                                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), SIX_MONTH)){
                                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
                                                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt10())){
                                                                                             numberOfOutStandingPayment++;
                                                                                         }
+                                                                                        if(isNPLIndividual(subjectAccountModel.getPaymt10())){
+                                                                                            if(isTMBAccount){
+                                                                                                isNPLTMB = true;
+                                                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate10();
+                                                                                                } else {
+                                                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate10());
+                                                                                                }
+                                                                                            } else {
+                                                                                                isNPLOther = true;
+                                                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate10();
+                                                                                                } else {
+                                                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate10());
+                                                                                                }
+                                                                                            }
+                                                                                        }
                                                                                     }
-                                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate11(),12)){
+                                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), TWELVE_MONTH)){
                                                                                         if(isOverLimit(subjectAccountModel.getPaymt11())){
                                                                                             numberOfOverLimit++;
                                                                                         }
-                                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate11(), 6)){
+                                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), SIX_MONTH)){
                                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
                                                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt11())){
                                                                                                 numberOfOutStandingPayment++;
                                                                                             }
+                                                                                            if(isNPLIndividual(subjectAccountModel.getPaymt11())){
+                                                                                                if(isTMBAccount){
+                                                                                                    isNPLTMB = true;
+                                                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate11();
+                                                                                                    } else {
+                                                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate11());
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    isNPLOther = true;
+                                                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate11();
+                                                                                                    } else {
+                                                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate11());
+                                                                                                    }
+                                                                                                }
+                                                                                            }
                                                                                         }
-                                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate12(),12)){
+                                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), TWELVE_MONTH)){
                                                                                             if(isOverLimit(subjectAccountModel.getPaymt12())){
                                                                                                 numberOfOverLimit++;
                                                                                             }
-                                                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate12(), 6)){
+                                                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), SIX_MONTH)){
                                                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
                                                                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt12())){
                                                                                                     numberOfOutStandingPayment++;
+                                                                                                }
+                                                                                                if(isNPLIndividual(subjectAccountModel.getPaymt12())){
+                                                                                                    if(isTMBAccount){
+                                                                                                        isNPLTMB = true;
+                                                                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate12();
+                                                                                                        } else {
+                                                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate12());
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        isNPLOther = true;
+                                                                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate12();
+                                                                                                        } else {
+                                                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate12());
+                                                                                                        }
+                                                                                                    }
                                                                                                 }
                                                                                             }
                                                                                         }
@@ -254,7 +487,7 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                 }
                                             }
                                         } else {
-                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate01(),12)){
+                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), TWELVE_MONTH)){
                                                 worstCode = subjectAccountModel.getPaymt01();
                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt01())){
                                                     numberOfOutStandingPayment++;
@@ -262,7 +495,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                 if(isOverLimit(subjectAccountModel.getPaymt01())){
                                                     numberOfOverLimit++;
                                                 }
-                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate02(),12)){
+                                                if(isNPLIndividual(subjectAccountModel.getPaymt01())){
+                                                    if(isTMBAccount){
+                                                        isNPLTMB = true;
+                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate01();
+                                                        } else {
+                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate01());
+                                                        }
+                                                    } else {
+                                                        isNPLOther = true;
+                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate01();
+                                                        } else {
+                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate01());
+                                                        }
+                                                    }
+                                                }
+                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), TWELVE_MONTH)){
                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt02(),worstCode);
                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt02())){
                                                         numberOfOutStandingPayment++;
@@ -270,7 +520,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                     if(isOverLimit(subjectAccountModel.getPaymt02())){
                                                         numberOfOverLimit++;
                                                     }
-                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate03(),12)){
+                                                    if(isNPLIndividual(subjectAccountModel.getPaymt02())){
+                                                        if(isTMBAccount){
+                                                            isNPLTMB = true;
+                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate02();
+                                                            } else {
+                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate02());
+                                                            }
+                                                        } else {
+                                                            isNPLOther = true;
+                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate02();
+                                                            } else {
+                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate02());
+                                                            }
+                                                        }
+                                                    }
+                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), TWELVE_MONTH)){
                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt03(),worstCode);
                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt03())){
                                                             numberOfOutStandingPayment++;
@@ -278,7 +545,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                         if(isOverLimit(subjectAccountModel.getPaymt03())){
                                                             numberOfOverLimit++;
                                                         }
-                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate04(),12)){
+                                                        if(isNPLIndividual(subjectAccountModel.getPaymt03())){
+                                                            if(isTMBAccount){
+                                                                isNPLTMB = true;
+                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate03();
+                                                                } else {
+                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate03());
+                                                                }
+                                                            } else {
+                                                                isNPLOther = true;
+                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate03();
+                                                                } else {
+                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate03());
+                                                                }
+                                                            }
+                                                        }
+                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), TWELVE_MONTH)){
                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt04(),worstCode);
                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt04())){
                                                                 numberOfOutStandingPayment++;
@@ -286,7 +570,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                             if(isOverLimit(subjectAccountModel.getPaymt04())){
                                                                 numberOfOverLimit++;
                                                             }
-                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate05(),12)){
+                                                            if(isNPLIndividual(subjectAccountModel.getPaymt04())){
+                                                                if(isTMBAccount){
+                                                                    isNPLTMB = true;
+                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate04();
+                                                                    } else {
+                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate04());
+                                                                    }
+                                                                } else {
+                                                                    isNPLOther = true;
+                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate04();
+                                                                    } else {
+                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate04());
+                                                                    }
+                                                                }
+                                                            }
+                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), TWELVE_MONTH)){
                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt05(),worstCode);
                                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt05())){
                                                                     numberOfOutStandingPayment++;
@@ -294,7 +595,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                 if(isOverLimit(subjectAccountModel.getPaymt05())){
                                                                     numberOfOverLimit++;
                                                                 }
-                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate06(),12)){
+                                                                if(isNPLIndividual(subjectAccountModel.getPaymt05())){
+                                                                    if(isTMBAccount){
+                                                                        isNPLTMB = true;
+                                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate05();
+                                                                        } else {
+                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate05());
+                                                                        }
+                                                                    } else {
+                                                                        isNPLOther = true;
+                                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate05();
+                                                                        } else {
+                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate05());
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), TWELVE_MONTH)){
                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt06(),worstCode);
                                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt06())){
                                                                         numberOfOutStandingPayment++;
@@ -302,7 +620,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                     if(isOverLimit(subjectAccountModel.getPaymt06())){
                                                                         numberOfOverLimit++;
                                                                     }
-                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate07(),12)){
+                                                                    if(isNPLIndividual(subjectAccountModel.getPaymt06())){
+                                                                        if(isTMBAccount){
+                                                                            isNPLTMB = true;
+                                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate06();
+                                                                            } else {
+                                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate06());
+                                                                            }
+                                                                        } else {
+                                                                            isNPLOther = true;
+                                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate06();
+                                                                            } else {
+                                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate06());
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), TWELVE_MONTH)){
                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt07(),worstCode);
                                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt07())){
                                                                             numberOfOutStandingPayment++;
@@ -310,7 +645,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                         if(isOverLimit(subjectAccountModel.getPaymt07())){
                                                                             numberOfOverLimit++;
                                                                         }
-                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate08(),12)){
+                                                                        if(isNPLIndividual(subjectAccountModel.getPaymt07())){
+                                                                            if(isTMBAccount){
+                                                                                isNPLTMB = true;
+                                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate07();
+                                                                                } else {
+                                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate07());
+                                                                                }
+                                                                            } else {
+                                                                                isNPLOther = true;
+                                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate07();
+                                                                                } else {
+                                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate07());
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), TWELVE_MONTH)){
                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt08(),worstCode);
                                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt08())){
                                                                                 numberOfOutStandingPayment++;
@@ -318,7 +670,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                             if(isOverLimit(subjectAccountModel.getPaymt08())){
                                                                                 numberOfOverLimit++;
                                                                             }
-                                                                            if(isInMonthPeriod(subjectAccountModel.getPaymtdate09(),12)){
+                                                                            if(isNPLIndividual(subjectAccountModel.getPaymt08())){
+                                                                                if(isTMBAccount){
+                                                                                    isNPLTMB = true;
+                                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate08();
+                                                                                    } else {
+                                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate08());
+                                                                                    }
+                                                                                } else {
+                                                                                    isNPLOther = true;
+                                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate08();
+                                                                                    } else {
+                                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate08());
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), TWELVE_MONTH)){
                                                                                 worstCode = getWorstCode(subjectAccountModel.getPaymt09(),worstCode);
                                                                                 if(isOutStandingPayment(subjectAccountModel.getPaymt09())){
                                                                                     numberOfOutStandingPayment++;
@@ -326,7 +695,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                                 if(isOverLimit(subjectAccountModel.getPaymt09())){
                                                                                     numberOfOverLimit++;
                                                                                 }
-                                                                                if(isInMonthPeriod(subjectAccountModel.getPaymtdate10(),12)){
+                                                                                if(isNPLIndividual(subjectAccountModel.getPaymt09())){
+                                                                                    if(isTMBAccount){
+                                                                                        isNPLTMB = true;
+                                                                                        if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                            lastNPLDateTMB = subjectAccountModel.getPaymtdate09();
+                                                                                        } else {
+                                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate09());
+                                                                                        }
+                                                                                    } else {
+                                                                                        isNPLOther = true;
+                                                                                        if(Util.isEmpty(lastNPLDateOther)){
+                                                                                            lastNPLDateOther = subjectAccountModel.getPaymtdate09();
+                                                                                        } else {
+                                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate09());
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), TWELVE_MONTH)){
                                                                                     worstCode = getWorstCode(subjectAccountModel.getPaymt10(),worstCode);
                                                                                     if(isOutStandingPayment(subjectAccountModel.getPaymt10())){
                                                                                         numberOfOutStandingPayment++;
@@ -334,7 +720,24 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                                     if(isOverLimit(subjectAccountModel.getPaymt10())){
                                                                                         numberOfOverLimit++;
                                                                                     }
-                                                                                    if(isInMonthPeriod(subjectAccountModel.getPaymtdate11(),12)){
+                                                                                    if(isNPLIndividual(subjectAccountModel.getPaymt10())){
+                                                                                        if(isTMBAccount){
+                                                                                            isNPLTMB = true;
+                                                                                            if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                lastNPLDateTMB = subjectAccountModel.getPaymtdate10();
+                                                                                            } else {
+                                                                                                lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate10());
+                                                                                            }
+                                                                                        } else {
+                                                                                            isNPLOther = true;
+                                                                                            if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                lastNPLDateOther = subjectAccountModel.getPaymtdate10();
+                                                                                            } else {
+                                                                                                lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate10());
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), TWELVE_MONTH)){
                                                                                         worstCode = getWorstCode(subjectAccountModel.getPaymt11(),worstCode);
                                                                                         if(isOutStandingPayment(subjectAccountModel.getPaymt11())){
                                                                                             numberOfOutStandingPayment++;
@@ -342,13 +745,47 @@ public class NCBBusinessTransform extends BusinessTransform {
                                                                                         if(isOverLimit(subjectAccountModel.getPaymt11())){
                                                                                             numberOfOverLimit++;
                                                                                         }
-                                                                                        if(isInMonthPeriod(subjectAccountModel.getPaymtdate12(),12)){
+                                                                                        if(isNPLIndividual(subjectAccountModel.getPaymt11())){
+                                                                                            if(isTMBAccount){
+                                                                                                isNPLTMB = true;
+                                                                                                if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                    lastNPLDateTMB = subjectAccountModel.getPaymtdate11();
+                                                                                                } else {
+                                                                                                    lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate11());
+                                                                                                }
+                                                                                            } else {
+                                                                                                isNPLOther = true;
+                                                                                                if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                    lastNPLDateOther = subjectAccountModel.getPaymtdate11();
+                                                                                                } else {
+                                                                                                    lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate11());
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        if(isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), 12)){
                                                                                             worstCode = getWorstCode(subjectAccountModel.getPaymt12(),worstCode);
                                                                                             if(isOutStandingPayment(subjectAccountModel.getPaymt12())){
                                                                                                 numberOfOutStandingPayment++;
                                                                                             }
                                                                                             if(isOverLimit(subjectAccountModel.getPaymt12())){
                                                                                                 numberOfOverLimit++;
+                                                                                            }
+                                                                                            if(isNPLIndividual(subjectAccountModel.getPaymt12())){
+                                                                                                if(isTMBAccount){
+                                                                                                    isNPLTMB = true;
+                                                                                                    if(Util.isEmpty(lastNPLDateTMB)){
+                                                                                                        lastNPLDateTMB = subjectAccountModel.getPaymtdate12();
+                                                                                                    } else {
+                                                                                                        lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB,subjectAccountModel.getPaymtdate12());
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    isNPLOther = true;
+                                                                                                    if(Util.isEmpty(lastNPLDateOther)){
+                                                                                                        lastNPLDateOther = subjectAccountModel.getPaymtdate12();
+                                                                                                    } else {
+                                                                                                        lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther,subjectAccountModel.getPaymtdate12());
+                                                                                                    }
+                                                                                                }
                                                                                             }
                                                                                         }
                                                                                     }
@@ -384,16 +821,33 @@ public class NCBBusinessTransform extends BusinessTransform {
                                     }
 
                                     ncbSummaryView = new NCBSummaryView();
-                                    ncbSummaryView.setTypeOfCurrentPayment(currentWorstPaymentStatus);
-                                    ncbSummaryView.setTypeOfHistoryPayment(worstPaymentStatus);
+                                    ncbSummaryView.setTypeOfCurrentPayment(currentWorstPaymentStatus); //todo: change view field to SettlementType
+                                    ncbSummaryView.setTypeOfHistoryPayment(worstPaymentStatus); //todo: change view field to SettlementType
+                                    //todo: set NPL flag and NPL date for TMB and other
+                                    //todo: set TDR flag and TDR date for TMB and other
                                 } else {
                                     //no ncb detail
                                 }
 
                                 //get enquiry amount
+                                int enquiryTime = 0;
                                 if(enquiryModelResults.size() > 0){
+                                    Map<String, String> enquiryMap = new HashMap<String, String>();  //for check duplicate enquiry time
+                                    //get number of enquiry in last 6 months
+                                    for(EnquiryModel enquiryModel: enquiryModelResults){
+                                        if(isInMonthPeriodYYYYMMDD(enquiryModel.getEnqdate(),SIX_MONTH)){
+                                            enquiryMap.put(enquiryModel.getEnqdate().concat(enquiryModel.getEnqtime()),enquiryModel.getEnqamount());
+                                        }
+                                    }
 
+                                    enquiryTime = enquiryMap.size();
                                 }
+
+                                if(ncbSummaryView != null){
+                                    ncbSummaryView.setNoOfNCBCheckIn6months(enquiryTime+"");
+                                }
+
+
                             }
                         }
                     }
@@ -417,9 +871,9 @@ public class NCBBusinessTransform extends BusinessTransform {
         return worstCode;
     }
 
-    private boolean isInMonthPeriod(String paymentDateStr, int numberMonth){
-        if(paymentDateStr!=null && !paymentDateStr.trim().equals("")){
-            Date paymentDate = Util.strYYYYMMDDtoDateFormat(paymentDateStr);
+    private boolean isInMonthPeriodYYYYMMDD(String dateStr, int numberMonth){
+        if(dateStr!=null && !dateStr.trim().equals("")){
+            Date paymentDate = Util.strYYYYMMDDtoDateFormat(dateStr);
             Date currentDate = new Date();
             Calendar startCalendar = new GregorianCalendar();
             startCalendar.setTime(paymentDate);
@@ -452,5 +906,44 @@ public class NCBBusinessTransform extends BusinessTransform {
             }
         }
         return false;
+    }
+
+    private boolean isNPLIndividual(String paymentCode){
+        if(!Util.isEmpty(paymentCode)){
+            int value = NCBPaymentCode.getValue(paymentCode).value();
+            if(value >= 3){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isNPLJuristic(String paymentCode){
+        if(!Util.isEmpty(paymentCode)){
+            int value = NCBPaymentCode.getValue(paymentCode).value();
+            if(value >= 4){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String getLastDateYYYYMMDD(String dateStr1, String dateStr2){
+        Date date1 = Util.strYYYYMMDDtoDateFormat(dateStr1);
+        Date date2 = Util.strYYYYMMDDtoDateFormat(dateStr2);
+        if(date1 != null && date2 != null){
+            if(date1.compareTo(date2) > 0){
+                return Util.createDateString(date1,"yyyyMMdd");
+            } else if(date1.compareTo(date2) < 0){
+                return Util.createDateString(date2,"yyyyMMdd");
+            }
+        } else {
+            if(date1 == null) {
+                return dateStr2;
+            } else {
+                return dateStr1;
+            }
+        }
+        return dateStr1;
     }
 }

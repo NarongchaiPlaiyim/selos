@@ -1,5 +1,6 @@
 package com.clevel.selos.util;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,5 +114,25 @@ public class Util {
 
     public static String getLinkKey(String userId){
         return userId+"_"+ System.currentTimeMillis();
+    }
+
+    public static int getDayOfDate(Date date){
+        int day = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        day = cal.get(Calendar.DAY_OF_MONTH);
+
+        return day;
+    }
+
+    public static int getMonthOfDate(Date date){
+        int month = 0;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        month = cal.get(Calendar.MONTH) + 1;
+
+        return month;
     }
 }

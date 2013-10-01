@@ -14,6 +14,8 @@ import java.util.Date;
 public class PrescreenView implements Serializable{
     private long id;
     private ProductGroup productGroup;
+    private int searchBy;
+    private String searchId;
     private Date expectedSubmitDate;
     private Province businessLocation;
     private Date registerDate;
@@ -52,6 +54,22 @@ public class PrescreenView implements Serializable{
 
     public void setProductGroup(ProductGroup productGroup) {
         this.productGroup = productGroup;
+    }
+
+    public int getSearchBy() {
+        return searchBy;
+    }
+
+    public void setSearchBy(int searchBy) {
+        this.searchBy = searchBy;
+    }
+
+    public String getSearchId() {
+        return searchId;
+    }
+
+    public void setSearchId(String searchId) {
+        this.searchId = searchId;
     }
 
     public Date getExpectedSubmitDate() {
@@ -139,6 +157,8 @@ public class PrescreenView implements Serializable{
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("productGroup", productGroup)
+                .append("searchBy", searchBy)
+                .append("searchId", searchId)
                 .append("expectedSubmitDate", expectedSubmitDate)
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)

@@ -21,7 +21,8 @@ public class AddressView {
     private Country countryCode;
     private String phoneNumber;
     private String extension;
-
+    private String contactName;
+    private String contactPhone;
 
 
 
@@ -142,6 +143,21 @@ public class AddressView {
         this.extension = extension;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
 
     @Override
     public String toString() {
@@ -160,6 +176,8 @@ public class AddressView {
                 .append("countryCode", countryCode)
                 .append("phoneNumber", phoneNumber)
                 .append("extension", extension)
+                .append("contactName", contactName)
+                .append("contactPhone", contactPhone)
                 .toString();
     }
 }

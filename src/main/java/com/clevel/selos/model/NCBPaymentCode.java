@@ -1,9 +1,9 @@
 package com.clevel.selos.model;
 
 public enum NCBPaymentCode {
-    CODE___N("__N",1),
+    CODE___N("N",1),
     CODE_000("000",2),
-    CODE___Y("__Y",3),
+    CODE___Y("Y",3),
     CODE_001("001",4),
     CODE_002("002",5),
     CODE_003("003",6),
@@ -15,7 +15,7 @@ public enum NCBPaymentCode {
     CODE_009("009",12),
     CODE_010("010",13),
     CODE_011("011",14),
-    CODE___F("__F",15),
+    CODE___F("F",15),
     CODE_999("999",-1);
 
     String code;
@@ -35,8 +35,9 @@ public enum NCBPaymentCode {
     }
 
     public static NCBPaymentCode getValue(String code) {
+        if(code!=null && !code.trim().equals(""))
         for (NCBPaymentCode ncbPaymentCode : values()) {
-            if (ncbPaymentCode.code.equals(code)) {
+            if (ncbPaymentCode.code.equals(code.trim())) {
                 return ncbPaymentCode;
             }
         }

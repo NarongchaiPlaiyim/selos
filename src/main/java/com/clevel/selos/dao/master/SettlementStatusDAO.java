@@ -24,7 +24,7 @@ public class SettlementStatusDAO extends GenericDAO<SettlementStatus,Integer> {
             //set for individual
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 1));
-            criteria.add(Restrictions.eq("code", code));
+            criteria.add(Restrictions.eq("code", code.trim()));
             SettlementStatus settlementStatus = (SettlementStatus) criteria.uniqueResult();
 
             log.debug("getIndividualByCode. (settlementStatus: {})",settlementStatus);
@@ -39,7 +39,7 @@ public class SettlementStatusDAO extends GenericDAO<SettlementStatus,Integer> {
             //set for juristic
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 2));
-            criteria.add(Restrictions.eq("code", code));
+            criteria.add(Restrictions.eq("code", code.trim()));
             SettlementStatus settlementStatus = (SettlementStatus) criteria.uniqueResult();
 
             log.debug("getJuristicByCode. (settlementStatus: {})",settlementStatus);
