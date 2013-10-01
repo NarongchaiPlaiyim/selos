@@ -12,8 +12,6 @@ import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualM
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
-import com.clevel.selos.transform.business.TranformCorporate;
-import com.clevel.selos.transform.business.TranformIndividual;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -29,12 +27,6 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     @Inject
     RMService rmService;
-
-    @Inject
-    TranformIndividual tranformIndividual;
-
-    @Inject
-    TranformCorporate tranformCorporate;
 
     @Inject
     @Config(name = "interface.rm.customerAccount.acronym")
