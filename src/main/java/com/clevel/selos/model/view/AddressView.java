@@ -21,8 +21,8 @@ public class AddressView {
     private Country countryCode;
     private String phoneNumber;
     private String extension;
-    private String customerContact;
     private String contactName;
+    private String contactPhone;
 
     public AddressView(){
 
@@ -140,20 +140,20 @@ public class AddressView {
         this.extension = extension;
     }
 
-    public String getCustomerContact() {
-        return customerContact;
-    }
-
-    public void setCustomerContact(String customerContact) {
-        this.customerContact = customerContact;
-    }
-
     public String getContactName() {
         return contactName;
     }
 
     public void setContactName(String contactName) {
         this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
     }
 
     @Override
@@ -173,8 +173,8 @@ public class AddressView {
                 .append("countryCode", countryCode)
                 .append("phoneNumber", phoneNumber)
                 .append("extension", extension)
-                .append("customerContact", customerContact)
                 .append("contactName", contactName)
+                .append("contactPhone", contactPhone)
                 .toString();
     }
 }
