@@ -98,11 +98,11 @@ public class PrescreenBusinessControl extends BusinessControl {
             log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
             log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
 
-            if(customerInfoView.getCustomerEntity().getId() == 1) {
+            /*if(customerInfoView.getCustomerEntity().getId() == 1) {
                 customerInfoSearch = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             } else if(customerInfoView.getCustomerEntity().getId() == 2){
                 customerInfoSearch = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
-            }
+            }*/
         } catch(Exception ex) {
             log.info("error : {}", ex);
             throw new Exception(ex.getMessage());

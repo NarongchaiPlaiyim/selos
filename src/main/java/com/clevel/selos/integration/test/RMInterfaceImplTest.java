@@ -2,9 +2,12 @@ package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountListModel;
-import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.view.CustomerInfoView;
 import org.slf4j.Logger;
 
@@ -27,10 +30,12 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
 
     @Override
-    public CustomerInfoView getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
 
         log.debug("======= IndividualServiceTest =======");
-        CustomerInfoView customerInfoView=new CustomerInfoView();
+        IndividualResult individualResult=new IndividualResult();
+        individualResult.setCustomerId(customerId);
+        individualResult.setActionResult(ActionResult.SUCCEED);
 //        IndividualModel individualModel = new IndividualModel();
 //        individualModel.setResCode("0000");
 //        individualModel.setResDesc("SUCCESS");
@@ -61,14 +66,16 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 //            }
 //            log.debug("responseCode: {}", individualModel.getResCode());
 //      }
-        return customerInfoView;
+        return individualResult;
     }
 
     @Override
-    public CustomerInfoView getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
         log.debug("======= CorporateServiceTest =======");
 
-        CorporateModel corporateModel = new CorporateModel();
+        CorporateResult corporateResult = new CorporateResult();
+        corporateResult.setActionResult(ActionResult.SUCCEED);
+        corporateResult.setCustomerId(customerId);
 //        corporateModel.setResCode("0000");
 //        corporateModel.setResDesc("SUCCESS");
 //        corporateModel.setSearchResult("CD");
@@ -103,17 +110,16 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 //            }
 //            log.debug("responseCode: {}", corporateModel.getResCode());
 
-        return null;
+        return corporateResult;
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String userId,String customerId) throws Exception {
+    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) throws Exception {
 
         log.debug("======= CustomerAccountServiceTest =======");
 
-        CustomerAccountModel customerAccountModel = new CustomerAccountModel();
-        customerAccountModel.setResCode("0000");
-        customerAccountModel.setResDesc("SUCCESS");
+        CustomerAccountResult customerAccountResult = new CustomerAccountResult();
+        customerAccountResult.setActionResult(ActionResult.SUCCEED);
 
         List<CustomerAccountListModel> listModelList=new ArrayList<CustomerAccountListModel>();
 
@@ -160,8 +166,8 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
                     customerAccountListModel.setCurr("");
                     listModelList.add(customerAccountListModel);
 
-            customerAccountModel.setAccountBody(listModelList);
+            customerAccountResult.setAccountListModels(listModelList);
 
-        return customerAccountModel;
+        return customerAccountResult;
     }
 }

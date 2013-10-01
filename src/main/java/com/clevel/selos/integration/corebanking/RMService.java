@@ -2,17 +2,17 @@ package com.clevel.selos.integration.corebanking;
 
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
+import com.clevel.selos.integration.corebanking.model.SearchIndividual;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountListModel;
-import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
-import com.clevel.selos.model.RMmodel.*;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.RMmodel.corporateInfo.RegistrationAddress;
-import com.clevel.selos.model.RMmodel.customeraccount.SearchCustomerAccountModel;
-import com.clevel.selos.model.RMmodel.individualInfo.ContactDetails;
-import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
-import com.clevel.selos.model.RMmodel.individualInfo.Spouse;
-import com.clevel.selos.model.RMmodel.individualInfo.Telephone;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.RegistrationAddress;
+import com.clevel.selos.integration.corebanking.model.customeraccount.SearchCustomerAccountModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.ContactDetails;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.Spouse;
+import com.clevel.selos.integration.corebanking.model.individualInfo.Telephone;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.*;
@@ -534,9 +534,9 @@ public class RMService implements Serializable {
     /**
      * ***************************  CustomerAccount  *********************************
      */
-    public CustomerAccountModel customerAccountService(SearchCustomerAccountModel searchCustomerAccountModel,String userId) throws Exception {
+    public CustomerAccountResult customerAccountService(SearchCustomerAccountModel searchCustomerAccountModel,String userId) throws Exception {
         log.debug("CustomerAccountService() START");
-        CustomerAccountModel customerAccountModel = null;
+        CustomerAccountResult customerAccountResult = null;
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchCustomerAccountModel.getReqId().length())) {
@@ -625,9 +625,9 @@ public class RMService implements Serializable {
                 for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }
-                customerAccountModel = new CustomerAccountModel();
-                customerAccountModel.setResCode(resSearchCustomerAccount.getHeader().getResCode());
-                customerAccountModel.setResDesc(resSearchCustomerAccount.getHeader().getResDesc());
+                customerAccountResult = new CustomerAccountResult();
+                customerAccountResult.setActionResult(ActionResult.SUCCEED);
+                customerAccountResult.setCustomerId(searchCustomerAccountModel.getCustNbr());
 
                 //Audit Data
                 rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), linkKey);
@@ -665,15 +665,15 @@ public class RMService implements Serializable {
                         }
 
                     }
-                    customerAccountModel.setAccountBody(listModelList);
+                    customerAccountResult.setAccountListModels(listModelList);
 
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
                     throw new ValidationException(exceptionMsg.get(ExceptionMapping.HOST_PARAMETER_IS_NULL));
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
+                    /*List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
                     log.info(listModelList.size() + "");
-                    customerAccountModel.setAccountBody(listModelList);
+                    customerAccountResult.setAccountListModels(listModelList);*/
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
                     throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
                 }
@@ -693,7 +693,7 @@ public class RMService implements Serializable {
         }
 
         log.debug("CorporateService() END");
-        return customerAccountModel;
+        return customerAccountResult;
     }
 
 

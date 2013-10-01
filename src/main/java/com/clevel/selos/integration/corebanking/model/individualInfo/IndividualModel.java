@@ -1,10 +1,6 @@
-package com.clevel.selos.model.RMmodel.individualInfo;
-
-import com.clevel.selos.model.Gender;
-import com.clevel.selos.model.db.master.Nationality;
+package com.clevel.selos.integration.corebanking.model.individualInfo;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 

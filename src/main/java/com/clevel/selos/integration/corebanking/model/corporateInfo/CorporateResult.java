@@ -1,15 +1,12 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.integration.corebanking.model.corporateInfo;
 
 import com.clevel.selos.model.ActionResult;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class CustomerAccountView {
+public class CorporateResult {
     private String customerId;
     private ActionResult actionResult;
     private String reason;
-    private List<String> accountList = new ArrayList<String>();
+    private CorporateModel corporateModel;
 
     public String getCustomerId() {
         return customerId;
@@ -35,11 +32,11 @@ public class CustomerAccountView {
         this.reason = reason;
     }
 
-    public List<String> getAccountList() {
-        return accountList;
+    public CorporateModel getCorporateModel() {
+        return corporateModel;
     }
 
-    public void setAccountList(List<String> accountList) {
-        this.accountList = accountList;
+    public void setCorporateModel(CorporateModel corporateModel) {
+        this.corporateModel = corporateModel;
     }
 }

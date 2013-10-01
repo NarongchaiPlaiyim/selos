@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;

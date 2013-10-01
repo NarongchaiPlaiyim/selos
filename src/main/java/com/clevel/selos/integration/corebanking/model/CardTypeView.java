@@ -1,4 +1,4 @@
-package com.clevel.selos.model.RMmodel;
+package com.clevel.selos.integration.corebanking.model;
 
 import java.io.Serializable;
 

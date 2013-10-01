@@ -1,15 +1,15 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.integration.corebanking.model.customeraccount;
 
 import com.clevel.selos.model.ActionResult;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
-public class CustomerAccountView {
+public class CustomerAccountResult implements Serializable {
     private String customerId;
     private ActionResult actionResult;
     private String reason;
-    private List<String> accountList = new ArrayList<String>();
+    private List<CustomerAccountListModel> accountListModels;
 
     public String getCustomerId() {
         return customerId;
@@ -35,11 +35,11 @@ public class CustomerAccountView {
         this.reason = reason;
     }
 
-    public List<String> getAccountList() {
-        return accountList;
+    public List<CustomerAccountListModel> getAccountListModels() {
+        return accountListModels;
     }
 
-    public void setAccountList(List<String> accountList) {
-        this.accountList = accountList;
+    public void setAccountListModels(List<CustomerAccountListModel> accountListModels) {
+        this.accountListModels = accountListModels;
     }
 }

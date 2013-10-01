@@ -1,15 +1,26 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class CustomerAccountView {
+public class CustomerInfoResultView implements Serializable {
     private String customerId;
     private ActionResult actionResult;
     private String reason;
-    private List<String> accountList = new ArrayList<String>();
+    private CustomerInfoView customerInfoView;
+
+    public CustomerInfoResultView(){
+        //reset();
+    }
 
     public String getCustomerId() {
         return customerId;
@@ -35,11 +46,11 @@ public class CustomerAccountView {
         this.reason = reason;
     }
 
-    public List<String> getAccountList() {
-        return accountList;
+    public CustomerInfoView getCustomerInfoView() {
+        return customerInfoView;
     }
 
-    public void setAccountList(List<String> accountList) {
-        this.accountList = accountList;
+    public void setCustomerInfoView(CustomerInfoView customerInfoView) {
+        this.customerInfoView = customerInfoView;
     }
 }
