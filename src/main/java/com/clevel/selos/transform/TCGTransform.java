@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.TCG;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGView;
 
 /**
@@ -12,14 +13,14 @@ import com.clevel.selos.model.view.TCGView;
  */
 public class TCGTransform extends Transform {
 
-    public TCG transformTCGViewToModel(TCGView tcgView) {
+    public TCG transformTCGViewToModel(TCGView tcgView ,WorkCase workCaseId) {
 
         TCG tcg = new TCG();
 
         if(tcgView.getId() != 0 ){
             tcg.setId(tcgView.getId());
         }
-//        tcg.setWorkCase();
+        tcg.setWorkCase(workCaseId);
         tcg.setCollateralRuleResult(tcgView.getCollateralRuleResult());
         tcg.setExistingLoanRatioUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
         tcg.setExistingLoanRatioNotUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());

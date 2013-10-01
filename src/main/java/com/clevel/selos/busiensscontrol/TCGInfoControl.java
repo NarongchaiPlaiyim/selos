@@ -2,9 +2,11 @@ package com.clevel.selos.busiensscontrol;
 
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.TCGDetail;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
 import com.clevel.selos.transform.TCGDetailTransform;
@@ -36,13 +38,14 @@ public class TCGInfoControl extends BusinessControl {
     TCGDAO tcgDAO;
     @Inject
     TCGDetailDAO tcgDetailDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO ;
 
-
-    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList){
+    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
         try{
             log.info("onSaveTCGToDB begin");
-
-            TCG tcg = tcgTransform.transformTCGViewToModel(tcgView);
+            WorkCase workCase  = workCaseDAO.findById(workCaseId);
+            TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
             tcgDAO.persist(tcg);
             log.info("persist tcg");
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;

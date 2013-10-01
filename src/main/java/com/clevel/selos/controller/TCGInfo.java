@@ -14,6 +14,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -21,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -295,7 +297,12 @@ public class TCGInfo implements Serializable {
 
     public void onSaveTcgInfo(){
         log.info("onSaveTcgInfo ::: ");
-        tcgBusinessControl.onSaveTCGToDB(TCGView,TCGDetailViewList);
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("workCaseId", 1);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        tcgBusinessControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+
+
     }
 
     public List<TCGDetailView> getTCGDetailViewList() {
