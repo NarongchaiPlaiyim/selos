@@ -1,6 +1,7 @@
 package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
@@ -28,6 +29,8 @@ public class CaseCreation implements WSCaseCreation {
     WSDataPersist wsDataPersist;
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    STPExecutor stpExecutor;
 
     @Inject
     @NormalMessage
@@ -274,16 +277,17 @@ public class CaseCreation implements WSCaseCreation {
                 return response;
             }
 
-            //todo: generate ref number
-            caseCreationHistory.setAppRefNumber("REF001");
+            //generate ref number
+            String applicationNumber = stpExecutor.getApplicationNumber("XX");   // todo: where to get segment code
+            caseCreationHistory.setAppNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
             //todo: how to get BDM Username for create case?
             if (bpmInterface.createCase(caseCreationHistory)) {
                 // return success
-                response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppRefNumber());
+                response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppNumber());
             } else {
-                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppRefNumber());
+                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppNumber());
             }
 
 
