@@ -81,7 +81,7 @@ public class CaseCreationHistory implements Serializable {
     private IntegrationStatus status;
     @Column(name="create_status_detail", length = 500)
     private String statusDetail;
-    @Column(name="app_number", nullable=false)
+    @Column(name="app_number")
     private String appNumber;
 
     public CaseCreationHistory() {
