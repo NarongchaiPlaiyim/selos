@@ -1,4 +1,4 @@
-package com.clevel.selos.model.RMmodel;
+package com.clevel.selos.model.RMmodel.customeraccount;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

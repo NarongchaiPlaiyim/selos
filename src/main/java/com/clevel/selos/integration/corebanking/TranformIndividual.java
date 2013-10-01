@@ -77,7 +77,7 @@ public class TranformIndividual implements Serializable{
 //        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
 //        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-//        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
+        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getOccupationCode())));
 //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("","")));
 
         CustomerInfoView spouse=new CustomerInfoView();

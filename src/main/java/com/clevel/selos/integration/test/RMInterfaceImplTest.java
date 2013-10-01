@@ -2,9 +2,9 @@ package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountListModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
 import com.clevel.selos.model.view.CustomerInfoView;
 import org.slf4j.Logger;
 

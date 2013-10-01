@@ -4,11 +4,11 @@ import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.customeraccount.SearchCustomerAccountModel;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
-import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.Config;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;

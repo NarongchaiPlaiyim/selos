@@ -24,6 +24,7 @@ public class AddressView {
 
 
 
+
     public AddressView(){
 
     }
@@ -140,6 +141,7 @@ public class AddressView {
     public void setExtension(String extension) {
         this.extension = extension;
     }
+
 
     @Override
     public String toString() {
