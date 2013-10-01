@@ -143,7 +143,7 @@
                             <tr>
                                 <td class="title top">Borrower :</td>
                                 <td>
-                                    <p:dataTable id="resultTableFacility" var="item" value="#{prescreenMaker.borrowerInfoViewList}"
+                                    <p:dataTable id="resultTableBorrower" var="item" value="#{prescreenMaker.borrowerInfoViewList}"
                                                  paginator="false" rowKey="#{item.id}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
@@ -169,6 +169,7 @@
                                                 <f:setPropertyActionListener value="#{item}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                             </p:commandButton>
+                                            <p:commandButton binding="#{submit}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>

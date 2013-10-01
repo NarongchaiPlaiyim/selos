@@ -91,7 +91,7 @@ public class BPMInterfaceImpl implements BPMInterface {
         caseParameter.put("HubCode", caseCreationHistory.getHubCode());
         caseParameter.put("RegionCode", caseCreationHistory.getRegionCode());
         caseParameter.put("AppInDateBDM", caseCreationHistory.getAppInDateBDM());
-        caseParameter.put("AppNumber", caseCreationHistory.getAppRefNumber());
+        caseParameter.put("AppNumber", caseCreationHistory.getAppNumber());
         caseParameter.put("RefAppNumber", "");
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());

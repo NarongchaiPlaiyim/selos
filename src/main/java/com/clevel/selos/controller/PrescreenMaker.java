@@ -96,7 +96,11 @@ public class PrescreenMaker implements Serializable {
 
     private PrescreenView prescreenView;
 
+    private User user;
+
     private String modeForButton;
+    private String messageHeader;
+    private String message;
     private int rowIndex;
 
     @Inject
@@ -160,13 +164,17 @@ public class PrescreenMaker implements Serializable {
 
         log.info("onCreation");
 
-        /*HttpSession session = FacesUtil.getSession(true);
-        long workCasePrescreenId = new Long(session.getAttribute("workCasePrescreenId").toString());
-        workCasePrescreenId = 1;
+        HttpSession session = FacesUtil.getSession(true);
+        //long workCasePrescreenId = new Long(session.getAttribute("workCasePrescreenId").toString());
+        //workCasePrescreenId = 1;
 
-        WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        //WorkCasePrescreen workcasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+        user = (User)session.getAttribute("user");      //*** Get user from session ***//
+        //TODO tempory to remove this.
+        user = userDAO.findById(new Long(1));
+        log.info("onCreation ::: user : {}", user);
 
-        prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
+        //prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
 
         modeForButton = "add";
 
@@ -258,6 +266,23 @@ public class PrescreenMaker implements Serializable {
 
         maritalStatusList = maritalStatusDAO.findAll();
         log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
+    }
+
+    // *** Function for PreScreen *** //
+    public void onCheckPreScreen(){
+        // *** Validate Data for Check PreScreen *** //
+        boolean validate = validateCheckPrescreen(customerInfoViewList);
+        if(validate){
+            //PreScreenResponse preScreenResponse = prescreenBusinessControl.getPrescreenResultFromBRMS(customerInfoViewList);
+        }else{
+            // *** MessageBox show validation Failed. *** //
+        }
+    }
+
+    public boolean validateCheckPrescreen(List<CustomerInfoView> vCustomerInfoViewList){
+        boolean validate = false;
+
+        return validate;
     }
 
     // *** Function For Facility *** //
@@ -360,9 +385,34 @@ public class PrescreenMaker implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
         //** validate form **//
-        //** TODO dynamic validation for ncb checking
-        if(borrowerInfo.getCustomerEntity().getId() != 0){
+        if(customerInfoViewList == null){
+            customerInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(borrowerInfoViewList == null){
+            borrowerInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(guarantorInfoViewList == null){
+            guarantorInfoViewList = new ArrayList<CustomerInfoView>();
+        }
+        if(relatedInfoViewList == null){
+            relatedInfoViewList = new ArrayList<CustomerInfoView>();
+        }
 
+        //** TODO dynamic validation for ncb checking
+        log.info("onSaveCustomerInfo ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
+        log.info("onSaveCustomerInfo ::: relation : {}", borrowerInfo.getRelation());
+        if(borrowerInfo.getCustomerEntity().getId() != 0){
+            if(borrowerInfo.getCustomerEntity().getId() == 1){ //Individual
+                if(borrowerInfo.getRelation().getId() == 1){
+
+                }else if(borrowerInfo.getRelation().getId() == 2){
+
+                }else if(borrowerInfo.getRelation().getId() == 3){
+
+                }
+            }else if(borrowerInfo.getCustomerEntity().getId() == 2){ //Juristic
+
+            }
         }
 
 
@@ -375,7 +425,18 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSearchCustomerInfo() {
-        //borrowerInfo = prescreenBusinessControl
+        log.info("onSearchCustomerInfo :::");
+        try{
+            prescreenBusinessControl.getBankStatementFromDWH(prescreenView, user);
+            log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
+            borrowerInfo = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
+        }catch(Exception ex){
+            messageHeader = "Error!";
+            message = "Error occur";
+            //TODO Show message box
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
     }
 
     public void onChangeCustomerEntity(){
@@ -991,5 +1052,21 @@ public class PrescreenMaker implements Serializable {
 
     public void setRelatedInfoViewList(List<CustomerInfoView> relatedInfoViewList) {
         this.relatedInfoViewList = relatedInfoViewList;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

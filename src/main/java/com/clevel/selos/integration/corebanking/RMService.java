@@ -3,11 +3,12 @@ package com.clevel.selos.integration.corebanking;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.RMmodel.CustomerAccountListModel;
-import com.clevel.selos.model.RMmodel.CustomerAccountModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountListModel;
+import com.clevel.selos.model.RMmodel.customeraccount.CustomerAccountModel;
 import com.clevel.selos.model.RMmodel.*;
 import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
 import com.clevel.selos.model.RMmodel.corporateInfo.RegistrationAddress;
+import com.clevel.selos.model.RMmodel.customeraccount.SearchCustomerAccountModel;
 import com.clevel.selos.model.RMmodel.individualInfo.ContactDetails;
 import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
 import com.clevel.selos.model.RMmodel.individualInfo.Spouse;
@@ -350,7 +351,7 @@ public class RMService implements Serializable {
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
 
                     log.debug("Data Not Found!");
-                    individualModel = new IndividualModel();
+                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
                     throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
@@ -360,6 +361,7 @@ public class RMService implements Serializable {
                 log.warn("resSearchIndividualCustomer : Null");
                 //Audit Data
                 rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
+                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -508,7 +510,7 @@ public class RMService implements Serializable {
                     throw new ValidationException(exceptionMsg.get(ExceptionMapping.HOST_PARAMETER_IS_NULL));
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    corporateModel = new CorporateModel();
+                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
 
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
                     throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
@@ -517,6 +519,7 @@ public class RMService implements Serializable {
                 log.warn(" resSearchCorporateCustomer : Null");
                 //Audit Data
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
+                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -679,6 +682,7 @@ public class RMService implements Serializable {
                 log.warn(" resSearchCustomerAccount : Null");
                 //Audit Data
                 rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCustomerAccount : Null", new Date(), linkKey);
+                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
             }
 
         } catch (Exception e) {

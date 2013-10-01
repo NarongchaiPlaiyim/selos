@@ -63,7 +63,7 @@ public class TranformIndividual implements Serializable{
 //        customerInfoView.setFirstNameEn(individualModel.getFirstnameEN());
 //        customerInfoView.setLastNameEn(individualModel.getLastnameEN());
         customerInfoView.setCustomerId(individualModel.getDocumentType());
-        customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("type", individualModel.getDocumentType())));
+        customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("description", individualModel.getDocumentType())));
         customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
         customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
 
@@ -77,7 +77,7 @@ public class TranformIndividual implements Serializable{
 //        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
 //        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-//        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("",individualModel.getOccupationCode())));
+        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getOccupationCode())));
 //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("","")));
 
         CustomerInfoView spouse=new CustomerInfoView();
@@ -189,8 +189,7 @@ public class TranformIndividual implements Serializable{
         workAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getProvince())));
         workAddress.setAddressType(addressTypeDAO.findById(3));
         workAddress.setPostalCode(individualModel.getWorkAddress().getPostcode());
-        workAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getCountry())));
-        workAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getWorkAddress().getCountryCode())));
+        workAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getWorkAddress().getCountryCode())));
         workAddress.setPhoneNumber(workPhoneNumber);
         workAddress.setExtension(workPhoneExtension);
         customerInfoView.setWorkAddress(workAddress);
@@ -206,8 +205,7 @@ public class TranformIndividual implements Serializable{
         currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getProvince())));
         currentAddress.setAddressType(addressTypeDAO.findById(1));
         currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
-        currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getCountry())));
-        currentAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getCurrentAddress().getCountryCode())));
+        currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getCurrentAddress().getCountryCode())));
         currentAddress.setPhoneNumber(currentPhoneNumber);
         currentAddress.setExtension(currentPhoneExtension);
         customerInfoView.setCurrentAddress(currentAddress);
@@ -223,8 +221,7 @@ public class TranformIndividual implements Serializable{
         homeAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getProvince())));
         homeAddress.setAddressType(addressTypeDAO.findById(2));
         homeAddress.setPostalCode(individualModel.getHomeAddress().getPostcode());
-        homeAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getCountry())));
-        homeAddress.setCountryCode(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getHomeAddress().getCountryCode())));
+        homeAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getHomeAddress().getCountryCode())));
         homeAddress.setPhoneNumber(homePhoneNumber);
         homeAddress.setExtension(homePhoneExtension);
         customerInfoView.setRegisterAddress(homeAddress);

@@ -7,20 +7,27 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_document_type")
+@Table(name = "mst_documenttype")
 public class DocumentType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @Column(name = "description")
     private String description;
+
     @OneToOne
-    @JoinColumn(name="customerentity_id")
+    @JoinColumn(name="customertype_id")
     private CustomerEntity customerEntity;
-    @JoinColumn(name="active")
+
+    @Column(name="active")
     private int active;
 
+    @Column(name="document_type_code")
+    private String documentTypeCode;
+
     public DocumentType() {
+
     }
 
     public int getId() {
@@ -55,13 +62,22 @@ public class DocumentType implements Serializable {
         this.active = active;
     }
 
+    public String getDocumentTypeCode() {
+        return documentTypeCode;
+    }
+
+    public void setDocumentTypeCode(String documentTypeCode) {
+        this.documentTypeCode = documentTypeCode;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("customerEntity", customerEntity).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("description", description)
+                .append("customerEntity", customerEntity)
+                .append("active", active)
+                .append("documentTypeCode", documentTypeCode)
+                .toString();
     }
 }
