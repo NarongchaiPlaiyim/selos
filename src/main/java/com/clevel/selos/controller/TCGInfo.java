@@ -277,9 +277,10 @@ public class TCGInfo implements Serializable {
     public void onDeleteTcgDetail() {
        log.info("onDeleteTcgDetail rowIndex {} ", rowIndex);
        TCGDetailViewList.remove(selectCollateralItem);
+       calculateAfterDelete();
     }
 
-    /*public void calculateAfterDelete(){
+    public void calculateAfterDelete(){
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
@@ -293,7 +294,7 @@ public class TCGInfo implements Serializable {
             this.sumInThisAppraisalAmount = new BigDecimal(0);
             this.sumInThisLtvValue = new BigDecimal(0);
         }
-    }*/
+    }
 
     public void onSaveTcgInfo(){
         log.info("onSaveTcgInfo ::: ");
