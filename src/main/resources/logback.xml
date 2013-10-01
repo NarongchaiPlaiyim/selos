@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
+    <property name="LOG_HOME" value="/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1" />
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos.log</file>
+        <file>${LOG_HOME}/slos.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -16,10 +17,10 @@
         </encoder>
     </appender>
 
-    <appender name="RM-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-RM.log</file>
+    <appender name="RM-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-RM.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-RM.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-RM.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -35,10 +36,10 @@
         <appender-ref ref="RM-FILE"/>
     </logger>
 
-    <appender name="NCB-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-NCB.log</file>
+    <appender name="NCB-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-NCB.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-NCB.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-NCB.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -54,10 +55,10 @@
         <appender-ref ref="NCB-FILE"/>
     </logger>
 
-    <appender name="SAFEWATCH-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-SAFEWATCH.log</file>
+    <appender name="SAFEWATCH-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-SAFEWATCH.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-SAFEWATCH.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-SAFEWATCH.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -73,10 +74,10 @@
         <appender-ref ref="SAFEWATCH-FILE"/>
     </logger>
 
-    <appender name="EMAIL-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-EMAIL.log</file>
+    <appender name="EMAIL-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-EMAIL.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-EMAIL.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-EMAIL.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -92,10 +93,10 @@
         <appender-ref ref="EMAIL-FILE"/>
     </logger>
 
-    <appender name="RLOS-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-RLOS.log</file>
+    <appender name="RLOS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-RLOS.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-RLOS.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-RLOS.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -110,10 +111,10 @@
         <appender-ref ref="RLOS-FILE"/>
     </logger>
 
-    <appender name="BRMS-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-BRMS.log</file>
+    <appender name="BRMS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-BRMS.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-BRMS.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-BRMS.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -128,10 +129,10 @@
         <appender-ref ref="BRMS-FILE"/>
     </logger>
 
-    <appender name="BPM-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-BPM.log</file>
+    <appender name="BPM-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-BPM.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-BPM.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-BPM.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -146,10 +147,10 @@
         <appender-ref ref="BPM-FILE"/>
     </logger>
 
-    <appender name="ECM-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-ECM.log</file>
+    <appender name="ECM-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-ECM.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-ECM.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-ECM.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
@@ -164,10 +165,10 @@
         <appender-ref ref="ECM-FILE"/>
     </logger>
 
-    <appender name="WS-FILE" class="ch.qos.logback.core.FileAppender">
-        <file>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-WS.log</file>
+    <appender name="WS-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/slos-WS.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1/slos-WS.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME}/slos-WS.%d{yyyy-MM-dd}.log</FileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
