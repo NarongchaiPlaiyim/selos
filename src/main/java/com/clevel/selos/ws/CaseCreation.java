@@ -156,7 +156,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(ValidationUtil.isGreaterThan(5,bdmId)){
+            if(ValidationUtil.isGreaterThan(10,bdmId)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(bdmId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(bdmId)"),"");
                 log.debug("{}",response);
