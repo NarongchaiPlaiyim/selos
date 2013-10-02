@@ -282,7 +282,6 @@ public class CaseCreation implements WSCaseCreation {
             caseCreationHistory.setAppNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
-            //todo: how to get BDM Username for create case?
             if (bpmInterface.createCase(caseCreationHistory)) {
                 // return success
                 response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppNumber());

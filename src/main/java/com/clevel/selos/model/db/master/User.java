@@ -11,8 +11,8 @@ import java.util.Date;
 @Table(name = "mst_user")
 public class User implements Serializable {
     @Id
-    @Column(name = "id")
-    private long id;
+    @Column(name = "id", nullable = false,unique = true,length = 10)
+    private String id;
     @Column(name = "username")
     private String userName;
     @OneToOne
@@ -55,11 +55,11 @@ public class User implements Serializable {
     public User() {
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
