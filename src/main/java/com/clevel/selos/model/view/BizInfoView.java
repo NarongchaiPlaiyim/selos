@@ -6,17 +6,11 @@ import com.clevel.selos.model.db.master.BusinessType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 13/9/2556
- * Time: 14:34 น.
- * To change this template use File | Settings | File Templates.
- */
-public class BizInfoView {
+public class BizInfoView implements Serializable {
     private long id;
     private String bizInfoText;
     private String tradeType;

@@ -886,19 +886,20 @@ public class NCBBizTransform extends BusinessTransform {
                                 H2HResponseSubjectModel h2HResponseSubjectModel = h2HResponseModel.getSubject();
                                 //get list Account for active,closed
                                 List<AccountModel> accountModels = new ArrayList<AccountModel>();
-                                boolean haveAccountData = false;
+                                boolean haveActiveAccountData = false;
+                                boolean haveClosedAccountData = false;
                                 if(h2HResponseSubjectModel.getActiveaccounts()!=null){
                                     if(h2HResponseSubjectModel.getActiveaccounts().getAccount()!=null && h2HResponseSubjectModel.getActiveaccounts().getAccount().size()>0){
-                                        haveAccountData = true;
+                                        haveActiveAccountData = true;
                                     }
                                 }
                                 if(h2HResponseSubjectModel.getClosedaccounts()!=null){
                                     if(h2HResponseSubjectModel.getClosedaccounts().getAccount()!=null && h2HResponseSubjectModel.getClosedaccounts().getAccount().size()>0){
-                                        haveAccountData = true;
+                                        haveClosedAccountData = true;
                                     }
                                 }
 
-                                if(haveAccountData){
+                                if(haveActiveAccountData || haveClosedAccountData){
                                     // transform all account from all subject to ncb detail and summary
                                     ncbDetailViews = new ArrayList<NCBDetailView>();
 
@@ -913,6 +914,14 @@ public class NCBBizTransform extends BusinessTransform {
                                     boolean isTDROther = false;
                                     String lastTDRDateTMB = null;
                                     String lastTDRDateOther = null;
+
+                                    //check for active account
+                                    if(haveActiveAccountData){
+                                        for(AccountModel accountModel : h2HResponseSubjectModel.getActiveaccounts().getAccount()){
+                                            boolean isTMBAccount = false;
+
+                                        }
+                                    }
                                 } else {
                                     //no account detail data
                                 }
@@ -1690,7 +1699,6 @@ public class NCBBizTransform extends BusinessTransform {
                                 if(ncbSummaryView != null){
                                     ncbSummaryView.setNoOfNCBCheckIn6months(enquiryTime+"");
                                 }*/
-
                             }
                         }
                     }

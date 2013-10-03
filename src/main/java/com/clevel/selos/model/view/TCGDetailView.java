@@ -7,17 +7,10 @@ import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 9/9/2556
- * Time: 10:28 น.
- * To change this template use File | Settings | File Templates.
- */
-
-public class TCGDetailView {
+public class TCGDetailView implements Serializable {
 
     private long id;
     private BigDecimal appraisalAmount;

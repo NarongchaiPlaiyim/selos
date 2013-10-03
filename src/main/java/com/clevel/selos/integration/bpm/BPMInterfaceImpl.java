@@ -26,10 +26,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.security.auth.Subject;
+import java.io.Serializable;
 import java.util.*;
 
 @Default
-public class BPMInterfaceImpl implements BPMInterface {
+public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Inject
     @BPM
     Logger log;

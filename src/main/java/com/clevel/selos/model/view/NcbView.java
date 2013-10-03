@@ -2,9 +2,10 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.ActionResult;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class NcbView {
+public class NcbView implements Serializable {
     private String idNumber;
     private ActionResult result;
     private String reason;

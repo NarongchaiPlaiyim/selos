@@ -4,9 +4,10 @@ import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AddressView {
+public class AddressView implements Serializable{
     private BigDecimal id;
     private AddressType addressType;
     private String addressNo;

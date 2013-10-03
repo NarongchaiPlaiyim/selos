@@ -9,8 +9,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 
-public class BusinessInfoView {
+public class BusinessInfoView implements Serializable {
     @Inject
     Logger log;
     @Inject

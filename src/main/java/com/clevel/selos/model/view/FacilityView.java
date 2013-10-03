@@ -7,9 +7,10 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class FacilityView {
+public class FacilityView implements Serializable {
 
     private long id;
     private String facilityName;

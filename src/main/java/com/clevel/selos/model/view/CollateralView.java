@@ -8,9 +8,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CollateralView {
+public class CollateralView implements Serializable {
     @Inject
     Logger log;
 
