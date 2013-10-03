@@ -7,7 +7,7 @@ import com.clevel.selos.integration.ncb.nccrs.service.NCCRSService;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
-import com.clevel.selos.integration.ncbi.service.NCBIImp;
+//import com.clevel.selos.integration.ncbi.service.NCBIImp;
 import org.slf4j.Logger;
 
 import javax.faces.bean.ManagedBean;
@@ -30,8 +30,8 @@ public class TestNCRS implements Serializable {
     @Inject
     NCCRSService nccrsService;
 
-    @Inject
-    NCBIImp ncbiImp;
+    //@Inject
+    //NCBIImp ncbiImp;
     //NCRS
     private String result;
     private String memberref = "123456789";
@@ -113,7 +113,7 @@ public class TestNCRS implements Serializable {
 
         NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
         //ncrsService.process(inputModel);
-        ncbiImp.process();
+        //ncbiImp.process();
     }
     public void onClickNCCRS(){
         log.info("========================================= onClickNCCRS");

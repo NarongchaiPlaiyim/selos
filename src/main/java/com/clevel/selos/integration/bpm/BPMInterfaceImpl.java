@@ -13,6 +13,7 @@ import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.ws.WSDataPersist;
 import com.filenet.api.core.Connection;
 import com.filenet.api.core.Domain;
@@ -125,7 +126,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public void dispatchCase(String queueName,String wobNumber,HashMap<String,String> fields) {
         log.debug("dispatchCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
-        listFields(fields);
+        Util.listFields(fields);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             bpmService.lockCase(queueName,wobNumber);
@@ -159,11 +160,5 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         bpmConfigurationsDTO.setJassName(jaasName);
         bpmConfigurationsDTO.setObjectStoreName(objectStore);
         return bpmConfigurationsDTO;
-    }
-
-    private void listFields(HashMap<String,String> fields) {
-        for (Map.Entry<String, String> entry : fields.entrySet()) {
-            log.debug("key: {}, value: {}",entry.getKey(),entry.getValue());
-        }
     }
 }
