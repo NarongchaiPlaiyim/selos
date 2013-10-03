@@ -74,6 +74,7 @@ public class Inbox implements Serializable {
         session.setAttribute("workCasePreScreenId", inboxViewSelectItem.getWorkCasePreScreenId());
         session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
+        session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
 
         try{
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

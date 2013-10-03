@@ -22,7 +22,8 @@ public class PrescreenView implements Serializable{
     private Date referDate;
     private boolean tcg;
     private boolean refinance;
-    private User bdmChecker;
+    private String checkerId;
+    private String remark;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -39,7 +40,6 @@ public class PrescreenView implements Serializable{
         this.registerDate = null;
         this.tcg = false;
         this.refinance = false;
-        this.bdmChecker = new User();
     }
 
     public long getId() {
@@ -154,12 +154,20 @@ public class PrescreenView implements Serializable{
         this.modifyBy = modifyBy;
     }
 
-    public User getBdmChecker() {
-        return bdmChecker;
+    public String getCheckerId() {
+        return checkerId;
     }
 
-    public void setBdmChecker(User bdmChecker) {
-        this.bdmChecker = bdmChecker;
+    public void setCheckerId(String checkerId) {
+        this.checkerId = checkerId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override

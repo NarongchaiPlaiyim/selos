@@ -109,6 +109,8 @@ public class PrescreenMaker implements Serializable {
     private User user;
     private long workCasePreScreenId;
     private long stepId;
+    private String queueName;
+
 
     enum ModeForButton{ ADD, EDIT, DELETE }
     private ModeForButton modeForButton;
@@ -228,6 +230,7 @@ public class PrescreenMaker implements Serializable {
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            queueName = session.getAttribute("queueName").toString();
         }
         //TODO tempory to remove this.
         user = userDAO.findById("10001");
@@ -746,8 +749,20 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onAssignToChecker(){
+        log.info("onAssignToChecker ::: bdmChecker : {}", prescreenView.getCheckerId());
+        log.info("onAssignToChecker ::: queueName : {}", queueName);
         //TODO get nextStep
-        prescreenBusinessControl.assignToChecker(workCasePreScreenId);
+        String actionCode = "1001";
+        String checkerId = prescreenView.getCheckerId();
+        prescreenBusinessControl.assignToChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+            return;
+        } catch (Exception ex) {
+            log.error("Error to redirect : {}", ex.getMessage());
+        }
+
     }
 
     // *** Function for Prescreen Maker ***//
