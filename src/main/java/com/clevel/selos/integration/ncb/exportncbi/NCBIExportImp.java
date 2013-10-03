@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Stateless
 @NCB
@@ -67,5 +68,10 @@ public class NCBIExportImp implements Serializable {
                 inquiryTime,
                 officeCode
                 ));
+    }
+
+    public List<NCBIExport> get(){
+        List<NCBIExport> ncbiExportList =  ncbiExportDAO.findAll();
+        return ncbiExportList;
     }
 }

@@ -1,179 +1,143 @@
 package com.clevel.selos.integration.ncbi.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 public class RequestModel {
 
+    @XStreamAlias("STAFF_ID")
     private String STAFF_ID;
-    private String REQUEST_NO;
-    private String INQUIRY_TYPE;
-    private String CUSTOMER_TYPE;
-    private String CUSTOMER_DOCUMENT_TYPE;
-    private String JURISTIC_TYPE;
-    private String CUSTOMER_ID;
-    private String COUNTRY_CODE;
-    private String TITLE_CODE;
-    private String FIRST_NAME;
-    private String LAST_NAME;
-    private String JURISTIC_NAME;
-    private String CA_NUMBER;
-    private String CAUTION;
-    private String REFERENCE_TEL;
-    private String INQUIRY_STATUS;
-    private String INQUIRY_DATE;
-    private String INQUIRY_TIME;
-    private String OFFICE_CODE;
 
-    public RequestModel() {
+    @XStreamAlias("REQUEST_NO")
+    private String requestNo;
+
+    @XStreamAlias("INQUIRY_TYPE")
+    private String inquiryType;
+
+    @XStreamAlias("CUSTOMER_TYPE")
+    private String customerType;
+
+    @XStreamAlias("CUSTOMER_DOCUMENT_TYPE")
+    private String customerDocumentType;
+
+    @XStreamAlias("JURISTIC_TYPE")
+    private String juristicType;
+
+    @XStreamAlias("CUSTOMER_ID")
+    private String customerId;
+
+    @XStreamAlias("COUNTRY_CODE")
+    private String countryCode;
+
+    @XStreamAlias("TITLE_CODE")
+    private String titleCode;
+
+    @XStreamAlias("FIRST_NAME")
+    private String firstName;
+
+    @XStreamAlias("LAST_NAME")
+    private String lastName;
+
+    @XStreamAlias("JURISTIC_NAME")
+    private String juristicName;
+
+    @XStreamAlias("CA_NUMBER")
+    private String caNumber;
+
+    @XStreamAlias("CAUTION")
+    private String caution;
+
+    @XStreamAlias("REFERENCE_TEL")
+    private String referenceTel;
+
+    @XStreamAlias("INQUIRY_STATUS")
+    private String inquiryStatus;
+
+    @XStreamAlias("INQUIRY_DATE")
+    private String inquiryDate;
+
+    @XStreamAlias("INQUIRY_TIME")
+    private String inquiryTime;
+
+    @XStreamAlias("OFFICE_CODE")
+    private String officeCode;
+
+    public RequestModel(String requestNo) {
+        this.requestNo = requestNo;
     }
 
-    public String getSTAFF_ID() {
-        return STAFF_ID;
+    public RequestModel(String staffId, String requestNo) {
+        this.STAFF_ID = staffId;
+        this.requestNo = requestNo;
     }
 
-    public void setSTAFF_ID(String STAFF_ID) {
-        this.STAFF_ID = STAFF_ID;
+    public RequestModel(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
+        this.STAFF_ID = staffId;
+        this.requestNo = requestNo;
+        this.inquiryType = inquiryType;
+        this.customerType = customerType;
+        this.customerDocumentType = customerDocumentType;
+        this.juristicType = "";
+        this.customerId = customerId;
+        this.countryCode = countryCode;
+        this.titleCode = titleCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.juristicName = "";
+        this.caNumber = caNumber;
+        this.caution = caution;
+        this.referenceTel = referenceTel;
+        this.inquiryStatus = inquiryStatus;
+        this.inquiryDate = inquiryDate;
+        this.inquiryTime = inquiryTime;
+        this.officeCode = officeCode;
     }
 
-    public String getREQUEST_NO() {
-        return REQUEST_NO;
+    public RequestModel(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
+        this.STAFF_ID = staffId;
+        this.requestNo = requestNo;
+        this.inquiryType = inquiryType;
+        this.customerType = customerType;
+        this.customerDocumentType = customerDocumentType;
+        this.juristicType = juristicType;
+        this.customerId = customerId;
+        this.countryCode = countryCode;
+        this.titleCode = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.juristicName = juristicName;
+        this.caNumber = caNumber;
+        this.caution = caution;
+        this.referenceTel = referenceTel;
+        this.inquiryStatus = inquiryStatus;
+        this.inquiryDate = inquiryDate;
+        this.inquiryTime = inquiryTime;
+        this.officeCode = officeCode;
     }
 
-    public void setREQUEST_NO(String REQUEST_NO) {
-        this.REQUEST_NO = REQUEST_NO;
-    }
-
-    public String getINQUIRY_TYPE() {
-        return INQUIRY_TYPE;
-    }
-
-    public void setINQUIRY_TYPE(String INQUIRY_TYPE) {
-        this.INQUIRY_TYPE = INQUIRY_TYPE;
-    }
-
-    public String getCUSTOMER_TYPE() {
-        return CUSTOMER_TYPE;
-    }
-
-    public void setCUSTOMER_TYPE(String CUSTOMER_TYPE) {
-        this.CUSTOMER_TYPE = CUSTOMER_TYPE;
-    }
-
-    public String getCUSTOMER_DOCUMENT_TYPE() {
-        return CUSTOMER_DOCUMENT_TYPE;
-    }
-
-    public void setCUSTOMER_DOCUMENT_TYPE(String CUSTOMER_DOCUMENT_TYPE) {
-        this.CUSTOMER_DOCUMENT_TYPE = CUSTOMER_DOCUMENT_TYPE;
-    }
-
-    public String getJURISTIC_TYPE() {
-        return JURISTIC_TYPE;
-    }
-
-    public void setJURISTIC_TYPE(String JURISTIC_TYPE) {
-        this.JURISTIC_TYPE = JURISTIC_TYPE;
-    }
-
-    public String getCUSTOMER_ID() {
-        return CUSTOMER_ID;
-    }
-
-    public void setCUSTOMER_ID(String CUSTOMER_ID) {
-        this.CUSTOMER_ID = CUSTOMER_ID;
-    }
-
-    public String getCOUNTRY_CODE() {
-        return COUNTRY_CODE;
-    }
-
-    public void setCOUNTRY_CODE(String COUNTRY_CODE) {
-        this.COUNTRY_CODE = COUNTRY_CODE;
-    }
-
-    public String getTITLE_CODE() {
-        return TITLE_CODE;
-    }
-
-    public void setTITLE_CODE(String TITLE_CODE) {
-        this.TITLE_CODE = TITLE_CODE;
-    }
-
-    public String getFIRST_NAME() {
-        return FIRST_NAME;
-    }
-
-    public void setFIRST_NAME(String FIRST_NAME) {
-        this.FIRST_NAME = FIRST_NAME;
-    }
-
-    public String getLAST_NAME() {
-        return LAST_NAME;
-    }
-
-    public void setLAST_NAME(String LAST_NAME) {
-        this.LAST_NAME = LAST_NAME;
-    }
-
-    public String getJURISTIC_NAME() {
-        return JURISTIC_NAME;
-    }
-
-    public void setJURISTIC_NAME(String JURISTIC_NAME) {
-        this.JURISTIC_NAME = JURISTIC_NAME;
-    }
-
-    public String getCA_NUMBER() {
-        return CA_NUMBER;
-    }
-
-    public void setCA_NUMBER(String CA_NUMBER) {
-        this.CA_NUMBER = CA_NUMBER;
-    }
-
-    public String getCAUTION() {
-        return CAUTION;
-    }
-
-    public void setCAUTION(String CAUTION) {
-        this.CAUTION = CAUTION;
-    }
-
-    public String getREFERENCE_TEL() {
-        return REFERENCE_TEL;
-    }
-
-    public void setREFERENCE_TEL(String REFERENCE_TEL) {
-        this.REFERENCE_TEL = REFERENCE_TEL;
-    }
-
-    public String getINQUIRY_STATUS() {
-        return INQUIRY_STATUS;
-    }
-
-    public void setINQUIRY_STATUS(String INQUIRY_STATUS) {
-        this.INQUIRY_STATUS = INQUIRY_STATUS;
-    }
-
-    public String getINQUIRY_DATE() {
-        return INQUIRY_DATE;
-    }
-
-    public void setINQUIRY_DATE(String INQUIRY_DATE) {
-        this.INQUIRY_DATE = INQUIRY_DATE;
-    }
-
-    public String getINQUIRY_TIME() {
-        return INQUIRY_TIME;
-    }
-
-    public void setINQUIRY_TIME(String INQUIRY_TIME) {
-        this.INQUIRY_TIME = INQUIRY_TIME;
-    }
-
-    public String getOFFICE_CODE() {
-        return OFFICE_CODE;
-    }
-
-    public void setOFFICE_CODE(String OFFICE_CODE) {
-        this.OFFICE_CODE = OFFICE_CODE;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("staff_Id", STAFF_ID)
+                .append("requestNo", requestNo)
+                .append("inquiryType", inquiryType)
+                .append("customerType", customerType)
+                .append("customerDocumentType", customerDocumentType)
+                .append("juristicType", juristicType)
+                .append("customerId", customerId)
+                .append("countryCode", countryCode)
+                .append("titleCode", titleCode)
+                .append("firstName", firstName)
+                .append("lastName", lastName)
+                .append("juristicName", juristicName)
+                .append("caNumber", caNumber)
+                .append("caution", caution)
+                .append("referenceTel", referenceTel)
+                .append("inquiryStatus", inquiryStatus)
+                .append("inquiryDate", inquiryDate)
+                .append("inquiryTime", inquiryTime)
+                .append("officeCode", officeCode)
+                .toString();
     }
 }

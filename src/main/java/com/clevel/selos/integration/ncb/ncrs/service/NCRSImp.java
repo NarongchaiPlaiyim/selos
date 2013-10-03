@@ -56,11 +56,11 @@ public class NCRSImp implements NCRS, Serializable{
     ValidationImp validationImp;
 
     @Inject
-    @Config(name = "interface.ncb.ncrs.user")
+    @Config(name = "interface.ncb.ncrs.username")
     private String id;
 
     @Inject
-    @Config(name = "interface.ncb.ncrs.pass")
+    @Config(name = "interface.ncb.ncrs.password")
     private String pass;
 
     @Inject

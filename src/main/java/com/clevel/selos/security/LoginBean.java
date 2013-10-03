@@ -58,7 +58,7 @@ public class LoginBean {
             securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
             return "unSecured";
         }
-        UserDetail userDetail = new UserDetail(user.getUserName(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+        UserDetail userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         try {
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
             request.setDetails(new WebAuthenticationDetails(httpServletRequest));

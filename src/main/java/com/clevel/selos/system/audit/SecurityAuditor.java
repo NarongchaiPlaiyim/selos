@@ -30,7 +30,7 @@ public class SecurityAuditor {
     }
 
     public void addSucceed(String userName,String action,String actionDetail,Date actionDate) {
-        User user = userDAO.findByUserName(userName);
+        User user = userDAO.findById(userName);
         user.setLastLogon(actionDate);
         user.setLastIP(FacesUtil.getRequest().getRemoteAddr());
         userDAO.persist(user);

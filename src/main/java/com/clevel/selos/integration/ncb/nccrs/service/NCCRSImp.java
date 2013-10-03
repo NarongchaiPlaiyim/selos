@@ -46,11 +46,11 @@ public class NCCRSImp implements NCCRS, Serializable {
     Message message;
 
     @Inject
-    @Config(name = "interface.ncb.nccrs.user")
+    @Config(name = "interface.ncb.nccrs.username")
     private String id;
 
     @Inject
-    @Config(name = "interface.ncb.nccrs.pass")
+    @Config(name = "interface.ncb.nccrs.password")
     private String pass;
 
     @Inject
