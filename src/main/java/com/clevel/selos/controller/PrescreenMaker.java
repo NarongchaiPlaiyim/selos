@@ -72,6 +72,7 @@ public class PrescreenMaker implements Serializable {
     private List<Title> titleList;
     private List<Nationality> nationalityList;
     private List<MaritalStatus> maritalStatusList;
+    private List<User> bdmCheckerList;
 
     //*** Result table List ***//
     private List<FacilityView> facilityViewList;
@@ -169,23 +170,32 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void preRender(){
-        HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(true);
         log.info("preRender ::: setSession ");
-        session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(1));
+        /*session.setAttribute("workCasePreScreenId", new Long(1));
+        session.setAttribute("stepId", new Long(1));*/
 
-        session = FacesUtil.getSession(true);
+        //session = FacesUtil.getSession(true);
         //user = (User)session.getAttribute("user");
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            if(stepId != 1001 && stepId != 1003){
+                try{
+                    ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                    ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                    return;
+                }catch (Exception ex){
+                    log.info("Exception :: {}",ex);
+                }
+            }
         }else{
             //TODO return to inbox
             log.info("onCreation ::: workCasePrescreenId is null.");
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
+                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
@@ -196,15 +206,16 @@ public class PrescreenMaker implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation");
-        HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(true);
         log.info("preRender ::: setSession ");
-        session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(1));
+        /*session.setAttribute("workCasePreScreenId", new Long(1));
+        session.setAttribute("stepId", new Long(1));*/
 
-        session = FacesUtil.getSession(true);
+        //session = FacesUtil.getSession(true);
         //user = (User)session.getAttribute("user");
         if(session.getAttribute("workCasePreScreenId") != null){
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
+            log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
         }
@@ -239,6 +250,18 @@ public class PrescreenMaker implements Serializable {
 
         bizInfoViewList = prescreenBusinessControl.getBusinessInfo(workCasePreScreenId);
         if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoView>(); }
+
+        customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        if(customerInfoViewList != null){
+            borrowerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViewList);
+            guarantorInfoViewList = prescreenBusinessControl.getGuarantorViewListByCustomerViewList(customerInfoViewList);
+            relatedInfoViewList = prescreenBusinessControl.getRelatedViewListByCustomerViewList(customerInfoViewList);
+        } else {
+            customerInfoViewList = new ArrayList<CustomerInfoView>();
+            borrowerInfoViewList = new ArrayList<CustomerInfoView>();
+            guarantorInfoViewList = new ArrayList<CustomerInfoView>();
+            relatedInfoViewList = new ArrayList<CustomerInfoView>();
+        }
     }
 
     public void onLoadSelectList() {
@@ -280,6 +303,9 @@ public class PrescreenMaker implements Serializable {
 
         maritalStatusList = maritalStatusDAO.findAll();
         log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
+
+        bdmCheckerList = userDAO.findAll();
+        log.info("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
     }
 
     public void onClearObject(){
@@ -411,7 +437,7 @@ public class PrescreenMaker implements Serializable {
 
     public void onEditCustomerInfo() {
         log.info("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
-
+        borrowerInfo = selectCustomerInfoItem;
         modeForButton = ModeForButton.EDIT;
     }
 
@@ -706,7 +732,12 @@ public class PrescreenMaker implements Serializable {
         prescreenView.setModifyDate(DateTime.now().toDate());
         //prescreenView.setModifyBy();
         prescreenView.setBusinessLocation(null);
-        prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId);
+        prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+    }
+
+    public void onAssignToChecker(){
+        //TODO get nextStep
+        prescreenBusinessControl.assignToChecker(workCasePreScreenId);
     }
 
     // *** Function for Prescreen Maker ***//
@@ -1211,5 +1242,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<User> getBdmCheckerList() {
+        return bdmCheckerList;
+    }
+
+    public void setBdmCheckerList(List<User> bdmCheckerList) {
+        this.bdmCheckerList = bdmCheckerList;
     }
 }

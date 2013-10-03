@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>SE-LOS : Prescreen Maker</title>
+        <title>SE-LOS : Inbox</title>
         <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
         <script type="text/javascript" language="javascript"
                 src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
@@ -28,9 +28,11 @@
                                     <table class="content_table_form">
                                     <tr>
                                         <td>
-                                            <h:outputText value="#{inbox.userDetail.userName}"/>
                                             <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
-                                                         paginator="false" rowKey="#{item.fnWobNum}" rowIndexVar="rowIndex" selection="#{item}">
+                                                         selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
+                                                         paginator="false" rowKey="#{item.fnWobNum}" rowIndexVar="rowIndex" >
+
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox" listener="#{inbox.onSelectInbox}" />
 
                                                 <p:column headerText="" styleClass="center" style="width:22px;">
                                                     <h:outputText value="#{rowIndex+1}"/>

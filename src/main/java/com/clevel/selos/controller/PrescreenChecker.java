@@ -94,7 +94,10 @@ public class PrescreenChecker implements Serializable {
         }
 
         //TODO Generate row for textBox to check Citizen id
-        customerInfoViewList = prescreenBusinessControl.getBorrowerListByWorkCaseId(workCasePreScreenId);
+        List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        if(customerInfoViews != null){
+            customerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViews);
+        }
 
         if(customerInfoViewList != null){
             int row = customerInfoViewList.size();

@@ -7,6 +7,7 @@
  */
 $(document).ready(function(){
     $(".numberonly").bind("keypress", function (e) {
+        alert('5');
         return !(e.which != 8 && e.which != 0 &&
             (e.which < 48 || e.which > 57) && e.which != 46);
     });
@@ -20,6 +21,11 @@ $(document).ready(function() {
         $(".readonly").blur();
     })
 });
+
+function numberOnly(e){
+    return !(e.which != 8 && e.which != 0 &&
+        (e.which < 48 || e.which > 57) && e.which != 46);
+}
 
 function removeWindowsScrollbar(){
     $("body").attr("style","overflow-y: hidden");
