@@ -1,4 +1,6 @@
 package com.clevel.selos.transform;
 
-public abstract class Transform {
+import java.io.Serializable;
+
+public abstract class Transform implements Serializable {
 }

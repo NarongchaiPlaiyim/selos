@@ -12,6 +12,9 @@ public class InboxView implements Serializable {
     private String lockStatus;
     private String lockedUser;
     private String queueName;
+    private long workCasePreScreenId;
+    private long workCaseId;
+    private long stepId;
 
     public String getFnWobNum() {
         return fnWobNum;
@@ -61,6 +64,30 @@ public class InboxView implements Serializable {
         this.queueName = queueName;
     }
 
+    public long getWorkCasePreScreenId() {
+        return workCasePreScreenId;
+    }
+
+    public void setWorkCasePreScreenId(long workCasePreScreenId) {
+        this.workCasePreScreenId = workCasePreScreenId;
+    }
+
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public long getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(long stepId) {
+        this.stepId = stepId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -70,6 +97,9 @@ public class InboxView implements Serializable {
                 .append("lockStatus", lockStatus)
                 .append("lockedUser", lockedUser)
                 .append("queueName", queueName)
+                .append("workCasePreScreenId", workCasePreScreenId)
+                .append("workCaseId", workCaseId)
+                .append("stepId", stepId)
                 .toString();
     }
 }

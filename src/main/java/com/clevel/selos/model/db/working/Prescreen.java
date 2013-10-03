@@ -44,6 +44,10 @@ public class Prescreen implements Serializable {
     @Column(name="refinance")
     private boolean refinance;
 
+    @OneToOne
+    @JoinColumn(name="bdm_checker_id")
+    private User bdmChecker;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;

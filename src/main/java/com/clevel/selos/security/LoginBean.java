@@ -73,6 +73,8 @@ public class LoginBean {
             httpSession.setAttribute("language", Language.EN);
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "",new Date());
+            HttpSession session = FacesUtil.getSession(false);
+            session.setAttribute("sess_user", user);
             return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (AuthenticationException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
