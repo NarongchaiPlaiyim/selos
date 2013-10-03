@@ -4,10 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_tcgcollateral_type")
-public class TCGCollateralType {
+public class TCGCollateralType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

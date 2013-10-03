@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.testrm;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "CARDTYPE")
-public class CardType {
+public class CardType implements Serializable {
 
     @Id
     @Column(name = "NAME")

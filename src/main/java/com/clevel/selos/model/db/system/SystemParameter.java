@@ -7,10 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "sys_parameter")
-public class SystemParameter {
+public class SystemParameter implements Serializable {
     @Id
     @Column(name = "name")
     private String name;
