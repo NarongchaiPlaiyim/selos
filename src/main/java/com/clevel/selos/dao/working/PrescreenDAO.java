@@ -26,4 +26,13 @@ public class PrescreenDAO extends GenericDAO<Prescreen, Integer> {
 
         return prescreen;
     }
+
+    public Prescreen findByWorkCasePrescreenId(long workCasePrescreenId){
+        log.info("findByWorkCasePrescreen ::: workCasePreScreenId : {}", workCasePrescreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
+        Prescreen prescreen = (Prescreen)criteria.uniqueResult();
+
+        return prescreen;
+    }
 }

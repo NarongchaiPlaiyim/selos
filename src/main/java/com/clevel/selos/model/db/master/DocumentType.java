@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_documenttype")
+@Table(name = "mst_document_type")
 public class DocumentType implements Serializable {
     @Id
     @Column(name = "id")
@@ -17,7 +17,7 @@ public class DocumentType implements Serializable {
     private String description;
 
     @OneToOne
-    @JoinColumn(name="customertype_id")
+    @JoinColumn(name="customerentity_id")
     private CustomerEntity customerEntity;
 
     @Column(name="active")

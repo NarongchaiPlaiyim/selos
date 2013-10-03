@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,6 +21,10 @@ public class Prescreen implements Serializable {
     @ManyToOne
     @JoinColumn(name="workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
+
+    @OneToOne
+    @JoinColumn(name="product_group_id")
+    private ProductGroup productGroup;
 
     @Temporal(TemporalType.DATE)
     @Column(name="expected_submit_date")
@@ -73,6 +78,14 @@ public class Prescreen implements Serializable {
 
     public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
         this.workCasePrescreen = workCasePrescreen;
+    }
+
+    public ProductGroup getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
     }
 
     public Date getExpectedSubmitDate() {
@@ -152,6 +165,7 @@ public class Prescreen implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCasePrescreen", workCasePrescreen)
+                .append("productGroup", productGroup)
                 .append("expectedSubmitDate", expectedSubmitDate)
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)

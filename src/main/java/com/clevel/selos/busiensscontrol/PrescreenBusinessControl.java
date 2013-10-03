@@ -7,17 +7,15 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
-import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.FacilityView;
-import com.clevel.selos.model.view.PreScreenResponseView;
-import com.clevel.selos.model.view.PrescreenView;
-import com.clevel.selos.transform.PreScreenResultTransform;
-import com.clevel.selos.transform.PrescreenFacilityTransform;
-import com.clevel.selos.transform.PrescreenTransform;
+import com.clevel.selos.model.view.*;
+import com.clevel.selos.transform.*;
+import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -39,11 +37,20 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenFacilityTransform prescreenFacilityTransform;
     @Inject
     PreScreenResultTransform preScreenResultTransform;
+    @Inject
+    BizInfoTransform bizInfoTransform;
+    @Inject
+    CustomerTransform customerTransform;
+
+    @Inject
+    CustomerBizTransform customerBizTransform;
 
     @Inject
     PrescreenDAO prescreenDAO;
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
+    @Inject
+    BizInfoDAO bizInfoDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
@@ -54,6 +61,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     DocumentTypeDAO documentTypeDAO;
     @Inject
     BRMSResultDAO brmsResultDAO;
+    @Inject
+    CustomerDAO customerDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -68,48 +77,49 @@ public class PrescreenBusinessControl extends BusinessControl {
     //** function for integration **//
 
     // *** Function for RM *** //
-    public CustomerInfoView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user) throws Exception{
-        CustomerInfoView customerInfoSearch = new CustomerInfoView();
+    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+        CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
         log.info("getCustomerInfoFromRM ::: customerInfoView : {}", customerInfoView);
-        try {
-            String userId = Long.toString(user.getId());
-            DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
-            String documentTypeCode = masterDocumentType.getDocumentTypeCode();
-            log.info("getCustomerInfoFromRM ::: userId : {}", userId);
-            log.info("getCustomerInfoFromRM ::: documentType : {}", masterDocumentType);
-            log.info("getCustomerInfoFromRM ::: documentTypeCode : {}", documentTypeCode);
 
-            RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-            if(customerInfoView.getSearchBy() == 1){
-                searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-            }else if(customerInfoView.getSearchBy() == 2){
-                searcyBy = RMInterface.SearchBy.TMBCUS_ID;
-            }
+        String userId = Long.toString(user.getId());
+        DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
+        String documentTypeCode = masterDocumentType.getDocumentTypeCode();
+        log.info("getCustomerInfoFromRM ::: userId : {}", userId);
+        log.info("getCustomerInfoFromRM ::: documentType : {}", masterDocumentType);
+        log.info("getCustomerInfoFromRM ::: documentTypeCode : {}", documentTypeCode);
 
-            RMInterface.DocumentType documentType = RMInterface.DocumentType.CITIZEN_ID;
-            if(documentTypeCode.equalsIgnoreCase("CI")){
-                documentType = RMInterface.DocumentType.CITIZEN_ID;
-            }else if(documentTypeCode.equalsIgnoreCase("PP")){
-                documentType = RMInterface.DocumentType.PASSPORT;
-            }else if(documentTypeCode.equalsIgnoreCase("SC")){
-                documentType = RMInterface.DocumentType.CORPORATE_ID;
-            }
-
-            log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
-            log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
-
-            /*if(customerInfoView.getCustomerEntity().getId() == 1) {
-                customerInfoSearch = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
-            } else if(customerInfoView.getCustomerEntity().getId() == 2){
-                customerInfoSearch = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
-            }*/
-        } catch(Exception ex) {
-            log.info("error : {}", ex);
-            throw new Exception(ex.getMessage());
+        RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+        if(customerInfoView.getSearchBy() == 1){
+            searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+        }else if(customerInfoView.getSearchBy() == 2){
+            searcyBy = RMInterface.SearchBy.TMBCUS_ID;
         }
+
+        RMInterface.DocumentType documentType = RMInterface.DocumentType.CITIZEN_ID;
+        if(documentTypeCode.equalsIgnoreCase("CI")){
+            documentType = RMInterface.DocumentType.CITIZEN_ID;
+        }else if(documentTypeCode.equalsIgnoreCase("PP")){
+            documentType = RMInterface.DocumentType.PASSPORT;
+        }else if(documentTypeCode.equalsIgnoreCase("SC")){
+            documentType = RMInterface.DocumentType.CORPORATE_ID;
+        }
+
+        log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
+        log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
+
+        if(customerInfoView.getCustomerEntity().getId() == 1) {
+            IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
+            customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
+        } else if(customerInfoView.getCustomerEntity().getId() == 2){
+            CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
+            log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
+            customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
+        }
+
         log.info("getCustomerInfoFromRM ::: success!!");
-        log.info("getCustomerInfoFromRM ::: customerInfoSearch : {}", customerInfoSearch);
-        return customerInfoSearch;
+        log.info("getCustomerInfoFromRM ::: customerInfoSearch : {}", customerInfoResultSearch);
+        return customerInfoResultSearch;
     }
 
     // *** Function for DWH (BankStatement) *** //
@@ -144,6 +154,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         return preScreenResponseViewList;
     }
 
+    // *** Function for NCB *** //
+    public List<NCBInfoView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList){
+        List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+
+        return ncbInfoViewList;
+    }
+
     public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
         preScreenResponseViewList = preScreenResultTransform.tranformToCustomerResponse(prescreenResponseViews);
@@ -173,12 +190,89 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for PreScreen Initial *** //
-    public void savePrescreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, long workCasePrescreenId){
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
+    public PrescreenView getPreScreen(long workCasePreScreenId){
+        log.info("getPreScreen ::: workCasePreScreenId : {}", workCasePreScreenId);
+        PrescreenView prescreenView = null;
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+
+        if(prescreen != null){
+            log.info("getPreScreen ::: prescreen : {}", prescreen);
+            prescreenView = prescreenTransform.transformToView(prescreen);
+        }
+        log.info("getPreScreen ::: preScreenView : {}", prescreenView);
+        return prescreenView;
+    }
+
+    public List<FacilityView> getPreScreenFacility(PrescreenView prescreenView){
+        log.info("getPreScreenFacility ::: prescreenView : {}", prescreenView);
+        List<FacilityView> facilityViewList = null;
+        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreenView.getId());
+
+        if(prescreenFacilityList != null){
+            facilityViewList = prescreenFacilityTransform.transformToView(prescreenFacilityList);
+        }
+        log.info("getPreScreenFacility ::: prescreenFacilityList : {}", prescreenFacilityList.size());
+        return facilityViewList;
+    }
+
+    public List<BizInfoView> getBusinessInfo(long workCasePreScreenId){
+        List<BizInfoView> bizInfoViewList = null;
+        List<BizInfo> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+
+        if(bizInfoList != null){
+            bizInfoViewList = bizInfoTransform.transformToPreScreenView(bizInfoList);
+        }
+
+        return bizInfoViewList;
+    }
+
+    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen);
         prescreenDAO.persist(prescreen);
-        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformModel(facilityViewList, prescreen);
+
+        //Remove all Facility before add new
+        List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
+        if(prescreenFacilitieListDelete != null){
+            prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
+        }
+
+        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
         prescreenFacilityDAO.persist(prescreenFacilityList);
+
+        //Remove all Customer before add new
+        List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        customerDAO.delete(customerListDelete);
+
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
+        log.info("savePreScreenInitial ::: customerList : {}", customerList);
+        customerDAO.persist(customerList);
+
+        /*//Remove all Business before add new
+        List<BizInfo> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
+        if(bizInfoListDelete != null){
+            bizInfoDAO.delete(bizInfoListDelete);
+        }
+
+        List<BizInfo> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
+        bizInfoDAO.persist(bizInfoList);*/
+    }
+
+    //*** Function for PreScreen Checker ***//
+    public List<CustomerInfoView> getBorrowerListByWorkCaseId(long workCasePreScreenId){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        log.info("getBorrowerListByWorkCaseId ::: customerList : {}", customerList);
+        customerInfoViewList = customerTransform.transformToViewList(customerList);
+        log.info("getBorrowerListByWorkCaseId ::: customerInfoViewList : {}", customerInfoViewList);
+
+        return customerInfoViewList;
+    }
+
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoView> bizInfoViewList, long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
     }
 
     public void save(WorkCasePrescreen workCasePrescreen){
@@ -204,5 +298,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         return workCasePrescreen;
     }
+
+
+    // *** Function for Drop Down *** //
 
 }

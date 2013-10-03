@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class UserDetail {
     private String userName;
+    private String userPassword;
     private String role;
     private String roleType;
 

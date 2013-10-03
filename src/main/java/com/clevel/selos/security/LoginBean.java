@@ -50,7 +50,14 @@ public class LoginBean {
 
     public String login() {
         log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
-        User user = userDAO.findByUserName(userName.trim());
+        long userId = 0;
+        try{
+            userId = Long.parseLong(userName);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        User user = userDAO.findById(userId);
+        //User user = userDAO.findByUserName(userName.trim());
         HttpServletRequest httpServletRequest = FacesUtil.getRequest();
         HttpServletResponse httpServletResponse = FacesUtil.getResponse();
         if (user == null) {

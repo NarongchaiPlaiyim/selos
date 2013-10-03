@@ -18,6 +18,7 @@ public class PrescreenTransform extends Transform {
             prescreen.setId(prescreenView.getId());
         }
         prescreen.setWorkCasePrescreen(workCasePrescreen);
+        prescreen.setProductGroup(prescreenView.getProductGroup());
         prescreen.setExpectedSubmitDate(prescreenView.getExpectedSubmitDate());
         prescreen.setBusinessLocation(prescreenView.getBusinessLocation());
         prescreen.setRegisterDate(prescreenView.getRegisterDate());
@@ -34,6 +35,7 @@ public class PrescreenTransform extends Transform {
         PrescreenView prescreenView = new PrescreenView();
 
         prescreenView.setId(prescreen.getId());
+        prescreenView.setProductGroup(prescreen.getProductGroup());
         prescreenView.setExpectedSubmitDate(prescreen.getExpectedSubmitDate());
         prescreenView.setBusinessLocation(prescreen.getBusinessLocation());
         prescreenView.setRegisterDate(prescreen.getRegisterDate());

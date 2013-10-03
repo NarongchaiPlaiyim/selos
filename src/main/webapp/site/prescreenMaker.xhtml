@@ -14,6 +14,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{prescreenMaker.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -31,7 +32,7 @@
             <div id="content">
             <div id="content_info">
                 <div id="content_trackchange">[ View Track Change ]</div>
-                <div id="content_lastupdate">Last update by Mr.BDM Maker, 02/08/2555 11:11:11</div>
+                <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
             </div>
             <div id="content_form">
             <!--<p:panel id="pnlContent_form">-->
@@ -287,7 +288,7 @@
                 <td>
                     <p:dataTable id="resulttableBusinessInformation"
                                  var="businessResultItem"
-                                 value="#{prescreenMaker.businessInfoViewList}"
+                                 value="#{prescreenMaker.bizInfoViewList}"
                                  paginator="false"
                                  rowKey="#{businessResultItem.businessDescription.id}"
                                  rowIndexVar="rowIndex">
@@ -488,14 +489,14 @@
         </h:form>
     </p:panel>
     <p:panel id="confirmDialog_test" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}">
-        <p:commandButton value="YES"
-                         process="@this"
-                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                         oncomplete="msgBoxFacilityDlg.hide()" />
-        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
-    </p:confirmDialog>
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}">
+            <p:commandButton value="YES"
+                             process="@this"
+                             actionListener="#{prescreenMaker.onChangeProductGroup()}"
+                             oncomplete="msgBoxFacilityDlg.hide()" />
+            <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+        </p:confirmDialog>
     </p:panel>
     <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
               modal="true" width="400" height="150">

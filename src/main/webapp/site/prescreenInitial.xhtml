@@ -14,7 +14,8 @@
 </h:head>
 
 <h:body>
-<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+<f:event type="preRenderView" listener="#{prescreenMaker.preRender()}" />
+<p:panel id="pnl_maincontainer" styleClass="panel">
     <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
@@ -29,10 +30,10 @@
             <div id="content_container">
                 <div id="content_name">Prescreen - Prescreen Initial</div>
                 <div id="content">
-                    <div id="content_info">
-                        <div id="content_trackchange">[ View Track Change ]</div>
-                        <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, 02/08/2555 11:11:11</div>
-                    </div>
+                <div id="content_info">
+                    <div id="content_trackchange">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
+                </div>
                     <div id="content_form">
                         <!-- start content -->
                         <table class="content_table_form">
@@ -143,14 +144,34 @@
                             <tr>
                                 <td class="title top">Borrower :</td>
                                 <td>
-                                    <p:dataTable id="resultTableBorrower" var="item" value="#{prescreenMaker.borrowerInfoViewList}"
-                                                 paginator="false" rowKey="#{item.id}" rowIndexVar="rowIndex">
+                                    <p:dataTable id="resultTableBorrower" var="borrowerItem" value="#{prescreenMaker.borrowerInfoViewList}"
+                                                 paginator="false" rowKey="#{borrowerItem.id}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                             <h:outputText value="#{rowIndex+1}"/>
                                         </p:column>
 
+                                        <p:column headerText="Customer Name" styleClass="center">
+                                            <h:outputText value="#{borrowerItem.titleTh.titleTh}"/><p:spacer width="2"/>
+                                            <h:outputText value="#{borrowerItem.firstNameTh}"/><p:spacer width="3"/>
+                                            <h:outputText value="#{borrowerItem.lastNameTh}"/>
+                                        </p:column>
 
+                                        <p:column headerText="Customer Type" styleClass="center">
+                                            <h:outputText value="#{borrowerItem.customerEntity.description}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Age" styleClass="center">
+                                            <h:outputText value="#{borrowerItem.age}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Citizen ID/Registration ID" styleClass="center">
+                                            <h:outputText value="#{borrowerItem.citizenId}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer ID" styleClass="center">
+                                            <h:outputText value="#{borrowerItem.customerId}"/>
+                                        </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
                                             <p:commandButton title="Edit"
@@ -169,12 +190,117 @@
                                                 <f:setPropertyActionListener value="#{item}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                             </p:commandButton>
-                                            <p:commandButton binding="#{submit}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>
                             </tr>
                             <tr>
+                                <td class="title top">Guarantor :</td>
+                                <td>
+                                    <p:dataTable id="resultTableGuarantor" var="guarantorItem" value="#{prescreenMaker.guarantorInfoViewList}"
+                                                 paginator="false" rowKey="#{guarantorItem.id}" rowIndexVar="rowIndex">
+
+                                        <p:column headerText="" styleClass="center" style="width:22px;">
+                                            <h:outputText value="#{rowIndex+1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer Name" styleClass="center">
+                                            <h:outputText value="#{guarantorItem.titleTh.titleTh}"/><p:spacer width="2"/>
+                                            <h:outputText value="#{guarantorItem.firstNameTh}"/><p:spacer width="3"/>
+                                            <h:outputText value="#{guarantorItem.lastNameTh}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer Type" styleClass="center">
+                                            <h:outputText value="#{guarantorItem.customerEntity.description}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Age" styleClass="center">
+                                            <h:outputText value="#{guarantorItem.age}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Citizen ID/Registration ID" styleClass="center">
+                                            <h:outputText value="#{guarantorItem.citizenId}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer ID" styleClass="center">
+                                            <h:outputText value="#{guarantorItem.customerId}"/>
+                                        </p:column>
+
+                                        <p:column headerText="" styleClass="center" style="width:54px;">
+                                            <p:commandButton title="Edit"
+                                                             icon="ui-icon-pencil"
+                                                             action="#{prescreenMaker.onEditCustomerInfo()}"
+                                                             update=":customerDlgForm"
+                                                             oncomplete="customerDlg.show();">
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{prescreenMaker.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteCustomerDlg.show()" >
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title top">Related Person :</td>
+                                <td>
+                                    <p:dataTable id="resultTableRelated" var="relatedItem" value="#{prescreenMaker.relatedInfoViewList}"
+                                                 paginator="false" rowKey="#{relatedItem.id}" rowIndexVar="rowIndex">
+
+                                        <p:column headerText="" styleClass="center" style="width:22px;">
+                                            <h:outputText value="#{rowIndex+1}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer Name" styleClass="center">
+                                            <h:outputText value="#{relatedItem.titleTh.titleTh}"/><p:spacer width="2"/>
+                                            <h:outputText value="#{relatedItem.firstNameTh}"/><p:spacer width="3"/>
+                                            <h:outputText value="#{relatedItem.lastNameTh}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer Type" styleClass="center">
+                                            <h:outputText value="#{relatedItem.customerEntity.description}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Age" styleClass="center">
+                                            <h:outputText value="#{relatedItem.age}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Citizen ID/Registration ID" styleClass="center">
+                                            <h:outputText value="#{relatedItem.citizenId}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Customer ID" styleClass="center">
+                                            <h:outputText value="#{relatedItem.customerId}"/>
+                                        </p:column>
+
+                                        <p:column headerText="" styleClass="center" style="width:54px;">
+                                            <p:commandButton title="Edit"
+                                                             icon="ui-icon-pencil"
+                                                             action="#{prescreenMaker.onEditCustomerInfo()}"
+                                                             update=":customerDlgForm"
+                                                             oncomplete="customerDlg.show();">
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{prescreenMaker.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteCustomerDlg.show()" >
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{prescreenMaker.selectCustomerInfoItem}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <!--<tr>
                                 <td class="title top">Borrower :</td>
                                 <td>
                                     <table class="table_content" >
@@ -185,8 +311,8 @@
                                             <th style="width:30px;">Age</th>
                                             <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
                                             <th style="width:90px;">Customer ID</th>
-                                            <!--<th style="width:30px;">NCB</th>
-                                            <th style="width:40px;">Eligible</th>-->
+                                            &lt;!&ndash;<th style="width:30px;">NCB</th>
+                                            <th style="width:40px;">Eligible</th>&ndash;&gt;
                                             <th style="width:50px;"></th>
                                         </tr>
                                         <tr>
@@ -196,8 +322,8 @@
                                             <td class="center">48</td>
                                             <td class="center">312320123123</td>
                                             <td class="center">30232</td>
-                                            <!--<td class="center"></td>
-                                            <td class="center"></td>-->
+                                            &lt;!&ndash;<td class="center"></td>
+                                            <td class="center"></td>&ndash;&gt;
                                             <td class="option">
                                                 <p:commandButton icon="ui-icon-pencil" title="Edit"/>
                                                 <p:commandButton icon="ui-icon-trash" title="Remove"/>
@@ -210,8 +336,8 @@
                                             <td class="center">36</td>
                                             <td class="center">412420124124</td>
                                             <td class="center">30234</td>
-                                            <!--<td class="center"></td>
-                                            <td class="center"></td>-->
+                                            &lt;!&ndash;<td class="center"></td>
+                                            <td class="center"></td>&ndash;&gt;
                                             <td class="option">
                                                 <p:commandButton icon="ui-icon-pencil" title="Edit"/>
                                                 <p:commandButton icon="ui-icon-trash" title="Remove"/>
@@ -235,7 +361,7 @@
                                             <th style="width:160px;">Citizen ID /<br/> Registration ID</th>
                                             <th style="width:90px;">Customer ID</th>
                                             <th style="width:140px;">Relationship</th>
-                                            <!--<th style="width:30px;">CSI</th>-->
+                                            &lt;!&ndash;<th style="width:30px;">CSI</th>&ndash;&gt;
                                             <th style="width:50px;"></th>
                                         </tr>
                                         <tr>
@@ -246,7 +372,7 @@
                                             <td class="center">312320123123</td>
                                             <td class="center">40432</td>
                                             <td class="center">Director</td>
-                                            <!--<td class="result_green"></td>-->
+                                            &lt;!&ndash;<td class="result_green"></td>&ndash;&gt;
                                             <td class="option">
                                                 <p:commandButton icon="ui-icon-pencil" title="Edit"/>
                                                 <p:commandButton icon="ui-icon-trash" title="Remove"/>
@@ -270,7 +396,7 @@
                                             <th width="160">Citizen ID /<br/> Registration ID</th>
                                             <th width="90">Customer ID</th>
                                             <th width="140">Relationship</th>
-                                            <!--<th width="30">CSI</th>-->
+                                            &lt;!&ndash;<th width="30">CSI</th>&ndash;&gt;
                                             <th width="50"></th>
                                         </tr>
                                         <tr>
@@ -281,7 +407,7 @@
                                             <td class="center">312320123123</td>
                                             <td class="center">50637</td>
                                             <td class="center">Shareholders</td>
-                                            <!--<td class="result_red"></td>-->
+                                            &lt;!&ndash;<td class="result_red"></td>&ndash;&gt;
                                             <td class="option">
                                                 <p:commandButton icon="ui-icon-pencil" title="Edit"/>
                                                 <p:commandButton icon="ui-icon-trash" title="Remove"/>
@@ -289,7 +415,7 @@
                                         </tr>
                                     </table>
                                 </td>
-                            </tr>
+                            </tr>-->
                             <tr>
                                 <td colspan="2">
                                     <div class="separate"><!-- --></div>
@@ -300,7 +426,7 @@
                                 <td class="center" colspan="100%">
                                     <p:commandButton id="btnSave" value="Save"
                                                      styleClass="medium"
-                                                     process=":frmMain"
+                                                     process="@form"
                                                      action="#{prescreenMaker.onSavePrescreenInitial()}"
                                                      update=":frmMain"/>
                                 </td>
@@ -318,6 +444,31 @@
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </div>
     </h:form>
+</p:panel>
+<p:panel id="waitingDialogPanel" widgetVar="waitingDlgPnl">
+    <p:dialog id="waitingDialog" widgetVar="waitingDlg" modal="true" draggable="false" closeOnEscape="false" closable="false"
+              header="#{prescreenMaker.messageHeader}">
+        <h:outputText value="#{prescreenMaker.message}"/><br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:dialog>
+</p:panel>
+<p:panel id="waitingDialogPanel2" widgetVar="waitingDlgPnl2">
+    <p:confirmDialog id="waitingDialog2" widgetVar="waitingDlg2" modal="true" closeOnEscape="false" closable="false"
+              header="#{prescreenMaker.messageHeader}">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:confirmDialog>
+</p:panel>
+
+<p:panel id="confirmDialog_test" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
+        <p:commandButton value="YES"
+                         process="@this"
+                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
+                         oncomplete="msgBoxFacilityDlg.hide()" />
+        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+    </p:confirmDialog>
 </p:panel>
 <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
           modal="true" width="400" height="150">

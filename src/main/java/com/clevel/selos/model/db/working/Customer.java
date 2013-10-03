@@ -53,16 +53,28 @@ public class Customer implements Serializable {
     @Column(name="name_th")
     private String nameTh;
 
+    @Column(name="lastname_th")
+    private String lastNameTh;
+
+    @Column(name="lastname_en")
+    private String lastNameEn;
+
     @Column(name="age")
     private int age;
 
-    @OneToOne
+    @OneToOne(mappedBy="customer")
+    private Individual individual;
+
+    @OneToOne(mappedBy="customer")
+    private Juristic juristic;
+
+    /*@OneToOne
     @JoinColumn(name="individual_id")
     private Individual individual;
 
     @OneToOne
     @JoinColumn(name="juristic_id")
-    private Juristic juristic;
+    private Juristic juristic;*/
 
     @OneToOne
     @JoinColumn(name="relation_id")
@@ -192,6 +204,22 @@ public class Customer implements Serializable {
 
     public void setNcbList(List<NCB> ncbList) {
         this.ncbList = ncbList;
+    }
+
+    public String getLastNameTh() {
+        return lastNameTh;
+    }
+
+    public void setLastNameTh(String lastNameTh) {
+        this.lastNameTh = lastNameTh;
+    }
+
+    public String getLastNameEn() {
+        return lastNameEn;
+    }
+
+    public void setLastNameEn(String lastNameEn) {
+        this.lastNameEn = lastNameEn;
     }
 
     @Override

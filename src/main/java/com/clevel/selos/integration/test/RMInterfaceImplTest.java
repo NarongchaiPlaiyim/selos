@@ -30,7 +30,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
 
     @Override
-    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
         log.debug("======= IndividualServiceTest =======");
         IndividualResult individualResult=new IndividualResult();
@@ -70,7 +70,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateResult corporateResult = new CorporateResult();
@@ -114,7 +114,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) throws Exception {
+    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) {
 
         log.debug("======= CustomerAccountServiceTest =======");
 

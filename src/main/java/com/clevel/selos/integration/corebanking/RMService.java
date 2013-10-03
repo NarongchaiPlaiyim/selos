@@ -368,6 +368,7 @@ public class RMService implements Serializable {
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+            throw new Exception(e.getMessage());
         }
         log.debug("IndividualService() END");
         return individualModel;
@@ -526,6 +527,7 @@ public class RMService implements Serializable {
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+            throw new Exception(e.getMessage());
         }
         log.debug("CorporateService() END");
         return corporateModel;
@@ -690,6 +692,7 @@ public class RMService implements Serializable {
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+            throw new Exception(e.getMessage());
         }
 
         log.debug("CorporateService() END");

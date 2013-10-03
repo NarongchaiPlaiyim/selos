@@ -4,7 +4,7 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
+<p:panel id="customerDlgPanel" styleClass="panel-dialog">
     <h:form id="customerDlgForm">
         <div id="customer_relation">
             <table class="content_form" border="0" style="width:650px;">
@@ -12,6 +12,7 @@
                     <td class="title" style="min-width: 124px; width: 124px; max-width: 124px;">Document Type :</td>
                     <td colspan="3">
                         <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
+                                         required="#{not empty param[searchButton.clientId]}"
                                          size="1" style="width: 200px;">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.documentTypeList}"
@@ -24,26 +25,31 @@
                 <tr>
                     <td class="title">Search by :</td>
                     <td>
-                        <p:selectOneRadio id="dlgRadioBrSearchBy" value="#{prescreenMaker.borrowerInfo.searchBy}" required="false">
+                        <p:selectOneRadio id="dlgRadioBrSearchBy"
+                                          value="#{prescreenMaker.borrowerInfo.searchBy}"
+                                          required="#{not empty param[searchButton.clientId]}">
                             <f:selectItem itemLabel="Citizen ID" itemValue="1"/>
                             <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
                         </p:selectOneRadio>
                     </td>
                     <td>
-                        <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}"/>
+                        <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}"
+                                     required="#{not empty param[searchButton.clientId]}" />
                     </td>
                     <td>
+                        <h:outputText value="#{param[searchButton]}"/>
                         <p:commandButton id="dlgSearchBrBtn" value="Search"
-                                            process="@form"
-                                            action="#{prescreenMaker.onSearchCustomerInfo}"
-                                            update=":confirmDialog_test"
-                                            />
+                                         binding="#{searchButton}"
+                                         process="@form"
+                                         actionListener="#{prescreenMaker.onSearchCustomerInfo}"
+                                         update=":confirmDialog_test :customerDlgForm :waitingDialogPanel" />
                     </td>
                 </tr>
                 <tr>
                     <td class="title">Customer Entity :</td>
                     <td colspan="3">
-                        <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}">
+                        <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}"
+                                          required="#{not empty param[searchButton.clientId]}">
                             <f:selectItems value="#{prescreenMaker.customerEntityList}"
                                            var="customerEntityItem"
                                            itemLabel="#{customerEntityItem.description}"
@@ -367,13 +373,12 @@
 
         <!--<p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">-->
             <p:commandButton
-                    rendered="#{prescreenMaker.modeForButton == 'add'}"
                     id="addCustomer"
                     value="Add"
                     styleClass="small"
                     action="#{prescreenMaker.onSaveCustomerInfo}"
                     process="@form"
-                    update=":customerDlgForm"
+                    update=":customerDlgForm :frmMain:resultTableBorrower :frmMain:resultTableGuarantor :frmMain:resultTableRelated"
                     oncomplete="handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
             <p:commandButton value="Cancel" styleClass="small"
                              process="@this" update=":customerDlgForm"
@@ -382,5 +387,9 @@
             </p:commandButton>
         <!--</p:panel>-->
     </h:form>
-    <p:blockUI widgetVar="blockUIContentForm" block="customerDlgForm" trigger=":customerDlgForm:dlgSearchBrBtn"/>
+</p:panel>
+    <p:blockUI widgetVar="blockUIContentForm" block="customerDlgPanel" trigger=":customerDlgForm:dlgSearchBrBtn">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

@@ -2,6 +2,8 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.working.Customer;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -16,4 +18,12 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
     public CustomerDAO() {
     }
 
+    public List<Customer> findByWorkCasePreScreenId(long workCasePreScreenId){
+        log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+
+        return customerList;
+    }
 }

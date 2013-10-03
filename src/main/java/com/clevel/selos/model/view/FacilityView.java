@@ -15,11 +15,19 @@ public class FacilityView {
     private String facilityName;
     private BigDecimal requestAmount;
     private String productProgramName;
-
     private ProductProgram productProgram;
     private CreditType creditType ;
 
     public FacilityView(){
+
+    }
+
+    public void reset(){
+        this.id = 0;
+        this.facilityName = "";
+        this.requestAmount = new BigDecimal(0);
+        this.productProgram = new ProductProgram();
+        this.creditType = new CreditType();
     }
 
     public long getId() {

@@ -20,9 +20,12 @@ public class Individual implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_INDIVIDUAL_ID")
     private long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Column(name="citizen_id")
+    private String citizenId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="birth_date")
@@ -67,6 +70,14 @@ public class Individual implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public String getCitizenId() {
+        return citizenId;
+    }
+
+    public void setCitizenId(String citizenId) {
+        this.citizenId = citizenId;
     }
 
     public Date getBirthDate() {
@@ -127,16 +138,17 @@ public class Individual implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("customer", customer).
-                append("birthDate", birthDate).
-                append("gender", gender).
-                append("nationality", nationality).
-                append("education", education).
-                append("occupation", occupation).
-                append("maritalStatus", maritalStatus).
-                append("numberOfChildren", numberOfChildren).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customer", customer)
+                .append("citizenId", citizenId)
+                .append("birthDate", birthDate)
+                .append("gender", gender)
+                .append("nationality", nationality)
+                .append("education", education)
+                .append("occupation", occupation)
+                .append("maritalStatus", maritalStatus)
+                .append("numberOfChildren", numberOfChildren)
+                .toString();
     }
 }

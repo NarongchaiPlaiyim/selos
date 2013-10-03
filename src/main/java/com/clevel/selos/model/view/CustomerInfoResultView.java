@@ -53,4 +53,14 @@ public class CustomerInfoResultView implements Serializable {
     public void setCustomerInfoView(CustomerInfoView customerInfoView) {
         this.customerInfoView = customerInfoView;
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("customerId", customerId)
+                .append("actionResult", actionResult)
+                .append("reason", reason)
+                .append("customerInfoView", customerInfoView)
+                .toString();
+    }
 }

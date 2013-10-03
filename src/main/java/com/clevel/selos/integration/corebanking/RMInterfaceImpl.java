@@ -56,7 +56,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     private String documentTypeValue;
     private String searchByValue;
     @Override
-    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
         log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -110,7 +110,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
         if(DocumentType.CORPORATE_ID==documentType){
             documentTypeValue="SC";
@@ -160,7 +160,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     }
 
     @Override
-    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) throws Exception {
+    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) {
 
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
