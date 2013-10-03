@@ -46,16 +46,17 @@ public class NCBIExport implements Serializable {
     private String referenceTel;
     @Column(name="inquiry_status", length = 2)
     private String inquiryStatus;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="inquiry_date", nullable=false)
-    private Date inquiryDate;
+    @Column(name="inquiry_date", length = 10)
+    private String inquiryDate;
+    @Column(name="inquiry_time", length = 8)
+    private String inquiryTime;
     @Column(name="office_code", length = 3)
     private String officeCode;
 
     public NCBIExport() {
     }
 
-    public NCBIExport(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, Date inquiryDate, String officeCode) {
+    public NCBIExport(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
         this.staffId = staffId;
         this.requestNo = requestNo;
         this.inquiryType = inquiryType;
@@ -73,6 +74,7 @@ public class NCBIExport implements Serializable {
         this.referenceTel = referenceTel;
         this.inquiryStatus = inquiryStatus;
         this.inquiryDate = inquiryDate;
+        this.inquiryTime = inquiryTime;
         this.officeCode = officeCode;
     }
 
@@ -80,176 +82,105 @@ public class NCBIExport implements Serializable {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getStaffId() {
         return staffId;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
     }
 
     public String getRequestNo() {
         return requestNo;
     }
 
-    public void setRequestNo(String requestNo) {
-        this.requestNo = requestNo;
-    }
-
     public String getInquiryType() {
         return inquiryType;
-    }
-
-    public void setInquiryType(String inquiryType) {
-        this.inquiryType = inquiryType;
     }
 
     public String getCustomerType() {
         return customerType;
     }
 
-    public void setCustomerType(String customerType) {
-        this.customerType = customerType;
-    }
-
     public String getCustomerDocumentType() {
         return customerDocumentType;
-    }
-
-    public void setCustomerDocumentType(String customerDocumentType) {
-        this.customerDocumentType = customerDocumentType;
     }
 
     public String getJuristicType() {
         return juristicType;
     }
 
-    public void setJuristicType(String juristicType) {
-        this.juristicType = juristicType;
-    }
-
     public String getCustomerId() {
         return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
     }
 
     public String getCountryCode() {
         return countryCode;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-
     public String getTitleCode() {
         return titleCode;
-    }
-
-    public void setTitleCode(String titleCode) {
-        this.titleCode = titleCode;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getJuristicName() {
         return juristicName;
     }
 
-    public void setJuristicName(String juristicName) {
-        this.juristicName = juristicName;
-    }
-
     public String getCaNumber() {
         return caNumber;
-    }
-
-    public void setCaNumber(String caNumber) {
-        this.caNumber = caNumber;
     }
 
     public String getCaution() {
         return caution;
     }
 
-    public void setCaution(String caution) {
-        this.caution = caution;
-    }
-
     public String getReferenceTel() {
         return referenceTel;
-    }
-
-    public void setReferenceTel(String referenceTel) {
-        this.referenceTel = referenceTel;
     }
 
     public String getInquiryStatus() {
         return inquiryStatus;
     }
 
-    public void setInquiryStatus(String inquiryStatus) {
-        this.inquiryStatus = inquiryStatus;
-    }
-
-    public Date getInquiryDate() {
+    public String getInquiryDate() {
         return inquiryDate;
     }
 
-    public void setInquiryDate(Date inquiryDate) {
-        this.inquiryDate = inquiryDate;
+    public String getInquiryTime() {
+        return inquiryTime;
     }
 
     public String getOfficeCode() {
         return officeCode;
     }
 
-    public void setOfficeCode(String officeCode) {
-        this.officeCode = officeCode;
-    }
-
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("staffId", staffId).
-                append("requestNo", requestNo).
-                append("inquiryType", inquiryType).
-                append("customerType", customerType).
-                append("customerDocumentType", customerDocumentType).
-                append("juristicType", juristicType).
-                append("customerId", customerId).
-                append("countryCode", countryCode).
-                append("titleCode", titleCode).
-                append("firstName", firstName).
-                append("lastName", lastName).
-                append("juristicName", juristicName).
-                append("caNumber", caNumber).
-                append("caution", caution).
-                append("referenceTel", referenceTel).
-                append("inquiryStatus", inquiryStatus).
-                append("inquiryDate", inquiryDate).
-                append("officeCode", officeCode).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("staffId", staffId)
+                .append("requestNo", requestNo)
+                .append("inquiryType", inquiryType)
+                .append("customerType", customerType)
+                .append("customerDocumentType", customerDocumentType)
+                .append("juristicType", juristicType)
+                .append("customerId", customerId)
+                .append("countryCode", countryCode)
+                .append("titleCode", titleCode)
+                .append("firstName", firstName)
+                .append("lastName", lastName)
+                .append("juristicName", juristicName)
+                .append("caNumber", caNumber)
+                .append("caution", caution)
+                .append("referenceTel", referenceTel)
+                .append("inquiryStatus", inquiryStatus)
+                .append("inquiryDate", inquiryDate)
+                .append("inquiryTime", inquiryTime)
+                .append("officeCode", officeCode)
+                .toString();
     }
 }

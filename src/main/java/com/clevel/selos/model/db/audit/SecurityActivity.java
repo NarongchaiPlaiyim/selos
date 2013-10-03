@@ -5,11 +5,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "adt_sec_activity")
-public class SecurityActivity {
+public class SecurityActivity implements Serializable {
     @Id
     @SequenceGenerator(name="SEQ_ADT_SEC_ID", sequenceName="SEQ_ADT_SEC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_SEC_ID")

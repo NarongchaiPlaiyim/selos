@@ -5,7 +5,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class UserDetail {
+import java.io.Serializable;
+
+public class UserDetail implements Serializable{
     private String userName;
     private String password;
     private String role;

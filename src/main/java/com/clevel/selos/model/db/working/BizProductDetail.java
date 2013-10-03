@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "wrk_biz_product_detail")
-public class BizProductDetail {
+public class BizProductDetail implements Serializable {
 
     @Id
     @SequenceGenerator(name="SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", allocationSize=1)

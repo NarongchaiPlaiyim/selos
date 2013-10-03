@@ -32,16 +32,20 @@ public class NCBResult implements Serializable {
     @Column(name="reason", length = 500)
     private String reason;
 
+    @Column(name="request_no", length = 20)
+    private String requestNo;
+
     public NCBResult() {
     }
 
-    public NCBResult(String appRefNumber, String customerType, String customerId, Date inquiryDate, String result, String reason) {
+    public NCBResult(String appRefNumber, String customerType, String customerId, Date inquiryDate, String result, String reason, String requestNo) {
         this.appRefNumber = appRefNumber;
         this.customerType = customerType;
         this.customerId = customerId;
         this.inquiryDate = inquiryDate;
         this.result = result;
         this.reason = reason;
+        this.requestNo = requestNo;
     }
 
     public String getReason() {
@@ -98,5 +102,13 @@ public class NCBResult implements Serializable {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getRequestNo() {
+        return requestNo;
+    }
+
+    public void setRequestNo(String requestNo) {
+        this.requestNo = requestNo;
     }
 }

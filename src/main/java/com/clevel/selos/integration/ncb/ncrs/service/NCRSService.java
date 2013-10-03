@@ -4,11 +4,13 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
 import com.clevel.selos.integration.test.NCBInterfaceImpTest;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -48,36 +50,6 @@ public class NCRSService implements Serializable {
     }
 
     public void process(NCRSInputModel inputModel){
-
-        /*try {
-            log.debug("NCRS process.");
-            NCRSResponseModel ncrsResponse = ncbInterfaceImpTest.request(ncrsModel);
-            NameModel nameModel = ncrsResponse.getBodyModel().getTransaction().getName();
-            log.debug("NCRS TrackingID. {}",ncrsResponse.getBodyModel().getTransaction().getTrackingid());
-            log.debug("NCRS DateOfBirth. {}",nameModel.getDateofbirth());
-            log.debug("NCRS Test {}",ncrsResponse.getBodyModel().getErrormsg());
-            String test = ncrsResponse.getBodyModel().getErrormsg();
-
-            if ("null".equals(test)){
-                log.debug("NCRS Test {}","String is null");
-            }
-
-            if (null == test){
-                log.debug("NCRS Test {}","String is null pointer");
-            }
-
-            String user = ncrsResponse.getHeaderModel().getUser();
-
-            if (user == null)log.debug("NCRS User is null {}", user);
-            if ("".equals(user))log.debug("NCRS User is emtry {}", user);
-
-            IdModel idModel = ncrsResponse.getBodyModel().getTransaction().getId();
-            idModel.getIdnumber();
-
-        } catch (Exception e) {
-            log.error("NCRS Exception : {}", e);
-        }*/
-
         ArrayList<NCRSOutputModel> responseModelArrayList = null;
         if(true){//
         try {
@@ -85,6 +57,13 @@ public class NCRSService implements Serializable {
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
             log.debug("NCRS flag is {}", flag);
             if (!flag){
+                ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
+                NCRSModel ncrsModel = null;
+                for(int i = 0; i<ncrsModelArrayList.size(); i++){
+                    ncrsModel = ncrsModelArrayList.get(i);
+                    ncrsModel.setMemberref(Util.setRequestNo(inputModel.getAppRefNumber(), i));
+                    log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
+                }
                 responseModelArrayList = ncrsImp.requestOnline(inputModel);
                 for (NCRSOutputModel outputModel : responseModelArrayList){
                     if("FAILED".equals(outputModel.getActionResult())){
