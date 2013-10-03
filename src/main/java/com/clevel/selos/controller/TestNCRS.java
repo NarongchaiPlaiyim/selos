@@ -39,8 +39,10 @@ public class TestNCRS implements Serializable {
 
     private String idNumber = "3100300390029";
     private String idNumber2= "3100504308002";
-    private String appRefNumber = "9999";
-    private String userId = "USERID";
+    private String appRefNumber = "0420140301000101";
+    private String userId = "SERID";
+    private String CANumber ="01234567890123456789";
+    private String referenceTel = "0800000000";
 
     //NCCRS
     private String registType ="1140002";
@@ -61,8 +63,6 @@ public class TestNCRS implements Serializable {
         log.info("========================================= onClickNCRS");
         NCRSModel ncrsModel = null;
         ArrayList<NCRSModel> ncrsModelArrayList = new ArrayList<NCRSModel>();
-
-
 
         ncrsModel = new NCRSModel();
         ncrsModel.setIdTypeCitizen();
@@ -108,15 +108,17 @@ public class TestNCRS implements Serializable {
         ncrsModel.setConsent(consent);
         ncrsModelArrayList.add(ncrsModel);
 
-        NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber,  ncrsModelArrayList);
+        NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
         ncrsService.process(inputModel);
 
     }
     public void onClickNCCRS(){
         log.info("========================================= onClickNCCRS");
-        NCCRSModel nccrsModel = new NCCRSModel();
-        nccrsModel.setRegistType(registType);
-        nccrsModel.setRegistIdCompanyLimited();
+        ArrayList<NCCRSModel> modelArrayList = new ArrayList<NCCRSModel>();
+        NCCRSModel nccrsModel = null;
+        nccrsModel = new NCCRSModel();
+        nccrsModel.setRegistId(registId);
+        nccrsModel.setRegistTypeCompanyLimited();
         nccrsModel.setCompanyName(companyName);
         nccrsModel.setInqPurose(inqPurose);
         nccrsModel.setProductType(productType);
@@ -124,11 +126,36 @@ public class TestNCRS implements Serializable {
         nccrsModel.setConfirmConsent(confirmConsent);
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
-
-        ArrayList<NCCRSModel> modelArrayList = new ArrayList<NCCRSModel>();
+        log.debug("_______________________________________ Model : ", nccrsModel.toString());
         modelArrayList.add(nccrsModel);
 
-        NCCRSInputModel inputModel = new NCCRSInputModel("UESERIS", "0123456789012345", modelArrayList);
+        nccrsModel = new NCCRSModel();
+        nccrsModel.setRegistId("0115530002071");
+        nccrsModel.setRegistTypeCompanyLimited();
+        nccrsModel.setCompanyName(companyName);
+        nccrsModel.setInqPurose(inqPurose);
+        nccrsModel.setProductType(productType);
+        nccrsModel.setMemberRef(memberRef);
+        nccrsModel.setConfirmConsent(confirmConsent);
+        nccrsModel.setLanguage(language);
+        nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
+        log.debug("_______________________________________ Model : ", nccrsModel.toString());
+        modelArrayList.add(nccrsModel);
+
+        nccrsModel = new NCCRSModel();
+        nccrsModel.setRegistId("0105532021260");
+        nccrsModel.setRegistTypeCompanyLimited();
+        nccrsModel.setCompanyName(companyName);
+        nccrsModel.setInqPurose(inqPurose);
+        nccrsModel.setProductType(productType);
+        nccrsModel.setMemberRef(memberRef);
+        nccrsModel.setConfirmConsent(confirmConsent);
+        nccrsModel.setLanguage(language);
+        nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
+        log.debug("_______________________________________ Model : ", nccrsModel.toString());
+        modelArrayList.add(nccrsModel);
+
+        NCCRSInputModel inputModel = new NCCRSInputModel("55555", "0123456789012345", CANumber, referenceTel, modelArrayList);
         nccrsService.process(inputModel);
     }
 

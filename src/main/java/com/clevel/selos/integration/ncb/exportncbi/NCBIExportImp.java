@@ -14,6 +14,7 @@ import java.util.Date;
 @NCB
 public class NCBIExportImp implements Serializable {
     @Inject
+    @NCB
     Logger log;
 
     @Inject
@@ -24,7 +25,7 @@ public class NCBIExportImp implements Serializable {
     }
 
     public void add(NCBIExportModel exportModel){
-
+        log.debug("Call add (NCBIExportModel = {})", exportModel.toString());
         String staffId =                exportModel.getStaffId();
         String requestNo =              exportModel.getRequestNo();
         String inquiryType =            exportModel.getInquiryType();
@@ -41,14 +42,30 @@ public class NCBIExportImp implements Serializable {
         String caution =                exportModel.getCaution();
         String referenceTel =           exportModel.getReferenceTel();
         String inquiryStatus =          exportModel.getInquiryStatus();
-        Date inquiryDate  =             exportModel.getInquiryDate();
+        String inquiryDate  =           exportModel.getInquiryDate();
+        String inquiryTime =            exportModel.getInquiryTime();
         String officeCode =             exportModel.getOfficeCode();
 
         ncbiExportDAO.persist(new NCBIExport(
-                staffId, requestNo, inquiryType, customerType, customerDocumentType,
-                juristicType, customerId, countryCode, titleCode, firstName,
-                lastName, juristicName, caNumber, caution, referenceTel,
-                inquiryStatus, inquiryDate, officeCode
+                staffId,
+                requestNo,
+                inquiryType,
+                customerType,
+                customerDocumentType,
+                juristicType,
+                customerId,
+                countryCode,
+                titleCode,
+                firstName,
+                lastName,
+                juristicName,
+                caNumber,
+                caution,
+                referenceTel,
+                inquiryStatus,
+                inquiryDate,
+                inquiryTime,
+                officeCode
                 ));
     }
 }

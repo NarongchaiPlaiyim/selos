@@ -62,34 +62,16 @@ public class Post implements Serializable {
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
         post.setHeader(HTTP.USER_AGENT, "Mozilla/5.0");
-        post.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=" + HTTP.UTF_8); //fot test
-        post.setHeader(HTTP.CONTENT_TYPE, HTTP.PLAIN_TEXT_TYPE + HTTP.CHARSET_PARAM + HTTP.UTF_8); //fot test
-        post.setHeader(HTTP.CONTENT_TYPE, "text/xml; charset="+HTTP.UTF_8);//for stest
-        post.setHeader("Accept-Encoding", "gzip,deflate");
-        post.setHeader("Accept-Charset", HTTP.UTF_8);
-
+        post.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=" + HTTP.UTF_8);
 
         urlParameters = new ArrayList<NameValuePair>();
-
-        /*Accept-Encoding: gzip,deflate
-        Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7       */
-        //post.setRequestHeader("Content-type", "text/xml; charset=ISO-8859-1");
-        //ByteBuffer encode = Charset.forName("UTF-8").encode(XML);
-          ///*"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+*/
-        String addHeader = "\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+xml;
-        String newString = new String(xml.getBytes(HTTP.UTF_8), HTTP.UTF_8);
-        //log.debug("newString {}",newString);
-        urlParameters.add(new BasicNameValuePair("q", newString));
-
-        //Charset.forName("UTF-8").encode(myString)
+        urlParameters.add(new BasicNameValuePair("q", xml));
         post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
-//        post.setEntity(new UrlEncodedFormEntity(urlParameters, Charset.forName(HTTP.UTF_8)));
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
             log.debug("The request has succeeded");
-//            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-11"), 8);
-            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), HTTP.UTF_8));
+            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()/*, HTTP.UTF_8*/));
             builder = new StringBuilder();
             String line = "";
             while ((line = rd.readLine()) != null) {
@@ -107,9 +89,4 @@ public class Post implements Serializable {
         */
 
     }
-    public String sendPost2(String xml, String url, int timeOut) throws Exception {
-        return  null;
-    }
-
-
 }

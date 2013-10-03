@@ -11,12 +11,15 @@ public class NCRSModel implements Serializable {
     private String firstName;
     private String lastName;
     private String citizenId;
-    private String idType;
+    private String idType = "01";
+    private String countryCode;
+    private String titleNameCode;
     private String trackingId;
     private String memberref;
     private String enqpurpose = "01";
     private String enqamount = "0";
     private String consent = "Y";
+    private String customerDocmentType;
 
     public NCRSModel() {
     }
@@ -97,6 +100,32 @@ public class NCRSModel implements Serializable {
         this.consent = consent;
     }
 
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getTitleNameCode() {
+        return titleNameCode;
+    }
+
+    public void setTitleNameCode(TitleName titleNameCode) {
+        this.titleNameCode = titleNameCode.value();
+    }
+
+    public String getCustomerDocmentType() {
+        if("01".equals(idType)){
+            return customerDocmentType = "01";
+        } else if("07".equals(idType)) {
+            return customerDocmentType = "03";
+        } else {
+            return customerDocmentType = "01";
+        }
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -104,11 +133,14 @@ public class NCRSModel implements Serializable {
                 .append("lastName", lastName)
                 .append("citizenId", citizenId)
                 .append("idType", idType)
+                .append("countryCode", countryCode)
+                .append("titleNameCode", titleNameCode)
                 .append("trackingId", trackingId)
                 .append("memberref", memberref)
                 .append("enqpurpose", enqpurpose)
                 .append("enqamount", enqamount)
                 .append("consent", consent)
+                .append("customerDocmentType", customerDocmentType)
                 .toString();
     }
 }

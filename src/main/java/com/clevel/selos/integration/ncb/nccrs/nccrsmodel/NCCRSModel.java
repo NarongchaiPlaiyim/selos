@@ -17,37 +17,41 @@ public class NCCRSModel implements Serializable {
     private String language;
     private String historicalBalanceReport;
     private String trackingId;
+    private String juristicType;
 
     public NCCRSModel() {
-    }
-
-    public String getRegistType() {
-        return registType;
-    }
-
-    public void setRegistType(String registType) {
-        this.registType = registType;
     }
 
     public String getRegistId() {
         return registId;
     }
 
-    public void setRegistIdCompanyLimited() {
-        registId = RegistType.CompanyLimited.value();
+    public void setRegistId(String registId) {
+        this.registId = registId;
     }
 
-    public void setRegistIdLimitedPartnership() {
-        registId = RegistType.LimitedPartnership.value();
+    public String getRegistType() {
+        return registType;
     }
-    public void setRegistIdRegisteredOrdinaryPartnership() {
-        registId = RegistType.RegisteredOrdinaryPartnership.value();
+
+    public void setRegistTypeCompanyLimited() {
+        registType = RegistType.CompanyLimited.value();
     }
-    public void setRegistIdPublicCompanyLimited() {
-        registId = RegistType.PublicCompanyLimited.value();
+
+    public void setRegistTypeLimitedPartnership() {
+        registType = RegistType.LimitedPartnership.value();
     }
-    public void setRegistIdForeignRegistrationIdOrOthers() {
-        registId = RegistType.ForeignRegistrationIdOrOthers.value();
+
+    public void setRegistTypeRegisteredOrdinaryPartnership() {
+        registType = RegistType.RegisteredOrdinaryPartnership.value();
+    }
+
+    public void setRegistTypePublicCompanyLimited() {
+        registType = RegistType.PublicCompanyLimited.value();
+    }
+
+    public void setRegistTypeForeignRegistrationIdOrOthers() {
+        registType = RegistType.ForeignRegistrationIdOrOthers.value();
     }
 
     public String getCompanyName() {
@@ -114,6 +118,22 @@ public class NCCRSModel implements Serializable {
         this.trackingId = trackingId;
     }
 
+    public String getJuristicType() {
+        if("1140001".equals(registType)){
+            return juristicType = "01";
+        } else if("1140002".equals(registType)){
+            return juristicType = "02";
+        } else if ("1140003".equals(registType)) {
+            return juristicType = "03";
+        } else if ("1140004".equals(registType)) {
+            return juristicType = "04";
+        } else if ("1140005".equals(registType)) {
+            return juristicType = "05";
+        } else {
+            return juristicType = "01";
+        }
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -126,6 +146,7 @@ public class NCCRSModel implements Serializable {
                 .append("confirmConsent", confirmConsent)
                 .append("language", language)
                 .append("historicalBalanceReport", historicalBalanceReport)
+                .append("trackingId", trackingId)
                 .toString();
     }
 }

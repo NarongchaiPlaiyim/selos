@@ -1,5 +1,6 @@
 package com.clevel.selos.util;
 
+import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,5 +114,34 @@ public class Util {
 
     public static String getLinkKey(String userId){
         return userId+"_"+ System.currentTimeMillis();
+    }
+
+    public static String getDateOrTime(String date, boolean flag){
+        if(15 == date.length()){
+            if(flag){
+                String yyyy = date.substring(0, 4);
+                String mm = date.substring(4, 6);
+                String dd = date.substring(6, 8);
+                return yyyy +"-"+ mm +"-"+ dd;
+            }else{
+                String hh = date.substring(9, 11);
+                String mm = date.substring(11, 13);
+                String ss = date.substring(13, 15);
+                return hh +":"+ mm +":"+ ss;
+            }
+        } else {
+            return "";
+        }
+    }
+    public static String convertCharset(String string)throws Exception{
+       return new String(string.getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+    }
+    public static String setRequestNo(String appRefNumber, int count){
+        count++;
+        if(count<=9){
+            return "SL"+appRefNumber+"0"+count;
+        } else {
+            return "SL"+appRefNumber+count;
+        }
     }
 }
