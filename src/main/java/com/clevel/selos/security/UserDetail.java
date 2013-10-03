@@ -7,12 +7,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class UserDetail {
     private String userName;
-    private String userPassword;
+    private String password;
     private String role;
     private String roleType;
 
-    public UserDetail(String userName, String role, String roleType) {
+    public UserDetail(String userName, String password, String role, String roleType) {
         this.userName = userName;
+        this.password = password;
         this.role = role;
         this.roleType = roleType;
     }
@@ -23,6 +24,14 @@ public class UserDetail {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {

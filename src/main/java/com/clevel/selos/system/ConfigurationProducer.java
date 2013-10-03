@@ -7,8 +7,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -19,9 +17,7 @@ public class ConfigurationProducer {
     Logger log;
 
     private volatile static Properties config;
-    private static final String internalBundle = "selos";
-    private static final String externalLocation = "/tmp/selos.properties";
-    private static final boolean useInternalConfig = true;
+    private static final String bundleName = "selos";
 
     @PostConstruct
     public void onCreation() {
@@ -30,27 +26,19 @@ public class ConfigurationProducer {
 
     public Properties loadProperties() {
         log.debug("load configuration properties.");
-        if (config==null) {
-            if (useInternalConfig) {
-                log.debug("using internal configuration file. ({})",internalBundle);
-                config = getFromResource(internalBundle);
-            } else {
-                log.debug("using external configuration file. ({})",externalLocation);
-                try {
-                    config.load(new FileInputStream(externalLocation));
-                } catch (IOException e) {
-                    log.error("exception loading configuration file from external location ({})",externalLocation);
-                }
-            }
+        if (config == null) {
+            log.debug("loading configuration file. (bundleName: {})", bundleName);
+            config = getFromResource(bundleName);
         }
-        log.debug("load configuration properties done. (size: {})",config.size());
+        log.debug("load configuration properties done. (size: {})", config.size());
         return config;
     }
 
-    @Produces @Config
+    @Produces
+    @Config
     public String getConfiguration(InjectionPoint ip) {
         Config configClass = ip.getAnnotated().getAnnotation(Config.class);
-        log.debug("key: {}, value: {}",configClass.name(),config.getProperty(configClass.name()));
+        log.trace("key: {}, value: {}", configClass.name(), config.getProperty(configClass.name()));
         return config.getProperty(configClass.name());
     }
 
@@ -60,7 +48,7 @@ public class ConfigurationProducer {
         Enumeration e = bundle.getKeys();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();
-            p.setProperty(key,bundle.getString(key));
+            p.setProperty(key, bundle.getString(key));
         }
         return p;
     }

@@ -81,7 +81,7 @@ public class Qualitative {
 
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
-        User user = userDAO.findById(new Long(1));
+        User user = userDAO.findById("1");
         log.info("onSaveQualitativeA ::: user : {}", user);
 //        WorkCase workCase  = workCaseDAO.findById(new Long(1));
 //        log.info("onSaveQualitativeA ::: workCase : {}", workCase);
@@ -107,7 +107,7 @@ public class Qualitative {
 
     public void onSaveQualitativeB(){
         log.info(" onSaveQualitativeB :::");
-        User user = userDAO.findById(new Long(1));
+        User user = userDAO.findById("1");
         log.info("onSaveQualitativeB ::: user : {}", user);
 
         HttpSession session = FacesUtil.getSession(true);

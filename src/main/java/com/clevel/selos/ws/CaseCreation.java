@@ -156,7 +156,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(ValidationUtil.isGreaterThan(5,bdmId)){
+            if(ValidationUtil.isGreaterThan(10,bdmId)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(bdmId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(bdmId)"),"");
                 log.debug("{}",response);
@@ -282,7 +282,6 @@ public class CaseCreation implements WSCaseCreation {
             caseCreationHistory.setAppNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
-            //todo: how to get BDM Username for create case?
             if (bpmInterface.createCase(caseCreationHistory)) {
                 // return success
                 response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppNumber());

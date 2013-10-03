@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.stp.STPExecutor;
+import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
@@ -212,6 +213,14 @@ public class WelcomePage implements Serializable {
     public void testStoredProcedure() {
         log.debug("testStoredProcedure");
         STPExecutor.getApplicationNumber("XX");
+    }
+
+    @Inject
+    BPMInterface bpmInterface;
+    public void testBPM() {
+        log.debug("testBPM");
+//        UserDTO userDTO = bpmInterface.getUserDTO();
+//        log.debug("user: {}, password: {}",userDTO.getUserName(),userDTO.getPassword());
     }
 
     public List<BusinessGroup> getBusinessGroups() {

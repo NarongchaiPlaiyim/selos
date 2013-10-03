@@ -50,14 +50,7 @@ public class LoginBean {
 
     public String login() {
         log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
-        long userId = 0;
-        try{
-            userId = Long.parseLong(userName);
-        }catch (Exception ex){
-            ex.printStackTrace();
-        }
-        User user = userDAO.findById(userId);
-        //User user = userDAO.findByUserName(userName.trim());
+        User user = userDAO.findById(userName.trim());
         HttpServletRequest httpServletRequest = FacesUtil.getRequest();
         HttpServletResponse httpServletResponse = FacesUtil.getResponse();
         if (user == null) {
@@ -65,7 +58,7 @@ public class LoginBean {
             securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
             return "unSecured";
         }
-        UserDetail userDetail = new UserDetail(user.getUserName(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+        UserDetail userDetail = new UserDetail(user.getUserName(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         try {
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
             request.setDetails(new WebAuthenticationDetails(httpServletRequest));
