@@ -1,6 +1,8 @@
 package com.clevel.selos.model;
 
-public class ManageButton {
+import java.io.Serializable;
+
+public class ManageButton implements Serializable {
     private boolean checkNCBButton;
 
     public boolean isCheckNCBButton() {
