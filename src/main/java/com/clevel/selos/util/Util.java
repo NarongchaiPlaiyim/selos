@@ -174,4 +174,10 @@ public class Util {
         }
         return page;
     }
+
+    public static void listFields(HashMap<String,String> fields) {
+        for (Map.Entry<String, String> entry : fields.entrySet()) {
+            log.debug("key: {}, value: {}",entry.getKey(),entry.getValue());
+        }
+    }
 }

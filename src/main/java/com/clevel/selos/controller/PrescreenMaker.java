@@ -427,7 +427,7 @@ public class PrescreenMaker implements Serializable {
             log.info("onSaveFacility ::: validation failed.");
             complete = false;
         }
-        //context.addCallbackParam("functionComplete", complete);
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteFacility() {
