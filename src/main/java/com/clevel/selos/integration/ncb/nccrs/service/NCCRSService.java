@@ -4,9 +4,11 @@ import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
 import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -39,23 +41,20 @@ public class NCCRSService implements Serializable {
     }
 
     public void process(NCCRSInputModel inputModel){
-        /*try {
-            log.debug("NCCRS process.");
-            NCCRSResponseModel responseModel = nccrsInterfaceImpTest.request(nccrsModel);
-
-            log.debug("NCCRS User. {}",responseModel.getHeader().getUser());
-
-        } catch (Exception e) {
-            log.error("NCCRS Exception : {}", e);
-        }  */
-
         ArrayList<NCCRSOutputModel> responseModelArrayList = null;
-        if(true){
+        if(true){//
         try {
             log.debug("NCCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
             log.debug("NCCRS flag is {}", flag);
             if (!flag){
+                ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
+                NCCRSModel nccrsModel = null;
+                for(int i = 0; i<nccrsModelArrayList.size(); i++){
+                    nccrsModel = nccrsModelArrayList.get(i);
+                    nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), i));
+                    log.debug("NCCRS MemberRef = {}", nccrsModel.getMemberRef());
+                }
                 responseModelArrayList = nccrsImp.requestOnline(inputModel);
                 for (NCCRSOutputModel outputModel : responseModelArrayList){
                     if("FAILED".equals(outputModel.getActionResult())){
@@ -77,7 +76,7 @@ public class NCCRSService implements Serializable {
         } catch (Exception e) {
             log.error("NCCRS Exception : {}", e.getMessage());
         }
-        }
+        }//
 
 
 

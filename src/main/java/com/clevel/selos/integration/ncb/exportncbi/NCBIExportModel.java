@@ -24,7 +24,8 @@ public class NCBIExportModel implements Serializable {
     private String caution;
     private String referenceTel;
     private String inquiryStatus;
-    private Date inquiryDate;
+    private String inquiryDate;
+    private String inquiryTime;
     private String officeCode;
 
     public NCBIExportModel() {
@@ -158,12 +159,20 @@ public class NCBIExportModel implements Serializable {
         this.inquiryStatus = inquiryStatus;
     }
 
-    public Date getInquiryDate() {
+    public String getInquiryDate() {
         return inquiryDate;
     }
 
-    public void setInquiryDate(Date inquiryDate) {
+    public void setInquiryDate(String inquiryDate) {
         this.inquiryDate = inquiryDate;
+    }
+
+    public String getInquiryTime() {
+        return inquiryTime;
+    }
+
+    public void setInquiryTime(String inquiryTime) {
+        this.inquiryTime = inquiryTime;
     }
 
     public String getOfficeCode() {
@@ -194,6 +203,7 @@ public class NCBIExportModel implements Serializable {
                 .append("referenceTel", referenceTel)
                 .append("inquiryStatus", inquiryStatus)
                 .append("inquiryDate", inquiryDate)
+                .append("inquiryTime", inquiryTime)
                 .append("officeCode", officeCode)
                 .toString();
     }

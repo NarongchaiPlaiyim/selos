@@ -33,6 +33,7 @@ import com.thoughtworks.xstream.XStream;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.net.ConnectException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -90,12 +91,23 @@ public class NCRSImp implements NCRS, Serializable{
 
     private String appRefNumber = null;
     private String userId = null;
+    private String CANumber = null;
+    private String referenceTel  = null;
+    private String customerType = null;
+    private String customerId = null;
+    private String customerDocmentType = null;
+    private String titleNameCode = null;
+    private String memberref = null;
+    private String countryCode = null;
+    private String firstName = null;
+    private String lastName = null;
+
     private final String action= "NCRS";
     private final String ONLINE = "BB01001";
     private final String FIND = "TS01001";
     private final String READ = "TS01002";
     private final String ERROR = "ER01001";
-//    private int retry = 0;
+
     @Inject
     public NCRSImp() {
     }
@@ -110,16 +122,23 @@ public class NCRSImp implements NCRS, Serializable{
         TUEFEnquiryNameModel nameModel = null;
         appRefNumber = inputModel.getAppRefNumber();
         userId = inputModel.getUserId();
-        String customerType = null;
-        String customerId = null;
+        CANumber = inputModel.getCANumber();
+        referenceTel = inputModel.getReferenceTel();
         String reason = null;
         Date inquiryDate = null;
         ArrayList<NCRSOutputModel> outputModelArrayList = new ArrayList<NCRSOutputModel>();
         ncrsModelArrayList = inputModel.getNcrsModelArrayList();
         log.debug("NCRS Check ncb online {} personals",ncrsModelArrayList.size());
         for(NCRSModel ncrsModel : ncrsModelArrayList ){
-            customerType = ncrsModel.getIdType();
             customerId = ncrsModel.getCitizenId();
+            customerType = ncrsModel.getIdType();
+            customerDocmentType = ncrsModel.getCustomerDocmentType();
+            titleNameCode = ncrsModel.getTitleNameCode();
+            countryCode = ncrsModel.getCountryCode();
+            memberref = ncrsModel.getMemberref();
+            firstName = ncrsModel.getFirstName();
+            lastName = ncrsModel.getLastName();
+
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
             idModel = new TUEFEnquiryIdModel(customerType, customerId);
             idModelArrayList.add(idModel);
@@ -134,26 +153,25 @@ public class NCRSImp implements NCRS, Serializable{
                     reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                     log.debug("NCRS Tracking Id is {}", reason);
                 }
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCEED, reason);
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCEED, reason, memberref);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason);
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason);
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
-
             } catch (Exception e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS EXCEPTION {}", reason);
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.EXCEPTION, reason);
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.EXCEPTION, reason, memberref);
                 outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel));
             }
         }
@@ -169,8 +187,8 @@ public class NCRSImp implements NCRS, Serializable{
         TUEFEnquiryNameModel nameModel = null;
         appRefNumber = inputModel.getAppRefNumber();
         userId = inputModel.getUserId();
-        String customerType = null;
-        String customerId = null;
+        CANumber = inputModel.getCANumber();
+        referenceTel = inputModel.getReferenceTel();
         String reason = null;
         ArrayList<NCRSOutputModel> responseModelArrayList = new ArrayList<NCRSOutputModel>();
         ncrsModelArrayList = inputModel.getNcrsModelArrayList();
@@ -179,13 +197,20 @@ public class NCRSImp implements NCRS, Serializable{
         for(NCRSModel ncrsModel : ncrsModelArrayList ){
             customerId = ncrsModel.getCitizenId();
             customerType = ncrsModel.getIdType();
+            customerDocmentType = ncrsModel.getCustomerDocmentType();
+            titleNameCode = ncrsModel.getTitleNameCode();
+            countryCode = ncrsModel.getCountryCode();
+            ncrsModel.setMemberref(resultImp.getRequestNo(appRefNumber, customerId));
+            memberref = ncrsModel.getMemberref();
+            firstName = ncrsModel.getFirstName();
+            lastName = ncrsModel.getLastName();
+
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
             idModel = new TUEFEnquiryIdModel(customerType, customerId);
             idModelArrayList.add(idModel);
             nameModelArrayList = new ArrayList<TUEFEnquiryNameModel>();
             nameModel = new TUEFEnquiryNameModel(ncrsModel.getLastName(), ncrsModel.getFirstName());
             nameModelArrayList.add(nameModel);
-
             try {
                 if(resultImp.isFAILED(appRefNumber, customerId)){
                     responseModel = callOffline(ncrsModel);
@@ -202,20 +227,21 @@ public class NCRSImp implements NCRS, Serializable{
                         reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                         log.debug("NCRS Tracking Id is {}", reason);
                     }
-                    log.debug("_________________________________100");
+                    resultImp.updateSUCCEED(appRefNumber, customerId, reason);
+                    saveNCBI(responseModel);
                     responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel));
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
-                log.error("NCCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", reason);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
-                log.error("NCCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", reason);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
             } catch (Exception e) {
                 reason = e.getMessage();
-                log.error("NCCRS EXCEPTION {}", reason);
+                log.error("NCRS EXCEPTION 55555 {}", reason);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel));
             }
         }
@@ -270,11 +296,15 @@ public class NCRSImp implements NCRS, Serializable{
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             throw new HttpHostConnectException(new HttpHost(url), new ConnectException());
         } catch (ConnectTimeoutException e) {
+            resultDesc = e.getMessage();
+            resultDate = new Date();
             log.debug("NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
                            userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             throw new ConnectTimeoutException(e.getMessage());
         } catch (Exception e) {
+            resultDesc = e.getMessage();
+            resultDate = new Date();
             log.debug("NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
                            userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
@@ -336,7 +366,7 @@ public class NCRSImp implements NCRS, Serializable{
                         responseModel = checkOnlineResponseModel(responseModel);
                         resultDate = new Date();
                         log.debug("NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                                userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
+                                       userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
                         ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, customerId, trackingId);
                         saveNCBI(responseModel);
@@ -418,28 +448,43 @@ public class NCRSImp implements NCRS, Serializable{
         }
     }
     private void saveNCBI(NCRSResponseModel responseModel) throws Exception{
-        //NCBI
         NCBIExportModel exportModel = new NCBIExportModel();
-        exportModel.setStaffId("01");
-        exportModel.setRequestNo("01");
-        exportModel.setInquiryType("01");
-        exportModel.setCustomerType("01");
-        exportModel.setCustomerDocumentType("01");
-        exportModel.setJuristicType("01");
-        exportModel.setCustomerId("01");
-        exportModel.setCountryCode("01");
-        exportModel.setTitleCode("01");
-        ArrayList<com.clevel.selos.integration.ncb.ncrs.models.response.TUEFEnquiryNameModel> test =  responseModel.getBodyModel().getTransaction().getTuefenquiry().getName();
-        com.clevel.selos.integration.ncb.ncrs.models.response.TUEFEnquiryNameModel model = test.get(0);
-        exportModel.setFirstName(model.getFirstname());
-        exportModel.setLastName("01");
-        exportModel.setJuristicName("01");
-        exportModel.setCaNumber("01");
-        exportModel.setCaution("01");
-        exportModel.setReferenceTel("01");
-        exportModel.setInquiryStatus("01");
-        exportModel.setInquiryDate(new Date( ));
-        exportModel.setOfficeCode("010");
+
+        exportModel.setOfficeCode("99");
+
+        exportModel.setRequestNo(memberref);
+        exportModel.setStaffId(userId);
+        exportModel.setInquiryType("01");//01
+        exportModel.setCustomerType("01");//01
+        exportModel.setJuristicType(null);
+        exportModel.setCustomerDocumentType(customerDocmentType);
+        if(!"01".equals(customerDocmentType)){
+            exportModel.setCountryCode(countryCode);
+        } else {
+            exportModel.setCountryCode("TH");
+        }
+        exportModel.setTitleCode(titleNameCode);
+        exportModel.setCustomerId(customerId);
+        exportModel.setFirstName(firstName);
+        exportModel.setLastName(lastName);
+        exportModel.setJuristicName(null);
+        exportModel.setCaNumber(CANumber);
+        exportModel.setCaution(null);
+        exportModel.setReferenceTel(referenceTel);
+        try {
+            exportModel.setInquiryStatus(checkInquiryStatus(responseModel));
+        } catch (Exception e) {
+            exportModel.setInquiryStatus("02");
+        }
+        try {
+            String date = responseModel.getBodyModel().getTransaction().getEnquirydate();
+            exportModel.setInquiryDate(Util.getDateOrTime(date, true));
+            exportModel.setInquiryTime(Util.getDateOrTime(date, false));
+        } catch (Exception e) {
+            Date date = new Date();
+            exportModel.setInquiryDate(Util.createDateString(date));
+            exportModel.setInquiryTime(Util.createDateString(date, "HH:mm:ss"));
+        }
         exportImp.add(exportModel);
     }
     private NCRSRequestModel createOnlineModel(NCRSModel ncrsModel, String command){
@@ -483,35 +528,19 @@ public class NCRSImp implements NCRS, Serializable{
     private NCRSResponseModel sendToHTTP(NCRSRequestModel ncrsRequest) throws Exception {
         log.debug("NCRS Call : sendToHTTP()");
         NCRSResponseModel ncrsResponse = null;
-        String xml = "\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        String xml = null;
         String result = null;
         XStream xStream = null;
 
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequestModel.class);
-        xml = new String(xml.getBytes(HTTP.UTF_8));
-        xml += xStream.toXML(ncrsRequest);
-        log.debug("NCRS Request : {}",xml);
-        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
-
-
-        result = post.sendPost(xml, url, Integer.parseInt(timeOut));
-        xStream.processAnnotations(NCRSResponseModel.class);
-        result = new String(result.getBytes(HTTP.UTF_8));
-        ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
-        log.debug("NCRS Response 111: {}\n",xStream.toXML(ncrsResponse));
-
-        result = post.sendPost(callGetString(), url, Integer.parseInt(timeOut));
-        xStream.processAnnotations(NCRSResponseModel.class);
-        result = new String(result.getBytes(HTTP.UTF_8));
-        ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
-        log.debug("NCRS Response 222: {}\n",xStream.toXML(ncrsResponse));
-
+        xml = new String(xStream.toXML(ncrsRequest).getBytes(HTTP.UTF_8));
+        log.debug("NCRS Request : \n{}",xml);
+        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
         if(!"".equals(result)){
             xStream.processAnnotations(NCRSResponseModel.class);
-            result = new String(result.getBytes(HTTP.UTF_8));
             ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
-            log.debug("NCRS Response : {}\n",xStream.toXML(ncrsResponse));
+            log.debug("NCRS Response : \n{}",xStream.toXML(ncrsResponse));
             return ncrsResponse;
         }else{
             log.error("NCRS XML response error : {}",result);
@@ -519,36 +548,44 @@ public class NCRSImp implements NCRS, Serializable{
         }
     }
 
-
-    private static String callGetString(){
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        builder.append("<ncrsrequest>");
-        builder.append("<header>");
-        builder.append("<user>SLOSTEST</user>");
-        builder.append("<password>SLOSTEST12</password>");
-        builder.append("<command>BB01001</command>");
-        builder.append("</header>");
-        builder.append("<body>");
-        builder.append("<tuefenquiry>");
-        builder.append("<header>");
-        builder.append("<memberref>123456789</memberref>");
-        builder.append("<enqpurpose>01</enqpurpose>");
-        builder.append("<enqamount>01</enqamount>");
-        builder.append("<consent>Y</consent>");
-        builder.append("</header>");
-        builder.append("<name>");
-        builder.append("<familyname>พสุธร</familyname>");
-        builder.append("<firstname>กุญชร</firstname>");
-        builder.append("</name>");
-        builder.append("<id>");
-        builder.append("<idtype>01</idtype>");
-        builder.append("<idnumber>3100300390029</idnumber>");
-        builder.append("</id>");
-        builder.append("</tuefenquiry>");
-        builder.append("</body>");
-        builder.append("</ncrsrequest>");
-        return builder.toString();
+    private String checkInquiryStatus(NCRSResponseModel responseModel) throws Exception{
+        String inquiryStatus = "02";
+        try {
+            ArrayList<SubjectModel> subjectModelArrayList = responseModel.getBodyModel().getTransaction().getTuefresponse().getSubject();
+            for(SubjectModel subjectModel : subjectModelArrayList){
+                if(0<subjectModel.getAccount().size()&&null!=subjectModel){
+                    inquiryStatus = "01";
+                    return inquiryStatus;
+                }
+            }
+            return inquiryStatus;
+        } catch (Exception e) {
+            return inquiryStatus;
+        }
     }
+        /*if(null != responseModel.getBodyModel()){
+            if(null != responseModel.getBodyModel().getTransaction()){
+                if(null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
+                    if(null != responseModel.getBodyModel().getTransaction().getTuefresponse().getSubject()){
+                        ArrayList<SubjectModel> subjectModelArrayList = responseModel.getBodyModel().getTransaction().getTuefresponse().getSubject();
+                        for(SubjectModel subjectModel : subjectModelArrayList){
+                            if(0<subjectModel.getAccount().size()&&null!=subjectModel){
+                                inquiryStatus = "01";
+                                return inquiryStatus;
+                            }
+                        }
+                    } else {
+                        return inquiryStatus;
+                    }
+                } else {
+                    return inquiryStatus;
+                }
+            } else {
+                return inquiryStatus;
+            }
+        } else {
+            return inquiryStatus;
+        }
+        return inquiryStatus;
+    }    */
 }

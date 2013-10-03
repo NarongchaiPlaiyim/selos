@@ -1,8 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.model.ManageButton;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -18,6 +21,7 @@ public class BaseController implements Serializable {
     Logger log;
 
     private ManageButton manageButton;
+    private User user;
 
     public BaseController(){
 
@@ -39,9 +43,15 @@ public class BaseController implements Serializable {
         }
         log.info("BaseController ::: getSession : workcase = {}, stepid = {}",workCasePreScreenId, stepId);
 
-        if(stepId == 2){
+        if(stepId == 1001){
+            manageButton.setAssignToCheckerButton(true);
+        }
+
+        if(stepId == 1002){
             manageButton.setCheckNCBButton(true);
         }
+
+        user = (User)session.getAttribute("sess_user");
     }
 
     public ManageButton getManageButton() {
@@ -50,5 +60,13 @@ public class BaseController implements Serializable {
 
     public void setManageButton(ManageButton manageButton) {
         this.manageButton = manageButton;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

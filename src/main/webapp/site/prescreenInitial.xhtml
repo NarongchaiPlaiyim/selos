@@ -179,7 +179,7 @@
                                                              action="#{prescreenMaker.onEditCustomerInfo()}"
                                                              update=":customerDlgForm"
                                                              oncomplete="customerDlg.show();">
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{borrowerItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{prescreenMaker.rowIndex}"/>
@@ -187,7 +187,7 @@
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteCustomerDlg.show()" >
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{borrowerItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                             </p:commandButton>
                                         </p:column>
@@ -232,7 +232,7 @@
                                                              action="#{prescreenMaker.onEditCustomerInfo()}"
                                                              update=":customerDlgForm"
                                                              oncomplete="customerDlg.show();">
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{guarantorItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{prescreenMaker.rowIndex}"/>
@@ -240,7 +240,7 @@
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteCustomerDlg.show()" >
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{guarantorItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                             </p:commandButton>
                                         </p:column>
@@ -285,7 +285,7 @@
                                                              action="#{prescreenMaker.onEditCustomerInfo()}"
                                                              update=":customerDlgForm"
                                                              oncomplete="customerDlg.show();">
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{relatedItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{prescreenMaker.rowIndex}"/>
@@ -293,7 +293,7 @@
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteCustomerDlg.show()" >
-                                                <f:setPropertyActionListener value="#{item}"
+                                                <f:setPropertyActionListener value="#{relatedItem}"
                                                                              target="#{prescreenMaker.selectCustomerInfoItem}"/>
                                             </p:commandButton>
                                         </p:column>
@@ -445,7 +445,7 @@
         </div>
     </h:form>
 </p:panel>
-<p:panel id="waitingDialogPanel" widgetVar="waitingDlgPnl">
+<!--<p:panel id="waitingDialogPanel" widgetVar="waitingDlgPnl">
     <p:dialog id="waitingDialog" widgetVar="waitingDlg" modal="true" draggable="false" closeOnEscape="false" closable="false"
               header="#{prescreenMaker.messageHeader}">
         <h:outputText value="#{prescreenMaker.message}"/><br />
@@ -459,8 +459,8 @@
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:confirmDialog>
 </p:panel>
-
-<p:panel id="confirmDialog_test" styleClass="panel">
+ -->
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
         <p:commandButton value="YES"
@@ -477,6 +477,10 @@
 <p:dialog id="customerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Customer Information" widgetVar="customerDlg"
           modal="true" width="800" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
+</p:dialog>
+<p:dialog id="assignCheckerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Check NCB - Assign to BDM Checker" widgetVar="assignCheckerDlg"
+          modal="true" width="300" height="200">
+    <ui:include src="dialog/prescreenAssignChecker.xhtml"/>
 </p:dialog>
 <ui:include src="dialog/confirmDeleteDlg.xhtml">
     <ui:param name="id" value="confirmDeleteFacilityDialog"/>
