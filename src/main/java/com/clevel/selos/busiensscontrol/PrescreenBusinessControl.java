@@ -2,13 +2,16 @@ package com.clevel.selos.busiensscontrol;
 
 import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.master.StepDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.master.DocumentType;
@@ -24,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Stateless
@@ -63,11 +67,19 @@ public class PrescreenBusinessControl extends BusinessControl {
     BRMSResultDAO brmsResultDAO;
     @Inject
     CustomerDAO customerDAO;
+    @Inject
+    IndividualDAO individualDAO;
+    @Inject
+    JuristicDAO juristicDAO;
+    @Inject
+    UserDAO userDAO;
 
     @Inject
     RMInterface rmInterface;
     @Inject
     BRMSInterface brmsInterface;
+    @Inject
+    BPMInterface bpmInterface;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -226,10 +238,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         return bizInfoViewList;
     }
 
-    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId){
+    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId, User user){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
-        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen);
+        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
         prescreenDAO.persist(prescreen);
 
         //Remove all Facility before add new
@@ -243,11 +255,33 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Customer before add new
         List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-        customerDAO.delete(customerListDelete);
+        for(Customer customer : customerListDelete){
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
+                Individual individual = customer.getIndividual();
+                individualDAO.delete(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2){
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.delete(juristic);
+            }
+            customerDAO.delete(customer);
+        }
+        //customerDAO.delete(customerListDelete);
 
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
-        customerDAO.persist(customerList);
+        for(Customer customer : customerList){
+            customerDAO.persist(customer);
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                Individual individual = customer.getIndividual();
+                individualDAO.persist(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+                //Juristic
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.persist(juristic);
+            }
+        }
+        //customerDAO.persist(customerList);
 
         /*//Remove all Business before add new
         List<BizInfo> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
@@ -259,14 +293,42 @@ public class PrescreenBusinessControl extends BusinessControl {
         bizInfoDAO.persist(bizInfoList);*/
     }
 
+    public void assignToChecker(long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
+        //TODO getNextStep from BPM
+        //bpmInterface.dispatchCase("1002", workCasePrescreen.getWobNumber(), new HashMap<String, String>());
+        Step step = stepDAO.findById(new Long(1002));
+        workCasePrescreen.setStep(step);
+        workCasePrescreenDAO.persist(workCasePrescreen);
+    }
+
     //*** Function for PreScreen Checker ***//
-    public List<CustomerInfoView> getBorrowerListByWorkCaseId(long workCasePreScreenId){
+    public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         log.info("getBorrowerListByWorkCaseId ::: customerList : {}", customerList);
         customerInfoViewList = customerTransform.transformToViewList(customerList);
         log.info("getBorrowerListByWorkCaseId ::: customerInfoViewList : {}", customerInfoViewList);
 
+        return customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getBorrowerViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        customerInfoViewList = customerTransform.transformToBorrowerViewList(customerInfoViews);
+        return customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getGuarantorViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        customerInfoViewList = customerTransform.transformToGuarantorViewList(customerInfoViews);
+        return customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getRelatedViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+        List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
+        customerInfoViewList = customerTransform.transformToRelatedViewList(customerInfoViews);
         return customerInfoViewList;
     }
 
