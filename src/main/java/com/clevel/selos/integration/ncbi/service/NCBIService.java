@@ -34,7 +34,7 @@ public class NCBIService implements Serializable {
         xStream = new XStream();
         xStream.processAnnotations(NcbiRequestModel.class);
 
-        RequestModel model = new RequestModel();
+        //RequestModel model = new RequestModel();
 //        model.setCA_NUMBER();
 
         ArrayList<RequestModel> modelArrayList = new ArrayList<RequestModel>();

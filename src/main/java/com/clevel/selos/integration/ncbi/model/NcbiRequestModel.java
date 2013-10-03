@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class NcbiRequestModel {
 
     @XStreamImplicit(itemFieldName = "REQUEST")
-    private ArrayList<RequestModel> REQUEST = new ArrayList<RequestModel>();
+    private ArrayList<RequestModel> request = new ArrayList<RequestModel>();
 
-    public NcbiRequestModel(ArrayList<RequestModel> REQUEST) {
-        this.REQUEST = REQUEST;
+    public NcbiRequestModel(ArrayList<RequestModel> request) {
+        this.request = request;
     }
 }

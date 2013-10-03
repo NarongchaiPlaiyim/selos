@@ -20,6 +20,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.PrescreenTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -181,7 +182,16 @@ public class PrescreenMaker implements Serializable {
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            if(stepId != 1001 && stepId != 1003){
+            String page = Util.getCurrentPage();
+            boolean checkPage = false;
+
+            if(stepId == 1001 && page.equals("prescreenInitial.jsf")){
+                checkPage = true;
+            } else if(stepId == 1003 && page.equals("prescreenMaker.jsf")){
+                checkPage = true;
+            }
+
+            if(!checkPage){
                 try{
                     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                     ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
@@ -414,7 +424,7 @@ public class PrescreenMaker implements Serializable {
             log.info("onSaveFacility ::: validation failed.");
             complete = false;
         }
-        context.addCallbackParam("functionComplete", complete);
+        //context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteFacility() {
