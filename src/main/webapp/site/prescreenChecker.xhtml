@@ -9,9 +9,12 @@
 <h:head>
     <title>SE-LOS : Prescreen Checker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{prescreenChecker.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -33,13 +36,12 @@
                         </div>
                         <div id="content_form">
                             <!-- start content -->
-                            <h:form id="frmCheckCustomer">
                             <table class="content_table_form">
                                 <tr>
                                     <td class="title top" style="min-width: 200px; width: 200px;">Borrower Check :</td>
                                     <td>
-                                        <p:dataTable id="resultTableCustomer" var="item" value="#{prescreenChecker.customerInfoViewList}"
-                                                     paginator="false" rowKey="#{item.id}" rowIndexVar="rowIndex">
+                                        <p:dataTable id="resultTableCustomer" var="borrowerItem" value="#{prescreenChecker.customerInfoViewList}"
+                                                     paginator="false" rowKey="#{borrowerItem.id}" rowIndexVar="rowIndex">
 
                                             <p:column headerText="" styleClass="center" style="width:22px;">
                                                 <h:outputText value="#{rowIndex+1}"/>
@@ -47,13 +49,15 @@
 
                                             <p:column headerText="Borrower Name" styleClass="center" style="width: 150px;">
                                                 <div class="left">
-                                                    <h:outputText value="#{item.customerName}"/>
+                                                    <h:outputText value="#{borrowerItem.titleTh.titleTh}"/><p:spacer width="2"/>
+                                                    <h:outputText value="#{borrowerItem.firstNameTh}"/><p:spacer width="3"/>
+                                                    <h:outputText value="#{borrowerItem.lastNameTh}"/>
                                                 </div>
                                             </p:column>
 
                                             <p:column headerText="Citizen ID / Registration ID" styleClass="center" style="width: 150px;">
-                                                <h:inputText value="#{item.inputCitizenID}"/>
-                                                <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="Invalid Citizen ID" rendered="#{item.validCitizenID==0}"/>
+                                                <h:inputText value="#{borrowerItem.inputId}"/>
+                                                <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="Invalid Citizen ID" rendered="#{borrowerItem.validId==0}"/>
                                                 <!--<p:spacer width="20" height="20" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==2}"/>
                                                 <h:graphicImage url="/resources/images/shared/valid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==1}"/>
                                                 <h:graphicImage url="/resources/images/shared/invalid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==0}"/>-->
@@ -63,7 +67,6 @@
                                     </td>
                                 </tr>
                             </table>
-                            </h:form>
                             <!-- end content -->
                         </div>
                     </div>

@@ -516,8 +516,8 @@ button.ui-button::-moz-focus-inner {
 }
 .ui-dialog .ui-dialog-content {
     position: relative;
+    padding: 0!important;
     border: 0;
-    padding: .5em 1em;
     background: none;
     overflow: auto;
 }
@@ -1263,6 +1263,9 @@ body .ui-tooltip {
 .ui-radiobutton-box {
     border: 1px solid #bfbfbf!important;
     background: transparent!important;
+}
+.ui-radiobutton-box.ui-state-error {
+    border: 1px solid #cd0a0a!important;
 }
 /*
 .ui-selectonemenu .ui-selectonemenu-trigger {

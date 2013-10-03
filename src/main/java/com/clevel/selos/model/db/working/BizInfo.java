@@ -4,6 +4,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.BusinessType;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -72,6 +74,10 @@ public class BizInfo implements Serializable {
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
+    @ManyToOne
+    @JoinColumn(name="workcase_prescreen_id")
+    private WorkCasePrescreen workCasePrescreen;
+
 
     public BizInfo() {
     }
@@ -82,6 +88,14 @@ public class BizInfo implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getBizInfoText() {
+        return bizInfoText;
+    }
+
+    public void setBizInfoText(String bizInfoText) {
+        this.bizInfoText = bizInfoText;
     }
 
     public BusinessType getBusinessType() {
@@ -156,14 +170,6 @@ public class BizInfo implements Serializable {
         this.bizPermission = bizPermission;
     }
 
-    public String getBizInfoText() {
-        return bizInfoText;
-    }
-
-    public void setBizInfoText(String bizInfoText) {
-        this.bizInfoText = bizInfoText;
-    }
-
     public List<BizStakeHolderDetail> getSupplierList() {
         return supplierList;
     }
@@ -186,5 +192,43 @@ public class BizInfo implements Serializable {
 
     public void setBizProductList(List<BizProductDetail> bizProductList) {
         this.bizProductList = bizProductList;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("bizInfoText", bizInfoText)
+                .append("businessType", businessType)
+                .append("businessGroup", businessGroup)
+                .append("businessDescription", businessDescription)
+                .append("bizCode", bizCode)
+                .append("incomeFactor", incomeFactor)
+                .append("adjustedIncomeFactor", adjustedIncomeFactor)
+                .append("bizComment", bizComment)
+                .append("percentBiz", percentBiz)
+                .append("bizPermission", bizPermission)
+                .append("supplierList", supplierList)
+                .append("buyerList", buyerList)
+                .append("bizProductList", bizProductList)
+                .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
+                .toString();
     }
 }

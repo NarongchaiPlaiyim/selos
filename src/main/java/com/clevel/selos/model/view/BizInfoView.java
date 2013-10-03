@@ -6,18 +6,12 @@ import com.clevel.selos.model.db.master.BusinessType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 13/9/2556
- * Time: 14:34 น.
- * To change this template use File | Settings | File Templates.
- */
-public class BizInfoView {
-
+public class BizInfoView implements Serializable {
+    private long id;
     private String bizInfoText;
     private String tradeType;
     private BusinessType bizType;
@@ -52,6 +46,18 @@ public class BizInfoView {
     private List<BizProductDetailView> bizProductDetailViewList;
     private List<BizStakeHolderDetailView> supplierDetailList;
     private List<BizStakeHolderDetailView> buyerDetailList;
+
+    public void reset(){
+
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getBizInfoText() {
         return bizInfoText;
@@ -319,8 +325,8 @@ public class BizInfoView {
 
     @Override
     public String toString() {
-
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("bizInfoText", bizInfoText)
                 .append("tradeType", tradeType)
                 .append("bizType", bizType)

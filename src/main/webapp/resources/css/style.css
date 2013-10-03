@@ -177,6 +177,10 @@ textarea {
     font-size: 12px;
     min-height: 215px;
 }
+#content_inbox {
+    font-size: 12px;
+    min-height: 350px;
+}
 #content_info {
     height: 24px;
     line-height: 24px;
@@ -487,6 +491,12 @@ h2{
 
 /** Overide Primeface Theme **/
 .panel{
+    border: none!important;
+    background: none!important;
+    padding: 0!important;
+}
+.panel-dialog{
+    padding: .5em 1em!important;
     border: none!important;
     background: none!important;
     padding: 0!important;

@@ -6,10 +6,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "rel_prdgroup_prdprogram")
-public class PrdGroupToPrdProgram {
+public class PrdGroupToPrdProgram implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

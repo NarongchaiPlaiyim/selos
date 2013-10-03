@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>SE-LOS : Prescreen Maker</title>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+        <script type="text/javascript" language="javascript"
+                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
+
+    <h:body>
+        <p:panel id="pnl_maincontainer">
+            <h:form id="frmMain">
+                <div id="main_container">
+                    <!-- Start Header Logo -->
+                    <ui:include src="include/header_logo.xhtml"/>
+                    <div id="content_container">
+                        <div id="content_name">Inbox</div>
+                            <div id="content_inbox">
+                                <div id="content_form">
+                                    <!-- start content -->
+                                    <table class="content_table_form">
+                                    <tr>
+                                        <td>
+                                            <h:outputText value="#{inbox.userDetail.userName}"/>
+                                            <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
+                                                         paginator="false" rowKey="#{item.fnWobNum}" rowIndexVar="rowIndex" selection="#{item}">
+
+                                                <p:column headerText="" styleClass="center" style="width:22px;">
+                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_WobNum" styleClass="center" style="width: 130px;">
+                                                    <h:outputText value="#{item.fnWobNum}"/>
+                                                </p:column>
+
+                                                <p:column headerText="FN_StepName" styleClass="center" style="width: 110px;">
+                                                    <h:outputText value="#{item.fnStepName}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Step_Code" style="width: 120px;">
+                                                    <h:outputText value="#{item.stepCode}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Lock_Status" styleClass="center" style="width: 110px;">
+                                                    <h:outputText value="#{item.lockStatus}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Locked_User" styleClass="center" style="width: 110px;">
+                                                    <h:outputText value="#{item.lockedUser}"/>
+                                                </p:column>
+
+                                                <p:column headerText="QUEUE_NAME" styleClass="center" style="width: 110px;">
+                                                    <h:outputText value="#{item.queueName}"/>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="clear"></div>
+                    <!-- Start Footer -->
+                    <ui:include src="include/footer.xhtml"/>
+                    <!-- End Footer -->
+                    <h:inputHidden id="pagename" value="mnuprescreen"/>
+                    <h:inputHidden id="subpagename" value="submnuprescreen"/>
+                </div>
+            </h:form>
+        </p:panel>
+    </h:body>
+</f:view>
+</html>

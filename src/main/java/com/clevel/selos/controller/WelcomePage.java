@@ -2,10 +2,11 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
+import com.clevel.selos.dao.stp.STPExecutor;
+import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -19,7 +20,6 @@ import com.clevel.selos.system.message.ValidationMessage;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Alternative;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -45,8 +45,8 @@ public class WelcomePage implements Serializable {
     @Email
     Logger emailLog;
     @Inject
-    @DWH
-    Logger dwhLog;
+    @RLOS
+    Logger rlosLog;
     @Inject
     @BRMS
     Logger brmsLog;
@@ -157,8 +157,8 @@ public class WelcomePage implements Serializable {
         emailLog.debug("test Email log. ({})",new Date());
     }
 
-    public void onActionDWH() {
-        dwhLog.debug("test DWH log. ({})",new Date());
+    public void onActionRLOS() {
+        rlosLog.debug("test RLOS log. ({})", new Date());
     }
 
     public void onActionBRMS() {
@@ -206,6 +206,21 @@ public class WelcomePage implements Serializable {
         BusinessDescription businessDescription = businessDescriptionDAO.findById(selectedBusinessDescription.getId());
         log.debug("{}",businessDescription);
         selectedText = "DESCRIPTION: "+businessDescription.getName();
+    }
+
+    @Inject
+    STPExecutor STPExecutor;
+    public void testStoredProcedure() {
+        log.debug("testStoredProcedure");
+        STPExecutor.getApplicationNumber("XX");
+    }
+
+    @Inject
+    BPMInterface bpmInterface;
+    public void testBPM() {
+        log.debug("testBPM");
+//        UserDTO userDTO = bpmInterface.getUserDTO();
+//        log.debug("user: {}, password: {}",userDTO.getUserName(),userDTO.getPassword());
     }
 
     public List<BusinessGroup> getBusinessGroups() {

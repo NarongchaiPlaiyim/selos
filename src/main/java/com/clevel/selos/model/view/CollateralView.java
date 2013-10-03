@@ -8,16 +8,18 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CollateralView {
+public class CollateralView implements Serializable {
     @Inject
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
 
-    private BigDecimal id;
+    private long id;
     private CollateralType collateralType;
     private String     collateralTypeName;
     private BigDecimal collateralAmount;
@@ -25,12 +27,19 @@ public class CollateralView {
     public CollateralView() {
     }
 
-    public String getCollateralTypeName() {
-        return collateralTypeName;
+    public void reset(){
+        this.id = 0;
+        this.collateralType = new CollateralType();
+        this.collateralTypeName = "";
+        this.collateralAmount = new BigDecimal(0);
     }
 
-    public void setCollateralTypeName(String collateralTypeName) {
-        this.collateralTypeName = collateralTypeName;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public CollateralType getCollateralType() {
@@ -39,6 +48,14 @@ public class CollateralView {
 
     public void setCollateralType(CollateralType collateralType) {
         this.collateralType = collateralType;
+    }
+
+    public String getCollateralTypeName() {
+        return collateralTypeName;
+    }
+
+    public void setCollateralTypeName(String collateralTypeName) {
+        this.collateralTypeName = collateralTypeName;
     }
 
     public BigDecimal getCollateralAmount() {
@@ -52,7 +69,9 @@ public class CollateralView {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("msg", msg)
                 .append("id", id)
+                .append("collateralType", collateralType)
                 .append("collateralTypeName", collateralTypeName)
                 .append("collateralAmount", collateralAmount)
                 .toString();

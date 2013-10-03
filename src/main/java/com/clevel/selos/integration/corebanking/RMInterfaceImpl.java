@@ -1,14 +1,17 @@
 package com.clevel.selos.integration.corebanking;
 
+import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.model.RMmodel.*;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.RMmodel.individualInfo.IndividualModel;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.integration.corebanking.model.SearchIndividual;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
+import com.clevel.selos.integration.corebanking.model.customeraccount.SearchCustomerAccountModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -24,12 +27,6 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
 
     @Inject
     RMService rmService;
-
-    @Inject
-    TranformIndividual tranformIndividual;
-
-    @Inject
-    TranformCorporate tranformCorporate;
 
     @Inject
     @Config(name = "interface.rm.customerAccount.acronym")
@@ -59,7 +56,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     private String documentTypeValue;
     private String searchByValue;
     @Override
-    public CustomerInfoView getIndividualInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
         log.debug("getIndividualInfo()");
         SearchIndividual searchIndividual = new SearchIndividual();
@@ -85,15 +82,35 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustSurname("");
         searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("RequestValue : {} ",searchIndividual.toString());
+        IndividualModel individualModel = null;
+        IndividualResult individualResult;
+        try{
+            individualModel = rmService.individualService(searchIndividual,userId);
+            individualResult = new IndividualResult();
+            individualResult.setCustomerId(customerId);
+            individualResult.setActionResult(ActionResult.SUCCEED);
+            individualResult.setIndividualModel(individualModel);
+        } catch (ValidationException ex) {
+            individualResult = new IndividualResult();
+            individualResult.setCustomerId(customerId);
+            individualResult.setActionResult(ActionResult.FAILED);
+            individualResult.setReason(ex.getMessage());
+        } catch (Exception ex2){
+            individualResult = new IndividualResult();
+            individualResult.setCustomerId(customerId);
+            individualResult.setActionResult(ActionResult.FAILED);
+            if(ex2.getMessage()!=null){
+                individualResult.setReason(ex2.getMessage());
+            } else {
+                individualResult.setReason(ActionResult.EXCEPTION.toString());
+            }
+        }
 
-        IndividualModel individualModel = rmService.individualService(searchIndividual);
-
-
-        return tranformIndividual.tranform(individualModel);
+        return individualResult;
     }
 
     @Override
-    public CustomerInfoView getCorporateInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
         if(DocumentType.CORPORATE_ID==documentType){
             documentTypeValue="SC";
@@ -117,13 +134,33 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchIndividual.setCustName("");
         searchIndividual.setRadSelectSearch(searchByValue);
         log.debug("requestValue : {}",searchIndividual.toString());
-        CorporateModel corporateModel = rmService.corporateService(searchIndividual);
 
-        return tranformCorporate.tranform(corporateModel);
+        CorporateModel corporateModel = null;
+        CorporateResult corporateResult = new CorporateResult();
+        try{
+            corporateModel = rmService.corporateService(searchIndividual, userId);
+            corporateResult.setCustomerId(customerId);
+            corporateResult.setActionResult(ActionResult.SUCCEED);
+            corporateResult.setCorporateModel(corporateModel);
+        } catch (ValidationException ex) {
+            corporateResult.setCustomerId(customerId);
+            corporateResult.setActionResult(ActionResult.FAILED);
+            corporateResult.setReason(ex.getMessage());
+        } catch (Exception ex2){
+            corporateResult.setCustomerId(customerId);
+            corporateResult.setActionResult(ActionResult.FAILED);
+            if(ex2.getMessage()!=null){
+                corporateResult.setReason(ex2.getMessage());
+            } else {
+                corporateResult.setReason(ActionResult.EXCEPTION.toString());
+            }
+        }
+
+        return corporateResult;
     }
 
     @Override
-    public CustomerAccountModel getCustomerAccountInfo(String customerId, DocumentType documentType,SearchBy searchBy) throws Exception {
+    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) {
 
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
@@ -135,8 +172,22 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         searchCustomerAccountModel.setCustNbr(customerId);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("RequestValue : {}",searchCustomerAccountModel.toString());
-        CustomerAccountModel customerAccountModel = rmService.customerAccountService(searchCustomerAccountModel);
-
-        return  customerAccountModel;
+        CustomerAccountResult customerAccountResult = new CustomerAccountResult();
+        try{
+            customerAccountResult = rmService.customerAccountService(searchCustomerAccountModel,userId);
+        } catch (ValidationException ex) {
+            customerAccountResult.setCustomerId(customerId);
+            customerAccountResult.setActionResult(ActionResult.FAILED);
+            customerAccountResult.setReason(ex.getMessage());
+        } catch (Exception ex2){
+            customerAccountResult.setCustomerId(customerId);
+            customerAccountResult.setActionResult(ActionResult.FAILED);
+            if(ex2.getMessage()!=null){
+                customerAccountResult.setReason(ex2.getMessage());
+            } else {
+                customerAccountResult.setReason(ActionResult.EXCEPTION.toString());
+            }
+        }
+        return customerAccountResult;
     }
 }

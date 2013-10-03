@@ -3,16 +3,10 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 5/9/2556
- * Time: 11:56 น.
- * To change this template use File | Settings | File Templates.
- */
-public class BizStakeHolderDetailView {
+public class BizStakeHolderDetailView implements Serializable {
 
     private long no;
     private String stakeHolderType;

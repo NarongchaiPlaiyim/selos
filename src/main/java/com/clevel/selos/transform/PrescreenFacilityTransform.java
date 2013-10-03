@@ -9,11 +9,11 @@ import java.util.List;
 
 public class PrescreenFacilityTransform extends Transform {
 
-    public List<PrescreenFacility> transformModel(List<FacilityView> facilityViewList, Prescreen prescreen){
+    public List<PrescreenFacility> transformToModel(List<FacilityView> facilityViewList, Prescreen prescreen){
         List<PrescreenFacility> prescreenFacilityList = new ArrayList<PrescreenFacility>();
         for(FacilityView facilityView : facilityViewList){
             PrescreenFacility prescreenFacility = new PrescreenFacility();
-            prescreenFacility.setId(facilityView.getId());
+            //prescreenFacility.setId(facilityView.getId());
             prescreenFacility.setPrescreen(prescreen);
             prescreenFacility.setCreditType(facilityView.getCreditType());
             prescreenFacility.setProductProgram(facilityView.getProductProgram());
@@ -21,5 +21,20 @@ public class PrescreenFacilityTransform extends Transform {
             prescreenFacilityList.add(prescreenFacility);
         }
         return prescreenFacilityList;
+    }
+
+    public List<FacilityView> transformToView(List<PrescreenFacility> prescreenFacilities){
+        List<FacilityView> facilityViewList = new ArrayList<FacilityView>();
+        for(PrescreenFacility item : prescreenFacilities){
+            FacilityView facilityView = new FacilityView();
+            facilityView.setId(item.getId());
+            facilityView.setRequestAmount(item.getRequestAmount());
+            facilityView.setProductProgram(item.getProductProgram());
+            facilityView.setCreditType(item.getCreditType());
+
+            facilityViewList.add(facilityView);
+        }
+
+        return facilityViewList;
     }
 }

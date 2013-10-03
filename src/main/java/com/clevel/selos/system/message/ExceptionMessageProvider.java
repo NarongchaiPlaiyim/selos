@@ -11,7 +11,7 @@ import java.util.MissingResourceException;
 @ApplicationScoped
 @ExceptionMessage
 @Named("exceptionMsg")
-public class ExceptionMessageProvider extends MessageProvider {
+public class ExceptionMessageProvider extends MessageProvider implements ExceptionMapping {
     @Inject
     private Logger log;
     private static final String messageFile = "com.clevel.selos.exceptionMessages";

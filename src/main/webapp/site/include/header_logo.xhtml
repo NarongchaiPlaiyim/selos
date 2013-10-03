@@ -2,7 +2,7 @@
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://java.sun.com/jsf/html">
     <div id="header_logo">
         <div id="header_logo_image">
             <img src="#{request.contextPath}/resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application" />
@@ -15,7 +15,7 @@
                 <a href="inbox.jsf" class="header_menu">inbox</a> |
                 <a href="search.jsf" class="header_menu">search</a> |
                 <a href="download.jsf" class="header_menu">download</a> |
-                <a href="logout.jsf" class="header_menu">logout</a>
+                <p:commandLink value="logout" title="Click to logout" action="#{loginBean.logout}"/>
             </div>
         </div>
     </div>

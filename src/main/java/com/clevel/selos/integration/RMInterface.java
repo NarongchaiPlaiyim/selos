@@ -1,8 +1,8 @@
 package com.clevel.selos.integration;
 
-import com.clevel.selos.model.RMmodel.CustomerAccountModel;
-import com.clevel.selos.model.RMmodel.corporateInfo.CorporateModel;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 
 public interface RMInterface {
 
@@ -10,7 +10,7 @@ public interface RMInterface {
     enum DocumentType {CITIZEN_ID,PASSPORT,CORPORATE_ID}
     enum SearchBy {CUSTOMER_ID,TMBCUS_ID}
 
-    public CustomerInfoView getIndividualInfo(String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
-    public CustomerInfoView getCorporateInfo(String customerId,DocumentType documentType,SearchBy searchBy)throws Exception;
-    public CustomerAccountModel getCustomerAccountInfo(String customerId,DocumentType documentType,SearchBy searchBy) throws Exception;
+    public IndividualResult getIndividualInfo(String userId,String customerId,DocumentType documentType,SearchBy searchBy);
+    public CorporateResult getCorporateInfo(String userId,String customerId,DocumentType documentType,SearchBy searchBy);
+    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId);
 }

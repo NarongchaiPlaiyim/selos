@@ -7,7 +7,7 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-                <!--<p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:frmCheckCustomer:resultTableCustomer" />-->
+                <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer" />
                 <p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />

@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CustomerInfoView implements Serializable {
-    private BigDecimal id;
+    private long id;
     private int searchBy;
     private String searchId;
     private DocumentType documentType;
@@ -23,6 +24,7 @@ public class CustomerInfoView implements Serializable {
     private Reference reference;
     private String citizenId;
     private String registrationId;
+    private String inputId;
     private String cardAuthorizeBy;
     private Date documentExpiredDate;
     private String customerId;
@@ -63,13 +65,14 @@ public class CustomerInfoView implements Serializable {
     private String reason;
     private BusinessType businessType;
     private CustomerInfoView spouse;
+    private int validId;
 
     public CustomerInfoView(){
         //reset();
     }
 
     public void reset(){
-        this.id = new BigDecimal(0);
+        this.id = new Long(0);
         this.searchBy = 0;
         this.searchId = "";
         this.documentType = new DocumentType();
@@ -120,11 +123,11 @@ public class CustomerInfoView implements Serializable {
         this.spouse = new CustomerInfoView();
     }
 
-    public BigDecimal getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -517,6 +520,22 @@ public class CustomerInfoView implements Serializable {
 
     public void setBusinessType(BusinessType businessType) {
         this.businessType = businessType;
+    }
+
+    public String getInputId() {
+        return inputId;
+    }
+
+    public void setInputId(String inputId) {
+        this.inputId = inputId;
+    }
+
+    public int getValidId() {
+        return validId;
+    }
+
+    public void setValidId(int validId) {
+        this.validId = validId;
     }
 
     @Override

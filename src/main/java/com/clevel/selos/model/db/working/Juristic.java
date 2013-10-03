@@ -19,9 +19,12 @@ public class Juristic implements Serializable {
     @SequenceGenerator(name="SEQ_WRK_JURISTIC_ID", sequenceName="SEQ_WRK_JURISTIC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_JURISTIC_ID")
     private long id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @Column(name="registration_id")
+    private String registrationId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="founded")
@@ -72,6 +75,14 @@ public class Juristic implements Serializable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
     }
 
     public Date getFounded() {
@@ -164,20 +175,21 @@ public class Juristic implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("customer", customer).
-                append("founded", founded).
-                append("owner", owner).
-                append("financialYear", financialYear).
-                append("businessType", businessType).
-                append("businessGroup", businessGroup).
-                append("businessDescription", businessDescription).
-                append("businessActivity", businessActivity).
-                append("capital", capital).
-                append("paidCapital", paidCapital).
-                append("totalShare", totalShare).
-                append("signCondition", signCondition).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("customer", customer)
+                .append("registrationId", registrationId)
+                .append("founded", founded)
+                .append("owner", owner)
+                .append("financialYear", financialYear)
+                .append("businessType", businessType)
+                .append("businessGroup", businessGroup)
+                .append("businessDescription", businessDescription)
+                .append("businessActivity", businessActivity)
+                .append("capital", capital)
+                .append("paidCapital", paidCapital)
+                .append("totalShare", totalShare)
+                .append("signCondition", signCondition)
+                .toString();
     }
 }

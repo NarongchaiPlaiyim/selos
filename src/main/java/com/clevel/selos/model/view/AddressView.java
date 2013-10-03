@@ -4,9 +4,10 @@ import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AddressView {
+public class AddressView implements Serializable{
     private BigDecimal id;
     private AddressType addressType;
     private String addressNo;
@@ -18,11 +19,10 @@ public class AddressView {
     private SubDistrict subDistrict;
     private String postalCode;
     private Country country;
-    private Country countryCode;
     private String phoneNumber;
     private String extension;
-
-
+    private String contactName;
+    private String contactPhone;
 
     public AddressView(){
 
@@ -117,14 +117,6 @@ public class AddressView {
         this.country = country;
     }
 
-    public Country getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(Country countryCode) {
-        this.countryCode = countryCode;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -141,6 +133,22 @@ public class AddressView {
         this.extension = extension;
     }
 
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -155,9 +163,10 @@ public class AddressView {
                 .append("subDistrict", subDistrict)
                 .append("postalCode", postalCode)
                 .append("country", country)
-                .append("countryCode", countryCode)
                 .append("phoneNumber", phoneNumber)
                 .append("extension", extension)
+                .append("contactName", contactName)
+                .append("contactPhone", contactPhone)
                 .toString();
     }
 }

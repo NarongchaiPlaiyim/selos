@@ -52,7 +52,6 @@
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            rendered="#{prescreenMaker.modeForButton == 'add'}"
                             id="addFacility"
                             value="Add"
                             styleClass="small"
@@ -60,15 +59,6 @@
                             process=":facilityDlgForm"
                             update=":facilityDlgForm :frmMain:resultTableFacility"
                             oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
-                    <p:commandButton
-                            rendered="#{prescreenMaker.modeForButton == 'edit'}"
-                            id="editFacility"
-                            value="Edit"
-                            styleClass="small"
-                            action="#{prescreenMaker.onEditFacility}"
-                            update=":facilityDlgForm :frmMain:resultTableFacility"
-                            oncomplete="facilityDlg.hide()"/>
-
                     <p:commandButton type="button" value="Cancel" styleClass="small" onclick="facilityDlg.hide()" update=":facilityDlgForm"/>
                 </td>
             </tr>

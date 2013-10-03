@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 
+import com.clevel.selos.busiensscontrol.TCGInfoControl;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
@@ -13,6 +14,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -20,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -70,6 +73,8 @@ public class TCGInfo implements Serializable {
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
+    @Inject
+    TCGInfoControl tcgBusinessControl ;
 
     public TCGInfo() {
 
@@ -126,9 +131,9 @@ public class TCGInfo implements Serializable {
         log.info("onAddCollateralDetail :: reset form");
         modeForButton = "add";
         TCGDetailView = new TCGDetailView();
-        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
-        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
-        TCGDetailView.setProposeInThisRequest("Y");
+//        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
+//        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
+        TCGDetailView.setProposeInThisRequest(false);
     }
 
     // onclick edit button
@@ -145,7 +150,7 @@ public class TCGInfo implements Serializable {
 
            TCGDetailView.setPotentialCollateral(potentialCollateralEdit);
            TCGDetailView.setTcgCollateralType(tcgCollateralTypeEdit);
-           TCGDetailView.setProposeInThisRequest(selectCollateralItem.getProposeInThisRequest());
+           TCGDetailView.setProposeInThisRequest(selectCollateralItem.isProposeInThisRequest());
            TCGDetailView.setLtvValue(selectCollateralItem.getLtvValue());
            TCGDetailView.setAppraisalAmount(selectCollateralItem.getAppraisalAmount());
 
@@ -174,7 +179,7 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewSave.setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewSave.setAppraisalAmount(TCGDetailView.getAppraisalAmount());
                 TCGDetailViewSave.setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
+                TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.isProposeInThisRequest());
 
                 TCGDetailViewList.add(TCGDetailViewSave);
 
@@ -187,7 +192,7 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewList.get(rowIndex).setTcgCollateralType(tcgCollateralTypeSave);
                 TCGDetailViewList.get(rowIndex).setAppraisalAmount(TCGDetailView.getAppraisalAmount());
                 TCGDetailViewList.get(rowIndex).setLtvValue(TCGDetailView.getLtvValue());
-                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(TCGDetailView.getProposeInThisRequest());
+                TCGDetailViewList.get(rowIndex).setProposeInThisRequest(TCGDetailView.isProposeInThisRequest());
 
             } else {
                 log.info("onSaveCollateralDetail ::: Undefined modeForbutton !!");
@@ -245,14 +250,14 @@ public class TCGInfo implements Serializable {
 
                  if(typeAmt.equals("Appraisal"))
                  {
-                     if(TCGDetailViewList.get(i).getProposeInThisRequest().equals("Y"))
+                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                      {
                         sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
                      }
                  }
                  else if(typeAmt.equals("LTV"))
                  {
-                     if(TCGDetailViewList.get(i).getProposeInThisRequest().equals("Y"))
+                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                      {
                         sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
                      }
@@ -272,9 +277,10 @@ public class TCGInfo implements Serializable {
     public void onDeleteTcgDetail() {
        log.info("onDeleteTcgDetail rowIndex {} ", rowIndex);
        TCGDetailViewList.remove(selectCollateralItem);
+       calculateAfterDelete();
     }
 
-    /*public void calculateAfterDelete(){
+    public void calculateAfterDelete(){
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
@@ -288,8 +294,17 @@ public class TCGInfo implements Serializable {
             this.sumInThisAppraisalAmount = new BigDecimal(0);
             this.sumInThisLtvValue = new BigDecimal(0);
         }
-    }*/
+    }
 
+    public void onSaveTcgInfo(){
+        log.info("onSaveTcgInfo ::: ");
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("workCaseId", 1);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        tcgBusinessControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+
+
+    }
 
     public List<TCGDetailView> getTCGDetailViewList() {
         return TCGDetailViewList;

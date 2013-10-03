@@ -1,8 +1,9 @@
 package com.clevel.selos.model.db;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Facility {
+public class Facility implements Serializable {
 
     private BigDecimal id;
     private String facilityName;

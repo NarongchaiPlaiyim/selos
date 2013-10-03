@@ -1,13 +1,8 @@
 package com.clevel.selos.model.view;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 6/9/2556
- * Time: 15:31 น.
- * To change this template use File | Settings | File Templates.
- */
-public class NCBSummaryView {
+import java.io.Serializable;
+
+public class NCBSummaryView implements Serializable {
 
     private String cusName;
     private String cusType;

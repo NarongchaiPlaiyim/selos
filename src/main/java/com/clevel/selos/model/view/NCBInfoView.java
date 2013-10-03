@@ -6,14 +6,6 @@ import com.clevel.selos.model.db.working.Customer;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 18/9/2556
- * Time: 14:06 น.
- * To change this template use File | Settings | File Templates.
- */
-
 public class NCBInfoView implements Serializable {
     private long id;
     private Date checkingDate;

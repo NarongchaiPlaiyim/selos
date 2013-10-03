@@ -6,10 +6,11 @@ import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "rel_potential_tcgcollateral")
-public class PotentialColToTCGCol {
+public class PotentialColToTCGCol implements Serializable {
     @Id
     @Column(name = "id")
     private int id;

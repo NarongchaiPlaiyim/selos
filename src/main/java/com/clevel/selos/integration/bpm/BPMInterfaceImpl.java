@@ -2,12 +2,16 @@ package com.clevel.selos.integration.bpm;
 
 import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
 import com.clevel.selos.filenet.bpm.connection.helper.SELOSConnectionHelper;
+import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
+import com.clevel.selos.filenet.bpm.util.constants.BPMConstants;
+import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.ws.WSDataPersist;
 import com.filenet.api.core.Connection;
@@ -17,15 +21,16 @@ import com.filenet.api.core.ObjectStore;
 import com.filenet.api.util.UserContext;
 import filenet.vw.api.VWSession;
 import org.slf4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.security.auth.Subject;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
 @Default
-public class BPMInterfaceImpl implements BPMInterface {
+public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Inject
     @BPM
     Logger log;
@@ -70,16 +75,26 @@ public class BPMInterfaceImpl implements BPMInterface {
         log.debug("createCase. (detail: {})",caseCreationHistory);
         boolean success = true;
 
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUserName(bpmUsername);
-        userDTO.setPassword(bpmPassword);
-        log.debug("ceuri: {}, username: {}, password: {}",ceURI,bpmUsername,bpmPassword);
-        HashMap<String,String> caseParameter = new HashMap<String, String>();
-        caseParameter.put("BDMUserName", caseCreationHistory.getBdmId());
-        caseParameter.put("CANumber", caseCreationHistory.getCaNumber());
+        log.debug("ceuri: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
 
+        HashMap<String,String> caseParameter = new HashMap<String, String>();
+        caseParameter.put("JobName",caseCreationHistory.getJobName());
+        caseParameter.put("CANumber", caseCreationHistory.getCaNumber());
+        caseParameter.put("RefCANumber", caseCreationHistory.getOldCaNumber());
+        caseParameter.put("AccountNo1", caseCreationHistory.getAccountNo1());
+        caseParameter.put("CustomerId", caseCreationHistory.getCustomerId());
+        caseParameter.put("CustomerName", caseCreationHistory.getCustomerName());
+        caseParameter.put("CitizenId", caseCreationHistory.getCitizenId());
+        caseParameter.put("RequestType", Integer.toString(caseCreationHistory.getRequestType()));
+        caseParameter.put("CustomerType", Integer.toString(caseCreationHistory.getCustomerType()));
+        caseParameter.put("BDMUserName", caseCreationHistory.getBdmId());
+        caseParameter.put("HubCode", caseCreationHistory.getHubCode());
+        caseParameter.put("RegionCode", caseCreationHistory.getRegionCode());
+        caseParameter.put("AppInDateBDM", caseCreationHistory.getAppInDateBDM());
+        caseParameter.put("AppNumber", caseCreationHistory.getAppNumber());
+        caseParameter.put("RefAppNumber", "");
         try {
-            BPMServiceImpl bpmService = new BPMServiceImpl(userDTO);
+            BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(),getConfigurationDTO());
             bpmService.launchCase(caseParameter);
         } catch (SELOSBPMException e) {
             success = false;
@@ -90,5 +105,64 @@ public class BPMInterfaceImpl implements BPMInterface {
 
         wsDataPersist.addNewCase(caseCreationHistory);
         return success;
+    }
+
+    @Override
+    public List<CaseDTO> getInboxList() {
+        log.debug("getInboxList.");
+        List<CaseDTO> caseDTOs = Collections.emptyList();
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            caseDTOs = bpmService.getCases(BPMConstants.BPM_QUEUE_PERSONAL_INBOX_NAME,BPMConstants.BPM_QUEUE_TYPE_PERSONALQ,null,null);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while create case in BPM!",e);
+        }
+
+        log.debug("getInboxList. (result size: {})",caseDTOs.size());
+        return caseDTOs;
+    }
+
+    @Override
+    public void dispatchCase(String queueName,String wobNumber,HashMap<String,String> fields) {
+        log.debug("dispatchCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        listFields(fields);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            bpmService.lockCase(queueName,wobNumber);
+            bpmService.dispatchCase(queueName,wobNumber,fields);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while dispatch case in BPM!",e);
+        }
+    }
+
+    private UserDTO getUserDTO() {
+        UserDTO userDTO = new UserDTO();
+        UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userDTO.setUserName(userDetail.getUserName());
+        userDTO.setPassword(userDetail.getPassword());
+        return userDTO;
+    }
+
+    private UserDTO getSystemUserDTO() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserName(bpmUsername);
+        userDTO.setPassword(bpmPassword);
+        return userDTO;
+    }
+
+    private BPMConfigurationsDTO getConfigurationDTO() {
+        BPMConfigurationsDTO bpmConfigurationsDTO = new BPMConfigurationsDTO();
+        bpmConfigurationsDTO.setCEURI(ceURI);
+        bpmConfigurationsDTO.setCaseWorkflowName(workflowName);
+        bpmConfigurationsDTO.setConnectionPointName(connectionPoint);
+        bpmConfigurationsDTO.setJassName(jaasName);
+        bpmConfigurationsDTO.setObjectStoreName(objectStore);
+        return bpmConfigurationsDTO;
+    }
+
+    private void listFields(HashMap<String,String> fields) {
+        for (Map.Entry<String, String> entry : fields.entrySet()) {
+            log.debug("key: {}, value: {}",entry.getKey(),entry.getValue());
+        }
     }
 }

@@ -44,7 +44,6 @@
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            rendered="#{prescreenMaker.modeForButton == 'add'}"
                             id="btnSaveBusinessInfo"
                             value="Save"
                             styleClass="small"
@@ -52,13 +51,6 @@
                             process=":businessDlgForm"
                             update=":businessDlgForm :frmMain:resulttableBusinessInformation"
                             oncomplete="handlePrescreenBusinessInfoRequest(xhr, status, args)"/>
-                    <p:commandButton value="Edit"
-                                     rendered="#{prescreenMaker.modeForButton == 'edit'}"
-                                     id="EditBusinessInformation" styleClass="small"
-                                     update=":frmMain:resulttableBusinessInformation"
-                                     action="#{prescreenMaker.onSaveBusinessInformation()}"
-                                     oncomplete="businessDlg.hide()"/>
-
                     <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
                 </td>
             </tr>
