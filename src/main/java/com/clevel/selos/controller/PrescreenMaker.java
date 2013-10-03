@@ -209,7 +209,7 @@ public class PrescreenMaker implements Serializable {
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
         }
         //TODO tempory to remove this.
-        user = userDAO.findById(new Long(10001));
+        user = userDAO.findById("10001");
         log.info("onCreation ::: user : {}", user);
 
         //prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
@@ -718,7 +718,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onSavePrescreen ::: sWorkcasePrescreen : {}", workCasePrescreen);
         Province businessLocation = provinceDAO.findById(10);
         log.info("onSavePrescreen ::: businessLocation : {}", businessLocation);
-        User user = userDAO.findById(new Long(1));
+        User user = userDAO.findById("10001");
         log.info("onSavePrescreen ::: user : {}", user);
         prescreen.setWorkCasePrescreen(workCasePrescreen);
         prescreen.setBusinessLocation(businessLocation);

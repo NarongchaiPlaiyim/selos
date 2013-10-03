@@ -81,7 +81,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
         log.info("getCustomerInfoFromRM ::: customerInfoView : {}", customerInfoView);
 
-        String userId = Long.toString(user.getId());
+        String userId = user.getId();
         DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         String documentTypeCode = masterDocumentType.getDocumentTypeCode();
         log.info("getCustomerInfoFromRM ::: userId : {}", userId);
