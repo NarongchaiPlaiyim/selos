@@ -297,10 +297,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         //TODO getNextStep from BPM
-        //bpmInterface.dispatchCase("1002", workCasePrescreen.getWobNumber(), new HashMap<String, String>());
-        Step step = stepDAO.findById(new Long(1002));
+        bpmInterface.dispatchCase("1002", workCasePrescreen.getWobNumber(), new HashMap<String, String>());
+        /*Step step = stepDAO.findById(new Long(1002));
         workCasePrescreen.setStep(step);
-        workCasePrescreenDAO.persist(workCasePrescreen);
+        workCasePrescreenDAO.persist(workCasePrescreen);*/
     }
 
     //*** Function for PreScreen Checker ***//
