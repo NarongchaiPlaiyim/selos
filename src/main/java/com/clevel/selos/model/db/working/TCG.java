@@ -25,10 +25,10 @@ public class TCG implements Serializable{
     @Column(name="request_limit_not_tcg")
     private BigDecimal requestLimitNotRequiredTCG;
 
-    @Column(name="existing_loan_under_same_collateral")
+    @Column(name="exist_loan_under_same")
     private BigDecimal existingLoanRatioUnderSameCollateral;
 
-    @Column(name="existing_loan_not_under_same_collateral")
+    @Column(name="exist_loan_not_under_same")
     private BigDecimal existingLoanRatioNotUnderSameCollateral;
 
     @Column(name="tcb_flood_amount")

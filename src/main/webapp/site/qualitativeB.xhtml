@@ -541,7 +541,7 @@
     </td>
     <td>
         <h:outputText
-                value="- จำนวนเช็คคืนของลูกหนี้การค้ามากกว่า 20% ของรายได้ต่อเดือน (ในช่วง 6 เดือนที่ผ่านมา )"/>
+                value="- จำนวนเช็คคืนของลูกหนี้การค้ามากกว่า 20% ของรายได้ต่อเดือน(ในช่วง 6 เดือนที่ผ่านมา)"/>
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl8}"/>
@@ -732,25 +732,22 @@
 
 <table class="table_content">
     <tr>
-        <td style="width: 330px;text-align: left">
+        <td style="width: 30%;text-align: left">
             <h:outputLabel value="สรุปการจัดชั้นหนี้"/>
         </td>
-        <td style="width: 500px;text-align: left">
+        <td style="width: 70%;text-align: left">
             <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
-            <!--                        <p:selectOneMenu id="dlgType"
-                                                     value="#{qualitative.qualityLevel}"
-                                                     styleClass="largest"
-                                                     size="1"
-                                                     required="#{not empty param[addRowData.clientId]}">
-                                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
-                                        <f:selectItems value="#{qualitative.qualityLevelList}"
-                                                       var="qualityLevel"
-                                                       itemLabel="#{qualityLevel.description}"
-                                                       itemValue="#{qualityLevel.id}"/>
-                                    </p:selectOneMenu>-->
-            <br/>
-            <h:outputLabel value="เหตุผล :"/>
-            <h:inputTextarea cols="90" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"/>
+                  <p:selectOneMenu id="dlgType"
+                                 value="#{qualitative.qualitativeView.qualityLevel.id}"
+                                 styleClass="largest"
+                                 size="1"
+                                 required="#{not empty param[addRowData.clientId]}">
+                    <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                    <f:selectItems value="#{qualitative.qualityLevelList}"
+                                   var="qualityItemsB"
+                                   itemLabel="#{qualityItemsB.description}"
+                                   itemValue="#{qualityItemsB.id}"/>
+                </p:selectOneMenu>
         </td>
     </tr>
     <tr>

@@ -34,24 +34,8 @@ public class NCCRSModel implements Serializable {
         return registType;
     }
 
-    public void setRegistTypeCompanyLimited() {
-        registType = RegistType.CompanyLimited.value();
-    }
-
-    public void setRegistTypeLimitedPartnership() {
-        registType = RegistType.LimitedPartnership.value();
-    }
-
-    public void setRegistTypeRegisteredOrdinaryPartnership() {
-        registType = RegistType.RegisteredOrdinaryPartnership.value();
-    }
-
-    public void setRegistTypePublicCompanyLimited() {
-        registType = RegistType.PublicCompanyLimited.value();
-    }
-
-    public void setRegistTypeForeignRegistrationIdOrOthers() {
-        registType = RegistType.ForeignRegistrationIdOrOthers.value();
+    public void setRegistType(RegistType registType) {
+        this.registType = registType.value();
     }
 
     public String getCompanyName() {

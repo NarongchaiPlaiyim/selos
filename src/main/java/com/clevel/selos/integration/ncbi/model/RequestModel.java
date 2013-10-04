@@ -4,10 +4,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+@XStreamAlias("REQUEST")
 public class RequestModel {
 
     @XStreamAlias("STAFF_ID")
-    private String STAFF_ID;
+    private String staffId;
 
     @XStreamAlias("REQUEST_NO")
     private String requestNo;
@@ -68,12 +69,12 @@ public class RequestModel {
     }
 
     public RequestModel(String staffId, String requestNo) {
-        this.STAFF_ID = staffId;
+        this.staffId = staffId;
         this.requestNo = requestNo;
     }
 
     public RequestModel(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
-        this.STAFF_ID = staffId;
+        this.staffId = staffId;
         this.requestNo = requestNo;
         this.inquiryType = inquiryType;
         this.customerType = customerType;
@@ -95,7 +96,7 @@ public class RequestModel {
     }
 
     public RequestModel(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
-        this.STAFF_ID = staffId;
+        this.staffId = staffId;
         this.requestNo = requestNo;
         this.inquiryType = inquiryType;
         this.customerType = customerType;
@@ -119,7 +120,7 @@ public class RequestModel {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("staff_Id", STAFF_ID)
+                .append("staff_Id", staffId)
                 .append("requestNo", requestNo)
                 .append("inquiryType", inquiryType)
                 .append("customerType", customerType)

@@ -24,12 +24,8 @@ public class NCRSModel implements Serializable {
     public NCRSModel() {
     }
 
-    public void setIdTypePassport() {
-        idType = IdType.PASSPORT.value();
-    }
-
-    public void setIdTypeCitizen() {
-        idType = IdType.CITIZEN.value();
+    public void setIdType(IdType idType) {
+        this.idType = idType.value();
     }
 
     public String getFirstName() {

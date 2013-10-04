@@ -67,7 +67,8 @@ public class NCBInfo implements Serializable {
     private boolean monthRender6;
 
     private boolean genTextBoxFlag;
-    //test
+    private boolean noOfmonthsPaymentFlag;
+
     private NCBDetailView NCBDetailView;
     private NCBDetailView selectNcbRecordItem;
     private List<NCBDetailView> NCBDetailViewList;
@@ -98,6 +99,7 @@ public class NCBInfo implements Serializable {
         log.info("onCreation.");
         modeForButton = "add";
         genTextBoxFlag = false;
+        noOfmonthsPaymentFlag = false;
 
         if (NCBDetailView == null) {
             NCBDetailView = new NCBDetailView();
@@ -165,8 +167,6 @@ public class NCBInfo implements Serializable {
     // onclick add button
     public void onAddNcbRecord() {
         //*** Reset form ***//
-        log.info("onAddNcbRecord ::: ");
-        //*** Reset form ***//
         log.info("onAddNcbRecord ::: Reset Form");
         NCBDetailView = new NCBDetailView();
         NCBDetailView.setAccountStatus(new AccountStatus());
@@ -178,7 +178,6 @@ public class NCBInfo implements Serializable {
         modeForButton = "add";
         genTextBoxFlag = false;
 
-        //test default for first section
     }
 
     public void onEditNcbDetail() {  //copy row that choose to dialog
@@ -415,15 +414,28 @@ public class NCBInfo implements Serializable {
         monthRender6 = rendered.get(5).booleanValue();
     }
 
+    //for rendered จำนวนเดือนที่หาร
+    public void onChangeAccountType(){
+        log.info("onChangeAccountType::");
+        log.info("dlgAccountType.getId() :: {}" ,dlgAccountType.getId());
+        noOfmonthsPaymentFlag = true;
+       /* if (dlgAccountType.getId() != 0){
+            AccountType accountChoose = accountTypeDAO.findById(dlgAccountType.getId());
+            log.info("accountChoose.getWcFlag() :: {}" ,accountChoose.getWcFlag());
+            if(accountChoose.getWcFlag() == 1 ){   // test ก่อน ต้องมีสูตรมาให้
+                noOfmonthsPaymentFlag = true;
+            }
+            else
+            {
+                noOfmonthsPaymentFlag = false;
+            }
+        }*/
+    }
 
-    // *** Function for NCB ***//
+    // *** Function for save NCB To DB ***//
     public void onSaveNcb() {     // call transform  and then call businessControl
         log.info("onSaveNcb:::: {} ", NCBInfoView.toString());
 //        Customer customerSave = customerEntityDAO.findById(ncb);
-
-        //save to DB
-        TDRCondition tdrConditionSave = tdrConditionDAO.findById(tdrCondition.getId());
-        NCBInfoView.setTdrCondition(tdrConditionSave);
 
         ncbInfoControl.onSaveNCBToDB(NCBInfoView, NCBDetailViewList);
     }
@@ -603,4 +615,13 @@ public class NCBInfo implements Serializable {
     public void setMonthRender6(boolean monthRender6) {
         this.monthRender6 = monthRender6;
     }
+
+    public boolean isNoOfmonthsPaymentFlag() {
+        return noOfmonthsPaymentFlag;
+    }
+
+    public void setNoOfmonthsPaymentFlag(boolean noOfmonthsPaymentFlag) {
+        this.noOfmonthsPaymentFlag = noOfmonthsPaymentFlag;
+    }
+
 }
