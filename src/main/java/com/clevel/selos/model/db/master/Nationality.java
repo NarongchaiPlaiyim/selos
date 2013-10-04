@@ -19,6 +19,8 @@ public class Nationality implements Serializable {
     private String name;
     @Column(name = "active")
     private int active;
+    @Column(name = "code")
+    private String code;
 
     public Nationality() {
     }
@@ -47,12 +49,21 @@ public class Nationality implements Serializable {
         this.active = active;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("active", active)
+                .append("code", code)
+                .toString();
     }
 }

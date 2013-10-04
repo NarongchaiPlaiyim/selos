@@ -45,6 +45,8 @@ public class CustomerBizTransform extends BusinessTransform {
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     BusinessTypeDAO businessTypeDAO;
+    @Inject
+    RaceDAO raceDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult){
         CustomerInfoResultView customerInfoResultView = null;
@@ -61,11 +63,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
-//        customerInfoView.setTitleEn(titleDAO.findOneByCriteria(Restrictions.eq("titleEn", individualModel.getTitleEN())));
-//        customerInfoView.setFirstNameEn(individualModel.getFirstnameEN());
-//        customerInfoView.setLastNameEn(individualModel.getLastnameEN());
                     customerInfoView.setCustomerId(individualModel.getDocumentType());
-                    customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("description", individualModel.getDocumentType())));
+                    customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
                     customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
                     customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
 
@@ -74,13 +73,15 @@ public class CustomerBizTransform extends BusinessTransform {
                     }else if(individualModel.getGender().equals("F")){
                         customerInfoView.setGender(Gender.FEMALE);
                     }
-//        customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getEducationBackground())));
-//        customerInfoView.setOrigin(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getRace())));  //***
-//        customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("",individualModel.getMarriageStatus())));
-//        customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("",individualModel.getNationality())));
+                    customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getEducationBackground())));
+                    customerInfoView.setOrigin(raceDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getRace())));
+                    customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getMarriageStatus())));
+                    customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getNationality())));
                     customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-                    customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getOccupationCode())));
-//        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("","")));
+                    if(individualModel.getOccupationCode().matches("[0-9]*")){
+                        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code",new Integer(individualModel.getOccupationCode()))));
+                    }
+            //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("",individualModel.getBizCode())));
 
                     CustomerInfoView spouse=new CustomerInfoView();
                     spouse.setFirstNameTh(individualModel.getSpouse().getFirstname());

@@ -230,7 +230,7 @@ public class RMService implements Serializable {
                     individualModel.setEducationBackground(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getEducationLevel());
                     individualModel.setRace(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRace());
                     individualModel.setMarriageStatus(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getMaritalStatus());
-                    individualModel.setNationality(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getIsoCitizenCtry());  //****
+                    individualModel.setNationality(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getIsoCitizenCtry());
                     individualModel.setNumberOfChild(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNoOfChildren());
                     //spouse
                     String spouseName[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseName().split(" ");
