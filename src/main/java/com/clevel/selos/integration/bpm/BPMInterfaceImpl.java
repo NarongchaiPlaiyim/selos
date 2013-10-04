@@ -129,10 +129,31 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         Util.listFields(fields);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
-            bpmService.lockCase(queueName,wobNumber);
             bpmService.dispatchCase(queueName,wobNumber,fields);
         } catch (SELOSBPMException e) {
             log.error("Exception while dispatch case in BPM!",e);
+        }
+    }
+
+    @Override
+    public void lockCase(String queueName, String wobNumber) {
+        log.debug("lockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            bpmService.lockCase(queueName,wobNumber);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while locking case in BPM!",e);
+        }
+    }
+
+    @Override
+    public void unLockCase(String queueName, String wobNumber) {
+        log.debug("lockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            bpmService.unLockCase(queueName,wobNumber);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while unlocking case in BPM!",e);
         }
     }
 

@@ -12,4 +12,6 @@ public interface BPMInterface  {
     public boolean createCase(CaseCreationHistory caseCreationHistory);
     public List<CaseDTO> getInboxList();
     public void dispatchCase(String queueName,String wobNumber,HashMap<String,String> fields);
+    public void lockCase(String queueName, String wobNumber);
+    public void unLockCase(String queueName, String wobNumber);
 }
