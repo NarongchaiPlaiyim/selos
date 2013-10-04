@@ -148,7 +148,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
     @Override
     public void unLockCase(String queueName, String wobNumber) {
-        log.debug("lockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        log.debug("unLockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             bpmService.unLockCase(queueName,wobNumber);
