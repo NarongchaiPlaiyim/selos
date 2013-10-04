@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>SE-LOS : NCB Record Detail</title>
+    <title>SE-LOS : TCG Calculation</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
@@ -286,6 +286,9 @@
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
 
+    <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave">
+        Loading...
+    </p:blockUI>
 </h:body>
 </f:view>
 </html>
