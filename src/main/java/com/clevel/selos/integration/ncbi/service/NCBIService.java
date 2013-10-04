@@ -20,48 +20,25 @@ public class NCBIService implements Serializable {
     NCBIExportImp exportImp;
 
     @Inject
+    NCBIImp ncbiImp;
+
+    @Inject
     public NCBIService() {
     }
 
     public void process(){
-
-
-        String xml = null;
-        String result = null;
-        XStream xStream = null;
-        NcbiRequestModel requestModel = null;
-
-        xStream = new XStream();
-        xStream.processAnnotations(NcbiRequestModel.class);
-
-        //RequestModel model = new RequestModel();
-//        model.setCA_NUMBER();
-
-        ArrayList<RequestModel> modelArrayList = new ArrayList<RequestModel>();
-//        modelArrayList.add()
-        requestModel = new NcbiRequestModel(modelArrayList);
-
-        xml = xStream.toXML(requestModel);
-
-        FileWriter fstream = null;
-        BufferedWriter out = null;
+        System.out.println("process()");
         try {
-            fstream = new FileWriter("D:/out.xml");
-            out = new BufferedWriter(fstream);
-            out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-            out.write("XML");
-            out.close();
-        } catch (IOException e) {
-            System.out.println("IOException : "+e.getMessage());
-        } finally {
-            try {
-                if(null!=out){
-                    out.close();
-                }
-            } catch (IOException e) {
-                System.out.println("IOException : "+ e.getMessage());
-            }
-        }
+            ArrayList<String> path = null;
 
+            path = ncbiImp.XMLFormatRequestTransaction(exportImp.get());
+
+            for(String string : path){
+                System.out.println("Paht : "+string);
+            }
+
+        } catch (Exception e) {
+            System.out.println("NCBI : "+e.getMessage());
+        }
     }
 }

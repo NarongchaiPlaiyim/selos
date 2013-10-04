@@ -3,11 +3,14 @@ package com.clevel.selos.controller;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
 import com.clevel.selos.integration.ncb.nccrs.service.NCCRSService;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.IdType;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
-//import com.clevel.selos.integration.ncbi.service.NCBIImp;
+import com.clevel.selos.integration.ncbi.service.NCBIImp;
+import com.clevel.selos.integration.ncbi.service.NCBIService;
 import org.slf4j.Logger;
 
 import javax.faces.bean.ManagedBean;
@@ -30,8 +33,8 @@ public class TestNCRS implements Serializable {
     @Inject
     NCCRSService nccrsService;
 
-    //@Inject
-    //NCBIImp ncbiImp;
+    @Inject
+    NCBIService ncbiService;
     //NCRS
     private String result;
     private String memberref = "123456789";
@@ -68,7 +71,7 @@ public class TestNCRS implements Serializable {
         ArrayList<NCRSModel> ncrsModelArrayList = new ArrayList<NCRSModel>();
 
         ncrsModel = new NCRSModel();
-        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setIdType(IdType.CITIZEN);
         ncrsModel.setCitizenId(idNumber);
         ncrsModel.setFirstName("พสุธร");
         ncrsModel.setLastName("กุญชร");
@@ -79,7 +82,7 @@ public class TestNCRS implements Serializable {
         ncrsModelArrayList.add(ncrsModel);
 
         ncrsModel = new NCRSModel();
-        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setIdType(IdType.CITIZEN);
         ncrsModel.setCitizenId(idNumber2);
         ncrsModel.setFirstName("ขวัญชัย");
         ncrsModel.setLastName("อานุภาพ");
@@ -90,7 +93,7 @@ public class TestNCRS implements Serializable {
         ncrsModelArrayList.add(ncrsModel);
 
         ncrsModel = new NCRSModel();
-        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setIdType(IdType.CITIZEN);
         ncrsModel.setCitizenId("3101403233750");
         ncrsModel.setFirstName("ประดิษฐ์");
         ncrsModel.setLastName("ภัทรประสิทธิ์");
@@ -101,7 +104,7 @@ public class TestNCRS implements Serializable {
         ncrsModelArrayList.add(ncrsModel);
 
         ncrsModel = new NCRSModel();
-        ncrsModel.setIdTypeCitizen();
+        ncrsModel.setIdType(IdType.CITIZEN);
         ncrsModel.setCitizenId("3149900124956");
         ncrsModel.setFirstName("วิลาวัณย ");
         ncrsModel.setLastName("อุปริกชาติพงษ์");
@@ -112,8 +115,9 @@ public class TestNCRS implements Serializable {
         ncrsModelArrayList.add(ncrsModel);
 
         NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
-        //ncrsService.process(inputModel);
-        //ncbiImp.process();
+        //ncbiService.process(inputModel);
+        ncbiService.process();
+
     }
     public void onClickNCCRS(){
         log.info("========================================= onClickNCCRS");
@@ -121,7 +125,7 @@ public class TestNCRS implements Serializable {
         NCCRSModel nccrsModel = null;
         nccrsModel = new NCCRSModel();
         nccrsModel.setRegistId(registId);
-        nccrsModel.setRegistTypeCompanyLimited();
+        nccrsModel.setRegistType(RegistType.CompanyLimited);
         nccrsModel.setCompanyName(companyName);
         nccrsModel.setInqPurose(inqPurose);
         nccrsModel.setProductType(productType);
@@ -134,7 +138,7 @@ public class TestNCRS implements Serializable {
 
         nccrsModel = new NCCRSModel();
         nccrsModel.setRegistId("0115530002071");
-        nccrsModel.setRegistTypeCompanyLimited();
+        nccrsModel.setRegistType(RegistType.CompanyLimited);
         nccrsModel.setCompanyName(companyName);
         nccrsModel.setInqPurose(inqPurose);
         nccrsModel.setProductType(productType);
@@ -147,7 +151,7 @@ public class TestNCRS implements Serializable {
 
         nccrsModel = new NCCRSModel();
         nccrsModel.setRegistId("0105532021260");
-        nccrsModel.setRegistTypeCompanyLimited();
+        nccrsModel.setRegistType(RegistType.CompanyLimited);
         nccrsModel.setCompanyName(companyName);
         nccrsModel.setInqPurose(inqPurose);
         nccrsModel.setProductType(productType);
