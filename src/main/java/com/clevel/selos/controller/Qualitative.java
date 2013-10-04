@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -75,55 +76,50 @@ public class Qualitative {
             qualityLevelList = new ArrayList<QualityLevel>();
         }
 
-//        qualityLevelList = qualityLevelDAO.findAll();
+        qualityLevelList = qualityLevelDAO.findAll();
     }
 
 
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
-        User user = userDAO.findById("1");
-        log.info("onSaveQualitativeA ::: user : {}", user);
+//        User user = userDAO.findById("1");
+//        log.info("onSaveQualitativeA ::: user : {}", user);
 //        WorkCase workCase  = workCaseDAO.findById(new Long(1));
 //        log.info("onSaveQualitativeA ::: workCase : {}", workCase);
 
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 1);
-        QualitativeView qualitativeView = new  QualitativeView();
+//        HttpSession session = FacesUtil.getSession(true);
+//        session.setAttribute("workCaseId", 1);
 
-//        QualityLevel qualityLevel = qualityLevelDAO.findById(qualitativeView.getQualityLevel().getId());
+//        if(qualitativeView.getId() == 0){
+//            qualitativeView.setCreateDate(DateTime.now().toDate());
+//        }
 
-        if(qualitativeView.getId() == 0){
-            qualitativeView.setCreateDate(DateTime.now().toDate());
-        }
+//        qualitativeView.setCreateBy(user);
 
-        qualitativeView.setCreateBy(user);
+//        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
 
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-//        qualitativeView.setQualityLevel(qualityLevel);
-
+        long workCaseId = 1;   // test to save data to DB
         log.info("qualitativeView :: {} ",qualitativeView.toString());
         qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
     }
 
     public void onSaveQualitativeB(){
         log.info(" onSaveQualitativeB :::");
-        User user = userDAO.findById("1");
-        log.info("onSaveQualitativeB ::: user : {}", user);
-
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 1);
-        QualitativeView qualitativeView = new  QualitativeView();
-
-        QualityLevel qualityLevel = qualityLevelDAO.findById(qualitativeView.getQualityLevel().getId());
-
-        if(qualitativeView.getId() == 0){
-            qualitativeView.setCreateDate(DateTime.now().toDate());
-        }
-
-        qualitativeView.setCreateBy(user);
-
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        qualitativeView.setQualityLevel(qualityLevel);
+//        User user = userDAO.findById("1");
+//        log.info("onSaveQualitativeB ::: user : {}", user);
+//
+//        HttpSession session = FacesUtil.getSession(true);
+//        session.setAttribute("workCaseId", 1);
+//
+//        if(qualitativeView.getId() == 0){
+//            qualitativeView.setCreateDate(DateTime.now().toDate());
+//        }
+//
+//        qualitativeView.setCreateBy(user);
+//
+//        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        long workCaseId = 2;  // test to save data to DB
+        log.info("qualitativeView :: {} ",qualitativeView.toString());
         qualitativeControl.saveQualitativeB(qualitativeView,workCaseId);
     }
 

@@ -90,6 +90,13 @@ public class QualitativeView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+
+    public  QualitativeView()
+    {
+        qualityLevel = new QualityLevel();
+    }
+
+
     public long getId() {
         return id;
     }
@@ -104,10 +111,6 @@ public class QualitativeView implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public void QualitativeView(){
-        qualityLevel = new QualityLevel();
     }
 
 

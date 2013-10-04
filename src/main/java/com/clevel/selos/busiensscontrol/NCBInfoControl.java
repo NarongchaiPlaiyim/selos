@@ -36,6 +36,10 @@ public class NCBInfoControl extends BusinessControl {
     @Inject
     NCBDetailDAO ncbDetailDAO;
 
+    @Inject
+    public void NCBInfoControl(){
+
+    }
 
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList){
         try{

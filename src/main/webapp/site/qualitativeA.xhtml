@@ -711,25 +711,34 @@
 
             <table class="table_content">
                 <tr>
-                    <td style="width: 330px;text-align: left">
+                    <td style="width: 20%;text-align: left">
                         <h:outputLabel value="สรุปการจัดชั้นหนี้"/>
                     </td>
-                    <td style="width: 500px;text-align: left">
-                        <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
-<!--                        <p:selectOneMenu id="dlgType"
-                                         value="#{qualitative.qualityLevel}"
-                                         styleClass="largest"
-                                         size="1"
-                                         required="#{not empty param[addRowData.clientId]}">
-                            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
-                            <f:selectItems value="#{qualitative.qualityLevelList}"
-                                           var="qualityLevel"
-                                           itemLabel="#{qualityLevel.description}"
-                                           itemValue="#{qualityLevel.id}"/>
-                        </p:selectOneMenu>-->
-                        <br/>
-                        <h:outputLabel value="เหตุผล :"/>
-                        <h:inputTextarea cols="90" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"/>
+                    <td style="width: 80%;text-align: left">
+                        <p:panel style="border-width: 0;" id="panelQualitative">
+                            <p:row>
+                                <p:column style="width:60%;text-align:left;">
+                                    <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"></h:outputLabel>
+                                    <p:selectOneMenu id="dlgQualityLevel"
+                                                     value="#{qualitative.qualitativeView.qualityLevel.id}"
+                                                     styleClass="largest"
+                                                     size="1"
+                                                     required="#{not empty param[addRowData.clientId]}">
+                                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                                        <f:selectItems value="#{qualitative.qualityLevelList}"
+                                                       var="qualityItemsA"
+                                                       itemLabel="#{qualityItemsA.description}"
+                                                       itemValue="#{qualityItemsA.id}"/>
+                                    </p:selectOneMenu>
+                                </p:column>
+                            </p:row>
+                            <p:row>
+                                <p:column style="width:60%;text-align:left;">
+                                    <h:outputLabel style=""  value="เหตุผล :"></h:outputLabel>
+                                    <h:inputTextarea cols="70" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"></h:inputTextarea>
+                                </p:column>
+                            </p:row>
+                        </p:panel>
                     </td>
                 </tr>
                 <tr>
@@ -801,7 +810,7 @@
                             <p:commandButton id="btnSave" value="Save"
                                              styleClass="medium"
                                              process=":frmMain"
-                                             action="#{qualitative.onSaveQualitativeA()}"
+                                             action="#{qualitative.onSaveQualitativeA}"
                                              update=":frmMain"/>
                             <p:commandButton value="Cancel" styleClass="small"/>
                         </td>

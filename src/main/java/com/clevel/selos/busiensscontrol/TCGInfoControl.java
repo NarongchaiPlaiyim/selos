@@ -41,6 +41,11 @@ public class TCGInfoControl extends BusinessControl {
     @Inject
     WorkCaseDAO workCaseDAO ;
 
+    @Inject
+    public void TCGInfoControl(){
+
+    }
+
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
         try{
             log.info("onSaveTCGToDB begin");
