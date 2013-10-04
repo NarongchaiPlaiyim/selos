@@ -305,6 +305,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
+    public void returnMaker(){
+
+    }
+
     //*** Function for PreScreen Checker ***//
     public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
