@@ -10,11 +10,19 @@
             <tr>
                 <td class="title">Assign to :</td>
                 <td>
-                    <p:selectOneMenu id="dlgSelectBDMChecker" size="1" style="width: 300px;"
+                    <!--<p:selectOneMenu id="dlgSelectBDMChecker" size="1" styleClass="width: 200px;"
                                      value="#{prescreenMaker.prescreenView.bdmChecker.id}"
                                      required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.bdmCheckerList}" var="bdmCheckerItem"
+                                       itemLabel="#{bdmCheckerItem.userName}"
+                                       itemValue="#{bdmCheckerItem.id}"/>
+                    </p:selectOneMenu>-->
+                    <p:selectOneMenu id="dlgSelectBDMChecker" value="#{prescreenMaker.prescreenView.checkerId}"
+                                     size="1" style="width: 200px;">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="1"/>
+                        <f:selectItems value="#{prescreenMaker.bdmCheckerList}"
+                                       var="bdmCheckerItem"
                                        itemLabel="#{bdmCheckerItem.userName}"
                                        itemValue="#{bdmCheckerItem.id}"/>
                     </p:selectOneMenu>
@@ -23,20 +31,20 @@
             <tr>
                 <td class="title">Remark :</td>
                 <td>
-                    <p:inputTextarea autoResize="false" cols="20" rows="5"></p:inputTextarea>
+                    <p:inputTextarea value="#{prescreenMaker.prescreenView.remark}" autoResize="false" cols="30" rows="5"></p:inputTextarea>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            id="btnSaveBusinessInfo"
+                            id="btnSubmitAssignChecker"
                             value="Submit"
                             styleClass="small"
-                            action="#{prescreenMaker.onAssignToChecker()}"
+                            action="#{prescreenMaker.onAssignToChecker}"
                             process="@form"
-                            update=":frmMain"
-                            oncomplete="handlePrescreenBusinessInfoRequest(xhr, status, args)"/>
-                    <p:commandButton value="Cancel" styleClass="small" onclick="businessDlg.hide()"/>
+                            update=":assignCheckerDlgForm"
+                            />
+                    <p:commandButton value="Cancel" styleClass="small" onclick="assignCheckerDlg.hide()"/>
                 </td>
             </tr>
         </table>

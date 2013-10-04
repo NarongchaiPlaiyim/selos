@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class AddressView implements Serializable{
-    private BigDecimal id;
+    private long id;
     private AddressType addressType;
     private String addressNo;
     private String moo;
@@ -28,11 +28,11 @@ public class AddressView implements Serializable{
 
     }
 
-    public BigDecimal getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(long id) {
         this.id = id;
     }
 

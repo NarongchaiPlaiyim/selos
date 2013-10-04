@@ -1,6 +1,5 @@
 package com.clevel.selos.util;
 
-import org.joda.time.DateTime;
 import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,6 +162,22 @@ public class Util {
             return "SL"+appRefNumber+"0"+count;
         } else {
             return "SL"+appRefNumber+count;
+        }
+    }
+
+    public static String getCurrentPage(){
+        String requestURL = FacesUtil.getRequest().getRequestURL().toString();
+        String url = requestURL.substring(0, requestURL.lastIndexOf("/"));
+        String page = "";
+        if(url != null){
+            page = requestURL.replace(url,"").replace("/","");
+        }
+        return page;
+    }
+
+    public static void listFields(HashMap<String,String> fields) {
+        for (Map.Entry<String, String> entry : fields.entrySet()) {
+            log.debug("key: {}, value: {}",entry.getKey(),entry.getValue());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.clevel.selos.busiensscontrol;
 
+import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.master.UserDAO;
@@ -11,10 +12,7 @@ import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.master.DocumentType;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
@@ -73,6 +71,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     JuristicDAO juristicDAO;
     @Inject
     UserDAO userDAO;
+    @Inject
+    ActionDAO actionDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -293,14 +293,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         bizInfoDAO.persist(bizInfoList);*/
     }
 
-    public void assignToChecker(long workCasePreScreenId){
+    public void assignToChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        Action action = actionDAO.findById(Long.parseLong(actionCode));
 
         //TODO getNextStep from BPM
-        //bpmInterface.dispatchCase("1002", workCasePrescreen.getWobNumber(), new HashMap<String, String>());
-        Step step = stepDAO.findById(new Long(1002));
-        workCasePrescreen.setStep(step);
-        workCasePrescreenDAO.persist(workCasePrescreen);
+        HashMap<String,String> fields = new HashMap<String, String>();
+        fields.put("Action_Code", Long.toString(action.getId()));
+        fields.put("Action_Name", action.getName());
+        fields.put("BDMCheckerUserName", checkerId);
+        bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
     //*** Function for PreScreen Checker ***//

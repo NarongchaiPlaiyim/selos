@@ -1,27 +1,22 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html">
 
-    <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
+    <!--<script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>-->
+    <h:outputScript library="js" name="jquery.menu.js"/>
     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css" />
 
     <script type="text/javascript">
+        //<![CDATA[
         $(document).ready(function(){
             selosmenu.init({
                 mainmenuid: "selosmenu", //menu DIV id
                 orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
                 classname: 'selosmenu'//, //class added to menu's outer DIV
             });
-
-            /*if($("#pagename").val() != undefined){
-                var pagename = $("#pagename").val();
-                $("#"+pagename).attr("class","current");
-                if($("#subpagename").val() != undefined){
-                    var subpagename = $("#subpagename").val();
-                    $("#"+subpagename).attr("class","current");
-                }
-            }*/
         });
+        //]]>
     </script>
 
     <div id="selosmenu" class="selosmenu">
