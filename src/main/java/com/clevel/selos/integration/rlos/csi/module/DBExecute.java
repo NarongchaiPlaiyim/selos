@@ -29,7 +29,7 @@ public class DBExecute implements Serializable{
     @Config(name = "interface.rlos.oracle.password")
     String rlosPassword;
     @Inject
-    @Config(name = "interface.rlos.oracle.table")
+    @Config(name = "interface.rlos.oracle.table.csi")
     String tableName;
 
     @Inject
