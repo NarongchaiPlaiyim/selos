@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.rlos.csi.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 public class CSIData implements Serializable{
@@ -83,5 +86,20 @@ public class CSIData implements Serializable{
 
     public void setDateWarningCode(String dateWarningCode) {
         this.dateWarningCode = dateWarningCode;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("citizenId", citizenId)
+                .append("passportNo", passportNo)
+                .append("businessRegNo", businessRegNo)
+                .append("nameTh", nameTh)
+                .append("nameEn", nameEn)
+                .append("warningCode", warningCode)
+                .append("source", source)
+                .append("dataDate", dataDate)
+                .append("dateWarningCode", dateWarningCode)
+                .toString();
     }
 }

@@ -24,7 +24,7 @@ public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
             csiDataList = csiService.getCSIData(userId,documentType,idNumber);
         } catch (Exception e){
             //todo: return fail result
-            log.error("{}",e);
+            log.error("get CSI data fail!",e);
         }
         return csiDataList;
     }

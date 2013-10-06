@@ -19,11 +19,11 @@ public class DBContext implements Serializable {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            log.error("",e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("",e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("",e);
         }
     }
 
@@ -34,7 +34,7 @@ public class DBContext implements Serializable {
         try {
             conn = DriverManager.getConnection(jdbcURL,user,password);
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Exception while connect to database!",e);
         }
         return conn;
     }
