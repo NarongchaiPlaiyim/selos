@@ -46,8 +46,7 @@ public class CSIService implements Serializable{
             rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.SUCCEED, resultDesc, responseTime, linkKey);
         }catch (Exception e){
             //save audit
-            e.printStackTrace();
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while get CSI data {}", e);
             rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.FAILED, resultDesc, responseTime, linkKey);
             throw new Exception(e.getMessage());
         }

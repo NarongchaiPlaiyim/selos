@@ -92,7 +92,7 @@ public class DBExecute implements Serializable{
             conn.close();
             conn = null;
             log.debug("connection closed.");
-            log.info("Finished executing csi query , data size. ({})",csiDataList.size());
+            log.debug("Finished executing csi query , data size. ({})",csiDataList.size());
         } catch (SQLException e) {
             log.error("execute query exception!",e);
             csiDataList = null;
