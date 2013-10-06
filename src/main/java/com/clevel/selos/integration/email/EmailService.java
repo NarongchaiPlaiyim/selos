@@ -1,20 +1,14 @@
 package com.clevel.selos.integration.email;
 
-import com.clevel.selos.exception.EmailException;
+import com.clevel.selos.exception.EmailInterfaceException;
 import com.clevel.selos.integration.Email;
 import com.clevel.selos.system.Application;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.io.*;
-import java.util.Date;
 import java.util.Map;
-import java.util.Properties;
 
 public abstract class EmailService implements Serializable {
     @Inject
@@ -26,13 +20,13 @@ public abstract class EmailService implements Serializable {
     private static final String FILE_ENCODE = "UTF-8";
     protected static String emailTemplate;
 
-    public void sendMail(String toAddress,String subject,String ccAddress,Map<String,String> valuesMap) throws EmailException {
+    public void sendMail(String toAddress,String subject,String ccAddress,Map<String,String> valuesMap) throws EmailInterfaceException {
         log.debug("sendMail. (toAddress: {}, subject: {}, ccAddress: {})",toAddress,subject,ccAddress);
 //        log.debug("SMTP host : {}",app.getEmailServer());
 //
 //        if (toAddress == null || "".equalsIgnoreCase(toAddress.trim())) {
 //            log.debug("empty email! do nothing.");
-//            throw new EmailException(msg.key("app.email.exception.address"));
+//            throw new EmailInterfaceException(msg.key("app.email.exception.address"));
 //        }
 //
 //        Properties p = new Properties();
@@ -57,16 +51,16 @@ public abstract class EmailService implements Serializable {
 //            Transport.send(msg);
 //        } catch (AuthenticationFailedException e) {
 //            log.error("",e);
-//            throw new EmailException("Email login failed!",e);
+//            throw new EmailInterfaceException("Email login failed!",e);
 //        } catch (AddressException e) {
 //            log.error("",e);
-//            throw new EmailException("Email address invalid!",e);
+//            throw new EmailInterfaceException("Email address invalid!",e);
 //        } catch (MessagingException e) {
 //            log.error("",e);
-//            throw new EmailException("Email could not be sent!",e);
+//            throw new EmailInterfaceException("Email could not be sent!",e);
 //        } catch (Exception e) {
 //            log.error("Email Exception!",e);
-//            throw new EmailException("Email could not be sent!",e);
+//            throw new EmailInterfaceException("Email could not be sent!",e);
 //        }
     }
 
