@@ -5,13 +5,14 @@ import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.tool.DBContext;
 import com.clevel.selos.system.Config;
-import oracle.jdbc.driver.OracleTypes;
-import oracle.jdbc.driver.OracleCallableStatement;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
