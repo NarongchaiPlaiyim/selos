@@ -1,15 +1,22 @@
 package com.clevel.selos.security;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.exception.ApplicationRuntimeException;
+import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMS;
+import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SecurityAuditor;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,10 +26,12 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -44,24 +53,51 @@ public class LoginBean {
     private String password;
 
     @Inject
+    LDAPInterface ldapInterface;
+    @Inject
+    BPMInterface bpmInterface;
+
+    @Inject
+    @Config(name = "interface.ldap.enable")
+    String ldapEnable;
+
+    @Inject
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value="#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
 
     public String login() {
         log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
+
+        // make authentication with AD first
+        if (Util.isTrue(ldapEnable)) {
+            log.debug("LDAP authentication enabled.");
+            try {
+                ldapInterface.authenticate(userName,password);
+            } catch (ApplicationRuntimeException e) {
+                log.debug("LDAP authentication failed! (user: {})", userName.trim());
+                securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
+                return "failed";
+            }
+        }
+
+        // find user profile in database
         User user = userDAO.findById(userName.trim());
-        HttpServletRequest httpServletRequest = FacesUtil.getRequest();
-        HttpServletResponse httpServletResponse = FacesUtil.getResponse();
-        if (user == null) {
+        UserDetail userDetail = null;
+        try {
+            userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+        } catch (EntityNotFoundException e) {
             log.debug("user not found in system! (user: {})", userName.trim());
             securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
-            return "unSecured";
+            return "failed";
         }
-        UserDetail userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+
         try {
+            HttpServletRequest httpServletRequest = FacesUtil.getRequest();
+            HttpServletResponse httpServletResponse = FacesUtil.getResponse();
             UsernamePasswordAuthenticationToken request = new UsernamePasswordAuthenticationToken(userDetail, this.getPassword());
             request.setDetails(new WebAuthenticationDetails(httpServletRequest));
+
             Authentication result = authenticationManager.authenticate(request);
             log.debug("authentication result: {}", result);
             SecurityContextHolder.getContext().setAuthentication(result);
@@ -73,14 +109,19 @@ public class LoginBean {
             httpSession.setAttribute("language", Language.EN);
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "",new Date());
-            HttpSession session = FacesUtil.getSession(false);
-            session.setAttribute("sess_user", user);
+
+            //todo: to be confirmed
+            httpSession.setAttribute("sess_user", user);
+
             return user.getRole().getRoleType().getRoleTypeName().name();
+        } catch (ApplicationRuntimeException e) {
+            securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
+            log.debug("login failed!. ({})", e.getMessage());
         } catch (AuthenticationException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
         }
-        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
+//        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
     }
 

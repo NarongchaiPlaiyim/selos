@@ -109,6 +109,20 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
+    public void authenticate(String userName,String password) {
+        log.debug("BPM authentication");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserName(userName);
+        userDTO.setPassword(password);
+        try {
+            new BPMServiceImpl(userDTO,getConfigurationDTO());
+        } catch (SELOSBPMException e) {
+            log.error("Exception while authentication with BPM!",e);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
+        }
+    }
+
+    @Override
     public List<CaseDTO> getInboxList() {
         log.debug("getInboxList.");
         List<CaseDTO> caseDTOs;
