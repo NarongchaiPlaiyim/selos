@@ -14,11 +14,18 @@ public interface ExceptionMapping {
     public static final String BPM_UNLOCK_CASE_EXCEPTION = "014";
     public static final String BPM_AUTHENTICATION_FAILED = "015";
 
+    //Email exception
+    public static final String EMAIL_EMPTY_ADDRESS = "020";
+    public static final String EMAIL_AUTHENTICATION_FAILED = "021";
+    public static final String EMAIL_INVALID_ADDRESS = "022";
+    public static final String EMAIL_COULD_NOT_BE_SENT = "023";
+    public static final String EMAIL_EXCEPTION = "024";
+    public static final String EMAIL_TEMPLATE_NOT_FOUND = "025";
+
     public static final String RM_SERVICE_FAILED = "500";
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
     public static final String RM_FAIL = "502";
     public static final String RM_DATA_NOT_FOUND = "503";
     public static final String RM_CUSTOMER_RESULT_MULTIPLE = "504";
-
 
 }
