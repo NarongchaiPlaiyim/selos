@@ -8,7 +8,10 @@ import java.util.Date;
 
 public class NCBInfoView implements Serializable {
     private long id;
+    private String ncbCusMarriageStatus;
     private Date checkingDate;
+    private Date ncbLastInfoAsOfDate;
+    private String enquiry ;
     private int checkIn6Month;
     private String paymentClass;
     private String personalId;
@@ -31,6 +34,9 @@ public class NCBInfoView implements Serializable {
     private String remark;
     private TDRCondition tdrCondition;
     private Customer customer;
+    private String ncbCusName;
+    private String ncbCusAddress;
+
 
 
     public void NcbResultView() {
@@ -57,6 +63,8 @@ public class NCBInfoView implements Serializable {
         this.remark = "";
         this.tdrCondition = new TDRCondition();
         this.customer = new Customer();
+        this.ncbCusName = "";
+        this.ncbCusAddress = "";
     }
 
     public long getId() {
@@ -251,5 +259,43 @@ public class NCBInfoView implements Serializable {
         this.customer = customer;
     }
 
+    public String getNcbCusMarriageStatus() {
+        return ncbCusMarriageStatus;
+    }
 
+    public void setNcbCusMarriageStatus(String ncbCusMarriageStatus) {
+        this.ncbCusMarriageStatus = ncbCusMarriageStatus;
+    }
+
+    public Date getNcbLastInfoAsOfDate() {
+        return ncbLastInfoAsOfDate;
+    }
+
+    public void setNcbLastInfoAsOfDate(Date ncbLastInfoAsOfDate) {
+        this.ncbLastInfoAsOfDate = ncbLastInfoAsOfDate;
+    }
+
+    public String getEnquiry() {
+        return enquiry;
+    }
+
+    public void setEnquiry(String enquiry) {
+        this.enquiry = enquiry;
+    }
+
+    public String getNcbCusName() {
+        return ncbCusName;
+    }
+
+    public void setNcbCusName(String ncbCusName) {
+        this.ncbCusName = ncbCusName;
+    }
+
+    public String getNcbCusAddress() {
+        return ncbCusAddress;
+    }
+
+    public void setNcbCusAddress(String ncbCusAddress) {
+        this.ncbCusAddress = ncbCusAddress;
+    }
 }

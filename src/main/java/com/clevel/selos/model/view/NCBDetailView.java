@@ -9,9 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class NCBDetailView implements Serializable {
 
@@ -42,6 +40,7 @@ public class NCBDetailView implements Serializable {
     private BigDecimal month4;
     private BigDecimal month5;
     private BigDecimal month6;
+    private boolean wcFlag;
 
     public NCBDetailView() {
         reset();
@@ -60,7 +59,8 @@ public class NCBDetailView implements Serializable {
         this.noOfOutstandingPaymentIn12months = new BigDecimal(0);
         this.noOfOverLimit = 0;
         this.refinanceFlag = false;
-        this.monthsPaymentFlag = true;
+        this.monthsPaymentFlag = false;
+        this.monthsPaymentFlag = false;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
         this.tdrCondition = new TDRCondition();
@@ -74,7 +74,7 @@ public class NCBDetailView implements Serializable {
         this.month4 = new BigDecimal(0);
         this.month5 = new BigDecimal(0);
         this.month6 = new BigDecimal(0);
-
+        this.wcFlag = false;
     }
 
     public long getId() {
@@ -295,6 +295,14 @@ public class NCBDetailView implements Serializable {
         this.month6 = month6;
     }
 
+    public boolean isWcFlag() {
+        return wcFlag;
+    }
+
+    public void setWcFlag(boolean wcFlag) {
+        this.wcFlag = wcFlag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -325,6 +333,7 @@ public class NCBDetailView implements Serializable {
                 .append("month4", month4)
                 .append("month5", month5)
                 .append("month6", month6)
+                .append("wcFlag", wcFlag)
                 .toString();
     }
 }

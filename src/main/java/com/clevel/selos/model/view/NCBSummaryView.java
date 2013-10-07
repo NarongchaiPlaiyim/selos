@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class NCBSummaryView implements Serializable {
 
     private String cusName;
-    private String cusType;
     private String personalID;
     private String noOfNCBCheckIn6months;
     private String typeOfCurrentPayment;
@@ -26,13 +25,6 @@ public class NCBSummaryView implements Serializable {
         this.cusName = cusName;
     }
 
-    public String getCusType() {
-        return cusType;
-    }
-
-    public void setCusType(String cusType) {
-        this.cusType = cusType;
-    }
 
     public String getPersonalID() {
         return personalID;

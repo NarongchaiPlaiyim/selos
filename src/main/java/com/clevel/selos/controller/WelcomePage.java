@@ -7,6 +7,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -25,6 +26,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -70,6 +72,8 @@ public class WelcomePage implements Serializable {
     RMInterface rm;
     @Inject
     BRMSInterface brms;
+    @Inject
+    RLOSInterface rlos;
 
     //user auditor
     @Inject
@@ -108,6 +112,17 @@ public class WelcomePage implements Serializable {
         try {
             List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new PreScreenRequest());
             log.debug("{}",preScreenResponseList);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+        log.debug("system: {}",system);
+    }
+
+    public void testRLOSCSI() {
+        try{
+            List<CSIData> csiDataList = new ArrayList<CSIData>();
+            csiDataList = rlos.getCSIData("10001", RLOSInterface.DocumentType.CITIZEN_ID,"123456");
+            log.debug("csi data size : {}",csiDataList.size());
         } catch (Exception e) {
             log.error("",e);
         }
