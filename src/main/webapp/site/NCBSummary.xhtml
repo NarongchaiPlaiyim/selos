@@ -43,7 +43,7 @@
                                                 <tr>
                                                     <td>
                                                         <p:dataTable id="ncbSum" var="item" value="#{ncbSummary.ncbSumList}"
-                                                                     paginator="false" rowKey="#{item.ncbSum}" rowIndexVar="rowIndex">
+                                                                     paginator="false" rowKey="#{item.NCBSummaryView}" rowIndexVar="rowIndex">
 
                                                             <p:column headerText="No." styleClass="center" style="width:22px;">
                                                                 <h:outputText value="#{rowIndex+1}"/>
@@ -51,10 +51,6 @@
 
                                                             <p:column headerText="#{msg.get('app.cusName')}"  styleClass="center" style="width: 150px;">
                                                                 <h:outputText value="#{item.cusName}"/>
-                                                            </p:column>
-
-                                                            <p:column headerText="#{msg.get('app.cusType')}" styleClass="center" style="width: 80px;">
-                                                                <h:outputText value="#{item.cusType}"/>
                                                             </p:column>
 
                                                             <p:column headerText="#{msg.get('app.personalId')}" styleClass="center" style="width: 70px;">
@@ -88,69 +84,16 @@
 
                                                             <p:column headerText="" styleClass="center" style="width:54px;">
                                                                 <p:commandButton icon="ui-icon-pencil"
-                                                                                 onclick="document.location.replace('fullappNcbDetail.jsf');return;"
-                                                                                 update=":ncbDlgForm" />
+                                                                                 onclick="document.location.replace('NCBInfo.jsf');return;" />
                                                             </p:column>
 
                                                         </p:dataTable>
                                                     </td>
                                                 </tr>
                                             </table>
-<!--                                            <table class="table_content">
-                                                <tr>
-                                                    <th style="width: 30px;line-height: 15px;">No.</th>
-                                                    <th style="width: 210px;line-height: 15px;">Customer Name</th>
-                                                    <th style="width: 80px;line-height: 15px;">Customer Type</th>
-                                                    <th style="width: 110px;line-height: 15px;">Citizen ID/ Registration ID</th>
-                                                    <th style="width: 80px;line-height: 15px;">จำนวนการสืบค้นข้อมูลในช่วง 6 เดือน</th>
-                                                    <th style="width: 80px;line-height: 15px;">การชำระหนี้ ณ ปัจจุบัน</th>
-                                                    <th style="width: 80px;line-height: 15px;">ประวัติการชำระหนี้</th>
-                                                    <th style="width: 80px;line-height: 15px;">ประวัติการเป็นหนี้ NPL</th>
-                                                    <th style="width: 80px;line-height: 15px;">ประวัติการทำ TDR</th>
-                                                    <th style="width: 250px;line-height: 15px;">เงื่อนไขการชำระหนี้ TDR</th>
-                                                    <th style="width: 50px"></th>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center" style="line-height: 15px">1</td>
-                                                    <td class="center" style="line-height: 15px">Mr.A Example</td>
-                                                    <td class="center" style="line-height: 15px">Individual</td>
-                                                    <td class="center" style="line-height: 15px">312320123123</td>
-                                                    <td class="center result_green" style="line-height: 15px">3</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
-                                                    <td class="option">
-                                                        <p:commandButton icon="ui-icon-pencil" title="Edit"
-                                                                         onclick="document.location.replace('fullappNcbDetail.jsf');return;"/>
-                                                        &lt;!&ndash;p:commandButton icon="ui-icon-trash" title="Remove"/&ndash;&gt;
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="center" style="line-height: 15px">2</td>
-                                                    <td class="center" style="line-height: 15px">Mr.B Example</td>
-                                                    <td class="center" style="line-height: 15px">Individual</td>
-                                                    <td class="center" style="line-height: 15px">412420124124</td>
-                                                    <td class="center result_green" style="line-height: 15px">1</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center result_green" style="line-height: 15px">GREEN</td>
-                                                    <td class="center">ไม่เคยปรับปรุงโครงสร้างหนี้</td>
-                                                    <td class="option">
-                                                        <p:commandButton icon="ui-icon-pencil" title="Edit"
-                                                                         onclick="document.location.replace('fullapppNcbdetail.jsf');return;"/>
-                                                        &lt;!&ndash;p:commandButton icon="ui-icon-trash" title="Remove"/&ndash;&gt;
-                                                    </td>
-                                                </tr>
-                                            </table>-->
                                         </td>
                                     </tr>
-
                                 </table>
-
-
                                 <!-- end content -->
                             </div>
                         </div>
@@ -165,11 +108,6 @@
                 </div>
             </h:form>
         </p:panel>
-
-        <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-                  modal="true" width="520" height="300">
-            <ui:include src="dialog/fullappNcbDialog.xhtml"/>
-        </p:dialog>
 
     </h:body>
 </f:view>
