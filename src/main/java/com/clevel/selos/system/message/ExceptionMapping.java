@@ -14,6 +14,7 @@ public interface ExceptionMapping {
     public static final String BPM_UNLOCK_CASE_EXCEPTION = "014";
     public static final String BPM_AUTHENTICATION_FAILED = "015";
 
+    public static final String RM_SERVICE_FAILED = "500";
     public static final String HOST_PARAMETER_IS_NULL = "501";
     public static final String FAIL = "502";
     public static final String DATA_NOT_FOUND = "503";
