@@ -110,9 +110,6 @@ public class LoginBean {
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "",new Date());
 
-            //todo: to be confirmed
-            httpSession.setAttribute("userId", user.getId());
-
             return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (ApplicationRuntimeException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());

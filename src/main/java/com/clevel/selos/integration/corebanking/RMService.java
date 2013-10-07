@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.corebanking;
 
+import com.clevel.selos.exception.RMInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.corebanking.model.SearchIndividual;
@@ -364,11 +365,10 @@ public class RMService implements Serializable {
                 throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new Exception(e.getMessage());
+            throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
         }
         log.debug("IndividualService() END");
         return individualModel;

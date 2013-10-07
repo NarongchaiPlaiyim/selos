@@ -7,9 +7,18 @@ public abstract class ApplicationRuntimeException extends RuntimeException {
     String code;
     String message;
 
-    protected ApplicationRuntimeException(Throwable cause, String code, String message) {
+    public ApplicationRuntimeException(Throwable cause, String code, String message) {
         super(cause);
         this.code = code;
+        this.message = message;
+    }
+
+    public ApplicationRuntimeException(String code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public ApplicationRuntimeException(String message) {
         this.message = message;
     }
 
