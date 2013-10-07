@@ -14,7 +14,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Serializable;
 
-public class NCBInterfaceImpTest implements NCBInterface, Serializable {
+public class NCBInterfaceImpTest implements Serializable {
     @Inject
     @NCB
     Logger log;
@@ -23,7 +23,7 @@ public class NCBInterfaceImpTest implements NCBInterface, Serializable {
     public NCBInterfaceImpTest() {
     }
 
-    @Override
+   /* @Override
     public NCRSResponseModel request(NCRSModel ncrsModel) throws Exception {
         log.debug("NCRS request(NCRSModel : {})",ncrsModel.toString());
         String path = "D:\\Response.TXT".replace("\\","/");
@@ -57,5 +57,5 @@ public class NCBInterfaceImpTest implements NCBInterface, Serializable {
         xStream.processAnnotations(NCCRSResponseModel.class);
         responseModel = (NCCRSResponseModel)xStream.fromXML(stringBuffer.toString());
         return responseModel;
-    }
+    }  */
 }
