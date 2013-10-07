@@ -2,10 +2,15 @@ package com.clevel.selos.integration;
 
 import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.models.response.NCRSResponseModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
+
+import java.util.ArrayList;
 
 public interface NCBInterface {
-    public NCRSResponseModel request(NCRSModel ncrsModel)throws Exception;
-    public NCCRSResponseModel request(NCCRSInputModel nccrsModel)throws Exception;
+    public ArrayList<NCRSOutputModel> request(NCRSInputModel inputModel)throws Exception;
+    public ArrayList<NCCRSOutputModel> request(NCCRSInputModel inputModel)throws Exception;
 }
