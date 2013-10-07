@@ -51,7 +51,6 @@ public class BaseController implements Serializable {
             manageButton.setCheckNCBButton(true);
         }
 
-        user = (User)session.getAttribute("sess_user");
     }
 
     public ManageButton getManageButton() {
