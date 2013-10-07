@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.bpm;
 
+import com.clevel.selos.exception.BPMInterfaceException;
 import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
-import com.clevel.selos.filenet.bpm.connection.helper.SELOSConnectionHelper;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.filenet.bpm.services.exception.SELOSBPMException;
 import com.clevel.selos.filenet.bpm.services.impl.BPMServiceImpl;
@@ -13,20 +13,16 @@ import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.ws.WSDataPersist;
-import com.filenet.api.core.Connection;
-import com.filenet.api.core.Domain;
-import com.filenet.api.core.Factory;
-import com.filenet.api.core.ObjectStore;
-import com.filenet.api.util.UserContext;
-import filenet.vw.api.VWSession;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.security.auth.Subject;
 import java.io.Serializable;
 import java.util.*;
 
@@ -68,6 +64,10 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     WSDataPersist wsDataPersist;
 
     @Inject
+    @ExceptionMessage
+    Message msg;
+
+    @Inject
     public BPMInterfaceImpl() {
     }
 
@@ -76,7 +76,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         log.debug("createCase. (detail: {})",caseCreationHistory);
         boolean success = true;
 
-        log.debug("ceuri: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
+        log.debug("CE URI: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
 
         HashMap<String,String> caseParameter = new HashMap<String, String>();
         caseParameter.put("JobName",caseCreationHistory.getJobName());
@@ -101,7 +101,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             success = false;
             caseCreationHistory.setStatus(IntegrationStatus.FAILED);
             caseCreationHistory.setStatusDetail(e.getMessage());
-            log.error("Exception while create case in BPM!",e);
+            log.error(msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION),e);
         }
 
         wsDataPersist.addNewCase(caseCreationHistory);
@@ -109,14 +109,29 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     }
 
     @Override
+    public void authenticate(String userName,String password) {
+        log.debug("BPM authentication");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserName(userName);
+        userDTO.setPassword(password);
+        try {
+            new BPMServiceImpl(userDTO,getConfigurationDTO());
+        } catch (SELOSBPMException e) {
+            log.error("Exception while authentication with BPM!",e);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
+        }
+    }
+
+    @Override
     public List<CaseDTO> getInboxList() {
         log.debug("getInboxList.");
-        List<CaseDTO> caseDTOs = Collections.emptyList();
+        List<CaseDTO> caseDTOs;
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             caseDTOs = bpmService.getCases(BPMConstants.BPM_QUEUE_PERSONAL_INBOX_NAME,BPMConstants.BPM_QUEUE_TYPE_PERSONALQ,null,null);
-        } catch (SELOSBPMException e) {
-            log.error("Exception while create case in BPM!",e);
+        } catch (Exception e) {
+            log.error("Exception while get inbox list in BPM!",e);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION,msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
         }
 
         log.debug("getInboxList. (result size: {})",caseDTOs.size());
@@ -129,10 +144,34 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         Util.listFields(fields);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
-            bpmService.lockCase(queueName,wobNumber);
             bpmService.dispatchCase(queueName,wobNumber,fields);
         } catch (SELOSBPMException e) {
             log.error("Exception while dispatch case in BPM!",e);
+            throw new BPMInterfaceException(e,ExceptionMapping.BPM_DISPATCH_EXCEPTION,msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
+        }
+    }
+
+    @Override
+    public void lockCase(String queueName, String wobNumber) {
+        log.debug("lockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            bpmService.lockCase(queueName,wobNumber);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while locking case in BPM!",e);
+            throw new BPMInterfaceException(e,ExceptionMapping.BPM_LOCK_CASE_EXCEPTION,msg.get(ExceptionMapping.BPM_LOCK_CASE_EXCEPTION));
+        }
+    }
+
+    @Override
+    public void unLockCase(String queueName, String wobNumber) {
+        log.debug("unLockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        try {
+            BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
+            bpmService.unLockCase(queueName, wobNumber);
+        } catch (SELOSBPMException e) {
+            log.error("Exception while unlocking case in BPM!",e);
+            throw new BPMInterfaceException(e,ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION,msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION));
         }
     }
 

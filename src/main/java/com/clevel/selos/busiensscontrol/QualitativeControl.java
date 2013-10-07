@@ -23,7 +23,7 @@ import javax.inject.Inject;
 
 
 @Stateless
-public class QualitativeControl extends BusinessControl{
+public class QualitativeControl extends BusinessControl {
 
     @Inject
     Logger log;
@@ -42,27 +42,46 @@ public class QualitativeControl extends BusinessControl{
 
 
     @Inject
-    public QualitativeControl(){
+    public QualitativeControl() {
 
     }
 
-    public void saveQualitativeA(QualitativeView qualitativeAView , long workCaseId){
-        WorkCase workCase  = workCaseDAO.findById(workCaseId);
-        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView,workCase);
-        qualitativeADAO.persist(qualitativeA);
+    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId) {
+        try {
+            log.info("start saveQualitativeA ::: ");
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
+            qualitativeADAO.persist(qualitativeA);
+        } catch (Exception e) {
+            log.error("saveQualitativeA error" + e);
+        } finally {
+
+            log.info("saveQualitativeA end");
+        }
+
     }
 
-    public void saveQualitativeB(QualitativeView qualitativeBView , long workCaseId){
-        WorkCase workCase  = workCaseDAO.findById(workCaseId);
-        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
-        qualitativeBDAO.persist(qualitativeB);
+    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId) {
+        try {
+            log.info("start saveQualitativeB ::: ");
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
+            QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
+            qualitativeBDAO.persist(qualitativeB);
+        } catch (Exception e) {
+            log.error("saveQualitativeB error" + e);
+        } finally {
+
+            log.info("saveQualitativeB end");
+        }
+
     }
 
-    public void save(WorkCase workCase){
+
+    public void save(WorkCase workCase) {
         workCaseDAO.persist(workCase);
     }
 
-    public void delete(WorkCase workCase){
+    public void delete(WorkCase workCase) {
         workCaseDAO.delete(workCase);
     }
 }

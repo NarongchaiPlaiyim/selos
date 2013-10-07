@@ -131,8 +131,8 @@ public class TCGInfo implements Serializable {
         log.info("onAddCollateralDetail :: reset form");
         modeForButton = "add";
         TCGDetailView = new TCGDetailView();
-//        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
-//        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
+        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
+        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
         TCGDetailView.setProposeInThisRequest(false);
     }
 

@@ -41,7 +41,7 @@ public class CustomerInfoView implements Serializable {
     private Date dateOfRegister;
     private Gender gender;
     private int age;
-    private Nationality origin;
+    private Race origin;
     private Nationality nationality;
     private Education education;
     private Occupation occupation;
@@ -98,7 +98,7 @@ public class CustomerInfoView implements Serializable {
         this.dateOfRegister = new Date();
         //this.gender = new Gender(0);
         this.age = 0;
-        this.origin = new Nationality();
+        this.origin = new Race();
         this.nationality = new Nationality();
         this.education = new Education();
         this.occupation = new Occupation();
@@ -331,11 +331,11 @@ public class CustomerInfoView implements Serializable {
         this.age = age;
     }
 
-    public Nationality getOrigin() {
+    public Race getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Nationality origin) {
+    public void setOrigin(Race origin) {
         this.origin = origin;
     }
 

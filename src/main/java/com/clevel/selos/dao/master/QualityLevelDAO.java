@@ -17,12 +17,4 @@ public class QualityLevelDAO extends GenericDAO<QualityLevel, Long> {
     public QualityLevelDAO() {
     }
 
-    @Override
-    public List<QualityLevel> findAll() {
-        Criteria criteria = getSession().createCriteria(getEntityClass())
-                .add(Restrictions.eq("active", 1));
-        List<QualityLevel> list = criteria.list();
-        return list;
-    }
-
 }

@@ -3,27 +3,30 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.stp.STPExecutor;
-import com.clevel.selos.filenet.bpm.connection.dto.UserDTO;
+import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
-import com.clevel.selos.system.message.ExceptionMessage;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.NormalMessage;
-import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.system.message.*;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +72,8 @@ public class WelcomePage implements Serializable {
     RMInterface rm;
     @Inject
     BRMSInterface brms;
+    @Inject
+    RLOSInterface rlos;
 
     //user auditor
     @Inject
@@ -113,6 +118,17 @@ public class WelcomePage implements Serializable {
         log.debug("system: {}",system);
     }
 
+    public void testRLOSCSI() {
+        try{
+            List<CSIData> csiDataList = new ArrayList<CSIData>();
+            csiDataList = rlos.getCSIData("10001", RLOSInterface.DocumentType.CITIZEN_ID,"123456");
+            log.debug("csi data size : {}",csiDataList.size());
+        } catch (Exception e) {
+            log.error("",e);
+        }
+        log.debug("system: {}",system);
+    }
+
     @PostConstruct
     public void onCreation() {
         log.debug("onCreation.");
@@ -136,6 +152,20 @@ public class WelcomePage implements Serializable {
         validationStr = validationMsg.get("002");
         exceptionStr = exceptionMsg.get("501");
         log.debug("v: {}, e: {}",validationStr,exceptionStr);
+    }
+
+    public void testException() {
+        log.debug("testException");
+        try {
+            bpmInterface.getInboxList();
+//            throw new BPMInterfaceException(null,"101","test BPM exception!");
+//            throw new EmailInterfaceException(null,"XXX","test EMAIL exception!");
+        } catch (ApplicationRuntimeException e) {
+            log.error("",e);
+            log.debug("cause stack: {}", ExceptionUtils.getStackTrace(e.getCause()));
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Runtime exception!","Exception Code: "+ e.getCode()+", Message: "+e.getMessage() +", stack trace: "+ ExceptionUtils.getMessage(e.getCause()));
+            RequestContext.getCurrentInstance().showMessageInDialog(message);
+        }
     }
 
     public void reloadConfig() {

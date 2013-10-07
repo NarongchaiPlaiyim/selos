@@ -1,8 +1,12 @@
 package com.clevel.selos.util;
 
+import com.clevel.selos.exception.ApplicationRuntimeException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;

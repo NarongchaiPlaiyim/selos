@@ -563,29 +563,4 @@ public class NCRSImp implements NCRS, Serializable{
             return inquiryStatus;
         }
     }
-        /*if(null != responseModel.getBodyModel()){
-            if(null != responseModel.getBodyModel().getTransaction()){
-                if(null != responseModel.getBodyModel().getTransaction().getTuefresponse()){
-                    if(null != responseModel.getBodyModel().getTransaction().getTuefresponse().getSubject()){
-                        ArrayList<SubjectModel> subjectModelArrayList = responseModel.getBodyModel().getTransaction().getTuefresponse().getSubject();
-                        for(SubjectModel subjectModel : subjectModelArrayList){
-                            if(0<subjectModel.getAccount().size()&&null!=subjectModel){
-                                inquiryStatus = "01";
-                                return inquiryStatus;
-                            }
-                        }
-                    } else {
-                        return inquiryStatus;
-                    }
-                } else {
-                    return inquiryStatus;
-                }
-            } else {
-                return inquiryStatus;
-            }
-        } else {
-            return inquiryStatus;
-        }
-        return inquiryStatus;
-    }    */
 }
