@@ -10,9 +10,12 @@ import com.clevel.selos.filenet.bpm.util.resources.BPMConfigurationsDTO;
 import com.clevel.selos.integration.BPM;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.audit.BPMAuditor;
+import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -45,12 +48,6 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Config(name = "interface.bpm.pe.connectionPoint")
     String connectionPoint;
     @Inject
-    @Config(name = "interface.bpm.client.date.format")
-    String clientDateFormat;
-    @Inject
-    @Config(name = "interface.bpm.system.field.inbox")
-    String inboxFields;
-    @Inject
     @Config(name = "interface.bpm.workflow.name")
     String workflowName;
     @Inject
@@ -62,6 +59,9 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
     @Inject
     WSDataPersist wsDataPersist;
+    @Inject
+    @BPM
+    SystemAuditor bpmAuditor;
 
     @Inject
     @ExceptionMessage
@@ -75,7 +75,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     public boolean createCase(CaseCreationHistory caseCreationHistory){
         log.debug("createCase. (detail: {})",caseCreationHistory);
         boolean success = true;
-
+        Date now = new Date();
         log.debug("CE URI: {}, username: {}, password: {}", ceURI, bpmUsername, bpmPassword);
 
         HashMap<String,String> caseParameter = new HashMap<String, String>();
@@ -97,11 +97,14 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(),getConfigurationDTO());
             bpmService.launchCase(caseParameter);
+            log.debug("BPM launch case successful.");
+            bpmAuditor.add(bpmUsername,"createCase","",now, ActionResult.SUCCEED,"",now,Util.getLinkKey(bpmUsername));
         } catch (SELOSBPMException e) {
             success = false;
             caseCreationHistory.setStatus(IntegrationStatus.FAILED);
             caseCreationHistory.setStatusDetail(e.getMessage());
-            log.error(msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION),e);
+            log.error(msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), e);
+            bpmAuditor.add(bpmUsername, "createCase", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(bpmUsername));
         }
 
         wsDataPersist.addNewCase(caseCreationHistory);
@@ -111,13 +114,16 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public void authenticate(String userName,String password) {
         log.debug("BPM authentication");
+        Date now = new Date();
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName(userName);
         userDTO.setPassword(password);
         try {
             new BPMServiceImpl(userDTO,getConfigurationDTO());
+            bpmAuditor.add(userName,"Authenticate","",now, ActionResult.SUCCEED,"",now,Util.getLinkKey(userName));
         } catch (SELOSBPMException e) {
             log.error("Exception while authentication with BPM!",e);
+            bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(userName));
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
         }
     }
@@ -125,12 +131,15 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public List<CaseDTO> getInboxList() {
         log.debug("getInboxList.");
+        Date now = new Date();
         List<CaseDTO> caseDTOs;
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             caseDTOs = bpmService.getCases(BPMConstants.BPM_QUEUE_PERSONAL_INBOX_NAME,BPMConstants.BPM_QUEUE_TYPE_PERSONALQ,null,null);
+            bpmAuditor.add(getUserDTO().getUserName(),"getInboxList","",now, ActionResult.SUCCEED,"",now,Util.getLinkKey(getUserDTO().getUserName()));
         } catch (Exception e) {
             log.error("Exception while get inbox list in BPM!",e);
+            bpmAuditor.add(getUserDTO().getUserName(), "getInboxList", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(getUserDTO().getUserName()));
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_GET_INBOX_EXCEPTION,msg.get(ExceptionMapping.BPM_GET_INBOX_EXCEPTION));
         }
 
@@ -141,12 +150,15 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public void dispatchCase(String queueName,String wobNumber,HashMap<String,String> fields) {
         log.debug("dispatchCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        Date now = new Date();
         Util.listFields(fields);
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             bpmService.dispatchCase(queueName,wobNumber,fields);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.SUCCEED, "", now, Util.getLinkKey(getUserDTO().getUserName()));
         } catch (SELOSBPMException e) {
             log.error("Exception while dispatch case in BPM!",e);
+            bpmAuditor.add(getUserDTO().getUserName(), "dispatchCase", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(getUserDTO().getUserName()));
             throw new BPMInterfaceException(e,ExceptionMapping.BPM_DISPATCH_EXCEPTION,msg.get(ExceptionMapping.BPM_DISPATCH_EXCEPTION));
         }
     }
@@ -154,11 +166,14 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public void lockCase(String queueName, String wobNumber) {
         log.debug("lockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        Date now = new Date();
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             bpmService.lockCase(queueName,wobNumber);
+            bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.SUCCEED, "", now, Util.getLinkKey(getUserDTO().getUserName()));
         } catch (SELOSBPMException e) {
             log.error("Exception while locking case in BPM!",e);
+            bpmAuditor.add(getUserDTO().getUserName(), "lockCase", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(getUserDTO().getUserName()));
             throw new BPMInterfaceException(e,ExceptionMapping.BPM_LOCK_CASE_EXCEPTION,msg.get(ExceptionMapping.BPM_LOCK_CASE_EXCEPTION));
         }
     }
@@ -166,11 +181,14 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Override
     public void unLockCase(String queueName, String wobNumber) {
         log.debug("unLockCase. (queueName: {}, wobNumber: {})",queueName,wobNumber);
+        Date now = new Date();
         try {
             BPMServiceImpl bpmService = new BPMServiceImpl(getUserDTO(),getConfigurationDTO());
             bpmService.unLockCase(queueName, wobNumber);
+            bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.SUCCEED, "", now, Util.getLinkKey(getUserDTO().getUserName()));
         } catch (SELOSBPMException e) {
             log.error("Exception while unlocking case in BPM!",e);
+            bpmAuditor.add(getUserDTO().getUserName(), "unLockCase", "", now, ActionResult.FAILED, e.getMessage(), now, Util.getLinkKey(getUserDTO().getUserName()));
             throw new BPMInterfaceException(e,ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION,msg.get(ExceptionMapping.BPM_UNLOCK_CASE_EXCEPTION));
         }
     }

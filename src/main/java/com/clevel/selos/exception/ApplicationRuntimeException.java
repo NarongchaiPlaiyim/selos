@@ -13,12 +13,12 @@ public abstract class ApplicationRuntimeException extends RuntimeException {
         this.message = message;
     }
 
-    protected ApplicationRuntimeException(String code, String message) {
+    public ApplicationRuntimeException(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    protected ApplicationRuntimeException(String message) {
+    public ApplicationRuntimeException(String message) {
         this.message = message;
     }
 
