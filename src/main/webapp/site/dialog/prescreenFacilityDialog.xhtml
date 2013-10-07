@@ -12,7 +12,7 @@
                 <td class="title" style="width:145px;">Product Program :</td>
                 <td>
                     <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
-                                        size="1" style="width: 200px;" required="true">
+                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
                                    var="prodProgramItem"
@@ -28,7 +28,7 @@
                 <td class="title">Facility :</td>
                 <td>
                     <p:selectOneMenu id="creditTypeName" value="#{prescreenMaker.facility.creditType.id}"
-                                        size="1" style="width: 200px;" required="true" >
+                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{prescreenMaker.prdProgramToCreditTypeList}"
                                        var="dlgCreditType"
@@ -40,10 +40,11 @@
             <tr>
                 <td class="title">Request Amount :</td>
                 <td>
-                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="true"
+                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
                                  maxlength="10" styleClass="large right"
-                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)" onblur="formatNumber(this)">
+                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                        <p:ajax event="change" update=":facilityDlgForm" process="@form"/>
                     </p:inputText> Baht.
                 </td>
             </tr>
@@ -52,20 +53,13 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <!--<p:commandButton
-                            id="addFacility"
-                            value="Add"
-                            styleClass="small"
-                            action="#{prescreenMaker.onSaveFacility}"
-                            process=":facilityDlgForm"
-                            update=":facilityDlgForm :frmMain:resultTableFacility"
-                            oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>-->
                     <p:commandButton
                             id="addFacility"
+                            binding="#{addFacilityButton}"
                             value="Add"
                             styleClass="small"
                             action="#{prescreenMaker.onSaveFacility}"
-                            process=":facilityDlgForm"
+                            process="@form"
                             update=":facilityDlgForm :frmMain:resultTableFacility"
                             oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
                     <p:commandButton type="button" value="Cancel" styleClass="small" onclick="facilityDlg.hide()" update=":facilityDlgForm"/>

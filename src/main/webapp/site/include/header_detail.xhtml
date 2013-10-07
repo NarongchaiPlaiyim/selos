@@ -11,8 +11,16 @@
                 <p:commandButton id="btnAssignToChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" onclick="assignCheckerDlg.show()"/>
                 <!--<p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />-->
-                <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Closed Sales" ajax="false" disabled="true" styleClass="blueButton" />
+                <p:commandButton value="Cancel CA" type="button" styleClass="blueButton" onclick="confirmCancelCA.show()" />
+                <p:confirmDialog header="Confirmation" message="Are you sure to Cancel CA?" styleClass="left" icon="ui-icon-alert"
+                                 widgetVar="confirmCancelCA" global="false" showEffect="fade">
+                    <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                     update=":msgBoxSystemMessagePanel"
+                                     actionListener="#{prescreenMaker.onCancelCA}"
+                                     process="@this" oncomplete="confirmCancelCA.hide()" />
+                    <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()" styleClass="ui-confirmdialog-no"/>
+                </p:confirmDialog>
+                <!--<p:commandButton value="Closed Sales" ajax="false" disabled="true" styleClass="blueButton" />-->
         </div>
         <div class="clear"></div>
         <div id="header_information">
@@ -62,37 +70,39 @@
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Borrower Name :</td>
-                    <td colspan="11" rowspan="2" style="padding:0; vertical-align: top;">
-                        <p:panelGrid>
-                            <ui:repeat value="#{baseController.appHeaderView.borrowerHeaderViewList}" var="borrower">
-                                <p:row>
-                                    <p:column><h:outputText value="#{borrower.borrowerName}"/></p:column>
-                                </p:row>
-                            </ui:repeat>
-                        </p:panelGrid>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Borrower Name :</td>
-                    <td colspan="11" rowspan="2" style="padding:0; vertical-align: top;">
-                        <table border="0" cellspacing="0" cellpadding="0">
+                    <td colspan="11" style="padding:0; vertical-align: top;">
+                        <table>
                             <tr>
-                                <td style="width: 150px;">Mr.A Example</td>
-                                <td style="width: 150px;">Mrs.B Example</td>
-                            </tr>
-                            <tr style="height:37px;">
-                                <td>312320123123</td>
-                                <td>412420124124</td>
+                                <ui:repeat var="borrower" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
+                                    <td>#{borrower.borrowerName}</td>
+                                </ui:repeat>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Citizen ID/<br/>Registration ID :</td>
+                    <td colspan="11" style="padding:0; vertical-align: top;">
+                        <table>
+                            <tr>
+                                <ui:repeat var="personalId" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
+                                    <td>#{personalId.personalId}</td>
+                                </ui:repeat>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Product Program :</td>
-                    <td colspan="11"></td>
+                    <td colspan="11">
+                        <table>
+                            <tr>
+                                <ui:repeat var="productProgram" value="#{baseController.appHeaderView.productProgramList}" varStatus="status">
+                                    <td>#{productProgram}</td>
+                                </ui:repeat>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Prescreen Result :</td>

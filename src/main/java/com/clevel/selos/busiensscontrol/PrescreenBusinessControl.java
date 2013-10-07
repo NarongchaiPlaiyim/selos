@@ -7,11 +7,19 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.IdType;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.TitleName;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -82,6 +90,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     BRMSInterface brmsInterface;
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    NCBInterface ncbInterface;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -169,8 +179,80 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NCBInfoView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList){
+    public List<NCBInfoView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
         List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+        NCRSInputModel ncrsInputModel;
+        ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
+        NCCRSInputModel nccrsInputModel;
+        ArrayList<NCCRSModel> nccrsModelList = new ArrayList<NCCRSModel>();
+
+        User user = userDAO.findById(userId);
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
+        for(CustomerInfoView customerItem : customerInfoViewList){
+            if(customerItem.getCustomerEntity().getId() == 1 && !customerItem.isNcbFlag()){
+                NCRSModel ncrsModel = new NCRSModel();
+
+                if(customerItem.getTitleTh() != null){
+                    if(customerItem.getTitleTh().getCode().equals("1")){
+                        ncrsModel.setTitleNameCode(TitleName.Mr);
+                    } else if(customerItem.getTitleTh().getCode().equals("2")){
+                        ncrsModel.setTitleNameCode(TitleName.Mrs);
+                    } else if(customerItem.getTitleTh().getCode().equals("3")){
+                        ncrsModel.setTitleNameCode(TitleName.Miss);
+                    } else {
+                        //send other
+                    }
+                }
+                ncrsModel.setFirstName(customerItem.getFirstNameTh());
+                ncrsModel.setLastName(customerItem.getLastNameTh());
+                ncrsModel.setCitizenId(customerItem.getCitizenId());
+
+                if(customerItem.getDocumentType() != null){
+                    if(customerItem.getDocumentType().getId() == 1){
+                        ncrsModel.setIdType(IdType.CITIZEN);
+                    } else if(customerItem.getDocumentType().getId() == 2){
+                        ncrsModel.setIdType(IdType.PASSPORT);
+                    }
+                }
+
+                if(customerItem.getCitizenCountry() != null){
+                    ncrsModel.setCountryCode(customerItem.getCitizenCountry().getCode());
+                }
+                ncrsModelList.add(ncrsModel);
+            } else if(customerItem.getCustomerEntity().getId() == 2 && !customerItem.isNcbFlag()) {
+                NCCRSModel nccrsModel = new NCCRSModel();
+                if(customerItem.getDocumentType() != null){
+                    if(customerItem.getTitleTh() != null){
+                        if(customerItem.getTitleTh().getCode().equals("1")){
+                            nccrsModel.setRegistType(RegistType.CompanyLimited);
+                        } else if(customerItem.getTitleTh().getCode().equals("2")){
+                            nccrsModel.setRegistType(RegistType.PublicCompanyLimited);
+                        } else if(customerItem.getTitleTh().getCode().equals("3")){
+                            nccrsModel.setRegistType(RegistType.LimitedPartnership);
+                        } else if(customerItem.getTitleTh().getCode().equals("4")){
+                            nccrsModel.setRegistType(RegistType.RegisteredOrdinaryPartnership);
+                        }
+                    }
+                }
+                nccrsModel.setRegistId(customerItem.getRegistrationId());
+                nccrsModel.setCompanyName(customerItem.getFirstNameTh());
+
+                nccrsModelList.add(nccrsModel);
+            }
+        }
+
+        ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
+        nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
+
+        //Get NCB for Individual
+            //ncbInterface.request();
+        //Get NCB for Juristic
+        try{
+            ncbInterface.request(nccrsInputModel);
+        } catch (Exception ex){
+            throw new Exception("Exception");
+        }
 
         return ncbInfoViewList;
     }
@@ -302,7 +384,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         bizInfoDAO.persist(bizInfoList);*/
     }
 
-    public void assignToChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
@@ -311,16 +393,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         fields.put("Action_Name", action.getName());
         fields.put("BDMCheckerUserName", checkerId);
 
-        log.info("assignToChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
-        log.info("assignToChecker ::: queueName : {}", queueName);
-        log.info("assignToChecker ::: Action_Code : {}", action.getId());
-        log.info("assignToChecker ::: Action_Name : {}", action.getName());
-        log.info("assignToChecker ::: BDMCheckerUserName : {}", checkerId);
+        log.info("assignChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("assignChecker ::: queueName : {}", queueName);
+        log.info("assignChecker ::: Action_Code : {}", action.getId());
+        log.info("assignChecker ::: Action_Name : {}", action.getName());
+        log.info("assignChecker ::: BDMCheckerUserName : {}", checkerId);
 
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
-    public void returnMaker(long workCasePreScreenId, String queueName, String actionCode){
+    public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
@@ -328,10 +410,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getName());
 
-        log.info("assignToChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
-        log.info("assignToChecker ::: queueName : {}", queueName);
-        log.info("assignToChecker ::: Action_Code : {}", action.getId());
-        log.info("assignToChecker ::: Action_Name : {}", action.getName());
+        log.info("nextStepPreScreen ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("nextStepPreScreen ::: queueName : {}", queueName);
+        log.info("nextStepPreScreen ::: Action_Code : {}", action.getId());
+        log.info("nextStepPreScreen ::: Action_Name : {}", action.getName());
 
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }

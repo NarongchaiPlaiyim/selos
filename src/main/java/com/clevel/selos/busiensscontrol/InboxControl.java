@@ -1,15 +1,11 @@
 package com.clevel.selos.busiensscontrol;
 
 import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.WorkCase;
-import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -42,6 +38,10 @@ public class InboxControl extends BusinessControl {
     UserDAO userDAO;
     @Inject
     CustomerDAO customerDAO;
+    @Inject
+    PrescreenDAO prescreenDAO;
+    @Inject
+    PrescreenFacilityDAO prescreenFacilityDAO;
 
     @Inject
     InboxBizTransform inboxBizTransform;
@@ -133,6 +133,20 @@ public class InboxControl extends BusinessControl {
                 }
                 appHeaderView.setBorrowerHeaderViewList(appBorrowerHeaderViewList);
             }
+
+            //Find product program from WorkCasePreScreenId
+            Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
+            log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
+            if(prescreenFacilityList != null){
+                List<String> productProgram = new ArrayList<String>();
+                for(PrescreenFacility item : prescreenFacilityList){
+                    String prdPrg = item.getProductProgram().getDescription();
+                    productProgram.add(prdPrg);
+                }
+                appHeaderView.setProductProgramList(productProgram);
+            }
+
         }
 
         if(!Util.isEmpty(bdmUserId)){

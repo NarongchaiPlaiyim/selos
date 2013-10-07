@@ -23,13 +23,12 @@ public class UserDAO extends GenericDAO<User,String> {
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }
 
-    public List<User> findBDMChecker(String userName){
-        log.debug("findBDMChecker. BDM Maker : {}", userName);
-        User bdmUser = findByUserName(userName);
+    public List<User> findBDMChecker(User user){
+        log.debug("findBDMChecker. BDM Maker : {}", user);
 
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.ne("id", userName));
-        criteria.add(Restrictions.eq("team", bdmUser.getTeam()));
+        criteria.add(Restrictions.ne("id", user.getId()));
+        criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("id"));
         List<User> userList = criteria.list();
         log.info("findBDMChecker. (result size: {})", userList.size());

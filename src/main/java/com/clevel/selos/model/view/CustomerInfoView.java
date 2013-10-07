@@ -66,6 +66,7 @@ public class CustomerInfoView implements Serializable {
     private BusinessType businessType;
     private CustomerInfoView spouse;
     private int validId;
+    private boolean ncbFlag;
 
     public CustomerInfoView(){
         //reset();
@@ -536,6 +537,14 @@ public class CustomerInfoView implements Serializable {
 
     public void setValidId(int validId) {
         this.validId = validId;
+    }
+
+    public boolean isNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(boolean ncbFlag) {
+        this.ncbFlag = ncbFlag;
     }
 
     @Override

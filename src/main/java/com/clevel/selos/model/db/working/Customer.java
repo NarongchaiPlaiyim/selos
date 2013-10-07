@@ -62,6 +62,9 @@ public class Customer implements Serializable {
     @Column(name="age")
     private int age;
 
+    @Column(name="ncb_checked", nullable=false, columnDefinition="int default 0")
+    private boolean ncbFlag;
+
     @OneToOne(mappedBy="customer")
     private Individual individual;
 
@@ -231,6 +234,14 @@ public class Customer implements Serializable {
 
     public void setAddressesList(List<Address> addressesList) {
         this.addressesList = addressesList;
+    }
+
+    public boolean isNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(boolean ncbFlag) {
+        this.ncbFlag = ncbFlag;
     }
 
     @Override

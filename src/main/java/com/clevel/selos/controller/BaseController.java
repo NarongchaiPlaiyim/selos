@@ -55,6 +55,7 @@ public class BaseController implements Serializable {
 
         user = (User)session.getAttribute("sess_user");
         appHeaderView = (AppHeaderView)session.getAttribute("appHeaderInfo");
+        log.info("BaseController ::: appHeader : {}", appHeaderView);
     }
 
     public ManageButton getManageButton() {

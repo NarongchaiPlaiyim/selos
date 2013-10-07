@@ -67,7 +67,7 @@
                 <tr>
                     <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Citizen ID :</td>
                     <td colspan="3">
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}"
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}" styleClass="large"
                                      onkeypress="return numberOnly(event);" />
                     </td>
@@ -149,7 +149,7 @@
                 <tr>
                     <td class="title">Date of Birth :</td>
                     <td>
-                        <p:calendar id="dlgCalBrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfBirth}" showOn="button" >
+                        <p:calendar id="dlgCalBrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfBirth}" pattern="dd/MM/yyyy" showOn="button" >
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </p:calendar>
                     </td>
@@ -253,7 +253,9 @@
                     <tr>
                         <td class="title">Citizen ID :</td>
                         <td colspan="3">
-                            <p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" required="#{not empty param[saveCustomerButton.clientId]}" styleClass="large"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" maxlength="13"
+                                         required="#{not empty param[saveCustomerButton.clientId]}" styleClass="large"
+                                         onkeypress="return numberOnly(event)" />
                         </td>
                     </tr>
                     <tr>

@@ -427,8 +427,8 @@
                                     <p:commandButton id="btnSave" value="Save"
                                                      styleClass="medium"
                                                      process="@form"
-                                                     action="#{prescreenMaker.onSavePrescreenInitial()}"
-                                                     update=":frmMain"/>
+                                                     actionListener="#{prescreenMaker.onSavePrescreenInitial()}"
+                                                     update=":pnl_maincontainer :msgBoxSystemMessagePanel"/>
                                 </td>
                             </tr>
                         </table>
@@ -445,6 +445,10 @@
         </div>
     </h:form>
 </p:panel>
+<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 <!--<p:panel id="waitingDialogPanel" widgetVar="waitingDlgPnl">
     <p:dialog id="waitingDialog" widgetVar="waitingDlg" modal="true" draggable="false" closeOnEscape="false" closable="false"
               header="#{prescreenMaker.messageHeader}">
@@ -463,11 +467,10 @@
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
-        <p:commandButton value="YES"
+        <p:commandButton value="OK"
                          process="@this"
-                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                         oncomplete="msgBoxFacilityDlg.hide()" />
-        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+                         update="frmMain"
+                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
 <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
