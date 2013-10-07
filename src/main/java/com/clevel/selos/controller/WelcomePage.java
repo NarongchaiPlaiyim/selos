@@ -86,9 +86,9 @@ public class WelcomePage implements Serializable {
     @NCB
     SystemAuditor ncbAuditor;
 
-    @Inject
-    @Config(name = "system.name")
-    String system;
+//    @Inject
+//    @Config(name = "system.name")
+//    String system;
 
     private Date now;
 
@@ -102,7 +102,7 @@ public class WelcomePage implements Serializable {
 //        } catch (Exception e) {
 //            log.error("",e);
 //        }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
         userAuditor.addSucceed("user1","test","test action");
         rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCEED,"",new Date(),"12345");
         ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCEED,"",new Date(),"67890");
@@ -115,7 +115,7 @@ public class WelcomePage implements Serializable {
         } catch (Exception e) {
             log.error("",e);
         }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
     }
 
     public void testRLOSCSI() {
@@ -126,7 +126,7 @@ public class WelcomePage implements Serializable {
         } catch (Exception e) {
             log.error("",e);
         }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
     }
 
     @PostConstruct
