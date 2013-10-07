@@ -108,11 +108,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
-        if(DocumentType.CORPORATE_ID==documentType){
-            documentTypeValue="SC";
-        }else{
-            documentTypeValue="SC";
-        }
+
+       documentTypeValue="SC";
+
 
         if(SearchBy.CUSTOMER_ID==searchBy){
             searchByValue="card";

@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
+import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.*;
@@ -84,6 +85,7 @@ public class TestService implements Serializable{
 //        printDetail+=customerInfoView.getCurrentAddress().toString();
 
         CustomerInfoResultView customerInfoResultView =  customerBizTransform.tranformIndividual(individualResult);
+
         if(customerInfoResultView.getCustomerInfoView()!=null){
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
             printDetail=customerInfoView.getWorkAddress().getProvince().getName();
@@ -103,8 +105,8 @@ public class TestService implements Serializable{
     }
 
 
-    public void corporate() throws Exception {
-
+    public void corporate() {
+           try{
         CorporateResult corporateResult = rmInterfaceImpl.getCorporateInfo("win",searchIndividual.getCustId(), RMInterface.DocumentType.CORPORATE_ID,RMInterface.SearchBy.CUSTOMER_ID);
 
         CustomerInfoResultView customerInfoResultView = customerBizTransform.tranformJuristic(corporateResult);
@@ -114,6 +116,9 @@ public class TestService implements Serializable{
             printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
             printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
         }
+           }catch (ApplicationRuntimeException e){
+
+           }
     }
 
     public void customerAccount() throws Exception {
