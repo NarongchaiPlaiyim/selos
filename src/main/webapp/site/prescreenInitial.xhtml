@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-    <title>SE-LOS : Prescreen Initial</title>
+    <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
     <h:outputScript library="js" name="custom.js" />
     <h:outputScript library="js" name="jquery.menu.js"/>
@@ -28,7 +28,7 @@
             <ui:include src="include/menubar.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
-                <div id="content_name">Prescreen - Prescreen Initial</div>
+                <div id="content_name">Prescreen - Prescreen Maker</div>
                 <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange">[ View Track Change ]</div>
@@ -474,11 +474,11 @@
           modal="true" width="400" height="150">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="customerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Customer Information" widgetVar="customerDlg"
+<p:dialog id="customerDialog" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Customer Information" widgetVar="customerDlg"
           modal="true" width="800" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Check NCB - Assign to BDM Checker"
+<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Check NCB - Assign to BDM Checker"
           modal="true" width="360" height="160">
     <ui:include src="dialog/prescreenAssignChecker.xhtml"/>
 </p:dialog>

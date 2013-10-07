@@ -40,8 +40,9 @@
             <tr>
                 <td class="title">Request Amount :</td>
                 <td>
-                    <p:inputText id="dFacilityRequestAmount" styleClass="large right numeric" required="true"
-                                 value="#{prescreenMaker.facility.requestAmount}">
+                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="true"
+                                 maxlength="10" styleClass="large right"
+                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)" onblur="formatNumber(this)">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                     </p:inputText> Baht.
                 </td>

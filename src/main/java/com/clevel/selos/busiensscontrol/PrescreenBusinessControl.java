@@ -73,6 +73,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     UserDAO userDAO;
     @Inject
     ActionDAO actionDAO;
+    @Inject
+    AddressDAO addressDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -256,6 +258,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         //Remove all Customer before add new
         List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         for(Customer customer : customerListDelete){
+            if(customer.getAddressesList() != null){
+                List<Address> addressList = customer.getAddressesList();
+                addressDAO.delete(addressList);
+            }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
                 Individual individual = customer.getIndividual();
                 individualDAO.delete(individual);
@@ -271,6 +277,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
         for(Customer customer : customerList){
             customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                addressDAO.persist(customer.getAddressesList());
+            }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
@@ -297,16 +306,34 @@ public class PrescreenBusinessControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
-        //TODO getNextStep from BPM
         HashMap<String,String> fields = new HashMap<String, String>();
         fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getName());
         fields.put("BDMCheckerUserName", checkerId);
+
+        log.info("assignToChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("assignToChecker ::: queueName : {}", queueName);
+        log.info("assignToChecker ::: Action_Code : {}", action.getId());
+        log.info("assignToChecker ::: Action_Name : {}", action.getName());
+        log.info("assignToChecker ::: BDMCheckerUserName : {}", checkerId);
+
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
-    public void returnMaker(){
+    public void returnMaker(long workCasePreScreenId, String queueName, String actionCode){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        Action action = actionDAO.findById(Long.parseLong(actionCode));
 
+        HashMap<String,String> fields = new HashMap<String, String>();
+        fields.put("Action_Code", Long.toString(action.getId()));
+        fields.put("Action_Name", action.getName());
+
+        log.info("assignToChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("assignToChecker ::: queueName : {}", queueName);
+        log.info("assignToChecker ::: Action_Code : {}", action.getId());
+        log.info("assignToChecker ::: Action_Name : {}", action.getName());
+
+        bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
     //*** Function for PreScreen Checker ***//

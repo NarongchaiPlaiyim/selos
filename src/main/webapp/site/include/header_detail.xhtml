@@ -19,46 +19,58 @@
             <table id="header_information_table">
                 <tr>
                     <td colspan="11" style="font-weight: bold; text-align: right;">Status :</td>
-                    <td>Prescreen-Maker</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.caseStatus}"/></td>
                 </tr>
                 <tr>
                     <td class="title left" style="min-width: 130px; max-width: 180px;">BDM :</td>
-                    <td class="left" style="min-width: 180px;">Mr.BDM Maker</td>
+                    <td class="left" style="min-width: 180px;"><h:outputText value="#{baseController.appHeaderView.bdmName}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Tel. :</td>
-                    <td class="left" style="min-width:90px; max-width:100px;">012-345-6788</td>
+                    <td class="left" style="min-width:90px; max-width:100px;"><h:outputText value="#{baseController.appHeaderView.bdmPhoneNumber}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Ext. :</td>
-                    <td class="left" style="min-width:80px; max-width: 90px;">0122</td>
+                    <td class="left" style="min-width:80px; max-width: 90px;"><h:outputText value="#{baseController.appHeaderView.bdmPhoneExtNumber}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Zone :</td>
-                    <td class="left" style="min-width:100px; max-width: 130px;">พหลโยธิน</td>
+                    <td class="left" style="min-width:100px; max-width: 130px;"><h:outputText value="#{baseController.appHeaderView.bdmZoneName}"/></td>
                     <td class="title right" style="min-width: 60px; max-width: 70px;">Region :</td>
-                    <td class="left" style="min-width:80px;">East</td>
+                    <td class="left" style="min-width:80px;"><h:outputText value="#{baseController.appHeaderView.bdmRegionName}"/></td>
                     <td class="title right" style="min-width: 100px; max-width: 110px;">Submit Date :</td>
-                    <td class="left" style="min-width:90px; max-width: 90px;">06/06/2556</td>
+                    <td class="left" style="min-width:90px; max-width: 90px;"><h:outputText value="#{baseController.appHeaderView.submitDate}"/></td>
                 </tr>
                 <tr>
                     <td class="title">Underwriter :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwName}"/></td>
                     <td class="title right">Tel. :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneNumber}"/></td>
                     <td class="title right">Ext. :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneExtNumber}"/></td>
                     <td class="title right">Team :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwTeamName}"/></td>
                     <td colspan="3" class="title right">Request Type :</td>
-                    <td>New Request</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.requestType}"/></td>
                 </tr>
                 <tr>
                     <td colspan="11" style="font-weight: bold; text-align: right;">Refinance :</td>
-                    <td>CIMB</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.refinance}"/></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">CA No. :</td>
-                    <td colspan="2">04731660051802013007</td>
+                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.caNo}"/></td>
                     <td class="title right">Ref CA No. :</td>
-                    <td colspan="3">04731660051802012002</td>
+                    <td colspan="3"><h:outputText value="#{baseController.appHeaderView.appRefNo}"/></td>
                     <td colspan="2" class="title right">Ref CA Date :</td>
-                    <td colspan="2">20/06/2555</td>
+                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.appRefDate}"/></td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Borrower Name :</td>
+                    <td colspan="11" rowspan="2" style="padding:0; vertical-align: top;">
+                        <p:panelGrid>
+                            <ui:repeat value="#{baseController.appHeaderView.borrowerHeaderViewList}" var="borrower">
+                                <p:row>
+                                    <p:column><h:outputText value="#{borrower.borrowerName}"/></p:column>
+                                </p:row>
+                            </ui:repeat>
+                        </p:panelGrid>
+                    </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Borrower Name :</td>

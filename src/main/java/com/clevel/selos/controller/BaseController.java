@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ public class BaseController implements Serializable {
 
     private ManageButton manageButton;
     private User user;
+    private AppHeaderView appHeaderView;
 
     public BaseController(){
 
@@ -52,6 +54,7 @@ public class BaseController implements Serializable {
         }
 
         user = (User)session.getAttribute("sess_user");
+        appHeaderView = (AppHeaderView)session.getAttribute("appHeaderInfo");
     }
 
     public ManageButton getManageButton() {
@@ -68,5 +71,13 @@ public class BaseController implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public AppHeaderView getAppHeaderView() {
+        return appHeaderView;
+    }
+
+    public void setAppHeaderView(AppHeaderView appHeaderView) {
+        this.appHeaderView = appHeaderView;
     }
 }

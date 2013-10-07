@@ -68,6 +68,9 @@ public class Customer implements Serializable {
     @OneToOne(mappedBy="customer")
     private Juristic juristic;
 
+    @OneToMany(mappedBy="customer")
+    private List<Address> addressesList;
+
     /*@OneToOne
     @JoinColumn(name="individual_id")
     private Individual individual;
@@ -222,11 +225,20 @@ public class Customer implements Serializable {
         this.lastNameEn = lastNameEn;
     }
 
+    public List<Address> getAddressesList() {
+        return addressesList;
+    }
+
+    public void setAddressesList(List<Address> addressesList) {
+        this.addressesList = addressesList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
                 .append("customerEntity", customerEntity)
                 .append("documentType", documentType)
                 .append("idNumber", idNumber)
@@ -234,10 +246,14 @@ public class Customer implements Serializable {
                 .append("title", title)
                 .append("nameEn", nameEn)
                 .append("nameTh", nameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("lastNameEn", lastNameEn)
                 .append("age", age)
                 .append("individual", individual)
                 .append("juristic", juristic)
+                .append("addressesList", addressesList)
                 .append("relation", relation)
+                .append("ncbList", ncbList)
                 .toString();
     }
 }
