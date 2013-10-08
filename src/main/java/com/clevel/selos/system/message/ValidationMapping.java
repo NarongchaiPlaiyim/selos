@@ -5,6 +5,7 @@ public interface ValidationMapping {
     public static final String RM_FIELD_LENGTH_INVALID = "1002";
 
 
+
     // web service
     public static final String RM_DUPLICATE_CA = "1101";
 }

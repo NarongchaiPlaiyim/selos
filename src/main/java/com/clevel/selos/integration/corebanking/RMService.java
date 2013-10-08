@@ -79,6 +79,10 @@ public class RMService implements Serializable {
     String requestTimeout;
 
     @Inject
+    @Config(name = "Interface.rm.replace.blank")
+    String blank;
+
+    @Inject
     @RM
     SystemAuditor rmAuditor;
 
