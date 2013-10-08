@@ -37,13 +37,13 @@ public class ValidationImp implements Validation, Serializable {
         if(!ValidationUtil.isValueInRange(5, 5, inputModel.getUserId())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
         }
-        if(!ValidationUtil.isValueInRange(13, 13, inputModel.getAppRefNumber())){
+        if(!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "AppRefNumber"));
         }
         if(!ValidationUtil.isValueInRange(20, 20, inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
         }
-        if(!ValidationUtil.isValueInRange(9, 10, inputModel.getAppRefNumber())){
+        if(!ValidationUtil.isValueInRange(9, 10, inputModel.getReferenceTel())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "Reference Tel"));
         }
         ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();

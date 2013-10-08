@@ -226,6 +226,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 if(customerItem.getCitizenCountry() != null){
                     ncrsModel.setCountryCode(customerItem.getCitizenCountry().getCode());
                 }
+                log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
                 ncrsModelList.add(ncrsModel);
             } else if(customerItem.getCustomerEntity().getId() == 2 && !customerItem.isNcbFlag()) {
                 NCCRSModel nccrsModel = new NCCRSModel();
@@ -244,11 +245,11 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
                 nccrsModel.setRegistId(customerItem.getRegistrationId());
                 nccrsModel.setCompanyName(customerItem.getFirstNameTh());
-
+                log.debug("getNCBFromNCB ::: nccrsModel : {}", nccrsModel);
                 nccrsModelList.add(nccrsModel);
             }
         }
-
+        log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
         ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
         nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
 
@@ -258,10 +259,12 @@ public class PrescreenBusinessControl extends BusinessControl {
         try{
             boolean checkNCBComplete = false;
             String exceptionMessage = "";
+            log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
             List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
             log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
             List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
 
+            log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
             List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
             log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
             List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
