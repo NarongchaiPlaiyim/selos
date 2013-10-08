@@ -29,10 +29,6 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     RMService rmService;
 
     @Inject
-    @Config(name = "interface.rm.customerAccount.acronym")
-    String acronym;
-
-    @Inject
     @Config(name = "interface.rm.customerAccount.productCode")
     String productCode;
 
@@ -112,11 +108,9 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
     @Override
     public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
 
-        if(DocumentType.CORPORATE_ID==documentType){
-            documentTypeValue="SC";
-        }else{
-            documentTypeValue="SC";
-        }
+
+       documentTypeValue="SC";
+
 
         if(SearchBy.CUSTOMER_ID==searchBy){
             searchByValue="card";
@@ -165,10 +159,8 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         log.debug("getCustomerAccountInfo()");
         SearchCustomerAccountModel searchCustomerAccountModel = new SearchCustomerAccountModel();
         searchCustomerAccountModel.setReqId("generateBySystem");
-        searchCustomerAccountModel.setAcronym(acronym);
+        searchCustomerAccountModel.setAcronym(userId);
         searchCustomerAccountModel.setProductCode(productCode);
-//        searchCustomerAccountModel.setServerURL(serverURL);
-//        searchCustomerAccountModel.setSessionId(sessionId);
         searchCustomerAccountModel.setCustNbr(customerId);
         searchCustomerAccountModel.setRadSelectSearch("code");
         log.debug("RequestValue : {}",searchCustomerAccountModel.toString());

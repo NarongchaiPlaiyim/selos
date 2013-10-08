@@ -49,9 +49,8 @@ public class NCRSService implements Serializable {
     public NCRSService() {
     }
 
-    public void process(NCRSInputModel inputModel){
+    public ArrayList<NCRSOutputModel> process(NCRSInputModel inputModel) throws Exception{
         ArrayList<NCRSOutputModel> responseModelArrayList = null;
-        if(true){//
         try {
             log.debug("NCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
@@ -65,29 +64,16 @@ public class NCRSService implements Serializable {
                     log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
                 }
                 responseModelArrayList = ncrsImp.requestOnline(inputModel);
-                for (NCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             } else {
                 responseModelArrayList =  ncrsImp.requestOffline(inputModel);
-                for (NCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             }
 
         } catch (Exception e) {
             log.error("NCRS Exception : {}", e.getMessage());
+            throw new Exception("NCRS Exception : "+e.getMessage());
         }
-        }//
-
     }
 
 }

@@ -7,7 +7,6 @@ import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.model.db.master.TDRCondition;
-import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -68,6 +67,7 @@ public class NCBInfo implements Serializable {
 
     private boolean genTextBoxFlag;
     private boolean noOfmonthsPaymentFlag;
+    private boolean genColumnEdit;
 
     private NCBDetailView NCBDetailView;
     private NCBDetailView selectNcbRecordItem;
@@ -100,6 +100,7 @@ public class NCBInfo implements Serializable {
         modeForButton = "add";
         genTextBoxFlag = false;
         noOfmonthsPaymentFlag = false;
+        genColumnEdit = false;
 
         if (NCBDetailView == null) {
             NCBDetailView = new NCBDetailView();
@@ -175,8 +176,10 @@ public class NCBInfo implements Serializable {
         NCBDetailView.setHistoryPayment(new SettlementStatus());
         NCBDetailView.setTMBAccount(false);
         NCBDetailView.setRefinanceFlag(false);
+        NCBDetailView.setWcFlag(false);
         modeForButton = "add";
         genTextBoxFlag = false;
+        genColumnEdit = true;
 
     }
 
@@ -209,6 +212,7 @@ public class NCBInfo implements Serializable {
             NCBDetailView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
             NCBDetailView.setRefinanceFlag(selectNcbRecordItem.isRefinanceFlag());
             NCBDetailView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
+            NCBDetailView.setWcFlag(selectNcbRecordItem.isWcFlag());
             NCBDetailView.setMonth1(selectNcbRecordItem.getMonth1());
             NCBDetailView.setMonth2(selectNcbRecordItem.getMonth2());
             NCBDetailView.setMonth3(selectNcbRecordItem.getMonth3());
@@ -268,6 +272,7 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setNoOfOutstandingPaymentIn12months(NCBDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(NCBDetailView.getNoOfOverLimit());
                 ncbAdd.setRefinanceFlag(NCBDetailView.isRefinanceFlag());
+                ncbAdd.setWcFlag(NCBDetailView.isWcFlag());
                 ncbAdd.setNoOfmonthsPayment(NCBDetailView.getNoOfmonthsPayment());
                 ncbAdd.setMonth1(NCBDetailView.getMonth1());
                 ncbAdd.setMonth2(NCBDetailView.getMonth2());
@@ -291,7 +296,7 @@ public class NCBInfo implements Serializable {
 
                     for(int i = 0 ; i<moneys.size() ; i ++){
                         if(i < NCBDetailView.getNoOfmonthsPayment()){
-                            moneyTotal += " เดือนที่#"+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
+                            moneyTotal += " เดือนที่ "+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
                             ncbAdd.setMoneyTotal(moneyTotal);
                         }
                     }
@@ -334,6 +339,7 @@ public class NCBInfo implements Serializable {
                 NCBDetailViewList.get(rowIndex).setMonth4(NCBDetailView.getMonth4());
                 NCBDetailViewList.get(rowIndex).setMonth5(NCBDetailView.getMonth5());
                 NCBDetailViewList.get(rowIndex).setMonth6(NCBDetailView.getMonth6());
+                NCBDetailViewList.get(rowIndex).setWcFlag(NCBDetailView.isWcFlag());
 
                 moneys = new ArrayList<BigDecimal>();
                 moneys.add(NCBDetailViewList.get(rowIndex).getMonth1());
@@ -351,7 +357,7 @@ public class NCBInfo implements Serializable {
 
                         for(int i = 0 ; i<moneys.size() ; i ++){
                             if(i < NCBDetailView.getNoOfmonthsPayment()){
-                                moneyTotal += " เดือนที่#"+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
+                                moneyTotal += " เดือนที่ "+ (i+1) + " : " +moneys.get(i).toString() + " บาท ";
                                 NCBDetailViewList.get(rowIndex).setMoneyTotal(moneyTotal);
                             }
                         }
@@ -366,7 +372,6 @@ public class NCBInfo implements Serializable {
             }
 
             complete = true;
-
         } else {
 
             log.info("onSaveNcbRecord ::: validation failed.");
@@ -624,4 +629,11 @@ public class NCBInfo implements Serializable {
         this.noOfmonthsPaymentFlag = noOfmonthsPaymentFlag;
     }
 
+    public boolean isGenColumnEdit() {
+        return genColumnEdit;
+    }
+
+    public void setGenColumnEdit(boolean genColumnEdit) {
+        this.genColumnEdit = genColumnEdit;
+    }
 }

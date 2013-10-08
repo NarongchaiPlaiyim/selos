@@ -40,45 +40,22 @@ public class NCCRSService implements Serializable {
     public NCCRSService() {
     }
 
-    public void process(NCCRSInputModel inputModel){
+    public ArrayList<NCCRSOutputModel> process(NCCRSInputModel inputModel)throws Exception{
         ArrayList<NCCRSOutputModel> responseModelArrayList = null;
-        if(true){//
         try {
             log.debug("NCCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
             log.debug("NCCRS flag is {}", flag);
             if (!flag){
                 ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
-                NCCRSModel nccrsModel = null;
-                for(int i = 0; i<nccrsModelArrayList.size(); i++){
-                    nccrsModel = nccrsModelArrayList.get(i);
-                    nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), i));
-                    log.debug("NCCRS MemberRef = {}", nccrsModel.getMemberRef());
-                }
-                responseModelArrayList = nccrsImp.requestOnline(inputModel);
-                for (NCCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             } else {
                 responseModelArrayList = nccrsImp.requestOffline(inputModel);
-                for (NCCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             }
         } catch (Exception e) {
             log.error("NCCRS Exception : {}", e.getMessage());
+            throw new Exception("NCCRS Exception : "+e.getMessage());
         }
-        }//
-
-
-
     }
 }

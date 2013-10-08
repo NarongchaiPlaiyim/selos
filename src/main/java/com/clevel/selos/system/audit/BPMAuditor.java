@@ -26,4 +26,9 @@ public class BPMAuditor implements SystemAuditor {
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
         bpmActivityDAO.persist(new BPMActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
     }
+
+    @Override
+    public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
+        bpmActivityDAO.persist(new BPMActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+    }
 }

@@ -26,4 +26,9 @@ public class RLOSAuditor implements SystemAuditor {
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
         RLOSActivityDAO.persist(new ROLSActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
     }
+
+    @Override
+    public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
+        RLOSActivityDAO.persist(new ROLSActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+    }
 }
