@@ -52,7 +52,6 @@ public class NCRSOutputModel implements Serializable {
                 .append("actionResult", actionResult)
                 .append("reason", reason)
                 .append("idNumber", idNumber)
-                .append("responseModel", responseModel)
                 .toString();
     }
 }

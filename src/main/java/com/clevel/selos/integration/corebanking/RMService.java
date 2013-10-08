@@ -79,6 +79,10 @@ public class RMService implements Serializable {
     String requestTimeout;
 
     @Inject
+    @Config(name = "Interface.rm.replace.blank")
+    String blank;
+
+    @Inject
     @RM
     SystemAuditor rmAuditor;
 
@@ -627,7 +631,9 @@ public class RMService implements Serializable {
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", responseTime);
                 log.debug("responseHeaderData : {}", resSearchCustomerAccount.getHeader().toString());
+                if(resSearchCustomerAccount.getBody()!=null&&resSearchCustomerAccount.getBody().getAccountList()!=null){
                 log.debug("accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
+                }
                 for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }

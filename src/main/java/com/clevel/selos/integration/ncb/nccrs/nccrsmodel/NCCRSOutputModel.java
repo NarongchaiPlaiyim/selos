@@ -2,6 +2,8 @@ package com.clevel.selos.integration.ncb.nccrs.nccrsmodel;
 
 import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.model.ActionResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -41,5 +43,15 @@ public class NCCRSOutputModel implements Serializable {
 
     public NCCRSResponseModel getResponseModel() {
         return responseModel;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("appRefNumber", appRefNumber)
+                .append("actionResult", actionResult)
+                .append("reason", reason)
+                .append("idNumber", idNumber)
+                .toString();
     }
 }
