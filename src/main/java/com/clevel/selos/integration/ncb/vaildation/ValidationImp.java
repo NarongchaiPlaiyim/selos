@@ -66,7 +66,7 @@ public class ValidationImp implements Validation, Serializable {
             if(!ValidationUtil.isValueInRange(13, 20, ncrsModel.getCitizenId())){
                 throw new ValidationException(invalid,  validationMsg.get(invalid, "Citizen ID"));
             }
-            if(!ValidationUtil.isInteger(ncrsModel.getCitizenId())){
+            if(!ValidationUtil.isNumeric(ncrsModel.getCitizenId())){
                 throw new ValidationException(required, validationMsg.get(required, "Citizen ID"));
             }
             if(!ValidationUtil.isValueInRange(2, 2, ncrsModel.getIdType())){
