@@ -90,8 +90,19 @@ public class RMService implements Serializable {
     public RMService() {
     }
 
+    String subDistrict="";
+    String district="";
     @PostConstruct
     public void onCreate() {
+         
+       String blankValue[]=blank.split("|");
+        int blankSize = blankValue.length - 1;
+        if(blankSize>=0){
+        subDistrict=blankValue[0];
+        }
+        if(blankSize>=1){
+        district=blankValue[1];
+        }
 
     }
 
@@ -278,10 +289,10 @@ public class RMService implements Serializable {
                     //validateSpiltSize
                     int homeAddressLineSize3 = homeAddressLine3.length - 1;
                     if (homeAddressLineSize3 >= 0) {
-                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], "แขวง"));
+                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], subDistrict));
                     }
                     if (homeAddressLineSize3 >= 1) {
-                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], "เขต"));
+                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], district));
                     }
                     homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
                     homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
@@ -309,10 +320,10 @@ public class RMService implements Serializable {
                     //validateSpiltSize
                     int currentAddressLineSize3 = currentAddressLine3.length - 1;
                     if (currentAddressLineSize3 >= 0) {
-                        currentContactDetails.setSubdistrict(Util.replaceStringToBlank(currentAddressLine3[0], "แขวง"));
+                        currentContactDetails.setSubdistrict(Util.replaceStringToBlank(currentAddressLine3[0], subDistrict));
                     }
                     if (currentAddressLineSize3 >= 1) {
-                        currentContactDetails.setDistrict(Util.replaceStringToBlank(currentAddressLine3[1], "เขต"));
+                        currentContactDetails.setDistrict(Util.replaceStringToBlank(currentAddressLine3[1], district));
                     }
                     currentContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCity());
                     currentContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegPostalCd());
@@ -340,10 +351,10 @@ public class RMService implements Serializable {
                     //ValidateSpiltSize
                     int workAddressLineSize3 = workAddressLine3.length - 1;
                     if (workAddressLineSize3 >= 0) {
-                        workContactDetails.setSubdistrict(Util.replaceStringToBlank(workAddressLine3[0], "แขวง"));
+                        workContactDetails.setSubdistrict(Util.replaceStringToBlank(workAddressLine3[0], subDistrict));
                     }
                     if (workAddressLineSize3 >= 1) {
-                        workContactDetails.setDistrict(Util.replaceStringToBlank(workAddressLine3[1], "เขต"));
+                        workContactDetails.setDistrict(Util.replaceStringToBlank(workAddressLine3[1], district));
                     }
                     workContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCity());
                     workContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusPostalCd());
@@ -493,16 +504,16 @@ public class RMService implements Serializable {
                     corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
-                    corporateModel.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),"แขวง"));
-                    corporateModel.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),"เขต"));
+                    corporateModel.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),subDistrict));
+                    corporateModel.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),district));
                     corporateModel.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity());
                     corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
 
                     RegistrationAddress registrationAddress = new RegistrationAddress();
-                    registrationAddress.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),"แขวง"));
-                    registrationAddress.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),"เขต"));
+                    registrationAddress.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),subDistrict));
+                    registrationAddress.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),district));
                     registrationAddress.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity2());
 //                    registrationAddress.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().get);
                     registrationAddress.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry2());
