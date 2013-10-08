@@ -161,7 +161,7 @@ public class TestNCRS implements Serializable {
         modelArrayList.add(nccrsModel);
 
         NCCRSInputModel inputModel = new NCCRSInputModel("55555", "0123456789012345", CANumber, referenceTel, modelArrayList);
-        nccrsService.process(inputModel);
+//        nccrsService.process(inputModel);
     }
 
     public String getUserId() {

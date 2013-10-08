@@ -40,7 +40,7 @@ public class NCCRSService implements Serializable {
     public NCCRSService() {
     }
 
-    public ArrayList<NCCRSOutputModel> process(NCCRSInputModel inputModel){
+    public ArrayList<NCCRSOutputModel> process(NCCRSInputModel inputModel)throws Exception{
         ArrayList<NCCRSOutputModel> responseModelArrayList = null;
         try {
             log.debug("NCCRS process()");
@@ -55,7 +55,7 @@ public class NCCRSService implements Serializable {
             }
         } catch (Exception e) {
             log.error("NCCRS Exception : {}", e.getMessage());
+            throw new Exception("NCCRS Exception : "+e.getMessage());
         }
-        return responseModelArrayList;
     }
 }
