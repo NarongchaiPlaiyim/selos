@@ -125,7 +125,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(oldCaNumber) || ValidationUtil.isGreaterThan(30,oldCaNumber)){
+            if(ValidationUtil.isNotNullAndGreaterThan(30,oldCaNumber)){ //Optional
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(oldCaNumber)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(oldCaNumber)"),"");
                 log.debug("{}",response);

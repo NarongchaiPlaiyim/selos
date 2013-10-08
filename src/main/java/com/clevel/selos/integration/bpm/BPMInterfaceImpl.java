@@ -81,8 +81,8 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         HashMap<String,String> caseParameter = new HashMap<String, String>();
         caseParameter.put("JobName",caseCreationHistory.getJobName());
         caseParameter.put("CANumber", caseCreationHistory.getCaNumber());
-        caseParameter.put("RefCANumber", caseCreationHistory.getOldCaNumber());
-        caseParameter.put("AccountNo1", caseCreationHistory.getAccountNo1());
+        caseParameter.put("RefCANumber", caseCreationHistory.getOldCaNumber()==null?"":caseCreationHistory.getOldCaNumber()); //Optional for crs
+        caseParameter.put("AccountNo1", caseCreationHistory.getAccountNo1()==null?"":caseCreationHistory.getAccountNo1()); //Optional for crs
         caseParameter.put("CustomerId", caseCreationHistory.getCustomerId());
         caseParameter.put("CustomerName", caseCreationHistory.getCustomerName());
         caseParameter.put("CitizenId", caseCreationHistory.getCitizenId());
