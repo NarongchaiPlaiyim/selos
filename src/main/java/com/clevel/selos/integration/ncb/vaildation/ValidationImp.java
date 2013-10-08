@@ -5,6 +5,7 @@ import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryIdModel;
 import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryNameModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
@@ -13,7 +14,7 @@ import com.clevel.selos.util.ValidationUtil;
 import javax.inject.Inject;
 import java.io.Serializable;
 
-public class ValidationImp implements /*Validation, */Serializable {
+public class ValidationImp implements Validation, Serializable {
     @Inject
     @ValidationMessage
     Message message;
@@ -21,6 +22,19 @@ public class ValidationImp implements /*Validation, */Serializable {
     @Inject
     public ValidationImp() {
     }
+
+    @Override
+    public void validation(NCRSInputModel model) throws Exception {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void validation(NCCRSInputModel model) throws Exception {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+
 /*
     @Override
     public void validation(NCRSModel model) throws Exception {
