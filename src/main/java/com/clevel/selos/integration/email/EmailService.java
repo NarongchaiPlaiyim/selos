@@ -74,6 +74,7 @@ public abstract class EmailService implements EmailInterface,Serializable {
         p.put("mail.smtp.port", port);
         p.put("mail.smtp.auth", "true");
         Date now = new Date();
+        String linkKey = Util.getLinkKey(userId);
         try {
             Session session = Session.getInstance(p, new EmailAuthenticator(username, password));
             MimeMessage msg = new MimeMessage(session);
@@ -90,20 +91,20 @@ public abstract class EmailService implements EmailInterface,Serializable {
             Transport.send(msg);
             emailAuditor.add(userId,"sendMail","",now, ActionResult.SUCCEED,"", Util.getLinkKey(userId));
         } catch (AuthenticationFailedException e) {
-            log.error("",e);
-            emailAuditor.add(userId,"sendMail","",now, ActionResult.EXCEPTION,e.getMessage(), Util.getLinkKey(userId));
+            log.error("[{}]",linkKey,e);
+            emailAuditor.add(userId,"sendMail","",now, ActionResult.EXCEPTION,e.getMessage(), linkKey);
             throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.EMAIL_AUTHENTICATION_FAILED));
         } catch (AddressException e) {
-            log.error("",e);
-            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), Util.getLinkKey(userId));
+            log.error("[{}]",linkKey,e);
+            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
             throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_INVALID_ADDRESS,msg.get(ExceptionMapping.EMAIL_INVALID_ADDRESS));
         } catch (MessagingException e) {
-            log.error("",e);
-            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), Util.getLinkKey(userId));
+            log.error("[{}]",linkKey,e);
+            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
             throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_COULD_NOT_BE_SENT,msg.get(ExceptionMapping.EMAIL_COULD_NOT_BE_SENT));
         } catch (Exception e) {
-            log.error("Email Exception!",e);
-            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), Util.getLinkKey(userId));
+            log.error("[{}] Email Exception!",linkKey,e);
+            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
             throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_EXCEPTION,msg.get(ExceptionMapping.EMAIL_EXCEPTION));
         }
     }

@@ -11,7 +11,7 @@ public class NCRSModel implements Serializable {
     private String firstName;
     private String lastName;
     private String citizenId;
-    private String idType = "01";
+    private String idType;
     private String countryCode;
     private String titleNameCode;
     private String trackingId;
@@ -19,7 +19,7 @@ public class NCRSModel implements Serializable {
     private String enqpurpose = "01";
     private String enqamount = "0";
     private String consent = "Y";
-    private String customerDocmentType;
+    private String customerDocumentType;
 
     public NCRSModel() {
     }
@@ -114,11 +114,11 @@ public class NCRSModel implements Serializable {
 
     public String getCustomerDocmentType() {
         if("01".equals(idType)){
-            return customerDocmentType = "01";
+            return customerDocumentType = "01";
         } else if("07".equals(idType)) {
-            return customerDocmentType = "03";
+            return customerDocumentType = "03";
         } else {
-            return customerDocmentType = "01";
+            return customerDocumentType = "01";
         }
     }
 
@@ -136,7 +136,7 @@ public class NCRSModel implements Serializable {
                 .append("enqpurpose", enqpurpose)
                 .append("enqamount", enqamount)
                 .append("consent", consent)
-                .append("customerDocmentType", customerDocmentType)
+                .append("customerDocmentType", customerDocumentType)
                 .toString();
     }
 }
