@@ -12,6 +12,10 @@ $(document).ready(function() {
     })
 });
 
+function gotoInbox(contextUrl){
+    window.location = contextUrl;
+}
+
 function removeComma(obj){
     var val = obj.value;
     val = val.replace(/,/g,'');

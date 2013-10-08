@@ -7,7 +7,8 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-                <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer" />
+                <p:commandButton id="btnReturnToMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
+                <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
                 <p:commandButton id="btnAssignToChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" onclick="assignCheckerDlg.show()"/>
                 <!--<p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
                 <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />-->

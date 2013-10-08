@@ -85,6 +85,26 @@
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{prescreenChecker.messageHeader}" message="#{prescreenChecker.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             render="#{prescreenChecker.messageErr}"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             render="#{not prescreenChecker.messageErr}"
+                             onclick="gotoInbox('#{request.contextPath}/site/inbox.jsf')"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
+              modal="true" width="380" height="150">
+        <ui:include src="dialog/prescreenReturnDialog.xhtml"/>
+    </p:dialog>
 </h:body>
 </f:view>
 </html>

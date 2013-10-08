@@ -251,7 +251,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         try{
             ncbInterface.request(nccrsInputModel);
         } catch (Exception ex){
-            throw new Exception("Exception");
+            throw ex;
         }
 
         return ncbInfoViewList;
@@ -419,6 +419,16 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     //*** Function for PreScreen Checker ***//
+    public String getBDMMakerName(long workCasePreScreenId){
+        String bdmMakerName = "";
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        if(workCasePrescreen != null){
+            bdmMakerName = workCasePrescreen.getCreateBy().getUserName();
+        }
+
+        return bdmMakerName;
+    }
+
     public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);

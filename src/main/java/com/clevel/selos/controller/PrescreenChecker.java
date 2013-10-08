@@ -1,7 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
+import com.clevel.selos.dao.master.ReasonDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
@@ -49,7 +52,13 @@ public class PrescreenChecker implements Serializable {
     @Inject
     CustomerDAO customerDAO;
     @Inject
+    ReasonDAO reasonDAO;
+    @Inject
+    UserDAO userDAO;
+    @Inject
     PrescreenBusinessControl prescreenBusinessControl;
+
+    private List<Reason> reasonList;
 
     private long workCasePreScreenId;
     private long stepId;
@@ -58,18 +67,19 @@ public class PrescreenChecker implements Serializable {
 
     private String messageHeader;
     private String message;
+    private boolean messageErr;
+
+    private Reason returnReason;
+    private String bdmMakerName;
+    private String remark;
 
     public PrescreenChecker(){
 
     }
 
     public void preRender(){
-        HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(true);
         log.info("preRender ::: setSession ");
-        session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(2));
-
-        session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -90,11 +100,8 @@ public class PrescreenChecker implements Serializable {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation");
-        HttpSession session = FacesUtil.getSession(false);
-        /*session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(2));*/
-        session = FacesUtil.getSession(true);
-        //user = (User)session.getAttribute("user");
+        HttpSession session = FacesUtil.getSession(true);
+
         if(session.getAttribute("workCasePreScreenId") != null){
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -114,40 +121,56 @@ public class PrescreenChecker implements Serializable {
             int row = customerInfoViewList.size();
             citizenID = new String[row];
         }
+
+
     }
 
     public void onCheckCustomer(){
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
+        boolean validate = false;
+        boolean tmpValidate = false;
+        int count = 0;
         for(CustomerInfoView customer : tmpCustomerInfoViewList){
             if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
                 log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
                 customer.setValidId(1);
+                tmpValidate = true;
             }else{
                 log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
                 customer.setValidId(0);
+                tmpValidate = false;
+            }
+            if(count == 0){
+                if(tmpValidate == true)
+                    validate = true;
+            } else {
+                if(tmpValidate == true && validate == true){
+                    validate = true;
+                } else if(tmpValidate == false && validate == true){
+                    validate = false;
+                } else if(tmpValidate == true && validate == false){
+                    validate = false;
+                }
             }
             customerInfoViewList.add(customer);
         }
-
-        /*List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
-        tmpCustomerInfoViewList = customerInfoViewList;
-        customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
-        for(CustomerInfoView customer : tmpCustomerInfoViewList){
-            if(customer.getCitizenID().trim().equals(customer.getInputCitizenID().trim())){
-                log.info("Check CitizenID Customer : {}, Match", customer.getCustomerName());
-                customer.setValidCitizenID(1);
-            }else{
-                log.info("Check CitizenID Customer : {}, Not Match", customer.getCustomerName());
-                customer.setValidCitizenID(0);
-            }
-            customerInfoViewList.add(customer);
-        }*/
-
+        if(validate){
+            //TODO Check ncb
+            onCheckNCB();
+        }
     }
 
     public void onReturnToMaker(){
+        returnReason = new Reason();
+        reasonList = new ArrayList<Reason>();
+        reasonList = reasonDAO.getCancleList();
+
+        bdmMakerName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
+    }
+
+    public void onSubmitReturnToMaker(){
         log.info("onReturnToMaker :::");
         //Only return to MAKER actionCode =
         String actionCode = "1005";
@@ -164,21 +187,32 @@ public class PrescreenChecker implements Serializable {
     public void onCheckNCB(){
         //To Get NCB Data and submit to MAKER
         log.info("onCheckNCB :::");
+        boolean success = false;
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+            log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
             prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+            success = true;
         } catch(Exception ex){
-            messageHeader = "Operation failed.";
-            message = "Check NCB error.";
+            ex.printStackTrace();
+            log.error("Exception : {}", ex);
+            messageHeader = "Check NCB failed.";
+            message = ex.getMessage();
+            messageErr = true;
         }
 
+        log.info("messageHeader : {}", messageHeader);
+        log.info("message : {}", message);
         //TODO get csi data for
 
-        //messageHeader = customerInfoResultView.getActionResult().toString();
-        //message = customerInfoResultView.getReason();
         //TODO Show message box
+        if(success){
+            messageHeader = "Check NCB Success.";
+            message = "Check NCB Success. Press OK to return to Inbox.";
+            messageErr = false;
+        }
         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
@@ -240,5 +274,45 @@ public class PrescreenChecker implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public List<Reason> getReasonList() {
+        return reasonList;
+    }
+
+    public void setReasonList(List<Reason> reasonList) {
+        this.reasonList = reasonList;
+    }
+
+    public Reason getReturnReason() {
+        return returnReason;
+    }
+
+    public void setReturnReason(Reason returnReason) {
+        this.returnReason = returnReason;
+    }
+
+    public String getBdmMakerName() {
+        return bdmMakerName;
+    }
+
+    public void setBdmMakerName(String bdmMakerName) {
+        this.bdmMakerName = bdmMakerName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public boolean isMessageErr() {
+        return messageErr;
+    }
+
+    public void setMessageErr(boolean messageErr) {
+        this.messageErr = messageErr;
     }
 }

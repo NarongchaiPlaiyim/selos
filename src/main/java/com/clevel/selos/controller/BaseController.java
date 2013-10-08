@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -21,9 +22,13 @@ public class BaseController implements Serializable {
     @Inject
     Logger log;
 
+    @Inject
+    UserDAO userDAO;
+
     private ManageButton manageButton;
     private User user;
     private AppHeaderView appHeaderView;
+
 
     public BaseController(){
 
@@ -51,11 +56,20 @@ public class BaseController implements Serializable {
 
         if(stepId == 1002){
             manageButton.setCheckNCBButton(true);
+            manageButton.setReturnToMakerButton(true);
         }
 
-        user = (User)session.getAttribute("sess_user");
         appHeaderView = (AppHeaderView)session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
+
+        user = (User)session.getAttribute("user");
+        if(user == null){
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = userDAO.findById(userDetail.getUserName());
+            session = FacesUtil.getSession(false);
+            session.setAttribute("user", user);
+        }
+
     }
 
     public ManageButton getManageButton() {

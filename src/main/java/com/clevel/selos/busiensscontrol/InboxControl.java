@@ -64,7 +64,7 @@ public class InboxControl extends BusinessControl {
             HashMap<String, String> caseData = new HashMap<String, String>();
             caseData.put("F_WobNum", workCasePrescreen.getWobNumber());
             caseData.put("F_StepName", "PS1001");
-            caseData.put("Step_Code", "1001");
+            caseData.put("Step_Code", "1002");
             caseData.put("Lock_Status", "0");
             caseData.put("Locked_User", "0");
             caseData.put("QUEUE_NAME", "0");
@@ -88,7 +88,7 @@ public class InboxControl extends BusinessControl {
     }
 
     public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId){
-        log.info("getHeaderInformation :::");
+        log.info("getHeaderInformation ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
         AppHeaderView appHeaderView = new AppHeaderView();
         appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
         String bdmUserId;
@@ -136,15 +136,17 @@ public class InboxControl extends BusinessControl {
 
             //Find product program from WorkCasePreScreenId
             Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-            List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
-            log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
-            if(prescreenFacilityList != null){
-                List<String> productProgram = new ArrayList<String>();
-                for(PrescreenFacility item : prescreenFacilityList){
-                    String prdPrg = item.getProductProgram().getDescription();
-                    productProgram.add(prdPrg);
+            if(prescreen != null){
+                List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
+                log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
+                if(prescreenFacilityList != null){
+                    List<String> productProgram = new ArrayList<String>();
+                    for(PrescreenFacility item : prescreenFacilityList){
+                        String prdPrg = item.getProductProgram().getDescription();
+                        productProgram.add(prdPrg);
+                    }
+                    appHeaderView.setProductProgramList(productProgram);
                 }
-                appHeaderView.setProductProgramList(productProgram);
             }
 
         }
