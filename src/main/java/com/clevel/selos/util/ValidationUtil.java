@@ -56,6 +56,14 @@ public class ValidationUtil {
         return isNull(string) || string.length() > max;
     }
 
+    public static boolean isNotNullAndGreaterThan(int max,String string) {
+        if(string!=null){
+            return string.length() > max;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean isLessThan(int min,String string) {
         return isNull(string) || string.length() < min;
     }

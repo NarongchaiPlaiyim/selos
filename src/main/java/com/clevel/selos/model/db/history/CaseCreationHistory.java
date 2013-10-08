@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.history;
 
 import com.clevel.selos.integration.IntegrationStatus;
+import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -78,7 +79,7 @@ public class CaseCreationHistory implements Serializable {
     private Date createDate;
     @Column(name="create_status")
     @Enumerated(EnumType.STRING)
-    private IntegrationStatus status;
+    private ActionResult status;
     @Column(name="create_status_detail", length = 500)
     private String statusDetail;
     @Column(name="app_number")
@@ -87,7 +88,7 @@ public class CaseCreationHistory implements Serializable {
     public CaseCreationHistory() {
     }
 
-    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, IntegrationStatus status, String statusDetail, String appNumber) {
+    public CaseCreationHistory(String jobName, String caNumber, String oldCaNumber, String accountNo1, String customerId, String customerName, String citizenId, int requestType, int customerType, String bdmId, String hubCode, String regionCode, String uwId, String appInDateBDM, String finalApproved, String parallel, String pending, String caExist, String caEnd, String accountNo2, String accountNo3, String accountNo4, String accountNo5, String accountNo6, String accountNo7, String accountNo8, String accountNo9, String accountNo10, String appInDateUW, Date createDate, ActionResult status, String statusDetail, String appNumber) {
         this.jobName = jobName;
         this.caNumber = caNumber;
         this.oldCaNumber = oldCaNumber;
@@ -371,11 +372,11 @@ public class CaseCreationHistory implements Serializable {
         this.createDate = createDate;
     }
 
-    public IntegrationStatus getStatus() {
+    public ActionResult getStatus() {
         return status;
     }
 
-    public void setStatus(IntegrationStatus status) {
+    public void setStatus(ActionResult status) {
         this.status = status;
     }
 

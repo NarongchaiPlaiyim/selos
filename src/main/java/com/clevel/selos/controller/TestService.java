@@ -125,6 +125,7 @@ public class TestService implements Serializable{
 
         CustomerAccountResult customerAccountResult =new CustomerAccountResult();
         //callservice
+        System.out.println("sssssssssssssss "+searchIndividual.getCustNbr());
         customerAccountResult = rmInterfaceImpl.getCustomerAccountInfo("win",searchIndividual.getCustNbr());
         //showData
         StringBuffer result=new StringBuffer();
