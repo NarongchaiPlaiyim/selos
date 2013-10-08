@@ -49,26 +49,28 @@ public class SimpleAuthenticationManager implements AuthenticationManager {
         // system role
         if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.SYSTEM.name())) {
             log.debug("system role.");
-            return getAuthority(userDetail,authentication,authenticationDetails);
+            return getAuthority(userDetail, authentication, authenticationDetails);
         }
 
         // non business role
         if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.NON_BUSINESS.name())) {
             log.debug("non business role.");
-            return getAuthority(userDetail,authentication,authenticationDetails);
+            return getAuthority(userDetail, authentication, authenticationDetails);
         }
 
         // business role continue BPM authentication
         if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.BUSINESS.name())) {
             log.debug("business role. (continue BPM authentication)");
-            bpmInterface.authenticate(userDetail.getUserName(), userDetail.getPassword());
-                log.debug("Authentication with BPM success.");
-                return getAuthority(userDetail,authentication,authenticationDetails);
+            if (Util.isTrue(ldapEnable)) {
+                bpmInterface.authenticate(userDetail.getUserName(), userDetail.getPassword());
+            }
+            log.debug("Authentication with BPM success.");
+            return getAuthority(userDetail, authentication, authenticationDetails);
         }
         throw new BadCredentialsException("Bad Credentials");
     }
 
-    private UsernamePasswordAuthenticationToken getAuthority(UserDetail userDetail,Authentication authentication,WebAuthenticationDetails authenticationDetails) {
+    private UsernamePasswordAuthenticationToken getAuthority(UserDetail userDetail, Authentication authentication, WebAuthenticationDetails authenticationDetails) {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
         grantedAuthorities.add(new SimpleGrantedAuthority(userDetail.getRole()));
         UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(userDetail,

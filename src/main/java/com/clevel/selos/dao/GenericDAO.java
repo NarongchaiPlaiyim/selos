@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<T,ID>,Serializable {
+public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO<T,ID>,Serializable {
     private Class<T> entityClass;
 //    @Inject
 //    private Logger log;
