@@ -13,18 +13,19 @@ import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.IdType;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.TitleName;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.*;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -54,6 +55,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     @Inject
     CustomerBizTransform customerBizTransform;
+    @Inject
+    NCBBizTransform ncbBizTransform;
 
     @Inject
     PrescreenDAO prescreenDAO;
@@ -90,8 +93,12 @@ public class PrescreenBusinessControl extends BusinessControl {
     BRMSInterface brmsInterface;
     @Inject
     BPMInterface bpmInterface;
+
+    /*@Inject
+    NCBInterface ncbInterface;  */
+
     @Inject
-    NCBInterface ncbInterface;
+    NCBInterfaceImpl ncbInterface;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -179,8 +186,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NCBInfoView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
-        List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+        List<NcbView> ncbViewList = new ArrayList<NcbView>();
         NCRSInputModel ncrsInputModel;
         ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
         NCCRSInputModel nccrsInputModel;
@@ -249,12 +256,31 @@ public class PrescreenBusinessControl extends BusinessControl {
             //ncbInterface.request();
         //Get NCB for Juristic
         try{
-            ncbInterface.request(nccrsInputModel);
+            boolean checkNCBComplete = false;
+            String exceptionMessage = "";
+            List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
+            log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
+            List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
+
+            List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
+            log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
+            List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
+
+            if(ncbIndividualViewList != null){
+                for(NcbView item : ncbIndividualViewList){
+                    ncbViewList.add(item);
+                }
+            }
+            if(ncbJuristicViewList != null){
+                for(NcbView item : ncbJuristicViewList){
+                    ncbViewList.add(item);
+                }
+            }
         } catch (Exception ex){
             throw ex;
         }
 
-        return ncbInfoViewList;
+        return ncbViewList;
     }
 
     public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
@@ -382,6 +408,28 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         List<BizInfo> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
         bizInfoDAO.persist(bizInfoList);*/
+    }
+
+    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+
+        log.info("saveCustomer ::: customerList : {}", customerList);
+        /*for(Customer customer : customerList){
+            customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                addressDAO.persist(customer.getAddressesList());
+            }
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                Individual individual = customer.getIndividual();
+                individualDAO.persist(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+                //Juristic
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.persist(juristic);
+            }
+        }*/
     }
 
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){

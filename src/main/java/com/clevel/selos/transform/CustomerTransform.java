@@ -54,6 +54,9 @@ public class CustomerTransform extends Transform {
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
         Customer customer = new Customer();
+        /*if(customerInfoView.getId() != 0){
+            customer.setId(customerInfoView.getId());
+        }*/
         customer.setWorkCase(workCase);
         customer.setWorkCasePrescreen(workCasePrescreen);
 
@@ -80,10 +83,13 @@ public class CustomerTransform extends Transform {
         customer.setNameTh(customerInfoView.getFirstNameTh());
         customer.setLastNameTh(customerInfoView.getLastNameTh());
         customer.setAge(customerInfoView.getAge());
+        customer.setNcbFlag(customerInfoView.isNcbFlag());
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
             customer.setRelation(relationDAO.findById(customerInfoView.getRelation().getId()));
         }
+
+        log.info("transformToModel : customer before adding address : {}", customer);
 
         List<Address> addressList = new ArrayList<Address>();
 
@@ -91,6 +97,9 @@ public class CustomerTransform extends Transform {
             Address address = new Address();
 
             AddressView currentAddress = customerInfoView.getCurrentAddress();
+            /*if(currentAddress.getId() != 0){
+                address.setId(currentAddress.getId());
+            }*/
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -135,6 +144,9 @@ public class CustomerTransform extends Transform {
             Address address = new Address();
 
             AddressView registerAddress = customerInfoView.getRegisterAddress();
+            /*if(registerAddress.getId() != 0){
+                address.setId(registerAddress.getId());
+            }*/
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -179,6 +191,9 @@ public class CustomerTransform extends Transform {
             Address address = new Address();
 
             AddressView workAddress = customerInfoView.getWorkAddress();
+            /*if(workAddress.getId() != 0){
+                address.setId(workAddress.getId());
+            }*/
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -219,9 +234,14 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(workAddress.getContactPhone());
         }
 
+        log.info("transformToModel : customer after adding address : {}", customer);
+
         if(customerInfoView.getCustomerEntity().getId() == 1){
             //Individual
             Individual individual = new Individual();
+            /*if(customerInfoView.getIndividualId() != 0){
+                individual.setId(customerInfoView.getIndividualId());
+            }*/
             individual.setBirthDate(customerInfoView.getDateOfBirth());
             individual.setCitizenId(customerInfoView.getCitizenId());
             individual.setCustomer(customer);
@@ -321,6 +341,7 @@ public class CustomerTransform extends Transform {
             if(item.getCustomerEntity().getId() == 1){
                 //Individual
                 Individual individual = item.getIndividual();
+                customerInfoView.setIndividualId(individual.getId());
                 customerInfoView.setCitizenId(individual.getCitizenId());
                 customerInfoView.setGender(individual.getGender());
                 customerInfoView.setDateOfBirth(individual.getBirthDate());
@@ -401,7 +422,9 @@ public class CustomerTransform extends Transform {
 
         if(customerInfoViews != null){
             for(CustomerInfoView item : customerInfoViews){
+                log.info("transformToModelList before item : {}", item);
                 Customer customer = transformToModel(item, workCasePrescreen, workCase);
+                log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
             }
         }

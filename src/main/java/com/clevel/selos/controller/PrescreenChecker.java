@@ -4,8 +4,10 @@ import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -193,7 +195,48 @@ public class PrescreenChecker implements Serializable {
             //** Retrieve new customer data !protect data is not up to date **//
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
             log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
-            prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+            List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+            int index = 0;
+            if(ncbViewList != null){
+                for(NcbView item : ncbViewList){
+                    index = 0;
+                    for(CustomerInfoView customerInfoView : customerInfoViewList){
+                        if(item.getIdNumber() != null){
+                            log.info("onCheckNCB ::: index : {}", index);
+                            if(customerInfoView.getCustomerEntity() != null){
+                                if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
+                                    if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
+                                        log.info("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
+                                        customerInfoView.setNcbReason(item.getReason());
+                                        customerInfoView.setNcbResult(item.getResult().name());
+                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                            customerInfoView.setNcbFlag(true);
+                                        }
+                                    }
+                                }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
+                                    if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
+                                        log.info("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
+                                        customerInfoView.setNcbReason(item.getReason());
+                                        customerInfoView.setNcbResult(item.getResult().name());
+                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                            customerInfoView.setNcbFlag(true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        log.info("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
+                        customerInfoViewList.set(index, customerInfoView);
+                        index = index + 1;
+                    }
+                }
+                //TODO update customer to database
+                log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
+                prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
+
+            }
+
+            log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
             success = true;
         } catch(Exception ex){
             ex.printStackTrace();

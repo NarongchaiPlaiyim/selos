@@ -767,9 +767,9 @@ public class PrescreenMaker implements Serializable {
 
     public void onCancelCA(){
         log.info("onCancelCA ::: queueName : {}", queueName);
-        /*//TODO get nextStep
+        //TODO get nextStep
         String actionCode = "1003";
-        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode); 8*/
+        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
 
         messageHeader = "Information";
         message = "Cancel CA Complete.";

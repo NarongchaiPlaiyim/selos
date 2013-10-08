@@ -64,7 +64,7 @@ public class InboxControl extends BusinessControl {
             HashMap<String, String> caseData = new HashMap<String, String>();
             caseData.put("F_WobNum", workCasePrescreen.getWobNumber());
             caseData.put("F_StepName", "PS1001");
-            caseData.put("Step_Code", "1002");
+            caseData.put("Step_Code", Long.toString(workCasePrescreen.getStep().getId()));
             caseData.put("Lock_Status", "0");
             caseData.put("Locked_User", "0");
             caseData.put("QUEUE_NAME", "0");
@@ -123,7 +123,11 @@ public class InboxControl extends BusinessControl {
                 List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
                 for(CustomerInfoView item : customerInfoViewList){
                     AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
-                    appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
+                    if(item.getTitleTh() != null){
+                        appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
+                    } else{
+                        appBorrowerHeaderView.setBorrowerName(item.getFirstNameTh() + " " + item.getLastNameTh());
+                    }
                     if(item.getCustomerEntity().getId() == 1){
                         appBorrowerHeaderView.setPersonalId(item.getCitizenId());
                     }else if(item.getCustomerEntity().getId() == 2){
