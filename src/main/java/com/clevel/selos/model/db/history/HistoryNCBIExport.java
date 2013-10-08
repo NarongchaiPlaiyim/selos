@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db.export;
+package com.clevel.selos.model.db.history;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -7,11 +7,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "ext_ncbi_export")
-public class NCBIExport implements Serializable {
+@Table(name = "his_ext_ncbi_export")
+public class HistoryNCBIExport implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_NCBI_ID", sequenceName="SEQ_EXT_NCBI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCBI_ID")
+    @SequenceGenerator(name="SEQ_HIS_EXT_NCBI_ID", sequenceName="SEQ_HIS_EXT_NCBI_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_EXT_NCBI_ID")
     private long id;
     @Column(name="staff_id", length = 5)
     private String staffId;
@@ -54,11 +54,10 @@ public class NCBIExport implements Serializable {
     @Column(name="status", length = 10)
     private String status;
 
-
-    public NCBIExport() {
+    public HistoryNCBIExport() {
     }
 
-    public NCBIExport(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode) {
+    public HistoryNCBIExport(String staffId, String requestNo, String inquiryType, String customerType, String customerDocumentType, String juristicType, String customerId, String countryCode, String titleCode, String firstName, String lastName, String juristicName, String caNumber, String caution, String referenceTel, String inquiryStatus, String inquiryDate, String inquiryTime, String officeCode, String status) {
         this.staffId = staffId;
         this.requestNo = requestNo;
         this.inquiryType = inquiryType;
@@ -78,6 +77,7 @@ public class NCBIExport implements Serializable {
         this.inquiryDate = inquiryDate;
         this.inquiryTime = inquiryTime;
         this.officeCode = officeCode;
+        this.status = status;
     }
 
     public long getId() {
@@ -164,10 +164,6 @@ public class NCBIExport implements Serializable {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -191,6 +187,7 @@ public class NCBIExport implements Serializable {
                 .append("inquiryDate", inquiryDate)
                 .append("inquiryTime", inquiryTime)
                 .append("officeCode", officeCode)
+                .append("status", status)
                 .toString();
     }
 }
