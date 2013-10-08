@@ -157,12 +157,14 @@ public class TestService implements Serializable{
                 result.append("\n citizenId : "+ customerAccountResult.getAccountListModels().get(i).getCitizenId());
                 result.append("\n curr : "+ customerAccountResult.getAccountListModels().get(i).getCurr());
                 result.append("\n =========================================================== ");
+
             }
         }else{
             result.append("\n accountListSize : "+ customerAccountResult.getAccountListModels().size());
         }
 
         printDetail=result.toString();
+        System.out.println(printDetail);
     }
 
 
