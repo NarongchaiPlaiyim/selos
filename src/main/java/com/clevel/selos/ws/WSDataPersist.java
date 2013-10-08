@@ -3,6 +3,7 @@ package com.clevel.selos.ws;
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 
 import com.clevel.selos.integration.IntegrationStatus;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import org.slf4j.Logger;
 
@@ -30,7 +31,7 @@ public class WSDataPersist {
 
     public void addFailedCase(CaseCreationHistory caseCreationHistory, String message) {
         log.debug("addFailedHistory (message: {}, detail: {})",message,caseCreationHistory);
-        caseCreationHistory.setStatus(IntegrationStatus.FAILED);
+        caseCreationHistory.setStatus(ActionResult.FAILED);
         caseCreationHistory.setStatusDetail(message);
         addNewCase(caseCreationHistory);
     }

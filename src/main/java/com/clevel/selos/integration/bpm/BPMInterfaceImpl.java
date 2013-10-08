@@ -103,7 +103,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             bpmAuditor.add(bpmUsername,"createCase","",now, ActionResult.SUCCEED,"",linkKey);
         } catch (SELOSBPMException e) {
             success = false;
-            caseCreationHistory.setStatus(IntegrationStatus.FAILED);
+            caseCreationHistory.setStatus(ActionResult.FAILED);
             caseCreationHistory.setStatusDetail(e.getMessage());
             log.error("[{}] {}",linkKey,msg.get(ExceptionMapping.BPM_NEW_CASE_EXCEPTION), e);
             bpmAuditor.add(bpmUsername, "createCase", "", now, ActionResult.FAILED, e.getMessage(),linkKey);

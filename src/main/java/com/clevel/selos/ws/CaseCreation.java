@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
@@ -94,7 +95,7 @@ public class CaseCreation implements WSCaseCreation {
         Date now = new Date();
         CaseCreationHistory caseCreationHistory = new CaseCreationHistory(jobName,caNumber,oldCaNumber,accountNo1,customerId,customerName,citizenId,requestType,customerType,
                 bdmId,hubCode,regionCode,uwId,appInDateBDM,finalApproved,parallel,pending,caExist,caEnd,accountNo2,accountNo3,accountNo4,
-                accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now,IntegrationStatus.WAITING,"","");
+                accountNo5,accountNo6,accountNo7,accountNo8,accountNo9,accountNo10,appInDateUW,now, ActionResult.WAITING,"","");
         CaseCreationResponse response = new CaseCreationResponse();
         //handle all un-expected exception
         try {
