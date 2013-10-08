@@ -23,9 +23,7 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory,Long>
 
         boolean exist = isRecordExist(Restrictions.and(
                 Restrictions.eq("caNumber", caNumber),
-                Restrictions.or(
-                        Restrictions.eq("status", ActionResult.SUCCEED),
-                        Restrictions.eq("status",IntegrationStatus.WAITING)))
+                Restrictions.eq("status", ActionResult.SUCCEED))
                 );
 
         log.debug("isExist. (result: {})", exist);
