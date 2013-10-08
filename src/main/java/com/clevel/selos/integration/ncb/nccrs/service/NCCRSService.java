@@ -48,6 +48,13 @@ public class NCCRSService implements Serializable {
             log.debug("NCCRS flag is {}", flag);
             if (!flag){
                 ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
+                NCCRSModel nccrsModel = null;
+                for(int i = 0; i<nccrsModelArrayList.size(); i++){
+                    nccrsModel = nccrsModelArrayList.get(i);
+                    nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), i));
+                    log.debug("NCRS MemberRef = {}", nccrsModel.getMemberRef());
+                }
+                responseModelArrayList = nccrsImp.requestOnline(inputModel);
                 return responseModelArrayList;
             } else {
                 responseModelArrayList = nccrsImp.requestOffline(inputModel);
