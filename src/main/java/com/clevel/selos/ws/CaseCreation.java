@@ -9,6 +9,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
 import org.slf4j.Logger;
 
@@ -102,7 +103,7 @@ public class CaseCreation implements WSCaseCreation {
             }
 
             //validate all input parameter
-            if(!ValidationUtil.isValueEqual(2, jobName.length())){
+            if(!Util.isEmpty(jobName) && jobName.equals("NC")){
                 wsDataPersist.addFailedCase(caseCreationHistory,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(jobName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(jobName)"),"");
                 log.debug("{}",response);
