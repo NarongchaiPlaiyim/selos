@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="selos" default="war">
+
+    <property file="selos.properties"/>
+    <property name="selos.output.dir" value="${project.home}/out/production/selos"/>
+
+    <target name="war" description="war">
+        <delete file="${war.output.file}"/>
+        <war destfile="${war.output.file}" webxml="src/main/webapp/WEB-INF/web.xml">
+            <fileset dir="src/main/webapp"/>
+            <classes dir="${selos.output.dir}" excludes="logback.xml,selos.properties"/>
+        </war>
+
+    </target>
+
+</project>

@@ -7,6 +7,8 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.email.EmailService;
+import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
@@ -28,6 +30,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -166,6 +169,15 @@ public class WelcomePage implements Serializable {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Runtime exception!","Exception Code: "+ e.getCode()+", Message: "+e.getMessage() +", stack trace: "+ ExceptionUtils.getMessage(e.getCause()));
             RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
+    }
+
+    @Inject
+    @Template1
+    EmailService email;
+
+    public void testEmail() {
+        log.debug("testEmail.");
+        email.sendMail("user1@test.local","test subject","",new HashMap<String, String>());
     }
 
     public void reloadConfig() {
