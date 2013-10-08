@@ -1,13 +1,16 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
 import com.clevel.selos.integration.ncb.nccrs.service.NCCRSService;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.IdType;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.service.NCRSService;
 import org.slf4j.Logger;
 
@@ -30,6 +33,9 @@ public class TestNCRS implements Serializable {
 
     @Inject
     NCCRSService nccrsService;
+
+    @Inject
+    NCBInterfaceImpl ncbInterface;
 
 //    @Inject
 //    NCBIService ncbiService;
@@ -113,8 +119,14 @@ public class TestNCRS implements Serializable {
         ncrsModelArrayList.add(ncrsModel);
 
         NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
-        //ncbiService.process(inputModel);
-//        ncbiService.process();
+        try {
+            ArrayList<NCRSOutputModel> ncrsOutputModelArrayList = ncbInterface.request(inputModel);
+            for(NCRSOutputModel ncrsOutputModel : ncrsOutputModelArrayList){
+                log.info("NCRS response : {}", ncrsOutputModel.toString());
+            }
+        } catch (Exception e) {
+            log.info("NCRS Exception : {}", e.getMessage());
+        }
 
     }
     public void onClickNCCRS(){
@@ -131,7 +143,7 @@ public class TestNCRS implements Serializable {
         nccrsModel.setConfirmConsent(confirmConsent);
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
-        log.debug("_______________________________________ Model : ", nccrsModel.toString());
+        log.debug("Model : {}", nccrsModel.toString());
         modelArrayList.add(nccrsModel);
 
         nccrsModel = new NCCRSModel();
@@ -144,7 +156,7 @@ public class TestNCRS implements Serializable {
         nccrsModel.setConfirmConsent(confirmConsent);
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
-        log.debug("_______________________________________ Model : ", nccrsModel.toString());
+        log.debug("Model : {}", nccrsModel.toString());
         modelArrayList.add(nccrsModel);
 
         nccrsModel = new NCCRSModel();
@@ -157,11 +169,18 @@ public class TestNCRS implements Serializable {
         nccrsModel.setConfirmConsent(confirmConsent);
         nccrsModel.setLanguage(language);
         nccrsModel.setHistoricalBalanceReport(historicalBalanceReport);
-        log.debug("_______________________________________ Model : ", nccrsModel.toString());
+        log.debug("Model : {}", nccrsModel.toString());
         modelArrayList.add(nccrsModel);
 
         NCCRSInputModel inputModel = new NCCRSInputModel("55555", "0123456789012345", CANumber, referenceTel, modelArrayList);
-//        nccrsService.process(inputModel);
+        try {
+            ArrayList<NCCRSOutputModel> nccrsOutputModelArrayList = ncbInterface.request(inputModel);
+            for(NCCRSOutputModel nccrsOutputModel : nccrsOutputModelArrayList){
+                log.info("NCCRS response : {}", nccrsOutputModel.toString());
+            }
+        } catch (Exception e) {
+            log.info("NCCRS Exception : {}", e.getMessage());
+        }
     }
 
     public String getUserId() {
