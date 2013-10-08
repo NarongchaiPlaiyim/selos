@@ -1,10 +1,12 @@
 package com.clevel.selos.ws;
 
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMapping;
@@ -32,6 +34,8 @@ public class CaseCreation implements WSCaseCreation {
     BPMInterface bpmInterface;
     @Inject
     STPExecutor stpExecutor;
+    @Inject
+    UserDAO userDAO;
 
     @Inject
     @NormalMessage
@@ -151,14 +155,14 @@ public class CaseCreation implements WSCaseCreation {
                 return response;
             }
             if(requestType!=1){ //new credit
-                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(requestType)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(requestType)"),"");
+                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_DATA_INVALID, "(requestType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_DATA_INVALID,"(requestType)"),"");
                 log.debug("{}",response);
                 return response;
             }
             if(customerType!=1 && customerType!=2){ //1-individual, 2-Juristic
-                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(customerType)"));
-                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(customerType)"),"");
+                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_DATA_INVALID, "(customerType)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_DATA_INVALID,"(customerType)"),"");
                 log.debug("{}",response);
                 return response;
             }
@@ -167,6 +171,15 @@ public class CaseCreation implements WSCaseCreation {
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(bdmId)"),"");
                 log.debug("{}",response);
                 return response;
+            } else {
+                //check for exist user
+                User user = userDAO.findById(bdmId);
+                if(user == null){
+                    wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_INVALID_BDM, "(bdmId)"));
+                    response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_INVALID_BDM,"(bdmId)"),"");
+                    log.debug("{}",response);
+                    return response;
+                }
             }
             if(Util.isEmpty(hubCode) || ValidationUtil.isGreaterThan(4,hubCode)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(hubCode)"));

@@ -12,4 +12,5 @@ public interface ValidationMapping {
 
     // web service
     public static final String RM_DUPLICATE_CA = "1101";
+    public static final String RM_INVALID_BDM = "1102";
 }
