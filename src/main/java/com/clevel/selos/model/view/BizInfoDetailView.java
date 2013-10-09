@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class BizInfoView implements Serializable {
+public class BizInfoDetailView implements Serializable {
     private long id;
     private String bizInfoText;
     private String tradeType;
@@ -20,9 +20,23 @@ public class BizInfoView implements Serializable {
     private String bizCode;
     private BigDecimal incomeFactor;
     private BigDecimal adjustedIncomeFactor;
+    private String bizComment;
     private BigDecimal percentBiz;
     private String bizPermission;
-    private String bizComment;
+    private String bizDocPermission;
+    private String bizDocExpiryDate;
+    private String expIndCountryName;
+    private BigDecimal percentExpIndCountryName;
+    private BigDecimal supplierTotalPercentBuyVolume;
+    private BigDecimal supplierTotalPercentCredit;
+    private BigDecimal supplierTotalCreditTerm;
+    private BigDecimal supplierUWAdjustPercentCredit;
+    private BigDecimal supplierUWAdjustCreditTerm;
+    private BigDecimal buyerTotalPercentBuyVolume;
+    private BigDecimal buyerTotalPercentCredit;
+    private BigDecimal buyerTotalCreditTerm;
+    private BigDecimal buyerUWAdjustPercentCredit;
+    private BigDecimal buyerUWAdjustCreditTerm;
     private BigDecimal standardAccountReceivable;
     private BigDecimal averagePurchaseAmount;
     private BigDecimal purchasePercentCash;
@@ -48,7 +62,8 @@ public class BizInfoView implements Serializable {
     private List<BizStakeHolderDetailView> buyerDetailList;
 
     public void reset(){
-
+        this.bizDesc = new BusinessDescription();
+        this.bizDesc.setBusinessGroup(new BusinessGroup());
     }
 
     public long getId() {
@@ -123,6 +138,14 @@ public class BizInfoView implements Serializable {
         this.adjustedIncomeFactor = adjustedIncomeFactor;
     }
 
+    public String getBizComment() {
+        return bizComment;
+    }
+
+    public void setBizComment(String bizComment) {
+        this.bizComment = bizComment;
+    }
+
     public BigDecimal getPercentBiz() {
         return percentBiz;
     }
@@ -139,12 +162,116 @@ public class BizInfoView implements Serializable {
         this.bizPermission = bizPermission;
     }
 
-    public String getBizComment() {
-        return bizComment;
+    public String getBizDocPermission() {
+        return bizDocPermission;
     }
 
-    public void setBizComment(String bizComment) {
-        this.bizComment = bizComment;
+    public void setBizDocPermission(String bizDocPermission) {
+        this.bizDocPermission = bizDocPermission;
+    }
+
+    public String getBizDocExpiryDate() {
+        return bizDocExpiryDate;
+    }
+
+    public void setBizDocExpiryDate(String bizDocExpiryDate) {
+        this.bizDocExpiryDate = bizDocExpiryDate;
+    }
+
+    public String getExpIndCountryName() {
+        return expIndCountryName;
+    }
+
+    public void setExpIndCountryName(String expIndCountryName) {
+        this.expIndCountryName = expIndCountryName;
+    }
+
+    public BigDecimal getPercentExpIndCountryName() {
+        return percentExpIndCountryName;
+    }
+
+    public void setPercentExpIndCountryName(BigDecimal percentExpIndCountryName) {
+        this.percentExpIndCountryName = percentExpIndCountryName;
+    }
+
+    public BigDecimal getSupplierTotalPercentBuyVolume() {
+        return supplierTotalPercentBuyVolume;
+    }
+
+    public void setSupplierTotalPercentBuyVolume(BigDecimal supplierTotalPercentBuyVolume) {
+        this.supplierTotalPercentBuyVolume = supplierTotalPercentBuyVolume;
+    }
+
+    public BigDecimal getSupplierTotalPercentCredit() {
+        return supplierTotalPercentCredit;
+    }
+
+    public void setSupplierTotalPercentCredit(BigDecimal supplierTotalPercentCredit) {
+        this.supplierTotalPercentCredit = supplierTotalPercentCredit;
+    }
+
+    public BigDecimal getSupplierTotalCreditTerm() {
+        return supplierTotalCreditTerm;
+    }
+
+    public void setSupplierTotalCreditTerm(BigDecimal supplierTotalCreditTerm) {
+        this.supplierTotalCreditTerm = supplierTotalCreditTerm;
+    }
+
+    public BigDecimal getSupplierUWAdjustPercentCredit() {
+        return supplierUWAdjustPercentCredit;
+    }
+
+    public void setSupplierUWAdjustPercentCredit(BigDecimal supplierUWAdjustPercentCredit) {
+        this.supplierUWAdjustPercentCredit = supplierUWAdjustPercentCredit;
+    }
+
+    public BigDecimal getSupplierUWAdjustCreditTerm() {
+        return supplierUWAdjustCreditTerm;
+    }
+
+    public void setSupplierUWAdjustCreditTerm(BigDecimal supplierUWAdjustCreditTerm) {
+        this.supplierUWAdjustCreditTerm = supplierUWAdjustCreditTerm;
+    }
+
+    public BigDecimal getBuyerTotalPercentBuyVolume() {
+        return buyerTotalPercentBuyVolume;
+    }
+
+    public void setBuyerTotalPercentBuyVolume(BigDecimal buyerTotalPercentBuyVolume) {
+        this.buyerTotalPercentBuyVolume = buyerTotalPercentBuyVolume;
+    }
+
+    public BigDecimal getBuyerTotalPercentCredit() {
+        return buyerTotalPercentCredit;
+    }
+
+    public void setBuyerTotalPercentCredit(BigDecimal buyerTotalPercentCredit) {
+        this.buyerTotalPercentCredit = buyerTotalPercentCredit;
+    }
+
+    public BigDecimal getBuyerTotalCreditTerm() {
+        return buyerTotalCreditTerm;
+    }
+
+    public void setBuyerTotalCreditTerm(BigDecimal buyerTotalCreditTerm) {
+        this.buyerTotalCreditTerm = buyerTotalCreditTerm;
+    }
+
+    public BigDecimal getBuyerUWAdjustPercentCredit() {
+        return buyerUWAdjustPercentCredit;
+    }
+
+    public void setBuyerUWAdjustPercentCredit(BigDecimal buyerUWAdjustPercentCredit) {
+        this.buyerUWAdjustPercentCredit = buyerUWAdjustPercentCredit;
+    }
+
+    public BigDecimal getBuyerUWAdjustCreditTerm() {
+        return buyerUWAdjustCreditTerm;
+    }
+
+    public void setBuyerUWAdjustCreditTerm(BigDecimal buyerUWAdjustCreditTerm) {
+        this.buyerUWAdjustCreditTerm = buyerUWAdjustCreditTerm;
     }
 
     public BigDecimal getStandardAccountReceivable() {

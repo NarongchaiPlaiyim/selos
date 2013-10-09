@@ -1,8 +1,12 @@
 package com.clevel.selos.integration.rlos.csi.model;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class CSIInputData {
+public class CSIInputData implements Serializable {
     private List<NameModel> nameModelList;
     private List<IdModel> idModelList;
 
@@ -20,5 +24,13 @@ public class CSIInputData {
 
     public void setIdModelList(List<IdModel> idModelList) {
         this.idModelList = idModelList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("nameModelList", nameModelList)
+                .append("idModelList", idModelList)
+                .toString();
     }
 }
