@@ -49,7 +49,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     PreScreenResultTransform preScreenResultTransform;
     @Inject
-    BizInfoTransform bizInfoTransform;
+    BizInfoDetailTransform bizInfoTransform;
     @Inject
     CustomerTransform customerTransform;
 
@@ -63,7 +63,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
     @Inject
-    BizInfoDAO bizInfoDAO;
+    BizInfoDetailDAO bizInfoDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
@@ -349,9 +349,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         return facilityViewList;
     }
 
-    public List<BizInfoView> getBusinessInfo(long workCasePreScreenId){
-        List<BizInfoView> bizInfoViewList = null;
-        List<BizInfo> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+    public List<BizInfoDetailView> getBusinessInfo(long workCasePreScreenId){
+        List<BizInfoDetailView> bizInfoViewList = null;
+        List<BizInfoDetail> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
 
         if(bizInfoList != null){
             bizInfoViewList = bizInfoTransform.transformToPreScreenView(bizInfoList);
@@ -413,12 +413,12 @@ public class PrescreenBusinessControl extends BusinessControl {
         //customerDAO.persist(customerList);
 
         /*//Remove all Business before add new
-        List<BizInfo> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
+        List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
         if(bizInfoListDelete != null){
             bizInfoDAO.delete(bizInfoListDelete);
         }
 
-        List<BizInfo> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
+        List<BizInfoDetail> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
         bizInfoDAO.persist(bizInfoList);*/
     }
 
@@ -518,7 +518,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoViewList;
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoView> bizInfoViewList, long workCasePreScreenId){
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoDetailView> bizInfoViewList, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
     }

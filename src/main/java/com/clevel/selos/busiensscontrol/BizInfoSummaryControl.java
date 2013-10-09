@@ -1,6 +1,6 @@
 package com.clevel.selos.busiensscontrol;
 
-import com.clevel.selos.dao.working.BizInfoSummaryDAO;
+//import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -17,8 +17,8 @@ public class BizInfoSummaryControl {
     Logger log;
     @Inject
     BizInfoSummaryTransform bizInfoSummaryTransform;
-    @Inject
-    BizInfoSummaryDAO bizInfoSummaryDAO;
+    //@Inject
+    //BizInfoSummaryDAO bizInfoSummaryDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
 
@@ -30,6 +30,6 @@ public class BizInfoSummaryControl {
         bizInfoSummary = bizInfoSummaryTransform.transformToModel(bizInfoSummaryView);
         bizInfoSummary.setWorkCase(workCase);
 
-        bizInfoSummaryDAO.persist(bizInfoSummary);
+        //bizInfoSummaryDAO.persist(bizInfoSummary);
     }
 }
