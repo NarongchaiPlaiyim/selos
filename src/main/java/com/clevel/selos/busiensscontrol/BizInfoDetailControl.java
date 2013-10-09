@@ -1,36 +1,37 @@
 package com.clevel.selos.busiensscontrol;
 
-import com.clevel.selos.dao.working.BizInfoDAO;
+import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
-import com.clevel.selos.model.db.working.BizInfo;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.db.working.BizStakeHolderDetail;
-import com.clevel.selos.model.view.BizInfoView;
+import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
-import com.clevel.selos.transform.BizInfoTransform;
+import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.transform.BizStakeHolderDetailTransform;
+import com.clevel.selos.dao.master.*;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 26/9/2556
- * Time: 16:09 น.
- * To change this template use File | Settings | File Templates.
- */
-
-public class BizInfoControl {
+@Stateless
+public class BizInfoDetailControl {
     @Inject
     Logger log;
+
     @Inject
-    BizInfoDAO bizInfoDAO;
+    BusinessDescriptionDAO businessDescriptionDAO;
+    
+    @Inject
+    BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
     BizStakeHolderDetailDAO bizStakeHolderDetailDAO;
     @Inject
@@ -40,9 +41,12 @@ public class BizInfoControl {
     @Inject
     BizStakeHolderDetailTransform bizStakeHolderDetailTransform;
     @Inject
-    BizInfoTransform bizInfoTransform;
+    BizInfoDetailTransform bizInfoDetailTransform;
+    @Inject
+    WorkCaseDAO workCaseDAO;
 
-    public void onSaveBizInfoToDB(BizInfoView bizInfoFullView){
+    public void onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView){
+
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
         List<BizProductDetail> bizProductDetailList;
@@ -50,7 +54,7 @@ public class BizInfoControl {
         List<BizStakeHolderDetailView> buyerDetailList;
         List<BizProductDetailView> bizProductDetailViewList;
 
-        BizInfo bizInfo;
+        BizInfoDetail bizInfoDetail;
         BizStakeHolderDetail bizStakeHolderDetailTemp;
         BizStakeHolderDetailView stakeHolderDetailViewTemp;
         BizProductDetailView bizProductDetailViewTemp;
@@ -58,47 +62,43 @@ public class BizInfoControl {
         try{
             log.info( "onSaveBizInfoToDB begin" );
 
-            bizInfo = bizInfoTransform.transformToModel(bizInfoFullView);
-            bizInfoDAO.persist(bizInfo);
+            bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
 
-            supplierDetailList = bizInfoFullView.getSupplierDetailList();
-            buyerDetailList = bizInfoFullView.getBuyerDetailList();
-            bizProductDetailViewList = bizInfoFullView.getBizProductDetailViewList();
+            bizInfoDetailDAO.persist(bizInfoDetail);
+            log.info( "bizInfoDetailDAO persist end" );
+
+            supplierDetailList = bizInfoDetailView.getSupplierDetailList();
+            buyerDetailList = bizInfoDetailView.getBuyerDetailList();
+            bizProductDetailViewList = bizInfoDetailView.getBizProductDetailViewList();
 
             bizProductDetailList = new ArrayList<BizProductDetail>();
             for (int i =0;i<bizProductDetailViewList.size();i++){
                 bizProductDetailViewTemp = bizProductDetailViewList.get(i);
-                bizProductDetailTemp = bizProductDetailTransform.transformToModel(bizProductDetailViewTemp,bizInfo);
+                bizProductDetailTemp = bizProductDetailTransform.transformToModel(bizProductDetailViewTemp, bizInfoDetail);
                 bizProductDetailList.add(bizProductDetailTemp);
             }
             bizProductDetailDAO.persist(bizProductDetailList);
-
-            //bizProductDetail Add
-            log.info( "bizProductDetailList Size " + bizProductDetailList.size());
-            for (int i=0;i<bizProductDetailList.size();i++){
-                bizProductDetailTemp =bizProductDetailList.get(i);
-                bizProductDetailTemp.setBizInfo(bizInfo);
-                bizProductDetailList.set(i,bizProductDetailTemp);
-            }
-            log.info( "bizProductDetailList Add " );
-            bizProductDetailDAO.persist(bizProductDetailList);
+            log.info( "bizProductDetailDAO persist end" );
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
             for (int i =0;i<supplierDetailList.size();i++){
                 stakeHolderDetailViewTemp = supplierDetailList.get(i);
-                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp,bizInfo);
+                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp, bizInfoDetail);
+                bizStakeHolderDetailTemp.setStakeHolderType("1");
                 bizSupplierList.add(bizStakeHolderDetailTemp);
             }
             bizStakeHolderDetailDAO.persist(bizSupplierList);
+            log.info( "bizSupplierListDetailDAO persist end" );
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
             for (int i =0;i<buyerDetailList.size();i++){
                 stakeHolderDetailViewTemp = buyerDetailList.get(i);
-                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp,bizInfo);
+                bizStakeHolderDetailTemp = bizStakeHolderDetailTransform.transformToModel(stakeHolderDetailViewTemp, bizInfoDetail);
+                bizStakeHolderDetailTemp.setStakeHolderType("2");
                 bizBuyerList.add(bizStakeHolderDetailTemp);
             }
             bizStakeHolderDetailDAO.persist(bizBuyerList);
-
+            log.info( "bizBuyerListDetailDAO persist end" );
 
         }catch (Exception e){
             log.error( "onSaveBizInfoToDB error" + e);
@@ -107,4 +107,28 @@ public class BizInfoControl {
             log.info( "onSaveBizInfoToDB end" );
         }
     }
+
+    public BusinessDescription onFindBizDescByID(BusinessDescription bizDescReq ){
+        BusinessDescription bizDescRes;
+        int bizDescId;
+        try{
+            log.info( "onFindBizDescByID begin" );
+
+            bizDescId = bizDescReq.getId();
+            bizDescRes =  businessDescriptionDAO.findById(bizDescId);
+
+            log.info( "onFindBizDescByID before return is   >> " + bizDescRes.toString());
+
+
+            return bizDescRes;
+        }catch (Exception e){
+            log.error( "onFindBizDescByID error" + e);
+            return null;
+        }finally{
+
+            log.info( "onFindBizDescByID end" );
+
+        }
+    }
+    
 }

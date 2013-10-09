@@ -7,7 +7,7 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>Business Info.</title>
+        <title>Business Info Summary</title>
         <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
@@ -28,15 +28,234 @@
                 <div id="content_name">Business Info. Summary</div>
                 <div id="content">
                     <table id="content_form">
-                        <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
-                            <a style="cursor: pointer;" href="#">[View Track Change]</a></td></tr>
                         <tr>
-                            <td colspan="100%"><div class="separate"><!-- --></div></td>
+                            <td class="right" style="padding-right: 10px;">
+                                Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                                <a style="cursor: pointer;" href="#">[View Track Change]</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div class="separate"><!-- --></div></td>
+                        </tr>
+                        <tr>
+                            <td>รายละเอียดสถานประกอบการณ์</td>
                         </tr>
 
                         <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td>ชื่อสถานประกอบการณ์</td>
+                                        <td><p:inputText/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>สถานประกอบการเป็นที่เช่า</td>
+                                        <td>เป็นกรรมสิทธิ์ของ</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td>หมดสัญญาวันที่ <p:calendar/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title top">ที่อยู่สถานประกอบการ :</td>
+                                        <td class="title top" style="padding: 0%" >
+                                            <table style="padding: 0%" border="3">
+                                                <tr>
+                                                    <td class="title left">เลขที่</td>
+                                                    <td class="left"><p:inputText styleClass="smallest"/></td>
+                                                    <td class="title right">หมู่ที่</td>
+                                                    <td class="left"><p:inputText styleClass="smallest"/></td>
+                                                    <td class="title right">อาคาร/หมู่บ้าน</td>
+                                                    <td class="left"><p:inputText styleClass="large"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title left">ตรอก/ซอย/ถนน</td>
+                                                    <td class="left" colspan="5"><input type="text" style="width:400px;"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td colspan="5">
+                                                        <p:selectOneMenu styleClass="largest" size="1"  value="bizInfoSummary.provinceID"
+                                                                         id="provinceCode">
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItems value="#{bizInfoSummary.provinceList}"
+                                                                           var="province"
+                                                                           itemLabel="#{province.name}"
+                                                                           itemValue="#{province.code}"/>
+                                                            <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
+                                                                    update=":districtCode,:subDistrictCode"/>
+                                                        </p:selectOneMenu>
+
+                                                        <p:selectOneMenu styleClass="largest" size="1" value="bizInfoSummary.districtID"
+                                                                         id="districtCode">
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItems value="#{bizInfoSummary.districtList}"
+                                                                           var="district"
+                                                                           itemLabel="#{district.name}"
+                                                                           itemValue="#{district.id}"/>
+                                                            <p:ajax listener="#{borrowerInfoIndividual.onChangeDistrict()}" update=":subDistrictCode"/>
+                                                        </p:selectOneMenu>
+
+                                                        <p:selectOneMenu styleClass="largest" size="1" value="bizInfoSummary.subDistrictID"
+                                                                         id="subDistrictCode">
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItems value="#{bizInfoSummary.subDistrictList}"
+                                                                           var="subDistrict3"
+                                                                           itemLabel="#{subDistrict.name}"
+                                                                           itemValue="#{subDistrict.code}"/>
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title">รหัสไปรษณีย์ :</td>
+                                                    <td colspan="5"><p:inputMask mask="99999" styleClass="medium"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title">โทรศัพท์สถานประกอบการ :</td>
+                                                    <td colspan="5"><p:inputText styleClass="large"/> ต่อ <p:inputText styleClass="smaller"/></td>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            ระยะเวลาดำเนินธุรกิจ
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            วันจดทะเบียนพาณิชย์
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            วันก่อตั้งกิจการ / อ้างอิงประสบการณ์
+                                        </td>
+                                        <td>
+                                            <p:calendar/>
+                                        </td>
+                                        <td>
+                                            อ้างอิงจาก
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="left">
-                                <p:commandButton value="Add" styleClass="small" onclick="document.location.replace('businessInfoDetail.jsf');return;"/>
+                                <table style="padding: 0%" border="3">
+                                    <tr>
+                                        <td>
+                                            รายการ
+                                        </td>
+                                        <td>
+                                            จำนวน
+                                        </td>
+                                        <td>
+                                            % ยอดขาย
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                           ยอดขาย/รายได้
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            ต้นทุนการผลิต
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            กำไรเบื้องต้น
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            หักค่าใช้จ่ายดำเนินงาน
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            กำไรก่อนหักดอกเบี้ยและภาษี
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            หักดอกเบี้ย
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            หักภาษี
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            กำไรสุทธิ
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                        <td>
+                                            <p:inputText/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน
+                                จำนวนแรงงาน
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <p:commandButton value="Add" styleClass="small" onclick="document.location.replace('bizInfoDetail.jsf');return;"/>
                             </td>
                         </tr>
                         <tr>
@@ -104,19 +323,45 @@
                         <tr>
                             <td colspan="6">
                                 <p:dataTable id="businessInfoTable"
-                                             var="bizInfo"
-                                             value="#{bizInfoSummary.bizInfoFullViewList}"
+                                             var="bizInfoDetailx"
+                                             value="#{bizInfoSummary.bizInfoDetailViewList}"
                                              paginator="false"
-                                             rowKey="#{bizInfo.bizComment}"
+                                             rowKey="#{bizInfoDetail.bizComment}"
                                              style="width: 100%;"
                                              rowIndexVar="rowIndex">
 
                                     <p:column headerText="" styleClass="center" style="width:22px;">
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-
+                                    <p:column headerText="bizCode" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizCode}"/>
+                                    </p:column>
+                                    <p:column headerText="bizType.name" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizType.name}"/>
+                                    </p:column>
+                                    <p:column headerText="bizGroup.name" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizGroup.name}"/>
+                                    </p:column>
+                                    <p:column headerText="bizDesc.name" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
+                                    </p:column>
+                                    <p:column headerText="incomeFactor" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.incomeFactor}"/>
+                                    </p:column>
+                                    <p:column headerText="adjustedIncomeFactor" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.adjustedIncomeFactor}"/>
+                                    </p:column>
+                                    <p:column headerText="bizDesc.ar" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizDesc.ar}"/>
+                                    </p:column>
+                                    <p:column headerText="bizDesc.ap" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizDesc.ap}"/>
+                                    </p:column>
+                                    <p:column headerText="bizDesc.inv" styleClass="center" style="width: 140px;">
+                                        <h:outputText value="#{bizInfoDetailx.bizDesc.inv}"/>
+                                    </p:column>
                                     <p:column headerText="#{msg.get('app.bizComment')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfo.bizComment}"/>
+                                        <h:outputText value="#{bizInfoDetailx.bizComment}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
