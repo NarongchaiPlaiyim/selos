@@ -450,7 +450,7 @@ public class NCRSImp implements NCRS, Serializable{
     private void saveNCBI(NCRSResponseModel responseModel) throws Exception{
         NCBIExportModel exportModel = new NCBIExportModel();
 
-        exportModel.setOfficeCode("99");
+        exportModel.setOfficeCode("XXX");
 
         exportModel.setRequestNo(memberref);
         exportModel.setStaffId(userId);

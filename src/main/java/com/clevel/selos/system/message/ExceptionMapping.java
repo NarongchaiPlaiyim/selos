@@ -5,6 +5,9 @@ public interface ExceptionMapping {
     //LDAP exception
     public static final String LDAP_EMPTY_PASSWORD = "005";
     public static final String LDAP_AUTHENTICATION_FAILED = "006";
+    public static final String USER_NOT_FOUND = "007";
+    public static final String USER_STATUS_DISABLED = "008";
+    public static final String USER_STATUS_DELETED = "009";
 
     //BPM exception
     public static final String BPM_NEW_CASE_EXCEPTION = "010";
@@ -21,6 +24,9 @@ public interface ExceptionMapping {
     public static final String EMAIL_COULD_NOT_BE_SENT = "023";
     public static final String EMAIL_EXCEPTION = "024";
     public static final String EMAIL_TEMPLATE_NOT_FOUND = "025";
+
+    //RLOS exception
+    public static final String RLOS_CSI_EXCEPTION = "030";
 
     public static final String RM_SERVICE_FAILED = "500";
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";

@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class CSIData implements Serializable{
+public class CSIData implements Serializable {
     private String citizenId;
     private String passportNo;
     private String businessRegNo;

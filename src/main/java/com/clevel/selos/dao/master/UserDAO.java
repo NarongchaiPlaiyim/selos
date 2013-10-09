@@ -22,7 +22,6 @@ public class UserDAO extends GenericDAO<User,String> {
         log.debug("findByUserName. (userName: {})",userName);
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }
-
     public List<User> findBDMChecker(User user){
         log.debug("findBDMChecker. BDM Maker : {}", user);
 
@@ -31,7 +30,7 @@ public class UserDAO extends GenericDAO<User,String> {
         criteria.add(Restrictions.eq("team", user.getTeam()));
         criteria.addOrder(Order.asc("id"));
         List<User> userList = criteria.list();
-        log.info("findBDMChecker. (result size: {})", userList.size());
+        log.debug("findBDMChecker. (result size: {})", userList.size());
 
         return userList;
     }
