@@ -7,9 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
+import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.ValidationUtil;
 import org.apache.http.HttpResponse;
@@ -35,15 +38,23 @@ public class Post implements Serializable {
     @ValidationMessage
     Message message;
 
-    @Inject
-    public Post() {
+    private final String required = ValidationMapping.NCB_DATA_REQUIRED;
+    private final String exception = ExceptionMapping.NCB_EXCEPTION;
 
+    public Post() {
     }
 
     public String sendPost(String xml, String url, int timeOut) throws Exception {
         log.debug("Call : sendPost()");
-        if (ValidationUtil.isNull(xml)) throw new ValidationException(message.get("validation.102"));
-        if (ValidationUtil.isNull(url)) throw new ValidationException(message.get("validation.103"));
+        if(ValidationUtil.isNull(xml)){
+            throw new ValidationException(required, message.get(required, "XML"));
+        }
+        if(ValidationUtil.isNull(url)){
+            throw new ValidationException(required, message.get(required, "URL"));
+        }
+        if(ValidationUtil.isInteger(""+timeOut)){
+            throw new ValidationException(required, message.get(required, "Time Out"));
+        }
 
         log.debug("url : {}", url);
         DefaultHttpClient client = null;
@@ -71,7 +82,7 @@ public class Post implements Serializable {
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
             log.debug("The request has succeeded");
-            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()/*, HTTP.UTF_8*/));
+            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             builder = new StringBuilder();
             String line = "";
             while ((line = rd.readLine()) != null) {
@@ -79,14 +90,9 @@ public class Post implements Serializable {
             }
             return builder!=null?builder.toString():"";
         }else{
-            throw new Exception("The request has failed, Error code is "+resCode);
+            log.error("The request has failed, Error code is {}", resCode);
+            throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
         }
-        /*
-        200′s are used for successful requests.
-        300′s are for redirections.
-        400′s are used if there was a problem with the request.
-        500′s are used if there was a problem with the server.
-        */
 
     }
 }
