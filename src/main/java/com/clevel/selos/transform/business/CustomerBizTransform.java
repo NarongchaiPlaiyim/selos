@@ -196,7 +196,6 @@ public class CustomerBizTransform extends BusinessTransform {
                     workAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getWorkAddress().getCountryCode())));
                     workAddress.setPhoneNumber(workPhoneNumber);
                     workAddress.setExtension(workPhoneExtension);
-                    workAddress.setTestString(individualModel.getWorkAddress().getDistrict());
                     customerInfoView.setWorkAddress(workAddress);
 
                     //CurrentAddress

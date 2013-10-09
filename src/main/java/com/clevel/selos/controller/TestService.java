@@ -99,17 +99,12 @@ public class TestService implements Serializable{
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getCode();
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getActive();
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getRegion();
-            printDetail+="\n blank Value : "+blank;
-            printDetail+="\n blank Value getByte : "+new String(blank.getBytes("UTF-8"),"ISO-8859-1");
-            printDetail+="\nbefore : "+customerInfoView.getWorkAddress().getTestString();
-            printDetail+="\nafter "+ Util.replaceToBlank(customerInfoView.getWorkAddress().getTestString(),blank);
-            printDetail+="\nafter getByte"+ Util.replaceToBlank(customerInfoView.getWorkAddress().getTestString(),new String(blank.getBytes("ISO-8859-1"),"UTF-8"));
-            printDetail+="\nafter blankHardcode"+ Util.replaceToBlank(customerInfoView.getWorkAddress().getTestString(),"เขต|แขวง");
-//            printDetail+="\n"+customerInfoView.getRegisterAddress().getSubDistrict().toString();
-//            printDetail+=" "+customerInfoView.getRegisterAddress().getDistrict().toString();
-//            printDetail+="\n\n\n\n\n"+customerInfoView.getWorkAddress().getAddressType().toString();
-//            printDetail+="\n"+customerInfoView.getCurrentAddress().getAddressType().toString();
-//            printDetail+="\n"+customerInfoView.getRegisterAddress().getAddressType().toString();
+
+            printDetail+="\n"+customerInfoView.getRegisterAddress().getSubDistrict().toString();
+            printDetail+=" "+customerInfoView.getRegisterAddress().getDistrict().toString();
+            printDetail+="\n\n\n\n\n"+customerInfoView.getWorkAddress().getAddressType().toString();
+            printDetail+="\n"+customerInfoView.getCurrentAddress().getAddressType().toString();
+            printDetail+="\n"+customerInfoView.getRegisterAddress().getAddressType().toString();
 //
 //            printDetail+=customerInfoView.toString();
         }
@@ -125,6 +120,7 @@ public class TestService implements Serializable{
         if(customerInfoResultView.getCustomerInfoView()!=null){
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
             printDetail=customerInfoView.toString();
+            printDetail+="\n\n\n"+customerInfoView.toString();
             printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
             printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
         }

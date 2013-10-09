@@ -23,15 +23,6 @@ public class AddressView implements Serializable{
     private String extension;
     private String contactName;
     private String contactPhone;
-    private String testString;
-
-    public String getTestString() {
-        return testString;
-    }
-
-    public void setTestString(String testString) {
-        this.testString = testString;
-    }
 
     public AddressView(){
 

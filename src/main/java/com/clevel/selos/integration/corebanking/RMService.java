@@ -264,8 +264,6 @@ public class RMService implements Serializable {
                     //set HomeAddress
                     String homeAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
                     String homeAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
-                    System.out.println("===================================== Line 3 : "+resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3());
-                    System.out.println("===================================== Line 3 : "+new String(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().getBytes("UTF-8")));
                     ContactDetails homeContactDetails = new ContactDetails();
                     //validateSpiltSize
                     int homeAddressLineSize1 = homeAddressLine1.length - 1;
@@ -282,15 +280,13 @@ public class RMService implements Serializable {
                     //validateSpiltSize
                     int homeAddressLineSize3 = homeAddressLine3.length - 1;
                     if (homeAddressLineSize3 >= 0) {
-//                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], subDistrict));
+//
 
                         homeContactDetails.setSubdistrict(Util.replaceToBlank(homeAddressLine3[0], blank));
-                        System.out.println("================================ REPLACE "+ Util.replaceToBlank(homeAddressLine3[0], blank));
                     }
                     if (homeAddressLineSize3 >= 1) {
-//                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], district));
                         homeContactDetails.setDistrict(Util.replaceToBlank(homeAddressLine3[1], blank));
-                        System.out.println("================================ REPLACE "+ Util.replaceToBlank(homeAddressLine3[1], blank));
+
                     }
                     homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
                     homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
