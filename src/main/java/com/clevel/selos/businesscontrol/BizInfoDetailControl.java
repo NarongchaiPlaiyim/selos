@@ -1,4 +1,4 @@
-package com.clevel.selos.busiensscontrol;
+package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;

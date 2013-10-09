@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.busiensscontrol.NCBInfoControl;
+import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;

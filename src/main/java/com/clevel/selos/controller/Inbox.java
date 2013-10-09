@@ -1,7 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.InboxControl;
-import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
@@ -10,7 +9,6 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
