@@ -95,8 +95,16 @@ public class LoginBean {
         try {
             userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {
-            log.debug("user not found in system! (user: {})", userName.trim());
-            securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
+            String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            return "failed";
+        }
+
+        if (user.getActive()!=1) {
+            String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
             return "failed";
         }
 
