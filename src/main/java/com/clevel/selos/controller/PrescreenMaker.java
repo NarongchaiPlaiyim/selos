@@ -254,6 +254,7 @@ public class PrescreenMaker implements Serializable {
         /*proposeCollateralViewList = prescreenBusinessControl.getProposeCollateral()*/
         if (proposeCollateralViewList == null) { proposeCollateralViewList = new ArrayList<CollateralView>(); }
 
+
         bizInfoViewList = prescreenBusinessControl.getBusinessInfo(workCasePreScreenId);
         if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoView>(); }
 
@@ -352,6 +353,26 @@ public class PrescreenMaker implements Serializable {
         boolean validate = false;
 
         return validate;
+    }
+
+    public void onCloseSale(){
+        log.info("onCloseSale ::: queueName : {}", queueName);
+        //TODO get nextStep
+        String actionCode = "1008";
+        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+
+        messageHeader = "Information";
+        message = "Close Sale Complete.";
+        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+            return;
+        } catch (Exception ex) {
+            log.error("Error to redirect : {}", ex.getMessage());
+        }
+
     }
 
     // *** Function For Facility *** //
@@ -773,7 +794,7 @@ public class PrescreenMaker implements Serializable {
 
         messageHeader = "Information";
         message = "Cancel CA Complete.";
-        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -835,7 +856,10 @@ public class PrescreenMaker implements Serializable {
 
     public void getProductProgramList(){
         log.info("getProductProgramList ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
-        ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+        ProductGroup productGroup = new ProductGroup();
+        if(prescreenView.getProductGroup().getId() != 0){
+            productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+        }
 
         //*** Get Product Program List from Product Group ***//
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);

@@ -23,6 +23,8 @@ public class AccountType implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
+    @Column(name = "ncb_code")
+    private String ncbCode;
 
     public AccountType() {
     }
@@ -75,6 +77,14 @@ public class AccountType implements Serializable {
         this.active = active;
     }
 
+    public String getNcbCode() {
+        return ncbCode;
+    }
+
+    public void setNcbCode(String ncbCode) {
+        this.ncbCode = ncbCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -84,6 +94,7 @@ public class AccountType implements Serializable {
                 append("wcFlag", wcFlag).
                 append("customerEntity", customerEntity).
                 append("active", active).
+                append("ncbCode", ncbCode).
                 toString();
     }
 }

@@ -179,8 +179,9 @@ public class CaseCreation implements WSCaseCreation {
                 return response;
             } else {
                 //check for exist user
-                User user = userDAO.findById(bdmId);
-                if(user == null){
+                try{
+                    User user = userDAO.findById(bdmId);
+                } catch (Exception ex){
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_INVALID_BDM, "(bdmId)"));
                     response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_INVALID_BDM,"(bdmId)"),"");
                     log.debug("{}",response);
