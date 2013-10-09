@@ -5,6 +5,9 @@ public interface ExceptionMapping {
     //LDAP exception
     public static final String LDAP_EMPTY_PASSWORD = "005";
     public static final String LDAP_AUTHENTICATION_FAILED = "006";
+    public static final String USER_NOT_FOUND = "007";
+    public static final String USER_STATUS_DISABLED = "008";
+    public static final String USER_STATUS_DELETED = "009";
 
     //BPM exception
     public static final String BPM_NEW_CASE_EXCEPTION = "010";
