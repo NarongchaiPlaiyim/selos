@@ -53,13 +53,35 @@ public class QualitativeControl extends BusinessControl {
             QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
             qualitativeADAO.persist(qualitativeA);
         } catch (Exception e) {
-            log.error("saveQualitativeA error" + e);
+            log.error("save QualitativeA error" + e);
         } finally {
 
             log.info("saveQualitativeA end");
         }
 
     }
+
+    public QualitativeView getQualitativeA(long workCaseId){
+        log.info("getQualitativeA ::: workCaseId : {}", workCaseId);
+        QualitativeView  qualitativeView = null;
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        if(workCase != null)
+        {
+            QualitativeA  qualitativeA = qualitativeADAO.findByWorkCase(workCase);
+
+            if(qualitativeA != null)
+            {
+                log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA);
+                qualitativeView = qualitativeTransform.transformQualitativeAToView(qualitativeA);
+            }
+        }
+
+        log.info("getQualitativeA ::: qualitativeView : {}", qualitativeView);
+        return qualitativeView;
+    }
+
 
     public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId) {
         try {
@@ -74,6 +96,27 @@ public class QualitativeControl extends BusinessControl {
             log.info("saveQualitativeB end");
         }
 
+    }
+
+    public QualitativeView getQualitativeB(long workCaseId){
+        log.info("getQualitativeB ::: workCaseId : {}", workCaseId);
+        QualitativeView  qualitativeView = null;
+
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        if(workCase != null)
+        {
+            QualitativeB  qualitativeB = qualitativeBDAO.findByWorkCase(workCase);
+
+            if(qualitativeB != null)
+            {
+                log.info("get QualitativeB ::: QualitativeB : {}", qualitativeB);
+                qualitativeView = qualitativeTransform.transformQualitativeBToView(qualitativeB);
+            }
+        }
+
+        log.info("getQualitativeB ::: qualitativeView : {}", qualitativeView);
+        return qualitativeView;
     }
 
 

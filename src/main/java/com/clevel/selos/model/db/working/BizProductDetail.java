@@ -21,8 +21,8 @@ public class BizProductDetail implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="biz_info_id")
-    private BizInfo bizInfo;
+    @JoinColumn(name="biz_info_detail_id")
+    private BizInfoDetail bizInfoDetail;
 
     @Column(name = "no")
     private long no;
@@ -90,11 +90,11 @@ public class BizProductDetail implements Serializable {
         this.productDetail = productDetail;
     }
 
-    public BizInfo getBizInfo() {
-        return bizInfo;
+    public BizInfoDetail getBizInfoDetail() {
+        return bizInfoDetail;
     }
 
-    public void setBizInfo(BizInfo bizInfo) {
-        this.bizInfo = bizInfo;
+    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
+        this.bizInfoDetail = bizInfoDetail;
     }
 }

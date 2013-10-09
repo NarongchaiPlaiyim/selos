@@ -55,7 +55,7 @@
         <td>
             <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}"/>
         </td>
-        <td>
+        <td >
             <h:outputText value="- มีความสามารถในการดำเนินธุรกิจจากรายได้ปกติของกิจการ"/>
         </td>
         <td colspan="2">
@@ -736,25 +736,43 @@
             <h:outputLabel value="สรุปการจัดชั้นหนี้"/>
         </td>
         <td style="width: 70%;text-align: left">
-            <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
-                  <p:selectOneMenu id="dlgType"
-                                 value="#{qualitative.qualitativeView.qualityLevel.id}"
-                                 styleClass="largest"
-                                 size="1"
-                                 required="#{not empty param[addRowData.clientId]}">
-                    <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
-                    <f:selectItems value="#{qualitative.qualityLevelList}"
-                                   var="qualityItemsB"
-                                   itemLabel="#{qualityItemsB.description}"
-                                   itemValue="#{qualityItemsB.id}"/>
-                </p:selectOneMenu>
+            <table class="table_noborder">
+                <tr>
+                    <td  class="title" style="width: 25%;text-align: left">
+                        <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="dlgQualityLevelB"
+                                         value="#{qualitative.qualitativeView.qualityLevel.id}"
+                                         styleClass="largest"
+                                         size="1"
+                                         required="#{not empty param[addRowData.clientId]}">
+                            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                            <f:selectItems value="#{qualitative.qualityLevelList}"
+                                           var="qualityItemsB"
+                                           itemLabel="#{qualityItemsB.description}"
+                                           itemValue="#{qualityItemsB.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputLabel value="เหตุผล :"/>
+                    </td>
+                    <td>
+                        <h:inputTextarea cols="70" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"/>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <tr>
-        <td>
+        <td class="title">
             <h:outputLabel value="วันที่ :"/>
+            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+            </h:outputText>
         </td>
-        <td>
+        <td class="title">
             <h:outputLabel
                     value="หมายเหตุ :    1. ให้อธิบายเหตุผลให้ชัดเจนในกรณีที่การจัดชั้นลูกหนี้เชิงคุณภาพโดยที่ลูกหนี้มีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่งหรือหลายเกณฑ์ แต่การจัดชั้นหนี้ที่จะสะท้อนคุณภาพลูกหนี้โดยรวมมีความแตกต่างจากเกณฑ์ทั่วไปข้างต้น"/>
         </td>
@@ -821,7 +839,11 @@
                                  process=":frmMain"
                                  action="#{qualitative.onSaveQualitativeB()}"
                                  update=":frmMain"/>
-                <p:commandButton value="Cancel" styleClass="small"/>
+                <p:commandButton value="Cancel"
+                                 styleClass="medium"
+                                 process=":frmMain"
+                                 action="#{qualitative.onCancelQualitativeB}"
+                                 update=":frmMain"/>
             </td>
         </tr>
     </table>

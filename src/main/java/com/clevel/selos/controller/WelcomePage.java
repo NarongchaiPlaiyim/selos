@@ -9,7 +9,7 @@ import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
-import com.clevel.selos.integration.rlos.csi.model.CSIData;
+import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -123,9 +123,25 @@ public class WelcomePage implements Serializable {
 
     public void testRLOSCSI() {
         try{
-            List<CSIData> csiDataList = new ArrayList<CSIData>();
-            csiDataList = rlos.getCSIData("10001", RLOSInterface.DocumentType.CITIZEN_ID,"123456");
-            log.debug("csi data size : {}",csiDataList.size());
+            CSIResult csiResult;
+            CSIInputData csiInputData = new CSIInputData();
+
+            IdModel idModel = new IdModel();
+            idModel.setDocumentType(RLOSInterface.DocumentType.CITIZEN_ID);
+            idModel.setIdNumber("3100203117607");
+            List<IdModel> idModelList = new ArrayList<IdModel>();
+            idModelList.add(idModel);
+
+            NameModel nameModel = new NameModel();
+            nameModel.setNameEn("CHUTIMA");
+            nameModel.setSurnameEn("JITBANTHAO");
+            List<NameModel> nameModelList = new ArrayList<NameModel>();
+            nameModelList.add(nameModel);
+
+            csiInputData.setIdModelList(idModelList);
+            csiInputData.setNameModelList(nameModelList);
+            csiResult = rlos.getCSIData("10001", csiInputData);
+            log.debug("csi result : {}",csiResult);
         } catch (Exception e) {
             log.error("",e);
         }

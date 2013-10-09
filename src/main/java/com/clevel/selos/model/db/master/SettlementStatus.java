@@ -19,6 +19,8 @@ public class SettlementStatus implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
+    @Column(name = "ncb_code")
+    private String ncbCode;
 
     public SettlementStatus() {
     }
@@ -55,6 +57,14 @@ public class SettlementStatus implements Serializable {
         this.active = active;
     }
 
+    public String getNcbCode() {
+        return ncbCode;
+    }
+
+    public void setNcbCode(String ncbCode) {
+        this.ncbCode = ncbCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -62,6 +72,7 @@ public class SettlementStatus implements Serializable {
                 append("name", name).
                 append("customerEntity", customerEntity).
                 append("active", active).
+                append("ncbCode", ncbCode).
                 toString();
     }
 }

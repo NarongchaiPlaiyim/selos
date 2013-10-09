@@ -1,6 +1,11 @@
 package com.clevel.selos.integration.rlos.csi.model;
 
-public class NameModel {
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
+
+public class NameModel implements Serializable {
     private String nameTh;
     private String surnameTh;
     private String nameEn;
@@ -36,5 +41,15 @@ public class NameModel {
 
     public void setSurnameEn(String surnameEn) {
         this.surnameEn = surnameEn;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("nameTh", nameTh)
+                .append("surnameTh", surnameTh)
+                .append("nameEn", nameEn)
+                .append("surnameEn", surnameEn)
+                .toString();
     }
 }

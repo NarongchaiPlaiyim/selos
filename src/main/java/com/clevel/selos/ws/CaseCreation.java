@@ -108,7 +108,7 @@ public class CaseCreation implements WSCaseCreation {
             }
 
             //validate all input parameter
-            if(Util.isEmpty(jobName) || ValidationUtil.isGreaterThan(2,jobName)){
+            if(ValidationUtil.isEmpty(jobName) || ValidationUtil.isGreaterThan(2,jobName)){
                 wsDataPersist.addFailedCase(caseCreationHistory,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(jobName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(jobName)"),"");
                 log.debug("{}",response);
@@ -119,7 +119,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(caNumber) || ValidationUtil.isGreaterThan(30,caNumber)){
+            if(ValidationUtil.isEmpty(caNumber) || ValidationUtil.isGreaterThan(30,caNumber)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(caNumber)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(caNumber)"),"");
                 log.debug("{}",response);
@@ -143,15 +143,20 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(customerName) || ValidationUtil.isGreaterThan(150,customerName)){
+            if(ValidationUtil.isEmpty(customerName) || ValidationUtil.isGreaterThan(150,customerName)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(customerName)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(customerName)"),"");
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(citizenId) || !ValidationUtil.isValueEqual(13, citizenId.length())){
+            if(ValidationUtil.isEmpty(citizenId) || !ValidationUtil.isValueEqual(13, citizenId.length())){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(citizenId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(citizenId)"),"");
+                log.debug("{}",response);
+                return response;
+            } else if(!ValidationUtil.isNumeric(citizenId)) {
+                wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_DATA_INVALID, "(citizenId)"));
+                response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_DATA_INVALID,"(citizenId)"),"");
                 log.debug("{}",response);
                 return response;
             }
@@ -167,7 +172,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(bdmId) || ValidationUtil.isGreaterThan(6,bdmId)){
+            if(ValidationUtil.isEmpty(bdmId) || ValidationUtil.isGreaterThan(10,bdmId)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(bdmId)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(bdmId)"),"");
                 log.debug("{}",response);
@@ -183,13 +188,13 @@ public class CaseCreation implements WSCaseCreation {
                     return response;
                 }
             }
-            if(Util.isEmpty(hubCode) || ValidationUtil.isGreaterThan(4,hubCode)){
+            if(ValidationUtil.isEmpty(hubCode) || ValidationUtil.isGreaterThan(4,hubCode)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(hubCode)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(hubCode)"),"");
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(regionCode) || ValidationUtil.isGreaterThan(4,regionCode)){
+            if(ValidationUtil.isEmpty(regionCode) || ValidationUtil.isGreaterThan(4,regionCode)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(regionCode)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(regionCode)"),"");
                 log.debug("{}",response);
@@ -201,7 +206,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(appInDateBDM) || ValidationUtil.isGreaterThan(10,appInDateBDM)){
+            if(ValidationUtil.isEmpty(appInDateBDM) || ValidationUtil.isGreaterThan(10,appInDateBDM)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(appInDateBDM)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(appInDateBDM)"),"");
                 log.debug("{}",response);
@@ -213,7 +218,7 @@ public class CaseCreation implements WSCaseCreation {
                 log.debug("{}",response);
                 return response;
             }
-            if(Util.isEmpty(parallel) || ValidationUtil.isGreaterThan(1,parallel)){
+            if(ValidationUtil.isEmpty(parallel) || ValidationUtil.isGreaterThan(1,parallel)){
                 wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID, "(parallel)"));
                 response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(parallel)"),"");
                 log.debug("{}",response);

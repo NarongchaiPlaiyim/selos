@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.master;
 
+import com.clevel.selos.model.UserStatus;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -51,6 +52,9 @@ public class User implements Serializable {
     private UserDivision division;
     @Column(name="active")
     private int active;
+    @Column(name="status",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     public User() {
     }
@@ -183,6 +187,14 @@ public class User implements Serializable {
         this.active = active;
     }
 
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -202,6 +214,7 @@ public class User implements Serializable {
                 append("department", department).
                 append("division", division).
                 append("active", active).
+                append("userStatus", userStatus).
                 toString();
     }
 }
