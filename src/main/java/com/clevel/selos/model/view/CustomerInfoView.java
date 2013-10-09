@@ -15,6 +15,8 @@ import java.util.List;
 
 public class CustomerInfoView implements Serializable {
     private long id;
+    private long individualId;
+    private long juristicId;
     private int searchBy;
     private String searchId;
     private DocumentType documentType;
@@ -66,6 +68,9 @@ public class CustomerInfoView implements Serializable {
     private BusinessType businessType;
     private CustomerInfoView spouse;
     private int validId;
+    private boolean ncbFlag;
+    private String ncbResult;
+    private String ncbReason;
 
     public CustomerInfoView(){
         //reset();
@@ -73,6 +78,8 @@ public class CustomerInfoView implements Serializable {
 
     public void reset(){
         this.id = new Long(0);
+        this.individualId = new Long(0);
+        this.juristicId = new Long(0);
         this.searchBy = 0;
         this.searchId = "";
         this.documentType = new DocumentType();
@@ -129,6 +136,22 @@ public class CustomerInfoView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getIndividualId() {
+        return individualId;
+    }
+
+    public void setIndividualId(long individualId) {
+        this.individualId = individualId;
+    }
+
+    public long getJuristicId() {
+        return juristicId;
+    }
+
+    public void setJuristicId(long juristicId) {
+        this.juristicId = juristicId;
     }
 
     public int getSearchBy() {
@@ -538,10 +561,36 @@ public class CustomerInfoView implements Serializable {
         this.validId = validId;
     }
 
+    public boolean isNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(boolean ncbFlag) {
+        this.ncbFlag = ncbFlag;
+    }
+
+    public String getNcbResult() {
+        return ncbResult;
+    }
+
+    public void setNcbResult(String ncbResult) {
+        this.ncbResult = ncbResult;
+    }
+
+    public String getNcbReason() {
+        return ncbReason;
+    }
+
+    public void setNcbReason(String ncbReason) {
+        this.ncbReason = ncbReason;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
+                .append("individualId", individualId)
+                .append("juristicId", juristicId)
                 .append("searchBy", searchBy)
                 .append("searchId", searchId)
                 .append("documentType", documentType)
@@ -551,6 +600,7 @@ public class CustomerInfoView implements Serializable {
                 .append("reference", reference)
                 .append("citizenId", citizenId)
                 .append("registrationId", registrationId)
+                .append("inputId", inputId)
                 .append("cardAuthorizeBy", cardAuthorizeBy)
                 .append("documentExpiredDate", documentExpiredDate)
                 .append("customerId", customerId)
@@ -591,6 +641,10 @@ public class CustomerInfoView implements Serializable {
                 .append("reason", reason)
                 .append("businessType", businessType)
                 .append("spouse", spouse)
+                .append("validId", validId)
+                .append("ncbFlag", ncbFlag)
+                .append("ncbResult", ncbResult)
+                .append("ncbReason", ncbReason)
                 .toString();
     }
 }

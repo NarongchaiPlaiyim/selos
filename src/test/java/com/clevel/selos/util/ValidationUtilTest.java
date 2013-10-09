@@ -1,7 +1,5 @@
 package com.clevel.selos.util;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +10,6 @@ public class ValidationUtilTest {
     private static Logger log = LoggerFactory.getLogger(ValidationUtilTest.class);
 
     public ValidationUtilTest() {
-    }
-
-    @Before
-    public void before() {
-    }
-
-    @After
-    public void after() {
     }
 
     @Test

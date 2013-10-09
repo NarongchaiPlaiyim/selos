@@ -58,6 +58,7 @@
                                             <p:column headerText="Citizen ID / Registration ID" styleClass="center" style="width: 150px;">
                                                 <h:inputText value="#{borrowerItem.inputId}"/>
                                                 <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="Invalid Citizen ID" rendered="#{borrowerItem.validId==0}"/>
+                                                <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="#{borrowerItem.ncbResult}, #{borrowerItem.ncbReason}" rendered="#{not empty borrowerItem.ncbResult}"/>
                                                 <!--<p:spacer width="20" height="20" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==2}"/>
                                                 <h:graphicImage url="/resources/images/shared/valid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==1}"/>
                                                 <h:graphicImage url="/resources/images/shared/invalid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==0}"/>-->
@@ -85,6 +86,27 @@
         LOADING<br />
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{prescreenChecker.messageHeader}" message="#{prescreenChecker.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             actionListener="#{prescreenChecker.onCompleteCheckNCB}"
+                             render="#{prescreenChecker.messageErr}"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             render="#{not prescreenChecker.messageErr}"
+                             onclick="gotoInbox('#{request.contextPath}/site/inbox.jsf')"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:dialog id="returnMakerDialog" header="Return to Maker" widgetVar="returnMakerDlg"
+              modal="true" width="380" height="150">
+        <ui:include src="dialog/prescreenReturnDialog.xhtml"/>
+    </p:dialog>
 </h:body>
 </f:view>
 </html>

@@ -7,16 +7,25 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
+import com.clevel.selos.integration.ncb.NCBInterfaceImpl;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.*;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -46,6 +55,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     @Inject
     CustomerBizTransform customerBizTransform;
+    @Inject
+    NCBBizTransform ncbBizTransform;
 
     @Inject
     PrescreenDAO prescreenDAO;
@@ -73,6 +84,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     UserDAO userDAO;
     @Inject
     ActionDAO actionDAO;
+    @Inject
+    AddressDAO addressDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -80,6 +93,12 @@ public class PrescreenBusinessControl extends BusinessControl {
     BRMSInterface brmsInterface;
     @Inject
     BPMInterface bpmInterface;
+
+    /*@Inject
+    NCBInterface ncbInterface;  */
+
+    @Inject
+    NCBInterfaceImpl ncbInterface;
 
     @Inject
     public PrescreenBusinessControl(){
@@ -167,10 +186,104 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NCBInfoView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList){
-        List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+        List<NcbView> ncbViewList = new ArrayList<NcbView>();
+        NCRSInputModel ncrsInputModel;
+        ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
+        NCCRSInputModel nccrsInputModel;
+        ArrayList<NCCRSModel> nccrsModelList = new ArrayList<NCCRSModel>();
 
-        return ncbInfoViewList;
+        User user = userDAO.findById(userId);
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
+        for(CustomerInfoView customerItem : customerInfoViewList){
+            if(customerItem.getCustomerEntity().getId() == 1 && !customerItem.isNcbFlag()){
+                NCRSModel ncrsModel = new NCRSModel();
+
+                if(customerItem.getTitleTh() != null){
+                    if(customerItem.getTitleTh().getCode().equals("1")){
+                        ncrsModel.setTitleNameCode(TitleName.Mr);
+                    } else if(customerItem.getTitleTh().getCode().equals("2")){
+                        ncrsModel.setTitleNameCode(TitleName.Mrs);
+                    } else if(customerItem.getTitleTh().getCode().equals("3")){
+                        ncrsModel.setTitleNameCode(TitleName.Miss);
+                    } else {
+                        //send other
+                    }
+                }
+                ncrsModel.setFirstName(customerItem.getFirstNameTh());
+                ncrsModel.setLastName(customerItem.getLastNameTh());
+                ncrsModel.setCitizenId(customerItem.getCitizenId());
+
+                if(customerItem.getDocumentType() != null){
+                    if(customerItem.getDocumentType().getId() == 1){
+                        ncrsModel.setIdType(IdType.CITIZEN);
+                    } else if(customerItem.getDocumentType().getId() == 2){
+                        ncrsModel.setIdType(IdType.PASSPORT);
+                    }
+                }
+
+                if(customerItem.getCitizenCountry() != null){
+                    ncrsModel.setCountryCode(customerItem.getCitizenCountry().getCode());
+                }
+                log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
+                ncrsModelList.add(ncrsModel);
+            } else if(customerItem.getCustomerEntity().getId() == 2 && !customerItem.isNcbFlag()) {
+                NCCRSModel nccrsModel = new NCCRSModel();
+                if(customerItem.getDocumentType() != null){
+                    if(customerItem.getTitleTh() != null){
+                        if(customerItem.getTitleTh().getCode().equals("1")){
+                            nccrsModel.setRegistType(RegistType.CompanyLimited);
+                        } else if(customerItem.getTitleTh().getCode().equals("2")){
+                            nccrsModel.setRegistType(RegistType.PublicCompanyLimited);
+                        } else if(customerItem.getTitleTh().getCode().equals("3")){
+                            nccrsModel.setRegistType(RegistType.LimitedPartnership);
+                        } else if(customerItem.getTitleTh().getCode().equals("4")){
+                            nccrsModel.setRegistType(RegistType.RegisteredOrdinaryPartnership);
+                        }
+                    }
+                }
+                nccrsModel.setRegistId(customerItem.getRegistrationId());
+                nccrsModel.setCompanyName(customerItem.getFirstNameTh());
+                log.debug("getNCBFromNCB ::: nccrsModel : {}", nccrsModel);
+                nccrsModelList.add(nccrsModel);
+            }
+        }
+        log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
+        ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
+        nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
+
+        //Get NCB for Individual
+            //ncbInterface.request();
+        //Get NCB for Juristic
+        try{
+            boolean checkNCBComplete = false;
+            String exceptionMessage = "";
+            log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
+            List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
+            log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
+            List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
+
+            log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
+            List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
+            log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
+            List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
+
+            if(ncbIndividualViewList != null){
+                for(NcbView item : ncbIndividualViewList){
+                    ncbViewList.add(item);
+                }
+            }
+            if(ncbJuristicViewList != null){
+                for(NcbView item : ncbJuristicViewList){
+                    ncbViewList.add(item);
+                }
+            }
+        } catch (Exception ex){
+            throw ex;
+        }
+
+        return ncbViewList;
     }
 
     public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
@@ -256,6 +369,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         //Remove all Customer before add new
         List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         for(Customer customer : customerListDelete){
+            if(customer.getAddressesList() != null){
+                List<Address> addressList = customer.getAddressesList();
+                addressDAO.delete(addressList);
+            }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
                 Individual individual = customer.getIndividual();
                 individualDAO.delete(individual);
@@ -271,6 +388,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
         for(Customer customer : customerList){
             customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                addressDAO.persist(customer.getAddressesList());
+            }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
@@ -293,19 +413,73 @@ public class PrescreenBusinessControl extends BusinessControl {
         bizInfoDAO.persist(bizInfoList);*/
     }
 
-    public void assignToChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
+    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+
+        log.info("saveCustomer ::: customerList : {}", customerList);
+        /*for(Customer customer : customerList){
+            customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                addressDAO.persist(customer.getAddressesList());
+            }
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                Individual individual = customer.getIndividual();
+                individualDAO.persist(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+                //Juristic
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.persist(juristic);
+            }
+        }*/
+    }
+
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
-        //TODO getNextStep from BPM
         HashMap<String,String> fields = new HashMap<String, String>();
         fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getName());
         fields.put("BDMCheckerUserName", checkerId);
+
+        log.info("assignChecker ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("assignChecker ::: queueName : {}", queueName);
+        log.info("assignChecker ::: Action_Code : {}", action.getId());
+        log.info("assignChecker ::: Action_Name : {}", action.getName());
+        log.info("assignChecker ::: BDMCheckerUserName : {}", checkerId);
+
+        bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
+    }
+
+    public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        Action action = actionDAO.findById(Long.parseLong(actionCode));
+
+        HashMap<String,String> fields = new HashMap<String, String>();
+        fields.put("Action_Code", Long.toString(action.getId()));
+        fields.put("Action_Name", action.getName());
+
+        log.info("nextStepPreScreen ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("nextStepPreScreen ::: queueName : {}", queueName);
+        log.info("nextStepPreScreen ::: Action_Code : {}", action.getId());
+        log.info("nextStepPreScreen ::: Action_Name : {}", action.getName());
+
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
     //*** Function for PreScreen Checker ***//
+    public String getBDMMakerName(long workCasePreScreenId){
+        String bdmMakerName = "";
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        if(workCasePrescreen != null){
+            bdmMakerName = workCasePrescreen.getCreateBy().getUserName();
+        }
+
+        return bdmMakerName;
+    }
+
     public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         List<Customer> customerList = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);

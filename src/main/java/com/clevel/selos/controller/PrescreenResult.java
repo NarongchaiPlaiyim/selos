@@ -38,4 +38,12 @@ public class PrescreenResult implements Serializable {
     public void onCreation() {
         log.info("PrescreenResult ::: onCreation");
     }
+
+    public void onRetrieveInterface(){
+
+    }
+
+    public void onCloseSale(){
+
+    }
 }

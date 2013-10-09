@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.busiensscontrol.InboxControl;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -75,6 +76,10 @@ public class Inbox implements Serializable {
         session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
+
+        //*** Get Information for Header ***//
+        AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
+        session.setAttribute("appHeaderInfo", appHeaderView);
 
         try{
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
