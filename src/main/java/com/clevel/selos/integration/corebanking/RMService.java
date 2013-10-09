@@ -79,7 +79,7 @@ public class RMService implements Serializable {
     String requestTimeout;
 
     @Inject
-    @Config(name = "Interface.rm.replace.blank")
+    @Config(name = "interface.rm.replace.blank")
     String blank;
 
     @Inject
@@ -90,26 +90,16 @@ public class RMService implements Serializable {
     public RMService() {
     }
 
-//    String subDistrict="";
-//    String district="";
-//
+
     @PostConstruct
     public void onCreate() {
-//
-//       String blankValue[]=blank.split("|");
-//        int blankSize = blankValue.length - 1;
-//        if(blankSize>=0){
-//        subDistrict=blankValue[0];
-//        }
-//        if(blankSize>=1){
-//        district=blankValue[1];
-//        }
-//
+
     }
 
     public IndividualModel individualService(SearchIndividual searchIndividual,String userId) throws Exception {
         log.debug("IndividualService() START");
         IndividualModel individualModel = null;
+        System.out.println("============================== : "+blank);
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
@@ -274,6 +264,8 @@ public class RMService implements Serializable {
                     //set HomeAddress
                     String homeAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
                     String homeAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
+                    System.out.println("===================================== Line 3 : "+resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3());
+                    System.out.println("===================================== Line 3 : "+new String(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().getBytes("UTF-8")));
                     ContactDetails homeContactDetails = new ContactDetails();
                     //validateSpiltSize
                     int homeAddressLineSize1 = homeAddressLine1.length - 1;
@@ -291,11 +283,14 @@ public class RMService implements Serializable {
                     int homeAddressLineSize3 = homeAddressLine3.length - 1;
                     if (homeAddressLineSize3 >= 0) {
 //                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], subDistrict));
+
                         homeContactDetails.setSubdistrict(Util.replaceToBlank(homeAddressLine3[0], blank));
+                        System.out.println("================================ REPLACE "+ Util.replaceToBlank(homeAddressLine3[0], blank));
                     }
                     if (homeAddressLineSize3 >= 1) {
 //                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], district));
                         homeContactDetails.setDistrict(Util.replaceToBlank(homeAddressLine3[1], blank));
+                        System.out.println("================================ REPLACE "+ Util.replaceToBlank(homeAddressLine3[1], blank));
                     }
                     homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
                     homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
@@ -511,9 +506,7 @@ public class RMService implements Serializable {
                     corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
-//                    corporateModel.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),subDistrict));
                     corporateModel.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),blank));
-//                    corporateModel.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),district));
                     corporateModel.setDistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),blank));
                     corporateModel.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity());
                     corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
@@ -521,9 +514,7 @@ public class RMService implements Serializable {
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
 
                     RegistrationAddress registrationAddress = new RegistrationAddress();
-//                    registrationAddress.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),subDistrict));
                     registrationAddress.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),blank));
-//                    registrationAddress.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),district));
                     registrationAddress.setDistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),blank));
                     registrationAddress.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity2());
 //                    registrationAddress.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().get);
