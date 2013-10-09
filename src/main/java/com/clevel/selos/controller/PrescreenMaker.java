@@ -83,7 +83,7 @@ public class PrescreenMaker implements Serializable {
     private List<CustomerInfoView> borrowerInfoViewList;
     private List<CustomerInfoView> guarantorInfoViewList;
     private List<CustomerInfoView> relatedInfoViewList;
-    private List<BizInfoView> bizInfoViewList;
+    private List<BizInfoDetailView> bizInfoViewList;
     private List<CollateralView> proposeCollateralViewList;
 
     //*** Variable for view ***//
@@ -95,8 +95,8 @@ public class PrescreenMaker implements Serializable {
     private CustomerInfoView spouseInfo;
     private CustomerInfoView selectCustomerInfoItem;
 
-    private BizInfoView selectBizInfoItem;
-    private BizInfoView bizInfoView;
+    private BizInfoDetailView selectBizInfoItem;
+    private BizInfoDetailView bizInfoView;
 
     private CollateralView proposeCollateral;
     private CollateralView selectProposeCollateralItem;
@@ -256,7 +256,7 @@ public class PrescreenMaker implements Serializable {
 
 
         bizInfoViewList = prescreenBusinessControl.getBusinessInfo(workCasePreScreenId);
-        if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoView>(); }
+        if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoDetailView>(); }
 
         customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         if(customerInfoViewList != null){
@@ -321,7 +321,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onClearObject :::");
 
         if(facility == null){ facility = new FacilityView(); }
-        if(bizInfoView == null){ bizInfoView = new BizInfoView(); }
+        if(bizInfoView == null){ bizInfoView = new BizInfoDetailView(); }
         if(proposeCollateral == null){ proposeCollateral = new CollateralView(); }
         if(borrowerInfo == null){ borrowerInfo = new CustomerInfoView(); }
         if(spouseInfo == null) { spouseInfo = new CustomerInfoView(); }
@@ -616,7 +616,7 @@ public class PrescreenMaker implements Serializable {
         /*** Reset Form ***/
         modeForButton = ModeForButton.ADD;
 
-        bizInfoView = new BizInfoView();
+        bizInfoView = new BizInfoDetailView();
         bizInfoView.setBizDesc(new BusinessDescription());
         bizInfoView.getBizDesc().setBusinessGroup(new BusinessGroup());
     }
@@ -625,7 +625,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onEditBusinessInfo ::: selectBusinessInfo : {}", selectBizInfoItem);
         modeForButton = ModeForButton.EDIT;
 
-        bizInfoView = new BizInfoView();
+        bizInfoView = new BizInfoDetailView();
         bizInfoView.setBizDesc(selectBizInfoItem.getBizDesc());
         bizInfoView.getBizDesc().setBusinessGroup(selectBizInfoItem.getBizDesc().getBusinessGroup());
 
@@ -641,7 +641,7 @@ public class PrescreenMaker implements Serializable {
         /*** validate input ***/
         if(bizInfoView.getBizDesc().getId() != 0 && bizInfoView.getBizDesc().getBusinessGroup().getId() != 0){
             if(modeForButton.equals(ModeForButton.ADD)) {
-                BizInfoView businessInfo = new BizInfoView();
+                BizInfoDetailView businessInfo = new BizInfoDetailView();
 
                 log.info("onSaveBusinessInformation ::: selectBusinessGroupID : {}", businessInfo.getBizDesc().getId());
                 log.info("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", businessInfo.getBizDesc().getBusinessGroup().getId());
@@ -1113,11 +1113,11 @@ public class PrescreenMaker implements Serializable {
         this.facilityViewList = facilityViewList;
     }
 
-    public List<BizInfoView> getBizInfoViewList() {
+    public List<BizInfoDetailView> getBizInfoDetailViewList() {
         return bizInfoViewList;
     }
 
-    public void setBizInfoViewList(List<BizInfoView> bizInfoViewList) {
+    public void setBizInfoDetailViewList(List<BizInfoDetailView> bizInfoViewList) {
         this.bizInfoViewList = bizInfoViewList;
     }
 
@@ -1289,19 +1289,19 @@ public class PrescreenMaker implements Serializable {
         this.preScreenResponseGroupList = preScreenResponseGroupList;
     }
 
-    public BizInfoView getSelectBizInfoItem() {
+    public BizInfoDetailView getSelectBizInfoItem() {
         return selectBizInfoItem;
     }
 
-    public void setSelectBizInfoItem(BizInfoView selectBizInfoItem) {
+    public void setSelectBizInfoItem(BizInfoDetailView selectBizInfoItem) {
         this.selectBizInfoItem = selectBizInfoItem;
     }
 
-    public BizInfoView getBizInfoView() {
+    public BizInfoDetailView getBizInfoDetailView() {
         return bizInfoView;
     }
 
-    public void setBizInfoView(BizInfoView bizInfoView) {
+    public void setBizInfoDetailView(BizInfoDetailView bizInfoView) {
         this.bizInfoView = bizInfoView;
     }
 
