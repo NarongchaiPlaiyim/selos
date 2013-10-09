@@ -49,7 +49,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     PreScreenResultTransform preScreenResultTransform;
     @Inject
-    BizInfoTransform bizInfoTransform;
+    BizInfoDetailTransform bizInfoTransform;
     @Inject
     CustomerTransform customerTransform;
 
@@ -63,7 +63,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
     @Inject
-    BizInfoDAO bizInfoDAO;
+    BizInfoDetailDAO bizInfoDAO;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject
@@ -188,9 +188,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     // *** Function for NCB *** //
     public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
         List<NcbView> ncbViewList = new ArrayList<NcbView>();
-        NCRSInputModel ncrsInputModel;
+        NCRSInputModel ncrsInputModel = null;
         ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
-        NCCRSInputModel nccrsInputModel;
+        NCCRSInputModel nccrsInputModel = null;
         ArrayList<NCCRSModel> nccrsModelList = new ArrayList<NCCRSModel>();
 
         User user = userDAO.findById(userId);
@@ -223,9 +223,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                     }
                 }
 
-                if(customerItem.getCitizenCountry() != null){
-                    ncrsModel.setCountryCode(customerItem.getCitizenCountry().getCode());
-                }
+                /*if(customerItem.getCitizenCountry() != null){
+                    ncrsModel.setCountryCode(customerItem.getCitizenCountry().getCode2());
+                }*/
+                ncrsModel.setCountryCode("TH");
                 log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
                 ncrsModelList.add(ncrsModel);
             } else if(customerItem.getCustomerEntity().getId() == 2 && !customerItem.isNcbFlag()) {
@@ -250,8 +251,13 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
         }
         log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
-        ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
-        nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
+        if(ncrsModelList.size() > 0){
+            ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
+        }
+
+        if(nccrsModelList.size() > 0){
+            nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
+        }
 
         //Get NCB for Individual
             //ncbInterface.request();
@@ -259,24 +265,27 @@ public class PrescreenBusinessControl extends BusinessControl {
         try{
             boolean checkNCBComplete = false;
             String exceptionMessage = "";
-            log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
-            List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
-            log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
-            List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
-
-            log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
-            List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
-            log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
-            List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
-
-            if(ncbIndividualViewList != null){
-                for(NcbView item : ncbIndividualViewList){
-                    ncbViewList.add(item);
+            if(ncrsInputModel != null){
+                log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
+                List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
+                log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
+                List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
+                if(ncbIndividualViewList != null){
+                    for(NcbView item : ncbIndividualViewList){
+                        ncbViewList.add(item);
+                    }
                 }
             }
-            if(ncbJuristicViewList != null){
-                for(NcbView item : ncbJuristicViewList){
-                    ncbViewList.add(item);
+
+            if(nccrsInputModel != null){
+                log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
+                List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
+                log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
+                List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
+                if(ncbJuristicViewList != null){
+                    for(NcbView item : ncbJuristicViewList){
+                        ncbViewList.add(item);
+                    }
                 }
             }
         } catch (Exception ex){
@@ -340,9 +349,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         return facilityViewList;
     }
 
-    public List<BizInfoView> getBusinessInfo(long workCasePreScreenId){
-        List<BizInfoView> bizInfoViewList = null;
-        List<BizInfo> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+    public List<BizInfoDetailView> getBusinessInfo(long workCasePreScreenId){
+        List<BizInfoDetailView> bizInfoViewList = null;
+        List<BizInfoDetail> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
 
         if(bizInfoList != null){
             bizInfoViewList = bizInfoTransform.transformToPreScreenView(bizInfoList);
@@ -404,12 +413,12 @@ public class PrescreenBusinessControl extends BusinessControl {
         //customerDAO.persist(customerList);
 
         /*//Remove all Business before add new
-        List<BizInfo> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
+        List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
         if(bizInfoListDelete != null){
             bizInfoDAO.delete(bizInfoListDelete);
         }
 
-        List<BizInfo> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
+        List<BizInfoDetail> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
         bizInfoDAO.persist(bizInfoList);*/
     }
 
@@ -462,6 +471,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         fields.put("Action_Name", action.getName());
 
         log.info("nextStepPreScreen ::: workCasePreScreenid : {}", workCasePreScreenId);
+        log.info("nextStepPreScreen ::: wobNumber : {}", workCasePrescreen.getWobNumber());
         log.info("nextStepPreScreen ::: queueName : {}", queueName);
         log.info("nextStepPreScreen ::: Action_Code : {}", action.getId());
         log.info("nextStepPreScreen ::: Action_Name : {}", action.getName());
@@ -508,7 +518,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoViewList;
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoView> bizInfoViewList, long workCasePreScreenId){
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoDetailView> bizInfoViewList, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
     }

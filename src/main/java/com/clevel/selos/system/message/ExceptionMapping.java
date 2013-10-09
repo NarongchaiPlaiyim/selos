@@ -3,8 +3,12 @@ package com.clevel.selos.system.message;
 public interface ExceptionMapping {
     public static final String SYSTEM_EXCEPTION = "001";
     //LDAP exception
-    public static final String LDAP_EMPTY_PASSWORD = "005";
-    public static final String LDAP_AUTHENTICATION_FAILED = "006";
+    public static final String LDAP_EMPTY_PASSWORD = "002";
+    public static final String LDAP_AUTHENTICATION_FAILED = "003";
+    public static final String USER_NOT_ACTIVE = "004";
+    public static final String USER_NOT_FOUND = "005";
+    public static final String USER_STATUS_DISABLED = "006";
+    public static final String USER_STATUS_DELETED = "007";
 
     //BPM exception
     public static final String BPM_NEW_CASE_EXCEPTION = "010";
