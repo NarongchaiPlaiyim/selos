@@ -164,6 +164,8 @@ public class BizInfoDetail implements Serializable {
     @Column(name="stock_value_uw")
     private BigDecimal stockValueUW;
 
+    @Column(name="no")
+    private long no;
 
     @OneToMany(mappedBy="bizInfoDetail")
     private List<BizStakeHolderDetail> supplierList;
@@ -551,6 +553,14 @@ public class BizInfoDetail implements Serializable {
 
     public void setStockValueUW(BigDecimal stockValueUW) {
         this.stockValueUW = stockValueUW;
+    }
+
+    public long getNo() {
+        return no;
+    }
+
+    public void setNo(long no) {
+        this.no = no;
     }
 
     public List<BizStakeHolderDetail> getSupplierList() {

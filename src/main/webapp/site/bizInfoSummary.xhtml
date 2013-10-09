@@ -14,6 +14,7 @@
         <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
+        <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
             <ui:include src="../resources/header_logo.xhtml" />
@@ -46,15 +47,15 @@
                                 <table>
                                     <tr>
                                         <td>ชื่อสถานประกอบการณ์</td>
-                                        <td><p:inputText/></td>
+                                        <td><p:inputText id="bizLocationDetail" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationDetail}"/></td>
                                     </tr>
                                     <tr>
-                                        <td>สถานประกอบการเป็นที่เช่า</td>
-                                        <td>เป็นกรรมสิทธิ์ของ</td>
+                                        <td>สถานประกอบการเป็นที่เช่า  </td>
+                                        <td>เป็นกรรมสิทธิ์ของ <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}"/> </td>
                                     </tr>
                                     <tr>
                                         <td></td>
-                                        <td>หมดสัญญาวันที่ <p:calendar/> </td>
+                                        <td>หมดสัญญาวันที่ <p:inputText id="expiryDate" value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}" /> </td>
                                     </tr>
                                     <tr>
                                         <td class="title top">ที่อยู่สถานประกอบการ :</td>
@@ -62,20 +63,20 @@
                                             <table style="padding: 0%" border="3">
                                                 <tr>
                                                     <td class="title left">เลขที่</td>
-                                                    <td class="left"><p:inputText styleClass="smallest"/></td>
+                                                    <td class="left"><p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"/></td>
                                                     <td class="title right">หมู่ที่</td>
-                                                    <td class="left"><p:inputText styleClass="smallest"/></td>
+                                                    <td class="left"><p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/></td>
                                                     <td class="title right">อาคาร/หมู่บ้าน</td>
-                                                    <td class="left"><p:inputText styleClass="large"/></td>
+                                                    <td class="left"><p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title left">ตรอก/ซอย/ถนน</td>
-                                                    <td class="left" colspan="5"><input type="text" style="width:400px;"/></td>
+                                                    <td class="left" colspan="5"><p:inputText styleClass="large" id="addressStreet" value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
                                                     <td colspan="5">
-                                                        <p:selectOneMenu styleClass="largest" size="1"  value="bizInfoSummary.provinceID"
+                                                        <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}"
                                                                          id="provinceCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
@@ -83,20 +84,20 @@
                                                                            itemLabel="#{province.name}"
                                                                            itemValue="#{province.code}"/>
                                                             <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
-                                                                    update=":districtCode,:subDistrictCode"/>
+                                                                    update=":frmMain:districtCode,:frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
 
-                                                        <p:selectOneMenu styleClass="largest" size="1" value="bizInfoSummary.districtID"
+                                                        <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}"
                                                                          id="districtCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax listener="#{borrowerInfoIndividual.onChangeDistrict()}" update=":subDistrictCode"/>
+                                                            <p:ajax listener="#{borrowerInfoIndividual.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
 
-                                                        <p:selectOneMenu styleClass="largest" size="1" value="bizInfoSummary.subDistrictID"
+                                                        <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
                                                                          id="subDistrictCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
@@ -108,11 +109,13 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title">รหัสไปรษณีย์ :</td>
-                                                    <td colspan="5"><p:inputMask mask="99999" styleClass="medium"/></td>
+                                                    <td colspan="5"><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="title">โทรศัพท์สถานประกอบการ :</td>
-                                                    <td colspan="5"><p:inputText styleClass="large"/> ต่อ <p:inputText styleClass="smaller"/></td>
+                                                    <td colspan="5">
+                                                        <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" /> ต่อ <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                                    </td>
                                                 </tr>
                                             </table>
 
@@ -126,14 +129,16 @@
                                     <tr>
                                         <td>
                                             วันจดทะเบียนพาณิชย์
+                                            <p:inputText styleClass="large"  id="registrationDate" value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             วันก่อตั้งกิจการ / อ้างอิงประสบการณ์
+                                            <p:inputText styleClass="large"  id="establishDate" value="#{bizInfoSummary.bizInfoSummaryView.establishDate}" />
                                         </td>
                                         <td>
-                                            <p:calendar/>
+                                            <p:inputText/>
                                         </td>
                                         <td>
                                             อ้างอิงจาก
@@ -164,10 +169,10 @@
                                            ยอดขาย/รายได้
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="circulationAmount" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="circulationPercentage" value="#{bizInfoSummary.bizInfoSummaryView.circulationPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -175,10 +180,10 @@
                                             ต้นทุนการผลิต
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="productionCostsAmount" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="productionCostsPercentage" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -186,10 +191,10 @@
                                             กำไรเบื้องต้น
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="profitMarginAmount" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="profitMarginPercentage" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -197,10 +202,10 @@
                                             หักค่าใช้จ่ายดำเนินงาน
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="operatingExpenseAmount" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="operatingExpensePercentage" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpensePercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -208,10 +213,10 @@
                                             กำไรก่อนหักดอกเบี้ยและภาษี
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="earningsBeforeTaxAmount" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="earningsBeforeTaxPercentage" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -219,10 +224,10 @@
                                             หักดอกเบี้ย
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="reduceInterestAmount" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="reduceInterestPercentage" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -230,10 +235,10 @@
                                             หักภาษี
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="reduceTaxAmount" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="reduceTaxPercentage" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxPercentage}"/>
                                         </td>
                                     </tr>
                                     <tr>
@@ -241,21 +246,21 @@
                                             กำไรสุทธิ
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="netMarginAmount" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}"/>
                                         </td>
                                         <td>
-                                            <p:inputText/>
+                                            <p:inputText id="netMarginPercentage" value="#{bizInfoSummary.bizInfoSummaryView.netMarginPercentage}"/>
                                         </td>
                                     </tr>
                                 </table>
 
-                                สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน
-                                จำนวนแรงงาน
+                                สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน <p:inputText id="netFixAsset" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}"/>
+                                จำนวนแรงงาน  <p:inputText id="noOfEmployee" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}"/>
                             </td>
                         </tr>
                         <tr>
                             <td class="left">
-                                <p:commandButton value="Add" styleClass="small" onclick="document.location.replace('bizInfoDetail.jsf');return;"/>
+                                <p:commandButton value="Add" styleClass="small" action="#{bizInfoSummary.onSaveBizInfoSummary}"  oncomplete="document.location.replace('bizInfoDetail.jsf');return;"/>
                             </td>
                         </tr>
                         <tr>
@@ -367,9 +372,10 @@
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit"
                                                          action="#{bizInfoSummary.onViewDetail()}"
-                                                         oncomplete="document.location.replace('businessInfoDetail.jsf');return;"
-
-                                                        />
+                                                         oncomplete="document.location.replace('bizInfoDetail.jsf');return;"
+                                                        >
+                                            <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                         </p:commandButton>
                                         <p:commandButton icon="ui-icon-trash"
                                                          title="Remove"
                                                          />
@@ -377,8 +383,23 @@
                                 </p:dataTable>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="6" class="center">
+                                <p:commandButton id="btnAddBizInfoSummary"
+                                                 value="Save DB"
+                                                 styleClass="smaller"
+                                                 process=":frmMain"
+                                                 actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
+                                                 update=":frmMain"
+                                                 oncomplete="document.location.replace('bizInfoSummary.jsf')"
+                                        />
+
+                                <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('bizInfoSummary.jsf')"/>
+                            </td>
+                        </tr>
                     </table>
                 </div>
+
                 <div class="bottom_line"></div>
             </div>
             <div class="clear"></div>
@@ -386,6 +407,7 @@
             <ui:include src="../resources/footer.xhtml" />
             <!-- End Footer -->
         </div>
+        </h:form>
     </h:body>
 </f:view>
 </html>

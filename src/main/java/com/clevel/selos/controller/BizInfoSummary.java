@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.busiensscontrol.BizInfoDetailControl;
+import com.clevel.selos.busiensscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.model.db.master.District;
@@ -8,16 +9,19 @@ import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.SubDistrict;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.view.BizInfoDetailView;
+import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.transform.BizProductDetailTransform;
+import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +41,16 @@ public class BizInfoSummary implements Serializable {
     @Inject
     Message msg;
 
-    private BizInfoSummary bizInfoSummary;
+    private BizInfoSummaryView bizInfoSummaryView;
+    private BizInfoDetailView selectBizInfoDetailView;
     private List<BizInfoDetailView> bizInfoDetailViewList;
     private List<BizInfoDetail> bizInfoDetailDetailList;
     private List<Province> provinceList;
     private List<District> districtList;
     private List<SubDistrict> subDistrictList;
+    private Province province;
+    private District district;
+    private SubDistrict subDistrict;
     public int provinceID;
     public int districtID;
     public int subDistrictID;
@@ -66,6 +74,9 @@ public class BizInfoSummary implements Serializable {
     private BizInfoDetailControl bizInfoDetailControl;
     @Inject
     private BizInfoDetailTransform bizProductDetailTransform;
+    @Inject
+    private BizInfoSummaryControl bizInfoSummaryControl;
+
 
     public BizInfoSummary(){
 
@@ -76,7 +87,16 @@ public class BizInfoSummary implements Serializable {
         //bizInfoDetailViewList = getBusinessInfoList();
         log.info("onCreation bizInfoSum");
         //bizInfoDetailViewList = getBusinessInfoListDB();
-        bizInfoSummary =  new BizInfoSummary();
+        bizInfoSummaryView =  new BizInfoSummaryView();
+        province = new Province();
+        district = new District();
+        subDistrict = new SubDistrict();
+
+        district.setProvince(province);
+        subDistrict.setDistrict(district);
+        subDistrict.setProvince(province);
+        bizInfoSummaryView.setSubDistrict(subDistrict);
+
         provinceList = provinceDAO.getListOrderByParameter("name");
         bizInfoDetailViewList= getBusinessInfoListDB();
         //bizInfoDetailDetailList = new ArrayList<BizInfoDetail>();
@@ -104,27 +124,6 @@ public class BizInfoSummary implements Serializable {
     }
 
 
-    public List<BizInfoDetailView> getBusinessInfoList(){
-        log.info("getBusinessInfoList bizInfoSum");
-        bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        BizInfoDetailView bizInfoDetailView;
-
-        bizInfoDetailView = new BizInfoDetailView();
-
-        bizInfoDetailView.setBizComment("Comment 1");
-        bizInfoDetailViewList.add(bizInfoDetailView);
-
-        bizInfoDetailView = new BizInfoDetailView();
-        bizInfoDetailView.setBizComment("Comment 2");
-        bizInfoDetailViewList.add(bizInfoDetailView);
-
-        bizInfoDetailView = new BizInfoDetailView();
-        bizInfoDetailView.setBizComment("Comment 3");
-        bizInfoDetailViewList.add(bizInfoDetailView);
-
-        return bizInfoDetailViewList;
-    }
-
     public List<BizInfoDetailView> getBusinessInfoListDB(){
         log.info("getBusinessInfoListDB bizInfoSum");
         bizInfoDetailDetailList = bizInfoDetailDAO.findAll();
@@ -148,7 +147,25 @@ public class BizInfoSummary implements Serializable {
 
     }
 
+    public void onSaveBizInfoSummary(){
+        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoSummaryView);
+
+        log.info( " Initial session ");
+        HttpSession session = FacesUtil.getSession(true);
+        log.info( " Initial session is " + session);
+
+        session.setAttribute("workCaseId", 10001);
+
+        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        log.info( " get FROM session workCaseId is " + workCaseId);
+
+        bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+    }
+
     public void onViewDetail(){
+        log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
+
         log.info(" success !! {}",true);
     }
 
@@ -214,5 +231,21 @@ public class BizInfoSummary implements Serializable {
 
     public void setBizInfoDetailDetailList(List<BizInfoDetail> bizInfoDetailDetailList) {
         this.bizInfoDetailDetailList = bizInfoDetailDetailList;
+    }
+
+    public BizInfoSummaryView getBizInfoSummaryView() {
+        return bizInfoSummaryView;
+    }
+
+    public void setBizInfoSummaryView(BizInfoSummaryView bizInfoSummaryView) {
+        this.bizInfoSummaryView = bizInfoSummaryView;
+    }
+
+    public BizInfoDetailView getSelectBizInfoDetailView() {
+        return selectBizInfoDetailView;
+    }
+
+    public void setSelectBizInfoDetailView(BizInfoDetailView selectBizInfoDetailView) {
+        this.selectBizInfoDetailView = selectBizInfoDetailView;
     }
 }
