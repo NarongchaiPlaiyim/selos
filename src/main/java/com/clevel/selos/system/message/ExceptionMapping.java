@@ -22,6 +22,9 @@ public interface ExceptionMapping {
     public static final String EMAIL_EXCEPTION = "024";
     public static final String EMAIL_TEMPLATE_NOT_FOUND = "025";
 
+    //RLOS exception
+    public static final String RLOS_CSI_EXCEPTION = "030";
+
     public static final String RM_SERVICE_FAILED = "500";
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
     public static final String RM_FAIL = "502";
