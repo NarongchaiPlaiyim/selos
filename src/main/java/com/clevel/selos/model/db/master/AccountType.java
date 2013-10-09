@@ -12,7 +12,7 @@ public class AccountType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
     @Column(name = "dbr_flag")
     private int dbrFlag;
@@ -23,7 +23,7 @@ public class AccountType implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
-    @Column(name = "ncb_code")
+    @Column(name = "ncb_code",length = 10)
     private String ncbCode;
 
     public AccountType() {

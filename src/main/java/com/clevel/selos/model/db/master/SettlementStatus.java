@@ -19,7 +19,7 @@ public class SettlementStatus implements Serializable {
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
-    @Column(name = "ncb_code")
+    @Column(name = "ncb_code",length = 5)
     private String ncbCode;
 
     public SettlementStatus() {
