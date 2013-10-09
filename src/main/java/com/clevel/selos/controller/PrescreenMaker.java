@@ -1,6 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
+import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;

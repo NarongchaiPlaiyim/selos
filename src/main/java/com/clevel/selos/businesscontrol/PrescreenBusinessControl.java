@@ -1,4 +1,4 @@
-package com.clevel.selos.busiensscontrol;
+package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ActionDAO;
 import com.clevel.selos.dao.master.DocumentTypeDAO;
@@ -7,7 +7,6 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.NCBInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
@@ -19,7 +18,6 @@ import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.*;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;

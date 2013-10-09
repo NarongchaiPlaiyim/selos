@@ -1,13 +1,11 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
+import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
-import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -26,7 +24,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

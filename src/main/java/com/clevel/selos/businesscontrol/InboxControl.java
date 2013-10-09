@@ -1,4 +1,4 @@
-package com.clevel.selos.busiensscontrol;
+package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Stateless

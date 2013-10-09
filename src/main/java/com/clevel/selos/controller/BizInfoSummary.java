@@ -1,7 +1,7 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.BizInfoDetailControl;
-import com.clevel.selos.busiensscontrol.BizInfoSummaryControl;
+import com.clevel.selos.businesscontrol.BizInfoDetailControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.model.db.master.District;
@@ -13,7 +13,6 @@ import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BizInfoDetailTransform;
-import com.clevel.selos.transform.BizProductDetailTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
