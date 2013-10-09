@@ -279,6 +279,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     registrationAddress.setContactName(corporateModel.getRegistrationAddress().getContactName());
                     registrationAddress.setContactPhone(corporateModel.getRegistrationAddress().getContactPhoneNo());
                     customerInfoView.setRegisterAddress(registrationAddress);
+
+                    customerInfoResultView.setCustomerInfoView(customerInfoView);
                 }
             } else {
                 customerInfoResultView.setCustomerId(corporateResult.getCustomerId());

@@ -120,9 +120,12 @@ public class TestService implements Serializable{
         if(customerInfoResultView.getCustomerInfoView()!=null){
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
             printDetail=customerInfoView.toString();
+            printDetail+="Result "+customerInfoResultView.getActionResult();
             printDetail+="\n\n\n"+customerInfoView.toString();
             printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
             printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
+        }else{
+            printDetail="NULL";
         }
            }catch (ApplicationRuntimeException e){
 
