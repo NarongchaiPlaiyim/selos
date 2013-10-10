@@ -164,25 +164,25 @@ public class NCRSImp implements NCRS, Serializable{
                     log.debug("NCRS Tracking Id is {}", reason);
                 }
                 resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCEED, reason, memberref);
-                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel));
+                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
                 resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
-                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
+                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS FAILED {}", reason);
                 resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.FAILED, reason, memberref);
-                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
+                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
                 log.error("NCRS EXCEPTION {}", reason);
                 resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.EXCEPTION, reason, memberref);
-                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel));
+                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel, ncrsModel));
             }
         }
         return outputModelArrayList;
@@ -229,7 +229,7 @@ public class NCRSImp implements NCRS, Serializable{
                         reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                         log.debug("NCRS Tracking Id is {}", reason);
                     }
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel));
+                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
                 } else if(resultImp.isEXCEPTION(appRefNumber, customerId)) {
                     responseModel = callOnline(ncrsModel);
                     reason = "";
@@ -239,20 +239,20 @@ public class NCRSImp implements NCRS, Serializable{
                     }
                     resultImp.updateSUCCEED(appRefNumber, customerId, reason);
                     saveNCBI(responseModel);
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel));
+                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 log.error("NCRS FAILED {}", reason);
-                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
+                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
                 log.error("NCRS FAILED {}", reason);
-                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel));
+                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
                 log.error("NCRS EXCEPTION 55555 {}", reason);
-                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel));
+                responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel, ncrsModel));
             }
         }
         return responseModelArrayList;

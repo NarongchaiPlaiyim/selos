@@ -10,7 +10,10 @@ import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.csi.model.*;
+import com.clevel.selos.model.AccountInfoId;
+import com.clevel.selos.model.AccountInfoName;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.Config;
@@ -126,16 +129,16 @@ public class WelcomePage implements Serializable {
             CSIResult csiResult;
             CSIInputData csiInputData = new CSIInputData();
 
-            IdModel idModel = new IdModel();
-            idModel.setDocumentType(RLOSInterface.DocumentType.CITIZEN_ID);
+            AccountInfoId idModel = new AccountInfoId();
+            idModel.setDocumentType(DocumentType.CITIZEN_ID);
             idModel.setIdNumber("3100203117607");
-            List<IdModel> idModelList = new ArrayList<IdModel>();
+            List<AccountInfoId> idModelList = new ArrayList<AccountInfoId>();
             idModelList.add(idModel);
 
-            NameModel nameModel = new NameModel();
+            AccountInfoName nameModel = new AccountInfoName();
             nameModel.setNameEn("CHUTIMA");
             nameModel.setSurnameEn("JITBANTHAO");
-            List<NameModel> nameModelList = new ArrayList<NameModel>();
+            List<AccountInfoName> nameModelList = new ArrayList<AccountInfoName>();
             nameModelList.add(nameModel);
 
             csiInputData.setIdModelList(idModelList);
