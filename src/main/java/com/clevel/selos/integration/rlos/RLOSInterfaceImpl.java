@@ -4,10 +4,8 @@ import com.clevel.selos.exception.RLOSInterfaceException;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.CSIService;
-import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
-import com.clevel.selos.integration.rlos.csi.model.IdModel;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -18,9 +16,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
     @Inject
