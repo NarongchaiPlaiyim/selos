@@ -1,5 +1,7 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.AccountInfoId;
+import com.clevel.selos.model.AccountInfoName;
 import com.clevel.selos.model.ActionResult;
 
 import java.io.Serializable;
@@ -11,6 +13,8 @@ public class NcbView implements Serializable {
     private String reason;
     private NCBInfoView NCBInfoView;
     private List<NCBDetailView> NCBDetailViews;
+    private List<AccountInfoId> accountInfoIdList; // use for csi
+    private List<AccountInfoName> accountInfoNameList; // use for csi
 
     public String getIdNumber() {
         return idNumber;
@@ -50,5 +54,21 @@ public class NcbView implements Serializable {
 
     public void setNCBDetailViews(List<NCBDetailView> NCBDetailViews) {
         this.NCBDetailViews = NCBDetailViews;
+    }
+
+    public List<AccountInfoId> getAccountInfoIdList() {
+        return accountInfoIdList;
+    }
+
+    public void setAccountInfoIdList(List<AccountInfoId> accountInfoIdList) {
+        this.accountInfoIdList = accountInfoIdList;
+    }
+
+    public List<AccountInfoName> getAccountInfoNameList() {
+        return accountInfoNameList;
+    }
+
+    public void setAccountInfoNameList(List<AccountInfoName> accountInfoNameList) {
+        this.accountInfoNameList = accountInfoNameList;
     }
 }
