@@ -712,13 +712,14 @@
             <table class="table_content">
                 <tr>
                     <td style="width: 30%;text-align: left">
-                        <h:outputLabel value="สรุปการจัดชั้นหนี้"/>
+                        <h:outputLabel value="สรุปการจัดชั้นหนี้ : "/>
+                        <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
                     </td>
                     <td style="width: 70%;text-align: left">
                         <table class="table_noborder">
                             <tr>
                                 <td  class="title" style="width: 25%;text-align: left">
-                                    <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
+                                    <h:outputLabel   value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
                                 </td>
                                 <td>
                                     <p:selectOneMenu id="dlgQualityLevelA"
