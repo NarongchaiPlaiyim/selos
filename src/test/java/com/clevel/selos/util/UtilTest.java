@@ -16,16 +16,16 @@ public class UtilTest {
     public void testReplaceToBlank() throws Exception {
         log.info("testReplaceToBlank.");
         String strToReplace = "เขต|แขวง";
-        String text1 = "เขตดุสิต";
+        String text1 = "เขตลาดพร้าว";
         String text2 = "แขวงดุสิต";
 
         log.info("text1 output: {}",Util.replaceToBlank(text1,strToReplace));
         log.info("text2 output: {}",Util.replaceToBlank(text2,strToReplace));
 
-        assertEquals("expected equal.", "ดุสิต", Util.replaceToBlank(text1,strToReplace));
+        assertEquals("expected equal.", "ลาดพร้าว", Util.replaceToBlank(text1,strToReplace));
         assertEquals("expected equal.", "ดุสิต", Util.replaceToBlank(text2,strToReplace));
         assertEquals("expected equal.", "", Util.replaceToBlank(null,strToReplace));
-        assertEquals("expected equal.", "เขตดุสิต", Util.replaceToBlank(text1, null));
+        assertEquals("expected equal.", "เขตลาดพร้าว", Util.replaceToBlank(text1, null));
         assertEquals("expected equal.", "", Util.replaceToBlank(null,null));
     }
 }

@@ -1,7 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.working.BizInfo;
+import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -18,31 +18,31 @@ import java.util.List;
  * Time: 16:02 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizInfoDAO extends GenericDAO<BizInfo,Long> {
+public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
     @Inject
     private Logger log;
 
     @Inject
-    public BizInfoDAO() {
+    public BizInfoDetailDAO() {
     }
 
-    public List<BizInfo> findByWorkCasePreScreen(WorkCasePrescreen workCasePrescreen){
+    public List<BizInfoDetail> findByWorkCasePreScreen(WorkCasePrescreen workCasePrescreen){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen", workCasePrescreen));
         criteria.addOrder(Order.asc("id"));
-        List<BizInfo> bizInfoList = criteria.list();
-        log.info("findByWorkCasePreScreen. (result size: {})",bizInfoList.size());
+        List<BizInfoDetail> bizInfoDetailList = criteria.list();
+        log.info("findByWorkCasePreScreen. (result size: {})", bizInfoDetailList.size());
 
-        return bizInfoList;
+        return bizInfoDetailList;
     }
 
-    public List<BizInfo> findByWorkCasePreScreenId(long workCasePrescreenId){
+    public List<BizInfoDetail> findByWorkCasePreScreenId(long workCasePrescreenId){
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
         criteria.addOrder(Order.asc("id"));
-        List<BizInfo> bizInfoList = criteria.list();
-        log.info("findByWorkCasePreScreen. (result size: {})",bizInfoList.size());
+        List<BizInfoDetail> bizInfoDetailList = criteria.list();
+        log.info("findByWorkCasePreScreen. (result size: {})", bizInfoDetailList.size());
 
-        return bizInfoList;
+        return bizInfoDetailList;
     }
 }

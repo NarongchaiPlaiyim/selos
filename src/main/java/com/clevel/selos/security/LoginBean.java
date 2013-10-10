@@ -8,11 +8,15 @@ import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Language;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SecurityAuditor;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -62,6 +66,10 @@ public class LoginBean {
     String ldapEnable;
 
     @Inject
+    @ExceptionMessage
+    Message msg;
+
+    @Inject
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value="#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
@@ -87,8 +95,30 @@ public class LoginBean {
         try {
             userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {
-            log.debug("user not found in system! (user: {})", userName.trim());
-            securityAuditor.addFailed(userName.trim(), "Login", "", "User not found in system!");
+            String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            return "failed";
+        }
+
+        if (user.getActive()!=1) {
+            String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            return "failed";
+        }
+
+        // handle user status here
+        UserStatus userStatus = user.getUserStatus();
+        if (UserStatus.DISABLED==userStatus) {
+            String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            return "failed";
+        } else if (UserStatus.MARK_AS_DELETED==userStatus) {
+            String message = msg.get(ExceptionMapping.USER_STATUS_DELETED,userName.trim());
+            log.debug("{}",message);
+            securityAuditor.addFailed(userName.trim(), "Login", "", message);
             return "failed";
         }
 

@@ -12,9 +12,9 @@ public class Step implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
-    @Column(name = "name")
+    @Column(name = "name",length = 10)
     private String name;
-    @Column(name = "description")
+    @Column(name = "description",length = 100)
     private String description;
     @OneToOne
     @JoinColumn(name = "stage_id")

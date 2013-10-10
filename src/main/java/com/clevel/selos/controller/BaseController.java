@@ -52,11 +52,21 @@ public class BaseController implements Serializable {
 
         if(stepId == 1001){
             manageButton.setAssignToCheckerButton(true);
+            manageButton.setCancelCAButton(true);
         }
 
         if(stepId == 1002){
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
+            manageButton.setCancelCAButton(true);
+        }
+
+        if(stepId == 1003){
+            manageButton.setCancelCAButton(true);
+            manageButton.setCloseSaleButton(true);
+            manageButton.setCheckBRMSButton(true);
+            manageButton.setCheckMandateDocButton(true);
+            manageButton.setRequestAppraisalButton(true);
         }
 
         appHeaderView = (AppHeaderView)session.getAttribute("appHeaderInfo");

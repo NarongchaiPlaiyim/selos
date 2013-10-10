@@ -10,49 +10,64 @@
             <tr>
                 <td class="title">  <h:outputText value="#{bizInfoDetail.dlgStakeName}"/></td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.stakeholderView.name}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.name}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactName')}"/> : </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.stakeholderView.contactName}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.phoneNo')}"/> : </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.stakeholderView.phoneNo}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}"/>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactYear')}"/> : </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.stakeholderView.contactYear}"/>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}">
+                        <f:convertNumber pattern="#,##0" integerOnly="true" />
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolume')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentSalesVolume}"/>
+                    <p:inputText  id="percentSalesVolume" value="#{bizInfoDetail.bizStakeHolderDetailView.percentSalesVolume}">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentSalesVolume"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentCash')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentCash}"/>
+                    <p:inputText id="percentCash"  value="#{bizInfoDetail.bizStakeHolderDetailView.percentCash}">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentCredit')}"/> : </td>
                 <td>
-                    <p:inputText  value="#{bizInfoDetail.stakeholderView.percentCredit}"/>
+                    <p:inputText id="percentCredit" value="#{bizInfoDetail.bizStakeHolderDetailView.percentCredit}">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCredit"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.creditTerm')}"/> : </td>
                 <td>
-                    <p:inputText value="#{bizInfoDetail.stakeholderView.creditTerm}"/>
+                    <p:inputText id="creditTerm" value="#{bizInfoDetail.bizStakeHolderDetailView.creditTerm}">
+                        <f:convertNumber pattern="#,##0" integerOnly="true"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:creditTerm"/>
+                    </p:inputText>
                 </td>
             </tr>
             <tr>
@@ -61,9 +76,9 @@
                             id="btnSaveStakeholderView"
                             value="Save"
                             styleClass="small"
-                            action="#{bizInfoDetail.onSaveStakeholderView()}"
+                            action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
                             update=":frmMain:supplierTable,:frmMain:buyerTable,:frmMain:supplierTotalTable,:frmMain:buyerTotalTable"
-                            oncomplete="stakeholderViewDlg.hide()"
+                            oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"
                      />
 
 

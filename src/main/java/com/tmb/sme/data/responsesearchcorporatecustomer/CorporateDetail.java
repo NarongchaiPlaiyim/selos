@@ -4,6 +4,7 @@ package com.tmb.sme.data.responsesearchcorporatecustomer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -1604,6 +1605,12 @@ public class CorporateDetail {
      *     
      */
     public String getComRegTumbon() {
+
+        try {
+            return new String(comRegTumbon.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+
+        }
         return comRegTumbon;
     }
 
@@ -1628,6 +1635,11 @@ public class CorporateDetail {
      *     
      */
     public String getComRegAumper() {
+        try {
+            return new String(comRegAumper.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+
+        }
         return comRegAumper;
     }
 

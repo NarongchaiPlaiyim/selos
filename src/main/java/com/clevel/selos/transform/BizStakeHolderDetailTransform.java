@@ -1,16 +1,9 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.working.BizInfo;
+import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizStakeHolderDetail;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 25/9/2556
- * Time: 14:59 น.
- * To change this template use File | Settings | File Templates.
- */
 public class BizStakeHolderDetailTransform extends Transform {
 
     public BizStakeHolderDetailView transformToView(BizStakeHolderDetail bizStakeHolderDetail){
@@ -31,7 +24,7 @@ public class BizStakeHolderDetailTransform extends Transform {
         return stakeHolderView;
     }
 
-    public BizStakeHolderDetail transformToModel(BizStakeHolderDetailView stakeHolderView,BizInfo bizInfo){
+    public BizStakeHolderDetail transformToModel(BizStakeHolderDetailView stakeHolderView,BizInfoDetail bizInfoDetail){
 
         BizStakeHolderDetail bizStakeHolderDetail = new BizStakeHolderDetail();
 
@@ -45,7 +38,7 @@ public class BizStakeHolderDetailTransform extends Transform {
         bizStakeHolderDetail.setPercentCredit(stakeHolderView.getPercentCredit());
         bizStakeHolderDetail.setPhoneNo(stakeHolderView.getPhoneNo());
         bizStakeHolderDetail.setCreditTerm(stakeHolderView.getCreditTerm());
-        bizStakeHolderDetail.setBizInfo(bizInfo);
+        bizStakeHolderDetail.setBizInfoDetail(bizInfoDetail);
 
         return bizStakeHolderDetail;
     }

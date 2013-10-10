@@ -1,9 +1,8 @@
-package com.clevel.selos.busiensscontrol;
+package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.TCGDetail;
 import com.clevel.selos.model.db.working.WorkCase;

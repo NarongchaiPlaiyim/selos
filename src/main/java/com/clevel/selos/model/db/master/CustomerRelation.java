@@ -15,15 +15,12 @@ public class CustomerRelation implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "active")
     private int active;
 
     public CustomerRelation(){
-
     }
 
     public int getId() {

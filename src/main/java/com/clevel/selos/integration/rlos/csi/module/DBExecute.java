@@ -4,6 +4,7 @@ import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.tool.DBContext;
+import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -47,9 +48,9 @@ public class DBExecute implements Serializable{
 
     }
 
-    public Map<String,String> getWarningCodeListFullyMatched(RLOSInterface.DocumentType documentType, String idNumber) throws Exception{
+    public Map<String,CSIData> getWarningCodeListFullyMatched(DocumentType documentType, String idNumber) throws Exception{
         log.debug("getWarningCodeFullyMatched DocumentType: {}, citizenId: {}",documentType.toString(),idNumber);
-        Map<String,String> warningCodeMap = null;
+        Map<String,CSIData> warningCodeMap = null;
         String clause;
         switch (documentType){
             case CITIZEN_ID:
@@ -77,7 +78,7 @@ public class DBExecute implements Serializable{
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             statement.setString(1, idNumber);
             rs = statement.executeQuery();
-            warningCodeMap = new HashMap<String, String>();
+            warningCodeMap = new HashMap<String, CSIData>();
             while (rs.next()) {
                 CSIData csiData = new CSIData();
                 csiData.setCitizenId(rs.getString(1));
@@ -90,7 +91,7 @@ public class DBExecute implements Serializable{
                 csiData.setDataDate(rs.getString(8));
                 csiData.setDateWarningCode(rs.getString(9));
                 log.debug("csi data : {}",csiData.toString());
-                warningCodeMap.put(csiData.getWarningCode(),csiData.getWarningCode());
+                warningCodeMap.put(csiData.getWarningCode(),csiData);
             }
             rs.close();
             conn.close();
@@ -104,9 +105,9 @@ public class DBExecute implements Serializable{
         return warningCodeMap;
     }
 
-    public Map<String,String> getWarningCodeListPartialMatched(String nameTh, String nameEn) throws Exception{
+    public Map<String,CSIData> getWarningCodeListPartialMatched(String nameTh, String nameEn) throws Exception{
         log.debug("getWarningCodeListPartialMatched nameTh: {}, nameEn: {}",nameTh,nameEn);
-        Map<String,String> warningCodeMap = null;
+        Map<String,CSIData> warningCodeMap = null;
 
         String SQL_SELECT = "SELECT CITIZEN_ID, PASSPORT_NO, BUSINESS_REG_NO, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, DATE_WARNING_CODE "+
                 "FROM "+tableName+" WHERE NAME_TH like ? OR NAME_EN like ? AND CITIZEN_ID is null AND PASSPORT_NO is null AND BUSINESS_REG_NO is null";
@@ -131,7 +132,7 @@ public class DBExecute implements Serializable{
             statement.setString(1, nameTh);
             statement.setString(2, nameEn);
             rs = statement.executeQuery();
-            warningCodeMap = new HashMap<String, String>();
+            warningCodeMap = new HashMap<String, CSIData>();
             while (rs.next()) {
                 CSIData csiData = new CSIData();
                 csiData.setCitizenId(rs.getString(1));
@@ -144,7 +145,7 @@ public class DBExecute implements Serializable{
                 csiData.setDataDate(rs.getString(8));
                 csiData.setDateWarningCode(rs.getString(9));
                 log.debug("csi data : {}",csiData.toString());
-                warningCodeMap.put(csiData.getWarningCode(),csiData.getWarningCode());
+                warningCodeMap.put(csiData.getWarningCode(),csiData);
             }
             rs.close();
             conn.close();
