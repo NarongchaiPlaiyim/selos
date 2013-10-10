@@ -20,6 +20,11 @@ public class CSIService implements Serializable{
     @Inject
     DBExecute dbExecute;
 
+    @Inject
+    public CSIService(){
+
+    }
+
     public CSIResult getCSIData(String userId,CSIInputData csiInputData) throws Exception{
         log.debug("getCSIData service userId: {}, csiInputData: {}", userId,csiInputData.toString());
         List<CSIData> csiDataList = new ArrayList<CSIData>();
