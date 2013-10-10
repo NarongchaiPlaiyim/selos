@@ -2,6 +2,8 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
 import com.clevel.selos.model.db.master.ProductGroup;
+import com.clevel.selos.model.db.master.RequestType;
+import com.clevel.selos.model.db.master.SpecialProgram;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,7 +12,7 @@ public class BasicInfoView implements Serializable {
     private String appNo;
     private String refAppNo;
     private String caNo;
-//    private RequestType requestType;
+    private RequestType requestType;
     private ProductGroup productGroup;
     private boolean charUnPaid;
     private boolean charNoPending;
@@ -21,7 +23,7 @@ public class BasicInfoView implements Serializable {
     private boolean charFCLate;
     private boolean charFCFund;
     private boolean isSpecialProgram;
-//    private SpecialPrograme specialProgram;
+    private SpecialProgram specialProgram;
     private boolean isRefIn;
 //    private Bank refIn;
     private boolean isRefOut;
@@ -68,6 +70,14 @@ public class BasicInfoView implements Serializable {
 
     public void setCaNo(String caNo) {
         this.caNo = caNo;
+    }
+
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
     }
 
     public ProductGroup getProductGroup() {
@@ -148,6 +158,14 @@ public class BasicInfoView implements Serializable {
 
     public void setSpecialProgram(boolean specialProgram) {
         isSpecialProgram = specialProgram;
+    }
+
+    public SpecialProgram getSpecialProgram() {
+        return specialProgram;
+    }
+
+    public void setSpecialProgram(SpecialProgram specialProgram) {
+        this.specialProgram = specialProgram;
     }
 
     public boolean isRefIn() {

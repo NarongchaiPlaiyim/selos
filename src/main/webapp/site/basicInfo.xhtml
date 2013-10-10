@@ -70,8 +70,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.requestType')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:selectOneMenu styleClass="largest">
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.requestType}" >
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{basicInfo.requestTypeList}"
+                                                                       var="requestType"
+                                                                       itemLabel="#{requestType.name}"
+                                                                       itemValue="#{requestType}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -185,8 +190,14 @@
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu styleClass="largest" disabled="#{not basicInfo.basicInfoView.specialProgram}">
+                                                                <p:selectOneMenu styleClass="largest" size="1"
+                                                                                 value="#{basicInfo.basicInfoView.specialProgram}"
+                                                                                 disabled="#{not basicInfo.basicInfoView.specialProgram}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{basicInfo.specialProgramList}"
+                                                                                   var="specialProgram"
+                                                                                   itemLabel="#{specialProgram.code}"
+                                                                                   itemValue="#{specialProgram}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
