@@ -45,14 +45,14 @@ public class Post implements Serializable {
     }
 
     public String sendPost(String xml, String url, int timeOut) throws Exception {
-        log.debug("Call : sendPost() url{}, timeOut{}", url,timeOut);
+        log.debug("Call : sendPost() url {}, timeOut {}", url,timeOut);
         if(ValidationUtil.isNull(xml)){
             throw new ValidationException(required, message.get(required, "XML"));
         }
         if(ValidationUtil.isNull(url)){
             throw new ValidationException(required, message.get(required, "URL"));
         }
-        if(ValidationUtil.isInteger(""+timeOut)){
+        if(timeOut <= 0){
             throw new ValidationException(required, message.get(required, "Time Out"));
         }
 
