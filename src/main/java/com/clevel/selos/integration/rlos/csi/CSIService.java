@@ -3,6 +3,8 @@ package com.clevel.selos.integration.rlos.csi;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.integration.rlos.csi.module.DBExecute;
+import com.clevel.selos.model.AccountInfoId;
+import com.clevel.selos.model.AccountInfoName;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -31,7 +33,7 @@ public class CSIService implements Serializable{
             //get fully matched warning code
             if(csiInputData.getIdModelList()!=null && csiInputData.getIdModelList().size()>0){
                 fullyMatchedMap = new HashMap<String, String>();
-                for(IdModel idModel: csiInputData.getIdModelList()){
+                for(AccountInfoId idModel: csiInputData.getIdModelList()){
                     Map<String,String> warningCodeMap = dbExecute.getWarningCodeListFullyMatched(idModel.getDocumentType(),idModel.getIdNumber());
                     if(warningCodeMap!=null){
                         for (String key: warningCodeMap.keySet()) {
@@ -44,7 +46,7 @@ public class CSIService implements Serializable{
             //get partial matched warning code
             if(csiInputData.getNameModelList()!=null && csiInputData.getNameModelList().size()>0){
                 partialMatchedMap = new HashMap<String, String>();
-                for(NameModel nameModel: csiInputData.getNameModelList()){
+                for(AccountInfoName nameModel: csiInputData.getNameModelList()){
                     String nameTh = null;
                     String nameEn = null;
                     if(!Util.isEmpty(nameModel.getNameTh()) && !Util.isEmpty(nameModel.getSurnameTh())){

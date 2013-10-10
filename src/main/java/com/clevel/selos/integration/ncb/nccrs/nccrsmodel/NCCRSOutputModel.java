@@ -13,16 +13,18 @@ public class NCCRSOutputModel implements Serializable {
     private String reason;
     private String idNumber;
     private NCCRSResponseModel responseModel;
+    private NCCRSModel nccrsModel; // use for csi
 
     public NCCRSOutputModel() {
     }
 
-    public NCCRSOutputModel(String appRefNumber, ActionResult actionResult, String reason, String idNumber, NCCRSResponseModel responseModel) {
+    public NCCRSOutputModel(String appRefNumber, ActionResult actionResult, String reason, String idNumber, NCCRSResponseModel responseModel, NCCRSModel nccrsModel) {
         this.appRefNumber = appRefNumber;
         this.actionResult = actionResult;
         this.reason = reason;
         this.idNumber = idNumber;
         this.responseModel = responseModel;
+        this.nccrsModel = nccrsModel;
     }
 
     public String getAppRefNumber() {
@@ -45,6 +47,10 @@ public class NCCRSOutputModel implements Serializable {
         return responseModel;
     }
 
+    public NCCRSModel getNccrsModel() {
+        return nccrsModel;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -52,6 +58,7 @@ public class NCCRSOutputModel implements Serializable {
                 .append("actionResult", actionResult)
                 .append("reason", reason)
                 .append("idNumber", idNumber)
+                .append("nccrsModel", nccrsModel)
                 .toString();
     }
 }
