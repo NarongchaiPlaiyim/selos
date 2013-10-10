@@ -176,7 +176,7 @@ public class NCCRSImp implements NCCRS, Serializable {
             companyName = nccrsModel.getCompanyName();
             juristicType = nccrsModel.getJuristicType();
             try {
-                if(resultImp.isFAILED(appRefNumber, registId)){
+                if(resultImp.isFAILED(appRefNumber, registId)||resultImp.isSUCCEED(appRefNumber, registId)){
                     responseModel = callOffline(nccrsModel);
                     reason = "";
                     if(!Util.isNull(responseModel.getBody().getTransaction().getTrackingid())){
