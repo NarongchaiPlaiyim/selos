@@ -39,4 +39,22 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
 
         return customerList;
     }
+
+    public Customer findByCitizenlId(String citizenId){
+        log.info("findByCitizenlId : {}", citizenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("individual.citizenId", citizenId));
+        Customer customer = (Customer)criteria.uniqueResult();
+
+        return customer;
+    }
+
+    public Customer findByRegistrationId(String registrationId){
+        log.info("findByRegistrationId : {}", registrationId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("juristic.registrationId", registrationId));
+        Customer customer = (Customer)criteria.uniqueResult();
+
+        return customer;
+    }
 }

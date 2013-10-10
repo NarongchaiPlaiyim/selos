@@ -241,11 +241,6 @@ public class PrescreenChecker implements Serializable {
                     success = false;
                 }
             }
-
-            prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
-
-            log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
-            //success = true;
         } catch(Exception ex){
             ex.printStackTrace();
             log.error("Exception : {}", ex);
@@ -254,7 +249,6 @@ public class PrescreenChecker implements Serializable {
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-        //TODO get csi data for
 
         //TODO Show message box
         if(success){
