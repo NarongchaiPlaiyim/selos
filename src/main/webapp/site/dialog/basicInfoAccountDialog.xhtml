@@ -1,0 +1,69 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="basicInfoAccountDlgForm">
+        <table class="content_form">
+            <!--<tr>
+                <td class="title" style="width:145px;">Product Program :</td>
+                <td>
+                    <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
+                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}">
+                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                    <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
+                                   var="prodProgramItem"
+                                   itemLabel="#{prodProgramItem.productProgram.name}"
+                                   itemValue="#{prodProgramItem.productProgram.id}"/>
+                    <p:ajax event="change"
+                            listener="#{prescreenMaker.onChangeProductProgram}"
+                            update=":facilityDlgForm"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Facility :</td>
+                <td>
+                    <p:selectOneMenu id="creditTypeName" value="#{prescreenMaker.facility.creditType.id}"
+                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{prescreenMaker.prdProgramToCreditTypeList}"
+                                       var="dlgCreditType"
+                                       itemLabel="#{dlgCreditType.creditType.name}"
+                                       itemValue="#{dlgCreditType.creditType.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">Request Amount :</td>
+                <td>
+                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
+                                 maxlength="10" styleClass="large right"
+                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                        <p:ajax event="change" update=":facilityDlgForm" process="@form"/>
+                    </p:inputText> Baht.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="addFacility"
+                            binding="#{addFacilityButton}"
+                            value="Add"
+                            styleClass="small"
+                            action="#{prescreenMaker.onSaveFacility}"
+                            process="@form"
+                            update=":facilityDlgForm :frmMain:resultTableFacility"
+                            oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
+                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="facilityDlg.hide()" update=":facilityDlgForm"/>
+                </td>
+            </tr>-->
+        </table>
+    </h:form>
+</ui:composition>
