@@ -1,14 +1,25 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.OpenAccountProduct;
+import com.clevel.selos.model.db.master.OpenAccountPurpose;
+import com.clevel.selos.model.db.master.OpenAccountType;
+
 import java.io.Serializable;
 
 public class BasicInfoAccountView implements Serializable {
     private String accountName;
-    private String accountType;
-    private String product;
-    private String purpose;
+    private OpenAccountType accountType;
+    private OpenAccountProduct product;
+    private OpenAccountPurpose purpose;
 
     public BasicInfoAccountView(){
+        reset();
+    }
+
+    public void reset(){
+        this.accountType = new OpenAccountType();
+        this.product = new OpenAccountProduct();
+        this.purpose = new OpenAccountPurpose();
     }
 
     public String getAccountName() {
@@ -19,27 +30,27 @@ public class BasicInfoAccountView implements Serializable {
         this.accountName = accountName;
     }
 
-    public String getAccountType() {
+    public OpenAccountType getAccountType() {
         return accountType;
     }
 
-    public void setAccountType(String accountType) {
+    public void setAccountType(OpenAccountType accountType) {
         this.accountType = accountType;
     }
 
-    public String getProduct() {
+    public OpenAccountProduct getProduct() {
         return product;
     }
 
-    public void setProduct(String product) {
+    public void setProduct(OpenAccountProduct product) {
         this.product = product;
     }
 
-    public String getPurpose() {
+    public OpenAccountPurpose getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(String purpose) {
+    public void setPurpose(OpenAccountPurpose purpose) {
         this.purpose = purpose;
     }
 }

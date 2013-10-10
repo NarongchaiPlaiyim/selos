@@ -1,12 +1,10 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.RequestType;
-import com.clevel.selos.model.db.master.RiskType;
-import com.clevel.selos.model.db.master.SpecialProgram;
+import com.clevel.selos.model.db.master.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,19 +22,19 @@ public class BasicInfoView implements Serializable {
     private boolean charFCAba;
     private boolean charFCLate;
     private boolean charFCFund;
-    private boolean isSpecialProgram;
+    private boolean isSpProgram;
     private SpecialProgram specialProgram;
     private boolean isRefIn;
-//    private Bank refIn;
+    private Bank refinanceIn;
     private boolean isRefOut;
-//    private Bank refOut;
+    private Bank refinanceOut;
     private RiskType riskType;
     private String qualitative;
     private boolean existingSME;
     private String since;
     private Date lastReviewDate;
     private Date extReviewDate;
-//    private xxxxx sbf;
+    private SBFScore sbfScore;
     private boolean isLoan;
     private boolean isMoreOneYear;
     private boolean isAnnual;
@@ -48,6 +46,18 @@ public class BasicInfoView implements Serializable {
     private String baPayment;
 
     public BasicInfoView(){
+        reset();
+    }
+
+    public void reset(){
+        this.requestType = new RequestType();
+        this.productGroup = new ProductGroup();
+        this.specialProgram = new SpecialProgram();
+        this.refinanceIn = new Bank();
+        this.refinanceOut = new Bank();
+        this.riskType = new RiskType();
+        this.sbfScore = new SBFScore();
+        this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
     }
 
     public String getAppNo() {
@@ -154,12 +164,12 @@ public class BasicInfoView implements Serializable {
         this.charFCFund = charFCFund;
     }
 
-    public boolean isSpecialProgram() {
-        return isSpecialProgram;
+    public boolean isSpProgram() {
+        return isSpProgram;
     }
 
-    public void setSpecialProgram(boolean specialProgram) {
-        isSpecialProgram = specialProgram;
+    public void setSpProgram(boolean spProgram) {
+        isSpProgram = spProgram;
     }
 
     public SpecialProgram getSpecialProgram() {
@@ -178,12 +188,28 @@ public class BasicInfoView implements Serializable {
         isRefIn = refIn;
     }
 
+    public Bank getRefinanceIn() {
+        return refinanceIn;
+    }
+
+    public void setRefinanceIn(Bank refinanceIn) {
+        this.refinanceIn = refinanceIn;
+    }
+
     public boolean isRefOut() {
         return isRefOut;
     }
 
     public void setRefOut(boolean refOut) {
         isRefOut = refOut;
+    }
+
+    public Bank getRefinanceOut() {
+        return refinanceOut;
+    }
+
+    public void setRefinanceOut(Bank refinanceOut) {
+        this.refinanceOut = refinanceOut;
     }
 
     public RiskType getRiskType() {
@@ -232,6 +258,14 @@ public class BasicInfoView implements Serializable {
 
     public void setExtReviewDate(Date extReviewDate) {
         this.extReviewDate = extReviewDate;
+    }
+
+    public SBFScore getSbfScore() {
+        return sbfScore;
+    }
+
+    public void setSbfScore(SBFScore sbfScore) {
+        this.sbfScore = sbfScore;
     }
 
     public boolean isLoan() {

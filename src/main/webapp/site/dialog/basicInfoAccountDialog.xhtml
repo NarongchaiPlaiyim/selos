@@ -7,63 +7,67 @@
 
     <h:form id="basicInfoAccountDlgForm">
         <table class="content_form">
-            <!--<tr>
-                <td class="title" style="width:145px;">Product Program :</td>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.accountName')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{basicInfo.basicInfoAccountView.accountName}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.accountType')}"/>
+                </td>
                 <td>
-                    <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
-                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}">
-                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
-                                   var="prodProgramItem"
-                                   itemLabel="#{prodProgramItem.productProgram.name}"
-                                   itemValue="#{prodProgramItem.productProgram.id}"/>
-                    <p:ajax event="change"
-                            listener="#{prescreenMaker.onChangeProductProgram}"
-                            update=":facilityDlgForm"/>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{basicInfo.basicInfoAccountView.accountType.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{basicInfo.openAccountTypeList}"
+                                       var="oepnAccountType"
+                                       itemLabel="#{oepnAccountType.name}"
+                                       itemValue="#{oepnAccountType.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
-                <td class="title">Facility :</td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.product')}"/>
+                </td>
                 <td>
-                    <p:selectOneMenu id="creditTypeName" value="#{prescreenMaker.facility.creditType.id}"
-                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}" >
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{prescreenMaker.prdProgramToCreditTypeList}"
-                                       var="dlgCreditType"
-                                       itemLabel="#{dlgCreditType.creditType.name}"
-                                       itemValue="#{dlgCreditType.creditType.id}"/>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{basicInfo.basicInfoAccountView.product.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{basicInfo.openAccountProductList}"
+                                       var="oepnAccountProduct"
+                                       itemLabel="#{oepnAccountProduct.name}"
+                                       itemValue="#{oepnAccountProduct.id}"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
             <tr>
-                <td class="title">Request Amount :</td>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
+                </td>
                 <td>
-                    <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
-                                 maxlength="10" styleClass="large right"
-                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
-                        <p:ajax event="change" update=":facilityDlgForm" process="@form"/>
-                    </p:inputText> Baht.
+                    <p:dataGrid value="#{basicInfo.openAccountPurposeList}" var="openAccountPurpose" columns="1" style="border: 0">
+                        <h:selectBooleanCheckbox value="#{openAccountPurpose.id}"/>
+                        <h:outputText value="#{openAccountPurpose.name}"/>
+                    </p:dataGrid>
                 </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td colspan="2" class="center">
-                    <p:commandButton
-                            id="addFacility"
-                            binding="#{addFacilityButton}"
-                            value="Add"
+                <td class="center" colspan="2" style="margin-top: 20px;">
+                    <p:commandButton value="#{msg.get('app.button.ok')}"
                             styleClass="small"
-                            action="#{prescreenMaker.onSaveFacility}"
+                            action="#{basicInfo.addAccount}"
                             process="@form"
-                            update=":facilityDlgForm :frmMain:resultTableFacility"
-                            oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
-                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="facilityDlg.hide()" update=":facilityDlgForm"/>
+                            update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
+                            oncomplete="basicInfoAccountDlg.hide()"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                     onclick="basicInfoAccountDlg.hide()" update=":basicInfoAccountDlgForm"/>
                 </td>
-            </tr>-->
+            </tr>
         </table>
     </h:form>
 </ui:composition>
