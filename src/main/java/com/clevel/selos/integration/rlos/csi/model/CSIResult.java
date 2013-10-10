@@ -7,22 +7,22 @@ import java.io.Serializable;
 import java.util.List;
 
 public class CSIResult implements Serializable {
-    private List<String> warningCodeFullMatched;
-    private List<String> warningCodePartialMatched;
+    private List<CSIData> warningCodeFullMatched;
+    private List<CSIData> warningCodePartialMatched;
 
-    public List<String> getWarningCodeFullMatched() {
+    public List<CSIData> getWarningCodeFullMatched() {
         return warningCodeFullMatched;
     }
 
-    public void setWarningCodeFullMatched(List<String> warningCodeFullMatched) {
+    public void setWarningCodeFullMatched(List<CSIData> warningCodeFullMatched) {
         this.warningCodeFullMatched = warningCodeFullMatched;
     }
 
-    public List<String> getWarningCodePartialMatched() {
+    public List<CSIData> getWarningCodePartialMatched() {
         return warningCodePartialMatched;
     }
 
-    public void setWarningCodePartialMatched(List<String> warningCodePartialMatched) {
+    public void setWarningCodePartialMatched(List<CSIData> warningCodePartialMatched) {
         this.warningCodePartialMatched = warningCodePartialMatched;
     }
 

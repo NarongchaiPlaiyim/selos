@@ -186,7 +186,7 @@ public class WelcomePage implements Serializable {
             log.error("",e);
             log.debug("cause stack: {}", ExceptionUtils.getStackTrace(e.getCause()));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Runtime exception!","Exception Code: "+ e.getCode()+", Message: "+e.getMessage() +", stack trace: "+ ExceptionUtils.getMessage(e.getCause()));
-            RequestContext.getCurrentInstance().showMessageInDialog(message);
+//            RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
     }
 
