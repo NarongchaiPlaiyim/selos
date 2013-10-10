@@ -319,6 +319,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setFirstNameTh(corporateModel.getCompanyNameTH());
                     customerInfoView.setFirstNameEn(corporateModel.getCompanyNameEN());
                     customerInfoView.setCitizenId(corporateModel.getRegistrationID());
+                    customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", corporateModel.getDocumentType())));
                     customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
                     customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationCountry())));
                     if(customerInfoView.getRegistrationCountry() == null){
