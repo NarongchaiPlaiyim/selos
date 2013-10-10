@@ -19,6 +19,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
+import com.filenet.api.exception.EngineRuntimeException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 @ManagedBean(name = "loginBean")
@@ -77,6 +79,8 @@ public class LoginBean {
     public String login() {
         log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
 
+        loginExceptionMessage="";
+
         // make authentication with AD first
         if (Util.isTrue(ldapEnable)) {
             log.debug("LDAP authentication enabled.");
@@ -85,8 +89,10 @@ public class LoginBean {
             } catch (ApplicationRuntimeException e) {
                 log.debug("LDAP authentication failed! (user: {})", userName.trim());
                 securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
+                loginExceptionMessage=e.getMessage();
                 return "failed";
             }
+
         }
 
         // find user profile in database
@@ -98,13 +104,16 @@ public class LoginBean {
             String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
             log.debug("{}",message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage=message;
             return "failed";
         }
+
 
         if (user.getActive()!=1) {
             String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE,userName.trim());
             log.debug("{}",message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage=message;
             return "failed";
         }
 
@@ -114,11 +123,13 @@ public class LoginBean {
             String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED,userName.trim());
             log.debug("{}",message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage=message;
             return "failed";
         } else if (UserStatus.MARK_AS_DELETED==userStatus) {
             String message = msg.get(ExceptionMapping.USER_STATUS_DELETED,userName.trim());
             log.debug("{}",message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
+            loginExceptionMessage=message;
             return "failed";
         }
 
@@ -144,9 +155,11 @@ public class LoginBean {
         } catch (ApplicationRuntimeException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
+            loginExceptionMessage=e.getMessage();
         } catch (AuthenticationException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
+            loginExceptionMessage=e.getMessage();
         }
 //        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
@@ -161,6 +174,7 @@ public class LoginBean {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
         securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "",new Date());
+        loginExceptionMessage="";
         return "loggedOut";
     }
 
@@ -186,5 +200,17 @@ public class LoginBean {
 
     public void setSessionRegistry(SessionRegistry sessionRegistry) {
         this.sessionRegistry = sessionRegistry;
+    }
+
+
+
+    private String loginExceptionMessage;
+
+    public String getloginExceptionMessage() {
+        return loginExceptionMessage;
+    }
+
+    public void setloginExceptionMessage(String loginExceptionMessage) {
+        this.loginExceptionMessage = loginExceptionMessage;
     }
 }

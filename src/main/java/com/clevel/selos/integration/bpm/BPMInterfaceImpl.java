@@ -21,6 +21,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.ws.WSDataPersist;
+import com.filenet.api.exception.EngineRuntimeException;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -129,6 +130,8 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             log.error("[{}] Exception while authentication with BPM!",linkKey,e);
             bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
+        } catch (EngineRuntimeException e){
+
         }
     }
 

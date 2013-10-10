@@ -61,8 +61,11 @@ public class Inbox implements Serializable {
         // *** Get user from Session *** //
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("onCreation ::: userDetail : {}", userDetail);
-
+           try{
         inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+           }catch (Exception e){
+               e.printStackTrace();
+           }
         log.info("onCreation ::: inboxViewList : {}", inboxViewList);
     }
 

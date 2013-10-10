@@ -3,6 +3,7 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Login</title>
@@ -10,17 +11,33 @@
     </h:head>
     <h:body>
 
-        <p:panel header="login">
+        <p:panel id="pnl_maincontainer">
+            <div id="main_container">
+                <!--Start Head Logo-->
+                <!--<ui:include src="site/include/header_logo.xhtml">-->
+            <div id="header_logo">
+                <div id="header_logo_image">
+                    <img src="#{request.contextPath}/resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application" />
+                </div>
+            </div>
+
+                <div id="content_container">
             <h:form>
-                <h:panelGrid columns="4">
-                    <h:outputText value="user name: "/>
-                    <p:inputText value="#{loginBean.userName}"/>
+                <p:panel header="login">
+                <h:panelGrid columns="2">
+                    <h:outputText value="username: "/>
+                    <p:inputText value="#{loginBean.userName}" />
                     <h:outputText value="password: "/>
                     <p:password value="#{loginBean.password}"/>
+
                 </h:panelGrid>
                 <p:commandButton value="Login" action="#{loginBean.login}" ajax="false" style="width: 150px;"/>
-            </h:form>
+                <h:outputText value="#{loginBean.loginExceptionMessage}"/>
+                </p:panel>
 
+            </h:form>
+                </div>
+            </div>
         </p:panel>
     </h:body>
 </f:view>

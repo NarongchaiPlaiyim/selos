@@ -398,8 +398,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     List<String> accountList = new ArrayList<String>();
                     for(CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()){
                         if(!Util.isEmpty(customerAccountListModel.getAccountNo())){
-                            accountList.add(customerAccountListModel.getName());
-//                            accountList.add(customerAccountListModel.getAccountNo());
+                            accountList.add(customerAccountListModel.getAccountNo());
                         }
                     }
                     customerAccountView.setAccountList(accountList);

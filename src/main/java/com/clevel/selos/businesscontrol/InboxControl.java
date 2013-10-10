@@ -49,6 +49,7 @@ public class InboxControl extends BusinessControl {
     CustomerTransform customerTransform;
 
     public List<InboxView> getInboxFromBPM(UserDetail userDetail){
+
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
@@ -72,7 +73,7 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }*/
+        }                                                              */
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
