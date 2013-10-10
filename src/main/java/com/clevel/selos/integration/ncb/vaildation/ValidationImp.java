@@ -46,6 +46,9 @@ public class ValidationImp implements Validation, Serializable {
         if(!ValidationUtil.isValueInRange(9, 10, inputModel.getReferenceTel())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "Reference Tel"));
         }
+        if(!ValidationUtil.isNumeric(inputModel.getReferenceTel())){
+            throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
+        }
         ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
         if(null == ncrsModelArrayList){
             throw new ValidationException(required, validationMsg.get(required, "NCRS Model ArrayList"));
@@ -93,6 +96,9 @@ public class ValidationImp implements Validation, Serializable {
         }
         if(!ValidationUtil.isValueInRange(9,10,inputModel.getReferenceTel())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "Reference Tel"));
+        }
+        if(!ValidationUtil.isNumeric(inputModel.getReferenceTel())){
+            throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
         }
         ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
         if(null == nccrsModelArrayList){
