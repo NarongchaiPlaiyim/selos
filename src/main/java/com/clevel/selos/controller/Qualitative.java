@@ -118,16 +118,17 @@ public class Qualitative {
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
         log.info("modeForButton :: {} ",modeForButton);
-        if(qualitativeView.getId() == 0){
-            qualitativeView.setCreateDate(DateTime.now().toDate());
-        }
+
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-            qualitativeView.setCreateBy(user);
-            qualitativeView.setCreateDate(DateTime.now().toDate());
+            if(qualitativeView.getId() == 0){
+                qualitativeView.setCreateDate(DateTime.now().toDate());
+                qualitativeView.setCreateBy(user);
+            }
+
             qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
             modeForButton = ModeForButton.EDIT;
 
@@ -149,16 +150,16 @@ public class Qualitative {
     public void onSaveQualitativeB(){
         log.info(" onSaveQualitativeB :::");
         log.info("modeForButton :: {} ",modeForButton);
-        if(qualitativeView.getId() == 0){
-            qualitativeView.setCreateDate(DateTime.now().toDate());
-        }
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-            qualitativeView.setCreateBy(user);
-            qualitativeView.setCreateDate(DateTime.now().toDate());
+            if(qualitativeView.getId() == 0){
+                qualitativeView.setCreateDate(DateTime.now().toDate());
+                qualitativeView.setCreateBy(user);
+            }
+
             qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
             modeForButton = ModeForButton.EDIT;
 
