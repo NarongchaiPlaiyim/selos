@@ -570,7 +570,14 @@ public class NCRSImp implements NCRS, Serializable{
         xStream.processAnnotations(NCRSRequestModel.class);
         xml = new String(xStream.toXML(ncrsRequest).getBytes(HTTP.UTF_8));
         log.debug("NCRS Request : \n{}",xml);
-        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+        int nTimeOut = 1; //minute
+        try{
+            nTimeOut = Integer.parseInt(timeOut);
+        }catch (Exception ex){
+            log.debug("cannot convert time out to integer");
+        }
+
+        result = new String(post.sendPost(xml, url, nTimeOut).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
         if(!"".equals(result)){
             xStream.processAnnotations(NCRSResponseModel.class);
             ncrsResponse = (NCRSResponseModel)xStream.fromXML(result);
