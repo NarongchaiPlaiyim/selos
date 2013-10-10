@@ -214,9 +214,8 @@ public class PrescreenMaker implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation");
+        log.info("onCreation :::");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("preRender ::: setSession ");
 
         if(session.getAttribute("workCasePreScreenId") != null){
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
@@ -224,9 +223,10 @@ public class PrescreenMaker implements Serializable {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             queueName = session.getAttribute("queueName").toString();
-            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String userId = userDetail.getUserName();
-            user = userDAO.findById(userId);
+//            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            String userId = userDetail.getUserName();
+//            user = userDAO.findById(userId);
+            user = (User)session.getAttribute("user");
 
             modeForButton = ModeForButton.ADD;
 

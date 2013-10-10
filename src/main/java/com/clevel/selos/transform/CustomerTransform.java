@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
@@ -15,6 +16,8 @@ public class CustomerTransform extends Transform {
     @Inject
     Logger log;
 
+    @Inject
+    CustomerDAO customerDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
     @Inject
@@ -54,9 +57,9 @@ public class CustomerTransform extends Transform {
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
         Customer customer = new Customer();
-        /*if(customerInfoView.getId() != 0){
-            customer.setId(customerInfoView.getId());
-        }*/
+        if(customerInfoView.getId() != 0){
+            customer = customerDAO.findById(customerInfoView.getId());
+        }
         customer.setWorkCase(workCase);
         customer.setWorkCasePrescreen(workCasePrescreen);
 
@@ -95,11 +98,15 @@ public class CustomerTransform extends Transform {
 
         if(customerInfoView.getCurrentAddress() != null){
             Address address = new Address();
-
             AddressView currentAddress = customerInfoView.getCurrentAddress();
-            /*if(currentAddress.getId() != 0){
-                address.setId(currentAddress.getId());
-            }*/
+            if(currentAddress.getId() != 0){
+                for(Address addressDb : customer.getAddressesList()){
+                    if(addressDb.getAddressType().getId() == 1){
+                        address = addressDb;
+                    }
+                }
+            }
+
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -142,11 +149,14 @@ public class CustomerTransform extends Transform {
 
         if(customerInfoView.getRegisterAddress() != null){
             Address address = new Address();
-
             AddressView registerAddress = customerInfoView.getRegisterAddress();
-            /*if(registerAddress.getId() != 0){
-                address.setId(registerAddress.getId());
-            }*/
+            if(registerAddress.getId() != 0){
+                for(Address addressDb : customer.getAddressesList()){
+                    if(addressDb.getAddressType().getId() == 2){
+                        address = addressDb;
+                    }
+                }
+            }
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -239,9 +249,12 @@ public class CustomerTransform extends Transform {
         if(customerInfoView.getCustomerEntity().getId() == 1){
             //Individual
             Individual individual = new Individual();
-            /*if(customerInfoView.getIndividualId() != 0){
+            if(customer.getIndividual() != null){
+                individual = customer.getIndividual();
+            }
+            if(customerInfoView.getIndividualId() != 0){
                 individual.setId(customerInfoView.getIndividualId());
-            }*/
+            }
             individual.setBirthDate(customerInfoView.getDateOfBirth());
             individual.setCitizenId(customerInfoView.getCitizenId());
             individual.setCustomer(customer);

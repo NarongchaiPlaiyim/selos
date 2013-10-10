@@ -425,7 +425,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
 
         log.info("saveCustomer ::: customerList : {}", customerList);
-        /*for(Customer customer : customerList){
+        for(Customer customer : customerList){
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
@@ -439,7 +439,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
             }
-        }*/
+        }
     }
 
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
