@@ -83,6 +83,7 @@ public class QualitativeView implements Serializable {
 
     private long id;
     private boolean active;
+    private String qualityResult;
     private String reason;
     private QualityLevel qualityLevel;
     private Date createDate;
@@ -94,6 +95,7 @@ public class QualitativeView implements Serializable {
     public  QualitativeView()
     {
         qualityLevel = new QualityLevel();
+        this.qualityResult = "P";        // test
     }
 
 
@@ -728,6 +730,14 @@ public class QualitativeView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public String getQualityResult() {
+        return qualityResult;
+    }
+
+    public void setQualityResult(String qualityResult) {
+        this.qualityResult = qualityResult;
     }
 
     @Override

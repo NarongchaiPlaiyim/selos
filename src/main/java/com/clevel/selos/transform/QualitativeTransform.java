@@ -97,6 +97,7 @@ public class QualitativeTransform extends Transform {
         qualitativeA.setProperties_dl13(qualitativeAView.isProperties_dl13());
         qualitativeA.setQualityLevel(qualitativeAView.getQualityLevel());
         qualitativeA.setReason(qualitativeAView.getReason());
+        qualitativeA.setQualityResult(qualitativeAView.getQualityResult());
 
         return qualitativeA;
     }
@@ -179,6 +180,7 @@ public class QualitativeTransform extends Transform {
         qualitativeView.setProperties_dl13(qualitativeA.isProperties_dl13());
         qualitativeView.setQualityLevel(qualitativeA.getQualityLevel());
         qualitativeView.setReason(qualitativeA.getReason());
+        qualitativeView.setQualityResult(qualitativeA.getQualityResult());
 
         return qualitativeView;
     }
@@ -194,6 +196,8 @@ public class QualitativeTransform extends Transform {
         qualitativeB.setWorkCase(workCase);
         qualitativeB.setCreateBy(qualitativeBView.getCreateBy());
         qualitativeB.setCreateDate(qualitativeBView.getCreateDate());
+        qualitativeB.setModifyDate(qualitativeBView.getModifyDate());
+        qualitativeB.setModifyBy(qualitativeBView.getModifyBy());
         qualitativeB.setProperties_p1(qualitativeBView.isProperties_p1());
         qualitativeB.setProperties_p2(qualitativeBView.isProperties_p2());
         qualitativeB.setProperties_p3(qualitativeBView.isProperties_p3());
@@ -263,6 +267,7 @@ public class QualitativeTransform extends Transform {
         qualitativeB.setProperties_dl13(qualitativeBView.isProperties_dl13());
         qualitativeB.setQualityLevel(qualitativeBView.getQualityLevel());
         qualitativeB.setReason(qualitativeBView.getReason());
+        qualitativeB.setQualityResult(qualitativeBView.getQualityResult());
         return qualitativeB;
     }
 
@@ -344,6 +349,7 @@ public class QualitativeTransform extends Transform {
         qualitativeBView.setProperties_dl13(qualitativeB.isProperties_dl13());
         qualitativeBView.setQualityLevel(qualitativeB.getQualityLevel());
         qualitativeBView.setReason(qualitativeB.getReason());
+        qualitativeBView.setQualityResult(qualitativeB.getQualityResult());
         return qualitativeBView;
     }
 }
