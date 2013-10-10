@@ -154,11 +154,17 @@ public class NCBBizTransform extends BusinessTransform {
                                         //set open date
                                         ncbDetailView.setAccountOpenDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getOpendate()));
                                         //set credit limit
-                                        ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getCreditlimit())){
+                                            ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit()));
+                                        }
                                         //set outstanding amount
-                                        ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getAmountowed())){
+                                            ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed()));
+                                        }
                                         //set installment
-                                        ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getInstallmentamount())){
+                                            ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount()));
+                                        }
                                         //set restructure date
                                         if(!Util.isEmpty(subjectAccountModel.getLastrestructureddate())){
                                             ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));

@@ -249,6 +249,9 @@ public class QualitativeA implements Serializable {
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
 
+    @Column(name="quality_result")
+    private String qualityResult;
+
     public long getId() {
         return id;
     }
@@ -863,5 +866,13 @@ public class QualitativeA implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public String getQualityResult() {
+        return qualityResult;
+    }
+
+    public void setQualityResult(String qualityResult) {
+        this.qualityResult = qualityResult;
     }
 }
