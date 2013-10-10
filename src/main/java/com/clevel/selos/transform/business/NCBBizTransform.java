@@ -154,15 +154,15 @@ public class NCBBizTransform extends BusinessTransform {
                                         //set open date
                                         ncbDetailView.setAccountOpenDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getOpendate()));
                                         //set credit limit
-                                        if(Util.isEmpty(subjectAccountModel.getCreditlimit())){
+                                        if(!Util.isEmpty(subjectAccountModel.getCreditlimit())){
                                             ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit()));
                                         }
                                         //set outstanding amount
-                                        if(Util.isEmpty(subjectAccountModel.getAmountowed())){
+                                        if(!Util.isEmpty(subjectAccountModel.getAmountowed())){
                                             ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed()));
                                         }
                                         //set installment
-                                        if(Util.isEmpty(subjectAccountModel.getInstallmentamount())){
+                                        if(!Util.isEmpty(subjectAccountModel.getInstallmentamount())){
                                             ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount()));
                                         }
                                         //set restructure date
