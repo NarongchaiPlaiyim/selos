@@ -218,7 +218,7 @@ public class NCRSImp implements NCRS, Serializable{
             nameModel = new TUEFEnquiryNameModel(ncrsModel.getLastName(), ncrsModel.getFirstName());
             nameModelArrayList.add(nameModel);
             try {
-                if(resultImp.isFAILED(appRefNumber, customerId)){
+                if(resultImp.isFAILED(appRefNumber, customerId)||resultImp.isSUCCEED(appRefNumber, customerId)){
                     responseModel = callOffline(ncrsModel);
                     reason = "";
                     if(!Util.isNull(responseModel.getBodyModel().getTransaction().getTrackingid())){
