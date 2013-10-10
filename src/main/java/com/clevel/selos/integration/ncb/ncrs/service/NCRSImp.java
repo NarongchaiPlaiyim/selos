@@ -146,7 +146,11 @@ public class NCRSImp implements NCRS, Serializable{
             lastName = ncrsModel.getLastName();
 
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
-            idModel = new TUEFEnquiryIdModel(customerType, customerId);
+            if("07".equals(customerType)){
+                idModel = new TUEFEnquiryIdModel(customerType, customerId, countryCode);
+            } else {
+                idModel = new TUEFEnquiryIdModel(customerType, customerId);
+            }
             idModelArrayList.add(idModel);
             nameModelArrayList = new ArrayList<TUEFEnquiryNameModel>();
             nameModel = new TUEFEnquiryNameModel(ncrsModel.getLastName(), ncrsModel.getFirstName());
@@ -519,12 +523,16 @@ public class NCRSImp implements NCRS, Serializable{
         String enqPurpose = ncrsModel.getEnqpurpose();
         String enqAmount = ncrsModel.getEnqamount();
         String consent = ncrsModel.getConsent();
+
+
         return new NCRSRequestModel(
                 new HeaderModel(id, pass, command),
                 new BodyModel(
                         new TUEFEnquiryModel(
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount,consent),
                                 nameModelArrayList, idModelArrayList)));
+
+
     }
     private NCRSRequestModel createFindModel(NCRSModel ncrsModel, String command){
         log.debug("NCRS Call : createFindModel()");
