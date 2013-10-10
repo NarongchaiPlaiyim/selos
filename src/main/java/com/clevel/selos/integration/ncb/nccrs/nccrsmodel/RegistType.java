@@ -2,11 +2,11 @@ package com.clevel.selos.integration.ncb.nccrs.nccrsmodel;
 
 
 public enum RegistType {
-    CompanyLimited("1140001"),//,"01"),
-    LimitedPartnership("1140002"),//,"02"),
-    RegisteredOrdinaryPartnership("1140003"),//,"03"),
+    CompanyLimited("1140001"),
+    LimitedPartnership("1140002"),
+    RegisteredOrdinaryPartnership("1140003"),
     PublicCompanyLimited("1140004"),//,"04"),
-    ForeignRegistrationIdOrOthers("1140005");//,"05");
+    ForeignRegistrationIdOrOthers("1140005");
 
     private String value;
 

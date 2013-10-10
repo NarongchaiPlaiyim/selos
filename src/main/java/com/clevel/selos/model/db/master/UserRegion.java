@@ -15,9 +15,9 @@ public class UserRegion implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code")
+    @Column(name = "code",length = 10)
     private String code;
-    @Column(name = "name")
+    @Column(name = "name",length = 50)
     private String name;
     @Column(name = "active")
     private int active;

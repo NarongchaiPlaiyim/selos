@@ -12,7 +12,7 @@ public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")
     private int code;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
     @OneToOne
     @JoinColumn(name="district_id")

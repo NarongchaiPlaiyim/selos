@@ -14,12 +14,12 @@ public class User implements Serializable {
     @Id
     @Column(name = "id", nullable = false,unique = true,length = 10)
     private String id;
-    @Column(name = "username")
+    @Column(name = "username",length = 50)
     private String userName;
     @OneToOne
     @JoinColumn(name="role_id")
     private Role role;
-    @Column(name = "bu_code")
+    @Column(name = "bu_code",length = 20)
     private String buCode;
     @Column(name = "email_address")
     private String emailAddress;
@@ -40,9 +40,9 @@ public class User implements Serializable {
     @OneToOne
     @JoinColumn(name="title_id")
     private UserTitle title;
-    @Column(name="phone_number")
+    @Column(name="phone_number",length = 20)
     private String phoneNumber;
-    @Column(name="phone_ext")
+    @Column(name="phone_ext",length = 20)
     private String phoneExt;
     @OneToOne
     @JoinColumn(name="department_id")

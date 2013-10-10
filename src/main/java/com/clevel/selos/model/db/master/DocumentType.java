@@ -12,22 +12,17 @@ public class DocumentType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-
-    @Column(name = "description")
+    @Column(name = "description",length = 100)
     private String description;
-
     @OneToOne
     @JoinColumn(name="customerentity_id")
     private CustomerEntity customerEntity;
-
     @Column(name="active")
     private int active;
-
-    @Column(name="document_type_code")
+    @Column(name="document_type_code",length = 5)
     private String documentTypeCode;
 
     public DocumentType() {
-
     }
 
     public int getId() {

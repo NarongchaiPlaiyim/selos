@@ -188,6 +188,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     workAddress.setBuilding(individualModel.getWorkAddress().getAddressBuilding());
                     workAddress.setRoad(individualModel.getWorkAddress().getAddressStreet());
                     workAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getSubdistrict())));
+                    System.out.println("=================== Work Address District : "+individualModel.getWorkAddress().getDistrict());
                     workAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getDistrict())));
                     workAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getProvince())));
                     workAddress.setAddressType(addressTypeDAO.findById(3));
@@ -278,6 +279,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     registrationAddress.setContactName(corporateModel.getRegistrationAddress().getContactName());
                     registrationAddress.setContactPhone(corporateModel.getRegistrationAddress().getContactPhoneNo());
                     customerInfoView.setRegisterAddress(registrationAddress);
+
+                    customerInfoResultView.setCustomerInfoView(customerInfoView);
                 }
             } else {
                 customerInfoResultView.setCustomerId(corporateResult.getCustomerId());
@@ -300,7 +303,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     List<String> accountList = new ArrayList<String>();
                     for(CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()){
                         if(!Util.isEmpty(customerAccountListModel.getAccountNo())){
-                            accountList.add(customerAccountListModel.getAccountNo());
+                            accountList.add(customerAccountListModel.getName());
+//                            accountList.add(customerAccountListModel.getAccountNo());
                         }
                     }
                     customerAccountView.setAccountList(accountList);

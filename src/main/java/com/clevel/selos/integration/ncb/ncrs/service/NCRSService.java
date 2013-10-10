@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.ncb.ncrs.service;
 
+import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
@@ -8,6 +9,7 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
 import com.clevel.selos.integration.test.NCBInterfaceImpTest;
+import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
@@ -43,8 +45,7 @@ public class NCRSService implements Serializable {
     @NCB
     NCBResultImp resultImp;
 
-    public final String ERROR = "ER01001";
-
+    private final String exception = ExceptionMapping.NCB_EXCEPTION;
     @Inject
     public NCRSService() {
     }
@@ -71,8 +72,10 @@ public class NCRSService implements Serializable {
             }
 
         } catch (Exception e) {
+            String resultDesc = "NCCRS Exception : "+ e.getMessage();
             log.error("NCRS Exception : {}", e.getMessage());
-            throw new Exception("NCRS Exception : "+e.getMessage());
+            throw new NCBInterfaceException(new Exception(resultDesc), exception,message.get(exception, resultDesc));
+//            throw new Exception("NCRS Exception : "+e.getMessage());
         }
     }
 

@@ -15,11 +15,11 @@ public class InboxConfig  implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 50)
     private String name;
-    @Column(name = "queue_name")
+    @Column(name = "queue_name",length = 50)
     private String queueName;
-    @Column(name = "type")
+    @Column(name = "type",length = 50)
     private String type;
     @Column(name = "active")
     private int active;

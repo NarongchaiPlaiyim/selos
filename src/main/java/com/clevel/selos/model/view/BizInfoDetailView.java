@@ -62,7 +62,8 @@ public class BizInfoDetailView implements Serializable {
     private List<BizStakeHolderDetailView> buyerDetailList;
 
     public void reset(){
-
+        this.bizDesc = new BusinessDescription();
+        this.bizDesc.setBusinessGroup(new BusinessGroup());
     }
 
     public long getId() {

@@ -15,13 +15,13 @@ public class Country implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
-    @Column(name = "code")
+    @Column(name = "code",length = 10)
     private String code;
-    @Column(name = "code2")
+    @Column(name = "code2",length = 5)
     private String code2;
-    @Column(name = "iso_code")
+    @Column(name = "iso_code",length = 5)
     private String isoCode;
     @Column(name = "active")
     private int active;

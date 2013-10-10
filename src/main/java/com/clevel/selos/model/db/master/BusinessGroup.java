@@ -2,6 +2,8 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +17,9 @@ public class BusinessGroup implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
-    @Column(name = "description")
+    @Column(name = "description",length = 100)
     private String description;
     @Column(name = "active")
     private int active;

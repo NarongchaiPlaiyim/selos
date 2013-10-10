@@ -24,7 +24,7 @@ public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
             //set for individual
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 1));
-            criteria.add(Restrictions.eq("code", code));
+            criteria.add(Restrictions.eq("ncbCode", code));
             AccountType accountType = (AccountType) criteria.uniqueResult();
 
             log.debug("getIndividualByCode. (accountType: {})",accountType);
@@ -39,7 +39,7 @@ public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
             //set for juristic
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 2));
-            criteria.add(Restrictions.eq("code", code));
+            criteria.add(Restrictions.eq("ncbCode", code));
             AccountType accountType = (AccountType) criteria.uniqueResult();
 
             log.debug("getJuristicByCode. (accountType: {})",accountType);

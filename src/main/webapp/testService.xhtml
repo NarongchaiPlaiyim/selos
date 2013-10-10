@@ -18,7 +18,7 @@
     <h:body>
         <fieldset>
             <legend>Search Form</legend>
-              <h:form>
+              <h:form id="tee">
 
                   <p:outputLabel value="** RM -Search Individual and Corporate     **CV -Search CustomerAccount"   />
 
@@ -62,13 +62,13 @@
                       <p:message for="radser"/>
 
 
-                      <p:commandButton value="(RM)SearchIndividual"  actionListener="#{testrm.individual()}" update="@form">
+                      <p:commandButton value="(RM)SearchIndividual"  actionListener="#{testrm.individual()}" update=":tee">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
-                      <p:commandButton value="(RM)SearchCorporate"  actionListener="#{testrm.corporate()}" update="@form">
+                      <p:commandButton value="(RM)SearchCorporate"  actionListener="#{testrm.corporate()}" update=":tee">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
-                      <p:commandButton value="(CA)SearchCustomerAccount"  actionListener="#{testrm.customerAccount()}" update="@form">
+                      <p:commandButton value="(CA)SearchCustomerAccount"  actionListener="#{testrm.customerAccount()}" update=":tee">
                           <!--<p:ajax  update="he"  />-->
                       </p:commandButton>
                       <p:commandButton value="Cancel"/>
