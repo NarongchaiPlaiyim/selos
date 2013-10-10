@@ -17,6 +17,7 @@ public class CorporateModel implements Serializable{
     private String titleTH;
     private String companyNameTH;
     private String companyNameEN;
+    private String documentType;
     private String registrationID;
     private String registrationDate;
     private String registrationCountry;
@@ -142,5 +143,13 @@ public class CorporateModel implements Serializable{
 
     public void setRegistrationAddress(RegistrationAddress registrationAddress) {
         this.registrationAddress = registrationAddress;
+    }
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 }
