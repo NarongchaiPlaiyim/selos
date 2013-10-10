@@ -30,4 +30,13 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen,Long> {
 
         return workCasePreScreenId;
     }
+
+    public WorkCasePrescreen findByWobNumber(String wobNumber){
+        log.info("findByWobNumber : {}", wobNumber);
+        WorkCasePrescreen workCasePrescreen;
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("wobNumber", wobNumber));
+        workCasePrescreen = (WorkCasePrescreen)criteria.uniqueResult();
+        return workCasePrescreen;
+    }
 }

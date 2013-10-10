@@ -18,6 +18,9 @@ import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.RegistType;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.*;
+import com.clevel.selos.integration.rlos.csi.CSIService;
+import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
+import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -91,6 +94,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     BRMSInterface brmsInterface;
     @Inject
     BPMInterface bpmInterface;
+    @Inject
+    CSIService csiService;
 
     /*@Inject
     NCBInterface ncbInterface;  */
@@ -273,6 +278,18 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncbViewList.add(item);
                     }
                 }
+
+                //TODO Check CSI
+                for(NcbView ncbView : ncbIndividualViewList){
+                    log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
+                    log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
+                    CSIInputData csiInputData = new CSIInputData();
+                    csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
+                    csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
+                    log.info("getCSI ::: csiInputData : {}", csiInputData);
+                    CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
+                    log.info("getCSI ::: csiResult : {}", csiResult);
+                }
             }
 
             if(nccrsInputModel != null){
@@ -425,7 +442,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
 
         log.info("saveCustomer ::: customerList : {}", customerList);
-        /*for(Customer customer : customerList){
+        for(Customer customer : customerList){
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
@@ -439,7 +456,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
             }
-        }*/
+        }
     }
 
     public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){

@@ -4,8 +4,10 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -190,7 +192,7 @@ public class PrescreenChecker implements Serializable {
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
-            /*List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+            List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
             log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
             int index = 0;
@@ -238,10 +240,12 @@ public class PrescreenChecker implements Serializable {
                 if(failedCount != 0){
                     success = false;
                 }
-            }*/
+            }
+
+            prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
 
             log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
-            success = true;
+            //success = true;
         } catch(Exception ex){
             ex.printStackTrace();
             log.error("Exception : {}", ex);

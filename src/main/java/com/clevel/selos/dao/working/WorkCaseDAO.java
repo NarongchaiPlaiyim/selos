@@ -29,4 +29,13 @@ public class WorkCaseDAO extends GenericDAO<WorkCase,Long> {
 
         return workCaseId;
     }
+
+    public WorkCase findByWobNumber(String wobNumber){
+        log.info("findIdByWobNum : {}", wobNumber);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("wobNumber", wobNumber));
+        WorkCase workCase = (WorkCase)criteria.uniqueResult();
+
+        return workCase;
+    }
 }
