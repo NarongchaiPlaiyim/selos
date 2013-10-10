@@ -71,12 +71,12 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.requestType}" >
+                                                                     value="#{basicInfo.basicInfoView.requestType.id}" >
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                         <f:selectItems value="#{basicInfo.requestTypeList}"
                                                                        var="requestType"
                                                                        itemLabel="#{requestType.name}"
-                                                                       itemValue="#{requestType}"/>
+                                                                       itemValue="#{requestType.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -86,12 +86,12 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.productGroup}" >
+                                                                     value="#{basicInfo.basicInfoView.productGroup.id}" >
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                         <f:selectItems value="#{basicInfo.productGroupList}"
                                                                        var="productGroup"
                                                                        itemLabel="#{productGroup.name}"
-                                                                       itemValue="#{productGroup}"/>
+                                                                       itemValue="#{productGroup.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -184,7 +184,7 @@
                                                     <table>
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.specialProgram}">
+                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
                                                                     <p:ajax update="specialProgram"/>
@@ -192,13 +192,13 @@
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
-                                                                                 value="#{basicInfo.basicInfoView.specialProgram}"
-                                                                                 disabled="#{not basicInfo.basicInfoView.specialProgram}">
+                                                                                 value="#{basicInfo.basicInfoView.specialProgram.id}"
+                                                                                 disabled="#{not basicInfo.basicInfoView.spProgram}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{basicInfo.specialProgramList}"
                                                                                    var="specialProgram"
                                                                                    itemLabel="#{specialProgram.code}"
-                                                                                   itemValue="#{specialProgram}"/>
+                                                                                   itemValue="#{specialProgram.id}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -220,8 +220,13 @@
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refIn" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refIn}">
+                                                                <p:selectOneMenu id="refIn" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refIn}"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{basicInfo.bankList}"
+                                                                                   var="bankList"
+                                                                                   itemLabel="#{bankList.name}"
+                                                                                   itemValue="#{bankList.code}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -243,8 +248,13 @@
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refOut" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refOut}">
+                                                                <p:selectOneMenu id="refOut" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refOut}"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{basicInfo.bankList}"
+                                                                                   var="bankList"
+                                                                                   itemLabel="#{bankList.name}"
+                                                                                   itemValue="#{bankList.code}"/>
                                                                 </p:selectOneMenu>
                                                             </td>
                                                         </tr>
@@ -257,12 +267,12 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.riskType}">
+                                                                     value="#{basicInfo.basicInfoView.riskType.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                         <f:selectItems value="#{basicInfo.riskTypeList}"
                                                                        var="riskType"
                                                                        itemLabel="#{riskType.description}"
-                                                                       itemValue="#{riskType}"/>
+                                                                       itemValue="#{riskType.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -317,8 +327,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.sbf')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:selectOneMenu style="width: 185px;">
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.sbfScore.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{basicInfo.sbfScoreList}"
+                                                                       var="sbfScore"
+                                                                       itemLabel="#{sbfScore.score}"
+                                                                       itemValue="#{sbfScore.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -397,16 +412,18 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <p:commandButton type="button" value="#{msg.get('app.basicInfo.content.button.add')}"
+                                                    <p:commandButton value="#{msg.get('app.button.add')}"
                                                                      styleClass="smaller"
-                                                                     actionListener="#{basicInfo.onAddAccount()}"
+                                                                     process="@this"
+                                                                     actionListener="#{basicInfo.onAddAccount}"
+                                                                     update=":basicInfoAccountDlgForm"
                                                                      oncomplete="basicInfoAccountDlg.show();"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
-                                                                 paginator="false" rowKey="" rowIndexVar="rowIndex">
+                                                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
                                                         <p:column headerText="" styleClass="center" style="width:22px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
@@ -417,27 +434,27 @@
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 110px;">
-                                                            <h:outputText value="#{item.accountType}"/>
+                                                            <h:outputText value="#{item.accountType.name}"/>
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 110px;">
-                                                            <h:outputText value="#{item.product}"/>
+                                                            <h:outputText value="#{item.product.name}"/>
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
-                                                            <h:outputText value="#{item.purpose}"/>
+                                                            <h:outputText value="#{item.purpose.name}"/>
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
                                                             <p:commandButton title="Edit"
-                                                                             icon="ui-icon-pencil">
-                                                                             <!--action="#{prescreenMaker.onEditFacility()}"-->
-                                                                             <!--update=":facilityDlgForm"-->
-                                                                             <!--oncomplete="facilityDlg.show();"-->
-                                                                <!--<f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{prescreenMaker.selectFacilityItem}"/>
+                                                                             icon="ui-icon-pencil"
+                                                                             action="#{basicInfo.onEditAccount()}"
+                                                                             update=":basicInfoAccountDlgForm"
+                                                                             oncomplete="basicInfoAccountDlg.show();">
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{basicInfo.selectAccount}"/>
                                                                 <f:setPropertyActionListener value="#{rowIndex}"
-                                                                                             target="#{prescreenMaker.rowIndex}"/>-->
+                                                                                             target="#{basicInfo.rowIndex}"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash">
@@ -501,8 +518,9 @@
 
                                 <tr>
                                     <td colspan="4" class="center">
-                                        <p:commandButton type="button" value="#{msg.get('app.basicInfo.content.button.save')}" styleClass="small" actionListener="#{basicInfo.onSave()}"/>
-                                        <p:commandButton type="button" value="#{msg.get('app.basicInfo.content.button.cancel')}" styleClass="small"/>
+                                        <p:commandButton value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form"
+                                                         actionListener="#{basicInfo.onSave}"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
                                     </td>
                                 </tr>
                             </table>
@@ -532,7 +550,7 @@
     </p:panel>
 
     <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg"
-              modal="true" width="400" height="150">
+              modal="true" width="500" height="260">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
 
