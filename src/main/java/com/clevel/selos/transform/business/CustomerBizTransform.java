@@ -48,6 +48,8 @@ public class CustomerBizTransform extends BusinessTransform {
     BusinessTypeDAO businessTypeDAO;
     @Inject
     RaceDAO raceDAO;
+    @Inject
+    CustomerEntityDAO customerEntityDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult){
         CustomerInfoResultView customerInfoResultView = null;
@@ -69,10 +71,9 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setLastNameTh(individualModel.getLastname());
                     customerInfoView.setCustomerId(individualModel.getDocumentType());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
-                    customerInfoView.setCustomerEntity(customerInfoView.getDocumentType().getCustomerEntity());
+                    customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
                     if(customerInfoView.getDocumentType() == null){
                         customerInfoView.setDocumentType(new DocumentType());
-                        customerInfoView.setCustomerEntity(new CustomerEntity());
                     }
                     customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
                     customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
@@ -318,7 +319,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     customerInfoView.setFirstNameTh(corporateModel.getCompanyNameTH());
                     customerInfoView.setFirstNameEn(corporateModel.getCompanyNameEN());
-                    customerInfoView.setCitizenId(corporateModel.getRegistrationID());
+                    customerInfoView.setRegistrationId(corporateModel.getRegistrationID());
                     customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
                     customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationCountry())));
                     if(customerInfoView.getRegistrationCountry() == null){
