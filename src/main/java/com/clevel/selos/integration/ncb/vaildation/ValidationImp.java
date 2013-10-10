@@ -34,7 +34,7 @@ public class ValidationImp implements Validation, Serializable {
         if(null == inputModel){
             throw new ValidationException(required, validationMsg.get(required, "NCRSInputModel"));
         }
-        if(!ValidationUtil.isValueInRange(5, 5, inputModel.getUserId())){
+        if(!ValidationUtil.isValueInRange(1, 10, inputModel.getUserId())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
         }
         if(!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())){
@@ -85,7 +85,7 @@ public class ValidationImp implements Validation, Serializable {
         if(null == inputModel){
             throw new ValidationException(required,validationMsg.get(required, "NCCRSInputModel"));
         }
-        if(!ValidationUtil.isValueInRange(5,5,inputModel.getUserId())){
+        if(!ValidationUtil.isValueInRange(1,10,inputModel.getUserId())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
         }
         if(!ValidationUtil.isValueInRange(16,16,inputModel.getAppRefNumber())){
