@@ -1,5 +1,8 @@
 package com.clevel.selos.model.db.master;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,13 +19,13 @@ public class WarningCode implements Serializable {
     @Column(name="code",length = 4)
     private String code;
 
-    @Column(name="group",length = 50)
-    private String group;
+    @Column(name="warning_group",length = 50)
+    private String warningGroup;
 
-    @Column(name="definition_en",length = 100)
+    @Column(name="definition_en",length = 150)
     private String definitionEn;
 
-    @Column(name="definition_th",length = 100)
+    @Column(name="definition_th",length = 150)
     private String definitionTh;
 
     @Column(name="active")
@@ -44,12 +47,12 @@ public class WarningCode implements Serializable {
         this.code = code;
     }
 
-    public String getGroup() {
-        return group;
+    public String getWarningGroup() {
+        return warningGroup;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
+    public void setWarningGroup(String warningGroup) {
+        this.warningGroup = warningGroup;
     }
 
     public String getDefinitionEn() {
@@ -74,5 +77,17 @@ public class WarningCode implements Serializable {
 
     public void setActive(int active) {
         this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("code", code)
+                .append("warningGroup", warningGroup)
+                .append("definitionEn", definitionEn)
+                .append("definitionTh", definitionTh)
+                .append("active", active)
+                .toString();
     }
 }
