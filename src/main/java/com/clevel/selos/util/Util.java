@@ -180,4 +180,16 @@ public class Util {
             log.debug("key: {}, value: {}",entry.getKey(),entry.getValue());
         }
     }
+
+    public static int calAge(Date date){
+        int resultDay = 0;
+        Calendar nowDay = Calendar.getInstance();
+        Calendar birthDay = Calendar.getInstance();
+        birthDay.setTime(date);
+        if(birthDay.after(nowDay))
+            return resultDay;
+
+        resultDay = (nowDay.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR));
+        return resultDay;
+    }
 }

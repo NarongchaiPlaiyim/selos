@@ -463,11 +463,8 @@
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
     <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
-        <p:commandButton value="YES"
-                         process="@this"
-                         actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                         oncomplete="msgBoxFacilityDlg.hide()" />
-        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+
+        <p:commandButton value="OK" onclick="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
 <p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
@@ -475,7 +472,7 @@
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="customerDialog" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Customer Information" widgetVar="customerDlg"
-          modal="true" width="800" height="500">
+          modal="true" width="690" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>
 <p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" onShow="removeWindowsScrollbar()" onHide="showWindowsScrollbar()" header="Check NCB - Assign to BDM Checker"
