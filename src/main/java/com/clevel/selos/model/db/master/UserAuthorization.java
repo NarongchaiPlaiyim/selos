@@ -13,7 +13,7 @@ public class UserAuthorization implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code")
+    @Column(name = "code",length = 20)
     private String code;
     @Column(name = "name")
     private String name;

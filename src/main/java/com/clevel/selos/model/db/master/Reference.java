@@ -12,15 +12,12 @@ public class Reference implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "active")
     private int active;
 
     public Reference(){
-
     }
 
     public int getId() {

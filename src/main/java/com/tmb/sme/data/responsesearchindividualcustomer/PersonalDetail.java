@@ -4,6 +4,7 @@ package com.tmb.sme.data.responsesearchindividualcustomer;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

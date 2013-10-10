@@ -15,13 +15,10 @@ public class PotentialCollateral implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-
     @Column(name = "name")
     private String name;
-
     @Column(name = "description")
     private String description;
-
     @Column(name = "active")
     private int active;
 

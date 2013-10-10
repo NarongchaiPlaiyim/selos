@@ -12,7 +12,7 @@ public class District implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
     @OneToOne
     @JoinColumn(name="province_id")

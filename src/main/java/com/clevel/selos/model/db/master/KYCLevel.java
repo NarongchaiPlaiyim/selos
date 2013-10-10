@@ -15,18 +15,14 @@ public class KYCLevel implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-
     @Column(name = "name")
     private String name;
-
     @Column(name = "kyc_level")
     private int kycLevel;
-
     @Column(name = "active")
     private int active;
 
     public KYCLevel(){
-
     }
 
     public int getId() {

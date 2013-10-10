@@ -2,8 +2,12 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -35,19 +39,19 @@ public class BusinessDescription implements Serializable {
     private String deviate;
     @Column(name = "esr")
     private String esr;
-    @Column(name = "negative")
+    @Column(name = "negative",length = 5)
     private String negative;
-    @Column(name = "high_risk")
+    @Column(name = "high_risk",length = 5)
     private String highRisk;
-    @Column(name = "suspend")
+    @Column(name = "suspend",length = 5)
     private String suspend;
     @Column(name = "business_comment")
     private String comment;
-    @Column(name = "allow_deviate")
+    @Column(name = "allow_deviate",length = 100)
     private String allowDeviate;
-    @Column(name = "deviated_by")
+    @Column(name = "deviated_by",length = 100)
     private String deviatedBy;
-    @Column(name = "business_permission")
+    @Column(name = "business_permission",length = 5)
     private String businessPermission;
     @Column(name = "business_permission_desc")
     private String businessPermissionDesc;
