@@ -22,10 +22,10 @@ public class WarningCode implements Serializable {
     @Column(name="warning_group",length = 50)
     private String warningGroup;
 
-    @Column(name="definition_en",length = 100)
+    @Column(name="definition_en",length = 150)
     private String definitionEn;
 
-    @Column(name="definition_th",length = 100)
+    @Column(name="definition_th",length = 150)
     private String definitionTh;
 
     @Column(name="active")
