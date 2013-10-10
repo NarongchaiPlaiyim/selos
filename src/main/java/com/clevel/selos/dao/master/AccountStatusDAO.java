@@ -21,7 +21,7 @@ public class AccountStatusDAO extends GenericDAO<AccountStatus,Integer> {
         log.debug("getIndividualByCode. (code: {}",code);
         if(!Util.isEmpty(code)){
             Criteria criteria = createCriteria();
-            criteria.add(Restrictions.eq("ncb_code_ind", code));
+            criteria.add(Restrictions.eq("ncbCodeInd", code));
             AccountStatus accountStatus = (AccountStatus) criteria.uniqueResult();
 
             log.debug("getIndividualByCode. (accountStatus: {})",accountStatus);
@@ -34,7 +34,7 @@ public class AccountStatusDAO extends GenericDAO<AccountStatus,Integer> {
         log.debug("getJuristicByCode. (code: {}",code);
         if(!Util.isEmpty(code)){
             Criteria criteria = createCriteria();
-            criteria.add(Restrictions.eq("ncb_code_jur", code));
+            criteria.add(Restrictions.eq("ncbCodeJur", code));
             AccountStatus accountStatus = (AccountStatus) criteria.uniqueResult();
 
             log.debug("getJuristicByCode. (accountStatus: {})",accountStatus);
