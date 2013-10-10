@@ -4,6 +4,7 @@ import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.tool.DBContext;
+import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class DBExecute implements Serializable{
 
     }
 
-    public Map<String,String> getWarningCodeListFullyMatched(RLOSInterface.DocumentType documentType, String idNumber) throws Exception{
+    public Map<String,String> getWarningCodeListFullyMatched(DocumentType documentType, String idNumber) throws Exception{
         log.debug("getWarningCodeFullyMatched DocumentType: {}, citizenId: {}",documentType.toString(),idNumber);
         Map<String,String> warningCodeMap = null;
         String clause;
