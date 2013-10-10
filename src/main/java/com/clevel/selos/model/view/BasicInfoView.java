@@ -3,10 +3,12 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.RequestType;
+import com.clevel.selos.model.db.master.RiskType;
 import com.clevel.selos.model.db.master.SpecialProgram;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class BasicInfoView implements Serializable {
     private String appNo;
@@ -28,7 +30,7 @@ public class BasicInfoView implements Serializable {
 //    private Bank refIn;
     private boolean isRefOut;
 //    private Bank refOut;
-//    private xxxxx riskCus;
+    private RiskType riskType;
     private String qualitative;
     private boolean existingSME;
     private String since;
@@ -41,7 +43,7 @@ public class BasicInfoView implements Serializable {
 //    private xxxxx style;
     private String refName;
     private String refId;
-//    private List<XXXX> openingAccountInfoList;
+    private List<BasicInfoAccountView> basicInfoAccountViews;
     private boolean isApplyBA;
     private String baPayment;
 
@@ -184,6 +186,14 @@ public class BasicInfoView implements Serializable {
         isRefOut = refOut;
     }
 
+    public RiskType getRiskType() {
+        return riskType;
+    }
+
+    public void setRiskType(RiskType riskType) {
+        this.riskType = riskType;
+    }
+
     public String getQualitative() {
         return qualitative;
     }
@@ -262,6 +272,14 @@ public class BasicInfoView implements Serializable {
 
     public void setRefId(String refId) {
         this.refId = refId;
+    }
+
+    public List<BasicInfoAccountView> getBasicInfoAccountViews() {
+        return basicInfoAccountViews;
+    }
+
+    public void setBasicInfoAccountViews(List<BasicInfoAccountView> basicInfoAccountViews) {
+        this.basicInfoAccountViews = basicInfoAccountViews;
     }
 
     public boolean isApplyBA() {
