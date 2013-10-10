@@ -19,6 +19,7 @@ import com.clevel.selos.integration.rlos.csi.CSIService;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -286,36 +287,40 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    CSIInputData csiInputData = new CSIInputData();
-                    csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
-                    csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
+                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                        CSIInputData csiInputData = new CSIInputData();
+                        csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
+                        csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
 
-                    log.info("getCSI ::: csiInputData : {}", csiInputData);
-                    CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
-                    log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
-                    log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
+                        log.info("getCSI ::: csiInputData : {}", csiInputData);
+                        CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
+                        log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
+                        log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                    Customer customer = customerDAO.findByCitizenlId(ncbView.getIdNumber());
-                    List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+                        Individual individual = individualDAO.findByCitizenId(ncbView.getIdNumber());
+                        Customer customer = individual.getCustomer();
 
-                    for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
-                        CustomerCSI customerCSI = new CustomerCSI();
-                        customerCSI.setCustomer(customer);
-                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                        customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("F");
-                        customerCSIList.add(customerCSI);
+                        List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+
+                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("F");
+                            customerCSIList.add(customerCSI);
+                        }
+
+                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("P");
+                            customerCSIList.add(customerCSI);
+                        }
+                        customerCSIDAO.persist(customerCSIList);
                     }
-
-                    for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
-                        CustomerCSI customerCSI = new CustomerCSI();
-                        customerCSI.setCustomer(customer);
-                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                        customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("P");
-                        customerCSIList.add(customerCSI);
-                    }
-                    customerCSIDAO.persist(customerCSIList);
                 }
             }
 
@@ -335,36 +340,39 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    CSIInputData csiInputData = new CSIInputData();
-                    csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
-                    csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
+                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                        CSIInputData csiInputData = new CSIInputData();
+                        csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
+                        csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
 
-                    log.info("getCSI ::: csiInputData : {}", csiInputData);
-                    CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
-                    log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
-                    log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
+                        log.info("getCSI ::: csiInputData : {}", csiInputData);
+                        CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
+                        log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
+                        log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                    Customer customer = customerDAO.findByRegistrationId(ncbView.getIdNumber());
-                    List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+                        Juristic juristic = juristicDAO.findByRegisterId(ncbView.getIdNumber());
+                        Customer customer = juristic.getCustomer();
+                        List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
-                    for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
-                        CustomerCSI customerCSI = new CustomerCSI();
-                        customerCSI.setCustomer(customer);
-                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                        customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("F");
-                        customerCSIList.add(customerCSI);
+                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("F");
+                            customerCSIList.add(customerCSI);
+                        }
+
+                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("P");
+                            customerCSIList.add(customerCSI);
+                        }
+                        customerCSIDAO.persist(customerCSIList);
                     }
-
-                    for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
-                        CustomerCSI customerCSI = new CustomerCSI();
-                        customerCSI.setCustomer(customer);
-                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                        customerCSI.setWarningDate(csiData.getDateWarningCode());
-                        customerCSI.setMatchedType("P");
-                        customerCSIList.add(customerCSI);
-                    }
-                    customerCSIDAO.persist(customerCSIList);
                 }
             }
         } catch (Exception ex){
