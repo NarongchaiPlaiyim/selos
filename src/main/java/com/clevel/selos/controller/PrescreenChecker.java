@@ -197,6 +197,12 @@ public class PrescreenChecker implements Serializable {
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
             int index = 0;
             int failedCount = 0;
+            for(CustomerInfoView customerInfoView : customerInfoViewList){
+                if(customerInfoView.isNcbFlag()){
+                    customerInfoView.setNcbReason("");
+                    customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
+                }
+            }
             if(ncbViewList != null){
                 for(NcbView item : ncbViewList){
                     index = 0;

@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.BRMSInterface;
+import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
@@ -98,7 +99,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     BPMInterface bpmInterface;
     @Inject
-    CSIService csiService;
+    RLOSInterface rlosInterface;
 
     /*@Inject
     NCBInterface ncbInterface;  */
@@ -203,7 +204,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         for(CustomerInfoView customerItem : customerInfoViewList){
+            log.info("customerItem : {}", customerItem);
             if(customerItem.getCustomerEntity().getId() == 1 && !customerItem.isNcbFlag()){
+                log.info("customerItem ::: NcbFlag : {}", customerItem.isNcbFlag());
                 NCRSModel ncrsModel = new NCRSModel();
 
                 if(customerItem.getTitleTh() != null){
@@ -293,7 +296,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
 
                         log.info("getCSI ::: csiInputData : {}", csiInputData);
-                        CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
+                        CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
@@ -346,7 +349,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
 
                         log.info("getCSI ::: csiInputData : {}", csiInputData);
-                        CSIResult csiResult = csiService.getCSIData(userId, csiInputData);
+                        CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 

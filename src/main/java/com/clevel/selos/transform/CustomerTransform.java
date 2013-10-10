@@ -320,6 +320,7 @@ public class CustomerTransform extends Transform {
             customerInfoView.setCustomerId(item.getIdNumber());
             customerInfoView.setRelation(item.getRelation());
             customerInfoView.setDocumentType(item.getDocumentType());
+            customerInfoView.setNcbFlag(item.isNcbFlag());
             customerInfoView.setValidId(2);
 
             if(item.getAddressesList() != null){
