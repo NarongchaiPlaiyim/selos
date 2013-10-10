@@ -33,6 +33,12 @@ public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
 
     @Inject
     CSIService csiService;
+
+    @Inject
+    public RLOSInterfaceImpl(){
+
+    }
+
     public CSIResult getCSIData(String userId, CSIInputData csiInputData){
         CSIResult csiResult = null;
         Date requestTime = new Date();
