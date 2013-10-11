@@ -19,7 +19,6 @@ public class TCGDetail implements Serializable {
     @JoinColumn(name="tcg_id")
     private TCG tcg;
 
-
     @OneToOne
     @JoinColumn(name="potential_collateral_id")
     private PotentialCollateral potentialCollateral;
@@ -92,4 +91,6 @@ public class TCGDetail implements Serializable {
     public void setProposeInThisRequest(boolean proposeInThisRequest) {
         isProposeInThisRequest = proposeInThisRequest;
     }
+
+
 }

@@ -48,8 +48,11 @@ public class TCGInfoControl extends BusinessControl {
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
         try{
             log.info("onSaveTCGToDB begin");
+            log.info("workCaseId {} ",workCaseId);
+            log.info("tcgView  {} ",tcgView.toString() );
             WorkCase workCase  = workCaseDAO.findById(workCaseId);
             TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
+            log.info("tranform comback {} ",tcg.toString() );
             tcgDAO.persist(tcg);
             log.info("persist tcg");
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
@@ -61,7 +64,69 @@ public class TCGInfoControl extends BusinessControl {
             log.info( "onSaveTCGToDB end" );
         }
 
+    }
 
+    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
+        try{
+            log.info("onEditTCGToDB begin");
+            log.info("workCaseId {} ",workCaseId);
+            log.info("tcgView  {} ",tcgView.toString() );
+            WorkCase workCase  = workCaseDAO.findById(workCaseId);
+            TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
+            log.info("tranform comback {} ",tcg.toString() );
+            tcgDAO.persist(tcg);
+            log.info("persist tcg");
+
+//            List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
+//
+//            if(TCGDetailList.size() > 0){
+//                for(int i = 0 ; i < TCGDetailList.size();i++){
+//                    log.info("TCGDetailList.get(i).toString():::: {} ",TCGDetailList.get(i).toString());
+//                    tcgDetailDAO.delete(TCGDetailList.get(i));
+//                }
+//            }
+
+            List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
+            tcgDetailDAO.persist(tcgDetailList);
+
+        }catch (Exception e){
+            log.error( "onEditTCGToDB error" + e);
+        }finally{
+            log.info( "onEditTCGToDB end" );
+        }
 
     }
+
+    public TCGView getTcgView(long workCaseId){
+        log.info("getTcgView :: workCaseId  :: {}", workCaseId);
+        TCGView tcgView = null;
+        WorkCase workCase  = workCaseDAO.findById(workCaseId);
+        log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
+        if(workCase != null)
+        {
+           TCG tcg =  tcgDAO.findByWorkCase(workCase);
+
+           if(tcg != null){
+               log.info("tcg :: {} ",tcg.getId());
+               tcgView  = tcgTransform.transformTCGToTcgView(tcg);
+           }
+
+        }
+        return tcgView;
+    }
+
+    public List<TCGDetailView> getTcgDetailListView(TCGView tcgView){
+        log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
+
+        List<TCGDetailView> tcgDetailViewList = null;
+
+            List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
+
+            if(TCGDetailList.size() > 0){
+                tcgDetailViewList  = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
+            }
+
+        return tcgDetailViewList;
+    }
+
 }

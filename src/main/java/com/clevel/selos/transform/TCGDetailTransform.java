@@ -36,4 +36,22 @@ public class TCGDetailTransform extends Transform {
         return tcgDetailList;
     }
 
+    public List<TCGDetailView> transformTCGDetailModelToView(List<TCGDetail> tcgDetailList) {
+
+        List<TCGDetailView> tcgDetailViewList  = new ArrayList<TCGDetailView>();
+
+        for(TCGDetail tcgDetail : tcgDetailList){
+            TCGDetailView tcgDetailView = new TCGDetailView();
+            tcgDetailView.setId(tcgDetail.getId());
+            tcgDetailView.setLtvValue(tcgDetail.getLtvValue());
+            tcgDetailView.setAppraisalAmount(tcgDetail.getAppraisalAmount());
+            tcgDetailView.setPotentialCollateral(tcgDetail.getPotentialCollateral());
+            tcgDetailView.setProposeInThisRequest(tcgDetail.isProposeInThisRequest());
+            tcgDetailView.setTcgCollateralType(tcgDetail.getTcgCollateralType());
+
+            tcgDetailViewList.add(tcgDetailView);
+        }
+
+        return tcgDetailViewList;
+    }
 }

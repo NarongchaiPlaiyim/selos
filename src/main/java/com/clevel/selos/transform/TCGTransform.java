@@ -13,23 +13,59 @@ import com.clevel.selos.model.view.TCGView;
  */
 public class TCGTransform extends Transform {
 
-    public TCG transformTCGViewToModel(TCGView tcgView ,WorkCase workCaseId) {
+    public TCG transformTCGViewToModel(TCGView tcgView ,WorkCase workCase) {
 
         TCG tcg = new TCG();
 
         if(tcgView.getId() != 0 ){
             tcg.setId(tcgView.getId());
         }
-        tcg.setWorkCase(workCaseId);
+        tcg.setWorkCase(workCase);
+        tcg.setActive(true);
+        tcg.setCreateBy(tcgView.getCreateBy());
+        tcg.setCreateDate(tcgView.getCreateDate());
+        tcg.setModifyBy(tcgView.getModifyBy());
+        tcg.setModifyDate(tcgView.getModifyDate());
         tcg.setCollateralRuleResult(tcgView.getCollateralRuleResult());
         tcg.setExistingLoanRatioUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
         tcg.setExistingLoanRatioNotUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
-        tcg.setRequestLimitNotRequiredTCG(tcgView.getRequestLimitRequiredTCG());
+        tcg.setRequestLimitRequiredTCG(tcgView.getRequestLimitRequiredTCG());
+        tcg.setRequestLimitNotRequiredTCG(tcgView.getRequestLimitNotRequiredTCG());
         tcg.setRequestTCGAmount(tcgView.getRequestTCGAmount());
         tcg.setTcbFloodAmount(tcgView.getTcbFloodAmount());
         tcg.setTcgFlag(tcgView.isTCG());
+        tcg.setSumAppraisalAmount(tcgView.getSumAppraisalAmount());
+        tcg.setSumLtvValue(tcgView.getSumLtvValue());
+        tcg.setSumInThisAppraisalAmount(tcgView.getSumInThisAppraisalAmount());
+        tcg.setSumInThisLtvValue(tcgView.getSumInThisLtvValue());
 
         return tcg;
+    }
+
+    public TCGView transformTCGToTcgView(TCG tcg) {
+
+        TCGView tcgView = new TCGView();
+
+        tcgView.setId(tcg.getId());
+        tcgView.setActive(tcg.isActive());
+        tcgView.setCreateBy(tcg.getCreateBy());
+        tcgView.setCreateDate(tcg.getCreateDate());
+        tcgView.setModifyBy(tcg.getModifyBy());
+        tcgView.setModifyDate(tcg.getModifyDate());
+        tcgView.setCollateralRuleResult(tcg.getCollateralRuleResult());
+        tcgView.setExistingLoanRatioUnderSameCollateral(tcg.getExistingLoanRatioUnderSameCollateral());
+        tcgView.setExistingLoanRatioNotUnderSameCollateral(tcg.getExistingLoanRatioUnderSameCollateral());
+        tcgView.setRequestLimitRequiredTCG(tcg.getRequestLimitRequiredTCG());
+        tcgView.setRequestLimitNotRequiredTCG(tcg.getRequestLimitNotRequiredTCG());
+        tcgView.setRequestTCGAmount(tcg.getRequestTCGAmount());
+        tcgView.setTcbFloodAmount(tcg.getTcbFloodAmount());
+        tcgView.setTCG(tcg.isTcgFlag());
+        tcgView.setSumAppraisalAmount(tcg.getSumAppraisalAmount());
+        tcgView.setSumLtvValue(tcg.getSumLtvValue());
+        tcgView.setSumInThisAppraisalAmount(tcg.getSumInThisAppraisalAmount());
+        tcgView.setSumInThisLtvValue(tcg.getSumInThisLtvValue());
+
+        return tcgView;
     }
 
 }
