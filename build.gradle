@@ -1,0 +1,56 @@
+apply plugin: 'java'
+apply plugin: 'war'
+sourceCompatibility = 1.6
+
+project.ext {
+    selosLib='D:/Works/TMB/SELOS/Projects/selos_lib_compile'
+    versionString = ''
+    versionNumber = 'vvv'
+    buildNumber = '0'
+    buildDate = new Date().format("dd/MM/yyyy HH:mm:ss")
+    version = ''
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    providedCompile fileTree(dir: selosLib, include: '*.jar')
+    providedCompile 'javax:javaee-api:6.0'
+}
+
+task getVersion << {
+    new ByteArrayOutputStream().withStream { os ->
+        def result = exec {
+            workingDir rootDir.getAbsolutePath()
+            executable = 'git'
+            args = ['describe']
+            standardOutput = os
+        }
+        def outputAsString = os.toString()
+        project.versionString = outputAsString.replace('\n','').split("-")
+        project.versionNumber = versionString[0]
+        if (project.versionString.size() > 1) {
+            project.buildNumber = versionString[1]
+        }
+        project.ext.version = 'Version: ' + versionNumber + ', build: ' + buildNumber + ' ('+buildDate+')'
+    }
+}
+
+war {
+    getVersion.execute()
+
+    println project.ext.version
+    baseName = 'selos'
+    println "selos library folder: $project.ext.selosLib"
+
+    eachFile {
+        if (it.name == 'login.xhtml') {
+            it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: ['versionNumber' : project.ext.version])
+        }
+    }
+    war.rootSpec.exclude '**/*.java'
+
+    excludes = ['mockup/**']
+}
