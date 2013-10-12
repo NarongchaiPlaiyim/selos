@@ -5,13 +5,14 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
+<p:panel id="businessDlgPanel" styleClass="panel-dialog">
     <h:form id="businessDlgForm">
         <table class="content_form">
             <tr>
                 <td class="title">Business Group :</td>
                 <td>
-                    <p:selectOneMenu id="dlgBusinessGroupId" size="1" style="width: 300px;"
-                                     value="#{prescreenMaker.bizInfoView.bizDesc.businessGroup.id}"
+                    <p:selectOneMenu style="width: 300px;" size="1"
+                                     value="#{prescreenMaker.bizInfoDetailView.bizDesc.businessGroup.id}"
                                      required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgBusinessGroupItem"
@@ -24,8 +25,8 @@
             <tr>
                 <td class="title">Business Description :</td>
                 <td>
-                    <p:selectOneMenu id="businessDescriptionID" size="1" style="width: 300px;"
-                                     value="#{prescreenMaker.bizInfoView.bizDesc.id}"
+                    <p:selectOneMenu style="width: 300px;" size="1"
+                                     value="#{prescreenMaker.bizInfoDetailView.bizDesc.id}"
                                      required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgBusinessDescItem"
@@ -38,16 +39,17 @@
             <tr>
                 <td class="title">Comment :</td>
                 <td class="left">
-                    <p:inputText id="dBusinessComment" value="#{prescreenMaker.bizInfoView.bizDesc.comment}" readonly="true" styleClass="readonly"/>
+                    <p:inputText styleClass="readonly" readonly="true"
+                                 value="#{prescreenMaker.bizInfoDetailView.bizDesc.comment}" />
                 </td>
             </tr>
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton
-                            id="btnSaveBusinessInfo"
-                            value="Save"
+                            id="dlgSaveBizBtn"
+                            value="OK"
                             styleClass="small"
-                            action="#{prescreenMaker.onSaveBusinessInformation()}"
+                            action="#{prescreenMaker.onSaveBusinessInfo()}"
                             process=":businessDlgForm"
                             update=":businessDlgForm :frmMain:resulttableBusinessInformation"
                             oncomplete="handlePrescreenBusinessInfoRequest(xhr, status, args)"/>
@@ -56,5 +58,9 @@
             </tr>
         </table>
     </h:form>
-
+</p:panel>
+<p:blockUI widgetVar="blockBusinessDlg" block="businessDlgPanel" trigger=":businessDlgForm:dlgSaveBizBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

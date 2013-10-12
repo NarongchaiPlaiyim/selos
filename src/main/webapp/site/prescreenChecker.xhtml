@@ -56,12 +56,9 @@
                                             </p:column>
 
                                             <p:column headerText="Citizen ID / Registration ID" styleClass="center" style="width: 150px;">
-                                                <h:inputText value="#{borrowerItem.inputId}"/>
+                                                <h:inputText value="#{borrowerItem.inputId}" onkeypress="return numberOnly(event);" maxlength="15"/>
                                                 <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="Invalid Citizen ID" rendered="#{borrowerItem.validId==0}"/>
                                                 <h:outputText styleClass="require-field" style="margin-left: 60px; position: absolute;" value="#{borrowerItem.ncbResult}, #{borrowerItem.ncbReason}" rendered="#{not empty borrowerItem.ncbResult}"/>
-                                                <!--<p:spacer width="20" height="20" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==2}"/>
-                                                <h:graphicImage url="/resources/images/shared/valid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==1}"/>
-                                                <h:graphicImage url="/resources/images/shared/invalid.png" style="vertical-align: middle; margin-bottom: 5px;" rendered="#{item.validCitizenID==0}"/>-->
                                             </p:column>
 
                                         </p:dataTable>

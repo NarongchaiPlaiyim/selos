@@ -9,7 +9,7 @@
         <div id="header_button_bar">
             <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
             <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
-            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" onclick="assignCheckerDlg.show()"/>
+            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()"/>
             <p:commandButton id="btnMandateDoc" value="Check Mandate Doc" styleClass="blueButton" rendered="#{baseController.manageButton.checkMandateDocButton}" disabled="true" />
             <p:commandButton id="btnCheckPreScreen" value="Check Prescreen" styleClass="blueButton" rendered="#{baseController.manageButton.checkBRMSButton}" action="#{prescreenMaker.onCheckPreScreen}" disabled="true" />
             <p:commandButton id="btnRequestAppraisal" value="Request Appraisal" styleClass="blueButton" rendered="#{baseController.manageButton.requestAppraisalButton}" disabled="true" />
@@ -86,7 +86,7 @@
                         <table>
                             <tr>
                                 <ui:repeat var="borrower" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
-                                    <td>#{borrower.borrowerName}</td>
+                                    <td style="min-width: 140px; max-width: 140px; width: 140px;">#{borrower.borrowerName}</td>
                                 </ui:repeat>
                             </tr>
                         </table>
@@ -98,7 +98,7 @@
                         <table>
                             <tr>
                                 <ui:repeat var="personalId" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
-                                    <td>#{personalId.personalId}</td>
+                                    <td style="min-width: 140px; max-width: 140px; width: 140px;"><h:outputText rendered="#{baseController.stepId != 1002}" value="#{personalId.personalId}"/></td>
                                 </ui:repeat>
                             </tr>
                         </table>

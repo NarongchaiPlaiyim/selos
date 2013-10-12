@@ -21,4 +21,28 @@ public class PrescreenCollateral implements Serializable{
     @OneToOne
     @JoinColumn(name="collateral_type_id")
     private CollateralType collateralType;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Prescreen getPrescreen() {
+        return prescreen;
+    }
+
+    public void setPrescreen(Prescreen prescreen) {
+        this.prescreen = prescreen;
+    }
+
+    public CollateralType getCollateralType() {
+        return collateralType;
+    }
+
+    public void setCollateralType(CollateralType collateralType) {
+        this.collateralType = collateralType;
+    }
 }

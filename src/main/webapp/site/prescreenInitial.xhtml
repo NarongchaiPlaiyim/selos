@@ -43,8 +43,9 @@
                                     <p:selectOneMenu id="selProdGroupId"
                                                      styleClass="largest"
                                                      size="1"
-                                                     value="#{prescreenMaker.prescreenView.productGroup.id}" >
-                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                     value="#{prescreenMaker.prescreenView.productGroup.id}"
+                                                     required="#{not empty param[btnAddFacility.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
                                                        itemLabel="#{productGroupList.name}"
@@ -64,13 +65,12 @@
                             <tr>
                                 <td class="title"><h:outputText value="#{msg.get('app.label.producgprogram')}"/> <h:outputText value="*" styleClass="require-field"/> :</td>
                                 <td>
-                                    <p:commandButton id="btnAddFacility"
-                                                     value="Add"
-                                                     styleClass="smaller"
-                                                     process="@this, selProdGroupId"
-                                                     actionListener="#{prescreenMaker.onAddFacility}"
-                                                     update=":facilityDlgForm"
-                                                     oncomplete="facilityDlg.show();">
+                                    <p:commandButton id="btnAddFacility" styleClass="smaller"
+                                                     binding="#{btnAddFacility}"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     process="@form"
+                                                     action="#{prescreenMaker.onAddFacility}"
+                                                     update=":frmMain, :facilityDlgForm">
                                         <p:resetInput target=":facilityDlgForm" />
                                     </p:commandButton>
                                 </td>
@@ -473,15 +473,18 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-<p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+<p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="400" height="150">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="customerDialog" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Customer Information" widgetVar="customerDlg"
+<p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="800" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Check NCB - Assign to BDM Checker"
+<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" header="Check NCB - Assign to BDM Checker"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="360" height="160">
     <ui:include src="dialog/prescreenAssignChecker.xhtml"/>
 </p:dialog>

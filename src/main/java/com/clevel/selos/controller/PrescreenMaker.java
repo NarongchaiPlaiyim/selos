@@ -119,6 +119,7 @@ public class PrescreenMaker implements Serializable {
     private String messageHeader;
     private String message;
     private int rowIndex;
+    private boolean disableAssignButton;
 
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
@@ -223,6 +224,10 @@ public class PrescreenMaker implements Serializable {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             queueName = session.getAttribute("queueName").toString();
+
+            log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
+            log.debug("onCreation ::: stepId : {}", stepId);
+            log.debug("onCreation ::: queueName : {}", queueName);
 //            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //            String userId = userDetail.getUserName();
 //            user = userDAO.findById(userId);
@@ -233,9 +238,16 @@ public class PrescreenMaker implements Serializable {
             onClearObjectList();
             onLoadSelectList();
             onClearObject();
+            onCheckButton();
         }
+    }
 
-
+    public void onCheckButton(){
+        if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
+            disableAssignButton = false;
+        }else{
+            disableAssignButton = true;
+        }
     }
 
     public void onClearObjectList(){
@@ -311,7 +323,7 @@ public class PrescreenMaker implements Serializable {
         maritalStatusList = maritalStatusDAO.findAll();
         log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
 
-        log.info("onLoadSelectList ::: user : {}", user);
+        //log.info("onLoadSelectList ::: user : {}", user);
         bdmCheckerList = userDAO.findBDMChecker(user);
         log.info("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
     }
@@ -380,13 +392,18 @@ public class PrescreenMaker implements Serializable {
         log.info("onAddFacility ::: ");
         log.info("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
 
-        //*** Reset form ***//
-        log.info("onAddFacility ::: Reset Form");
-        prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
-        facility = new FacilityView();
-        facility.setProductProgram(new ProductProgram());
-        facility.setCreditType(new CreditType());
-        modeForButton = ModeForButton.ADD;
+        if(prescreenView.getProductGroup() != null){
+            //*** Reset form ***//
+            log.info("onAddFacility ::: Reset Form");
+            prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
+            facility = new FacilityView();
+            facility.setProductProgram(new ProductProgram());
+            facility.setCreditType(new CreditType());
+            modeForButton = ModeForButton.ADD;
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('facilityDlg').show()");
+        }
+
     }
 
     public void onEditFacility() {
@@ -564,7 +581,7 @@ public class PrescreenMaker implements Serializable {
         } else {
 
         }
-
+        onCheckButton();
         context.addCallbackParam("functionComplete", complete);
     }
 
@@ -812,13 +829,37 @@ public class PrescreenMaker implements Serializable {
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen(){
         //*** validate forms ***//
-        log.info("onSavePrescreen ::: prescreenView : {}", prescreenView);
+
+        log.debug("onSavePrescreen ::: prescreenView : {}", prescreenView);
+        try{
+            prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+            //TODO show messageBox success
+            messageHeader = "Save PreScreen Success.";
+            message = "Save PreScreen data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            log.error("onSavePreScreenInitial ::: exception : {}", ex);
+            //TODO show messageBox error
+            messageHeader = "Save PreScreen Failed.";
+            if(ex.getCause() != null){
+                message = "Save PreScreen data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save PreScreen data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
+        /*log.info("onSavePrescreen ::: prescreenView : {}", prescreenView);
         Prescreen prescreen = new Prescreen();
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(new Long(1));
+
         log.info("onSavePrescreen ::: sWorkcasePrescreen : {}", workCasePrescreen);
         Province businessLocation = provinceDAO.findById(10);
+
         log.info("onSavePrescreen ::: businessLocation : {}", businessLocation);
         User user = userDAO.findById("10001");
+
         log.info("onSavePrescreen ::: user : {}", user);
         prescreen.setWorkCasePrescreen(workCasePrescreen);
         prescreen.setBusinessLocation(businessLocation);
@@ -829,7 +870,7 @@ public class PrescreenMaker implements Serializable {
         prescreen.setModifyBy(user);
         prescreen.setModifyDate(DateTime.now().toDate());
         prescreen.setCreateDate(DateTime.now().toDate());
-        prescreenService.save(prescreen);
+        prescreenService.save(prescreen);*/
 
         /*Province province = provinceDAO.findById(11);
         province.setName("testtest");
@@ -1322,5 +1363,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setBdmCheckerList(List<User> bdmCheckerList) {
         this.bdmCheckerList = bdmCheckerList;
+    }
+
+    public boolean isDisableAssignButton() {
+        return disableAssignButton;
+    }
+
+    public void setDisableAssignButton(boolean disableAssignButton) {
+        this.disableAssignButton = disableAssignButton;
     }
 }
