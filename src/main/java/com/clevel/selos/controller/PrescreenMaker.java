@@ -120,7 +120,7 @@ public class PrescreenMaker implements Serializable {
 
     // ***Boolean CustomerDialog*** //
     //Individual
-
+    private boolean isDocumentType;
     private boolean isCitizenId;
     private boolean isCustomerId;
     private boolean isServiceSegment;
@@ -471,7 +471,7 @@ public class PrescreenMaker implements Serializable {
         borrowerInfo.reset();
         spouseInfo.reset();
 
-
+        isDocumentType = false;
         isCitizenId = true;
         isCustomerId = true;
         isServiceSegment = true;
@@ -591,7 +591,12 @@ public class PrescreenMaker implements Serializable {
                 complete = true;
             }
         } else {
+            if(borrowerInfo.getCustomerEntity().getId() != 0){
+                if(borrowerInfo.getCustomerEntity().getId() == 1){
+                    log.info("onEditCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
 
+                }
+            }
         }
 
         context.addCallbackParam("functionComplete", complete);
@@ -637,8 +642,14 @@ public class PrescreenMaker implements Serializable {
                     isApproxIncome = false;
                     isMaritalStatus= false;
                     isDateOfRegister = false;
+                    isDocumentType = false;
                 }else{
                     log.info("else borrowerInfo = null");
+                    if(borrowerInfo.getSearchBy() == 2){
+                        isDocumentType = true;
+                    }else{
+                        isDocumentType = false;
+                    }
                     isCitizenId = true;
                     isCustomerId = true;
                     isServiceSegment = true;
@@ -683,12 +694,15 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeCustomerEntity(){
-        if( borrowerInfo.getCustomerEntity().getId() == 0){
-            return;
-        }
+
         log.info("onChangeCustomerEntity ::: Custoemr Entity : {}", borrowerInfo.getCustomerEntity().getId());
         titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
         log.info("onChangeCustomerEntity ::{}", borrowerInfo);
+        if ( borrowerInfo.getCustomerEntity().getId() == 1){
+            isDocumentType = false;
+        }else{
+            isDocumentType = true;
+        }
         isCitizenId = false;
         isCustomerId = false;
         isServiceSegment = false;
@@ -713,6 +727,16 @@ public class PrescreenMaker implements Serializable {
         log.info("");
         log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
+
+    public void onDisableDocType(){
+        log.info("onDisableDocType ::: {}", borrowerInfo.getSearchBy());
+        if(borrowerInfo.getSearchBy() == 2){
+            isDocumentType = true;
+        }else{
+            isDocumentType = false;
+        }
+    }
+
     // *** Calculate Age And Year In Business ***//
     public void onCalAge(String type){
         log.info("onCalAge ::: DateOfBirth:{} ", borrowerInfo.getDateOfBirth());
@@ -1559,5 +1583,11 @@ public class PrescreenMaker implements Serializable {
         isDateOfRegister = dateOfRegister;
     }
 
+    public boolean isDocumentType() {
+        return isDocumentType;
+    }
 
+    public void setDocumentType(boolean documentType) {
+        isDocumentType = documentType;
+    }
 }

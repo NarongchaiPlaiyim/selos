@@ -13,7 +13,7 @@
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
                              required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}"
-                             size="1" style="width: 200px;">
+                             size="1" style="width: 200px;" disabled="#{prescreenMaker.documentType}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{prescreenMaker.documentTypeList}"
                                var="docTypeItem"
@@ -32,6 +32,10 @@
                               required="#{not empty param[searchButton.clientId]}">
                 <f:selectItem itemLabel="Citizen ID" itemValue="1"/>
                 <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
+                <p:ajax event="change" process="@form" immediate="true"/>
+                <p:ajax event="change"
+                        listener="#{prescreenMaker.onDisableDocType}"
+                        update=":customerDlgForm:dlgSelBrDocType" />
             </p:selectOneRadio>
         </td>
         <td>
@@ -44,7 +48,7 @@
                              binding="#{searchButton}"
                              process="@form"
                              actionListener="#{prescreenMaker.onSearchCustomerInfo}"
-                             update=":msgBoxSystemMessagePanel :customerDlgForm" />
+                             update=":msgBoxSystemMessagePanel :customerDlgForm " />
         </td>
     </tr>
     <tr>
@@ -57,8 +61,8 @@
     <tr>
         <td class="title">Customer Entity :</td>
         <td colspan="3">
-            <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}"
-                              required="#{not empty param[searchButton.clientId]}">
+            <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}">
+                              <!--required="#{not empty param[searchButton.clientId]}">-->
                 <f:selectItems value="#{prescreenMaker.customerEntityList}"
                                var="customerEntityItem"
                                itemLabel="#{customerEntityItem.description}"
@@ -66,6 +70,7 @@
                 <p:ajax event="change"
                         process="@form" immediate="true" />
                 <p:ajax event="change"
+
                         listener="#{prescreenMaker.onChangeCustomerEntity()}"
                         update=":customerDlgForm" />
 
