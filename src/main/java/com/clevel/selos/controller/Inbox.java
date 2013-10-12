@@ -1,15 +1,14 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.InboxControl;
-import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.business.InboxBizTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,8 +61,11 @@ public class Inbox implements Serializable {
         // *** Get user from Session *** //
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("onCreation ::: userDetail : {}", userDetail);
-
+           try{
         inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+           }catch (Exception e){
+               e.printStackTrace();
+           }
         log.info("onCreation ::: inboxViewList : {}", inboxViewList);
     }
 
@@ -75,6 +77,10 @@ public class Inbox implements Serializable {
         session.setAttribute("workCaseId", inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("stepId", inboxViewSelectItem.getStepId());
         session.setAttribute("queueName", inboxViewSelectItem.getQueueName());
+
+        //*** Get Information for Header ***//
+        AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
+        session.setAttribute("appHeaderInfo", appHeaderView);
 
         try{
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();

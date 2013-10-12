@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.corebanking;
 
+import com.clevel.selos.exception.RMInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.corebanking.model.SearchIndividual;
@@ -78,12 +79,17 @@ public class RMService implements Serializable {
     String requestTimeout;
 
     @Inject
+    @Config(name = "interface.rm.replace.blank")
+    String blank;
+
+    @Inject
     @RM
     SystemAuditor rmAuditor;
 
     @Inject
     public RMService() {
     }
+
 
     @PostConstruct
     public void onCreate() {
@@ -93,53 +99,54 @@ public class RMService implements Serializable {
     public IndividualModel individualService(SearchIndividual searchIndividual,String userId) throws Exception {
         log.debug("IndividualService() START");
         IndividualModel individualModel = null;
+        System.out.println("============================== : "+blank);
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             if(searchIndividual.getReqId()==null||searchIndividual.getReqId().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate CustType
         if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             if(searchIndividual.getCustType()==null||searchIndividual.getCustType().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(custType)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(custType)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custType)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custType)"));
             }
         }
         //Validate Type
         if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             if(searchIndividual.getType()==null||searchIndividual.getType().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(type)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(type)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(type)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(type)"));
             }
         }
         //Validate CustId
         if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custId)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custId)"));
         }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate CustName
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custName)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custName)"));
         }
         //Validate CustSurname
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustSurname().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(surname)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(surname)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             if(searchIndividual.getRadSelectSearch()==null||searchIndividual.getRadSelectSearch().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -179,9 +186,11 @@ public class RMService implements Serializable {
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", new Date());
                 log.debug("responseHeaderData : {}", resSearchIndividualCustomer.getHeader().toString());
+                if(resSearchIndividualCustomer.getBody()!=null
+                        &&resSearchIndividualCustomer.getBody().getPersonalDetailSection()!=null
+                        &&resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail()!=null){
                 log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
-
-
+                }
                 //Audit Data
                 rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
 
@@ -191,7 +200,7 @@ public class RMService implements Serializable {
                     individualModel = new IndividualModel();
                     //checkSearchResult
                     if (resSearchIndividualCustomer.getBody().getSearchResult().equals("CL")) {
-                        throw new ValidationException(validationMsg.get(ValidationMapping.CUSTOMER_RESULT_MULTIPLE));   
+                        throw new RMInterfaceException(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE,exceptionMsg.get(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE));
                     }
                     //personal detail session
                     individualModel.setTmbCusID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustNbr());
@@ -271,10 +280,13 @@ public class RMService implements Serializable {
                     //validateSpiltSize
                     int homeAddressLineSize3 = homeAddressLine3.length - 1;
                     if (homeAddressLineSize3 >= 0) {
-                        homeContactDetails.setSubdistrict(Util.replaceStringToBlank(homeAddressLine3[0], "แขวง"));
+//
+
+                        homeContactDetails.setSubdistrict(Util.replaceToBlank(homeAddressLine3[0], blank));
                     }
                     if (homeAddressLineSize3 >= 1) {
-                        homeContactDetails.setDistrict(Util.replaceStringToBlank(homeAddressLine3[1], "เขต"));
+                        homeContactDetails.setDistrict(Util.replaceToBlank(homeAddressLine3[1], blank));
+
                     }
                     homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
                     homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
@@ -302,10 +314,12 @@ public class RMService implements Serializable {
                     //validateSpiltSize
                     int currentAddressLineSize3 = currentAddressLine3.length - 1;
                     if (currentAddressLineSize3 >= 0) {
-                        currentContactDetails.setSubdistrict(Util.replaceStringToBlank(currentAddressLine3[0], "แขวง"));
+//                        currentContactDetails.setSubdistrict(Util.replaceStringToBlank(currentAddressLine3[0], subDistrict));
+                        currentContactDetails.setSubdistrict(Util.replaceToBlank(currentAddressLine3[0], blank));
                     }
                     if (currentAddressLineSize3 >= 1) {
-                        currentContactDetails.setDistrict(Util.replaceStringToBlank(currentAddressLine3[1], "เขต"));
+//                        currentContactDetails.setDistrict(Util.replaceStringToBlank(currentAddressLine3[1], district));
+                        currentContactDetails.setDistrict(Util.replaceToBlank(currentAddressLine3[1], blank));
                     }
                     currentContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCity());
                     currentContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegPostalCd());
@@ -333,10 +347,12 @@ public class RMService implements Serializable {
                     //ValidateSpiltSize
                     int workAddressLineSize3 = workAddressLine3.length - 1;
                     if (workAddressLineSize3 >= 0) {
-                        workContactDetails.setSubdistrict(Util.replaceStringToBlank(workAddressLine3[0], "แขวง"));
+//                        workContactDetails.setSubdistrict(Util.replaceStringToBlank(workAddressLine3[0], subDistrict));
+                        workContactDetails.setSubdistrict(Util.replaceToBlank(workAddressLine3[0], blank));
                     }
                     if (workAddressLineSize3 >= 1) {
-                        workContactDetails.setDistrict(Util.replaceStringToBlank(workAddressLine3[1], "เขต"));
+//                        workContactDetails.setDistrict(Util.replaceStringToBlank(workAddressLine3[1], district));
+                        workContactDetails.setDistrict(Util.replaceToBlank(workAddressLine3[1], blank));
                     }
                     workContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCity());
                     workContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusPostalCd());
@@ -346,29 +362,28 @@ public class RMService implements Serializable {
 
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL,exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
                     
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
 
                     log.debug("Data Not Found!");
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
+                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL,exceptionMsg.get(ExceptionMapping.RM_FAIL));
                 }
                 //check null
             } else {
                 log.warn("resSearchIndividualCustomer : Null");
                 //Audit Data
                 rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
-                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
+                throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new Exception(e.getMessage());
+            throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
         }
         log.debug("IndividualService() END");
         return individualModel;
@@ -383,45 +398,45 @@ public class RMService implements Serializable {
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             if(searchIndividual.getReqId()==null||searchIndividual.getReqId().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate CustType
         if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             if(searchIndividual.getCustType()==null||searchIndividual.getCustType().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(custType)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(custType)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custType)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custType)"));
             }
         }
         //Validate Type
         if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             if(searchIndividual.getType()==null||searchIndividual.getType().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(type)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(type)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(type)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(type)"));
             }
         }
         //Validate CustId
         if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custId)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custId)"));
         }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate CustName
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custName)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custName)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             if(searchIndividual.getRadSelectSearch()==null||searchIndividual.getRadSelectSearch().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -458,8 +473,11 @@ public class RMService implements Serializable {
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", new Date());
                 log.debug("responseHeaderData : {}", resSearchCorporateCustomer.getHeader().toString());
+                if(resSearchCorporateCustomer.getBody()!=null
+                        &&resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection()!=null
+                        &&resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail()!=null){
                 log.debug("responseBodyData : {}", resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().toString());
-
+                }
 
                 //Audit Data
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
@@ -470,7 +488,7 @@ public class RMService implements Serializable {
                     corporateModel = new CorporateModel();
                     //checkSearchResult
                     if (resSearchCorporateCustomer.getBody().getSearchResult().equals("CL")) {
-                        throw new ValidationException(validationMsg.get(ValidationMapping.CUSTOMER_RESULT_MULTIPLE));
+                        throw new RMInterfaceException(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE,exceptionMsg.get(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE));
                     }
                     //personal detail session
                     corporateModel.setTitleTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
@@ -484,16 +502,17 @@ public class RMService implements Serializable {
                     corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
-                    corporateModel.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),"แขวง"));
-                    corporateModel.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),"เขต"));
+                    corporateModel.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(),blank));
+                    corporateModel.setDistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrAumper(),blank));
                     corporateModel.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity());
                     corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
+                    corporateModel.setDocumentType(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
 
                     RegistrationAddress registrationAddress = new RegistrationAddress();
-                    registrationAddress.setSubdistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),"แขวง"));
-                    registrationAddress.setDistrict(Util.replaceStringToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),"เขต"));
+                    registrationAddress.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),blank));
+                    registrationAddress.setDistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegAumper(),blank));
                     registrationAddress.setProvince(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCity2());
 //                    registrationAddress.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().get);
                     registrationAddress.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry2());
@@ -508,26 +527,25 @@ public class RMService implements Serializable {
 
                     log.debug("responseCode: {}", resSearchCorporateCustomer.getHeader().getResCode());
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL,exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
+                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
 
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL,exceptionMsg.get(ExceptionMapping.RM_FAIL));
                 }  //check null
             } else {
                 log.warn(" resSearchCorporateCustomer : Null");
                 //Audit Data
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
-                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
+                throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new Exception(e.getMessage());
+            throw new RMInterfaceException(ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
         }
         log.debug("CorporateService() END");
         return corporateModel;
@@ -543,25 +561,25 @@ public class RMService implements Serializable {
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchCustomerAccountModel.getReqId().length())) {
             if(searchCustomerAccountModel.getReqId()==null||searchCustomerAccountModel.getReqId().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate Acronym
         if (!ValidationUtil.isValueInRange(1, 20, searchCustomerAccountModel.getAcronym().length())) {
             if(searchCustomerAccountModel.getAcronym()==null||searchCustomerAccountModel.getAcronym().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(acronym)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(acronym)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(acronym)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(acronym)"));
             }
         }
         //Validate ProductCode
         if (!ValidationUtil.isValueInRange(1, 8, searchCustomerAccountModel.getProductCode().length())) {
             if(searchCustomerAccountModel.getProductCode()==null||searchCustomerAccountModel.getProductCode().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(productCode)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(productCode)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(productCode)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(productCode)"));
             }
         }
 //        //Validate ServerURL
@@ -574,14 +592,14 @@ public class RMService implements Serializable {
 //        }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchCustomerAccountModel.getCustNbr().length())) {
-            throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchCustomerAccountModel.getRadSelectSearch().length())) {
             if(searchCustomerAccountModel.getRadSelectSearch()==null||searchCustomerAccountModel.getRadSelectSearch().equals("")){
-                throw new ValidationException(validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -623,7 +641,9 @@ public class RMService implements Serializable {
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", responseTime);
                 log.debug("responseHeaderData : {}", resSearchCustomerAccount.getHeader().toString());
+                if(resSearchCustomerAccount.getBody()!=null&&resSearchCustomerAccount.getBody().getAccountList()!=null){
                 log.debug("accountListSize: {}", resSearchCustomerAccount.getBody().getAccountList().size());
+                }
                 for (int i = 0; i < resSearchCustomerAccount.getBody().getAccountList().size(); i++) {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }
@@ -670,29 +690,27 @@ public class RMService implements Serializable {
                     customerAccountResult.setAccountListModels(listModelList);
 
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL,exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    /*List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
-                    log.info(listModelList.size() + "");
-                    customerAccountResult.setAccountListModels(listModelList);*/
+                   throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
-                    throw new ValidationException(exceptionMsg.get(ExceptionMapping.FAIL));
+                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL,exceptionMsg.get(ExceptionMapping.RM_FAIL));
                 }
                 //check null
             } else {
                 log.warn(" resSearchCustomerAccount : Null");
                 //Audit Data
                 rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCustomerAccount : Null", new Date(), linkKey);
-                throw new ValidationException(exceptionMsg.get(ExceptionMapping.DATA_NOT_FOUND));
+                throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+
             log.error("Exception :{}", e.getMessage());
             //Audit Data
             rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new Exception(e.getMessage());
+            throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
         }
 
         log.debug("CorporateService() END");

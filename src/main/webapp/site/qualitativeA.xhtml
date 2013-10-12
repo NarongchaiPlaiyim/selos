@@ -711,15 +711,18 @@
 
             <table class="table_content">
                 <tr>
-                    <td style="width: 20%;text-align: left">
-                        <h:outputLabel value="สรุปการจัดชั้นหนี้"/>
+                    <td style="width: 30%;text-align: left">
+                        <h:outputLabel value="สรุปการจัดชั้นหนี้ : "/>
+                        <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
                     </td>
-                    <td style="width: 80%;text-align: left">
-                        <p:panel style="border-width: 0;" id="panelQualitative">
-                            <p:row>
-                                <p:column style="width:60%;text-align:left;">
-                                    <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"></h:outputLabel>
-                                    <p:selectOneMenu id="dlgQualityLevel"
+                    <td style="width: 70%;text-align: left">
+                        <table class="table_noborder">
+                            <tr>
+                                <td  class="title" style="width: 25%;text-align: left">
+                                    <h:outputLabel   value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
+                                </td>
+                                <td>
+                                    <p:selectOneMenu id="dlgQualityLevelA"
                                                      value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                      styleClass="largest"
                                                      size="1"
@@ -730,22 +733,27 @@
                                                        itemLabel="#{qualityItemsA.description}"
                                                        itemValue="#{qualityItemsA.id}"/>
                                     </p:selectOneMenu>
-                                </p:column>
-                            </p:row>
-                            <p:row>
-                                <p:column style="width:60%;text-align:left;">
-                                    <h:outputLabel style=""  value="เหตุผล :"></h:outputLabel>
-                                    <h:inputTextarea cols="70" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"></h:inputTextarea>
-                                </p:column>
-                            </p:row>
-                        </p:panel>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <h:outputLabel value="เหตุผล :"/>
+                                </td>
+                                <td>
+                                    <h:inputTextarea cols="70" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"/>
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="title">
                         <h:outputLabel value="วันที่ :"/>
+                        <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+                            <f:convertDateTime pattern="d/M/yyyy"/>
+                        </h:outputText>
                     </td>
-                    <td>
+                    <td class="title">
                         <h:outputLabel
                                 value="หมายเหตุ :    1. ให้อธิบายเหตุผลให้ชัดเจนในกรณีที่การจัดชั้นลูกหนี้เชิงคุณภาพโดยที่ลูกหนี้มีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่งหรือหลายเกณฑ์ แต่การจัดชั้นหนี้ที่จะสะท้อนคุณภาพลูกหนี้โดยรวมมีความแตกต่างจากเกณฑ์ทั่วไปข้างต้น"/>
                     </td>
@@ -812,7 +820,11 @@
                                              process=":frmMain"
                                              action="#{qualitative.onSaveQualitativeA}"
                                              update=":frmMain"/>
-                            <p:commandButton value="Cancel" styleClass="small"/>
+                            <p:commandButton value="Cancel"
+                                             styleClass="medium"
+                                             process=":frmMain"
+                                             action="#{qualitative.onCancelQualitativeA}"
+                                             update=":frmMain"/>
                         </td>
                     </tr>
                 </table>

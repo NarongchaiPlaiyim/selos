@@ -15,12 +15,16 @@ public class AccountStatus implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 100)
     private String name;
     @Column(name = "dbr_flag")
     private int dbrFlag;
     @Column(name = "active")
     private int active;
+    @Column(name = "ncb_code_ind",length = 5)
+    private String ncbCodeInd;
+    @Column(name = "ncb_code_jur",length = 5)
+    private String ncbCodeJur;
 
     public AccountStatus() {
     }
@@ -57,6 +61,22 @@ public class AccountStatus implements Serializable {
         this.active = active;
     }
 
+    public String getNcbCodeInd() {
+        return ncbCodeInd;
+    }
+
+    public void setNcbCodeInd(String ncbCodeInd) {
+        this.ncbCodeInd = ncbCodeInd;
+    }
+
+    public String getNcbCodeJur() {
+        return ncbCodeJur;
+    }
+
+    public void setNcbCodeJur(String ncbCodeJur) {
+        this.ncbCodeJur = ncbCodeJur;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -64,6 +84,8 @@ public class AccountStatus implements Serializable {
                 append("name", name).
                 append("dbrFlag", dbrFlag).
                 append("active", active).
+                append("ncbCodeInd", active).
+                append("ncbCodeJur", active).
                 toString();
     }
 }

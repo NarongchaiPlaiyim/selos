@@ -17,8 +17,10 @@ public class Bank implements Serializable {
     private int code;
     @Column(name = "name")
     private String name;
-    @Column(name = "shortName")
+    @Column(name = "shortName",length = 20)
     private String shortName;
+    @Column(name = "refinance")
+    private int refinance;
     @Column(name = "active")
     private int active;
 
@@ -47,6 +49,14 @@ public class Bank implements Serializable {
 
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    public int getRefinance() {
+        return refinance;
+    }
+
+    public void setRefinance(int refinance) {
+        this.refinance = refinance;
     }
 
     public int getActive() {

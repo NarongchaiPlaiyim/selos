@@ -18,12 +18,23 @@ public class Util {
     }
 
     public static String replaceStringToBlank(String str,String replaceValue){
-
         return str.replace(replaceValue,"");
     }
+
+    public static String replaceToBlank(String input,String strToReplace) {
+        if (input==null) return "";
+        if (strToReplace==null) return input;
+        String[] target = strToReplace.split("\\|");
+        for (String aTarget : target) {
+            input = input.replaceAll(aTarget, "");
+        }
+        return input;
+    }
+
     public static String createDateString(Date date) {
         return createDateString(date,"yyyy-MM-dd");
     }
+
     public static Date convertStringToDateBuddhist(String dateStr) {
         Date dateD = new Date();
         try {

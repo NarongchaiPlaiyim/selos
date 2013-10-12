@@ -13,11 +13,11 @@ public class Role implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name")
+    @Column(name = "name",length = 20)
     private String name;
-    @Column(name = "description")
+    @Column(name = "description",length = 100)
     private String description;
-    @Column(name = "system_name")
+    @Column(name = "system_name",length = 20)
     private String systemName;
     @OneToOne
     @JoinColumn(name="roletype_id")

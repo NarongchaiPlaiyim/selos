@@ -1,18 +1,18 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.QualitativeControl;
+import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.QualitativeView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
@@ -55,9 +55,11 @@ public class Qualitative {
     WorkCaseDAO workCaseDAO ;
 
     private QualitativeView qualitativeView;
-    private String modeForButton ;
     private List<QualityLevel> qualityLevelList;
-
+    private long workCaseId;
+    private User user;
+    enum ModeForButton{ ADD, EDIT, CANCEL }
+    private ModeForButton modeForButton;
 
     public Qualitative(){
 
@@ -66,11 +68,45 @@ public class Qualitative {
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
-        modeForButton = "add";
+
+        HttpSession session = FacesUtil.getSession(true);
+        user = userDAO.findById("10001");
+        log.info("onSaveQualitativeA ::: user : {}", user);
+
+        String page = Util.getCurrentPage();
+        log.info("this page :: {} ",page);
+        if(page.equals("qualitativeA.jsf")){
+            session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                log.info("workCaseId :: {} ",workCaseId);
+            }
+
+            qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
+
+        } else if(page.equals("qualitativeB.jsf")){
+            session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
+            if(session.getAttribute("workCaseId") != null){
+                workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+                log.info("workCaseId :: {} ",workCaseId);
+            }
+
+            qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
+        }
 
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
+            modeForButton = ModeForButton.ADD;
+        } else{
+            modeForButton = ModeForButton.EDIT;
         }
+
+        onLoadSelectList();
+    }
+
+    public void onLoadSelectList(){
 
         if(qualityLevelList == null){
             qualityLevelList = new ArrayList<QualityLevel>();
@@ -79,48 +115,67 @@ public class Qualitative {
         qualityLevelList = qualityLevelDAO.findAll();
     }
 
-
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
-//        User user = userDAO.findById("1");
-//        log.info("onSaveQualitativeA ::: user : {}", user);
-//        WorkCase workCase  = workCaseDAO.findById(new Long(1));
-//        log.info("onSaveQualitativeA ::: workCase : {}", workCase);
+        log.info("modeForButton :: {} ",modeForButton);
 
-//        HttpSession session = FacesUtil.getSession(true);
-//        session.setAttribute("workCaseId", 1);
 
-//        if(qualitativeView.getId() == 0){
-//            qualitativeView.setCreateDate(DateTime.now().toDate());
-//        }
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-//        qualitativeView.setCreateBy(user);
+            if(qualitativeView.getId() == 0){
+                qualitativeView.setCreateDate(DateTime.now().toDate());
+                qualitativeView.setCreateBy(user);
+            }
 
-//        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+            modeForButton = ModeForButton.EDIT;
 
-        long workCaseId = 1;   // test to save data to DB
-        log.info("qualitativeView :: {} ",qualitativeView.toString());
-        qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+        }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            qualitativeView.setModifyBy(user);
+            qualitativeView.setModifyDate(DateTime.now().toDate());
+            qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+        }
     }
+
+    public void onCancelQualitativeA(){
+        modeForButton = ModeForButton.CANCEL;
+        log.info("modeForButton :: {} ",modeForButton);
+        onCreation();
+    }
+
+
 
     public void onSaveQualitativeB(){
         log.info(" onSaveQualitativeB :::");
-//        User user = userDAO.findById("1");
-//        log.info("onSaveQualitativeB ::: user : {}", user);
-//
-//        HttpSession session = FacesUtil.getSession(true);
-//        session.setAttribute("workCaseId", 1);
-//
-//        if(qualitativeView.getId() == 0){
-//            qualitativeView.setCreateDate(DateTime.now().toDate());
-//        }
-//
-//        qualitativeView.setCreateBy(user);
-//
-//        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        long workCaseId = 2;  // test to save data to DB
-        log.info("qualitativeView :: {} ",qualitativeView.toString());
-        qualitativeControl.saveQualitativeB(qualitativeView,workCaseId);
+        log.info("modeForButton :: {} ",modeForButton);
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
+            if(qualitativeView.getId() == 0){
+                qualitativeView.setCreateDate(DateTime.now().toDate());
+                qualitativeView.setCreateBy(user);
+            }
+
+            qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+            modeForButton = ModeForButton.EDIT;
+
+        }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            qualitativeView.setModifyBy(user);
+            qualitativeView.setModifyDate(DateTime.now().toDate());
+            qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+        }
+
+    }
+
+
+    public void onCancelQualitativeB(){
+        modeForButton = ModeForButton.CANCEL;
+        log.info("modeForButton :: {} ",modeForButton);
+        onCreation();
     }
 
     public QualitativeView getQualitativeView() {

@@ -15,7 +15,7 @@ public class TDRCondition implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "description")
+    @Column(name = "description",length = 100)
     private String description;
     @Column(name = "active")
     private int active;

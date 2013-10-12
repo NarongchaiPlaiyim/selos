@@ -56,6 +56,14 @@ public class ValidationUtil {
         return isNull(string) || string.length() > max;
     }
 
+    public static boolean isNotNullAndGreaterThan(int max,String string) {
+        if(string!=null){
+            return string.length() > max;
+        } else {
+            return false;
+        }
+    }
+
     public static boolean isLessThan(int min,String string) {
         return isNull(string) || string.length() < min;
     }
@@ -72,6 +80,15 @@ public class ValidationUtil {
             Integer.parseInt(string);
         } catch(NumberFormatException e) {
             return false;
+        }
+        return true;
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        for (char c : str.toCharArray())
+        {
+            if (!Character.isDigit(c)) return false;
         }
         return true;
     }

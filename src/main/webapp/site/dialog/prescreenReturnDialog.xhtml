@@ -1,0 +1,48 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="returnMakerDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width:110px;">Return to :</td>
+                <td><h:outputText value="#{prescreenChecker.bdmMakerName}"/></td>
+            </tr>
+            <tr>
+                <td class="title">Reason Code :</td>
+                <td>
+                    <p:selectOneMenu id="creditTypeName" value="#{prescreenChecker.returnReason.id}"
+                                     size="1" style="width: 200px;" required="true" >
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                        <f:selectItems value="#{prescreenChecker.reasonList}"
+                                       var="reasonItem"
+                                       itemLabel="#{reasonItem.description}"
+                                       itemValue="#{reasonItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title top">Remark :</td>
+                <td>
+                    <p:inputTextarea cols="30" row="5" value="#{prescreenChecker.remark}"></p:inputTextarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            value="Submit"
+                            styleClass="small"
+                            action="#{prescreenChecker.onSubmitReturnToMaker}"
+                            process="@form"
+                            oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
+                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="returnMakerDlg.hide()" update=":returnMakerDlgForm">
+                        <p:resetInput target=":returnMakerDlgForm" />
+                    </p:commandButton>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

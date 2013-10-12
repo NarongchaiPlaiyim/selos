@@ -1,12 +1,14 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.busiensscontrol.TCGInfoControl;
-import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
+import com.clevel.selos.businesscontrol.TCGInfoControl;
 import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
+import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
 import com.clevel.selos.model.view.TCGDetailView;
 import com.clevel.selos.model.view.TCGView;
@@ -15,6 +17,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -48,18 +51,18 @@ public class TCGInfo implements Serializable {
     @ExceptionMessage
     Message exceptionMsg;
 
+
     private List<TCGDetailView> TCGDetailViewList;
     private TCGDetailView TCGDetailView;
     private TCGDetailView selectCollateralItem;
     private TCGView TCGView;
 
-
-    private String modeForButton;
     private int rowIndex;
-    private BigDecimal sumAppraisalAmount;
-    private BigDecimal sumLtvValue;
-    private BigDecimal sumInThisAppraisalAmount;
-    private BigDecimal sumInThisLtvValue;
+    private Long workCaseId;
+    private User user;
+    enum ModeForButton{ ADD, EDIT,CANCEL }
+    private ModeForButton modeForButton;
+
 
     private List<PotentialCollateral> potentialCollateralList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
@@ -74,17 +77,39 @@ public class TCGInfo implements Serializable {
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
 
     @Inject
-    TCGInfoControl tcgBusinessControl ;
+    TCGInfoControl tcgInfoControl ;
 
-    public TCGInfo() {
+    @Inject
+    UserDAO userDAO;
 
-    }
+    public TCGInfo() {}
+
 
     @PostConstruct
     public void onCreation() {
-
         log.info("onCreation.");
-        modeForButton = "add";
+
+        HttpSession session = FacesUtil.getSession(true);
+        user = userDAO.findById("10001");
+        log.info("onCreation ::: user : {}", user);
+
+        session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            log.info("workCaseId :: {} ",workCaseId);
+        }
+
+        TCGView = tcgInfoControl.getTcgView(workCaseId);
+
+        if(TCGView != null){
+            TCGDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
+            log.info("TCGDetailViewList ::: {} ", TCGDetailViewList.size());
+            modeForButton = ModeForButton.EDIT;
+        }else if(TCGView == null){
+            TCGView = new TCGView();
+            modeForButton = ModeForButton.ADD;
+        }
 
         if (TCGDetailView == null) {
             TCGDetailView = new TCGDetailView();
@@ -94,21 +119,14 @@ public class TCGInfo implements Serializable {
             TCGDetailViewList = new ArrayList<TCGDetailView>();
         }
 
-        if(TCGView == null){
-            TCGView = new TCGView();
-        }
-
         if (potentialCollateralList == null) {
             potentialCollateralList = new ArrayList<PotentialCollateral>();
         }
 
-        this.sumAppraisalAmount = new BigDecimal(0);
-        this.sumLtvValue = new BigDecimal(0);
-        this.sumInThisAppraisalAmount = new BigDecimal(0);
-        this.sumInThisLtvValue = new BigDecimal(0);
-
         potentialCollateralList = potentialCollateralDAO.findAll();
+
     }
+
 
     public void onChangePotentialCollateralType() {
         log.info("onChangePotentialCollateralType ::: TCGDetailView.getPotentialCollateral().getId() : {}", TCGDetailView.getPotentialCollateral().getId());
@@ -129,7 +147,7 @@ public class TCGInfo implements Serializable {
     // onclick ADD button
     public void onAddCollateralDetail() {
         log.info("onAddCollateralDetail :: reset form");
-        modeForButton = "add";
+        modeForButton = ModeForButton.ADD;
         TCGDetailView = new TCGDetailView();
         TCGDetailView.setPotentialCollateral(new PotentialCollateral());
         TCGDetailView.setTcgCollateralType(new TCGCollateralType());
@@ -139,7 +157,7 @@ public class TCGInfo implements Serializable {
     // onclick edit button
     public void onEditCollateralDetail() {
         log.info("onEditCollateralDetail rowIndex {} ", rowIndex);
-        modeForButton = "edit";
+        modeForButton = ModeForButton.EDIT;
         log.info("onEditCollateralDetail ::: selectCollateralItem  : {}", selectCollateralItem.toString());
 
         if(rowIndex < TCGDetailViewList.size()){
@@ -169,7 +187,7 @@ public class TCGInfo implements Serializable {
 
         if (TCGDetailView.getPotentialCollateral().getId() != 0 && TCGDetailView.getTcgCollateralType().getId() != 0) {
 
-            if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(TCGDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(TCGDetailView.getTcgCollateralType().getId());
@@ -181,9 +199,10 @@ public class TCGInfo implements Serializable {
                 TCGDetailViewSave.setLtvValue(TCGDetailView.getLtvValue());
                 TCGDetailViewSave.setProposeInThisRequest(TCGDetailView.isProposeInThisRequest());
 
+
                 TCGDetailViewList.add(TCGDetailViewSave);
 
-            } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
+            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
                 PotentialCollateral potentialCollateralSave = potentialCollateralDAO.findById(TCGDetailView.getPotentialCollateral().getId());
                 TCGCollateralType tcgCollateralTypeSave = tcgCollateralTypeDAO.findById(TCGDetailView.getTcgCollateralType().getId());
@@ -200,15 +219,15 @@ public class TCGInfo implements Serializable {
 
             if (TCGDetailViewList.size() > 0) {
                 log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", CalculateSumValue(TCGDetailViewList,"Appraisal" ));
-                this.sumAppraisalAmount = CalculateSumValue(TCGDetailViewList,"Appraisal");
-                this.sumLtvValue = CalculateSumValue(TCGDetailViewList,"LTV");
-                this.sumInThisAppraisalAmount = CalculateSumValueInThis(TCGDetailViewList,"Appraisal");
-                this.sumInThisLtvValue = CalculateSumValueInThis(TCGDetailViewList,"LTV");
+                TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList, "Appraisal"));
+                TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList,"LTV"));
+                TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList,"Appraisal"));
+                TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList,"LTV"));
             }else{
-                this.sumAppraisalAmount = new BigDecimal(0);
-                this.sumLtvValue = new BigDecimal(0);
-                this.sumInThisAppraisalAmount = new BigDecimal(0);
-                this.sumInThisLtvValue = new BigDecimal(0);
+                TCGView.setSumAppraisalAmount(new BigDecimal(0));
+                TCGView.setSumLtvValue(new BigDecimal(0));
+                TCGView.setSumInThisAppraisalAmount(new BigDecimal(0));
+                TCGView.setSumInThisLtvValue(new BigDecimal(0));
             }
 
             complete = true;
@@ -237,7 +256,8 @@ public class TCGInfo implements Serializable {
                 sum = new BigDecimal(0);
             }
         }
-        log.info("sum ::: {} ", sum);
+
+        log.info("sum ::: {} ",  sum);
 
         return  sum;
     }
@@ -245,28 +265,22 @@ public class TCGInfo implements Serializable {
      public BigDecimal CalculateSumValueInThis(List<TCGDetailView> TCGDetailViewList, String typeAmt) {
          BigDecimal sum = new BigDecimal(0);
 
-         for (int i = 0; i < TCGDetailViewList.size(); i++)
-         {
+         for (int i = 0; i < TCGDetailViewList.size(); i++){
 
-                 if(typeAmt.equals("Appraisal"))
+             if(typeAmt.equals("Appraisal"))
+             {
+                 if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                  {
-                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
-                     {
-                        sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
-                     }
+                    sum = sum.add(TCGDetailViewList.get(i).getAppraisalAmount());
                  }
-                 else if(typeAmt.equals("LTV"))
+             }else if(typeAmt.equals("LTV")){
+                 if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
                  {
-                     if(TCGDetailViewList.get(i).isProposeInThisRequest() == true)
-                     {
-                        sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
-                     }
-
+                    sum = sum.add(TCGDetailViewList.get(i).getLtvValue());
                  }
-                 else
-                 {
-                     sum = new BigDecimal(0);
-                 }
+             }else{
+                 sum = new BigDecimal(0);
+             }
 
          }
          log.info("sum ::: {} ", sum);
@@ -284,26 +298,53 @@ public class TCGInfo implements Serializable {
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
             log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
-            this.sumAppraisalAmount = CalculateSumValue(TCGDetailViewList ,"Appraisal");
-            this.sumLtvValue = CalculateSumValue(TCGDetailViewList ,"LTV");
-            this.sumInThisAppraisalAmount = CalculateSumValueInThis(TCGDetailViewList ,"Appraisal");
-            this.sumInThisLtvValue = CalculateSumValueInThis(TCGDetailViewList ,"LTV");
+            TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList,"Appraisal"));
+            TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList,"LTV"));
+            TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList,"Appraisal"));
+            TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList,"LTV"));
         }else{
-            this.sumAppraisalAmount = new BigDecimal(0);
-            this.sumLtvValue = new BigDecimal(0);
-            this.sumInThisAppraisalAmount = new BigDecimal(0);
-            this.sumInThisLtvValue = new BigDecimal(0);
+            TCGView.setSumAppraisalAmount(new BigDecimal(0));
+            TCGView.setSumLtvValue(new BigDecimal(0));
+            TCGView.setSumInThisAppraisalAmount(new BigDecimal(0));
+            TCGView.setSumInThisLtvValue(new BigDecimal(0));
         }
+
     }
 
     public void onSaveTcgInfo(){
-        log.info("onSaveTcgInfo ::: ");
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 1);
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        tcgBusinessControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+
+        log.info("onSaveTcgInfo ::: modeForButton  {}", modeForButton);
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+            if(TCGView.getId() == 0){
+                TCGView.setCreateBy(user);
+                TCGView.setCreateDate(DateTime.now().toDate());
+            }
+            if (TCGDetailViewList.size() > 0) {
+                tcgInfoControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+                modeForButton = ModeForButton.EDIT;
+                onCreation();
+            }
+        } else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            TCGView.setModifyBy(user);
+            TCGView.setModifyDate(DateTime.now().toDate());
+            tcgInfoControl.onEditTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+        }
 
 
+
+    }
+
+
+    public void onCancelTcgInfo(){
+        modeForButton = ModeForButton.CANCEL;
+        log.info("onCancelTcgInfo ::: ");
+
+        for(int i = 0 ; i < TCGDetailViewList.size() ; i ++){
+            TCGDetailViewList.remove(TCGDetailViewList.get(i));
+        }
+
+        onCreation();
     }
 
     public List<TCGDetailView> getTCGDetailViewList() {
@@ -346,44 +387,12 @@ public class TCGInfo implements Serializable {
         this.potentialColToTCGColList = potentialColToTCGColList;
     }
 
-    public String getModeForButton() {
+    public ModeForButton getModeForButton() {
         return modeForButton;
     }
 
-    public void setModeForButton(String modeForButton) {
+    public void setModeForButton(ModeForButton modeForButton) {
         this.modeForButton = modeForButton;
-    }
-
-    public BigDecimal getSumAppraisalAmount() {
-        return sumAppraisalAmount;
-    }
-
-    public void setSumAppraisalAmount(BigDecimal sumAppraisalAmount) {
-        this.sumAppraisalAmount = sumAppraisalAmount;
-    }
-
-    public BigDecimal getSumLtvValue() {
-        return sumLtvValue;
-    }
-
-    public void setSumLtvValue(BigDecimal sumLtvValue) {
-        this.sumLtvValue = sumLtvValue;
-    }
-
-    public BigDecimal getSumInThisAppraisalAmount() {
-        return sumInThisAppraisalAmount;
-    }
-
-    public void setSumInThisAppraisalAmount(BigDecimal sumInThisAppraisalAmount) {
-        this.sumInThisAppraisalAmount = sumInThisAppraisalAmount;
-    }
-
-    public BigDecimal getSumInThisLtvValue() {
-        return sumInThisLtvValue;
-    }
-
-    public void setSumInThisLtvValue(BigDecimal sumInThisLtvValue) {
-        this.sumInThisLtvValue = sumInThisLtvValue;
     }
 
     public int getRowIndex() {
@@ -401,5 +410,7 @@ public class TCGInfo implements Serializable {
     public void setTCGView(TCGView TCGView) {
         this.TCGView = TCGView;
     }
+
+
 }
 

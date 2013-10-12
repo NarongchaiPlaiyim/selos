@@ -11,8 +11,8 @@
                 <td class="title">Business Group :</td>
                 <td>
                     <p:selectOneMenu id="dlgBusinessGroupId" size="1" style="width: 300px;"
-                                        value="#{prescreenMaker.businessInfo.businessDescription.businessGroup.id}"
-                                        required="true">
+                                     value="#{prescreenMaker.bizInfoView.bizDesc.businessGroup.id}"
+                                     required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgBusinessGroupItem"
                                        itemLabel="#{dlgBusinessGroupItem.name}"
@@ -25,8 +25,8 @@
                 <td class="title">Business Description :</td>
                 <td>
                     <p:selectOneMenu id="businessDescriptionID" size="1" style="width: 300px;"
-                                        value="#{prescreenMaker.businessInfo.businessDescription.id}"
-                                        required="true">
+                                     value="#{prescreenMaker.bizInfoView.bizDesc.id}"
+                                     required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{prescreenMaker.businessDescriptionList}" var="dlgBusinessDescItem"
                                        itemLabel="#{dlgBusinessDescItem.name}"
@@ -38,7 +38,7 @@
             <tr>
                 <td class="title">Comment :</td>
                 <td class="left">
-                    <p:inputText id="dBusinessComment" value="#{prescreenMaker.businessInfo.businessDescription.comment}" readonly="true" styleClass="readonly"/>
+                    <p:inputText id="dBusinessComment" value="#{prescreenMaker.bizInfoView.bizDesc.comment}" readonly="true" styleClass="readonly"/>
                 </td>
             </tr>
             <tr>

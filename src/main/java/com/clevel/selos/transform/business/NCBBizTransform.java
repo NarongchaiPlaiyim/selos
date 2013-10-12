@@ -3,19 +3,18 @@ package com.clevel.selos.transform.business;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
-import com.clevel.selos.integration.ncb.nccrs.models.response.AccountModel;
-import com.clevel.selos.integration.ncb.nccrs.models.response.H2HResponseModel;
-import com.clevel.selos.integration.ncb.nccrs.models.response.H2HResponseSubjectModel;
-import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
+import com.clevel.selos.integration.ncb.nccrs.models.response.*;
+import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.integration.ncb.ncrs.models.response.*;
+import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.NCBPaymentCode;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.model.view.NCBDetailView;
+import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NCBSummaryView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.util.Util;
@@ -39,11 +38,30 @@ public class NCBBizTransform extends BusinessTransform {
     public List<NcbView> transformIndividual(List<NCRSOutputModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
         List<NCBDetailView> ncbDetailViews = null;
-        NCBSummaryView ncbSummaryView = null;
+        NCBInfoView ncbInfoView = null;
+        //NCBSummaryView ncbSummaryView = null;
         if(responseNCRSModels!=null && responseNCRSModels.size()>0){
             ncbViews = new ArrayList<NcbView>();
             for(NCRSOutputModel responseNCRSModel: responseNCRSModels){
                 NcbView ncbView = new NcbView();
+                List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
+
+                //get account info from NCRSModel
+                NCRSModel ncrsModel = responseNCRSModel.getNcrsModel();
+                AccountInfoName accountInfoName = new AccountInfoName();
+                AccountInfoId accountInfoId = new AccountInfoId();
+
+                accountInfoName.setNameTh(ncrsModel.getFirstName());
+                accountInfoName.setSurnameTh(ncrsModel.getLastName());
+                accountInfoId.setIdNumber(ncrsModel.getCitizenId());
+                if(ncrsModel.getIdType().equalsIgnoreCase("01")){
+                    accountInfoId.setDocumentType(DocumentType.CITIZEN_ID);
+                } else {
+                    accountInfoId.setDocumentType(DocumentType.PASSPORT);
+                }
+                accountInfoNameList.add(accountInfoName);
+                accountInfoIdList.add(accountInfoId);
                 ncbView.setIdNumber(responseNCRSModel.getIdNumber());
                 if(responseNCRSModel.getActionResult() == ActionResult.SUCCEED){
                     ncbView.setResult(ActionResult.SUCCEED);
@@ -58,7 +76,31 @@ public class NCBBizTransform extends BusinessTransform {
                                 List<EnquiryModel> enquiryModelResults = new ArrayList<EnquiryModel>();
 
                                 for(SubjectModel subjectModel: tuefResponseModel.getSubject()){
-                                    //todo: get name, last name, address, marital status to list in summary
+
+                                    //get Name and Id information for send csi
+                                    if(subjectModel.getName()!=null && subjectModel.getName().size()>0) {
+                                        for(SubjectNameModel subjectNameModel: subjectModel.getName()){
+                                            AccountInfoName ncbAccountInfoName = new AccountInfoName();
+                                            ncbAccountInfoName.setNameTh(subjectNameModel.getFirstname());
+                                            ncbAccountInfoName.setSurnameTh(subjectNameModel.getFamilyname());
+                                            accountInfoNameList.add(ncbAccountInfoName);
+                                        }
+                                    }
+
+                                    if(subjectModel.getId()!=null && subjectModel.getId().size()>0){
+                                        for(SubjectIdModel subjectIdModel: subjectModel.getId()){
+                                            if(subjectIdModel.getIdtype().equalsIgnoreCase("01") && subjectIdModel.getIdtype().equalsIgnoreCase("07")){
+                                                AccountInfoId ncbAccountInfoId = new AccountInfoId();
+                                                if(subjectIdModel.getIdtype().equalsIgnoreCase("01")){
+                                                    ncbAccountInfoId.setDocumentType(DocumentType.CITIZEN_ID);
+                                                } else {
+                                                    ncbAccountInfoId.setDocumentType(DocumentType.PASSPORT);
+                                                }
+                                                ncbAccountInfoId.setIdNumber(subjectIdModel.getIdnumber());
+                                                accountInfoIdList.add(ncbAccountInfoId);
+                                            }
+                                        }
+                                    }
 
                                     //get Account for all subject
                                     List<SubjectAccountModel> subjectAccountModels = subjectModel.getAccount();
@@ -112,11 +154,17 @@ public class NCBBizTransform extends BusinessTransform {
                                         //set open date
                                         ncbDetailView.setAccountOpenDate(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getOpendate()));
                                         //set credit limit
-                                        ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getCreditlimit())){
+                                            ncbDetailView.setLimit(new BigDecimal(subjectAccountModel.getCreditlimit()));
+                                        }
                                         //set outstanding amount
-                                        ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getAmountowed())){
+                                            ncbDetailView.setOutstanding(new BigDecimal(subjectAccountModel.getAmountowed()));
+                                        }
                                         //set installment
-                                        ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount())); //todo: check if null
+                                        if(!Util.isEmpty(subjectAccountModel.getInstallmentamount())){
+                                            ncbDetailView.setInstallment(new BigDecimal(subjectAccountModel.getInstallmentamount()));
+                                        }
                                         //set restructure date
                                         if(!Util.isEmpty(subjectAccountModel.getLastrestructureddate())){
                                             ncbDetailView.setDateOfDebtRestructuring(Util.strYYYYMMDDtoDateFormat(subjectAccountModel.getLastrestructureddate()));
@@ -823,10 +871,13 @@ public class NCBBizTransform extends BusinessTransform {
                                         //add ncbDetailView to ncbDetailViewList
                                         ncbDetailViews.add(ncbDetailView);
                                     }
+                                    ncbInfoView = new NCBInfoView();
+                                    //ncbSummaryView = new NCBSummaryView();
+                                    ncbInfoView.setCurrentPaymentType(currentWorstPaymentStatus);
+                                    ncbInfoView.setHistoryPaymentType(worstPaymentStatus);
 
-                                    ncbSummaryView = new NCBSummaryView();
-                                    ncbSummaryView.setTypeOfCurrentPayment(currentWorstPaymentStatus); //todo: change view field to SettlementType
-                                    ncbSummaryView.setTypeOfHistoryPayment(worstPaymentStatus); //todo: change view field to SettlementType
+                                    //ncbSummaryView.setTypeOfCurrentPayment(currentWorstPaymentStatus); //todo: change view field to SettlementType
+                                    //ncbSummaryView.setTypeOfHistoryPayment(worstPaymentStatus); //todo: change view field to SettlementType
                                     //todo: set NPL flag and NPL date for TMB and other
                                     //todo: set TDR flag and TDR date for TMB and other
                                 } else {
@@ -847,11 +898,14 @@ public class NCBBizTransform extends BusinessTransform {
                                     enquiryTime = enquiryMap.size();
                                 }
 
-                                if(ncbSummaryView != null){
-                                    ncbSummaryView.setNoOfNCBCheckIn6months(enquiryTime+"");
+                                if(ncbInfoView != null){
+                                    ncbInfoView.setCheckIn6Month(enquiryTime);
                                 }
 
-
+                                ncbView.setNCBDetailViews(ncbDetailViews);
+                                ncbView.setNCBInfoView(ncbInfoView);
+                                ncbView.setAccountInfoIdList(accountInfoIdList);
+                                ncbView.setAccountInfoNameList(accountInfoNameList);
                             }
                         }
                     }
@@ -874,6 +928,19 @@ public class NCBBizTransform extends BusinessTransform {
             ncbViews = new ArrayList<NcbView>();
             for(NCCRSOutputModel responseNCCRSModel: responseNCCRSModels){
                 NcbView ncbView = new NcbView();
+                List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
+
+                //get account info from NCRSModel
+                NCCRSModel nccrsModel = responseNCCRSModel.getNccrsModel();
+                AccountInfoName accountInfoName = new AccountInfoName();
+                AccountInfoId accountInfoId = new AccountInfoId();
+
+                accountInfoName.setNameTh(nccrsModel.getCompanyName());
+                accountInfoId.setIdNumber(nccrsModel.getRegistId());
+                accountInfoId.setDocumentType(DocumentType.CORPORATE_ID);
+                accountInfoNameList.add(accountInfoName);
+                accountInfoIdList.add(accountInfoId);
                 ncbView.setIdNumber(responseNCCRSModel.getIdNumber());
                 if(responseNCCRSModel.getActionResult() == ActionResult.SUCCEED){
                     ncbView.setResult(ActionResult.SUCCEED);
@@ -884,6 +951,33 @@ public class NCBBizTransform extends BusinessTransform {
                             H2HResponseModel h2HResponseModel = nccrsResponseModel.getBody().getTransaction().getH2hresponse();
                             if(h2HResponseModel.getSubject()!=null){
                                 H2HResponseSubjectModel h2HResponseSubjectModel = h2HResponseModel.getSubject();
+
+                                //get Name and Id information for send csi
+                                if(h2HResponseSubjectModel!=null && h2HResponseSubjectModel.getProfile()!=null) {
+                                    ProfileModel profileModel = h2HResponseSubjectModel.getProfile();
+                                    AccountInfoName accountInfoName2 = new AccountInfoName();
+                                    AccountInfoId accountInfoId2 = new AccountInfoId();
+
+                                    accountInfoName2.setNameTh(profileModel.getThainame());
+                                    accountInfoName2.setNameTh(profileModel.getEngname());
+                                    accountInfoId2.setIdNumber(profileModel.getRegistid());
+                                    accountInfoId2.setDocumentType(DocumentType.CORPORATE_ID);
+                                    accountInfoNameList.add(accountInfoName2);
+                                    accountInfoIdList.add(accountInfoId2);
+
+                                    if(h2HResponseSubjectModel.getProfile().getAdditional()!=null){
+                                        AdditionalModel additionalModel = h2HResponseSubjectModel.getProfile().getAdditional();
+                                        if(additionalModel.getName()!=null && additionalModel.getName().size()>0){
+                                            for(ProfileNameModel profileNameModel: additionalModel.getName()){
+                                                AccountInfoName ncbAccountInfoName = new AccountInfoName();
+                                                ncbAccountInfoName.setNameTh(profileNameModel.getThainame());
+                                                ncbAccountInfoName.setSurnameTh(profileNameModel.getEngname());
+                                                accountInfoNameList.add(ncbAccountInfoName);
+                                            }
+                                        }
+                                    }
+                                }
+
                                 //get list Account for active,closed
                                 List<AccountModel> accountModels = new ArrayList<AccountModel>();
                                 boolean haveActiveAccountData = false;
@@ -1699,6 +1793,9 @@ public class NCBBizTransform extends BusinessTransform {
                                 if(ncbSummaryView != null){
                                     ncbSummaryView.setNoOfNCBCheckIn6months(enquiryTime+"");
                                 }*/
+
+                                ncbView.setAccountInfoIdList(accountInfoIdList);
+                                ncbView.setAccountInfoNameList(accountInfoNameList);
                             }
                         }
                     }

@@ -19,6 +19,17 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
     public CustomerDAO() {
     }
 
+    public List<Customer> findBorrowerByWorkCasePreScreenId(long workCasePreScreenId){
+        log.info("findByWorkCasePreScreenId ::: workCasePreScreenId : {}", workCasePreScreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        criteria.add(Restrictions.eq("relation.id", 1));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+        log.info("findByWorkCasePreScreenId ::: size : {}", workCasePreScreenId);
+        return customerList;
+    }
+
     public List<Customer> findByWorkCasePreScreenId(long workCasePreScreenId){
         log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
@@ -27,5 +38,23 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
         List<Customer> customerList = (List<Customer>)criteria.list();
 
         return customerList;
+    }
+
+    public Customer findByCitizenlId(String citizenId){
+        log.info("findByCitizenlId : {}", citizenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("individual.citizenId", citizenId));
+        Customer customer = (Customer)criteria.uniqueResult();
+
+        return customer;
+    }
+
+    public Customer findByRegistrationId(String registrationId){
+        log.info("findByRegistrationId : {}", registrationId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("juristic.registrationId", registrationId));
+        Customer customer = (Customer)criteria.uniqueResult();
+
+        return customer;
     }
 }

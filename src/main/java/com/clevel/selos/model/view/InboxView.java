@@ -6,6 +6,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class InboxView implements Serializable {
+    private String caNo;
+    private String bdmId;
     private String fnWobNum;
     private String fnStepName;
     private String stepCode;
@@ -15,6 +17,22 @@ public class InboxView implements Serializable {
     private long workCasePreScreenId;
     private long workCaseId;
     private long stepId;
+
+    public String getCaNo() {
+        return caNo;
+    }
+
+    public void setCaNo(String caNo) {
+        this.caNo = caNo;
+    }
+
+    public String getBdmId() {
+        return bdmId;
+    }
+
+    public void setBdmId(String bdmId) {
+        this.bdmId = bdmId;
+    }
 
     public String getFnWobNum() {
         return fnWobNum;
@@ -91,6 +109,8 @@ public class InboxView implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("caNo", caNo)
+                .append("bdmId", bdmId)
                 .append("fnWobNum", fnWobNum)
                 .append("fnStepName", fnStepName)
                 .append("stepCode", stepCode)

@@ -1,6 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.working.BizInfo;
+import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.view.BizProductDetailView;
 
@@ -25,7 +25,7 @@ public class BizProductDetailTransform extends Transform {
         return bizProductDetailView;
     }
 
-    public BizProductDetail transformToModel(BizProductDetailView bizProductDetailView,BizInfo bizInfo){
+    public BizProductDetail transformToModel(BizProductDetailView bizProductDetailView,BizInfoDetail bizInfoDetail){
 
         BizProductDetail bizProductDetail = new BizProductDetail();
         bizProductDetail.setNo(bizProductDetailView.getNo());
@@ -33,7 +33,7 @@ public class BizProductDetailTransform extends Transform {
         bizProductDetail.setPercentEBIT(bizProductDetailView.getPercentEBIT());
         bizProductDetail.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
         bizProductDetail.setProductDetail(bizProductDetailView.getProductDetail());
-        bizProductDetail.setBizInfo(bizInfo);
+        bizProductDetail.setBizInfoDetail(bizInfoDetail);
 
         return bizProductDetail;
     }

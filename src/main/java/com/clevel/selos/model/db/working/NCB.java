@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.TDRCondition;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -87,6 +85,22 @@ public class NCB implements Serializable{
     @Column(name="remark")
     private String remark;
 
+    @Column (name="cus_marriage_status")
+    private String ncbCusMarriageStatus;
+
+
+    @Column (name="last_info_as_of_date")
+    private String ncbLastInfoAsOfDate;
+
+
+    @Column (name="enquiry")
+    private String enquiry;
+
+    @Column (name="ncb_cus_name")
+    private String ncbCusName;
+
+    @Column (name="ncb_cus_address")
+    private String ncbCusAddress;
 
     public long getId() {
         return id;
@@ -280,33 +294,43 @@ public class NCB implements Serializable{
         this.remark = remark;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("customer", customer)
-                .append("checkingDate", checkingDate)
-                .append("checkIn6Month", checkIn6Month)
-                .append("paymentClass", paymentClass)
-                .append("personalId", personalId)
-                .append("currentPaymentType", currentPaymentType)
-                .append("historyPaymentType", historyPaymentType)
-                .append("nplFlag", nplFlag)
-                .append("nplTMBFlag", nplTMBFlag)
-                .append("nplTMBMonth", nplTMBMonth)
-                .append("nplTMBYear", nplTMBYear)
-                .append("nplOtherFlag", nplOtherFlag)
-                .append("nplOtherMonth", nplOtherMonth)
-                .append("nplOtherYear", nplOtherYear)
-                .append("tdrFlag", tdrFlag)
-                .append("tdrTMBFlag", tdrTMBFlag)
-                .append("tdrTMBMonth", tdrTMBMonth)
-                .append("tdrTMBYear", tdrTMBYear)
-                .append("tdrOhterFlag", tdrOhterFlag)
-                .append("tdrOtherMonth", tdrOtherMonth)
-                .append("tdrOtherYear", tdrOtherYear)
-                .append("tdrCondition", tdrCondition)
-                .append("remark", remark)
-                .toString();
+    public String getNcbCusMarriageStatus() {
+        return ncbCusMarriageStatus;
+    }
+
+    public void setNcbCusMarriageStatus(String ncbCusMarriageStatus) {
+        this.ncbCusMarriageStatus = ncbCusMarriageStatus;
+    }
+
+    public String getNcbLastInfoAsOfDate() {
+        return ncbLastInfoAsOfDate;
+    }
+
+    public void setNcbLastInfoAsOfDate(String ncbLastInfoAsOfDate) {
+        this.ncbLastInfoAsOfDate = ncbLastInfoAsOfDate;
+    }
+
+    public String getEnquiry() {
+        return enquiry;
+    }
+
+    public void setEnquiry(String enquiry) {
+        this.enquiry = enquiry;
+    }
+
+    public String getNcbCusName() {
+        return ncbCusName;
+    }
+
+    public void setNcbCusName(String ncbCusName) {
+        this.ncbCusName = ncbCusName;
+    }
+
+    public String getNcbCusAddress() {
+        return ncbCusAddress;
+    }
+
+    public void setNcbCusAddress(String ncbCusAddress) {
+        this.ncbCusAddress = ncbCusAddress;
     }
 }

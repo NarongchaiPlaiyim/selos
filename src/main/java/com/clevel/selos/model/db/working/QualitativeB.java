@@ -236,6 +236,9 @@ public class QualitativeB implements Serializable {
     @JoinColumn(name="quality_level_id")
     private QualityLevel qualityLevel;
 
+    @Column(name="quality_result")
+    private String qualityResult;
+
     @Column(name="reason")
     private String reason;
 
@@ -877,5 +880,21 @@ public class QualitativeB implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public String getQualityResult() {
+        return qualityResult;
+    }
+
+    public void setQualityResult(String qualityResult) {
+        this.qualityResult = qualityResult;
+    }
+
+    public boolean isProperties_sm13() {
+        return properties_sm13;
+    }
+
+    public void setProperties_sm13(boolean properties_sm13) {
+        this.properties_sm13 = properties_sm13;
     }
 }

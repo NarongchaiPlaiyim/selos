@@ -1,6 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.busiensscontrol.PrescreenBusinessControl;
+import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
@@ -13,6 +13,7 @@ import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.*;
+import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.service.PrescreenService;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -24,6 +25,7 @@ import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -81,7 +83,7 @@ public class PrescreenMaker implements Serializable {
     private List<CustomerInfoView> borrowerInfoViewList;
     private List<CustomerInfoView> guarantorInfoViewList;
     private List<CustomerInfoView> relatedInfoViewList;
-    private List<BizInfoView> bizInfoViewList;
+    private List<BizInfoDetailView> bizInfoViewList;
     private List<CollateralView> proposeCollateralViewList;
 
     //*** Variable for view ***//
@@ -93,8 +95,8 @@ public class PrescreenMaker implements Serializable {
     private CustomerInfoView spouseInfo;
     private CustomerInfoView selectCustomerInfoItem;
 
-    private BizInfoView selectBizInfoItem;
-    private BizInfoView bizInfoView;
+    private BizInfoDetailView selectBizInfoItem;
+    private BizInfoDetailView bizInfoView;
 
     private CollateralView proposeCollateral;
     private CollateralView selectProposeCollateralItem;
@@ -199,11 +201,6 @@ public class PrescreenMaker implements Serializable {
     public void preRender(){
         HttpSession session = FacesUtil.getSession(true);
         log.info("preRender ::: setSession ");
-        /*session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(1));*/
-
-        //session = FacesUtil.getSession(true);
-        //user = (User)session.getAttribute("user");
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -228,7 +225,7 @@ public class PrescreenMaker implements Serializable {
             }
         }else{
             //TODO return to inbox
-            log.info("onCreation ::: workCasePrescreenId is null.");
+            log.info("preRender ::: workCasePrescreenId is null.");
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
@@ -241,32 +238,28 @@ public class PrescreenMaker implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation");
+        log.info("onCreation :::");
         HttpSession session = FacesUtil.getSession(true);
-        log.info("preRender ::: setSession ");
-        /*session.setAttribute("workCasePreScreenId", new Long(1));
-        session.setAttribute("stepId", new Long(1));*/
 
-        //session = FacesUtil.getSession(true);
-        //user = (User)session.getAttribute("user");
         if(session.getAttribute("workCasePreScreenId") != null){
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             queueName = session.getAttribute("queueName").toString();
+//            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            String userId = userDetail.getUserName();
+//            user = userDAO.findById(userId);
+            user = (User)session.getAttribute("user");
+
+            modeForButton = ModeForButton.ADD;
+
+            onClearObjectList();
+            onLoadSelectList();
+            onClearObject();
         }
-        //TODO tempory to remove this.
-        user = userDAO.findById("10001");
-        log.info("onCreation ::: user : {}", user);
 
-        //prescreenView = prescreenTransform.transform(prescreenDAO.findByWorkCasePrescreen(workcasePrescreen));*/
 
-        modeForButton = ModeForButton.ADD;
-
-        onClearObjectList();
-        onLoadSelectList();
-        onClearObject();
     }
 
     public void onClearObjectList(){
@@ -286,7 +279,7 @@ public class PrescreenMaker implements Serializable {
         if (proposeCollateralViewList == null) { proposeCollateralViewList = new ArrayList<CollateralView>(); }
 
         bizInfoViewList = prescreenBusinessControl.getBusinessInfo(workCasePreScreenId);
-        if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoView>(); }
+        if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoDetailView>(); }
 
         customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         if(customerInfoViewList != null){
@@ -341,7 +334,8 @@ public class PrescreenMaker implements Serializable {
         maritalStatusList = maritalStatusDAO.findAll();
         log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
 
-        bdmCheckerList = userDAO.findAll();
+        log.info("onLoadSelectList ::: user : {}", user);
+        bdmCheckerList = userDAO.findBDMChecker(user);
         log.info("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
     }
 
@@ -350,7 +344,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onClearObject :::");
 
         if(facility == null){ facility = new FacilityView(); }
-        if(bizInfoView == null){ bizInfoView = new BizInfoView(); }
+        if(bizInfoView == null){ bizInfoView = new BizInfoDetailView(); }
         if(proposeCollateral == null){ proposeCollateral = new CollateralView(); }
         if(borrowerInfo == null){ borrowerInfo = new CustomerInfoView(); }
         if(spouseInfo == null) { spouseInfo = new CustomerInfoView(); }
@@ -382,6 +376,26 @@ public class PrescreenMaker implements Serializable {
         boolean validate = false;
 
         return validate;
+    }
+
+    public void onCloseSale(){
+        log.info("onCloseSale ::: queueName : {}", queueName);
+        //TODO get nextStep
+        String actionCode = "1008";
+        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+
+        messageHeader = "Information";
+        message = "Close Sale Complete.";
+        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+            return;
+        } catch (Exception ex) {
+            log.error("Error to redirect : {}", ex.getMessage());
+        }
+
     }
 
     // *** Function For Facility *** //
@@ -591,12 +605,7 @@ public class PrescreenMaker implements Serializable {
                 complete = true;
             }
         } else {
-            if(borrowerInfo.getCustomerEntity().getId() != 0){
-                if(borrowerInfo.getCustomerEntity().getId() == 1){
-                    log.info("onEditCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
 
-                }
-            }
         }
 
         context.addCallbackParam("functionComplete", complete);
@@ -724,7 +733,6 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeMaritalStatus(){
-        log.info("");
         log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
 
@@ -763,7 +771,7 @@ public class PrescreenMaker implements Serializable {
         /*** Reset Form ***/
         modeForButton = ModeForButton.ADD;
 
-        bizInfoView = new BizInfoView();
+        bizInfoView = new BizInfoDetailView();
         bizInfoView.setBizDesc(new BusinessDescription());
         bizInfoView.getBizDesc().setBusinessGroup(new BusinessGroup());
     }
@@ -772,7 +780,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onEditBusinessInfo ::: selectBusinessInfo : {}", selectBizInfoItem);
         modeForButton = ModeForButton.EDIT;
 
-        bizInfoView = new BizInfoView();
+        bizInfoView = new BizInfoDetailView();
         bizInfoView.setBizDesc(selectBizInfoItem.getBizDesc());
         bizInfoView.getBizDesc().setBusinessGroup(selectBizInfoItem.getBizDesc().getBusinessGroup());
 
@@ -788,7 +796,7 @@ public class PrescreenMaker implements Serializable {
         /*** validate input ***/
         if(bizInfoView.getBizDesc().getId() != 0 && bizInfoView.getBizDesc().getBusinessGroup().getId() != 0){
             if(modeForButton.equals(ModeForButton.ADD)) {
-                BizInfoView businessInfo = new BizInfoView();
+                BizInfoDetailView businessInfo = new BizInfoDetailView();
 
                 log.info("onSaveBusinessInformation ::: selectBusinessGroupID : {}", businessInfo.getBizDesc().getId());
                 log.info("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", businessInfo.getBizDesc().getBusinessGroup().getId());
@@ -891,23 +899,29 @@ public class PrescreenMaker implements Serializable {
 
     // *** Function for Prescreen Initial *** //
     public void onSavePrescreenInitial(){
-
         log.info("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
         log.info("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
 
-        HttpSession session = FacesUtil.getSession(true);
-
-        /*session.setAttribute("workCasePrescreenId", 1);
-        long workCasePrescreenId = Long.parseLong(session.getAttribute("workCasePrescreenId").toString());*/
-
-        if(prescreenView.getId() == 0){
-            prescreenView.setCreateDate(DateTime.now().toDate());
-            //prescreenView.setCreateBy();
+        try{
+            //TODO set Business Location
+            prescreenView.setBusinessLocation(null);
+            prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+            //TODO show messageBox success
+            messageHeader = "Save PreScreen Success.";
+            message = "Save PreScreen data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            log.error("onSavePreScreenInitial ::: exception : {}", ex);
+            //TODO show messageBox error
+            messageHeader = "Save PreScreen Failed.";
+            if(ex.getCause() != null){
+                message = "Save PreScreen data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save PreScreen data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-        prescreenView.setModifyDate(DateTime.now().toDate());
-        //prescreenView.setModifyBy();
-        prescreenView.setBusinessLocation(null);
-        prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
     }
 
     public void onAssignToChecker(){
@@ -916,7 +930,27 @@ public class PrescreenMaker implements Serializable {
         //TODO get nextStep
         String actionCode = "1001";
         String checkerId = prescreenView.getCheckerId();
-        prescreenBusinessControl.assignToChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+        prescreenBusinessControl.assignChecker(workCasePreScreenId, queueName, checkerId, actionCode);
+        try {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+            return;
+        } catch (Exception ex) {
+            log.error("Error to redirect : {}", ex.getMessage());
+        }
+
+    }
+
+    public void onCancelCA(){
+        log.info("onCancelCA ::: queueName : {}", queueName);
+        //TODO get nextStep
+        String actionCode = "1003";
+        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+
+        messageHeader = "Information";
+        message = "Cancel CA Complete.";
+        //RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
@@ -977,7 +1011,10 @@ public class PrescreenMaker implements Serializable {
 
     public void getProductProgramList(){
         log.info("getProductProgramList ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
-        ProductGroup productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+        ProductGroup productGroup = new ProductGroup();
+        if(prescreenView.getProductGroup().getId() != 0){
+            productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
+        }
 
         //*** Get Product Program List from Product Group ***//
         prdGroupToPrdProgramList = prdGroupToPrdProgramDAO.getListPrdProByPrdGroup(productGroup);
@@ -1231,11 +1268,11 @@ public class PrescreenMaker implements Serializable {
         this.facilityViewList = facilityViewList;
     }
 
-    public List<BizInfoView> getBizInfoViewList() {
+    public List<BizInfoDetailView> getBizInfoDetailViewList() {
         return bizInfoViewList;
     }
 
-    public void setBizInfoViewList(List<BizInfoView> bizInfoViewList) {
+    public void setBizInfoDetailViewList(List<BizInfoDetailView> bizInfoViewList) {
         this.bizInfoViewList = bizInfoViewList;
     }
 
@@ -1407,19 +1444,19 @@ public class PrescreenMaker implements Serializable {
         this.preScreenResponseGroupList = preScreenResponseGroupList;
     }
 
-    public BizInfoView getSelectBizInfoItem() {
+    public BizInfoDetailView getSelectBizInfoItem() {
         return selectBizInfoItem;
     }
 
-    public void setSelectBizInfoItem(BizInfoView selectBizInfoItem) {
+    public void setSelectBizInfoItem(BizInfoDetailView selectBizInfoItem) {
         this.selectBizInfoItem = selectBizInfoItem;
     }
 
-    public BizInfoView getBizInfoView() {
+    public BizInfoDetailView getBizInfoDetailView() {
         return bizInfoView;
     }
 
-    public void setBizInfoView(BizInfoView bizInfoView) {
+    public void setBizInfoDetailView(BizInfoDetailView bizInfoView) {
         this.bizInfoView = bizInfoView;
     }
 

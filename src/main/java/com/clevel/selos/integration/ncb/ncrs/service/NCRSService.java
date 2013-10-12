@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.ncb.ncrs.service;
 
+import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
@@ -8,6 +9,7 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
 import com.clevel.selos.integration.test.NCBInterfaceImpTest;
+import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
@@ -43,15 +45,13 @@ public class NCRSService implements Serializable {
     @NCB
     NCBResultImp resultImp;
 
-    public final String ERROR = "ER01001";
-
+    private final String exception = ExceptionMapping.NCB_EXCEPTION;
     @Inject
     public NCRSService() {
     }
 
-    public void process(NCRSInputModel inputModel){
+    public ArrayList<NCRSOutputModel> process(NCRSInputModel inputModel) throws Exception{
         ArrayList<NCRSOutputModel> responseModelArrayList = null;
-        if(true){//
         try {
             log.debug("NCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
@@ -65,29 +65,18 @@ public class NCRSService implements Serializable {
                     log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
                 }
                 responseModelArrayList = ncrsImp.requestOnline(inputModel);
-                for (NCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCRS Online check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             } else {
                 responseModelArrayList =  ncrsImp.requestOffline(inputModel);
-                for (NCRSOutputModel outputModel : responseModelArrayList){
-                    if("FAILED".equals(outputModel.getActionResult())){
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    } else {
-                        log.debug("NCRS Offline check ncb id is {}, resutl is {} and reason is {}",outputModel.getIdNumber(), outputModel.getActionResult(), outputModel.getReason());
-                    }
-                }
+                return responseModelArrayList;
             }
 
         } catch (Exception e) {
+            String resultDesc = "NCCRS Exception : "+ e.getMessage();
             log.error("NCRS Exception : {}", e.getMessage());
+            throw new NCBInterfaceException(new Exception(resultDesc), exception,message.get(exception, resultDesc));
+//            throw new Exception("NCRS Exception : "+e.getMessage());
         }
-        }//
-
     }
 
 }

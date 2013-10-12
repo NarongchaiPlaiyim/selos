@@ -5,14 +5,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
-@Table(name = "exp_ncbi")
+@Table(name = "ext_ncbi_export")
 public class NCBIExport implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXP_NCBI_ID", sequenceName="SEQ_EXP_NCBI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXP_NCBI_ID")
+    @SequenceGenerator(name="SEQ_EXT_NCBI_ID", sequenceName="SEQ_EXT_NCBI_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCBI_ID")
     private long id;
     @Column(name="staff_id", length = 5)
     private String staffId;
@@ -52,6 +51,9 @@ public class NCBIExport implements Serializable {
     private String inquiryTime;
     @Column(name="office_code", length = 3)
     private String officeCode;
+    @Column(name="status", length = 10)
+    private String status;
+
 
     public NCBIExport() {
     }
@@ -156,6 +158,14 @@ public class NCBIExport implements Serializable {
 
     public String getOfficeCode() {
         return officeCode;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

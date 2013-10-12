@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.testdao.CardTypeDao;
+import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.*;
@@ -10,9 +11,12 @@ import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.integration.corebanking.model.CardTypeView;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.*;
 import com.clevel.selos.integration.corebanking.model.SearchIndividual;
+import com.clevel.selos.model.view.CustomerAccountView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +39,10 @@ public class TestService implements Serializable{
 
     @Inject
     RMInterface rmInterfaceImpl;
+
+    @Inject
+    @Config(name = "interface.rm.replace.blank")
+    String blank;
 
     @Inject
     CustomerBizTransform customerBizTransform;
@@ -84,80 +92,78 @@ public class TestService implements Serializable{
 //        printDetail+=customerInfoView.getCurrentAddress().toString();
 
         CustomerInfoResultView customerInfoResultView =  customerBizTransform.tranformIndividual(individualResult);
+
         if(customerInfoResultView.getCustomerInfoView()!=null){
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
             printDetail=customerInfoView.getWorkAddress().getProvince().getName();
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getCode();
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getActive();
             printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getRegion();
-            printDetail+=" "+customerInfoView.getWorkAddress().getDistrict().toString();
+
             printDetail+="\n"+customerInfoView.getRegisterAddress().getSubDistrict().toString();
             printDetail+=" "+customerInfoView.getRegisterAddress().getDistrict().toString();
             printDetail+="\n\n\n\n\n"+customerInfoView.getWorkAddress().getAddressType().toString();
             printDetail+="\n"+customerInfoView.getCurrentAddress().getAddressType().toString();
             printDetail+="\n"+customerInfoView.getRegisterAddress().getAddressType().toString();
-
-            printDetail+=customerInfoView.toString();
+//
+//            printDetail+=customerInfoView.toString();
         }
 
     }
 
 
-    public void corporate() throws Exception {
-
+    public void corporate() {
+           try{
         CorporateResult corporateResult = rmInterfaceImpl.getCorporateInfo("win",searchIndividual.getCustId(), RMInterface.DocumentType.CORPORATE_ID,RMInterface.SearchBy.CUSTOMER_ID);
 
         CustomerInfoResultView customerInfoResultView = customerBizTransform.tranformJuristic(corporateResult);
         if(customerInfoResultView.getCustomerInfoView()!=null){
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
             printDetail=customerInfoView.toString();
+            printDetail+="Result "+customerInfoResultView.getActionResult();
+            printDetail+="\n\n\n"+customerInfoView.toString();
             printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
             printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
+        }else{
+            printDetail="NULL";
         }
+           }catch (ApplicationRuntimeException e){
+
+           }
     }
 
     public void customerAccount() throws Exception {
 
         CustomerAccountResult customerAccountResult =new CustomerAccountResult();
         //callservice
+        System.out.println("sssssssssssssss "+searchIndividual.getCustNbr());
         customerAccountResult = rmInterfaceImpl.getCustomerAccountInfo("win",searchIndividual.getCustNbr());
+
+
+       CustomerAccountView customerAccountView= customerBizTransform.transformCustomerAccount(customerAccountResult);
         //showData
         StringBuffer result=new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");
-        result.append("\n result : "+ customerAccountResult.getActionResult().toString());
-        if(customerAccountResult.getActionResult() == ActionResult.FAILED){
-            result.append("\n reason : "+ customerAccountResult.getReason());
+        result.append("\n result : "+ customerAccountView.getActionResult().toString());
+        if(customerAccountView.getActionResult() == ActionResult.FAILED){
+            result.append("\n reason : "+ customerAccountView.getReason());
         }
 
 
-        if(customerAccountResult.getAccountListModels()!=null&& customerAccountResult.getAccountListModels().size()>0 ){
-            result.append("\n cusAccountListSize : "+ customerAccountResult.getAccountListModels().size());
-            for(int i=0;i< customerAccountResult.getAccountListModels().size();i++){
-                result.append("\n rel : "+ customerAccountResult.getAccountListModels().get(i).getRel());
-                result.append("\n cd : "+ customerAccountResult.getAccountListModels().get(i).getCd());
-                result.append("\n pSO : "+ customerAccountResult.getAccountListModels().get(i).getpSO());
-                result.append("\n appl : "+ customerAccountResult.getAccountListModels().get(i).getAppl());
-                result.append("\n accountNo : "+ customerAccountResult.getAccountListModels().get(i).getAccountNo());
-                result.append("\n trlr : "+ customerAccountResult.getAccountListModels().get(i).getTrlr());
-                result.append("\n balance : "+ customerAccountResult.getAccountListModels().get(i).getBalance());
-                result.append("\n dir : "+ customerAccountResult.getAccountListModels().get(i).getDir());
-                result.append("\n prod : "+ customerAccountResult.getAccountListModels().get(i).getProd());
-                result.append("\n ctl1 : "+ customerAccountResult.getAccountListModels().get(i).getCtl1());
-                result.append("\n ctl2 : "+ customerAccountResult.getAccountListModels().get(i).getCtl2());
-                result.append("\n ctl3 : "+ customerAccountResult.getAccountListModels().get(i).getCtl3());
-                result.append("\n ctl4 : "+ customerAccountResult.getAccountListModels().get(i).getCtl4());
-                result.append("\n status : "+ customerAccountResult.getAccountListModels().get(i).getStatus());
-                result.append("\n date : "+ customerAccountResult.getAccountListModels().get(i).getDate());
-                result.append("\n name : "+ customerAccountResult.getAccountListModels().get(i).getName());
-                result.append("\n citizenId : "+ customerAccountResult.getAccountListModels().get(i).getCitizenId());
-                result.append("\n curr : "+ customerAccountResult.getAccountListModels().get(i).getCurr());
-                result.append("\n =========================================================== ");
+        if(customerAccountView.getAccountList()!=null&& customerAccountView.getAccountList().size()>0 ){
+            result.append("\n cusAccountListSize : "+ customerAccountView.getAccountList().size());
+            for(int i=0;i< customerAccountView.getAccountList().size();i++){
+                result.append("\n AccountNumber : "+ customerAccountView.getAccountList().get(i));
+
+                result.append("\n =========================================================== T");
+
             }
         }else{
-            result.append("\n accountListSize : "+ customerAccountResult.getAccountListModels().size());
+            result.append("\n accountListSize : 0");
         }
 
         printDetail=result.toString();
+        System.out.println(printDetail);
     }
 
 

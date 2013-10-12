@@ -6,6 +6,7 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
+import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
@@ -40,7 +41,10 @@ public class LDAPInterfaceImpl implements LDAPInterface {
     public void authenticate(String userName, String password) {
         log.debug("authenticate. (userName: {}, password: [hidden])", userName);
         DirContext ctx;
-
+        if (userName == null || "".equalsIgnoreCase(userName)){
+            log.debug("username is null or empty!");
+            throw new LDAPInterfaceException(null, ExceptionMapping.LDAP_EMPTY_USERNAME, msg.get(ExceptionMapping.LDAP_EMPTY_USERNAME));
+        }
         if (password == null || "".equalsIgnoreCase(password)) {
             log.debug("password is null or empty!");
             throw new LDAPInterfaceException(null, ExceptionMapping.LDAP_EMPTY_PASSWORD, msg.get(ExceptionMapping.LDAP_EMPTY_PASSWORD));
@@ -87,9 +91,14 @@ public class LDAPInterfaceImpl implements LDAPInterface {
     }
 
     private String getLDAPErrorCode(String exceptionMessage) {
+        try{
         String[] tmp = exceptionMessage.substring(exceptionMessage.indexOf(", data")).split(",");
+
         tmp = tmp[1].split(" ");
         return tmp[2].trim();
+        }catch (StringIndexOutOfBoundsException e){
+            return "";
+        }
     }
 
 }

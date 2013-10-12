@@ -7,80 +7,114 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-                <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer" />
-                <p:commandButton id="btnAssignToChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" onclick="assignCheckerDlg.show()"/>
-                <!--<p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Mandatory Document" ajax="false" styleClass="blueButton" />-->
-                <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Closed Sales" ajax="false" disabled="true" styleClass="blueButton" />
+            <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
+            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
+            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" onclick="assignCheckerDlg.show()"/>
+            <p:commandButton id="btnMandateDoc" value="Check Mandate Doc" styleClass="blueButton" rendered="#{baseController.manageButton.checkMandateDocButton}" disabled="true" />
+            <p:commandButton id="btnCheckPreScreen" value="Check Prescreen" styleClass="blueButton" rendered="#{baseController.manageButton.checkBRMSButton}" action="#{prescreenMaker.onCheckPreScreen}" disabled="true" />
+            <p:commandButton id="btnRequestAppraisal" value="Request Appraisal" styleClass="blueButton" rendered="#{baseController.manageButton.requestAppraisalButton}" disabled="true" />
+            <p:commandButton id="btnCancelCA" value="Cancel CA" styleClass="blueButton" rendered="#{baseController.manageButton.cancelCAButton}" type="button" onclick="confirmCancelCA.show()" />
+            <p:confirmDialog header="Confirmation" message="Are you sure to Cancel CA?" styleClass="left" icon="ui-icon-alert"
+                             widgetVar="confirmCancelCA" global="false" showEffect="fade"
+                             rendered="#{baseController.manageButton.cancelCAButton}">
+                <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                 update=":msgBoxSystemMessagePanel"
+                                 actionListener="#{prescreenMaker.onCancelCA}"
+                                 process="@this" oncomplete="confirmCancelCA.hide()" />
+                <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()" styleClass="ui-confirmdialog-no"/>
+            </p:confirmDialog>
+            <p:commandButton id="btnCloseSale" value="Closed Sales" styleClass="blueButton" rendered="#{baseController.manageButton.closeSaleButton}" type="button" onclick="confirmCloseSaleCA.show()"/>
+            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale CA?" styleClass="left" icon="ui-icon-alert"
+                             widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
+                             rendered="#{baseController.manageButton.closeSaleButton}">
+                <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+                                 update=":msgBoxSystemMessagePanel"
+                                 actionListener="#{prescreenMaker.onCloseSale()}"
+                                 process="@this" oncomplete="confirmCloseSaleCA.hide()" />
+                <p:commandButton value="No" type="button" onclick="confirmCloseSaleCA.hide()" styleClass="ui-confirmdialog-no"/>
+            </p:confirmDialog>
         </div>
         <div class="clear"></div>
         <div id="header_information">
             <table id="header_information_table">
                 <tr>
                     <td colspan="11" style="font-weight: bold; text-align: right;">Status :</td>
-                    <td>Prescreen-Maker</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.caseStatus}"/></td>
                 </tr>
                 <tr>
                     <td class="title left" style="min-width: 130px; max-width: 180px;">BDM :</td>
-                    <td class="left" style="min-width: 180px;">Mr.BDM Maker</td>
+                    <td class="left" style="min-width: 180px;"><h:outputText value="#{baseController.appHeaderView.bdmName}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Tel. :</td>
-                    <td class="left" style="min-width:90px; max-width:100px;">012-345-6788</td>
+                    <td class="left" style="min-width:90px; max-width:100px;"><h:outputText value="#{baseController.appHeaderView.bdmPhoneNumber}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Ext. :</td>
-                    <td class="left" style="min-width:80px; max-width: 90px;">0122</td>
+                    <td class="left" style="min-width:80px; max-width: 90px;"><h:outputText value="#{baseController.appHeaderView.bdmPhoneExtNumber}"/></td>
                     <td class="title right" style="min-width: 50px; max-width: 60px;">Zone :</td>
-                    <td class="left" style="min-width:100px; max-width: 130px;">พหลโยธิน</td>
+                    <td class="left" style="min-width:100px; max-width: 130px;"><h:outputText value="#{baseController.appHeaderView.bdmZoneName}"/></td>
                     <td class="title right" style="min-width: 60px; max-width: 70px;">Region :</td>
-                    <td class="left" style="min-width:80px;">East</td>
+                    <td class="left" style="min-width:80px;"><h:outputText value="#{baseController.appHeaderView.bdmRegionName}"/></td>
                     <td class="title right" style="min-width: 100px; max-width: 110px;">Submit Date :</td>
-                    <td class="left" style="min-width:90px; max-width: 90px;">06/06/2556</td>
+                    <td class="left" style="min-width:90px; max-width: 90px;"><h:outputText value="#{baseController.appHeaderView.submitDate}"/></td>
                 </tr>
                 <tr>
                     <td class="title">Underwriter :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwName}"/></td>
                     <td class="title right">Tel. :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneNumber}"/></td>
                     <td class="title right">Ext. :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwPhoneExtNumber}"/></td>
                     <td class="title right">Team :</td>
-                    <td></td>
+                    <td><h:outputText value="#{baseController.appHeaderView.uwTeamName}"/></td>
                     <td colspan="3" class="title right">Request Type :</td>
-                    <td>New Request</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.requestType}"/></td>
                 </tr>
                 <tr>
                     <td colspan="11" style="font-weight: bold; text-align: right;">Refinance :</td>
-                    <td>CIMB</td>
+                    <td><h:outputText value="#{baseController.appHeaderView.refinance}"/></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">CA No. :</td>
-                    <td colspan="2">04731660051802013007</td>
+                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.caNo}"/></td>
                     <td class="title right">Ref CA No. :</td>
-                    <td colspan="3">04731660051802012002</td>
+                    <td colspan="3"><h:outputText value="#{baseController.appHeaderView.appRefNo}"/></td>
                     <td colspan="2" class="title right">Ref CA Date :</td>
-                    <td colspan="2">20/06/2555</td>
+                    <td colspan="2"><h:outputText value="#{baseController.appHeaderView.appRefDate}"/></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Borrower Name :</td>
-                    <td colspan="11" rowspan="2" style="padding:0; vertical-align: top;">
-                        <table border="0" cellspacing="0" cellpadding="0">
+                    <td colspan="11" style="padding:0; vertical-align: top;">
+                        <table>
                             <tr>
-                                <td style="width: 150px;">Mr.A Example</td>
-                                <td style="width: 150px;">Mrs.B Example</td>
-                            </tr>
-                            <tr style="height:37px;">
-                                <td>312320123123</td>
-                                <td>412420124124</td>
+                                <ui:repeat var="borrower" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
+                                    <td>#{borrower.borrowerName}</td>
+                                </ui:repeat>
                             </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Citizen ID/<br/>Registration ID :</td>
+                    <td colspan="11" style="padding:0; vertical-align: top;">
+                        <table>
+                            <tr>
+                                <ui:repeat var="personalId" value="#{baseController.appHeaderView.borrowerHeaderViewList}" varStatus="status">
+                                    <td>#{personalId.personalId}</td>
+                                </ui:repeat>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Product Program :</td>
-                    <td colspan="11"></td>
+                    <td colspan="11">
+                        <table>
+                            <tr>
+                                <ui:repeat var="productProgram" value="#{baseController.appHeaderView.productProgramList}" varStatus="status">
+                                    <td>#{productProgram}</td>
+                                </ui:repeat>
+                            </tr>
+                        </table>
+                    </td>
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Prescreen Result :</td>

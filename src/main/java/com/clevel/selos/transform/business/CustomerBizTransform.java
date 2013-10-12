@@ -8,10 +8,8 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerAccountView;
-import com.clevel.selos.model.view.CustomerInfoResultView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
@@ -47,6 +45,8 @@ public class CustomerBizTransform extends BusinessTransform {
     BusinessTypeDAO businessTypeDAO;
     @Inject
     RaceDAO raceDAO;
+    @Inject
+    CustomerEntityDAO customerEntityDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult){
         CustomerInfoResultView customerInfoResultView = null;
@@ -57,14 +57,23 @@ public class CustomerBizTransform extends BusinessTransform {
                 customerInfoResultView.setCustomerId(individualResult.getCustomerId());
                 if(individualResult.getIndividualModel()!=null){
                     IndividualModel individualModel = individualResult.getIndividualModel();
-                    CustomerInfoView customerInfoView =new CustomerInfoView();
+                    CustomerInfoView customerInfoView = new CustomerInfoView();
+
+                    customerInfoView.reset();
 
                     customerInfoView.setCitizenId(individualModel.getCitizenID());
                     customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
+                    if(customerInfoView.getTitleTh() == null){
+                        customerInfoView.setTitleTh(new Title());
+                    }
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
                     customerInfoView.setCustomerId(individualModel.getDocumentType());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
+                    customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
+                    if(customerInfoView.getDocumentType() == null){
+                        customerInfoView.setDocumentType(new DocumentType());
+                    }
                     customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
                     customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
 
@@ -74,16 +83,34 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setGender(Gender.FEMALE);
                     }
                     customerInfoView.setEducation(educationDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getEducationBackground())));
+                    if(customerInfoView.getEducation() == null){
+                        customerInfoView.setEducation(new Education());
+                    }
                     customerInfoView.setOrigin(raceDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getRace())));
+                    if(customerInfoView.getOrigin() == null){
+                        customerInfoView.setOrigin(new Race());
+                    }
                     customerInfoView.setMaritalStatus(maritalStatusDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getMarriageStatus())));
+                    if(customerInfoView.getMaritalStatus() == null){
+                        customerInfoView.setMaritalStatus(new MaritalStatus());
+                    }
                     customerInfoView.setNationality(nationalityDAO.findOneByCriteria(Restrictions.eq("code",individualModel.getNationality())));
+                    if(customerInfoView.getNationality() == null){
+                        customerInfoView.setNationality(new Nationality());
+                    }
                     customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
                     if(individualModel.getOccupationCode().matches("[0-9]*")){
                         customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code",new Integer(individualModel.getOccupationCode()))));
+                        if(customerInfoView.getOccupation() == null){
+                            customerInfoView.setOccupation(new Occupation());
+                        }
+                    }else{
+                        customerInfoView.setOccupation(new Occupation());
                     }
             //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("",individualModel.getBizCode())));
 
-                    CustomerInfoView spouse=new CustomerInfoView();
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
                     spouse.setFirstNameTh(individualModel.getSpouse().getFirstname());
                     spouse.setLastNameTh(individualModel.getSpouse().getLastname());
                     spouse.setCitizenId(individualModel.getSpouse().getCitizenID());
@@ -176,39 +203,61 @@ public class CustomerBizTransform extends BusinessTransform {
 
                     }
 
-
-
                     customerInfoView.setMobileNumber(mobileNumber1);
                     customerInfoView.setFaxNumber(faxNumber);
 
                     //Workaddress
-                    AddressView workAddress=new AddressView();
+                    AddressView workAddress = new AddressView();
                     workAddress.setAddressNo(individualModel.getWorkAddress().getAddressNo());
                     workAddress.setMoo(individualModel.getWorkAddress().getAddressMoo());
                     workAddress.setBuilding(individualModel.getWorkAddress().getAddressBuilding());
                     workAddress.setRoad(individualModel.getWorkAddress().getAddressStreet());
                     workAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getSubdistrict())));
+                    if(workAddress.getSubDistrict() == null){
+                        workAddress.setSubDistrict(new SubDistrict());
+                    }
                     workAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getDistrict())));
+                    if(workAddress.getDistrict() == null){
+                        workAddress.setDistrict(new District());
+                    }
                     workAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getProvince())));
+                    if(workAddress.getProvince() == null){
+                        workAddress.setProvince(new Province());
+                    }
                     workAddress.setAddressType(addressTypeDAO.findById(3));
                     workAddress.setPostalCode(individualModel.getWorkAddress().getPostcode());
                     workAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getWorkAddress().getCountryCode())));
+                    if(workAddress.getCountry() == null){
+                        workAddress.setCountry(new Country());
+                    }
                     workAddress.setPhoneNumber(workPhoneNumber);
                     workAddress.setExtension(workPhoneExtension);
                     customerInfoView.setWorkAddress(workAddress);
 
                     //CurrentAddress
-                    AddressView currentAddress=new AddressView();
+                    AddressView currentAddress = new AddressView();
                     currentAddress.setAddressNo(individualModel.getCurrentAddress().getAddressNo());
                     currentAddress.setMoo(individualModel.getCurrentAddress().getAddressMoo());
                     currentAddress.setBuilding(individualModel.getCurrentAddress().getAddressBuilding());
                     currentAddress.setRoad(individualModel.getCurrentAddress().getAddressStreet());
                     currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getSubdistrict())));
+                    if(currentAddress.getSubDistrict() == null){
+                        currentAddress.setSubDistrict(new SubDistrict());
+                    }
                     currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getDistrict())));
+                    if(currentAddress.getDistrict() == null){
+                        currentAddress.setDistrict(new District());
+                    }
                     currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getProvince())));
+                    if(currentAddress.getProvince() == null){
+                        currentAddress.setProvince(new Province());
+                    }
                     currentAddress.setAddressType(addressTypeDAO.findById(1));
                     currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
                     currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", individualModel.getCurrentAddress().getCountryCode())));
+                    if(currentAddress.getCountry() == null){
+                        currentAddress.setCountry(new Country());
+                    }
                     currentAddress.setPhoneNumber(currentPhoneNumber);
                     currentAddress.setExtension(currentPhoneExtension);
                     customerInfoView.setCurrentAddress(currentAddress);
@@ -220,11 +269,23 @@ public class CustomerBizTransform extends BusinessTransform {
                     homeAddress.setBuilding(individualModel.getHomeAddress().getAddressBuilding());
                     homeAddress.setRoad(individualModel.getHomeAddress().getAddressStreet());
                     homeAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getSubdistrict())));
+                    if(homeAddress.getSubDistrict() == null){
+                        homeAddress.setSubDistrict(new SubDistrict());
+                    }
                     homeAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getDistrict())));
+                    if(homeAddress.getDistrict() == null){
+                        homeAddress.setDistrict(new District());
+                    }
                     homeAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getProvince())));
+                    if(homeAddress.getProvince() == null){
+                        homeAddress.setProvince(new Province());
+                    }
                     homeAddress.setAddressType(addressTypeDAO.findById(2));
                     homeAddress.setPostalCode(individualModel.getHomeAddress().getPostcode());
                     homeAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",individualModel.getHomeAddress().getCountryCode())));
+                    if(homeAddress.getCountry() == null){
+                        homeAddress.setCountry(new Country());
+                    }
                     homeAddress.setPhoneNumber(homePhoneNumber);
                     homeAddress.setExtension(homePhoneExtension);
                     customerInfoView.setRegisterAddress(homeAddress);
@@ -253,31 +314,68 @@ public class CustomerBizTransform extends BusinessTransform {
 
                     customerInfoView.setCustomerId(corporateModel.getTmbCusID());
                     customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", corporateModel.getTitleTH())));
+                    if(customerInfoView.getTitleTh() == null){
+                        customerInfoView.setTitleTh(new Title());
+                    }
                     customerInfoView.setFirstNameTh(corporateModel.getCompanyNameTH());
                     customerInfoView.setFirstNameEn(corporateModel.getCompanyNameEN());
-                    customerInfoView.setCitizenId(corporateModel.getRegistrationID());
+                    customerInfoView.setRegistrationId(corporateModel.getRegistrationID());
+                    customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", corporateModel.getDocumentType())));
+                    if(customerInfoView.getDocumentType() == null){
+                        customerInfoView.setDocumentType(new DocumentType());
+                    }
+                    customerInfoView.setCustomerEntity(customerEntityDAO.findById(2));
                     customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
                     customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationCountry())));
+                    if(customerInfoView.getRegistrationCountry() == null){
+                        customerInfoView.setRegistrationCountry(new Country());
+                    }
 
                     //CurrentAddress
-                    AddressView currentAddress=new AddressView();
+                    AddressView currentAddress = new AddressView();
                     currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getSubdistrict())));
+                    if(currentAddress.getSubDistrict() == null){
+                        currentAddress.setSubDistrict(new SubDistrict());
+                    }
                     currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getDistrict())));
+                    if(currentAddress.getDistrict() == null){
+                        currentAddress.setDistrict(new District());
+                    }
                     currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getProvince())));
+                    if(currentAddress.getProvince() == null){
+                        currentAddress.setProvince(new Province());
+                    }
                     currentAddress.setPostalCode(corporateModel.getPostcode());
                     currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getCountryCode())));
+                    if(currentAddress.getCountry() == null){
+                        currentAddress.setCountry(new Country());
+                    }
                     customerInfoView.setCurrentAddress(currentAddress);
 
-                    AddressView registrationAddress=new AddressView();
+                    AddressView registrationAddress = new AddressView();
                     registrationAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getSubdistrict())));
+                    if(registrationAddress.getSubDistrict() == null){
+                        registrationAddress.setSubDistrict(new SubDistrict());
+                    }
                     registrationAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getDistrict())));
+                    if(registrationAddress.getDistrict() == null){
+                        registrationAddress.setDistrict(new District());
+                    }
                     registrationAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getProvince())));
+                    if(registrationAddress.getProvince() == null){
+                        registrationAddress.setProvince(new Province());
+                    }
                     registrationAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationAddress().getCountryCode())));
+                    if(registrationAddress.getCountry() == null){
+                        registrationAddress.setCountry(new Country());
+                    }
                     registrationAddress.setPhoneNumber(corporateModel.getRegistrationAddress().getPhoneNo());
                     registrationAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
                     registrationAddress.setContactName(corporateModel.getRegistrationAddress().getContactName());
                     registrationAddress.setContactPhone(corporateModel.getRegistrationAddress().getContactPhoneNo());
                     customerInfoView.setRegisterAddress(registrationAddress);
+
+                    customerInfoResultView.setCustomerInfoView(customerInfoView);
                 }
             } else {
                 customerInfoResultView.setCustomerId(corporateResult.getCustomerId());

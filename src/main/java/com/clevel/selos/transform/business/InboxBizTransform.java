@@ -5,6 +5,8 @@ import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.model.db.master.Step;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.InboxView;
 import org.slf4j.Logger;
 
@@ -30,8 +32,23 @@ public class InboxBizTransform extends BusinessTransform {
 
             if(item.getCaseData().containsKey("F_WobNum")){
                 inboxView.setFnWobNum(item.getCaseData().get("F_WobNum"));
-                inboxView.setWorkCasePreScreenId(workCasePrescreenDAO.findIdByWobNumber(inboxView.getFnWobNum()));
-                inboxView.setWorkCaseId(workCaseDAO.findIdByWobNumber(inboxView.getFnWobNum()));
+                WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxView.getFnWobNum());
+                if(workCasePrescreen != null){
+                    inboxView.setWorkCasePreScreenId(workCasePrescreen.getId());
+                    inboxView.setCaNo(workCasePrescreen.getCaNumber());
+                    inboxView.setBdmId(workCasePrescreen.getCreateBy().getId());
+                } else {
+                    inboxView.setWorkCasePreScreenId(0);
+                    inboxView.setCaNo("");
+                    inboxView.setBdmId("");
+                }
+                WorkCase workCase = workCaseDAO.findByWobNumber(inboxView.getFnWobNum());
+                if(workCase != null){
+                    inboxView.setWorkCaseId(workCase.getId());
+                    inboxView.setCaNo(workCase.getCaNumber());
+                    inboxView.setBdmId(workCase.getCreateBy().getId());
+                }
+
             }
             if(item.getCaseData().containsKey("F_StepName")){
                 inboxView.setFnStepName(item.getCaseData().get("F_StepName"));

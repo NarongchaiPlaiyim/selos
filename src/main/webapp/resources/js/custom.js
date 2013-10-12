@@ -4,9 +4,6 @@ $(document).ready(function(){
         return !(e.which != 8 && e.which != 0 &&
             (e.which < 48 || e.which > 57) && e.which != 46);
     });
-    /*$(".numeric").numeric();
-    $(".integer").numeric(false, function() { alert("Integers only"); this.value = ""; this.focus(); });
-    $(".positive").numeric({ negative: false }, function() { alert("No negative values"); this.value = ""; this.focus(); });*/
 });
 
 $(document).ready(function() {
@@ -15,15 +12,41 @@ $(document).ready(function() {
     })
 });
 
+function gotoInbox(contextUrl){
+    window.location = contextUrl;
+}
+
+function removeComma(obj){
+    var val = obj.value;
+    val = val.replace(/,/g,'');
+    obj.value = val;
+}
+
+function formatNumber(obj){
+    var val = obj.value;
+    val = $.trim(val);
+    if(val != ''){
+        val += '';
+        x = val.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '.00';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        obj.value = x1 + x2;
+    }
+}
+
 function numberOnly(e){
     return !(e.which != 8 && e.which != 0 &&
         (e.which < 48 || e.which > 57) && e.which != 46);
 }
 
-function removeWindowsScrollbar(){
+function hideWindowsScrollBar(){
     $("body").attr("style","overflow-y: hidden");
 }
-function showWindowsScrollbar(){
+function showWindowsScrollBar(){
     $("body").attr("style","overflow-y: scroll");
 }
 

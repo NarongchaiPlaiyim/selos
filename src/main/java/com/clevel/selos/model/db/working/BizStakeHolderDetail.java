@@ -21,8 +21,8 @@ public class BizStakeHolderDetail implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="biz_info_id")
-    private BizInfo bizInfo;
+    @JoinColumn(name="biz_info_detail_id")
+    private BizInfoDetail bizInfoDetail;
 
     @Column(name = "stake_Holder_type")
     private String stakeHolderType;
@@ -57,12 +57,12 @@ public class BizStakeHolderDetail implements Serializable {
     public BizStakeHolderDetail() {
     }
 
-    public BizInfo getBizInfo() {
-        return bizInfo;
+    public BizInfoDetail getBizInfoDetail() {
+        return bizInfoDetail;
     }
 
-    public void setBizInfo(BizInfo bizInfo) {
-        this.bizInfo = bizInfo;
+    public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
+        this.bizInfoDetail = bizInfoDetail;
     }
 
     public long getId() {

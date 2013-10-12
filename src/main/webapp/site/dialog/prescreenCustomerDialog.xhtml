@@ -62,7 +62,7 @@
         <td class="title">Customer Entity :</td>
         <td colspan="3">
             <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}">
-                              <!--required="#{not empty param[searchButton.clientId]}">-->
+                <!--required="#{not empty param[searchButton.clientId]}">-->
                 <f:selectItems value="#{prescreenMaker.customerEntityList}"
                                var="customerEntityItem"
                                itemLabel="#{customerEntityItem.description}"

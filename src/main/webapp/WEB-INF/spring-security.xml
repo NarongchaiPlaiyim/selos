@@ -10,7 +10,7 @@
 
     <http auto-config="false">
         <intercept-url pattern="/admin/**" access="ROLE_SYSTEM"/>
-        <intercept-url pattern="/site/**" access="ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_HSME,ROLE_CHIEF,ROLE_UW,ROLE_SSO"/>
+        <intercept-url pattern="/site/**" access="ROLE_SYSTEM,ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_HSME,ROLE_CHIEF,ROLE_UW,ROLE_SSO"/>
         <intercept-url pattern="/isa/**" access="ROLE_ISA"/>
         <form-login login-page="/login.jsf" />
         <logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.jsf"/>

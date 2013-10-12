@@ -8,6 +8,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
@@ -44,7 +45,7 @@ public class ConfigurationProducer {
 
     private static Properties getFromResource(String resourceName) {
         Properties p = new Properties();
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceName);
+        ResourceBundle bundle = ResourceBundle.getBundle(resourceName,new Locale("th","TH"));
         Enumeration e = bundle.getKeys();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();

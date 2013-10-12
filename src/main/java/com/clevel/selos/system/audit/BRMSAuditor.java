@@ -26,4 +26,10 @@ public class BRMSAuditor implements SystemAuditor {
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
         brmsActivityDAO.persist(new BRMSActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
     }
+
+    @Override
+    public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
+        brmsActivityDAO.persist(new BRMSActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+    }
+
 }

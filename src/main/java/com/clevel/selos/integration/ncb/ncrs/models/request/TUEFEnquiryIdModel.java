@@ -23,6 +23,12 @@ public class TUEFEnquiryIdModel implements Serializable {
         this.idnumber = idnumber;
     }
 
+    public TUEFEnquiryIdModel(String idtype, String idnumber, String issuecountry) {
+        this.idtype = idtype;
+        this.idnumber = idnumber;
+        this.issuecountry = issuecountry;
+    }
+
     public String getIdtype() {
         return idtype;
     }

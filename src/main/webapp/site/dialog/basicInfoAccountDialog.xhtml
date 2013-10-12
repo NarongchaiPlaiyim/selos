@@ -1,0 +1,73 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="basicInfoAccountDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.accountName')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{basicInfo.basicInfoAccountView.accountName}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.accountType')}"/>
+                </td>
+                <td>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{basicInfo.basicInfoAccountView.accountType.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{basicInfo.openAccountTypeList}"
+                                       var="oepnAccountType"
+                                       itemLabel="#{oepnAccountType.name}"
+                                       itemValue="#{oepnAccountType.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.product')}"/>
+                </td>
+                <td>
+                    <p:selectOneMenu styleClass="largest" size="1"
+                                     value="#{basicInfo.basicInfoAccountView.product.id}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                        <f:selectItems value="#{basicInfo.openAccountProductList}"
+                                       var="oepnAccountProduct"
+                                       itemLabel="#{oepnAccountProduct.name}"
+                                       itemValue="#{oepnAccountProduct.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                    <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
+                </td>
+                <td>
+                    <p:dataGrid value="#{basicInfo.openAccountPurposeList}" var="openAccountPurpose" columns="1" style="border: 0">
+                        <h:selectBooleanCheckbox value="#{openAccountPurpose.id}"/>
+                        <h:outputText value="#{openAccountPurpose.name}"/>
+                    </p:dataGrid>
+                </td>
+            </tr>
+            <tr>
+                <td class="center" colspan="2" style="margin-top: 20px;">
+                    <p:commandButton value="#{msg.get('app.button.ok')}"
+                            styleClass="small"
+                            action="#{basicInfo.addAccount}"
+                            process="@form"
+                            update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
+                            oncomplete="basicInfoAccountDlg.hide()"/>
+                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                     onclick="basicInfoAccountDlg.hide()" update=":basicInfoAccountDlgForm"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</ui:composition>

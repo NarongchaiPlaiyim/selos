@@ -7,8 +7,13 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.rlos.csi.model.CSIData;
+import com.clevel.selos.integration.email.EmailService;
+import com.clevel.selos.integration.email.Template1;
+import com.clevel.selos.integration.rlos.csi.model.*;
+import com.clevel.selos.model.AccountInfoId;
+import com.clevel.selos.model.AccountInfoName;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.Config;
@@ -28,6 +33,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
@@ -86,9 +92,9 @@ public class WelcomePage implements Serializable {
     @NCB
     SystemAuditor ncbAuditor;
 
-    @Inject
-    @Config(name = "system.name")
-    String system;
+//    @Inject
+//    @Config(name = "system.name")
+//    String system;
 
     private Date now;
 
@@ -102,7 +108,7 @@ public class WelcomePage implements Serializable {
 //        } catch (Exception e) {
 //            log.error("",e);
 //        }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
         userAuditor.addSucceed("user1","test","test action");
         rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCEED,"",new Date(),"12345");
         ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCEED,"",new Date(),"67890");
@@ -115,18 +121,34 @@ public class WelcomePage implements Serializable {
         } catch (Exception e) {
             log.error("",e);
         }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
     }
 
     public void testRLOSCSI() {
         try{
-            List<CSIData> csiDataList = new ArrayList<CSIData>();
-            csiDataList = rlos.getCSIData("10001", RLOSInterface.DocumentType.CITIZEN_ID,"123456");
-            log.debug("csi data size : {}",csiDataList.size());
+            CSIResult csiResult;
+            CSIInputData csiInputData = new CSIInputData();
+
+            AccountInfoId idModel = new AccountInfoId();
+            idModel.setDocumentType(DocumentType.CITIZEN_ID);
+            idModel.setIdNumber("3100203117607");
+            List<AccountInfoId> idModelList = new ArrayList<AccountInfoId>();
+            idModelList.add(idModel);
+
+            AccountInfoName nameModel = new AccountInfoName();
+            nameModel.setNameEn("CHUTIMA");
+            nameModel.setSurnameEn("JITBANTHAO");
+            List<AccountInfoName> nameModelList = new ArrayList<AccountInfoName>();
+            nameModelList.add(nameModel);
+
+            csiInputData.setIdModelList(idModelList);
+            csiInputData.setNameModelList(nameModelList);
+            csiResult = rlos.getCSIData("10001", csiInputData);
+            log.debug("csi result : {}",csiResult);
         } catch (Exception e) {
             log.error("",e);
         }
-        log.debug("system: {}",system);
+//        log.debug("system: {}",system);
     }
 
     @PostConstruct
@@ -164,8 +186,17 @@ public class WelcomePage implements Serializable {
             log.error("",e);
             log.debug("cause stack: {}", ExceptionUtils.getStackTrace(e.getCause()));
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Runtime exception!","Exception Code: "+ e.getCode()+", Message: "+e.getMessage() +", stack trace: "+ ExceptionUtils.getMessage(e.getCause()));
-            RequestContext.getCurrentInstance().showMessageInDialog(message);
+//            RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
+    }
+
+    @Inject
+    @Template1
+    EmailService email;
+
+    public void testEmail() {
+        log.debug("testEmail.");
+        email.sendMail("user1@test.local","test subject","",new HashMap<String, String>());
     }
 
     public void reloadConfig() {

@@ -15,9 +15,9 @@ public class RiskType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code")
+    @Column(name = "code",length = 20)
     private String code;
-    @Column(name = "name")
+    @Column(name = "name",length = 50)
     private String name;
     @Column(name = "description")
     private String description;

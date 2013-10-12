@@ -45,15 +45,11 @@
         <h:outputText value="#{msg.get('app.ncbSummaryResult')}"/>
     </td>
     <td style="width: 500px">
-        <div style="width: 90px;height: 20px; line-height:20px;float: left;"
-             class="result_green center">GREEN
-        </div>
     </td>
 </tr>
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:inputText value="#{ncbInfo.NCBInfoView.checkingDate}" id="checkingDate" disabled="true"/>
@@ -63,7 +59,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:inputText value="#{ncbInfo.NCBInfoView.checkIn6Month}" disabled="true"/>
@@ -72,7 +67,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.paymentClass')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:inputText value="#{ncbInfo.NCBInfoView.paymentClass}" disabled="true"/>
@@ -81,7 +75,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.typeOfCurrentPayment')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:inputText value="#{ncbInfo.NCBInfoView.currentPaymentType}" disabled="true"/>
@@ -90,7 +83,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.typeOfHistoryPayment')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:inputText value="#{ncbInfo.NCBInfoView.historyPaymentType}" disabled="true"/>
@@ -99,7 +91,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.NPLFlag')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <h:form>
@@ -159,6 +150,15 @@
                         </h:selectOneMenu>
                     </td>
                 </tr>
+                <tr >
+                    <td colspan="2">
+                        <h:inputHidden   value="#{ncbInfo.NCBInfoView.ncbCusMarriageStatus}" />
+                        <h:inputHidden   value="#{ncbInfo.NCBInfoView.enquiry}" />
+                        <h:inputHidden   value="#{ncbInfo.NCBInfoView.ncbLastInfoAsOfDate}" />
+                        <h:inputHidden   value="#{ncbInfo.NCBInfoView.ncbCusName}" />
+                        <h:inputHidden   value="#{ncbInfo.NCBInfoView.ncbCusAddress}" />
+                    </td>
+                </tr>
             </table>
         </h:form>
     </td>
@@ -166,7 +166,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.TDRFlag')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <h:form>
@@ -233,7 +232,6 @@
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.TDRPaymentCondition')}"/>
-        <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <!-- <p:inputText   value="#{ncbInfo.NCBInfoView.tdrPaymentCondition}"   disabled="true"/>-->
@@ -276,7 +274,7 @@
 </tr>
 <tr>
     <td colspan="2">
-        <table class="table_content">
+        <table>
             <tr>
                 <td>
 
@@ -303,15 +301,17 @@
                                           style="width: 80px;"/>
                                 <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
                                           style="width: 100px;"/>
-                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center"
+                                <p:column headerText="ลักษณะการชำระหนี้ ณ ปัจจุบัน" styleClass="center"
                                           style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center"
+                                <p:column headerText="ลักษณะการชำระหนี้ที่ผ่านมา" styleClass="center"
                                           style="width: 110px;"/>
                                 <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}"
                                           styleClass="center" style="width: 120px;"/>
                                 <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"
                                           style="width: 110px;"/>
                                 <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center"
+                                          style="width: 30px;"/>
+                                <p:column headerText="W/C Flag" styleClass="center"
                                           style="width: 30px;"/>
                                 <p:column headerText="BUTTON" styleClass="center" style="width:60px;"/>
                             </p:row>
@@ -327,8 +327,9 @@
                                 <h:outputText value="#{item.accountType.name}"/>
                             </p:column>
 
-                            <p:column>
-                                <h:outputText value="#{item.TMBAccount}"/>
+                            <p:column  styleClass="center">
+                               <!-- <h:outputText value="#{item.TMBAccount}"/>-->
+                                <h:selectBooleanCheckbox value="#{item.TMBAccount}"/>
                             </p:column>
 
                             <p:column>
@@ -387,11 +388,17 @@
                                 <h:outputText value="#{item.noOfOverLimit}"/>
                             </p:column>
 
-                            <p:column>
-                                <h:outputText value="#{item.refinanceFlag}"/>
+                            <p:column  styleClass="center">
+                               <!-- <h:outputText value="#{item.refinanceFlag}"/>-->
+                                <h:selectBooleanCheckbox value="#{item.refinanceFlag}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column  styleClass="center">
+                                <!--<h:outputText value="#{item.wcFlag}"/>-->
+                                <h:selectBooleanCheckbox value="#{item.wcFlag}"/>
+                            </p:column>
+
+                            <p:column rendered="#{ncbInfo.genColumnEdit}">
                                 <p:commandButton icon="ui-icon-pencil"
                                                  action="#{ncbInfo.onEditNcbDetail()}"
                                                  update=":ncbDlgForm"
@@ -413,7 +420,7 @@
                                 <p:row>
                                     <p:column colspan="4" style="text-align: center"
                                               footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
-                                    <p:column colspan="12" style="text-align: left"
+                                    <p:column colspan="13" style="text-align: left"
                                               footerText="#{item.moneyTotal}"></p:column>
                                 </p:row>
                             </p:columnGroup>
