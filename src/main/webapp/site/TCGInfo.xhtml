@@ -14,7 +14,7 @@
 </h:head>
 
 <h:body>
-    <p:panel id="pnl_maincontainer">
+    <p:panel id="pnl_maincontainer" style="width:100%">
         <h:form id="frmMain">
             <div id="main_container">
                 <!-- Start Header Logo -->
@@ -144,12 +144,12 @@
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.potentialType')}"  styleClass="center" style="width: 150px;">
-                                                            <h:outputText value="#{item.potentialCollateral.name}"/>
+                                                        <p:column headerText="#{msg.get('app.potentialType')}"  styleClass="left" style="width: 200px;">
+                                                            <h:outputText value="#{item.potentialCollateral.description}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.collateralCollateralType')}" styleClass="center" style="width:150px;">
-                                                            <h:outputText value="#{item.tcgCollateralType.name}"/>
+                                                        <p:column headerText="#{msg.get('app.collateralCollateralType')}" styleClass="left" style="width:200px;">
+                                                            <h:outputText value="#{item.tcgCollateralType.description}"/>
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.appraisalAmount')}" styleClass="right" style="width: 150px;">
