@@ -1,6 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoView;
@@ -61,13 +61,25 @@ public class BasicInfoTransform extends Transform {
         return basicInfo;
     }
 
-    public BasicInfoView transformToView(BasicInfo basicInfo){
+    public BasicInfoView transformToView(BasicInfo basicInfo,WorkCase workCase){
         BasicInfoView basicInfoView = new BasicInfoView();
+
+        basicInfoView.setAppNo(workCase.getAppNumber());
+        basicInfoView.setRefAppNo(workCase.getRefAppNumber());
+        basicInfoView.setCaNo(workCase.getCaNumber());
 
         basicInfoView.setId(basicInfo.getId());
 
+
         basicInfoView.setRequestType(basicInfo.getRequestType());
+        if(basicInfoView.getRequestType() == null){
+            basicInfoView.setRequestType(new RequestType());
+        }
+
         basicInfoView.setProductGroup(basicInfo.getProductGroup());
+        if(basicInfoView.getProductGroup() == null){
+            basicInfoView.setProductGroup(new ProductGroup());
+        }
 
         basicInfoView.setCharUnPaid(basicInfo.isUnpaidFeeInsurance());
         basicInfoView.setCharNoPending(basicInfo.isNoPendingClaimLG());
@@ -80,15 +92,28 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setCharFCFund(basicInfo.isAdequateOfCapitalResource());
 
         basicInfoView.setSpProgram(basicInfo.isApplySpecialProgram());
+
         basicInfoView.setSpecialProgram(basicInfo.getSpecialProgram());
+        if(basicInfoView.getSpecialProgram() == null){
+            basicInfoView.setSpecialProgram(new SpecialProgram());
+        }
 
         basicInfoView.setRefIn(basicInfo.isRefinanceIN());
         basicInfoView.setRefinanceIn(basicInfo.getRefinanceInValue());
+        if(basicInfoView.getRefinanceIn() == null){
+            basicInfoView.setRefinanceIn(new Bank());
+        }
 
         basicInfoView.setRefOut(basicInfo.isRefinanceOUT());
         basicInfoView.setRefinanceOut(basicInfo.getRefinanceOutValue());
+        if(basicInfoView.getRefinanceOut() == null){
+            basicInfoView.setRefinanceOut(new Bank());
+        }
 
         basicInfoView.setRiskType(basicInfo.getRiskCustomerType());
+        if(basicInfoView.getRiskType() == null){
+            basicInfoView.setRiskType(new RiskType());
+        }
 
         basicInfoView.setQualitative(basicInfo.getQualitativeType());
         basicInfoView.setExistingSME(basicInfo.isExistingSMECustomer());
@@ -97,12 +122,18 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setExtReviewDate(basicInfo.getExtendedReviewDate());
 
         basicInfoView.setSbfScore(basicInfo.getSbfScore());
+        if(basicInfoView.getSbfScore() == null){
+            basicInfoView.setSbfScore(new SBFScore());
+        }
 
         basicInfoView.setLoan(basicInfo.isRequestLoanWithSameName());
         basicInfoView.setMoreOneYear(basicInfo.isHaveLoanInOneYear());
         basicInfoView.setAnnual(basicInfo.isPassAnnualReview());
 
         basicInfoView.setLoanRequestPattern(basicInfo.getLoanRequestPattern());
+        if(basicInfoView.getLoanRequestPattern() == null){
+            basicInfoView.setLoanRequestPattern(new BorrowingType());
+        }
 
         basicInfoView.setRefName(basicInfo.getReferralName());
         basicInfoView.setRefId(basicInfo.getReferralID());

@@ -21,8 +21,8 @@ public class CustomerEntity implements Serializable {
     private int active;
     @Column(name = "default_qualitative")
     private int defaultQualitative;
-    @Column(name = "change_quli_enable")
-    private boolean changeQultiEnable;
+    @Column(name = "change_quali_enable")
+    private boolean changeQualtiEnable;
 
 
     public CustomerEntity() {
@@ -60,12 +60,12 @@ public class CustomerEntity implements Serializable {
         this.defaultQualitative = defaultQualitative;
     }
 
-    public boolean isChangeQultiEnable() {
-        return changeQultiEnable;
+    public boolean isChangeQualtiEnable() {
+        return changeQualtiEnable;
     }
 
-    public void setChangeQultiEnable(boolean changeQultiEnable) {
-        this.changeQultiEnable = changeQultiEnable;
+    public void setChangeQualtiEnable(boolean changeQualtiEnable) {
+        this.changeQualtiEnable = changeQualtiEnable;
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CustomerEntity implements Serializable {
                 append("description", description).
                 append("active", active).
                 append("defaultQualitative", defaultQualitative).
-                append("changeQultiEnable", changeQultiEnable).
+                append("changeQualtiEnable", changeQualtiEnable).
                 toString();
     }
 }

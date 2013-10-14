@@ -1,7 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class BasicInfoView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    //for disable
+    private boolean isIndividual;
+
 
     public BasicInfoView(){
         reset();
@@ -384,5 +388,59 @@ public class BasicInfoView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public boolean isIndividual() {
+        return isIndividual;
+    }
+
+    public void setIndividual(boolean individual) {
+        isIndividual = individual;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("appNo", appNo).
+                append("refAppNo", refAppNo).
+                append("caNo", caNo).
+                append("requestType", requestType).
+                append("productGroup", productGroup).
+                append("charUnPaid", charUnPaid).
+                append("charNoPending", charNoPending).
+                append("charFCLG", charFCLG).
+                append("charFCIns", charFCIns).
+                append("charFCCom", charFCCom).
+                append("charFCAba", charFCAba).
+                append("charFCLate", charFCLate).
+                append("charFCFund", charFCFund).
+                append("isSpProgram", isSpProgram).
+                append("specialProgram", specialProgram).
+                append("isRefIn", isRefIn).
+                append("refinanceIn", refinanceIn).
+                append("isRefOut", isRefOut).
+                append("refinanceOut", refinanceOut).
+                append("riskType", riskType).
+                append("qualitative", qualitative).
+                append("existingSME", existingSME).
+                append("since", since).
+                append("lastReviewDate", lastReviewDate).
+                append("extReviewDate", extReviewDate).
+                append("sbfScore", sbfScore).
+                append("isLoan", isLoan).
+                append("isMoreOneYear", isMoreOneYear).
+                append("isAnnual", isAnnual).
+                append("loanRequestPattern", loanRequestPattern).
+                append("refName", refName).
+                append("refId", refId).
+                append("basicInfoAccountViews", basicInfoAccountViews).
+                append("isApplyBA", isApplyBA).
+                append("baPayment", baPayment).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }

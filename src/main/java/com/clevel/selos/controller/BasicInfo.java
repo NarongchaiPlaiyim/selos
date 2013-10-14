@@ -1,6 +1,8 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
@@ -59,6 +61,10 @@ public class BasicInfo implements Serializable {
     private OpenAccountPurposeDAO openAccountPurposeDAO;
     @Inject
     private BankDAO bankDAO;
+    @Inject
+    private BasicInfoControl basicInfoControl;
+    @Inject
+    private BorrowingTypeDAO borrowingTypeDAO;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -73,6 +79,8 @@ public class BasicInfo implements Serializable {
     private List<OpenAccountPurpose> openAccountPurposeList;
 
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
+
+    private List<BorrowingType> borrowingTypeList;
 
     //*** View ***//
     private BasicInfoView basicInfoView;
@@ -118,12 +126,19 @@ public class BasicInfo implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        basicInfoView = new BasicInfoView();
 
+        preRender();
 
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+        if(basicInfoView == null){
+            basicInfoView = new BasicInfoView();
+        }
 
-        //todo:qualitative check from customer individual or juristic
-//        basicInfoView.setQualitative("A");
+        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
+        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
+        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
+
         basicInfoView.setBaPayment("TOPUP");
 
         basicInfoAccountView = new BasicInfoAccountView();
@@ -145,6 +160,8 @@ public class BasicInfo implements Serializable {
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
         }
+
+        borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
     }
 
     public void onAddAccount(){
@@ -349,5 +366,13 @@ public class BasicInfo implements Serializable {
 
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
+    }
+
+    public List<BorrowingType> getBorrowingTypeList() {
+        return borrowingTypeList;
+    }
+
+    public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
+        this.borrowingTypeList = borrowingTypeList;
     }
 }

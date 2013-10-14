@@ -184,6 +184,14 @@ public class WorkCase implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
