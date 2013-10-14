@@ -57,6 +57,7 @@ public class LoginBean {
 
     private String userName;
     private String password;
+    private String loginExceptionMessage;
 
     @Inject
     LDAPInterface ldapInterface;
@@ -202,15 +203,11 @@ public class LoginBean {
         this.sessionRegistry = sessionRegistry;
     }
 
-
-
-    private String loginExceptionMessage;
-
-    public String getloginExceptionMessage() {
+    public String getLoginExceptionMessage() {
         return loginExceptionMessage;
     }
 
-    public void setloginExceptionMessage(String loginExceptionMessage) {
+    public void setLoginExceptionMessage(String loginExceptionMessage) {
         this.loginExceptionMessage = loginExceptionMessage;
     }
 }
