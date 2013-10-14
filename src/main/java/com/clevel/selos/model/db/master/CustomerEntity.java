@@ -21,7 +21,7 @@ public class CustomerEntity implements Serializable {
     private int active;
     @Column(name = "default_qualitative")
     private int defaultQualitative;
-    @Column(name = "change_quli_enable")
+    @Column(name = "change_quali_enable")
     private boolean changeQultiEnable;
 
 

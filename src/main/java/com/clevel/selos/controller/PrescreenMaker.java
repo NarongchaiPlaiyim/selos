@@ -80,6 +80,8 @@ public class PrescreenMaker implements Serializable {
 
     private List<ReferredExperience> referredExperienceList;
 
+    private List<BorrowingType> borrowingTypeList;
+
     //*** Result table List ***//
     private List<FacilityView> facilityViewList;
     private List<CustomerInfoView> customerInfoViewList;
@@ -200,6 +202,8 @@ public class PrescreenMaker implements Serializable {
     private BankDAO bankDAO;
     @Inject
     private ReferredExperienceDAO referredExperienceDAO;
+    @Inject
+    private BorrowingTypeDAO borrowingTypeDAO;
 
     @Inject
     private PrescreenService prescreenService;
@@ -377,6 +381,9 @@ public class PrescreenMaker implements Serializable {
 
             referredExperienceList = referredExperienceDAO.findAll();
             log.info("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
+
+            borrowingTypeList = borowingTypeDAO.findAll();
+            log.info("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
         }
 
         //*** List for Customer ***//
@@ -1786,5 +1793,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setReferredExperienceList(List<ReferredExperience> referredExperienceList) {
         this.referredExperienceList = referredExperienceList;
+    }
+
+    public List<BorrowingType> getBorrowingTypeList() {
+        return borrowingTypeList;
+    }
+
+    public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
+        this.borrowingTypeList = borrowingTypeList;
     }
 }
