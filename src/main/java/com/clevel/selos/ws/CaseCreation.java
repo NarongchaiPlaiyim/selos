@@ -6,6 +6,7 @@ import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.system.message.Message;
@@ -14,12 +15,14 @@ import com.clevel.selos.system.message.ValidationMapping;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
+import javax.persistence.EntityNotFoundException;
 import java.util.Date;
 
 @WebService
@@ -180,7 +183,14 @@ public class CaseCreation implements WSCaseCreation {
             } else {
                 //check for exist user
                 try{
-                    User user = userDAO.findById(bdmId);
+                    User user =null;
+                    user=userDAO.findOneByCriteria(Restrictions.eq("id",bdmId),Restrictions.eq("userStatus", UserStatus.NORMAL));
+                         if(user==null){
+                             wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_INVALID_BDM, "(bdmId)"));
+                             response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_INVALID_BDM,"(bdmId)"),"");
+                             log.debug("{}",response);
+                             return response;
+                         }
                 } catch (Exception ex){
                     wsDataPersist.addFailedCase(caseCreationHistory, msg.get(ValidationMapping.RM_INVALID_BDM, "(bdmId)"));
                     response.setValue(WSResponse.VALIDATION_FAILED,msg.get(ValidationMapping.RM_INVALID_BDM,"(bdmId)"),"");
