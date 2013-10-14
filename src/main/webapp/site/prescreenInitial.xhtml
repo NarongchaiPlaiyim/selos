@@ -40,11 +40,12 @@
                             <tr>
                                 <td class="title" style="min-width: 200px; width: 200px;"><h:outputText value="#{msg.get('app.label.productgroup')}"/> :</td>
                                 <td>
+                                    <h:inputText value="#{prescreenMaker.previousProductGroupId}"/>
                                     <p:selectOneMenu id="selProdGroupId"
                                                      styleClass="largest"
                                                      size="1"
                                                      value="#{prescreenMaker.prescreenView.productGroup.id}"
-                                                     required="#{not empty param[btnAddFacility.clientId]}">
+                                                     required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
@@ -52,13 +53,17 @@
                                                        itemValue="#{productGroupList.id}"/>
                                         <p:ajax event="change" listener="#{prescreenMaker.checkOnChangeProductGroup()}" />
                                     </p:selectOneMenu>
-                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" message="Are you want to change Productgroup? If you click 'YES' facility added will be remove!!">`
+                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" header="Confirm" message="#{msg.get('app.prescreen.message.changeproductgroup')}">`
                                         <p:commandButton value="YES"
                                                          process="@this"
                                                          actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                                                         oncomplete="msgBoxFacilityDlg.hide()"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
                                                          update=":frmMain:resultTableFacility,:facilityDlgForm" />
-                                        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+                                        <p:commandButton value="NO"
+                                                         process="@this"
+                                                         actionListener="#{prescreenMaker.onCancelChangeProductGroup()}"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
+                                                         update=":frmMain"/>
                                     </p:confirmDialog>
                                 </td>
                             </tr>
@@ -425,6 +430,7 @@
                             <tr>
                                 <td class="center" colspan="100%">
                                     <p:commandButton id="btnSave" value="Save"
+                                                     binding="#{btnSaveInitialButton}"
                                                      styleClass="medium"
                                                      process="@form"
                                                      actionListener="#{prescreenMaker.onSavePrescreenInitial()}"

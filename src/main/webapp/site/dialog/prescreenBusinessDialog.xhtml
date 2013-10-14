@@ -9,10 +9,10 @@
     <h:form id="businessDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title">Business Group :</td>
+                <td class="title" style="width:150px;">Business Group :</td>
                 <td>
                     <p:selectOneMenu style="width: 300px;" size="1"
-                                     value="#{prescreenMaker.bizInfoDetailView.bizDesc.businessGroup.id}"
+                                     value="#{prescreenMaker.bizInfoDetailView.bizGroup.id}"
                                      required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                         <f:selectItems value="#{prescreenMaker.businessGroupList}" var="dlgBusinessGroupItem"

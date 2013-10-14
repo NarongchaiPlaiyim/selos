@@ -1,6 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.PrescreenFacility;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -40,10 +40,26 @@ public class PrescreenTransform extends Transform {
 
         prescreenView.setId(prescreen.getId());
         prescreenView.setProductGroup(prescreen.getProductGroup());
+        if(prescreenView.getProductGroup() == null){
+            prescreenView.setProductGroup(new ProductGroup());
+        }
         prescreenView.setExpectedSubmitDate(prescreen.getExpectedSubmitDate());
         prescreenView.setBusinessLocation(prescreen.getBusinessLocation());
+        if(prescreenView.getBusinessLocation() == null){
+            prescreenView.setBusinessLocation(new Province());
+        }
         prescreenView.setRegisterDate(prescreen.getRegisterDate());
+        prescreenView.setReferDate(prescreen.getReferredDate());
+        prescreenView.setReferredExperience(prescreen.getReferredExperience());
+        if(prescreenView.getReferredExperience() == null){
+            prescreenView.setReferredExperience(new ReferredExperience());
+        }
         prescreenView.setRefinance(prescreen.isRefinance());
+        prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
+        if(prescreenView.getRefinanceBank() == null){
+            prescreenView.setRefinanceBank(new Bank());
+        }
+
         prescreenView.setCreateDate(prescreen.getCreateDate());
         prescreenView.setCreateBy(prescreen.getCreateBy());
         prescreenView.setModifyDate(prescreen.getModifyDate());

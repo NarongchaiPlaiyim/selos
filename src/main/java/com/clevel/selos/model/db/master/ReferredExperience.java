@@ -10,18 +10,17 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mst_borrower_type")
-public class BorrowerType implements Serializable {
+@Table(name = "mst_referred_experience")
+public class ReferredExperience implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "description",length = 100)
+
+    @Column(name = "description")
     private String description;
+
     @Column(name = "active")
     private int active;
-
-    public BorrowerType() {
-    }
 
     public int getId() {
         return id;
@@ -49,10 +48,10 @@ public class BorrowerType implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("description", description)
+                .append("active", active)
+                .toString();
     }
 }

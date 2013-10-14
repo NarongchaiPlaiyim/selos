@@ -1,9 +1,7 @@
 package com.clevel.selos.model.view;
 
 
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,8 +18,10 @@ public class PrescreenView implements Serializable{
     private Province businessLocation;
     private Date registerDate;
     private Date referDate;
+    private ReferredExperience referredExperience;
     private boolean tcg;
     private boolean refinance;
+    private Bank refinanceBank;
     private String checkerId;
     private String remark;
     private Date createDate;
@@ -40,6 +40,8 @@ public class PrescreenView implements Serializable{
         this.registerDate = null;
         this.tcg = false;
         this.refinance = false;
+        this.refinanceBank = new Bank();
+        this.referredExperience = new ReferredExperience();
     }
 
     public long getId() {
@@ -106,6 +108,14 @@ public class PrescreenView implements Serializable{
         this.referDate = referDate;
     }
 
+    public ReferredExperience getReferredExperience() {
+        return referredExperience;
+    }
+
+    public void setReferredExperience(ReferredExperience referredExperience) {
+        this.referredExperience = referredExperience;
+    }
+
     public boolean isTcg() {
         return tcg;
     }
@@ -120,6 +130,30 @@ public class PrescreenView implements Serializable{
 
     public void setRefinance(boolean refinance) {
         this.refinance = refinance;
+    }
+
+    public Bank getRefinanceBank() {
+        return refinanceBank;
+    }
+
+    public void setRefinanceBank(Bank refinanceBank) {
+        this.refinanceBank = refinanceBank;
+    }
+
+    public String getCheckerId() {
+        return checkerId;
+    }
+
+    public void setCheckerId(String checkerId) {
+        this.checkerId = checkerId;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreateDate() {
@@ -154,22 +188,6 @@ public class PrescreenView implements Serializable{
         this.modifyBy = modifyBy;
     }
 
-    public String getCheckerId() {
-        return checkerId;
-    }
-
-    public void setCheckerId(String checkerId) {
-        this.checkerId = checkerId;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -181,8 +199,12 @@ public class PrescreenView implements Serializable{
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)
                 .append("referDate", referDate)
+                .append("referredExperience", referredExperience)
                 .append("tcg", tcg)
                 .append("refinance", refinance)
+                .append("refinanceBank", refinanceBank)
+                .append("checkerId", checkerId)
+                .append("remark", remark)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

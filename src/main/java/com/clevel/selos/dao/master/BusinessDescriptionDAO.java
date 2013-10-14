@@ -7,11 +7,9 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
-@Stateless
 public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription,Integer> {
     @Inject
     private Logger log;
@@ -23,7 +21,7 @@ public class BusinessDescriptionDAO extends GenericDAO<BusinessDescription,Integ
     public List<BusinessDescription> getListByBusinessGroup(BusinessGroup businessGroup) {
         log.info("getListByBusinessGroup. (businessGroup: {})",businessGroup);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("businessGroup",businessGroup));
+        criteria.add(Restrictions.eq("businessGroup", businessGroup));
         List<BusinessDescription> businessDescriptions = criteria.list();
         log.info("getListByBusinessGroup. (result size: {})",businessDescriptions.size());
         return businessDescriptions;

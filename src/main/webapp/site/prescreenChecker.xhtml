@@ -88,14 +88,14 @@
                          header="#{prescreenChecker.messageHeader}" message="#{prescreenChecker.message}" >
             <p:commandButton value="OK"
                              process="@this"
-                             update="frmMain"
+                             update=":frmMain"
                              actionListener="#{prescreenChecker.onCompleteCheckNCB}"
                              render="#{prescreenChecker.messageErr}"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
             <p:commandButton value="OK"
                              process="@this"
-                             update="frmMain"
-                             render="#{not prescreenChecker.messageErr}"
+                             update=":frmMain"
+                             render="#{!prescreenChecker.messageErr}"
                              onclick="gotoInbox('#{request.contextPath}/site/inbox.jsf')"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>

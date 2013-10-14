@@ -64,6 +64,8 @@ public class BizInfoDetailView implements Serializable {
     public void reset(){
         this.bizDesc = new BusinessDescription();
         this.bizDesc.setBusinessGroup(new BusinessGroup());
+        this.bizGroup = new BusinessGroup();
+        this.bizType = new BusinessType();
     }
 
     public long getId() {

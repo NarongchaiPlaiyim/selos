@@ -475,7 +475,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         prescreenFacilityDAO.persist(prescreenFacilityList);
 
         //Remove all Customer before add new
-        List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        /*List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
         for(Customer customer : customerListDelete){
             if(customer.getAddressesList() != null){
                 List<Address> addressList = customer.getAddressesList();
@@ -489,7 +489,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 juristicDAO.delete(juristic);
             }
             customerDAO.delete(customer);
-        }
+        }*/
         //customerDAO.delete(customerListDelete);
 
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
