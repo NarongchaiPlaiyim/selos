@@ -51,7 +51,7 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.appNo')}"/>
                                                 </td>
                                                 <td style="width: 200px;">
-                                                    <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -59,11 +59,11 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refAppNo')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                                 <td class="title" style="width: 300px; padding-left: 30px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}" style="margin-right: 10px;"/>
-                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -283,8 +283,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -376,8 +376,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.style')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:selectOneMenu style="width: 185px;">
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.loanRequestPattern.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{basicInfo.borrowingTypeList}"
+                                                                       var="borrowingType"
+                                                                       itemLabel="#{borrowingType.name}"
+                                                                       itemValue="#{borrowingType.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
