@@ -21,7 +21,7 @@
                         <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
                         <f:selectItems value="#{tcgInfo.potentialCollateralList}"
                                        var="potentialCollateralList"
-                                       itemLabel="#{potentialCollateralList.name}"
+                                       itemLabel="#{potentialCollateralList.description}"
                                        itemValue="#{potentialCollateralList.id}"/>
                         <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}" update=":tcgDlgForm"/>
                     </p:selectOneMenu>
@@ -41,7 +41,7 @@
                         <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
                         <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
                                        var="dlgPotentialColToTCGColList"
-                                       itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.name}"
+                                       itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
                                        itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
 
                     </p:selectOneMenu>

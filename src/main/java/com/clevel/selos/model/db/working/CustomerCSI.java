@@ -23,6 +23,12 @@ public class CustomerCSI implements Serializable{
     @JoinColumn(name="warning_id")
     WarningCode warningCode;
 
+    @Column(name="warning_date", length = 8)
+    String warningDate;
+
+    @Column(name="matched_type", length = 1)
+    String matchedType;
+
     public long getId() {
         return id;
     }
@@ -47,12 +53,30 @@ public class CustomerCSI implements Serializable{
         this.warningCode = warningCode;
     }
 
+    public String getWarningDate() {
+        return warningDate;
+    }
+
+    public void setWarningDate(String warningDate) {
+        this.warningDate = warningDate;
+    }
+
+    public String getMatchedType() {
+        return matchedType;
+    }
+
+    public void setMatchedType(String matchedType) {
+        this.matchedType = matchedType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("customer", customer)
                 .append("warningCode", warningCode)
+                .append("warningDate", warningDate)
+                .append("matchedType", matchedType)
                 .toString();
     }
 }

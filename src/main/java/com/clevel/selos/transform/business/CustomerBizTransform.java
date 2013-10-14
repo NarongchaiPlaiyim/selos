@@ -9,10 +9,7 @@ import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualM
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.AddressView;
-import com.clevel.selos.model.view.CustomerAccountView;
-import com.clevel.selos.model.view.CustomerInfoResultView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
@@ -62,6 +59,8 @@ public class CustomerBizTransform extends BusinessTransform {
                     IndividualModel individualModel = individualResult.getIndividualModel();
                     CustomerInfoView customerInfoView = new CustomerInfoView();
 
+                    customerInfoView.reset();
+
                     customerInfoView.setCitizenId(individualModel.getCitizenID());
                     customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
                     if(customerInfoView.getTitleTh() == null){
@@ -105,10 +104,13 @@ public class CustomerBizTransform extends BusinessTransform {
                         if(customerInfoView.getOccupation() == null){
                             customerInfoView.setOccupation(new Occupation());
                         }
+                    }else{
+                        customerInfoView.setOccupation(new Occupation());
                     }
             //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("",individualModel.getBizCode())));
 
-                    CustomerInfoView spouse=new CustomerInfoView();
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
                     spouse.setFirstNameTh(individualModel.getSpouse().getFirstname());
                     spouse.setLastNameTh(individualModel.getSpouse().getLastname());
                     spouse.setCitizenId(individualModel.getSpouse().getCitizenID());
@@ -200,8 +202,6 @@ public class CustomerBizTransform extends BusinessTransform {
                     if(individualModel.getTelephoneNumber4().getTelephoneType().equals("R")){
 
                     }
-
-
 
                     customerInfoView.setMobileNumber(mobileNumber1);
                     customerInfoView.setFaxNumber(faxNumber);
@@ -398,8 +398,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     List<String> accountList = new ArrayList<String>();
                     for(CustomerAccountListModel customerAccountListModel : customerAccountResult.getAccountListModels()){
                         if(!Util.isEmpty(customerAccountListModel.getAccountNo())){
-                            accountList.add(customerAccountListModel.getName());
-//                            accountList.add(customerAccountListModel.getAccountNo());
+                            accountList.add(customerAccountListModel.getAccountNo());
                         }
                     }
                     customerAccountView.setAccountList(accountList);

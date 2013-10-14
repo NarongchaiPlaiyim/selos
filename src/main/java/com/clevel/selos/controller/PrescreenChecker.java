@@ -197,6 +197,12 @@ public class PrescreenChecker implements Serializable {
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
             int index = 0;
             int failedCount = 0;
+            for(CustomerInfoView customerInfoView : customerInfoViewList){
+                if(customerInfoView.isNcbFlag()){
+                    customerInfoView.setNcbReason("");
+                    customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
+                }
+            }
             if(ncbViewList != null){
                 for(NcbView item : ncbViewList){
                     index = 0;
@@ -241,11 +247,6 @@ public class PrescreenChecker implements Serializable {
                     success = false;
                 }
             }
-
-            prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
-
-            log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
-            //success = true;
         } catch(Exception ex){
             ex.printStackTrace();
             log.error("Exception : {}", ex);
@@ -254,7 +255,6 @@ public class PrescreenChecker implements Serializable {
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
-        //TODO get csi data for
 
         //TODO Show message box
         if(success){

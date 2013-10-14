@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.relation.PotentialColToTCGCol;
@@ -16,10 +15,13 @@ public class TCGDetailView implements Serializable {
     private BigDecimal appraisalAmount;
     private BigDecimal ltvValue;
     private boolean isProposeInThisRequest;
+    private String  proposeInThis;
+
 
     private PotentialCollateral  potentialCollateral;
     private TCGCollateralType tcgCollateralType;
     private PotentialColToTCGCol potentialColToTCGCol;
+
 
     public TCGDetailView(){
         reset();
@@ -61,6 +63,7 @@ public class TCGDetailView implements Serializable {
 
     public boolean isProposeInThisRequest() {
         return isProposeInThisRequest;
+
     }
 
     public void setProposeInThisRequest(boolean proposeInThisRequest) {
@@ -92,9 +95,23 @@ public class TCGDetailView implements Serializable {
         this.potentialColToTCGCol = potentialColToTCGCol;
     }
 
+    public String getProposeInThis() {
+        if(isProposeInThisRequest == true){
+             proposeInThis = "Y";
+        }else{
+             proposeInThis = "N";
+        }
+        return proposeInThis;
+    }
+
+    public void setProposeInThis(String proposeInThis) {
+        this.proposeInThis = proposeInThis;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("appraisalAmount", appraisalAmount)
                 .append("ltvValue", ltvValue)
                 .append("isProposeInThisRequest", isProposeInThisRequest)

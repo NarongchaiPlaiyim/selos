@@ -9,6 +9,7 @@ public interface ExceptionMapping {
     public static final String USER_NOT_FOUND = "005";
     public static final String USER_STATUS_DISABLED = "006";
     public static final String USER_STATUS_DELETED = "007";
+    public static final String LDAP_EMPTY_USERNAME = "008";
 
     //BPM exception
     public static final String BPM_NEW_CASE_EXCEPTION = "010";

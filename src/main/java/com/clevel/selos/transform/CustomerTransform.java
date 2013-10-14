@@ -145,6 +145,8 @@ public class CustomerTransform extends Transform {
             address.setExtension(currentAddress.getExtension());
             address.setContactName(currentAddress.getContactName());
             address.setContactPhone(currentAddress.getContactPhone());
+
+            addressList.add(address);
         }
 
         if(customerInfoView.getRegisterAddress() != null){
@@ -195,6 +197,8 @@ public class CustomerTransform extends Transform {
             address.setExtension(registerAddress.getExtension());
             address.setContactName(registerAddress.getContactName());
             address.setContactPhone(registerAddress.getContactPhone());
+
+            addressList.add(address);
         }
 
         if(customerInfoView.getWorkAddress() != null){
@@ -242,6 +246,8 @@ public class CustomerTransform extends Transform {
             address.setExtension(workAddress.getExtension());
             address.setContactName(workAddress.getContactName());
             address.setContactPhone(workAddress.getContactPhone());
+
+            addressList.add(address);
         }
 
         log.info("transformToModel : customer after adding address : {}", customer);
@@ -251,9 +257,6 @@ public class CustomerTransform extends Transform {
             Individual individual = new Individual();
             if(customer.getIndividual() != null){
                 individual = customer.getIndividual();
-            }
-            if(customerInfoView.getIndividualId() != 0){
-                individual.setId(customerInfoView.getIndividualId());
             }
             individual.setBirthDate(customerInfoView.getDateOfBirth());
             individual.setCitizenId(customerInfoView.getCitizenId());
@@ -286,7 +289,11 @@ public class CustomerTransform extends Transform {
         } else {
             //Juristic
             Juristic juristic = new Juristic();
-            //juristic.setCustomer(customer);
+            if(customer.getJuristic() != null){
+                juristic = customer.getJuristic();
+            }
+            juristic.setRegistrationId(customerInfoView.getRegistrationId());
+
             customer.setJuristic(juristic);
         }
 
@@ -313,6 +320,7 @@ public class CustomerTransform extends Transform {
             customerInfoView.setCustomerId(item.getIdNumber());
             customerInfoView.setRelation(item.getRelation());
             customerInfoView.setDocumentType(item.getDocumentType());
+            customerInfoView.setNcbFlag(item.isNcbFlag());
             customerInfoView.setValidId(2);
 
             if(item.getAddressesList() != null){

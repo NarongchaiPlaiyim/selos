@@ -55,20 +55,20 @@ public class DBExecute implements Serializable{
         String clause;
         switch (documentType){
             case CITIZEN_ID:
-                clause = "CITIZEN_ID";
+                clause = "ID_NO";
                 break;
             case PASSPORT:
                 clause = "PASSPORT_NO";
                 break;
             case CORPORATE_ID:
-                clause = "BUSINESS_REG_NO";
+                clause = "BUSINESS_REG";
                 break;
             default:
-                clause = "CITIZEN_ID";
+                clause = "ID_NO";
                 break;
         }
 
-        String SQL_SELECT = "SELECT CITIZEN_ID, PASSPORT_NO, BUSINESS_REG_NO, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, DATE_WARNING_CODE "+
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
                 "FROM "+tableName+" WHERE "+clause+" = ?";
 
         try {
@@ -110,8 +110,8 @@ public class DBExecute implements Serializable{
         log.debug("getWarningCodeListPartialMatched nameTh: {}, nameEn: {}",nameTh,nameEn);
         Map<String,CSIData> warningCodeMap = null;
 
-        String SQL_SELECT = "SELECT CITIZEN_ID, PASSPORT_NO, BUSINESS_REG_NO, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, DATE_WARNING_CODE "+
-                "FROM "+tableName+" WHERE NAME_TH like ? OR NAME_EN like ? AND CITIZEN_ID is null AND PASSPORT_NO is null AND BUSINESS_REG_NO is null";
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
+                "FROM "+tableName+" WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
 
         try {
             log.debug("open connection.");

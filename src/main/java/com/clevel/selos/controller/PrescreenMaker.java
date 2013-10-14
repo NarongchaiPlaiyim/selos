@@ -120,6 +120,30 @@ public class PrescreenMaker implements Serializable {
     private String message;
     private int rowIndex;
 
+    // ***Boolean CustomerDialog*** //
+    //Individual
+    private boolean isDocumentType;
+    private boolean isCitizenId;
+    private boolean isCustomerId;
+    private boolean isServiceSegment;
+    private boolean isRelation;
+    private boolean isCollateralOwner;
+    private boolean isReference;
+    private boolean isPercentShare;
+    private boolean isTitleTh;
+    private boolean isFirstNameTh;
+    private boolean isLastNameTh;
+    private boolean isDateOfBirth;
+    private boolean isAge;
+    private boolean isNationality;
+    private boolean isAddress;
+    private boolean isPostalCode;
+    private boolean isApproxIncome;
+    private boolean isMaritalStatus;
+    //Juristic
+    private boolean isDateOfRegister;
+
+
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
     @Inject
@@ -253,7 +277,6 @@ public class PrescreenMaker implements Serializable {
 
         /*proposeCollateralViewList = prescreenBusinessControl.getProposeCollateral()*/
         if (proposeCollateralViewList == null) { proposeCollateralViewList = new ArrayList<CollateralView>(); }
-
 
         bizInfoViewList = prescreenBusinessControl.getBusinessInfo(workCasePreScreenId);
         if (bizInfoViewList == null) { bizInfoViewList = new ArrayList<BizInfoDetailView>(); }
@@ -461,6 +484,26 @@ public class PrescreenMaker implements Serializable {
 
         borrowerInfo.reset();
         spouseInfo.reset();
+
+        isDocumentType = false;
+        isCitizenId = true;
+        isCustomerId = true;
+        isServiceSegment = true;
+        isRelation = true;
+        isCollateralOwner = true;
+        isReference = true;
+        isPercentShare = true;
+        isTitleTh = true;
+        isFirstNameTh = true;
+        isLastNameTh = true;
+        isDateOfBirth = true;
+        isAge = true;
+        isNationality = true;
+        isAddress = true;
+        isPostalCode = true;
+        isApproxIncome = true;
+        isMaritalStatus= true;
+        isDateOfRegister = true;
     }
 
     public void onEditCustomerInfo() {
@@ -575,20 +618,74 @@ public class PrescreenMaker implements Serializable {
     public void onSearchCustomerInfo() {
         log.info("onSearchCustomerInfo :::");
         log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
-        CustomerInfoResultView customerInfoResultView;
+        CustomerInfoResultView customerInfoResultView = new CustomerInfoResultView();
         messageHeader = "Please wait...";
         message = "Waiting for search customer from RM";
         try{
-            customerInfoResultView = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
+            //customerInfoResultView = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
+            customerInfoResultView.setActionResult(ActionResult.SUCCEED);
+            customerInfoResultView.setCustomerInfoView(new CustomerInfoView());
             log.info("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
-            if(customerInfoResultView.getActionResult() == ActionResult.SUCCEED){
-                borrowerInfo = customerInfoResultView.getCustomerInfoView();
-                log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
-                if(borrowerInfo != null && borrowerInfo.getSpouse() != null){
-                    spouseInfo = borrowerInfo.getSpouse();
+            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCEED)){
+                log.info("onSearchCustomerInfo ActionResult.SUCCEED");
+                if(customerInfoResultView.getCustomerInfoView() != null && customerInfoResultView.getCustomerInfoView().getSpouse() != null){
+                    borrowerInfo = customerInfoResultView.getCustomerInfoView();
+                    if(borrowerInfo.getMaritalStatus().getId() == 2){
+                        spouseInfo = borrowerInfo.getSpouse();
+                    }
+                    isCitizenId = true;
+                    isCustomerId = true;
+                    isServiceSegment = false;
+                    isRelation = false;
+                    isCollateralOwner = false;
+                    isReference = false;
+                    isPercentShare = false;
+                    isTitleTh = false;
+                    isFirstNameTh = false;
+                    isLastNameTh = false;
+                    isDateOfBirth = false;
+                    isAge = true;
+                    isNationality = false;
+                    isAddress = false;
+                    isPostalCode = false;
+                    isApproxIncome = false;
+                    isMaritalStatus= false;
+                    isDateOfRegister = false;
+                    isDocumentType = false;
+                }else{
+                    log.info("else borrowerInfo = null");
+                    if(borrowerInfo.getSearchBy() == 2){
+                        isDocumentType = true;
+                    }else{
+                        isDocumentType = false;
+                    }
+                    isCitizenId = true;
+                    isCustomerId = true;
+                    isServiceSegment = true;
+                    isRelation = true;
+                    isCollateralOwner = true;
+                    isReference = true;
+                    isPercentShare = true;
+                    isTitleTh = true;
+                    isFirstNameTh = true;
+                    isLastNameTh = true;
+                    isDateOfBirth = true;
+                    isAge = true;
+                    isNationality = true;
+                    isAddress = true;
+                    isPostalCode = true;
+                    isApproxIncome = true;
+                    isMaritalStatus= true;
+                    isDateOfRegister = true;
+                    CustomerEntity customerEntity = new CustomerEntity();
+                    customerEntity.setId(0);
+                    borrowerInfo.setCustomerEntity(customerEntity);
+                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    message = "Search Not Found";
+                    //TODO Show message box
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
                 }
-                //borrowerInfo.setFirstNameTh(customerInfoResultView.getCustomerInfoView().getFirstNameTh());
-                //log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
+
             }else {
                 messageHeader = customerInfoResultView.getActionResult().toString();
                 message = customerInfoResultView.getReason();
@@ -596,6 +693,7 @@ public class PrescreenMaker implements Serializable {
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
         }catch (Exception ex){
+            log.info("onSearchCustomerInfo Exception");
             messageHeader = "Failed to Search Customer.";
             message = ex.getMessage();
             //TODO Show message box
@@ -605,15 +703,69 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeCustomerEntity(){
+
         log.info("onChangeCustomerEntity ::: Custoemr Entity : {}", borrowerInfo.getCustomerEntity().getId());
         titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
+        log.info("onChangeCustomerEntity ::{}", borrowerInfo);
+        if ( borrowerInfo.getCustomerEntity().getId() == 1){
+            isDocumentType = false;
+        }else{
+            isDocumentType = true;
+        }
+        isCitizenId = false;
+        isCustomerId = false;
+        isServiceSegment = false;
+        isRelation = false;
+        isCollateralOwner = false;
+        isReference = false;
+        isPercentShare = false;
+        isTitleTh = false;
+        isFirstNameTh = false;
+        isLastNameTh = false;
+        isDateOfBirth = false;
+        isAge = false;
+        isNationality = false;
+        isAddress = false;
+        isPostalCode = false;
+        isApproxIncome = false;
+        isMaritalStatus= false;
+        isDateOfRegister = false;
     }
 
     public void onChangeMaritalStatus(){
         log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
 
-    // *** Function For BusinessInfoView *** //
+    public void onDisableDocType(){
+        log.info("onDisableDocType ::: {}", borrowerInfo.getSearchBy());
+        if(borrowerInfo.getSearchBy() == 2){
+            isDocumentType = true;
+        }else{
+            isDocumentType = false;
+        }
+    }
+
+    // *** Calculate Age And Year In Business ***//
+    public void onCalAge(String type){
+        log.info("onCalAge ::: DateOfBirth:{} ", borrowerInfo.getDateOfBirth());
+        int age = 0;
+        if(type.trim().toUpperCase().equals("AGE")){
+            if(borrowerInfo.getDateOfBirth() != null){
+                age = Util.calAge(borrowerInfo.getDateOfBirth());
+                borrowerInfo.setAge(age);
+            }else if(type.trim().toUpperCase().equals("SPOUSEAGE")){
+                age = Util.calAge(borrowerInfo.getSpouse().getDateOfBirth());
+                spouseInfo.setAge(age);
+                borrowerInfo.setSpouse(spouseInfo);
+            }else if(type.trim().toUpperCase().equals("DATEOFREGISTER")){
+                age = Util.calAge(borrowerInfo.getDateOfRegister());
+                borrowerInfo.setAge(age);
+            }
+        }
+        log.info("onCalAge ::: DateOfBirth:{}", age);
+    }
+
+        // *** Function For BusinessInfoView *** //
     public void onAddBusinessInfo() {
         log.info("onAddBusinessInfo ::: reset form");
         /*** Reset Form ***/
@@ -1322,5 +1474,157 @@ public class PrescreenMaker implements Serializable {
 
     public void setBdmCheckerList(List<User> bdmCheckerList) {
         this.bdmCheckerList = bdmCheckerList;
+    }
+    // ***Boolean CustomerDialog***
+    public boolean isCitizenId() {
+        return isCitizenId;
+    }
+
+    public void setCitizenId(boolean citizenId) {
+        isCitizenId = citizenId;
+    }
+
+    public boolean isCustomerId() {
+        return isCustomerId;
+    }
+
+    public void setCustomerId(boolean customerId) {
+        isCustomerId = customerId;
+    }
+
+    public boolean isServiceSegment() {
+        return isServiceSegment;
+    }
+
+    public void setServiceSegment(boolean serviceSegment) {
+        isServiceSegment = serviceSegment;
+    }
+
+    public boolean isRelation() {
+        return isRelation;
+    }
+
+    public void setRelation(boolean relation) {
+        isRelation = relation;
+    }
+
+    public boolean isCollateralOwner() {
+        return isCollateralOwner;
+    }
+
+    public void setCollateralOwner(boolean collateralOwner) {
+        isCollateralOwner = collateralOwner;
+    }
+
+    public boolean isReference() {
+        return isReference;
+    }
+
+    public void setReference(boolean reference) {
+        isReference = reference;
+    }
+
+    public boolean isPercentShare() {
+        return isPercentShare;
+    }
+
+    public void setPercentShare(boolean percentShare) {
+        isPercentShare = percentShare;
+    }
+
+    public boolean isTitleTh() {
+        return isTitleTh;
+    }
+
+    public void setTitleTh(boolean titleTh) {
+        isTitleTh = titleTh;
+    }
+
+    public boolean isFirstNameTh() {
+        return isFirstNameTh;
+    }
+
+    public void setFirstNameTh(boolean firstNameTh) {
+        isFirstNameTh = firstNameTh;
+    }
+
+    public boolean isLastNameTh() {
+        return isLastNameTh;
+    }
+
+    public void setLastNameTh(boolean lastNameTh) {
+        isLastNameTh = lastNameTh;
+    }
+
+    public boolean isDateOfBirth() {
+        return isDateOfBirth;
+    }
+
+    public void setDateOfBirth(boolean dateOfBirth) {
+        isDateOfBirth = dateOfBirth;
+    }
+
+    public boolean isAge() {
+        return isAge;
+    }
+
+    public void setAge(boolean age) {
+        isAge = age;
+    }
+
+    public boolean isNationality() {
+        return isNationality;
+    }
+
+    public void setNationality(boolean nationality) {
+        isNationality = nationality;
+    }
+
+    public boolean isAddress() {
+        return isAddress;
+    }
+
+    public void setAddress(boolean address) {
+        isAddress = address;
+    }
+
+    public boolean isPostalCode() {
+        return isPostalCode;
+    }
+
+    public void setPostalCode(boolean postalCode) {
+        isPostalCode = postalCode;
+    }
+
+    public boolean isApproxIncome() {
+        return isApproxIncome;
+    }
+
+    public void setApproxIncome(boolean approxIncome) {
+        isApproxIncome = approxIncome;
+    }
+
+    public boolean isMaritalStatus() {
+        return isMaritalStatus;
+    }
+
+    public void setMaritalStatus(boolean maritalStatus) {
+        isMaritalStatus = maritalStatus;
+    }
+
+    public boolean isDateOfRegister() {
+        return isDateOfRegister;
+    }
+
+    public void setDateOfRegister(boolean dateOfRegister) {
+        isDateOfRegister = dateOfRegister;
+    }
+
+    public boolean isDocumentType() {
+        return isDocumentType;
+    }
+
+    public void setDocumentType(boolean documentType) {
+        isDocumentType = documentType;
     }
 }

@@ -1,8 +1,11 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name="wrk_tcg")
@@ -15,6 +18,25 @@ public class TCG implements Serializable{
     @ManyToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
+
+    @Column(name="active")
+    private boolean active;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
 
     @Column(name="tcg_flag")
     private boolean tcgFlag;
@@ -35,10 +57,23 @@ public class TCG implements Serializable{
     private BigDecimal tcbFloodAmount;
 
     @Column(name="collateral_rule_result")
-    private String collateralRuleResult;
+    private BigDecimal collateralRuleResult;
 
     @Column(name="request_tcg_amount")
     private BigDecimal requestTCGAmount;
+
+    @Column(name="sum_appraisal_amount")
+    private BigDecimal sumAppraisalAmount;
+
+    @Column(name="sum_ltv_value")
+    private BigDecimal sumLtvValue;
+
+    @Column(name="sum_in_this_appraisal_amount")
+    private BigDecimal sumInThisAppraisalAmount;
+
+    @Column(name="sum_in_this_ltv_value")
+    private BigDecimal sumInThisLtvValue;
+
 
     public long getId() {
         return id;
@@ -105,11 +140,11 @@ public class TCG implements Serializable{
         this.tcbFloodAmount = tcbFloodAmount;
     }
 
-    public String getCollateralRuleResult() {
+    public BigDecimal getCollateralRuleResult() {
         return collateralRuleResult;
     }
 
-    public void setCollateralRuleResult(String collateralRuleResult) {
+    public void setCollateralRuleResult(BigDecimal collateralRuleResult) {
         this.collateralRuleResult = collateralRuleResult;
     }
 
@@ -119,5 +154,77 @@ public class TCG implements Serializable{
 
     public void setRequestTCGAmount(BigDecimal requestTCGAmount) {
         this.requestTCGAmount = requestTCGAmount;
+    }
+
+    public BigDecimal getSumAppraisalAmount() {
+        return sumAppraisalAmount;
+    }
+
+    public void setSumAppraisalAmount(BigDecimal sumAppraisalAmount) {
+        this.sumAppraisalAmount = sumAppraisalAmount;
+    }
+
+    public BigDecimal getSumLtvValue() {
+        return sumLtvValue;
+    }
+
+    public void setSumLtvValue(BigDecimal sumLtvValue) {
+        this.sumLtvValue = sumLtvValue;
+    }
+
+    public BigDecimal getSumInThisAppraisalAmount() {
+        return sumInThisAppraisalAmount;
+    }
+
+    public void setSumInThisAppraisalAmount(BigDecimal sumInThisAppraisalAmount) {
+        this.sumInThisAppraisalAmount = sumInThisAppraisalAmount;
+    }
+
+    public BigDecimal getSumInThisLtvValue() {
+        return sumInThisLtvValue;
+    }
+
+    public void setSumInThisLtvValue(BigDecimal sumInThisLtvValue) {
+        this.sumInThisLtvValue = sumInThisLtvValue;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 }
