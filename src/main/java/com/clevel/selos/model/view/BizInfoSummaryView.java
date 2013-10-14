@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BizInfoSummaryView {
-
-    private String bizLocationDetail;
+    private long id;
     private String bizLocationName;
     private String isRental;
     private String ownerName;
@@ -63,12 +62,12 @@ public class BizInfoSummaryView {
     public BizInfoSummaryView() {
     }
 
-    public String getBizLocationDetail() {
-        return bizLocationDetail;
+    public long getId() {
+        return id;
     }
 
-    public void setBizLocationDetail(String bizLocationDetail) {
-        this.bizLocationDetail = bizLocationDetail;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getBizLocationName() {

@@ -8,11 +8,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
+    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView){
+
+        BizInfoDetail bizInfoDetail = new BizInfoDetail();
+
+        if(bizInfoDetailView.getId()!= 0){
+            bizInfoDetail.setId(bizInfoDetailView.getId());
+        }
+
+        bizInfoDetail.setBizInfoText(bizInfoDetailView.getBizInfoText());
+        bizInfoDetail.setTradeType(bizInfoDetailView.getTradeType());
+        bizInfoDetail.setBusinessType(bizInfoDetailView.getBizType());
+        bizInfoDetail.setBusinessGroup(bizInfoDetailView.getBizGroup());
+        bizInfoDetail.setBusinessDescription(bizInfoDetailView.getBizDesc());
+        bizInfoDetail.setBizCode(bizInfoDetailView.getBizCode());
+        bizInfoDetail.setBizComment(bizInfoDetailView.getBizComment());
+        bizInfoDetail.setIncomeFactor(bizInfoDetailView.getIncomeFactor());
+        bizInfoDetail.setAdjustedIncomeFactor(bizInfoDetailView.getAdjustedIncomeFactor());
+        bizInfoDetail.setPercentBiz(bizInfoDetailView.getPercentBiz());
+        bizInfoDetail.setBizPermission(bizInfoDetailView.getBizPermission());
+        bizInfoDetail.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
+        bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
+        bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
+        bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
+        bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
+        bizInfoDetail.setSupplierTotalPercentCredit(bizInfoDetailView.getSupplierTotalPercentCredit());
+        bizInfoDetail.setSupplierTotalCreditTerm(bizInfoDetailView.getSupplierTotalCreditTerm());
+        bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustPercentCredit());
+        bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustCreditTerm());
+        bizInfoDetail.setBuyerTotalPercentBuyVolume(bizInfoDetailView.getBuyerTotalPercentBuyVolume());
+        bizInfoDetail.setBuyerTotalPercentCredit(bizInfoDetailView.getBuyerTotalPercentCredit());
+        bizInfoDetail.setBuyerTotalCreditTerm(bizInfoDetailView.getBuyerTotalCreditTerm());
+        bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustPercentCredit());
+        bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustCreditTerm());
+        bizInfoDetail.setStandardAccountReceivable(bizInfoDetailView.getStandardAccountReceivable());
+        bizInfoDetail.setAveragePurchaseAmount(bizInfoDetailView.getAveragePurchaseAmount());
+        bizInfoDetail.setPurchasePercentCash(bizInfoDetailView.getPurchasePercentCash());
+        bizInfoDetail.setPurchasePercentCredit(bizInfoDetailView.getPurchasePercentCredit());
+        bizInfoDetail.setPurchasePercentLocal(bizInfoDetailView.getPurchasePercentLocal());
+        bizInfoDetail.setPurchasePercentForeign( bizInfoDetailView.getPurchasePercentForeign());
+        bizInfoDetail.setPurchaseTerm(bizInfoDetailView.getPurchaseTerm());
+        bizInfoDetail.setStandardAccountPayable( bizInfoDetailView.getStandardAccountPayable());
+        bizInfoDetail.setAveragePayableAmount(bizInfoDetailView.getAveragePayableAmount());
+        bizInfoDetail.setPayablePercentCash(bizInfoDetailView.getPayablePercentCash());
+        bizInfoDetail.setPayablePercentCredit(bizInfoDetailView.getPayablePercentCredit());
+        bizInfoDetail.setPayablePercentLocal(bizInfoDetailView.getPayablePercentLocal());
+        bizInfoDetail.setPayablePercentForeign( bizInfoDetailView.getPayablePercentForeign());
+        bizInfoDetail.setPayableTerm(bizInfoDetailView.getPayableTerm());
+        bizInfoDetail.setStandardStock(bizInfoDetailView.getStandardStock());
+        bizInfoDetail.setStockDurationBDM(bizInfoDetailView.getStockDurationBDM());
+        bizInfoDetail.setStockDurationUW(bizInfoDetailView.getStockDurationUW());
+        bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
+        bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
+        return bizInfoDetail;
+    }
 
     public BizInfoDetailView transformToView(BizInfoDetail bizInfoDetail){
 
         BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
 
+        bizInfoDetailView.setId(bizInfoDetail.getId());
         bizInfoDetailView.setBizInfoText(bizInfoDetail.getBizInfoText());
         bizInfoDetailView.setTradeType(bizInfoDetail.getTradeType());
         bizInfoDetailView.setBizType(bizInfoDetail.getBusinessType());
@@ -104,56 +159,6 @@ public class BizInfoDetailTransform extends Transform {
         }
 
         return bizInfoDetailList;
-    }
-
-    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView){
-
-        BizInfoDetail bizInfoDetail = new BizInfoDetail();
-        bizInfoDetail.setBizInfoText(bizInfoDetailView.getBizInfoText());
-        bizInfoDetail.setTradeType(bizInfoDetailView.getTradeType());
-        bizInfoDetail.setBusinessType(bizInfoDetailView.getBizType());
-        bizInfoDetail.setBusinessGroup(bizInfoDetailView.getBizGroup());
-        bizInfoDetail.setBusinessDescription(bizInfoDetailView.getBizDesc());
-        bizInfoDetail.setBizCode(bizInfoDetailView.getBizCode());
-        bizInfoDetail.setBizComment(bizInfoDetailView.getBizComment());
-        bizInfoDetail.setIncomeFactor(bizInfoDetailView.getIncomeFactor());
-        bizInfoDetail.setAdjustedIncomeFactor(bizInfoDetailView.getAdjustedIncomeFactor());
-        bizInfoDetail.setPercentBiz(bizInfoDetailView.getPercentBiz());
-        bizInfoDetail.setBizPermission(bizInfoDetailView.getBizPermission());
-        bizInfoDetail.setBizDocPermission(bizInfoDetailView.getBizDocPermission());
-        bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
-        bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
-        bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
-        bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
-        bizInfoDetail.setSupplierTotalPercentCredit(bizInfoDetailView.getSupplierTotalPercentCredit());
-        bizInfoDetail.setSupplierTotalCreditTerm(bizInfoDetailView.getSupplierTotalCreditTerm());
-        bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustPercentCredit());
-        bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustCreditTerm());
-        bizInfoDetail.setBuyerTotalPercentBuyVolume(bizInfoDetailView.getBuyerTotalPercentBuyVolume());
-        bizInfoDetail.setBuyerTotalPercentCredit(bizInfoDetailView.getBuyerTotalPercentCredit());
-        bizInfoDetail.setBuyerTotalCreditTerm(bizInfoDetailView.getBuyerTotalCreditTerm());
-        bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustPercentCredit());
-        bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustCreditTerm());
-        bizInfoDetail.setStandardAccountReceivable(bizInfoDetailView.getStandardAccountReceivable());
-        bizInfoDetail.setAveragePurchaseAmount(bizInfoDetailView.getAveragePurchaseAmount());
-        bizInfoDetail.setPurchasePercentCash(bizInfoDetailView.getPurchasePercentCash());
-        bizInfoDetail.setPurchasePercentCredit(bizInfoDetailView.getPurchasePercentCredit());
-        bizInfoDetail.setPurchasePercentLocal(bizInfoDetailView.getPurchasePercentLocal());
-        bizInfoDetail.setPurchasePercentForeign( bizInfoDetailView.getPurchasePercentForeign());
-        bizInfoDetail.setPurchaseTerm(bizInfoDetailView.getPurchaseTerm());
-        bizInfoDetail.setStandardAccountPayable( bizInfoDetailView.getStandardAccountPayable());
-        bizInfoDetail.setAveragePayableAmount(bizInfoDetailView.getAveragePayableAmount());
-        bizInfoDetail.setPayablePercentCash(bizInfoDetailView.getPayablePercentCash());
-        bizInfoDetail.setPayablePercentCredit(bizInfoDetailView.getPayablePercentCredit());
-        bizInfoDetail.setPayablePercentLocal(bizInfoDetailView.getPayablePercentLocal());
-        bizInfoDetail.setPayablePercentForeign( bizInfoDetailView.getPayablePercentForeign());
-        bizInfoDetail.setPayableTerm(bizInfoDetailView.getPayableTerm());
-        bizInfoDetail.setStandardStock(bizInfoDetailView.getStandardStock());
-        bizInfoDetail.setStockDurationBDM(bizInfoDetailView.getStockDurationBDM());
-        bizInfoDetail.setStockDurationUW(bizInfoDetailView.getStockDurationUW());
-        bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
-        bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
-        return bizInfoDetail;
     }
 
 }

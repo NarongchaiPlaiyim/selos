@@ -47,7 +47,7 @@
                                 <table>
                                     <tr>
                                         <td>ชื่อสถานประกอบการณ์</td>
-                                        <td><p:inputText id="bizLocationDetail" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationDetail}"/></td>
+                                        <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}"/></td>
                                     </tr>
                                     <tr>
                                         <td>สถานประกอบการเป็นที่เช่า  </td>
@@ -94,14 +94,14 @@
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
                                                                            itemValue="#{district.id}"/>
-                                                            <p:ajax listener="#{borrowerInfoIndividual.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
+                                                            <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
 
                                                         <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
                                                                          id="subDistrictCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
-                                                                           var="subDistrict3"
+                                                                           var="subDistrict"
                                                                            itemLabel="#{subDistrict.name}"
                                                                            itemValue="#{subDistrict.code}"/>
                                                         </p:selectOneMenu>

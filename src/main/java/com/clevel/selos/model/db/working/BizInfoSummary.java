@@ -27,9 +27,6 @@ public class BizInfoSummary implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_SUM_ID")
     private long id;
 
-    @Column(name="biz_location_detail")
-    private String bizLocationDetail;
-
     @Column(name="bizLocationName")
     private String bizLocationName;
 
@@ -187,14 +184,6 @@ public class BizInfoSummary implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getBizLocationDetail() {
-        return bizLocationDetail;
-    }
-
-    public void setBizLocationDetail(String bizLocationDetail) {
-        this.bizLocationDetail = bizLocationDetail;
     }
 
     public String getBizLocationName() {
@@ -579,7 +568,6 @@ public class BizInfoSummary implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 
                 .append("id", id)
-                .append("bizLocationDetail", bizLocationDetail)
                 .append("bizLocationName", bizLocationName)
                 .append("isRental", isRental)
                 .append("ownerName", ownerName)

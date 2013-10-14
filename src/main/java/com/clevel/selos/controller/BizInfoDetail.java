@@ -1,9 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
+import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
@@ -22,13 +24,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 5/9/2556
- * Time: 16:26 น.
- * To change this template use File | Settings | File Templates.
- */
 @ViewScoped
 @ManagedBean(name = "bizInfoDetail")
 public class BizInfoDetail implements Serializable {
@@ -50,6 +45,9 @@ public class BizInfoDetail implements Serializable {
     private String modeForButton;
     private String dlgStakeName;
     private int bizGroupId;
+    long bizInfoSummaryId;
+    long bizInfoDetailViewId;
+    private String descType;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -68,6 +66,8 @@ public class BizInfoDetail implements Serializable {
     private BusinessGroup bizGroup;
     private BusinessDescription bizDesc;
 
+    private BizInfoSummaryView bizInfoSummaryView;
+
     @Inject
     Logger log;
     @Inject
@@ -76,6 +76,9 @@ public class BizInfoDetail implements Serializable {
     private BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
     BizInfoDetailControl bizInfoDetailControl;
+    @Inject
+    private BizInfoSummaryControl bizInfoSummaryControl;
+
     public BizInfoDetail(){
 
     }
@@ -83,43 +86,123 @@ public class BizInfoDetail implements Serializable {
     @PostConstruct
     public void onCreation(){
         log.info("onCreation ");
-        bizInfoDetailView = new BizInfoDetailView();
 
-        bizProductDetailViewList = new ArrayList<BizProductDetailView>();
-        supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
-        buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+        HttpSession session = FacesUtil.getSession(true);
 
-        bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-        bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-        bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        log.info( " get FROM session workCaseId is " + workCaseId);
 
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-        bizProductDetailView = new BizProductDetailView();
+        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        bizInfoSummaryId = bizInfoSummaryView.getId();
+        log.info("bizInfoSummaryId     is " + bizInfoSummaryId);
 
+        bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+        log.info("bizInfoDetailViewId  is " + bizInfoDetailViewId);
 
-        bizGroup = new BusinessGroup();
-        bizDesc = new BusinessDescription();
+        descType = "";
 
-        bizInfoDetailView.setBizDesc(bizDesc);
-        bizInfoDetailView.setBizGroup(bizGroup);
-        bizInfoDetailView.setBizPermission("Y");
-        log.info("bizInfoDetailView " + bizInfoDetailView);
+        //search Single by bizInfoSummaryId and   bizInfoDetailViewId
 
         businessGroupList = businessGroupDAO.findAll();
 
+        if(bizInfoDetailViewId == -1 ){
+
+            log.info( "bizInfoDetailView NEW RECORD");
+
+
+
+            bizInfoDetailView = new BizInfoDetailView();
+
+            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
+            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
+            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+            bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
+            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+
+            bizStakeHolderDetailView = new BizStakeHolderDetailView();
+            bizProductDetailView = new BizProductDetailView();
+
+            bizGroup = new BusinessGroup();
+            bizDesc = new BusinessDescription();
+
+            bizInfoDetailView.setBizDesc(bizDesc);
+            bizInfoDetailView.setBizGroup(bizGroup);
+
+            log.info("bizInfoDetailView " + bizInfoDetailView);
+        }else{
+            //
+            log.info( "bizInfoDetailView FIND BY ID ");
+
+
+            bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
+
+            log.info( "bizInfoDetailView FIND BY ID " +  bizInfoDetailView.getId());
+            log.info( "bizInfoDetailView getBizGroup " +  bizInfoDetailView.getBizGroup());
+            log.info( "bizInfoDetailView getBizDesc " +  bizInfoDetailView.getBizDesc());
+            log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
+            if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
+                bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
+            }else {
+                bizProductDetailViewList =   new ArrayList<BizProductDetailView>();
+            }
+            log.info( "bizInfoDetailView getSupplierDetailList Size " +  bizInfoDetailView.getSupplierDetailList().size());
+            if(bizInfoDetailView.getSupplierDetailList().size()>0){
+                supplierDetailList =   bizInfoDetailView.getSupplierDetailList();
+            }else {
+                supplierDetailList =   new ArrayList<BizStakeHolderDetailView>();
+            }
+            log.info( "bizInfoDetailView getBuyerDetailList Size " +  bizInfoDetailView.getBuyerDetailList().size());
+            if(bizInfoDetailView.getBuyerDetailList().size()>0){
+                buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
+            }else {
+                buyerDetailList =   new ArrayList<BizStakeHolderDetailView>();
+            }
+            bizGroup =  bizInfoDetailView.getBizGroup();
+            bizDesc =  bizInfoDetailView.getBizDesc();
+
+            descType = "1";
+            onChangeBusinessGroup();
+            onChangeBusinessDesc();
+            descType = "";
+
+
+
+            /*bizInfoDetailView = new BizInfoDetailView();
+
+            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
+            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
+            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+            bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
+            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+
+            bizStakeHolderDetailView = new BizStakeHolderDetailView();
+            bizProductDetailView = new BizProductDetailView();
+
+            bizGroup = new BusinessGroup();
+            bizDesc = new BusinessDescription();
+
+            bizInfoDetailView.setBizDesc(bizDesc);
+            bizInfoDetailView.setBizGroup(bizGroup);
+            bizInfoDetailView.setBizPermission("Y");
+            log.info("bizInfoDetailView " + bizInfoDetailView);     */
+        }
         log.info("businessGroupList size is ====  " + businessGroupList.size());
     }
 
     public void onChangeBusinessGroup(){
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizGroup);
 
-        bizInfoDetailView.setBizCode("");
-        bizInfoDetailView.setIncomeFactor(null);
-        bizInfoDetailView.setAdjustedIncomeFactor(null);
-        bizInfoDetailView.setBizComment("");
-        bizInfoDetailView.setBizPermission("");
-        bizInfoDetailView.setBizDocPermission("");
-        bizInfoDetailView.setBizDocExpiryDate("");
+        if(descType.equals("")){
+            bizInfoDetailView.setBizCode("");
+            bizInfoDetailView.setIncomeFactor(null);
+            bizInfoDetailView.setAdjustedIncomeFactor(null);
+            bizInfoDetailView.setBizComment("");
+            bizInfoDetailView.setBizPermission("");
+            bizInfoDetailView.setBizDocPermission("");
+            bizInfoDetailView.setBizDocExpiryDate("");
+        }
     }
 
     public void onChangeBusinessDesc(){
@@ -129,11 +212,13 @@ public class BizInfoDetail implements Serializable {
         viewBizDesc = bizInfoDetailView.getBizDesc();
         businessDesc = bizInfoDetailControl.onFindBizDescByID(viewBizDesc);
 
-        bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
-        bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
-        bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
-        bizInfoDetailView.setBizComment(businessDesc.getComment());
-        bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
+        if(descType.equals("")){
+            bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
+            bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
+            bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
+            bizInfoDetailView.setBizComment(businessDesc.getComment());
+            bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
+        }
 
     }
 
@@ -384,17 +469,8 @@ public class BizInfoDetail implements Serializable {
 
         log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoDetailView);
 
-        log.info( " Initial session ");
-        HttpSession session = FacesUtil.getSession(true);
-        log.info( " Initial session is " + session);
 
-        session.setAttribute("workCaseId", 10001);
-
-        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        log.info( " get FROM session workCaseId is " + workCaseId);
-
-        bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView);
+        bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView,bizInfoSummaryId);
 
     }
 
