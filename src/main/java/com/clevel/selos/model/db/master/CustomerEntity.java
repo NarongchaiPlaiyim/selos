@@ -19,6 +19,11 @@ public class CustomerEntity implements Serializable {
     private String description;
     @Column(name = "active")
     private int active;
+    @Column(name = "default_qualitative")
+    private int defaultQualitative;
+    @Column(name = "change_quli_enable")
+    private boolean changeQultiEnable;
+
 
     public CustomerEntity() {
     }
@@ -47,12 +52,30 @@ public class CustomerEntity implements Serializable {
         this.active = active;
     }
 
+    public int getDefaultQualitative() {
+        return defaultQualitative;
+    }
+
+    public void setDefaultQualitative(int defaultQualitative) {
+        this.defaultQualitative = defaultQualitative;
+    }
+
+    public boolean isChangeQultiEnable() {
+        return changeQultiEnable;
+    }
+
+    public void setChangeQultiEnable(boolean changeQultiEnable) {
+        this.changeQultiEnable = changeQultiEnable;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("description", description).
                 append("active", active).
+                append("defaultQualitative", defaultQualitative).
+                append("changeQultiEnable", changeQultiEnable).
                 toString();
     }
 }

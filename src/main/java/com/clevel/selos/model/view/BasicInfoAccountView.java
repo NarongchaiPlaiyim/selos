@@ -5,12 +5,15 @@ import com.clevel.selos.model.db.master.OpenAccountPurpose;
 import com.clevel.selos.model.db.master.OpenAccountType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BasicInfoAccountView implements Serializable {
     private String accountName;
     private OpenAccountType accountType;
     private OpenAccountProduct product;
-    private OpenAccountPurpose purpose;
+    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
+    private String purposeForShow;
 
     public BasicInfoAccountView(){
         reset();
@@ -19,7 +22,7 @@ public class BasicInfoAccountView implements Serializable {
     public void reset(){
         this.accountType = new OpenAccountType();
         this.product = new OpenAccountProduct();
-        this.purpose = new OpenAccountPurpose();
+        this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
     }
 
     public String getAccountName() {
@@ -46,11 +49,19 @@ public class BasicInfoAccountView implements Serializable {
         this.product = product;
     }
 
-    public OpenAccountPurpose getPurpose() {
-        return purpose;
+    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeView() {
+        return basicInfoAccountPurposeView;
     }
 
-    public void setPurpose(OpenAccountPurpose purpose) {
-        this.purpose = purpose;
+    public void setBasicInfoAccountPurposeView(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView) {
+        this.basicInfoAccountPurposeView = basicInfoAccountPurposeView;
+    }
+
+    public String getPurposeForShow() {
+        return purposeForShow;
+    }
+
+    public void setPurposeForShow(String purposeForShow) {
+        this.purposeForShow = purposeForShow;
     }
 }

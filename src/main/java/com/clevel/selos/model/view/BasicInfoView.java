@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BasicInfoView implements Serializable {
+    private long id;
     private String appNo;
     private String refAppNo;
     private String caNo;
@@ -29,7 +30,7 @@ public class BasicInfoView implements Serializable {
     private boolean isRefOut;
     private Bank refinanceOut;
     private RiskType riskType;
-    private String qualitative;
+    private int qualitative;
     private boolean existingSME;
     private String since;
     private Date lastReviewDate;
@@ -38,12 +39,16 @@ public class BasicInfoView implements Serializable {
     private boolean isLoan;
     private boolean isMoreOneYear;
     private boolean isAnnual;
-//    private xxxxx style;
+    private BorrowingType loanRequestPattern;
     private String refName;
     private String refId;
     private List<BasicInfoAccountView> basicInfoAccountViews;
     private boolean isApplyBA;
     private String baPayment;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
     public BasicInfoView(){
         reset();
@@ -57,7 +62,16 @@ public class BasicInfoView implements Serializable {
         this.refinanceOut = new Bank();
         this.riskType = new RiskType();
         this.sbfScore = new SBFScore();
+        this.loanRequestPattern = new BorrowingType();
         this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAppNo() {
@@ -220,11 +234,11 @@ public class BasicInfoView implements Serializable {
         this.riskType = riskType;
     }
 
-    public String getQualitative() {
+    public int getQualitative() {
         return qualitative;
     }
 
-    public void setQualitative(String qualitative) {
+    public void setQualitative(int qualitative) {
         this.qualitative = qualitative;
     }
 
@@ -292,6 +306,14 @@ public class BasicInfoView implements Serializable {
         isAnnual = annual;
     }
 
+    public BorrowingType getLoanRequestPattern() {
+        return loanRequestPattern;
+    }
+
+    public void setLoanRequestPattern(BorrowingType loanRequestPattern) {
+        this.loanRequestPattern = loanRequestPattern;
+    }
+
     public String getRefName() {
         return refName;
     }
@@ -330,5 +352,37 @@ public class BasicInfoView implements Serializable {
 
     public void setBaPayment(String baPayment) {
         this.baPayment = baPayment;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 }
