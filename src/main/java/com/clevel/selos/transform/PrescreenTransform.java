@@ -29,7 +29,11 @@ public class PrescreenTransform extends Transform {
         prescreen.setExpectedSubmitDate(prescreenView.getExpectedSubmitDate());
         prescreen.setBusinessLocation(prescreenView.getBusinessLocation());
         prescreen.setRegisterDate(prescreenView.getRegisterDate());
+        prescreen.setReferredDate(prescreenView.getReferDate());
+        prescreen.setReferredExperience(prescreenView.getReferredExperience());
         prescreen.setRefinance(prescreenView.isRefinance());
+        prescreen.setRefinanceBank(prescreenView.getRefinanceBank());
+        prescreen.setBorrowingType(prescreenView.getBorrowingType());
         prescreen.setModifyDate(new DateTime().now().toDate());
         prescreen.setModifyBy(user);
         return prescreen;
@@ -58,6 +62,10 @@ public class PrescreenTransform extends Transform {
         prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
         if(prescreenView.getRefinanceBank() == null){
             prescreenView.setRefinanceBank(new Bank());
+        }
+        prescreenView.setBorrowingType(prescreen.getBorrowingType());
+        if(prescreenView.getBorrowingType() == null){
+            prescreenView.setBorrowingType(new BorrowingType());
         }
 
         prescreenView.setCreateDate(prescreen.getCreateDate());

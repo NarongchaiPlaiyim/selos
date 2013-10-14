@@ -509,10 +509,78 @@ public class PrescreenBusinessControl extends BusinessControl {
                 juristicDAO.persist(juristic);
             }
         }
-        //customerDAO.persist(customerList);
 
         /*//Remove all Business before add new
         List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
+        if(bizInfoListDelete != null){
+            bizInfoDAO.delete(bizInfoListDelete);
+        }
+
+        List<BizInfoDetail> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
+        bizInfoDAO.persist(bizInfoList);*/
+    }
+
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoViewList, long workCasePreScreenId, User user){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+
+        Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
+        prescreenDAO.persist(prescreen);
+
+        //Remove all Facility before add new
+        List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
+        if(prescreenFacilitieListDelete != null){
+            prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
+        }
+
+        List<PrescreenFacility> prescreenFacilityList = prescreenFacilityTransform.transformToModel(facilityViewList, prescreen);
+        prescreenFacilityDAO.persist(prescreenFacilityList);
+
+        //Remove all Customer before add new
+        /*List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
+        for(Customer customer : customerListDelete){
+            if(customer.getAddressesList() != null){
+                List<Address> addressList = customer.getAddressesList();
+                addressDAO.delete(addressList);
+            }
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
+                Individual individual = customer.getIndividual();
+                individualDAO.delete(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2){
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.delete(juristic);
+            }
+            customerDAO.delete(customer);
+        }*/
+        //customerDAO.delete(customerListDelete);
+
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
+        log.info("savePreScreenInitial ::: customerList : {}", customerList);
+        for(Customer customer : customerList){
+            customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                addressDAO.persist(customer.getAddressesList());
+            }
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                Individual individual = customer.getIndividual();
+                individualDAO.persist(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+                //Juristic
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.persist(juristic);
+            }
+        }
+
+        //Remove all Business before add new
+        List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
+        if(prescreenBusinessDelete != null){
+            prescreenBusinessDAO.delete(prescreenBusinessDelete);
+        }
+
+        List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessTransform.transformToModelList(bizInfoViewList, prescreen);
+        prescreenBusinessDAO.persist(prescreenBusinessList);
+
+        /*List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
         if(bizInfoListDelete != null){
             bizInfoDAO.delete(bizInfoListDelete);
         }
@@ -688,10 +756,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoViewList;
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<BizInfoDetailView> bizInfoViewList, long workCasePreScreenId){
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
-    }
 
     public void save(WorkCasePrescreen workCasePrescreen){
         workCasePrescreenDAO.persist(workCasePrescreen);

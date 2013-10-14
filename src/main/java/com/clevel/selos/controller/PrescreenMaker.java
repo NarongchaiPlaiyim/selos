@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
+import com.clevel.selos.dao.working.BorrowingTypeDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.model.ActionResult;
@@ -382,7 +383,7 @@ public class PrescreenMaker implements Serializable {
             referredExperienceList = referredExperienceDAO.findAll();
             log.info("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
 
-            borrowingTypeList = borowingTypeDAO.findAll();
+            borrowingTypeList = borrowingTypeDAO.findAll();
             log.info("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
         }
 
@@ -1045,7 +1046,8 @@ public class PrescreenMaker implements Serializable {
 
         log.debug("onSavePrescreen ::: prescreenView : {}", prescreenView);
         try{
-            prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+            //prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+            prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, bizInfoViewList, workCasePreScreenId, user);
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";

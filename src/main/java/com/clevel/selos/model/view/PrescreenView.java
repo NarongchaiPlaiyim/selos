@@ -22,6 +22,7 @@ public class PrescreenView implements Serializable{
     private boolean tcg;
     private boolean refinance;
     private Bank refinanceBank;
+    private BorrowingType borrowingType;
     private String checkerId;
     private String remark;
     private Date createDate;
@@ -42,6 +43,7 @@ public class PrescreenView implements Serializable{
         this.refinance = false;
         this.refinanceBank = new Bank();
         this.referredExperience = new ReferredExperience();
+        this.borrowingType = new BorrowingType();
     }
 
     public long getId() {
@@ -188,6 +190,14 @@ public class PrescreenView implements Serializable{
         this.modifyBy = modifyBy;
     }
 
+    public BorrowingType getBorrowingType() {
+        return borrowingType;
+    }
+
+    public void setBorrowingType(BorrowingType borrowingType) {
+        this.borrowingType = borrowingType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -203,6 +213,7 @@ public class PrescreenView implements Serializable{
                 .append("tcg", tcg)
                 .append("refinance", refinance)
                 .append("refinanceBank", refinanceBank)
+                .append("borrowingType", borrowingType)
                 .append("checkerId", checkerId)
                 .append("remark", remark)
                 .append("createDate", createDate)

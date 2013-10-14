@@ -55,6 +55,10 @@ public class Prescreen implements Serializable {
     private Bank refinanceBank;
 
     @OneToOne
+    @JoinColumn(name="borrowing_type_id")
+    private BorrowingType borrowingType;
+
+    @OneToOne
     @JoinColumn(name="bdm_checker_id")
     private User bdmChecker;
 
@@ -204,6 +208,14 @@ public class Prescreen implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public BorrowingType getBorrowingType() {
+        return borrowingType;
+    }
+
+    public void setBorrowingType(BorrowingType borrowingType) {
+        this.borrowingType = borrowingType;
     }
 
     @Override
