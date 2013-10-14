@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
- * User: acer
+ * User: SUKANDA CHITSUP
  * Date: 1/10/2556
  * Time: 14:27 น.
  * To change this template use File | Settings | File Templates.
@@ -22,7 +22,6 @@ public class TCGDetailTransform extends Transform {
 
         for(TCGDetailView tcgDetailView : tcgDetailViewList){
             TCGDetail tcgDetail = new TCGDetail();
-            tcgDetail.setId(tcgDetailView.getId());
             tcgDetail.setTcg(tcg);
             tcgDetail.setLtvValue(tcgDetailView.getLtvValue());
             tcgDetail.setAppraisalAmount(tcgDetailView.getAppraisalAmount());
@@ -42,7 +41,6 @@ public class TCGDetailTransform extends Transform {
 
         for(TCGDetail tcgDetail : tcgDetailList){
             TCGDetailView tcgDetailView = new TCGDetailView();
-            tcgDetailView.setId(tcgDetail.getId());
             tcgDetailView.setLtvValue(tcgDetail.getLtvValue());
             tcgDetailView.setAppraisalAmount(tcgDetail.getAppraisalAmount());
             tcgDetailView.setPotentialCollateral(tcgDetail.getPotentialCollateral());

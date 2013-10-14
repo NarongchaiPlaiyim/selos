@@ -52,13 +52,13 @@ public class TCGInfoControl extends BusinessControl {
             log.info("tcgView  {} ",tcgView.toString() );
             WorkCase workCase  = workCaseDAO.findById(workCaseId);
             TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
-            log.info("tranform comback {} ",tcg.toString() );
+            log.info("transform comeback {} ",tcg.toString() );
             tcgDAO.persist(tcg);
             log.info("persist tcg");
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
             tcgDetailDAO.persist(tcgDetailList);
         }catch (Exception e){
-            log.error( "onSaveTCGToDB error" + e);
+            log.error( "onSaveTCGToDB error ::: {}" , e);
         }finally{
 
             log.info( "onSaveTCGToDB end" );
@@ -70,27 +70,22 @@ public class TCGInfoControl extends BusinessControl {
         try{
             log.info("onEditTCGToDB begin");
             log.info("workCaseId {} ",workCaseId);
-            log.info("tcgView  {} ",tcgView.toString() );
             WorkCase workCase  = workCaseDAO.findById(workCaseId);
             TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
-            log.info("tranform comback {} ",tcg.toString() );
             tcgDAO.persist(tcg);
             log.info("persist tcg");
 
-//            List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
-//
-//            if(TCGDetailList.size() > 0){
-//                for(int i = 0 ; i < TCGDetailList.size();i++){
-//                    log.info("TCGDetailList.get(i).toString():::: {} ",TCGDetailList.get(i).toString());
-//                    tcgDetailDAO.delete(TCGDetailList.get(i));
-//                }
-//            }
+            List<TCGDetail> tcgDetailListToDelete =  tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
+            log.info("tcgDetailListToDelete :: {}",tcgDetailListToDelete.size());
+            tcgDetailDAO.delete(tcgDetailListToDelete);
+            log.info("delete tcgDetailListToDelete");
 
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
             tcgDetailDAO.persist(tcgDetailList);
+            log.info("persist tcgDetailList");
 
         }catch (Exception e){
-            log.error( "onEditTCGToDB error" + e);
+            log.error( "onEditTCGToDB error ::: {}" , e);
         }finally{
             log.info( "onEditTCGToDB end" );
         }

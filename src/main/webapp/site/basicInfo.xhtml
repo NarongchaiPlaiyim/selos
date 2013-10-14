@@ -14,6 +14,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{basicInfo.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -282,8 +283,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="A"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="B"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -442,7 +443,7 @@
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
-                                                            <h:outputText value="#{item.purpose.name}"/>
+                                                            <h:outputText value="#{item.purposeForShow}"/>
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -458,9 +459,8 @@
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash">
-                                                                             <!--oncomplete="confirmDeleteFacilityDlg.show()" -->
-                                                                <!--<f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{prescreenMaker.selectFacilityItem}"/>-->
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
                                                         </p:column>
                                                     </p:dataTable>
@@ -553,6 +553,15 @@
               modal="true" width="500" height="260">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteFacilityDialog"/>
+        <ui:param name="name" value="confirmDeleteFacilityDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteFacility"/>
+        <ui:param name="controller" value="#{basicInfo}"/>
+        <ui:param name="action" value="onDeleteAccount"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
 </h:body>
 </f:view>
