@@ -26,45 +26,45 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name="product_group_id")
     private ProductGroup productGroup;
 
-    @Column(name="is_unpaind_fee_insurance")
+    @Column(name="unpaid_fee_insurance")
     private boolean unpaidFeeInsurance;
 
-    @Column(name="is_no_pending_claim_lg")
+    @Column(name="no_pending_claim_lg")
     private boolean noPendingClaimLG;
 
-    @Column(name="is_contruct_request_lg")
+    @Column(name="construct_request_lg")
     private boolean isConstructionRequestLG;
 
-    @Column(name="is_able_get_guarantor")
+    @Column(name="able_to_get_guarantor")
     private boolean isAbleToGettingGuarantorJob;
 
-    @Column(name="is_claim_lg_history")
+    @Column(name="claim_lg_history")
     private boolean noClaimLGHistory;
 
-    @Column(name="is_revoke_license")
+    @Column(name="revoke_license")
     private boolean noRevokedLicense;
 
-    @Column(name="is_late_work_delivery")
+    @Column(name="late_work_delivery")
     private boolean noLateWorkDelivery;
 
-    @Column(name="is_adequate_capital_resource")
+    @Column(name="adequate_capital_resource")
     private boolean isAdequateOfCapitalResource;
 
-    @Column(name="is_apply_special_program")
+    @Column(name="apply_special_program")
     private boolean isApplySpecialProgram;
 
     @OneToOne
-    @JoinColumn(name="special_program_id")
+    @JoinColumn(name="specialprogram_id")
     private SpecialProgram specialProgram;
 
-    @Column(name="is_refinance_in")
+    @Column(name="refinance_in")
     private boolean isRefinanceIN;
 
     @OneToOne
     @JoinColumn(name="refinance_in_id")
     private Bank refinanceInValue;
 
-    @Column(name="is_refinance_out")
+    @Column(name="refinance_out")
     private boolean isRefinanceOUT;
 
     @OneToOne
@@ -78,7 +78,7 @@ public class BasicInfo implements Serializable {
     @Column(name="qualitative_type")
     private int qualitativeType;
 
-    @Column(name="is_existing_sme_customer")
+    @Column(name="existing_sme_customer")
     private boolean isExistingSMECustomer;
 
     @Column(name="existing_since")
@@ -94,13 +94,13 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name="sbf_score_id")
     private SBFScore sbfScore;
 
-    @Column(name="is_request_loan_same_name")
+    @Column(name="request_loan_same_name")
     private boolean requestLoanWithSameName;
 
-    @Column(name="is_loan_in_one_year")
+    @Column(name="loan_in_one_year")
     private boolean haveLoanInOneYear;
 
-    @Column(name="is_pass_annual_review")
+    @Column(name="pass_annual_review")
     private boolean passAnnualReview;
 
     @OneToOne
@@ -113,7 +113,7 @@ public class BasicInfo implements Serializable {
     @Column(name="referral_id")
     private String referralID;
 
-    @Column(name="is_apply_ba")
+    @Column(name="apply_ba")
     private boolean isApplyBA;
 
     @OneToOne
