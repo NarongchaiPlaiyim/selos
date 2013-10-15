@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -44,6 +45,8 @@ public class PrescreenResult implements Serializable {
     private long stepId;
     private String queueName;
     private User user;
+
+    private PrescreenResultView prescreenResultView;
 
     public PrescreenResult(){
 
@@ -96,13 +99,20 @@ public class PrescreenResult implements Serializable {
         }
     }
 
-    public void onRetrieveInterface(){
+    public void onRetrieveInterfaceInfo(){
 
         //TODO get all data to Screen
-        onCreation();
     }
 
     public void onCloseSale(){
 
+    }
+
+    public PrescreenResultView getPrescreenResultView() {
+        return prescreenResultView;
+    }
+
+    public void setPrescreenResultView(PrescreenResultView prescreenResultView) {
+        this.prescreenResultView = prescreenResultView;
     }
 }

@@ -6,13 +6,17 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-<h:head>
-    <title>SE-LOS : Example Template</title>
-    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-</h:head>
+    <h:head>
+        <title>SE-LOS : Prescreen Result</title>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
 
 <h:body>
-    <div id="main_container">
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+    <h:form id="frmMain">
+        <div id="main_container">
         <!-- Start Header Logo -->
         <ui:include src="include/header_logo.xhtml" />
         <!-- End Header Logo -->
@@ -23,15 +27,64 @@
         <ui:include src="include/menubar.xhtml" />
         <!-- End Menu -->
         <div id="content_container">
-            <div id="content_name">SE-LOS Template</div>
+            <div id="content_name"><h:outputText value="#{msg.get('app.prescreen.result.contentName')}"/></div>
             <div id="content">
                 <div id="content_info">
                     <div id="content_trackchange">[ View Track Change ]</div>
-                    <div id="content_lastupdate">Last update by Mr.BDM Maker, 02/08/2555 11:11:11</div>
+                    <div id="content_lastupdate">Last update by </div>
                 </div>
                 <div id="content_form">
-                    <!-- start content -->
-                    <!-- end content -->
+                    <table class="content_table_form">
+                        <tr>
+                            <td class="title" style="width: 200px;"><h:outputText value="#{msg.get('app.prescreen.result.interfaceResult')}"/></td>
+                            <td><p:commandButton id="btnRetrieveInterfaceInfo"
+                                                 value="#{msg.get('app.prescreen.result.retrieveInterfaceInfo')}"
+                                                 styleClass="largest"
+                                                 actionListener="#{prescreen.onRetrieveInterfaceInfo}">
+
+                            </p:commandButton></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupExposure')}"/></td>
+                            <td><p:inputText title="msg.get('app.prescreen.result.groupExposure')" styleClass="medium" value="#{prescreenResult.prescreenResultView.groupExposure}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
+                            <td><p:inputText title="msg.get('app.prescreen.result.groupIncome')" styleClass="medium" value="#{prescreenResult.prescreenResultView.groupIncome}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title" colspan="2"><h:outputText value="#{msg.get('app.prescreen.result.existingCredit')}"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
+                            <td>
+                                <p:dataTable id="resultTableFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCredit}"
+                                             paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
+                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.account')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
             <div id="bottom_line"><!-- --></div>
@@ -42,7 +95,18 @@
         <!-- End Footer -->
         <h:inputHidden id="pagename" value="mnuprescreen"/>
         <h:inputHidden id="subpagename" value="submnuprescreen"/>
-    </div>
+
+        </div>
+    </h:form>
+    </p:panel>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{prescreenResult.messageHeader}" message="#{prescreenResult.message}" >
+
+        </p:confirmDialog>
+    </p:panel>
+
+
 </h:body>
 </f:view>
 </html>
