@@ -22,67 +22,67 @@ public class BasicInfo implements Serializable {
     private WorkCase workCase;
 
     @OneToOne
-    @JoinColumn(name="request_type_id")
+    @JoinColumn(name="requesttype_id")
     private RequestType requestType;
 
     @OneToOne
-    @JoinColumn(name="product_group_id")
+    @JoinColumn(name="productgroup_id")
     private ProductGroup productGroup;
 
     @Column(name="unpaid_fee_insurance")
-    private boolean unpaidFeeInsurance;
+    private int unpaidFeeInsurance;
 
     @Column(name="no_pending_claim_lg")
-    private boolean noPendingClaimLG;
+    private int noPendingClaimLG;
 
     @Column(name="construct_request_lg")
-    private boolean isConstructionRequestLG;
+    private int constructionRequestLG;
 
     @Column(name="able_to_get_guarantor")
-    private boolean isAbleToGettingGuarantorJob;
+    private int ableToGettingGuarantorJob;
 
     @Column(name="claim_lg_history")
-    private boolean noClaimLGHistory;
+    private int noClaimLGHistory;
 
     @Column(name="revoke_license")
-    private boolean noRevokedLicense;
+    private int noRevokedLicense;
 
     @Column(name="late_work_delivery")
-    private boolean noLateWorkDelivery;
+    private int noLateWorkDelivery;
 
     @Column(name="adequate_capital_resource")
-    private boolean isAdequateOfCapitalResource;
+    private int adequateOfCapitalResource;
 
     @Column(name="apply_special_program")
-    private boolean isApplySpecialProgram;
+    private int applySpecialProgram;
 
     @OneToOne
     @JoinColumn(name="specialprogram_id")
     private SpecialProgram specialProgram;
 
     @Column(name="refinance_in")
-    private boolean isRefinanceIN;
+    private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name="refinance_in_id")
+    @JoinColumn(name="refinancein_id")
     private Bank refinanceInValue;
 
     @Column(name="refinance_out")
-    private boolean isRefinanceOUT;
+    private int refinanceOUT;
 
     @OneToOne
-    @JoinColumn(name="refinance_out_id")
+    @JoinColumn(name="refinanceout_id")
     private Bank refinanceOutValue;
 
     @OneToOne
-    @JoinColumn(name="risk_customer_type_id")
+    @JoinColumn(name="risktype_id")
     private RiskType riskCustomerType;
 
     @Column(name="qualitative_type")
     private int qualitativeType;
 
     @Column(name="existing_sme_customer")
-    private boolean isExistingSMECustomer;
+    private int existingSMECustomer;
 
     @Column(name="existing_since")
     private String existingSMECustomerSince;
@@ -94,20 +94,20 @@ public class BasicInfo implements Serializable {
     private Date extendedReviewDate;
 
     @OneToOne
-    @JoinColumn(name="sbf_score_id")
+    @JoinColumn(name="sbfscore_id")
     private SBFScore sbfScore;
 
     @Column(name="request_loan_same_name")
-    private boolean requestLoanWithSameName;
+    private int requestLoanWithSameName;
 
     @Column(name="loan_in_one_year")
-    private boolean haveLoanInOneYear;
+    private int haveLoanInOneYear;
 
     @Column(name="pass_annual_review")
-    private boolean passAnnualReview;
+    private int passAnnualReview;
 
     @OneToOne
-    @JoinColumn(name="borrowing_type_id")
+    @JoinColumn(name="borrowingtype_id")
     private BorrowingType loanRequestPattern;
 
     @Column(name="referral_name")
@@ -117,10 +117,10 @@ public class BasicInfo implements Serializable {
     private String referralID;
 
     @Column(name="apply_ba")
-    private boolean isApplyBA;
+    private int applyBA;
 
     @OneToOne
-    @JoinColumn(name="ba_payment_method_id")
+    @JoinColumn(name="bapaymentmethod_id")
     private BAPaymentMethod baPaymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -174,76 +174,76 @@ public class BasicInfo implements Serializable {
         this.productGroup = productGroup;
     }
 
-    public boolean isUnpaidFeeInsurance() {
+    public int getUnpaidFeeInsurance() {
         return unpaidFeeInsurance;
     }
 
-    public void setUnpaidFeeInsurance(boolean unpaidFeeInsurance) {
+    public void setUnpaidFeeInsurance(int unpaidFeeInsurance) {
         this.unpaidFeeInsurance = unpaidFeeInsurance;
     }
 
-    public boolean isNoPendingClaimLG() {
+    public int getNoPendingClaimLG() {
         return noPendingClaimLG;
     }
 
-    public void setNoPendingClaimLG(boolean noPendingClaimLG) {
+    public void setNoPendingClaimLG(int noPendingClaimLG) {
         this.noPendingClaimLG = noPendingClaimLG;
     }
 
-    public boolean isConstructionRequestLG() {
-        return isConstructionRequestLG;
+    public int getConstructionRequestLG() {
+        return constructionRequestLG;
     }
 
-    public void setConstructionRequestLG(boolean constructionRequestLG) {
-        isConstructionRequestLG = constructionRequestLG;
+    public void setConstructionRequestLG(int constructionRequestLG) {
+        this.constructionRequestLG = constructionRequestLG;
     }
 
-    public boolean isAbleToGettingGuarantorJob() {
-        return isAbleToGettingGuarantorJob;
+    public int getAbleToGettingGuarantorJob() {
+        return ableToGettingGuarantorJob;
     }
 
-    public void setAbleToGettingGuarantorJob(boolean ableToGettingGuarantorJob) {
-        isAbleToGettingGuarantorJob = ableToGettingGuarantorJob;
+    public void setAbleToGettingGuarantorJob(int ableToGettingGuarantorJob) {
+        this.ableToGettingGuarantorJob = ableToGettingGuarantorJob;
     }
 
-    public boolean isNoClaimLGHistory() {
+    public int getNoClaimLGHistory() {
         return noClaimLGHistory;
     }
 
-    public void setNoClaimLGHistory(boolean noClaimLGHistory) {
+    public void setNoClaimLGHistory(int noClaimLGHistory) {
         this.noClaimLGHistory = noClaimLGHistory;
     }
 
-    public boolean isNoRevokedLicense() {
+    public int getNoRevokedLicense() {
         return noRevokedLicense;
     }
 
-    public void setNoRevokedLicense(boolean noRevokedLicense) {
+    public void setNoRevokedLicense(int noRevokedLicense) {
         this.noRevokedLicense = noRevokedLicense;
     }
 
-    public boolean isNoLateWorkDelivery() {
+    public int getNoLateWorkDelivery() {
         return noLateWorkDelivery;
     }
 
-    public void setNoLateWorkDelivery(boolean noLateWorkDelivery) {
+    public void setNoLateWorkDelivery(int noLateWorkDelivery) {
         this.noLateWorkDelivery = noLateWorkDelivery;
     }
 
-    public boolean isAdequateOfCapitalResource() {
-        return isAdequateOfCapitalResource;
+    public int getAdequateOfCapitalResource() {
+        return adequateOfCapitalResource;
     }
 
-    public void setAdequateOfCapitalResource(boolean adequateOfCapitalResource) {
-        isAdequateOfCapitalResource = adequateOfCapitalResource;
+    public void setAdequateOfCapitalResource(int adequateOfCapitalResource) {
+        this.adequateOfCapitalResource = adequateOfCapitalResource;
     }
 
-    public boolean isApplySpecialProgram() {
-        return isApplySpecialProgram;
+    public int getApplySpecialProgram() {
+        return applySpecialProgram;
     }
 
-    public void setApplySpecialProgram(boolean applySpecialProgram) {
-        isApplySpecialProgram = applySpecialProgram;
+    public void setApplySpecialProgram(int applySpecialProgram) {
+        this.applySpecialProgram = applySpecialProgram;
     }
 
     public SpecialProgram getSpecialProgram() {
@@ -254,12 +254,12 @@ public class BasicInfo implements Serializable {
         this.specialProgram = specialProgram;
     }
 
-    public boolean isRefinanceIN() {
-        return isRefinanceIN;
+    public int getRefinanceIN() {
+        return refinanceIN;
     }
 
-    public void setRefinanceIN(boolean refinanceIN) {
-        isRefinanceIN = refinanceIN;
+    public void setRefinanceIN(int refinanceIN) {
+        this.refinanceIN = refinanceIN;
     }
 
     public Bank getRefinanceInValue() {
@@ -270,12 +270,12 @@ public class BasicInfo implements Serializable {
         this.refinanceInValue = refinanceInValue;
     }
 
-    public boolean isRefinanceOUT() {
-        return isRefinanceOUT;
+    public int getRefinanceOUT() {
+        return refinanceOUT;
     }
 
-    public void setRefinanceOUT(boolean refinanceOUT) {
-        isRefinanceOUT = refinanceOUT;
+    public void setRefinanceOUT(int refinanceOUT) {
+        this.refinanceOUT = refinanceOUT;
     }
 
     public Bank getRefinanceOutValue() {
@@ -302,12 +302,12 @@ public class BasicInfo implements Serializable {
         this.qualitativeType = qualitativeType;
     }
 
-    public boolean isExistingSMECustomer() {
-        return isExistingSMECustomer;
+    public int getExistingSMECustomer() {
+        return existingSMECustomer;
     }
 
-    public void setExistingSMECustomer(boolean existingSMECustomer) {
-        isExistingSMECustomer = existingSMECustomer;
+    public void setExistingSMECustomer(int existingSMECustomer) {
+        this.existingSMECustomer = existingSMECustomer;
     }
 
     public String getExistingSMECustomerSince() {
@@ -342,27 +342,27 @@ public class BasicInfo implements Serializable {
         this.sbfScore = sbfScore;
     }
 
-    public boolean isRequestLoanWithSameName() {
+    public int getRequestLoanWithSameName() {
         return requestLoanWithSameName;
     }
 
-    public void setRequestLoanWithSameName(boolean requestLoanWithSameName) {
+    public void setRequestLoanWithSameName(int requestLoanWithSameName) {
         this.requestLoanWithSameName = requestLoanWithSameName;
     }
 
-    public boolean isHaveLoanInOneYear() {
+    public int getHaveLoanInOneYear() {
         return haveLoanInOneYear;
     }
 
-    public void setHaveLoanInOneYear(boolean haveLoanInOneYear) {
+    public void setHaveLoanInOneYear(int haveLoanInOneYear) {
         this.haveLoanInOneYear = haveLoanInOneYear;
     }
 
-    public boolean isPassAnnualReview() {
+    public int getPassAnnualReview() {
         return passAnnualReview;
     }
 
-    public void setPassAnnualReview(boolean passAnnualReview) {
+    public void setPassAnnualReview(int passAnnualReview) {
         this.passAnnualReview = passAnnualReview;
     }
 
@@ -388,6 +388,22 @@ public class BasicInfo implements Serializable {
 
     public void setReferralID(String referralID) {
         this.referralID = referralID;
+    }
+
+    public int getApplyBA() {
+        return applyBA;
+    }
+
+    public void setApplyBA(int applyBA) {
+        this.applyBA = applyBA;
+    }
+
+    public BAPaymentMethod getBaPaymentMethod() {
+        return baPaymentMethod;
+    }
+
+    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
+        this.baPaymentMethod = baPaymentMethod;
     }
 
     public Date getCreateDate() {
@@ -422,22 +438,6 @@ public class BasicInfo implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public BAPaymentMethod getBaPaymentMethod() {
-        return baPaymentMethod;
-    }
-
-    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
-        this.baPaymentMethod = baPaymentMethod;
-    }
-
-    public boolean isApplyBA() {
-        return isApplyBA;
-    }
-
-    public void setApplyBA(boolean applyBA) {
-        isApplyBA = applyBA;
-    }
-
     public List<OpenAccount> getOpenAccountList() {
         return openAccountList;
     }
@@ -455,21 +455,21 @@ public class BasicInfo implements Serializable {
                 append("productGroup", productGroup).
                 append("unpaidFeeInsurance", unpaidFeeInsurance).
                 append("noPendingClaimLG", noPendingClaimLG).
-                append("isConstructionRequestLG", isConstructionRequestLG).
-                append("isAbleToGettingGuarantorJob", isAbleToGettingGuarantorJob).
+                append("constructionRequestLG", constructionRequestLG).
+                append("ableToGettingGuarantorJob", ableToGettingGuarantorJob).
                 append("noClaimLGHistory", noClaimLGHistory).
                 append("noRevokedLicense", noRevokedLicense).
                 append("noLateWorkDelivery", noLateWorkDelivery).
-                append("isAdequateOfCapitalResource", isAdequateOfCapitalResource).
-                append("isApplySpecialProgram", isApplySpecialProgram).
+                append("adequateOfCapitalResource", adequateOfCapitalResource).
+                append("applySpecialProgram", applySpecialProgram).
                 append("specialProgram", specialProgram).
-                append("isRefinanceIN", isRefinanceIN).
+                append("refinanceIN", refinanceIN).
                 append("refinanceInValue", refinanceInValue).
-                append("isRefinanceOUT", isRefinanceOUT).
+                append("refinanceOUT", refinanceOUT).
                 append("refinanceOutValue", refinanceOutValue).
                 append("riskCustomerType", riskCustomerType).
                 append("qualitativeType", qualitativeType).
-                append("isExistingSMECustomer", isExistingSMECustomer).
+                append("existingSMECustomer", existingSMECustomer).
                 append("existingSMECustomerSince", existingSMECustomerSince).
                 append("lastReviewDate", lastReviewDate).
                 append("extendedReviewDate", extendedReviewDate).
@@ -480,7 +480,7 @@ public class BasicInfo implements Serializable {
                 append("loanRequestPattern", loanRequestPattern).
                 append("referralName", referralName).
                 append("referralID", referralID).
-                append("isApplyBA", isApplyBA).
+                append("applyBA", applyBA).
                 append("baPaymentMethod", baPaymentMethod).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).

@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -95,6 +96,9 @@ public class BasicInfo implements Serializable {
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
 
+    private String messageHeader;
+    private String message;
+
     //session
     private long workCaseId;
     private long stepId;
@@ -136,11 +140,7 @@ public class BasicInfo implements Serializable {
 
         preRender();
 
-        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
-
         basicInfoView = new BasicInfoView();
-
-        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
 
         productGroupList = productGroupDAO.findAll();
         specialProgramList = specialProgramDAO.findAll();
@@ -160,6 +160,8 @@ public class BasicInfo implements Serializable {
             basicInfoAccountPurposeViewList.add(purposeView);
         }
 
+        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
 
         baPaymentMethodList = baPaymentMethodDAO.findAll();
@@ -170,7 +172,15 @@ public class BasicInfo implements Serializable {
 
         basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 
-        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
+        if(basicInfoView.getId() == 0){
+            basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
+        }
+
+        if(customerEntity.isChangeQualtiEnable()){
+            basicInfoView.setIndividual(1);
+        }else{
+            basicInfoView.setIndividual(0);
+        }
 
         basicInfoAccountView = new BasicInfoAccountView();
     }
@@ -250,10 +260,21 @@ public class BasicInfo implements Serializable {
     }
 
     public void onSave(){
-        log.debug("basicInfoView : {}", basicInfoView);
-        basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
-
-        onCreation();
+        try{
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+            messageHeader = "Save Basic Info Success.";
+            message = "Save Basic Info data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Basic Info Failed.";
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     public void onChangeSpecialProgram(){
@@ -269,7 +290,7 @@ public class BasicInfo implements Serializable {
     }
 
     public void onChangeBA(){
-        if(!basicInfoView.isApplyBA()){
+        if(basicInfoView.getApplyBA() == 0){
             basicInfoView.getBaPaymentMethod().setId(0);
         }else{
             if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
@@ -407,5 +428,21 @@ public class BasicInfo implements Serializable {
 
     public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
         this.baPaymentMethodList = baPaymentMethodList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

@@ -107,7 +107,7 @@ public class BasicInfoControl extends BusinessControl {
             basicInfoView.setQualitative(2);
         }
 
-        if(!basicInfoView.isApplyBA()){
+        if(basicInfoView.getApplyBA() == 0){
             basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
         }
 
