@@ -33,7 +33,7 @@ public class Obligation implements Serializable {
     private BigDecimal intAccrued;
     private BigDecimal tmbBotCommitment;
     private BigDecimal currBookBal;
-    private int tenors;
+    private BigDecimal tenors;
     private String accountNumber;
     private String accountSuffix;
     private String accountRef;
@@ -41,8 +41,8 @@ public class Obligation implements Serializable {
     private String cardBlockCode;
     private String cusRelAccount;
     private String tdrFlag;
-    private int numMonthIntPastDue;
-    private int numMonthIntPastDueTDRAcc;
+    private BigDecimal numMonthIntPastDue;
+    private BigDecimal numMonthIntPastDueTDRAcc;
 
     public long getId() {
         return id;
@@ -244,11 +244,11 @@ public class Obligation implements Serializable {
         this.currBookBal = currBookBal;
     }
 
-    public int getTenors() {
+    public BigDecimal getTenors() {
         return tenors;
     }
 
-    public void setTenors(int tenors) {
+    public void setTenors(BigDecimal tenors) {
         this.tenors = tenors;
     }
 
@@ -308,19 +308,19 @@ public class Obligation implements Serializable {
         this.tdrFlag = tdrFlag;
     }
 
-    public int getNumMonthIntPastDue() {
+    public BigDecimal getNumMonthIntPastDue() {
         return numMonthIntPastDue;
     }
 
-    public void setNumMonthIntPastDue(int numMonthIntPastDue) {
+    public void setNumMonthIntPastDue(BigDecimal numMonthIntPastDue) {
         this.numMonthIntPastDue = numMonthIntPastDue;
     }
 
-    public int getNumMonthIntPastDueTDRAcc() {
+    public BigDecimal getNumMonthIntPastDueTDRAcc() {
         return numMonthIntPastDueTDRAcc;
     }
 
-    public void setNumMonthIntPastDueTDRAcc(int numMonthIntPastDueTDRAcc) {
+    public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 
