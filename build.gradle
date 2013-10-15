@@ -55,9 +55,9 @@ war {
     war.rootSpec.exclude '**/selos.properties'
 
     // exclude resources to be static
-    war.rootSpec.exclude 'resources/css'
-    war.rootSpec.exclude 'resources/images'
-    war.rootSpec.exclude 'resources/js'
+//    war.rootSpec.exclude 'resources/css'
+//    war.rootSpec.exclude 'resources/images'
+//    war.rootSpec.exclude 'resources/js'
 //    war.rootSpec.exclude 'resources/primefaces-theme'
 
     // exclude temporary files
