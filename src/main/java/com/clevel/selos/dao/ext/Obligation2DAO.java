@@ -1,7 +1,7 @@
 package com.clevel.selos.dao.ext;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.ext.Obligation2;
+import com.clevel.selos.model.db.ext.dwh.Obligation2;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;

@@ -1,7 +1,7 @@
 package com.clevel.selos.dao.ext.ncb;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.ext.NCBResult;
+import com.clevel.selos.model.db.ext.ncb.NCBResult;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 

@@ -4,7 +4,7 @@ package com.clevel.selos.integration.ncb.ncbresult;
 import com.clevel.selos.dao.ext.ncb.NCBResultDAO;
 import com.clevel.selos.integration.NCB;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.db.ext.NCBResult;
+import com.clevel.selos.model.db.ext.ncb.NCBResult;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
