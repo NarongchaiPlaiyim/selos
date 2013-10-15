@@ -14,8 +14,26 @@ public class BasicInfoTransform extends Transform {
 
         basicInfo.setWorkCase(workCase);
 
+        if(basicInfoView.getId() != 0){
+            basicInfo.setId(basicInfoView.getId());
+            basicInfo.setCreateDate(basicInfoView.getCreateDate());
+            basicInfo.setCreateBy(basicInfoView.getCreateBy());
+        } else {
+            basicInfo.setCreateDate(new Date());
+            basicInfo.setCreateBy(user);
+        }
+        basicInfo.setModifyDate(new Date());
+        basicInfo.setModifyBy(user);
+
         basicInfo.setRequestType(basicInfoView.getRequestType());
+        if(basicInfo.getRequestType().getId() == 0){
+            basicInfo.setRequestType(null);
+        }
+
         basicInfo.setProductGroup(basicInfoView.getProductGroup());
+        if(basicInfo.getProductGroup().getId() == 0){
+            basicInfo.setProductGroup(null);
+        }
 
         basicInfo.setUnpaidFeeInsurance(basicInfoView.isCharUnPaid());
         basicInfo.setNoPendingClaimLG(basicInfoView.isCharNoPending());
@@ -29,14 +47,26 @@ public class BasicInfoTransform extends Transform {
 
         basicInfo.setApplySpecialProgram(basicInfoView.isSpProgram());
         basicInfo.setSpecialProgram(basicInfoView.getSpecialProgram());
+        if(basicInfo.getSpecialProgram().getId() == 0){
+            basicInfo.setSpecialProgram(null);
+        }
 
         basicInfo.setRefinanceIN(basicInfoView.isRefIn());
         basicInfo.setRefinanceInValue(basicInfoView.getRefinanceIn());
+        if(basicInfo.getRefinanceInValue().getCode() == 0){
+            basicInfo.setRefinanceInValue(null);
+        }
 
         basicInfo.setRefinanceOUT(basicInfoView.isRefOut());
         basicInfo.setRefinanceOutValue(basicInfoView.getRefinanceOut());
+        if(basicInfo.getRefinanceOutValue().getCode() == 0){
+            basicInfo.setRefinanceOutValue(null);
+        }
 
         basicInfo.setRiskCustomerType(basicInfoView.getRiskType());
+        if(basicInfo.getRiskCustomerType().getId() == 0){
+            basicInfo.setRiskCustomerType(null);
+        }
 
         basicInfo.setQualitativeType(basicInfoView.getQualitative());
         basicInfo.setExistingSMECustomer(basicInfoView.isExistingSME());
@@ -45,24 +75,35 @@ public class BasicInfoTransform extends Transform {
         basicInfo.setExtendedReviewDate(basicInfoView.getExtReviewDate());
 
         basicInfo.setSbfScore(basicInfoView.getSbfScore());
+        if(basicInfo.getSbfScore().getId() == 0){
+            basicInfo.setSbfScore(null);
+        }
 
         basicInfo.setRequestLoanWithSameName(basicInfoView.isLoan());
         basicInfo.setHaveLoanInOneYear(basicInfoView.isMoreOneYear());
         basicInfo.setPassAnnualReview(basicInfoView.isAnnual());
 
         basicInfo.setLoanRequestPattern(basicInfoView.getLoanRequestPattern());
+        if(basicInfo.getLoanRequestPattern().getId() == 0){
+            basicInfo.setLoanRequestPattern(null);
+        }
 
         basicInfo.setReferralName(basicInfoView.getRefName());
         basicInfo.setReferralID(basicInfoView.getRefId());
 
-        basicInfo.setCreateDate(new Date());
-        basicInfo.setCreateBy(user);
+        basicInfo.setApplyBA(basicInfoView.isApplyBA());
+        basicInfo.setBaPaymentMethod(basicInfoView.getBaPaymentMethod());
+        if(basicInfo.getBaPaymentMethod().getId() == 0){
+            basicInfo.setBaPaymentMethod(null);
+        }
 
         return basicInfo;
     }
 
     public BasicInfoView transformToView(BasicInfo basicInfo,WorkCase workCase){
         BasicInfoView basicInfoView = new BasicInfoView();
+
+        basicInfoView.setId(basicInfo.getId());
 
         basicInfoView.setAppNo(workCase.getAppNumber());
         basicInfoView.setRefAppNo(workCase.getRefAppNumber());
@@ -137,6 +178,12 @@ public class BasicInfoTransform extends Transform {
 
         basicInfoView.setRefName(basicInfo.getReferralName());
         basicInfoView.setRefId(basicInfo.getReferralID());
+
+        basicInfoView.setApplyBA(basicInfo.isApplyBA());
+        basicInfoView.setBaPaymentMethod(basicInfo.getBaPaymentMethod());
+        if(basicInfoView.getBaPaymentMethod() == null){
+            basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
+        }
 
         basicInfoView.setCreateDate(basicInfo.getCreateDate());
         basicInfoView.setCreateBy(basicInfo.getCreateBy());

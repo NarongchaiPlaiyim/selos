@@ -75,7 +75,7 @@ public class BasicInfo implements Serializable {
     @JoinColumn(name="risk_customer_type_id")
     private RiskType riskCustomerType;
 
-    @Column(name="is_qualitative_type")
+    @Column(name="qualitative_type")
     private int qualitativeType;
 
     @Column(name="is_existing_sme_customer")
@@ -112,6 +112,13 @@ public class BasicInfo implements Serializable {
 
     @Column(name="referral_id")
     private String referralID;
+
+    @Column(name="is_apply_ba")
+    private boolean isApplyBA;
+
+    @OneToOne
+    @JoinColumn(name="ba_payment_method_id")
+    private BAPaymentMethod baPaymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
@@ -407,5 +414,21 @@ public class BasicInfo implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public BAPaymentMethod getBaPaymentMethod() {
+        return baPaymentMethod;
+    }
+
+    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
+        this.baPaymentMethod = baPaymentMethod;
+    }
+
+    public boolean isApplyBA() {
+        return isApplyBA;
+    }
+
+    public void setApplyBA(boolean applyBA) {
+        isApplyBA = applyBA;
     }
 }

@@ -497,6 +497,7 @@
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <p:ajax update="ba"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -505,9 +506,8 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.baPayment}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.topUp')}" itemValue="TOPUP"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.directly')}" itemValue="DIRECTLY"/>
+                                                    <h:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}" disabled="#{not basicInfo.basicInfoView.applyBA}">
+                                                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment" itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>

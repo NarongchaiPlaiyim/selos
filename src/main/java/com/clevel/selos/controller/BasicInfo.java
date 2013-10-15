@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.BorrowingTypeDAO;
+import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
@@ -65,6 +65,8 @@ public class BasicInfo implements Serializable {
     private BasicInfoControl basicInfoControl;
     @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
+    @Inject
+    private BAPaymentMethodDAO baPaymentMethodDAO;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -81,6 +83,7 @@ public class BasicInfo implements Serializable {
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
 
     private List<BorrowingType> borrowingTypeList;
+    private List<BAPaymentMethod> baPaymentMethodList;
 
     //*** View ***//
     private BasicInfoView basicInfoView;
@@ -95,6 +98,7 @@ public class BasicInfo implements Serializable {
     //session
     private long workCaseId;
     private long stepId;
+    private String userId;
 
     public BasicInfo(){
     }
@@ -103,6 +107,8 @@ public class BasicInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
+        session.setAttribute("userId", 10001);
+
         log.info("preRender ::: setSession ");
 
         session = FacesUtil.getSession(true);
@@ -110,6 +116,7 @@ public class BasicInfo implements Serializable {
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            userId = session.getAttribute("userId").toString();
         }else{
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -139,8 +146,6 @@ public class BasicInfo implements Serializable {
         basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
         basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
 
-        basicInfoView.setBaPayment("TOPUP");
-
         basicInfoAccountView = new BasicInfoAccountView();
 
         productGroupList = productGroupDAO.findAll();
@@ -162,6 +167,12 @@ public class BasicInfo implements Serializable {
         }
 
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+
+        baPaymentMethodList = baPaymentMethodDAO.findAll();
+
+        if(baPaymentMethodList != null){
+            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
+        }
     }
 
     public void onAddAccount(){
@@ -240,19 +251,14 @@ public class BasicInfo implements Serializable {
 
     public void onSave(){
         log.debug("basicInfoView : {}", basicInfoView);
-        System.out.println("####### : "+basicInfoView.getBasicInfoAccountViews().get(0).getBasicInfoAccountPurposeView().get(0).getPurpose().getName());
-        int a = 1;
-        for(BasicInfoAccountView asdfg : basicInfoView.getBasicInfoAccountViews()){
-            System.out.println("############ Column : "+a);
-            int b = 1;
-            for (BasicInfoAccountPurposeView qwerty : asdfg.getBasicInfoAccountPurposeView()){
-                System.out.println("#################### Purpose : "+b);
-                System.out.println("#################### Purpose Name : "+qwerty.getPurpose().getName());
-                System.out.println("#################### Purpose Selected : "+qwerty.isSelected());
-                b++;
-            }
-            a++;
-        }
+        com.clevel.selos.model.db.working.BasicInfo basicInfo = basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+
+        basicInfoControl.deleteOpenAccount(basicInfo.getId());
+
+        System.out.println("basicInfoView : "+basicInfoView);
+
+        basicInfoControl.addOpenAccount(basicInfoView,basicInfo);
+
     }
 
     // Get Set
@@ -374,5 +380,13 @@ public class BasicInfo implements Serializable {
 
     public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
+    }
+
+    public List<BAPaymentMethod> getBaPaymentMethodList() {
+        return baPaymentMethodList;
+    }
+
+    public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
+        this.baPaymentMethodList = baPaymentMethodList;
     }
 }

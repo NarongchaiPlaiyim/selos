@@ -45,7 +45,7 @@ public class BasicInfoView implements Serializable {
     private String refId;
     private List<BasicInfoAccountView> basicInfoAccountViews;
     private boolean isApplyBA;
-    private String baPayment;
+    private BAPaymentMethod baPaymentMethod;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -68,6 +68,7 @@ public class BasicInfoView implements Serializable {
         this.sbfScore = new SBFScore();
         this.loanRequestPattern = new BorrowingType();
         this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
+        this.baPaymentMethod = new BAPaymentMethod();
     }
 
     public long getId() {
@@ -350,12 +351,12 @@ public class BasicInfoView implements Serializable {
         isApplyBA = applyBA;
     }
 
-    public String getBaPayment() {
-        return baPayment;
+    public BAPaymentMethod getBaPaymentMethod() {
+        return baPaymentMethod;
     }
 
-    public void setBaPayment(String baPayment) {
-        this.baPayment = baPayment;
+    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
+        this.baPaymentMethod = baPaymentMethod;
     }
 
     public Date getCreateDate() {
@@ -436,7 +437,7 @@ public class BasicInfoView implements Serializable {
                 append("refId", refId).
                 append("basicInfoAccountViews", basicInfoAccountViews).
                 append("isApplyBA", isApplyBA).
-                append("baPayment", baPayment).
+                append("baPaymentMethod", baPaymentMethod).
                 append("createDate", createDate).
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).
