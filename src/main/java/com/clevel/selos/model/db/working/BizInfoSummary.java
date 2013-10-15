@@ -27,9 +27,6 @@ public class BizInfoSummary implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_SUM_ID")
     private long id;
 
-    @Column(name="biz_location_detail")
-    private String bizLocationDetail;
-
     @Column(name="bizLocationName")
     private String bizLocationName;
 
@@ -39,8 +36,9 @@ public class BizInfoSummary implements Serializable {
     @Column(name="owner_name")
     private String ownerName;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="expiry_date")
-    private String expiryDate;
+    private Date expiryDate;
 
     @Column(name="address_no")
     private String addressNo;
@@ -81,11 +79,13 @@ public class BizInfoSummary implements Serializable {
     @Column(name="extension")
     private String extension;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="registration_date")
-    private String registrationDate;
+    private Date registrationDate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="establish_date")
-    private String establishDate;
+    private Date establishDate;
 
     @Column(name="biz_interview_info")
     private String bizInterviewInfo;
@@ -189,14 +189,6 @@ public class BizInfoSummary implements Serializable {
         this.id = id;
     }
 
-    public String getBizLocationDetail() {
-        return bizLocationDetail;
-    }
-
-    public void setBizLocationDetail(String bizLocationDetail) {
-        this.bizLocationDetail = bizLocationDetail;
-    }
-
     public String getBizLocationName() {
         return bizLocationName;
     }
@@ -221,11 +213,11 @@ public class BizInfoSummary implements Serializable {
         this.ownerName = ownerName;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -325,19 +317,19 @@ public class BizInfoSummary implements Serializable {
         this.extension = extension;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public String getEstablishDate() {
+    public Date getEstablishDate() {
         return establishDate;
     }
 
-    public void setEstablishDate(String establishDate) {
+    public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
     }
 
@@ -579,7 +571,6 @@ public class BizInfoSummary implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 
                 .append("id", id)
-                .append("bizLocationDetail", bizLocationDetail)
                 .append("bizLocationName", bizLocationName)
                 .append("isRental", isRental)
                 .append("ownerName", ownerName)

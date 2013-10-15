@@ -1,9 +1,8 @@
-package com.clevel.selos.dao.working;
+package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.master.BorrowingType;
 import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.working.BasicInfo;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

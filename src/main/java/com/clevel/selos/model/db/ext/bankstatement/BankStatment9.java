@@ -77,7 +77,27 @@ public class BankStatment9 implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="end_od_date")
     private Date endOdDate;
+    @Column(name="gross_debit_balance", length = 14, scale = 2)
+    private BigDecimal grossDebitBalance;
 
+    @Column(name="debit_txn_number", length = 14, scale = 2)
+    private int debitTXNNumber;
+
+    public BigDecimal getGrossDebitBalance() {
+        return grossDebitBalance;
+    }
+
+    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
+        this.grossDebitBalance = grossDebitBalance;
+    }
+
+    public int getDebitTXNNumber() {
+        return debitTXNNumber;
+    }
+
+    public void setDebitTXNNumber(int debitTXNNumber) {
+        this.debitTXNNumber = debitTXNNumber;
+    }
     public BankStatment9() {
     }
 
