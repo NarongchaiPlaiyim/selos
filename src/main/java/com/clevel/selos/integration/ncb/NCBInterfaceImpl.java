@@ -36,14 +36,14 @@ public class NCBInterfaceImpl implements NCBInterface, Serializable {
     @Override
     public ArrayList<NCRSOutputModel> request(NCRSInputModel inputModel) throws Exception {
         log.info("NCRS request");
-        validationImp.validation(inputModel);
+        //validationImp.validation(inputModel);
         return ncrsService.process(inputModel);
     }
 
     @Override
     public ArrayList<NCCRSOutputModel> request(NCCRSInputModel inputModel) throws Exception {
         log.info("NCCRS request");
-        validationImp.validation(inputModel);
+        //validationImp.validation(inputModel);
         return nccrsService.process(inputModel);
     }
 }
