@@ -53,7 +53,6 @@ public class BasicInfoView implements Serializable {
     //for disable
     private boolean isIndividual;
 
-
     public BasicInfoView(){
         reset();
     }

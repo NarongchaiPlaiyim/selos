@@ -1,10 +1,13 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="wrk_basicinfo")
@@ -135,6 +138,9 @@ public class BasicInfo implements Serializable {
     @OneToOne
     @JoinColumn(name="modify_user_id")
     private User modifyBy;
+
+    @OneToMany(mappedBy="basicInfo")
+    private List<OpenAccount> openAccountList;
 
     public long getId() {
         return id;
@@ -430,5 +436,57 @@ public class BasicInfo implements Serializable {
 
     public void setApplyBA(boolean applyBA) {
         isApplyBA = applyBA;
+    }
+
+    public List<OpenAccount> getOpenAccountList() {
+        return openAccountList;
+    }
+
+    public void setOpenAccountList(List<OpenAccount> openAccountList) {
+        this.openAccountList = openAccountList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("requestType", requestType).
+                append("productGroup", productGroup).
+                append("unpaidFeeInsurance", unpaidFeeInsurance).
+                append("noPendingClaimLG", noPendingClaimLG).
+                append("isConstructionRequestLG", isConstructionRequestLG).
+                append("isAbleToGettingGuarantorJob", isAbleToGettingGuarantorJob).
+                append("noClaimLGHistory", noClaimLGHistory).
+                append("noRevokedLicense", noRevokedLicense).
+                append("noLateWorkDelivery", noLateWorkDelivery).
+                append("isAdequateOfCapitalResource", isAdequateOfCapitalResource).
+                append("isApplySpecialProgram", isApplySpecialProgram).
+                append("specialProgram", specialProgram).
+                append("isRefinanceIN", isRefinanceIN).
+                append("refinanceInValue", refinanceInValue).
+                append("isRefinanceOUT", isRefinanceOUT).
+                append("refinanceOutValue", refinanceOutValue).
+                append("riskCustomerType", riskCustomerType).
+                append("qualitativeType", qualitativeType).
+                append("isExistingSMECustomer", isExistingSMECustomer).
+                append("existingSMECustomerSince", existingSMECustomerSince).
+                append("lastReviewDate", lastReviewDate).
+                append("extendedReviewDate", extendedReviewDate).
+                append("sbfScore", sbfScore).
+                append("requestLoanWithSameName", requestLoanWithSameName).
+                append("haveLoanInOneYear", haveLoanInOneYear).
+                append("passAnnualReview", passAnnualReview).
+                append("loanRequestPattern", loanRequestPattern).
+                append("referralName", referralName).
+                append("referralID", referralID).
+                append("isApplyBA", isApplyBA).
+                append("baPaymentMethod", baPaymentMethod).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("openAccountList", openAccountList).
+                toString();
     }
 }
