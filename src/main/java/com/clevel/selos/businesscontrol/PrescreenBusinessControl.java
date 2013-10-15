@@ -20,10 +20,8 @@ import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.db.master.Action;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Step;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
@@ -126,33 +124,48 @@ public class PrescreenBusinessControl extends BusinessControl {
     // *** Function for RM *** //
     public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
-        log.info("getCustomerInfoFromRM ::: customerInfoView : {}", customerInfoView);
+        log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
+        log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
+
+        DocumentType masterDocumentType = new DocumentType();
+
+        RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+        if(customerInfoView.getSearchBy() == 1){
+            searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
+            masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
+        }else if(customerInfoView.getSearchBy() == 2){
+            searcyBy = RMInterface.SearchBy.TMBCUS_ID;
+            masterDocumentType = documentTypeDAO.findById(3);
+        }
 
         String userId = user.getId();
-        DocumentType masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         String documentTypeCode = masterDocumentType.getDocumentTypeCode();
         log.info("getCustomerInfoFromRM ::: userId : {}", userId);
         log.info("getCustomerInfoFromRM ::: documentType : {}", masterDocumentType);
         log.info("getCustomerInfoFromRM ::: documentTypeCode : {}", documentTypeCode);
 
-        RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-        if(customerInfoView.getSearchBy() == 1){
-            searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-        }else if(customerInfoView.getSearchBy() == 2){
-            searcyBy = RMInterface.SearchBy.TMBCUS_ID;
-        }
-
         RMInterface.DocumentType documentType = RMInterface.DocumentType.CITIZEN_ID;
+
         if(documentTypeCode.equalsIgnoreCase("CI")){
             documentType = RMInterface.DocumentType.CITIZEN_ID;
+            CustomerEntity customerEntity = new CustomerEntity();
+            customerEntity.setId(1);
+            customerInfoView.setCustomerEntity(customerEntity);
         }else if(documentTypeCode.equalsIgnoreCase("PP")){
             documentType = RMInterface.DocumentType.PASSPORT;
+            CustomerEntity customerEntity = new CustomerEntity();
+            customerEntity.setId(1);
+            customerInfoView.setCustomerEntity(customerEntity);
         }else if(documentTypeCode.equalsIgnoreCase("SC")){
             documentType = RMInterface.DocumentType.CORPORATE_ID;
+            CustomerEntity customerEntity = new CustomerEntity();
+            customerEntity.setId(2);
+            customerInfoView.setCustomerEntity(customerEntity);
         }
 
         log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
         log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
+
 
         if(customerInfoView.getCustomerEntity().getId() == 1) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
@@ -214,8 +227,9 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         for(CustomerInfoView customerItem : customerInfoViewList){
             log.info("customerItem : {}", customerItem);
-            if(customerItem.getCustomerEntity().getId() == 1 && !customerItem.isNcbFlag()){
-                log.info("customerItem ::: NcbFlag : {}", customerItem.isNcbFlag());
+            if(customerItem.getCustomerEntity().getId() == 1
+                    && customerItem.getNcbFlag() == RadioValue.NO.value()){
+                log.info("customerItem ::: NcbFlag : {}", customerItem.getNcbFlag());
                 NCRSModel ncrsModel = new NCRSModel();
 
                 if(customerItem.getTitleTh() != null){
@@ -247,7 +261,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                 ncrsModel.setCountryCode("TH");
                 log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
                 ncrsModelList.add(ncrsModel);
-            } else if(customerItem.getCustomerEntity().getId() == 2 && !customerItem.isNcbFlag()) {
+            } else if(customerItem.getCustomerEntity().getId() == 2
+                    && customerItem.getNcbFlag() == RadioValue.NO.value()) {
                 NCCRSModel nccrsModel = new NCCRSModel();
                 if(customerItem.getDocumentType() != null){
                     if(customerItem.getTitleTh() != null){

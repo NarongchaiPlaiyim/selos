@@ -1,8 +1,11 @@
-$(document).ready(function(){
-    $(".numberonly").bind("keypress", function (e) {
-        alert('5');
-        return !(e.which != 8 && e.which != 0 &&
-            (e.which < 48 || e.which > 57) && e.which != 46);
+/*$(document).ready(function(){
+    $(".number-only").keypress(function(event) {
+        var validNums = '0123456789';
+
+        if (!event.charCode) k = String.fromCharCode(event.which);
+        else k = String.fromCharCode(event.charCode);
+
+        if (validNums.indexOf(k) == -1) event.preventDefault();
     });
 });
 
@@ -10,7 +13,7 @@ $(document).ready(function() {
     $(".readonly").bind("onclick", function(e) {
         $(".readonly").blur();
     })
-});
+});*/
 
 function gotoInbox(contextUrl){
     window.location = contextUrl;
@@ -39,8 +42,12 @@ function formatNumber(obj){
 }
 
 function numberOnly(e){
-    return !(e.which != 8 && e.which != 0 &&
-        (e.which < 48 || e.which > 57) && e.which != 46);
+    var validNums = '0123456789.,';
+
+    if (!event.charCode) k = String.fromCharCode(event.which);
+    else k = String.fromCharCode(event.charCode);
+
+    if (validNums.indexOf(k) == -1) event.preventDefault();
 }
 
 function hideWindowsScrollBar(){
