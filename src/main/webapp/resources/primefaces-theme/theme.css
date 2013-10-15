@@ -522,7 +522,7 @@ button.ui-button::-moz-focus-inner {
     overflow: auto;
 }
 .ui-dialog .ui-dialog-buttonpane {
-    text-align: left;
+    text-align: right!important;
     border-width: 1px 0 0 0;
     background-image: none;
     margin-top: .5em;
@@ -1260,9 +1260,13 @@ body .ui-tooltip {
 .ui-selectonemenu-list-item {
     font-size: 12px!important;
 }
+.ui-radiobutton {
+    vertical-align: middle;
+}
 .ui-radiobutton-box {
     border: 1px solid #bfbfbf!important;
-    background: transparent!important;
+    background: white!important;
+    /*background: transparent!important;*/
 }
 .ui-radiobutton-box.ui-state-error {
     border: 1px solid #cd0a0a!important;

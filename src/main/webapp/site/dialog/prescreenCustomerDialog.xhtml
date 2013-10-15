@@ -39,7 +39,7 @@
             </p:selectOneRadio>
         </td>
         <td>
-            <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}"
+            <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                          required="#{not empty param[searchButton.clientId]}" onkeypress="return numberOnly(event);" />
         </td>
         <td>
@@ -83,23 +83,23 @@
     <tr>
         <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Citizen ID :</td>
         <td colspan="3">
-            <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}"
-                         required="#{not empty param[saveCustomerButton.clientId]}" styleClass="large"
-                         onkeypress="return numberOnly(event);"
+            <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
+                         required="#{not empty param[saveCustomerButton.clientId]}"
+                         onkeypress="return numberOnly(event);" maxlength="13"
                          readonly="#{prescreenMaker.citizenId}"/>
         </td>
     </tr>
     <tr>
         <td class="title">TMB Customer ID :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}"
-                         onkeypress="return numberOnly(event);"
-                         styleClass="large"
+            <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}" styleClass="large"
+                         onkeypress="return numberOnly(event);" maxlength="15"
                          readonly="#{prescreenMaker.customerId}"/>
         </td>
         <td class="title right">Service Segment :</td>
         <td>
             <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"
+                         onkeypress="return numberOnly(event)" maxlength="15"
                          readonly="#{prescreenMaker.serviceSegment}"/>
         </td>
     </tr>
@@ -141,7 +141,11 @@
         </td>
         <td class="title right">Percent Share :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" readonly="#{prescreenMaker.percentShare}"/>
+            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="10" styleClass="small" readonly="#{prescreenMaker.percentShare}">
+                <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                <f:validateDoubleRange maximum="100"/>
+                <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+            </p:inputText>
         </td>
     </tr>
     <tr>
@@ -149,7 +153,8 @@
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrTitle" value="#{prescreenMaker.borrowerInfo.titleTh.id}"
                              size="1" style="width: 200px;"
-                             disabled="#{prescreenMaker.titleTh}">
+                             disabled="#{prescreenMaker.titleTh}"
+                             required="#{not empty param[saveCustomerButton.clientId]}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{prescreenMaker.titleList}"
                                var="titleThItem"
@@ -161,19 +166,24 @@
     <tr>
         <td class="title">First Name :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="large" readonly="#{prescreenMaker.firstNameTh}"/>
+            <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="large" required="#{not empty param[saveCustomerButton.clientId]}" readonly="#{prescreenMaker.firstNameTh}"/>
         </td>
         <td class="title right">Last Name :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.lastNameTh}" styleClass="large" readonly="#{prescreenMaker.lastNameTh}"/>
+            <p:inputText value="#{prescreenMaker.borrowerInfo.lastNameTh}" styleClass="large" required="#{not empty param[saveCustomerButton.clientId]}" readonly="#{prescreenMaker.lastNameTh}"/>
         </td>
     </tr>
     <tr>
         <td class="title">Date of Birth :</td>
         <td>
-            <p:calendar id="dlgCalBrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfBirth}" showOn="button" navigator="true" disabled="#{prescreenMaker.dateOfBirth}">
+            <p:calendar id="dlgCalBrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
+                        value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
+                        disabled="#{prescreenMaker.dateOfBirth}" pattern="dd/MM/yyyy">
                 <f:convertDateTime pattern="dd/MM/yyyy"/>
-
+                <p:ajax event="dateSelect"
+                        listener="#{prescreenMaker.onChangeDate('borrower')}"
+                        process="@form"
+                        update=":customerDlgForm"/>
             </p:calendar>
         </td>
         <td class="title right">Age :</td>
@@ -231,7 +241,10 @@
     <tr>
         <td class="title">Approx. Income :</td>
         <td colspan="3">
-            <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" onkeypress="return numberOnly(event);" styleClass="small" readonly="#{prescreenMaker.approxIncome}"/>
+            <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" maxlength="7" styleClass="small right" readonly="#{prescreenMaker.approxIncome}">
+                <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
+                <p:ajax event="change" update="customerDlgForm" process="@form"/>
+            </p:inputText>
             <p:spacer width="5"/>Baht/Year
         </td>
     </tr>
@@ -276,17 +289,21 @@
         <tr>
             <td class="title">Citizen ID :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" required="#{not empty param[saveCustomerButton.clientId]}" styleClass="large"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" styleClass="large"
+                             onkeypress="return numberOnly(event);" maxlength="13"
+                             required="#{not empty param[saveCustomerButton.clientId]}"/>
             </td>
         </tr>
         <tr>
             <td class="title">TMB Customer ID :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.spouseInfo.customerId}" styleClass="large"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.customerId}" styleClass="large"
+                             onkeypress="return numberOnly(event);" maxlength="15"/>
             </td>
             <td class="title">Service Segment :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.spouseInfo.serviceSegment}" styleClass="large"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.serviceSegment}" styleClass="large"
+                             onkeypress="return numberOnly(event);" maxlength="15"/>
             </td>
         </tr>
         <tr>
@@ -325,7 +342,11 @@
             </td>
             <td class="title">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}" maxlength="10" styleClass="small">
+                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                    <f:validateDoubleRange maximum="100"/>
+                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                </p:inputText>
             </td>
         </tr>
         <tr>
@@ -354,8 +375,14 @@
         <tr>
             <td class="title">Date of Birth :</td>
             <td>
-                <p:calendar id="dlgCalSpDateOfBirth" value="#{prescreenMaker.spouseInfo.dateOfBirth}" showOn="button" navigator="true" readonly="#{prescreenMaker.dateOfBirth}">
+                <p:calendar id="dlgCalSpDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
+                            value="#{prescreenMaker.spouseInfo.dateOfBirth}"
+                            pattern="dd/MM/yyyy">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <p:ajax event="dateSelect"
+                            listener="#{prescreenMaker.onChangeDate('spouse')}"
+                            process="@form"
+                            update=":customerDlgForm"/>
                 </p:calendar>
             </td>
             <td class="title">Age :</td>
@@ -412,7 +439,10 @@
         <tr>
             <td class="title">Approx. Income :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" styleClass="small"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" maxlength="7">
+                    <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
+                    <p:ajax event="change" update="customerDlgForm" process="@form"/>
+                </p:inputText>
                 <p:spacer width="5"/>Baht/Year
             </td>
         </tr>
@@ -424,23 +454,23 @@
         <tr>
             <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Registration ID :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
                              required="#{not empty param[saveCustomerButton.clientId]}"
-                             styleClass="large"
+                             onkeypress="return numberOnly(event);" maxlength="13"
                              readonly="#{prescreenMaker.citizenId}"/>
             </td>
         </tr>
         <tr>
             <td class="title">TMB Customer ID :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}"
-                             styleClass="large"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.customerId}" styleClass="large"
+                             onkeypress="return numberOnly(event);" maxlength="15"
                              readonly="#{prescreenMaker.customerId}"/>
             </td>
             <td class="title right">Service Segment :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}"
-                             styleClass="large"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"
+                             onkeypress="return numberOnly(event);"
                              readonly="#{prescreenMaker.serviceSegment}"/>
             </td>
         </tr>
@@ -483,7 +513,11 @@
             </td>
             <td class="title right">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" readonly="#{prescreenMaker.percentShare}"/>
+                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="10" styleClass="small" readonly="#{prescreenMaker.percentShare}">
+                    <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
+                    <f:validateDoubleRange maximum="100"/>
+                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                </p:inputText>
             </td>
         </tr>
         <tr>
@@ -501,7 +535,7 @@
             </td>
         </tr>
         <tr>
-            <td class="title">Name :</td>
+            <td class="title">Company Name (TH):</td>
             <td colspan="3">
                 <p:inputText value="#{prescreenMaker.borrowerInfo.firstNameTh}" styleClass="largest_m"
                              readonly="#{prescreenMaker.firstNameTh}"/>
@@ -510,8 +544,14 @@
         <tr>
             <td class="title">Date of Register :</td>
             <td>
-                <p:calendar id="dlgCalJrDateOfBirth" value="#{prescreenMaker.borrowerInfo.dateOfRegister}" showOn="button" navigator="true" disabled="#{prescreenMaker.dateOfRegister}">
+                <p:calendar id="dlgCalJrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
+                            value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
+                            pattern="dd/MM/yyyy">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <p:ajax event="dateSelect"
+                            listener="#{prescreenMaker.onChangeDate('juristic')}"
+                            process="@form"
+                            update=":customerDlgForm"/>
                 </p:calendar>
             </td>
             <td id="yearInBusiness" class="title right">Year In Business :</td>
@@ -569,7 +609,10 @@
         <tr>
             <td class="title">Approx. Income :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small" readonly="#{prescreenMaker.approxIncome}"/>
+                <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" maxlength="10" styleClass="small" readonly="#{prescreenMaker.approxIncome}">
+                    <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
+                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                </p:inputText>
                 <p:spacer width="5"/>Baht/Year
             </td>
         </tr>

@@ -1,13 +1,11 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +19,6 @@ public class CustomerInfoView implements Serializable {
     private String searchId;
     private DocumentType documentType;
     private CustomerEntity customerEntity;
-    private BorrowerType borrowerType;
     private Relation relation;
     private Reference reference;
     private String citizenId;
@@ -84,7 +81,6 @@ public class CustomerInfoView implements Serializable {
         this.searchId = "";
         this.documentType = new DocumentType();
         this.customerEntity = new CustomerEntity();
-        this.borrowerType = new BorrowerType();
         this.relation = new Relation();
         this.reference = new Reference();
         this.citizenId = "";
@@ -184,14 +180,6 @@ public class CustomerInfoView implements Serializable {
 
     public void setCustomerEntity(CustomerEntity customerEntity) {
         this.customerEntity = customerEntity;
-    }
-
-    public BorrowerType getBorrowerType() {
-        return borrowerType;
-    }
-
-    public void setBorrowerType(BorrowerType borrowerType) {
-        this.borrowerType = borrowerType;
     }
 
     public Relation getRelation() {
@@ -595,7 +583,6 @@ public class CustomerInfoView implements Serializable {
                 .append("searchId", searchId)
                 .append("documentType", documentType)
                 .append("customerEntity", customerEntity)
-                .append("borrowerType", borrowerType)
                 .append("relation", relation)
                 .append("reference", reference)
                 .append("citizenId", citizenId)

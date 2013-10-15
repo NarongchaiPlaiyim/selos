@@ -40,37 +40,42 @@
                             <tr>
                                 <td class="title" style="min-width: 200px; width: 200px;"><h:outputText value="#{msg.get('app.label.productgroup')}"/> :</td>
                                 <td>
+                                    <h:inputText value="#{prescreenMaker.previousProductGroupId}"/>
                                     <p:selectOneMenu id="selProdGroupId"
                                                      styleClass="largest"
                                                      size="1"
-                                                     value="#{prescreenMaker.prescreenView.productGroup.id}" >
-                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                     value="#{prescreenMaker.prescreenView.productGroup.id}"
+                                                     required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
+                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
                                                        itemLabel="#{productGroupList.name}"
                                                        itemValue="#{productGroupList.id}"/>
                                         <p:ajax event="change" listener="#{prescreenMaker.checkOnChangeProductGroup()}" />
                                     </p:selectOneMenu>
-                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" message="Are you want to change Productgroup? If you click 'YES' facility added will be remove!!">`
+                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" header="Confirm" message="#{msg.get('app.prescreen.message.changeproductgroup')}">`
                                         <p:commandButton value="YES"
                                                          process="@this"
                                                          actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                                                         oncomplete="msgBoxFacilityDlg.hide()"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
                                                          update=":frmMain:resultTableFacility,:facilityDlgForm" />
-                                        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+                                        <p:commandButton value="NO"
+                                                         process="@this"
+                                                         actionListener="#{prescreenMaker.onCancelChangeProductGroup()}"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
+                                                         update=":frmMain"/>
                                     </p:confirmDialog>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title"><h:outputText value="#{msg.get('app.label.producgprogram')}"/> <h:outputText value="*" styleClass="require-field"/> :</td>
                                 <td>
-                                    <p:commandButton id="btnAddFacility"
-                                                     value="Add"
-                                                     styleClass="smaller"
-                                                     process="@this, selProdGroupId"
-                                                     actionListener="#{prescreenMaker.onAddFacility}"
-                                                     update=":facilityDlgForm"
-                                                     oncomplete="facilityDlg.show();">
+                                    <p:commandButton id="btnAddFacility" styleClass="smaller"
+                                                     binding="#{btnAddFacility}"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     process="@form"
+                                                     action="#{prescreenMaker.onAddFacility}"
+                                                     update=":frmMain, :facilityDlgForm">
                                         <p:resetInput target=":facilityDlgForm" />
                                     </p:commandButton>
                                 </td>
@@ -425,6 +430,7 @@
                             <tr>
                                 <td class="center" colspan="100%">
                                     <p:commandButton id="btnSave" value="Save"
+                                                     binding="#{btnSaveInitialButton}"
                                                      styleClass="medium"
                                                      process="@form"
                                                      actionListener="#{prescreenMaker.onSavePrescreenInitial()}"
@@ -473,16 +479,18 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
-<p:dialog id="facilityDialog" header="Facility Information" widgetVar="facilityDlg"
+<p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="400" height="150">
     <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
 </p:dialog>
-
-<p:dialog id="customerDialog" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Customer Information" widgetVar="customerDlg"
-          modal="true" width="690" height="500">
+<p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+          modal="true" width="800" height="500">
     <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
 </p:dialog>
-<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" header="Check NCB - Assign to BDM Checker"
+<p:dialog id="assignCheckerDialog" widgetVar="assignCheckerDlg" header="Check NCB - Assign to BDM Checker"
+          onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="360" height="160">
     <ui:include src="dialog/prescreenAssignChecker.xhtml"/>
 </p:dialog>

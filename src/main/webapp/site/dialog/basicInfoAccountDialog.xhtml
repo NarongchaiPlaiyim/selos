@@ -50,9 +50,11 @@
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
                 </td>
                 <td>
-                    <p:dataGrid value="#{basicInfo.openAccountPurposeList}" var="openAccountPurpose" columns="1" style="border: 0">
-                        <h:selectBooleanCheckbox value="#{openAccountPurpose.id}"/>
-                        <h:outputText value="#{openAccountPurpose.name}"/>
+                    <p:dataGrid value="#{basicInfo.basicInfoAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
+                        <p:column>
+                            <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
+                            <h:outputText value="#{purposeList.purpose.name}"/>
+                        </p:column>
                     </p:dataGrid>
                 </td>
             </tr>
