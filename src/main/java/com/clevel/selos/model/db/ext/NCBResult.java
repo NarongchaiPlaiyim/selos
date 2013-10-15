@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db.ext.ncb;
+package com.clevel.selos.model.db.ext;
 
 
 import javax.persistence.*;
