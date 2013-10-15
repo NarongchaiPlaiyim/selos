@@ -67,6 +67,21 @@ public class BizInfoDetailControl {
             bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
 
+
+            log.info( "bizControl \n SupplierTotal 1 " + bizInfoDetail.getSupplierTotalPercentBuyVolume() +
+                    " \n SupplierTotal 2 " + bizInfoDetail.getSupplierTotalPercentCredit() +
+                    " \n SupplierTotal 3 " + bizInfoDetail.getSupplierTotalCreditTerm());
+
+            log.info( "bizControl \n SupplierUWAdjust 1 " + bizInfoDetail.getSupplierUWAdjustPercentCredit() +
+                    " \n SupplierUWAdjust2 " + bizInfoDetail.getSupplierUWAdjustCreditTerm());
+
+            log.info( "bizControl \n BuyerTotal 1 " + bizInfoDetail.getBuyerTotalPercentBuyVolume() +
+                    " \n BuyerTotal 2 " + bizInfoDetail.getBuyerTotalPercentCredit() +
+                    " \n BuyerTotal 3 " + bizInfoDetail.getBuyerTotalCreditTerm());
+
+            log.info( "bizControl \n BuyerUWAdjust 1 " + bizInfoDetail.getBuyerUWAdjustPercentCredit() +
+                    " \n BuyerUWAdjust2 " + bizInfoDetail.getBuyerUWAdjustCreditTerm());
+
             bizInfoDetailDAO.persist(bizInfoDetail);
             log.info( "bizInfoDetailDAO persist end" );
 
@@ -76,8 +91,8 @@ public class BizInfoDetailControl {
             bizProductDetailList = new ArrayList<BizProductDetail>();
 
             if(bizProductDetailViewList.size()>0){
-                bizProductDetailList = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
-                bizProductDetailDAO.delete(bizProductDetailList);
+                List<BizProductDetail>   bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
+                bizProductDetailDAO.delete(bizProductDetailLisDelete);
             }
 
             for (int i =0;i<bizProductDetailViewList.size();i++){
@@ -91,8 +106,10 @@ public class BizInfoDetailControl {
 
 
             if(supplierDetailList.size()>0){
-                bizSupplierList =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"1");
-                bizStakeHolderDetailDAO.delete(bizSupplierList);
+                List<BizStakeHolderDetail> bizSupplierListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"1");
+
+                bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
+                log.info( "supplierDetailList delete end " +bizSupplierListDelete.size() );
             }
 
             bizSupplierList = new ArrayList<BizStakeHolderDetail>();
@@ -106,8 +123,8 @@ public class BizInfoDetailControl {
             log.info( "bizSupplierListDetailDAO persist end" );
 
             if(buyerDetailList.size()>0){
-                bizBuyerList =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"2");
-                bizStakeHolderDetailDAO.delete(bizBuyerList);
+                List<BizStakeHolderDetail> bizBuyerListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"2");
+                bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
             }
 
             bizBuyerList = new ArrayList<BizStakeHolderDetail>();
@@ -202,7 +219,7 @@ public class BizInfoDetailControl {
             bizBuyerList =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"2");
 
             for (int i =0;i<bizBuyerList.size();i++){
-                bizStakeHolderDetailTemp = bizSupplierList.get(i);
+                bizStakeHolderDetailTemp = bizBuyerList.get(i);
                 stakeHolderDetailViewTemp = bizStakeHolderDetailTransform.transformToView(bizStakeHolderDetailTemp);
                 buyerDetailList.add(stakeHolderDetailViewTemp);
             }
@@ -223,4 +240,45 @@ public class BizInfoDetailControl {
             log.info( "onFindByID end" );
         }
     }
+
+    public void onDeleteBizInfoToDB(BizInfoDetailView bizInfoDetailView){
+        BizInfoDetail bizInfoDetail;
+        try{
+            log.info( "onDeleteBizInfoToDB begin" );
+            log.info( "onDeleteBizInfoToDB id is " +bizInfoDetailView.getId());
+            // 1 . first way
+            //log.info( "1 way start" );
+            //bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
+            //log.info( "1 way result is " +bizInfoDetail);
+            // 2 . first way
+            log.info( "2 way start" );
+            bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailView.getId());
+            log.info( "2 way result is " +bizInfoDetail);
+
+            List<BizProductDetail>   bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
+            bizProductDetailDAO.delete(bizProductDetailLisDelete);
+            log.info( "supplierDetailList delete end " +bizProductDetailLisDelete.size() );
+
+            List<BizStakeHolderDetail> bizSupplierListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"1");
+
+            bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
+            log.info( "supplierDetailList delete end " +bizSupplierListDelete.size() );
+
+
+            List<BizStakeHolderDetail> bizBuyerListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"2");
+            bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
+            log.info( "supplierDetailList delete end " +bizBuyerListDelete.size() );
+
+            bizInfoDetailDAO.delete(bizInfoDetail);
+            log.info( "bizInfoDetailDAO delete end" );
+
+
+        }catch (Exception e){
+            log.error( "onDeleteBizInfoToDB error" + e);
+        }finally{
+
+            log.info( "onDeleteBizInfoToDB end" );
+        }
+    }
+
 }

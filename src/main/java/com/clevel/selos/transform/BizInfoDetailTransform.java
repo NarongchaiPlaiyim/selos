@@ -3,11 +3,15 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.BizInfoDetailView;
+import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
+    @Inject
+    Logger log;
     public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView){
 
         BizInfoDetail bizInfoDetail = new BizInfoDetail();
@@ -31,16 +35,31 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
         bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
         bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
+
+        log.info( " BizInfoDetailTransform bizInfoDetailView Supplier \n SupplierTotal 1 " + bizInfoDetailView.getSupplierTotalPercentBuyVolume() +
+                " \n SupplierTotal 2 " + bizInfoDetailView.getSupplierTotalPercentCredit() +
+                " \n SupplierTotal 3 " + bizInfoDetailView.getSupplierTotalCreditTerm());
+
+        log.info( "BizInfoDetailTransform \n SupplierUWAdjust 1 " + bizInfoDetailView.getSupplierUWAdjustPercentCredit() +
+                " \n SupplierUWAdjust2 " + bizInfoDetailView.getSupplierUWAdjustCreditTerm());
+
+        log.info( "BizInfoDetailTransform bizInfoDetailView Buyer \n BuyerTotal 1 " + bizInfoDetailView.getBuyerTotalPercentBuyVolume() +
+                " \n BuyerTotal 2 " + bizInfoDetailView.getBuyerTotalPercentCredit() +
+                " \n BuyerTotal 3 " + bizInfoDetailView.getBuyerTotalCreditTerm());
+
+        log.info( "BizInfoDetailTransform \n BuyerUWAdjust 1 " + bizInfoDetailView.getBuyerUWAdjustPercentCredit() +
+                " \n BuyerUWAdjust2 " + bizInfoDetailView.getBuyerUWAdjustCreditTerm());
+
         bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
         bizInfoDetail.setSupplierTotalPercentCredit(bizInfoDetailView.getSupplierTotalPercentCredit());
         bizInfoDetail.setSupplierTotalCreditTerm(bizInfoDetailView.getSupplierTotalCreditTerm());
         bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustPercentCredit());
-        bizInfoDetail.setSupplierUWAdjustPercentCredit(bizInfoDetailView.getSupplierUWAdjustCreditTerm());
+        bizInfoDetail.setSupplierUWAdjustCreditTerm(bizInfoDetailView.getSupplierUWAdjustCreditTerm());
         bizInfoDetail.setBuyerTotalPercentBuyVolume(bizInfoDetailView.getBuyerTotalPercentBuyVolume());
         bizInfoDetail.setBuyerTotalPercentCredit(bizInfoDetailView.getBuyerTotalPercentCredit());
         bizInfoDetail.setBuyerTotalCreditTerm(bizInfoDetailView.getBuyerTotalCreditTerm());
         bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustPercentCredit());
-        bizInfoDetail.setBuyerUWAdjustPercentCredit(bizInfoDetailView.getBuyerUWAdjustCreditTerm());
+        bizInfoDetail.setBuyerUWAdjustCreditTerm(bizInfoDetailView.getBuyerUWAdjustCreditTerm());
         bizInfoDetail.setStandardAccountReceivable(bizInfoDetailView.getStandardAccountReceivable());
         bizInfoDetail.setAveragePurchaseAmount(bizInfoDetailView.getAveragePurchaseAmount());
         bizInfoDetail.setPurchasePercentCash(bizInfoDetailView.getPurchasePercentCash());
@@ -87,12 +106,12 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setSupplierTotalPercentCredit(bizInfoDetail.getSupplierTotalPercentCredit());
         bizInfoDetailView.setSupplierTotalCreditTerm(bizInfoDetail.getSupplierTotalCreditTerm());
         bizInfoDetailView.setSupplierUWAdjustPercentCredit(bizInfoDetail.getSupplierUWAdjustPercentCredit());
-        bizInfoDetailView.setSupplierUWAdjustPercentCredit(bizInfoDetail.getSupplierUWAdjustCreditTerm());
+        bizInfoDetailView.setSupplierUWAdjustCreditTerm(bizInfoDetail.getSupplierUWAdjustCreditTerm());
         bizInfoDetailView.setBuyerTotalPercentBuyVolume(bizInfoDetail.getBuyerTotalPercentBuyVolume());
         bizInfoDetailView.setBuyerTotalPercentCredit(bizInfoDetail.getBuyerTotalPercentCredit());
         bizInfoDetailView.setBuyerTotalCreditTerm(bizInfoDetail.getBuyerTotalCreditTerm());
         bizInfoDetailView.setBuyerUWAdjustPercentCredit(bizInfoDetail.getBuyerUWAdjustPercentCredit());
-        bizInfoDetailView.setBuyerUWAdjustPercentCredit(bizInfoDetail.getBuyerUWAdjustCreditTerm());
+        bizInfoDetailView.setBuyerUWAdjustCreditTerm(bizInfoDetail.getBuyerUWAdjustCreditTerm());
         bizInfoDetailView.setStandardAccountReceivable(bizInfoDetail.getStandardAccountReceivable());
         bizInfoDetailView.setAveragePurchaseAmount(bizInfoDetail.getAveragePurchaseAmount());
         bizInfoDetailView.setPurchasePercentCash(bizInfoDetail.getPurchasePercentCash());

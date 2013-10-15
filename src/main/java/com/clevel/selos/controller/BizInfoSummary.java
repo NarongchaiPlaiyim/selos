@@ -173,11 +173,20 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onViewDetail(){
+        log.info(" onViewDetail begin !! {}");
         HttpSession session = FacesUtil.getSession(true);
-        log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
         session.setAttribute("bizInfoDetailViewId",selectBizInfoDetailView.getId() );
+        //log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
+        log.info(" onViewDetail end !! {}");
 
-        log.info(" success !! {}",true);
+
+    }
+
+
+    public void onDeleteBizInfoToDB(){
+
+        bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
+
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {

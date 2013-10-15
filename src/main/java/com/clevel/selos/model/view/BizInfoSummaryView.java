@@ -14,7 +14,7 @@ public class BizInfoSummaryView {
     private String bizLocationName;
     private String isRental;
     private String ownerName;
-    private String expiryDate;
+    private Date expiryDate;
     private String addressNo;
     private String addressMoo;
     private String addressBuilding;
@@ -27,8 +27,8 @@ public class BizInfoSummaryView {
     private String addressEng;
     private String phoneNo;
     private String extension;
-    private String registrationDate;
-    private String establishDate;
+    private Date registrationDate;
+    private Date establishDate;
     private String bizInterviewInfo;
     private BigDecimal circulationAmount;
     private BigDecimal circulationPercentage;
@@ -94,11 +94,11 @@ public class BizInfoSummaryView {
         this.ownerName = ownerName;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -198,19 +198,19 @@ public class BizInfoSummaryView {
         this.extension = extension;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public String getEstablishDate() {
+    public Date getEstablishDate() {
         return establishDate;
     }
 
-    public void setEstablishDate(String establishDate) {
+    public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
     }
 

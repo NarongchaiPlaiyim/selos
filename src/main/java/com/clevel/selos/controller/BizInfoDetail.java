@@ -116,9 +116,7 @@ public class BizInfoDetail implements Serializable {
             bizProductDetailViewList = new ArrayList<BizProductDetailView>();
             supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
             buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
-            bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+
 
             bizStakeHolderDetailView = new BizStakeHolderDetailView();
             bizProductDetailView = new BizProductDetailView();
@@ -133,13 +131,8 @@ public class BizInfoDetail implements Serializable {
         }else{
             //
             log.info( "bizInfoDetailView FIND BY ID ");
-
-
             bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
 
-            log.info( "bizInfoDetailView FIND BY ID " +  bizInfoDetailView.getId());
-            log.info( "bizInfoDetailView getBizGroup " +  bizInfoDetailView.getBizGroup());
-            log.info( "bizInfoDetailView getBizDesc " +  bizInfoDetailView.getBizDesc());
             log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
             if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
                 bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
@@ -165,30 +158,11 @@ public class BizInfoDetail implements Serializable {
             onChangeBusinessGroup();
             onChangeBusinessDesc();
             descType = "";
-
-
-
-            /*bizInfoDetailView = new BizInfoDetailView();
-
-            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
-            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
-            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
-            bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
-
-            bizStakeHolderDetailView = new BizStakeHolderDetailView();
-            bizProductDetailView = new BizProductDetailView();
-
-            bizGroup = new BusinessGroup();
-            bizDesc = new BusinessDescription();
-
-            bizInfoDetailView.setBizDesc(bizDesc);
-            bizInfoDetailView.setBizGroup(bizGroup);
-            bizInfoDetailView.setBizPermission("Y");
-            log.info("bizInfoDetailView " + bizInfoDetailView);     */
         }
-        log.info("businessGroupList size is ====  " + businessGroupList.size());
+        bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
+        bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+        bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+
     }
 
     public void onChangeBusinessGroup(){
@@ -201,7 +175,7 @@ public class BizInfoDetail implements Serializable {
             bizInfoDetailView.setBizComment("");
             bizInfoDetailView.setBizPermission("");
             bizInfoDetailView.setBizDocPermission("");
-            bizInfoDetailView.setBizDocExpiryDate("");
+            bizInfoDetailView.setBizDocExpiryDate(null);
         }
     }
 
@@ -467,10 +441,28 @@ public class BizInfoDetail implements Serializable {
 
     public void onSaveBizInfoView(){
 
-        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoDetailView);
+        //log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoDetailView);
+        log.info( " Controller bizInfoDetailView Supplier \n SupplierTotal 1 " + bizInfoDetailView.getSupplierTotalPercentBuyVolume() +
+                " \n SupplierTotal 2 " + bizInfoDetailView.getSupplierTotalPercentCredit() +
+                " \n SupplierTotal 3 " + bizInfoDetailView.getSupplierTotalCreditTerm());
 
+        log.info( " Controller \n SupplierUWAdjust 1 " + bizInfoDetailView.getSupplierUWAdjustPercentCredit() +
+                " \n SupplierUWAdjust2 " + bizInfoDetailView.getSupplierUWAdjustCreditTerm());
+
+        log.info( "Controller bizInfoDetailView Buyer \n BuyerTotal 1 " + bizInfoDetailView.getBuyerTotalPercentBuyVolume() +
+                " \n BuyerTotal 2 " + bizInfoDetailView.getBuyerTotalPercentCredit() +
+                " \n BuyerTotal 3 " + bizInfoDetailView.getBuyerTotalCreditTerm());
+
+        log.info( "Controller \n BuyerUWAdjust 1 " + bizInfoDetailView.getBuyerUWAdjustPercentCredit() +
+                " \n BuyerUWAdjust2 " + bizInfoDetailView.getBuyerUWAdjustCreditTerm());
 
         bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView,bizInfoSummaryId);
+
+    }
+
+    public void onDeleteBizInfoView(){
+
+        bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
 
     }
 

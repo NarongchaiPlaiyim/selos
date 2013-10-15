@@ -36,8 +36,9 @@ public class BizInfoSummary implements Serializable {
     @Column(name="owner_name")
     private String ownerName;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="expiry_date")
-    private String expiryDate;
+    private Date expiryDate;
 
     @Column(name="address_no")
     private String addressNo;
@@ -78,11 +79,13 @@ public class BizInfoSummary implements Serializable {
     @Column(name="extension")
     private String extension;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="registration_date")
-    private String registrationDate;
+    private Date registrationDate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="establish_date")
-    private String establishDate;
+    private Date establishDate;
 
     @Column(name="biz_interview_info")
     private String bizInterviewInfo;
@@ -210,11 +213,11 @@ public class BizInfoSummary implements Serializable {
         this.ownerName = ownerName;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -314,19 +317,19 @@ public class BizInfoSummary implements Serializable {
         this.extension = extension;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public String getEstablishDate() {
+    public Date getEstablishDate() {
         return establishDate;
     }
 
-    public void setEstablishDate(String establishDate) {
+    public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
     }
 
