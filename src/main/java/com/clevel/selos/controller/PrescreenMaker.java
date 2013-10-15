@@ -1047,7 +1047,7 @@ public class PrescreenMaker implements Serializable {
         log.debug("onSavePrescreen ::: prescreenView : {}", prescreenView);
         try{
             //prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
-            prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, bizInfoViewList, workCasePreScreenId, user);
+            prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, customerInfoViewList, bizInfoViewList, workCasePreScreenId, user);
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
