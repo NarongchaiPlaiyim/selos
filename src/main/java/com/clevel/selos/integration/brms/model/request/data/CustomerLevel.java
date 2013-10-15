@@ -1,107 +1,135 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
+import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class CustomerLevel {
-    public String personalId; //use for citizenID, registrationID, passportNumber
-    public int borrowerType; //enum
-    public int relationshipType; //enum
-    public int nationality; //enum
-    public int ageMonths;
-    public int newQualitativeClass; //enum ,Default to 'P'
-    public Date lastReviewDate;
-    public Date extendedReviewDate;
-    public int SCFScore;
-    public int warningCodeFullMatch; //enum
-    public int warningCodeSomeMatch; //enum
-    public boolean creditWorthiness;
-    public int kycLevel; //enum
-    public int noOfNCBCheckIn6months;
-    public int numberOfDaysLastNCBCheck;
+public class CustomerLevel implements Serializable {
+    private CustomerEntity customerEntity;
+    private boolean isExistingSMECustomer;
+    private Relation relationshipType;
+    private Reference reference;
+    private Nationality nationality;
+    private int numberOfMonthFromLastSetUpDate;
+    private String newQualitative; //todo : to be enum
+    private Date nextReviewDate;
+    private boolean nextReviewDateFlag;
+    private Date extendedReviewDate;
+    private boolean extendedReviewDateFlag;
+    private String ratingFinal;
+    private boolean unpaidFeePaid;
+    private boolean claimedLGFlag;
+    private String personalId;
+    private int age;
+    private boolean ncbFlag;
+    private int numSearchesLast6Mths;
+    private int numberOfDaysNCBcheck;
+    private WarningCode warningCodeFullyMatched;
+    private WarningCode warningCodeSomeMatched;
+    private int dayOverdueAnnualReview;
 
-    public NcbAccountLevel ncbAccountLevel; //should be in CustomerLevel?
-    public BankAccountLevel bankAccountLevel; //should be in CustomerLevel?
-    public TmbAccountLevel tmbAccountLevel; //should be in CustomerLevel?
-    //todo add more field
 
     public CustomerLevel() {
     }
 
-    public CustomerLevel(String personalId, int borrowerType, int relationshipType, int nationality, int ageMonths, int newQualitativeClass, Date lastReviewDate, Date extendedReviewDate, int SCFScore, int warningCodeFullMatch, int warningCodeSomeMatch, boolean creditWorthiness, int kycLevel, int noOfNCBCheckIn6months, int numberOfDaysLastNCBCheck, NcbAccountLevel ncbAccountLevel, BankAccountLevel bankAccountLevel, TmbAccountLevel tmbAccountLevel) {
-        this.personalId = personalId;
-        this.borrowerType = borrowerType;
+    public CustomerLevel(CustomerEntity customerEntity, boolean existingSMECustomer, Relation relationshipType, Reference reference, Nationality nationality, int numberOfMonthFromLastSetUpDate, String newQualitative, Date nextReviewDate, boolean nextReviewDateFlag, Date extendedReviewDate, boolean extendedReviewDateFlag, String ratingFinal, boolean unpaidFeePaid, boolean claimedLGFlag, String personalId, int age, boolean ncbFlag, int numSearchesLast6Mths, int numberOfDaysNCBcheck, WarningCode warningCodeFullyMatched, WarningCode warningCodeSomeMatched, int dayOverdueAnnualReview) {
+        this.customerEntity = customerEntity;
+        isExistingSMECustomer = existingSMECustomer;
         this.relationshipType = relationshipType;
+        this.reference = reference;
         this.nationality = nationality;
-        this.ageMonths = ageMonths;
-        this.newQualitativeClass = newQualitativeClass;
-        this.lastReviewDate = lastReviewDate;
+        this.numberOfMonthFromLastSetUpDate = numberOfMonthFromLastSetUpDate;
+        this.newQualitative = newQualitative;
+        this.nextReviewDate = nextReviewDate;
+        this.nextReviewDateFlag = nextReviewDateFlag;
         this.extendedReviewDate = extendedReviewDate;
-        this.SCFScore = SCFScore;
-        this.warningCodeFullMatch = warningCodeFullMatch;
-        this.warningCodeSomeMatch = warningCodeSomeMatch;
-        this.creditWorthiness = creditWorthiness;
-        this.kycLevel = kycLevel;
-        this.noOfNCBCheckIn6months = noOfNCBCheckIn6months;
-        this.numberOfDaysLastNCBCheck = numberOfDaysLastNCBCheck;
-        this.ncbAccountLevel = ncbAccountLevel;
-        this.bankAccountLevel = bankAccountLevel;
-        this.tmbAccountLevel = tmbAccountLevel;
-    }
-
-    public String getPersonalId() {
-        return personalId;
-    }
-
-    public void setPersonalId(String personalId) {
+        this.extendedReviewDateFlag = extendedReviewDateFlag;
+        this.ratingFinal = ratingFinal;
+        this.unpaidFeePaid = unpaidFeePaid;
+        this.claimedLGFlag = claimedLGFlag;
         this.personalId = personalId;
+        this.age = age;
+        this.ncbFlag = ncbFlag;
+        this.numSearchesLast6Mths = numSearchesLast6Mths;
+        this.numberOfDaysNCBcheck = numberOfDaysNCBcheck;
+        this.warningCodeFullyMatched = warningCodeFullyMatched;
+        this.warningCodeSomeMatched = warningCodeSomeMatched;
+        this.dayOverdueAnnualReview = dayOverdueAnnualReview;
     }
 
-    public int getBorrowerType() {
-        return borrowerType;
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
     }
 
-    public void setBorrowerType(int borrowerType) {
-        this.borrowerType = borrowerType;
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 
-    public int getRelationshipType() {
+    public boolean isExistingSMECustomer() {
+        return isExistingSMECustomer;
+    }
+
+    public void setExistingSMECustomer(boolean existingSMECustomer) {
+        isExistingSMECustomer = existingSMECustomer;
+    }
+
+    public Relation getRelationshipType() {
         return relationshipType;
     }
 
-    public void setRelationshipType(int relationshipType) {
+    public void setRelationshipType(Relation relationshipType) {
         this.relationshipType = relationshipType;
     }
 
-    public int getNationality() {
+    public Reference getReference() {
+        return reference;
+    }
+
+    public void setReference(Reference reference) {
+        this.reference = reference;
+    }
+
+    public Nationality getNationality() {
         return nationality;
     }
 
-    public void setNationality(int nationality) {
+    public void setNationality(Nationality nationality) {
         this.nationality = nationality;
     }
 
-    public int getAgeMonths() {
-        return ageMonths;
+    public int getNumberOfMonthFromLastSetUpDate() {
+        return numberOfMonthFromLastSetUpDate;
     }
 
-    public void setAgeMonths(int ageMonths) {
-        this.ageMonths = ageMonths;
+    public void setNumberOfMonthFromLastSetUpDate(int numberOfMonthFromLastSetUpDate) {
+        this.numberOfMonthFromLastSetUpDate = numberOfMonthFromLastSetUpDate;
     }
 
-    public int getNewQualitativeClass() {
-        return newQualitativeClass;
+    public String getNewQualitative() {
+        return newQualitative;
     }
 
-    public void setNewQualitativeClass(int newQualitativeClass) {
-        this.newQualitativeClass = newQualitativeClass;
+    public void setNewQualitative(String newQualitative) {
+        this.newQualitative = newQualitative;
     }
 
-    public Date getLastReviewDate() {
-        return lastReviewDate;
+    public Date getNextReviewDate() {
+        return nextReviewDate;
     }
 
-    public void setLastReviewDate(Date lastReviewDate) {
-        this.lastReviewDate = lastReviewDate;
+    public void setNextReviewDate(Date nextReviewDate) {
+        this.nextReviewDate = nextReviewDate;
+    }
+
+    public boolean isNextReviewDateFlag() {
+        return nextReviewDateFlag;
+    }
+
+    public void setNextReviewDateFlag(boolean nextReviewDateFlag) {
+        this.nextReviewDateFlag = nextReviewDateFlag;
     }
 
     public Date getExtendedReviewDate() {
@@ -112,83 +140,127 @@ public class CustomerLevel {
         this.extendedReviewDate = extendedReviewDate;
     }
 
-    public int getSCFScore() {
-        return SCFScore;
+    public boolean isExtendedReviewDateFlag() {
+        return extendedReviewDateFlag;
     }
 
-    public void setSCFScore(int SCFScore) {
-        this.SCFScore = SCFScore;
+    public void setExtendedReviewDateFlag(boolean extendedReviewDateFlag) {
+        this.extendedReviewDateFlag = extendedReviewDateFlag;
     }
 
-    public int getWarningCodeFullMatch() {
-        return warningCodeFullMatch;
+    public String getRatingFinal() {
+        return ratingFinal;
     }
 
-    public void setWarningCodeFullMatch(int warningCodeFullMatch) {
-        this.warningCodeFullMatch = warningCodeFullMatch;
+    public void setRatingFinal(String ratingFinal) {
+        this.ratingFinal = ratingFinal;
     }
 
-    public int getWarningCodeSomeMatch() {
-        return warningCodeSomeMatch;
+    public boolean isUnpaidFeePaid() {
+        return unpaidFeePaid;
     }
 
-    public void setWarningCodeSomeMatch(int warningCodeSomeMatch) {
-        this.warningCodeSomeMatch = warningCodeSomeMatch;
+    public void setUnpaidFeePaid(boolean unpaidFeePaid) {
+        this.unpaidFeePaid = unpaidFeePaid;
     }
 
-    public boolean isCreditWorthiness() {
-        return creditWorthiness;
+    public boolean isClaimedLGFlag() {
+        return claimedLGFlag;
     }
 
-    public void setCreditWorthiness(boolean creditWorthiness) {
-        this.creditWorthiness = creditWorthiness;
+    public void setClaimedLGFlag(boolean claimedLGFlag) {
+        this.claimedLGFlag = claimedLGFlag;
     }
 
-    public int getKycLevel() {
-        return kycLevel;
+    public String getPersonalId() {
+        return personalId;
     }
 
-    public void setKycLevel(int kycLevel) {
-        this.kycLevel = kycLevel;
+    public void setPersonalId(String personalId) {
+        this.personalId = personalId;
     }
 
-    public int getNoOfNCBCheckIn6months() {
-        return noOfNCBCheckIn6months;
+    public int getAge() {
+        return age;
     }
 
-    public void setNoOfNCBCheckIn6months(int noOfNCBCheckIn6months) {
-        this.noOfNCBCheckIn6months = noOfNCBCheckIn6months;
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    public int getNumberOfDaysLastNCBCheck() {
-        return numberOfDaysLastNCBCheck;
+    public boolean isNcbFlag() {
+        return ncbFlag;
     }
 
-    public void setNumberOfDaysLastNCBCheck(int numberOfDaysLastNCBCheck) {
-        this.numberOfDaysLastNCBCheck = numberOfDaysLastNCBCheck;
+    public void setNcbFlag(boolean ncbFlag) {
+        this.ncbFlag = ncbFlag;
     }
 
-    public NcbAccountLevel getNcbAccountLevel() {
-        return ncbAccountLevel;
+    public int getNumSearchesLast6Mths() {
+        return numSearchesLast6Mths;
     }
 
-    public void setNcbAccountLevel(NcbAccountLevel ncbAccountLevel) {
-        this.ncbAccountLevel = ncbAccountLevel;
+    public void setNumSearchesLast6Mths(int numSearchesLast6Mths) {
+        this.numSearchesLast6Mths = numSearchesLast6Mths;
     }
 
-    public BankAccountLevel getBankAccountLevel() {
-        return bankAccountLevel;
+    public int getNumberOfDaysNCBcheck() {
+        return numberOfDaysNCBcheck;
     }
 
-    public void setBankAccountLevel(BankAccountLevel bankAccountLevel) {
-        this.bankAccountLevel = bankAccountLevel;
+    public void setNumberOfDaysNCBcheck(int numberOfDaysNCBcheck) {
+        this.numberOfDaysNCBcheck = numberOfDaysNCBcheck;
     }
 
-    public TmbAccountLevel getTmbAccountLevel() {
-        return tmbAccountLevel;
+    public WarningCode getWarningCodeFullyMatched() {
+        return warningCodeFullyMatched;
     }
 
-    public void setTmbAccountLevel(TmbAccountLevel tmbAccountLevel) {
-        this.tmbAccountLevel = tmbAccountLevel;
+    public void setWarningCodeFullyMatched(WarningCode warningCodeFullyMatched) {
+        this.warningCodeFullyMatched = warningCodeFullyMatched;
+    }
+
+    public WarningCode getWarningCodeSomeMatched() {
+        return warningCodeSomeMatched;
+    }
+
+    public void setWarningCodeSomeMatched(WarningCode warningCodeSomeMatched) {
+        this.warningCodeSomeMatched = warningCodeSomeMatched;
+    }
+
+    public int getDayOverdueAnnualReview() {
+        return dayOverdueAnnualReview;
+    }
+
+    public void setDayOverdueAnnualReview(int dayOverdueAnnualReview) {
+        this.dayOverdueAnnualReview = dayOverdueAnnualReview;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("customerEntity", customerEntity)
+                .append("isExistingSMECustomer", isExistingSMECustomer)
+                .append("relationshipType", relationshipType)
+                .append("reference", reference)
+                .append("nationality", nationality)
+                .append("numberOfMonthFromLastSetUpDate", numberOfMonthFromLastSetUpDate)
+                .append("newQualitative", newQualitative)
+                .append("nextReviewDate", nextReviewDate)
+                .append("nextReviewDateFlag", nextReviewDateFlag)
+                .append("extendedReviewDate", extendedReviewDate)
+                .append("extendedReviewDateFlag", extendedReviewDateFlag)
+                .append("ratingFinal", ratingFinal)
+                .append("unpaidFeePaid", unpaidFeePaid)
+                .append("claimedLGFlag", claimedLGFlag)
+                .append("personalId", personalId)
+                .append("age", age)
+                .append("ncbFlag", ncbFlag)
+                .append("numSearchesLast6Mths", numSearchesLast6Mths)
+                .append("numberOfDaysNCBcheck", numberOfDaysNCBcheck)
+                .append("warningCodeFullyMatched", warningCodeFullyMatched)
+                .append("warningCodeSomeMatched", warningCodeSomeMatched)
+                .append("dayOverdueAnnualReview", dayOverdueAnnualReview)
+                .toString();
     }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BasicInfoAccountView implements Serializable {
+    private long id;
     private String accountName;
     private OpenAccountType accountType;
     private OpenAccountProduct product;
@@ -23,6 +24,14 @@ public class BasicInfoAccountView implements Serializable {
         this.accountType = new OpenAccountType();
         this.product = new OpenAccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAccountName() {

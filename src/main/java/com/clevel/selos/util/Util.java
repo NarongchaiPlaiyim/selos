@@ -43,6 +43,7 @@ public class Util {
             dateD = (Date) formatter.parse(dateStr);
 
         } catch (ParseException e) {
+            log.error("",e);
         }
         return dateD;
     }
@@ -56,6 +57,7 @@ public class Util {
             DateFormat formatter = new SimpleDateFormat("yyyyMMdd", Locale.US);
             date = (Date) formatter.parse(dateStr);
         } catch (ParseException e) {
+            log.error("",e);
         }
         return date;
     }
@@ -69,6 +71,7 @@ public class Util {
             DateFormat formatter = new SimpleDateFormat(format, Locale.US);
             date = (Date) formatter.parse(dateStr);
         } catch (ParseException e) {
+            log.error("",e);
         }
         return date;
     }
@@ -112,6 +115,7 @@ public class Util {
             return false;
         }
     }
+
     public static String convertNullToBlank(String string){
         if(string != null || !"null".equals(string.toLowerCase())){
             return "";
@@ -119,7 +123,8 @@ public class Util {
             return string;
         }
     }
-    public static List convertNullToEmpeyList(List list){
+
+    public static List convertNullToEmptyList(List list){
         return list!=null?list: Collections.EMPTY_LIST;
     }
 
@@ -164,9 +169,11 @@ public class Util {
             return "";
         }
     }
+
     public static String convertCharset(String string)throws Exception{
        return new String(string.getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
     }
+
     public static String setRequestNo(String appRefNumber, int count){
         count++;
         if(count<=9){

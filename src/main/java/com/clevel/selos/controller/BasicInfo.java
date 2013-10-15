@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.working.BorrowingTypeDAO;
+import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -65,6 +66,8 @@ public class BasicInfo implements Serializable {
     private BasicInfoControl basicInfoControl;
     @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
+    @Inject
+    private BAPaymentMethodDAO baPaymentMethodDAO;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -81,6 +84,7 @@ public class BasicInfo implements Serializable {
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
 
     private List<BorrowingType> borrowingTypeList;
+    private List<BAPaymentMethod> baPaymentMethodList;
 
     //*** View ***//
     private BasicInfoView basicInfoView;
@@ -92,9 +96,13 @@ public class BasicInfo implements Serializable {
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
 
+    private String messageHeader;
+    private String message;
+
     //session
     private long workCaseId;
     private long stepId;
+    private String userId;
 
     public BasicInfo(){
     }
@@ -103,6 +111,8 @@ public class BasicInfo implements Serializable {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
+        session.setAttribute("userId", 10001);
+
         log.info("preRender ::: setSession ");
 
         session = FacesUtil.getSession(true);
@@ -110,6 +120,7 @@ public class BasicInfo implements Serializable {
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            userId = session.getAttribute("userId").toString();
         }else{
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
@@ -129,19 +140,7 @@ public class BasicInfo implements Serializable {
 
         preRender();
 
-        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-        if(basicInfoView == null){
-            basicInfoView = new BasicInfoView();
-        }
-
-        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
-
-        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
-        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
-
-        basicInfoView.setBaPayment("TOPUP");
-
-        basicInfoAccountView = new BasicInfoAccountView();
+        basicInfoView = new BasicInfoView();
 
         productGroupList = productGroupDAO.findAll();
         specialProgramList = specialProgramDAO.findAll();
@@ -161,7 +160,29 @@ public class BasicInfo implements Serializable {
             basicInfoAccountPurposeViewList.add(purposeView);
         }
 
+        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+
+        baPaymentMethodList = baPaymentMethodDAO.findAll();
+
+        if(baPaymentMethodList != null){
+            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
+        }
+
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+
+        if(basicInfoView.getId() == 0){
+            basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
+        }
+
+        if(customerEntity.isChangeQualtiEnable()){
+            basicInfoView.setIndividual(1);
+        }else{
+            basicInfoView.setIndividual(0);
+        }
+
+        basicInfoAccountView = new BasicInfoAccountView();
     }
 
     public void onAddAccount(){
@@ -235,23 +256,48 @@ public class BasicInfo implements Serializable {
     }
 
     public void onDeleteAccount() {
-        basicInfoView.getBasicInfoAccountViews().remove(basicInfoAccountView);
+        basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
     public void onSave(){
-        log.debug("basicInfoView : {}", basicInfoView);
-        System.out.println("####### : "+basicInfoView.getBasicInfoAccountViews().get(0).getBasicInfoAccountPurposeView().get(0).getPurpose().getName());
-        int a = 1;
-        for(BasicInfoAccountView asdfg : basicInfoView.getBasicInfoAccountViews()){
-            System.out.println("############ Column : "+a);
-            int b = 1;
-            for (BasicInfoAccountPurposeView qwerty : asdfg.getBasicInfoAccountPurposeView()){
-                System.out.println("#################### Purpose : "+b);
-                System.out.println("#################### Purpose Name : "+qwerty.getPurpose().getName());
-                System.out.println("#################### Purpose Selected : "+qwerty.isSelected());
-                b++;
+        try{
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+            messageHeader = "Save Basic Info Success.";
+            message = "Save Basic Info data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Basic Info Failed.";
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
             }
-            a++;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onChangeSpecialProgram(){
+        basicInfoView.getSpecialProgram().setId(0);
+    }
+
+    public void onChangeRefIn(){
+        basicInfoView.getRefinanceIn().setCode(0);
+    }
+
+    public void onChangeRefOut(){
+        basicInfoView.getRefinanceOut().setCode(0);
+    }
+
+    public void onChangeBA(){
+        if(basicInfoView.getApplyBA() == 0){
+            basicInfoView.getBaPaymentMethod().setId(0);
+        }else{
+            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
+            }else{
+                basicInfoView.getBaPaymentMethod().setId(0);
+            }
         }
     }
 
@@ -374,5 +420,29 @@ public class BasicInfo implements Serializable {
 
     public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
         this.borrowingTypeList = borrowingTypeList;
+    }
+
+    public List<BAPaymentMethod> getBaPaymentMethodList() {
+        return baPaymentMethodList;
+    }
+
+    public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
+        this.baPaymentMethodList = baPaymentMethodList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

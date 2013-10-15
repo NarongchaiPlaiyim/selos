@@ -38,9 +38,9 @@ public class ValidationImp implements Validation, Serializable {
             throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
         }
         if(!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppRefNumber"));
+            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppNumber"));
         }
-        if(!ValidationUtil.isValueInRange(20, 20, inputModel.getCANumber())){
+        /*if(!ValidationUtil.isValueInRange(20, 20, inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
         }
         if(!ValidationUtil.isValueInRange(1, 10, inputModel.getReferenceTel())){
@@ -48,7 +48,7 @@ public class ValidationImp implements Validation, Serializable {
         }
         if(!ValidationUtil.isNumeric(inputModel.getReferenceTel())){
             throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
-        }
+        }    */
         ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
         if(null == ncrsModelArrayList){
             throw new ValidationException(required, validationMsg.get(required, "NCRS Model ArrayList"));
@@ -89,9 +89,9 @@ public class ValidationImp implements Validation, Serializable {
             throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
         }
         if(!ValidationUtil.isValueInRange(16,16,inputModel.getAppRefNumber())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppRefNumber"));
+            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppNumber"));
         }
-        if(!ValidationUtil.isValueInRange(20,20,inputModel.getCANumber())){
+        /*if(!ValidationUtil.isValueInRange(20,20,inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
         }
         if(!ValidationUtil.isValueInRange(9,10,inputModel.getReferenceTel())){
@@ -99,7 +99,7 @@ public class ValidationImp implements Validation, Serializable {
         }
         if(!ValidationUtil.isNumeric(inputModel.getReferenceTel())){
             throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
-        }
+        }   */
         ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
         if(null == nccrsModelArrayList){
             throw new ValidationException(required, validationMsg.get(required, "NCCRS Model ArrayList"));

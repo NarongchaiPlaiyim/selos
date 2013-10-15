@@ -1,4 +1,4 @@
-package com.clevel.selos.model.db.ext.ncb;
+package com.clevel.selos.model.db.ext;
 
 
 import javax.persistence.*;
@@ -13,8 +13,8 @@ public class NCBResult implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCB_RESULT_ID")
     private long id;
 
-    @Column(name="app_ref_number", length = 16)
-    private String appRefNumber;
+    @Column(name="appNnumber", length = 16)
+    private String appNumber;
 
     @Column(name="customer_type", length = 7)
     private String customerType;
@@ -38,8 +38,8 @@ public class NCBResult implements Serializable {
     public NCBResult() {
     }
 
-    public NCBResult(String appRefNumber, String customerType, String customerId, Date inquiryDate, String result, String reason, String requestNo) {
-        this.appRefNumber = appRefNumber;
+    public NCBResult(String appNumber, String customerType, String customerId, Date inquiryDate, String result, String reason, String requestNo) {
+        this.appNumber = appNumber;
         this.customerType = customerType;
         this.customerId = customerId;
         this.inquiryDate = inquiryDate;
@@ -64,12 +64,12 @@ public class NCBResult implements Serializable {
         this.id = id;
     }
 
-    public String getAppRefNumber() {
-        return appRefNumber;
+    public String getAppNumber() {
+        return appNumber;
     }
 
-    public void setAppRefNumber(String appRefNumber) {
-        this.appRefNumber = appRefNumber;
+    public void setAppNumber(String appNumber) {
+        this.appNumber = appNumber;
     }
 
     public String getCustomerType() {

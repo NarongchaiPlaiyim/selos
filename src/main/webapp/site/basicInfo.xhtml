@@ -186,15 +186,15 @@
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="specialProgram"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
                                                                                  value="#{basicInfo.basicInfoView.specialProgram.id}"
-                                                                                 disabled="#{not basicInfo.basicInfoView.spProgram}">
+                                                                                 disabled="#{basicInfo.basicInfoView.spProgram != 1}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{basicInfo.specialProgramList}"
                                                                                    var="specialProgram"
@@ -215,13 +215,13 @@
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="refIn"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refIn" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refIn}"
+                                                                <p:selectOneMenu id="refIn" styleClass="largest" disabled="#{basicInfo.basicInfoView.refIn != 1}"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
@@ -243,13 +243,13 @@
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}">
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="refOut"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refOut" styleClass="largest" disabled="#{not basicInfo.basicInfoView.refOut}"
+                                                                <p:selectOneMenu id="refOut" styleClass="largest" disabled="#{basicInfo.basicInfoView.refOut != 1}"
                                                                                  size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
@@ -283,8 +283,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1" itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2" itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -294,8 +294,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -344,8 +344,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.loan}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -355,8 +355,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -366,8 +366,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.annual}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -463,7 +463,8 @@
                                                                                              target="#{basicInfo.rowIndex}"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
-                                                                             icon="ui-icon-trash">
+                                                                             icon="ui-icon-trash"
+                                                                             oncomplete="confirmDeleteAccountDlg.show()" >
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
@@ -495,8 +496,9 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -505,9 +507,8 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.baPayment}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.topUp')}" itemValue="TOPUP"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.directly')}" itemValue="DIRECTLY"/>
+                                                    <h:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}" disabled="#{basicInfo.basicInfoView.applyBA != 1}">
+                                                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment" itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -523,9 +524,10 @@
 
                                 <tr>
                                     <td colspan="4" class="center">
-                                        <p:commandButton value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form"
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form" update=":msgBoxSystemMessagePanel"
                                                          actionListener="#{basicInfo.onSave}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                                         actionListener="#{basicInfo.onCreation}"/>
                                     </td>
                                 </tr>
                             </table>
@@ -542,31 +544,37 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
         </h:form>
+
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+
     </p:panel>
+
+    <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
+              modal="true" width="500" height="260">
+        <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
+    </p:dialog>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAccountDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccount"/>
+        <ui:param name="controller" value="#{basicInfo}"/>
+        <ui:param name="action" value="onDeleteAccount"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
+                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
-
-    <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg"
-              modal="true" width="500" height="260">
-        <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
-    </p:dialog>
-
-    <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteFacilityDialog"/>
-        <ui:param name="name" value="confirmDeleteFacilityDlg"/>
-        <ui:param name="formId" value="frmConfirmDeleteFacility"/>
-        <ui:param name="controller" value="#{basicInfo}"/>
-        <ui:param name="action" value="onDeleteAccount"/>
-        <ui:param name="update" value=":frmMain"/>
-    </ui:include>
 
 </h:body>
 </f:view>
