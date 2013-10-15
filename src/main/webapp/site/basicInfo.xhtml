@@ -188,7 +188,7 @@
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="specialProgram"/>
+                                                                    <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
@@ -217,7 +217,7 @@
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="refIn"/>
+                                                                    <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
@@ -245,7 +245,7 @@
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                                    <p:ajax update="refOut"/>
+                                                                    <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
@@ -463,7 +463,8 @@
                                                                                              target="#{basicInfo.rowIndex}"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
-                                                                             icon="ui-icon-trash">
+                                                                             icon="ui-icon-trash"
+                                                                             oncomplete="confirmDeleteAccountDlg.show()" >
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
@@ -497,7 +498,7 @@
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
-                                                        <p:ajax update="ba"/>
+                                                        <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -523,9 +524,10 @@
 
                                 <tr>
                                     <td colspan="4" class="center">
-                                        <p:commandButton value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form"
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form"
                                                          actionListener="#{basicInfo.onSave}"/>
-                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                                         actionListener="#{basicInfo.onCreation}"/>
                                     </td>
                                 </tr>
                             </table>
@@ -542,6 +544,12 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
         </h:form>
+
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
+
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
@@ -560,9 +568,9 @@
     </p:dialog>
 
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteFacilityDialog"/>
-        <ui:param name="name" value="confirmDeleteFacilityDlg"/>
-        <ui:param name="formId" value="frmConfirmDeleteFacility"/>
+        <ui:param name="id" value="confirmDeleteAccountDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccount"/>
         <ui:param name="controller" value="#{basicInfo}"/>
         <ui:param name="action" value="onDeleteAccount"/>
         <ui:param name="update" value=":frmMain"/>

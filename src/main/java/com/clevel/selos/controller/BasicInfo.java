@@ -136,17 +136,11 @@ public class BasicInfo implements Serializable {
 
         preRender();
 
-        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-        if(basicInfoView == null){
-            basicInfoView = new BasicInfoView();
-        }
-
         CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
 
-        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
-        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
+        basicInfoView = new BasicInfoView();
 
-        basicInfoAccountView = new BasicInfoAccountView();
+        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
 
         productGroupList = productGroupDAO.findAll();
         specialProgramList = specialProgramDAO.findAll();
@@ -173,6 +167,12 @@ public class BasicInfo implements Serializable {
         if(baPaymentMethodList != null){
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
+
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+
+        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
+
+        basicInfoAccountView = new BasicInfoAccountView();
     }
 
     public void onAddAccount(){
@@ -246,19 +246,38 @@ public class BasicInfo implements Serializable {
     }
 
     public void onDeleteAccount() {
-        basicInfoView.getBasicInfoAccountViews().remove(basicInfoAccountView);
+        basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
     public void onSave(){
         log.debug("basicInfoView : {}", basicInfoView);
-        com.clevel.selos.model.db.working.BasicInfo basicInfo = basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+        basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
 
-        basicInfoControl.deleteOpenAccount(basicInfo.getId());
+        onCreation();
+    }
 
-        System.out.println("basicInfoView : "+basicInfoView);
+    public void onChangeSpecialProgram(){
+        basicInfoView.getSpecialProgram().setId(0);
+    }
 
-        basicInfoControl.addOpenAccount(basicInfoView,basicInfo);
+    public void onChangeRefIn(){
+        basicInfoView.getRefinanceIn().setCode(0);
+    }
 
+    public void onChangeRefOut(){
+        basicInfoView.getRefinanceOut().setCode(0);
+    }
+
+    public void onChangeBA(){
+        if(!basicInfoView.isApplyBA()){
+            basicInfoView.getBaPaymentMethod().setId(0);
+        }else{
+            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
+            }else{
+                basicInfoView.getBaPaymentMethod().setId(0);
+            }
+        }
     }
 
     // Get Set
