@@ -14,6 +14,7 @@
 </h:head>
 
 <h:body>
+    <f:event type="preRenderView" listener="#{basicInfo.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
@@ -50,7 +51,7 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.appNo')}"/>
                                                 </td>
                                                 <td style="width: 200px;">
-                                                    <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -58,11 +59,11 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refAppNo')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                                 <td class="title" style="width: 300px; padding-left: 30px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}" style="margin-right: 10px;"/>
-                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger" disabled="true"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -282,8 +283,8 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="A"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="B"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2" itemDisabled="#{not basicInfo.basicInfoView.individual}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -375,8 +376,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.style')}"/>
                                                 </td>
                                                 <td>
-                                                    <p:selectOneMenu style="width: 185px;">
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.loanRequestPattern.id}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{basicInfo.borrowingTypeList}"
+                                                                       var="borrowingType"
+                                                                       itemLabel="#{borrowingType.name}"
+                                                                       itemValue="#{borrowingType.id}"/>
                                                     </p:selectOneMenu>
                                                 </td>
                                             </tr>
@@ -442,7 +448,7 @@
                                                         </p:column>
 
                                                         <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
-                                                            <h:outputText value="#{item.purpose.name}"/>
+                                                            <h:outputText value="#{item.purposeForShow}"/>
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -458,9 +464,8 @@
                                                             </p:commandButton>
                                                             <p:commandButton title="Remove"
                                                                              icon="ui-icon-trash">
-                                                                             <!--oncomplete="confirmDeleteFacilityDlg.show()" -->
-                                                                <!--<f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{prescreenMaker.selectFacilityItem}"/>-->
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{basicInfo.selectAccount}"/>
                                                             </p:commandButton>
                                                         </p:column>
                                                     </p:dataTable>
@@ -492,6 +497,7 @@
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="false"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="true"/>
+                                                        <p:ajax update="ba"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -500,9 +506,8 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.baPayment}">
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.topUp')}" itemValue="TOPUP"/>
-                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.directly')}" itemValue="DIRECTLY"/>
+                                                    <h:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}" disabled="#{not basicInfo.basicInfoView.applyBA}">
+                                                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment" itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -553,6 +558,15 @@
               modal="true" width="500" height="260">
         <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
     </p:dialog>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteFacilityDialog"/>
+        <ui:param name="name" value="confirmDeleteFacilityDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteFacility"/>
+        <ui:param name="controller" value="#{basicInfo}"/>
+        <ui:param name="action" value="onDeleteAccount"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
 </h:body>
 </f:view>

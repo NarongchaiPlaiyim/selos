@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class OpenAccountPurpose implements Serializable {
     @Id
     @Column(name = "id")
-    private int id;
+    private long id;
     @Column(name = "name")
     private String name;
     @Column(name = "active")
@@ -23,11 +23,11 @@ public class OpenAccountPurpose implements Serializable {
     public OpenAccountPurpose() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

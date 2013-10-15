@@ -1,7 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BasicInfoView implements Serializable {
+    private long id;
     private String appNo;
     private String refAppNo;
     private String caNo;
@@ -29,7 +31,7 @@ public class BasicInfoView implements Serializable {
     private boolean isRefOut;
     private Bank refinanceOut;
     private RiskType riskType;
-    private String qualitative;
+    private int qualitative;
     private boolean existingSME;
     private String since;
     private Date lastReviewDate;
@@ -38,12 +40,19 @@ public class BasicInfoView implements Serializable {
     private boolean isLoan;
     private boolean isMoreOneYear;
     private boolean isAnnual;
-//    private xxxxx style;
+    private BorrowingType loanRequestPattern;
     private String refName;
     private String refId;
     private List<BasicInfoAccountView> basicInfoAccountViews;
     private boolean isApplyBA;
-    private String baPayment;
+    private BAPaymentMethod baPaymentMethod;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+    //for disable
+    private boolean isIndividual;
+
 
     public BasicInfoView(){
         reset();
@@ -57,7 +66,17 @@ public class BasicInfoView implements Serializable {
         this.refinanceOut = new Bank();
         this.riskType = new RiskType();
         this.sbfScore = new SBFScore();
+        this.loanRequestPattern = new BorrowingType();
         this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
+        this.baPaymentMethod = new BAPaymentMethod();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAppNo() {
@@ -220,11 +239,11 @@ public class BasicInfoView implements Serializable {
         this.riskType = riskType;
     }
 
-    public String getQualitative() {
+    public int getQualitative() {
         return qualitative;
     }
 
-    public void setQualitative(String qualitative) {
+    public void setQualitative(int qualitative) {
         this.qualitative = qualitative;
     }
 
@@ -292,6 +311,14 @@ public class BasicInfoView implements Serializable {
         isAnnual = annual;
     }
 
+    public BorrowingType getLoanRequestPattern() {
+        return loanRequestPattern;
+    }
+
+    public void setLoanRequestPattern(BorrowingType loanRequestPattern) {
+        this.loanRequestPattern = loanRequestPattern;
+    }
+
     public String getRefName() {
         return refName;
     }
@@ -324,11 +351,97 @@ public class BasicInfoView implements Serializable {
         isApplyBA = applyBA;
     }
 
-    public String getBaPayment() {
-        return baPayment;
+    public BAPaymentMethod getBaPaymentMethod() {
+        return baPaymentMethod;
     }
 
-    public void setBaPayment(String baPayment) {
-        this.baPayment = baPayment;
+    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
+        this.baPaymentMethod = baPaymentMethod;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public boolean isIndividual() {
+        return isIndividual;
+    }
+
+    public void setIndividual(boolean individual) {
+        isIndividual = individual;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("appNo", appNo).
+                append("refAppNo", refAppNo).
+                append("caNo", caNo).
+                append("requestType", requestType).
+                append("productGroup", productGroup).
+                append("charUnPaid", charUnPaid).
+                append("charNoPending", charNoPending).
+                append("charFCLG", charFCLG).
+                append("charFCIns", charFCIns).
+                append("charFCCom", charFCCom).
+                append("charFCAba", charFCAba).
+                append("charFCLate", charFCLate).
+                append("charFCFund", charFCFund).
+                append("isSpProgram", isSpProgram).
+                append("specialProgram", specialProgram).
+                append("isRefIn", isRefIn).
+                append("refinanceIn", refinanceIn).
+                append("isRefOut", isRefOut).
+                append("refinanceOut", refinanceOut).
+                append("riskType", riskType).
+                append("qualitative", qualitative).
+                append("existingSME", existingSME).
+                append("since", since).
+                append("lastReviewDate", lastReviewDate).
+                append("extReviewDate", extReviewDate).
+                append("sbfScore", sbfScore).
+                append("isLoan", isLoan).
+                append("isMoreOneYear", isMoreOneYear).
+                append("isAnnual", isAnnual).
+                append("loanRequestPattern", loanRequestPattern).
+                append("refName", refName).
+                append("refId", refId).
+                append("basicInfoAccountViews", basicInfoAccountViews).
+                append("isApplyBA", isApplyBA).
+                append("baPaymentMethod", baPaymentMethod).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                toString();
     }
 }

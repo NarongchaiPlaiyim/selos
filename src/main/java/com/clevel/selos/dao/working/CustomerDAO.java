@@ -57,4 +57,13 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
 
         return customer;
     }
+
+    public List<Customer> findByWorkCaseId(long workCaseId){
+        log.info("findByWorkCaseId : {}", workCaseId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+
+        return customerList;
+    }
 }

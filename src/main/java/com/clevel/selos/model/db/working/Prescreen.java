@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -38,11 +36,27 @@ public class Prescreen implements Serializable {
     @Column(name="register_date")
     private Date registerDate;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name="referred_date")
+    private Date referredDate;
+
+    @OneToOne
+    @JoinColumn(name="referred_experience_id")
+    private ReferredExperience referredExperience;
+
     @Column(name="tcg")
     private boolean tcg;
 
     @Column(name="refinance")
     private boolean refinance;
+
+    @OneToOne
+    @JoinColumn(name="refinance_bank_id")
+    private Bank refinanceBank;
+
+    @OneToOne
+    @JoinColumn(name="borrowing_type_id")
+    private BorrowingType borrowingType;
 
     @OneToOne
     @JoinColumn(name="bdm_checker_id")
@@ -116,6 +130,22 @@ public class Prescreen implements Serializable {
         this.registerDate = registerDate;
     }
 
+    public Date getReferredDate() {
+        return referredDate;
+    }
+
+    public void setReferredDate(Date referredDate) {
+        this.referredDate = referredDate;
+    }
+
+    public ReferredExperience getReferredExperience() {
+        return referredExperience;
+    }
+
+    public void setReferredExperience(ReferredExperience referredExperience) {
+        this.referredExperience = referredExperience;
+    }
+
     public boolean isTcg() {
         return tcg;
     }
@@ -130,6 +160,22 @@ public class Prescreen implements Serializable {
 
     public void setRefinance(boolean refinance) {
         this.refinance = refinance;
+    }
+
+    public Bank getRefinanceBank() {
+        return refinanceBank;
+    }
+
+    public void setRefinanceBank(Bank refinanceBank) {
+        this.refinanceBank = refinanceBank;
+    }
+
+    public User getBdmChecker() {
+        return bdmChecker;
+    }
+
+    public void setBdmChecker(User bdmChecker) {
+        this.bdmChecker = bdmChecker;
     }
 
     public Date getCreateDate() {
@@ -164,6 +210,14 @@ public class Prescreen implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+    public BorrowingType getBorrowingType() {
+        return borrowingType;
+    }
+
+    public void setBorrowingType(BorrowingType borrowingType) {
+        this.borrowingType = borrowingType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -173,8 +227,12 @@ public class Prescreen implements Serializable {
                 .append("expectedSubmitDate", expectedSubmitDate)
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)
+                .append("referredDate", referredDate)
+                .append("referredExperience", referredExperience)
                 .append("tcg", tcg)
                 .append("refinance", refinance)
+                .append("refinanceBank", refinanceBank)
+                .append("bdmChecker", bdmChecker)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

@@ -1,20 +1,28 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -53,6 +61,12 @@ public class BasicInfo implements Serializable {
     private OpenAccountPurposeDAO openAccountPurposeDAO;
     @Inject
     private BankDAO bankDAO;
+    @Inject
+    private BasicInfoControl basicInfoControl;
+    @Inject
+    private BorrowingTypeDAO borrowingTypeDAO;
+    @Inject
+    private BAPaymentMethodDAO baPaymentMethodDAO;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -66,6 +80,11 @@ public class BasicInfo implements Serializable {
     private List<OpenAccountProduct> openAccountProductList;
     private List<OpenAccountPurpose> openAccountPurposeList;
 
+    private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList;
+
+    private List<BorrowingType> borrowingTypeList;
+    private List<BAPaymentMethod> baPaymentMethodList;
+
     //*** View ***//
     private BasicInfoView basicInfoView;
 
@@ -76,15 +95,56 @@ public class BasicInfo implements Serializable {
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
 
+    //session
+    private long workCaseId;
+    private long stepId;
+    private String userId;
+
     public BasicInfo(){
     }
 
+    public void preRender(){
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCaseId", 101);
+        session.setAttribute("stepId", 1006);
+        session.setAttribute("userId", 10001);
+
+        log.info("preRender ::: setSession ");
+
+        session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            userId = session.getAttribute("userId").toString();
+        }else{
+            //TODO return to inbox
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
+                return;
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
+            }
+        }
+    }
+
+
     @PostConstruct
     public void onCreation() {
-        basicInfoView = new BasicInfoView();
 
-        basicInfoView.setQualitative("A");
-        basicInfoView.setBaPayment("TOPUP");
+        preRender();
+
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+        if(basicInfoView == null){
+            basicInfoView = new BasicInfoView();
+        }
+
+        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
+        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
+        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
 
         basicInfoAccountView = new BasicInfoAccountView();
 
@@ -97,22 +157,51 @@ public class BasicInfo implements Serializable {
 
         openAccountTypeList = openAccountTypeDAO.findAll();
         openAccountProductList = openAccountProductDAO.findAll();
+
         openAccountPurposeList = openAccountPurposeDAO.findAll();
+        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
+        for(OpenAccountPurpose oap : openAccountPurposeList){
+            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+            purposeView.setPurpose(oap);
+            basicInfoAccountPurposeViewList.add(purposeView);
+        }
+
+        borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
+
+        baPaymentMethodList = baPaymentMethodDAO.findAll();
+
+        if(baPaymentMethodList != null){
+            basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
+        }
     }
 
     public void onAddAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
+
+        openAccountPurposeList = openAccountPurposeDAO.findAll();
+        basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
+        for(OpenAccountPurpose oap : openAccountPurposeList){
+            BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
+            purposeView.setPurpose(oap);
+            basicInfoAccountPurposeViewList.add(purposeView);
+        }
+
         modeForButton = ModeForButton.ADD;
     }
 
     public void onEditAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
+        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            if(biapv.isSelected()){
+                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
+                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
+                        purposeView.setSelected(true);
+                    }
+                }
+            }
+        }
         modeForButton = ModeForButton.EDIT;
-    }
-
-    public void onSave(){
-        log.debug("basicInfoView : {}", basicInfoView);
     }
 
     public void addAccount(){
@@ -128,11 +217,48 @@ public class BasicInfo implements Serializable {
             basicInfoAccountView.getProduct().setName("-");
         }
 
+        StringBuilder stringBuilder = new StringBuilder();
+
+        basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
+        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
+            if(bia.isSelected()){
+                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
+                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
+                    stringBuilder.append(bia.getPurpose().getName());
+                }else{
+                    basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
+                    stringBuilder.append(", "+bia.getPurpose().getName());
+                }
+            }
+        }
+
+        if(!stringBuilder.toString().isEmpty()){
+            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
+        }else{
+            basicInfoAccountView.setPurposeForShow("-");
+        }
+
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
         }else{
             basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
         }
+    }
+
+    public void onDeleteAccount() {
+        basicInfoView.getBasicInfoAccountViews().remove(basicInfoAccountView);
+    }
+
+    public void onSave(){
+        log.debug("basicInfoView : {}", basicInfoView);
+        com.clevel.selos.model.db.working.BasicInfo basicInfo = basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+
+        basicInfoControl.deleteOpenAccount(basicInfo.getId());
+
+        System.out.println("basicInfoView : "+basicInfoView);
+
+        basicInfoControl.addOpenAccount(basicInfoView,basicInfo);
+
     }
 
     // Get Set
@@ -200,12 +326,12 @@ public class BasicInfo implements Serializable {
         this.openAccountProductList = openAccountProductList;
     }
 
-    public List<OpenAccountPurpose> getOpenAccountPurposeList() {
-        return openAccountPurposeList;
+    public List<BasicInfoAccountPurposeView> getBasicInfoAccountPurposeViewList() {
+        return basicInfoAccountPurposeViewList;
     }
 
-    public void setOpenAccountPurposeList(List<OpenAccountPurpose> openAccountPurposeList) {
-        this.openAccountPurposeList = openAccountPurposeList;
+    public void setBasicInfoAccountPurposeViewList(List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViewList) {
+        this.basicInfoAccountPurposeViewList = basicInfoAccountPurposeViewList;
     }
 
     public List<SBFScore> getSbfScoreList() {
@@ -246,5 +372,21 @@ public class BasicInfo implements Serializable {
 
     public void setRowIndex(int rowIndex) {
         this.rowIndex = rowIndex;
+    }
+
+    public List<BorrowingType> getBorrowingTypeList() {
+        return borrowingTypeList;
+    }
+
+    public void setBorrowingTypeList(List<BorrowingType> borrowingTypeList) {
+        this.borrowingTypeList = borrowingTypeList;
+    }
+
+    public List<BAPaymentMethod> getBaPaymentMethodList() {
+        return baPaymentMethodList;
+    }
+
+    public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
+        this.baPaymentMethodList = baPaymentMethodList;
     }
 }

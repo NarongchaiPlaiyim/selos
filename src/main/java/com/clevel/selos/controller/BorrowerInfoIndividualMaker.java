@@ -40,7 +40,7 @@ public class BorrowerInfoIndividualMaker implements Serializable {
     @NormalMessage
     Message msg;
     private List<Title> titleList;
-    private List<BorrowerType> borrowerTypeList;
+    //private List<BorrowerType> borrowerTypeList;
     private List<Province> provinceList;
     private List<District> districtList;
     private List<SubDistrict> subDistrictList;
@@ -51,8 +51,8 @@ public class BorrowerInfoIndividualMaker implements Serializable {
     private List<AddressType> addressTypeList;
     @Inject
     private TitleDAO titleDAO;
-    @Inject
-    private BorrowerTypeDAO borrowerTypeDAO;
+    //@Inject
+    //private BorrowerTypeDAO borrowerTypeDAO;
     @Inject
     private ProvinceDAO provinceDAO;    // find credit type
     @Inject
@@ -84,7 +84,7 @@ public class BorrowerInfoIndividualMaker implements Serializable {
         relationList = relationDAO.findAll();
         addressTypeList = addressTypeDAO.findAll();
         nationalityList = nationalityDAO.findAll();
-        borrowerTypeList = borrowerTypeDAO.findAll();
+        //borrowerTypeList = borrowerTypeDAO.findAll();
         maritalStatusList = maritalStatusDAO.findAll();
 
         raceID = 178;
@@ -168,13 +168,13 @@ public class BorrowerInfoIndividualMaker implements Serializable {
         this.titleList = titleList;
     }
 
-    public List<BorrowerType> getBorrowerTypeList() {
-        return borrowerTypeList;
-    }
+    //public List<BorrowerType> getBorrowerTypeList() {
+    //    return borrowerTypeList;
+    //}
 
-    public void setBorrowerTypeList(List<BorrowerType> borrowerTypeList) {
-        this.borrowerTypeList = borrowerTypeList;
-    }
+    //public void setBorrowerTypeList(List<BorrowerType> borrowerTypeList) {
+    //    this.borrowerTypeList = borrowerTypeList;
+    //}
 
     public List<SubDistrict> getSubDistrictList() {
         return subDistrictList;
