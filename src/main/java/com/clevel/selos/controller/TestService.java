@@ -1,13 +1,11 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.dao.testdao.CardTypeDao;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.*;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.db.testrm.CardType;
 import com.clevel.selos.integration.corebanking.model.CardTypeView;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.*;
 import com.clevel.selos.integration.corebanking.model.SearchIndividual;
@@ -35,9 +33,6 @@ public class TestService implements Serializable{
     Logger log;
 
     @Inject
-    CardTypeDao dao;
-
-    @Inject
     RMInterface rmInterfaceImpl;
 
     @Inject
@@ -50,7 +45,6 @@ public class TestService implements Serializable{
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
 
-    List<CardType> list;
     List<CardTypeView>listhardcode;
 
     private String printDetail;
@@ -186,13 +180,6 @@ public class TestService implements Serializable{
         this.searchIndividual = searchIndividual;
     }
 
-    public List<CardType> getList() {
-        return list;
-    }
-
-    public void setList(List<CardType> list) {
-        this.list = list;
-    }
     public List<CardTypeView> getListhardcode() {
         return listhardcode;
     }

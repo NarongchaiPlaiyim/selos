@@ -10,8 +10,6 @@
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
     </h:head>
     <h:body>
-        <h:link outcome="testRM" value="TESTRM"/>
-
 
         <p:panel id="welcomePanel">
             <h:form>
@@ -53,6 +51,7 @@
                 <p:commandButton value="test BPM" action="#{welcomePage.testBPM}" update=":welcomePanel"/>
                 <p:commandButton value="test Exception" action="#{welcomePage.testException}" />
                 <p:commandButton value="test Email" action="#{welcomePage.testEmail}" />
+                <p:commandButton value="load discription" action="#{welcomePage.onLoadDescription()}" />
 
             </h:form>
         </p:panel>

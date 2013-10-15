@@ -1,193 +1,219 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
-import java.math.BigDecimal;
+import com.clevel.selos.model.db.master.Country;
+import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.master.ProductGroup;
+import com.clevel.selos.model.db.master.Province;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ApplicationLevel {
-    public String caNo;
-    public int numberOfMonthsLastContractDate;
-    public String clisFlag;
-    public int productGroup; //enum
-    public int productProgram; //enum
-    public boolean existingSMECustomerIndv;
-    public boolean isRefinance;
-    public int cusType; //enum
-    public int bizLocation; //enum
-    public int ageOfBusinessMonths;
-    public BigDecimal finalDBR;
-    public BigDecimal totalApprovedCredit;
-    public int creditCusType; //enum
-    public boolean isRequestTCG;
-    public BigDecimal existingODLimit;
-    public BigDecimal case1WCLimit;
-    public BigDecimal case2WCLimit;
-    public BigDecimal case3WCLimit;
-    //todo add more field
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+public class ApplicationLevel implements Serializable {
+    private String applicationNumber;
+    private Date processDate;
+    private Date appInDate;
+    private Date expectedSubmitDate;
+    private CustomerEntity customerEntity;
+    private boolean existingSMECustomer;
+    private boolean sameSetOfBorrower;
+    private boolean refinanceInFlag;
+    private boolean refinanceOutFlag;
+    private BigDecimal borrowerGroupSale;
+    private BigDecimal totalGroupSale;
+    private BigDecimal totalFacility;
+    private BigDecimal contingentFacility;
+    private Province bizLocation;
+    private int yearInBusiness;
+    private Country countryOfRegistration;
+    private ProductGroup productGroup;
+
+    List<CustomerLevel> customerLevelList;
+    List<BankAccountLevel> bankAccountLevelList;
+    List<BusinessLevel> businessLevelList;
 
     public ApplicationLevel() {
     }
 
-    public ApplicationLevel(String caNo, int numberOfMonthsLastContractDate, String clisFlag, int productGroup, int productProgram, boolean existingSMECustomerIndv, boolean refinance, int cusType, int bizLocation, int ageOfBusinessMonths, BigDecimal finalDBR, BigDecimal totalApprovedCredit, int creditCusType, boolean requestTCG, BigDecimal existingODLimit, BigDecimal case1WCLimit, BigDecimal case2WCLimit, BigDecimal case3WCLimit) {
-        this.caNo = caNo;
-        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
-        this.clisFlag = clisFlag;
-        this.productGroup = productGroup;
-        this.productProgram = productProgram;
-        this.existingSMECustomerIndv = existingSMECustomerIndv;
-        isRefinance = refinance;
-        this.cusType = cusType;
+    public ApplicationLevel(String applicationNumber, Date processDate, Date appInDate, Date expectedSubmitDate, CustomerEntity customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, BigDecimal borrowerGroupSale, BigDecimal totalGroupSale, BigDecimal totalFacility, BigDecimal contingentFacility, Province bizLocation, int yearInBusiness, Country countryOfRegistration, ProductGroup productGroup) {
+        this.applicationNumber = applicationNumber;
+        this.processDate = processDate;
+        this.appInDate = appInDate;
+        this.expectedSubmitDate = expectedSubmitDate;
+        this.customerEntity = customerEntity;
+        this.existingSMECustomer = existingSMECustomer;
+        this.sameSetOfBorrower = sameSetOfBorrower;
+        this.refinanceInFlag = refinanceInFlag;
+        this.refinanceOutFlag = refinanceOutFlag;
+        this.borrowerGroupSale = borrowerGroupSale;
+        this.totalGroupSale = totalGroupSale;
+        this.totalFacility = totalFacility;
+        this.contingentFacility = contingentFacility;
         this.bizLocation = bizLocation;
-        this.ageOfBusinessMonths = ageOfBusinessMonths;
-        this.finalDBR = finalDBR;
-        this.totalApprovedCredit = totalApprovedCredit;
-        this.creditCusType = creditCusType;
-        isRequestTCG = requestTCG;
-        this.existingODLimit = existingODLimit;
-        this.case1WCLimit = case1WCLimit;
-        this.case2WCLimit = case2WCLimit;
-        this.case3WCLimit = case3WCLimit;
-    }
-
-    public String getCaNo() {
-        return caNo;
-    }
-
-    public void setCaNo(String caNo) {
-        this.caNo = caNo;
-    }
-
-    public int getNumberOfMonthsLastContractDate() {
-        return numberOfMonthsLastContractDate;
-    }
-
-    public void setNumberOfMonthsLastContractDate(int numberOfMonthsLastContractDate) {
-        this.numberOfMonthsLastContractDate = numberOfMonthsLastContractDate;
-    }
-
-    public String getClisFlag() {
-        return clisFlag;
-    }
-
-    public void setClisFlag(String clisFlag) {
-        this.clisFlag = clisFlag;
-    }
-
-    public int getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(int productGroup) {
+        this.yearInBusiness = yearInBusiness;
+        this.countryOfRegistration = countryOfRegistration;
         this.productGroup = productGroup;
     }
 
-    public int getProductProgram() {
-        return productProgram;
+    public String getApplicationNumber() {
+        return applicationNumber;
     }
 
-    public void setProductProgram(int productProgram) {
-        this.productProgram = productProgram;
+    public void setApplicationNumber(String applicationNumber) {
+        this.applicationNumber = applicationNumber;
     }
 
-    public boolean isExistingSMECustomerIndv() {
-        return existingSMECustomerIndv;
+    public Date getProcessDate() {
+        return processDate;
     }
 
-    public void setExistingSMECustomerIndv(boolean existingSMECustomerIndv) {
-        this.existingSMECustomerIndv = existingSMECustomerIndv;
+    public void setProcessDate(Date processDate) {
+        this.processDate = processDate;
     }
 
-    public boolean isRefinance() {
-        return isRefinance;
+    public Date getAppInDate() {
+        return appInDate;
     }
 
-    public void setRefinance(boolean refinance) {
-        isRefinance = refinance;
+    public void setAppInDate(Date appInDate) {
+        this.appInDate = appInDate;
     }
 
-    public int getCusType() {
-        return cusType;
+    public Date getExpectedSubmitDate() {
+        return expectedSubmitDate;
     }
 
-    public void setCusType(int cusType) {
-        this.cusType = cusType;
+    public void setExpectedSubmitDate(Date expectedSubmitDate) {
+        this.expectedSubmitDate = expectedSubmitDate;
     }
 
-    public int getBizLocation() {
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
+    }
+
+    public boolean isExistingSMECustomer() {
+        return existingSMECustomer;
+    }
+
+    public void setExistingSMECustomer(boolean existingSMECustomer) {
+        this.existingSMECustomer = existingSMECustomer;
+    }
+
+    public boolean isSameSetOfBorrower() {
+        return sameSetOfBorrower;
+    }
+
+    public void setSameSetOfBorrower(boolean sameSetOfBorrower) {
+        this.sameSetOfBorrower = sameSetOfBorrower;
+    }
+
+    public boolean isRefinanceInFlag() {
+        return refinanceInFlag;
+    }
+
+    public void setRefinanceInFlag(boolean refinanceInFlag) {
+        this.refinanceInFlag = refinanceInFlag;
+    }
+
+    public boolean isRefinanceOutFlag() {
+        return refinanceOutFlag;
+    }
+
+    public void setRefinanceOutFlag(boolean refinanceOutFlag) {
+        this.refinanceOutFlag = refinanceOutFlag;
+    }
+
+    public BigDecimal getBorrowerGroupSale() {
+        return borrowerGroupSale;
+    }
+
+    public void setBorrowerGroupSale(BigDecimal borrowerGroupSale) {
+        this.borrowerGroupSale = borrowerGroupSale;
+    }
+
+    public BigDecimal getTotalGroupSale() {
+        return totalGroupSale;
+    }
+
+    public void setTotalGroupSale(BigDecimal totalGroupSale) {
+        this.totalGroupSale = totalGroupSale;
+    }
+
+    public BigDecimal getTotalFacility() {
+        return totalFacility;
+    }
+
+    public void setTotalFacility(BigDecimal totalFacility) {
+        this.totalFacility = totalFacility;
+    }
+
+    public BigDecimal getContingentFacility() {
+        return contingentFacility;
+    }
+
+    public void setContingentFacility(BigDecimal contingentFacility) {
+        this.contingentFacility = contingentFacility;
+    }
+
+    public Province getBizLocation() {
         return bizLocation;
     }
 
-    public void setBizLocation(int bizLocation) {
+    public void setBizLocation(Province bizLocation) {
         this.bizLocation = bizLocation;
     }
 
-    public int getAgeOfBusinessMonths() {
-        return ageOfBusinessMonths;
+    public int getYearInBusiness() {
+        return yearInBusiness;
     }
 
-    public void setAgeOfBusinessMonths(int ageOfBusinessMonths) {
-        this.ageOfBusinessMonths = ageOfBusinessMonths;
+    public void setYearInBusiness(int yearInBusiness) {
+        this.yearInBusiness = yearInBusiness;
     }
 
-    public BigDecimal getFinalDBR() {
-        return finalDBR;
+    public Country getCountryOfRegistration() {
+        return countryOfRegistration;
     }
 
-    public void setFinalDBR(BigDecimal finalDBR) {
-        this.finalDBR = finalDBR;
+    public void setCountryOfRegistration(Country countryOfRegistration) {
+        this.countryOfRegistration = countryOfRegistration;
     }
 
-    public BigDecimal getTotalApprovedCredit() {
-        return totalApprovedCredit;
+    public ProductGroup getProductGroup() {
+        return productGroup;
     }
 
-    public void setTotalApprovedCredit(BigDecimal totalApprovedCredit) {
-        this.totalApprovedCredit = totalApprovedCredit;
+    public void setProductGroup(ProductGroup productGroup) {
+        this.productGroup = productGroup;
     }
 
-    public int getCreditCusType() {
-        return creditCusType;
-    }
-
-    public void setCreditCusType(int creditCusType) {
-        this.creditCusType = creditCusType;
-    }
-
-    public boolean isRequestTCG() {
-        return isRequestTCG;
-    }
-
-    public void setRequestTCG(boolean requestTCG) {
-        isRequestTCG = requestTCG;
-    }
-
-    public BigDecimal getExistingODLimit() {
-        return existingODLimit;
-    }
-
-    public void setExistingODLimit(BigDecimal existingODLimit) {
-        this.existingODLimit = existingODLimit;
-    }
-
-    public BigDecimal getCase1WCLimit() {
-        return case1WCLimit;
-    }
-
-    public void setCase1WCLimit(BigDecimal case1WCLimit) {
-        this.case1WCLimit = case1WCLimit;
-    }
-
-    public BigDecimal getCase2WCLimit() {
-        return case2WCLimit;
-    }
-
-    public void setCase2WCLimit(BigDecimal case2WCLimit) {
-        this.case2WCLimit = case2WCLimit;
-    }
-
-    public BigDecimal getCase3WCLimit() {
-        return case3WCLimit;
-    }
-
-    public void setCase3WCLimit(BigDecimal case3WCLimit) {
-        this.case3WCLimit = case3WCLimit;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("applicationNumber", applicationNumber)
+                .append("processDate", processDate)
+                .append("appInDate", appInDate)
+                .append("expectedSubmitDate", expectedSubmitDate)
+                .append("customerEntity", customerEntity)
+                .append("existingSMECustomer", existingSMECustomer)
+                .append("sameSetOfBorrower", sameSetOfBorrower)
+                .append("refinanceInFlag", refinanceInFlag)
+                .append("refinanceOutFlag", refinanceOutFlag)
+                .append("borrowerGroupSale", borrowerGroupSale)
+                .append("totalGroupSale", totalGroupSale)
+                .append("totalFacility", totalFacility)
+                .append("contingentFacility", contingentFacility)
+                .append("bizLocation", bizLocation)
+                .append("yearInBusiness", yearInBusiness)
+                .append("countryOfRegistration", countryOfRegistration)
+                .append("productGroup", productGroup)
+                .toString();
     }
 }

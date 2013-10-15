@@ -25,13 +25,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 5/9/2556
- * Time: 16:26 น.
- * To change this template use File | Settings | File Templates.
- */
 @ViewScoped
 @ManagedBean(name = "bizInfoSummary")
 public class BizInfoSummary implements Serializable {
@@ -43,7 +36,7 @@ public class BizInfoSummary implements Serializable {
     private BizInfoSummaryView bizInfoSummaryView;
     private BizInfoDetailView selectBizInfoDetailView;
     private List<BizInfoDetailView> bizInfoDetailViewList;
-    private List<BizInfoDetail> bizInfoDetailDetailList;
+    private List<BizInfoDetail> bizInfoDetailList;
     private List<Province> provinceList;
     private List<District> districtList;
     private List<SubDistrict> subDistrictList;
@@ -85,70 +78,36 @@ public class BizInfoSummary implements Serializable {
     public void onCreation(){
         //bizInfoDetailViewList = getBusinessInfoList();
         log.info("onCreation bizInfoSum");
-        //bizInfoDetailViewList = getBusinessInfoListDB();
-        bizInfoSummaryView =  new BizInfoSummaryView();
-        province = new Province();
-        district = new District();
-        subDistrict = new SubDistrict();
 
-        district.setProvince(province);
-        subDistrict.setDistrict(district);
-        subDistrict.setProvince(province);
-        bizInfoSummaryView.setSubDistrict(subDistrict);
+        onSearchBizInfoSummaryByWorkCase();
 
         provinceList = provinceDAO.getListOrderByParameter("name");
-        bizInfoDetailViewList= getBusinessInfoListDB();
-        //bizInfoDetailDetailList = new ArrayList<BizInfoDetail>();
 
-    }
+        if(bizInfoSummaryView == null){
 
-    public void onChangeProvince() {
+            log.info("bizInfoSummaryView == null " );
 
-        log.info("onChangeProvince :::: provinceID :::  ", provinceID);
-        Province province = provinceDAO.findById(provinceID);
-        log.info("onChangeProvince :::: province ::: ", province);
+            bizInfoSummaryView =  new BizInfoSummaryView();
 
-        districtList = districtDAO.getListByProvince(province);
-        log.info("onChangeProvince :::: districtList.size ::: ", districtList.size());
-    }
+            province = new Province();
+            district = new District();
+            subDistrict = new SubDistrict();
 
-    public void onChangeDistrict() {
+            district.setProvince(province);
+            subDistrict.setDistrict(district);
+            subDistrict.setProvince(province);
+            bizInfoSummaryView.setSubDistrict(subDistrict);
 
-        log.info("onChangeDistrict :::: districtID  :::  ", districtID);
-        District district = districtDAO.findById(districtID);
-        log.info("onChangeDistrict :::: district ::: ", district);
+        }else{
 
-        subDistrictList = subDistrictDAO.getListByDistrict(district);
-        log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
-    }
-
-
-    public List<BizInfoDetailView> getBusinessInfoListDB(){
-        log.info("getBusinessInfoListDB bizInfoSum");
-        bizInfoDetailDetailList = bizInfoDetailDAO.findAll();
-
-        bizInfoDetailViewList = onTransformToView(bizInfoDetailDetailList);
-
-        return bizInfoDetailViewList;
-    }
-
-    private List<BizInfoDetailView> onTransformToView(List<BizInfoDetail> bizInfoDetailDetailList){
-        log.info("onTransformToView bizInfoSum");
-        bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        BizInfoDetailView bizInfoDetailView;
-        BizInfoDetail bizInfoDetail;
-        for(int i=0;i< bizInfoDetailDetailList.size();i++){
-            bizInfoDetail =  bizInfoDetailDetailList.get(i);
-            bizInfoDetailView =  bizProductDetailTransform.transformToView(bizInfoDetail)  ;
-            bizInfoDetailViewList.add(bizInfoDetailView);
+            getBusinessInfoListDB();
+            onChangeProvince();
+            onChangeDistrict();
         }
-        return bizInfoDetailViewList;
 
     }
 
-    public void onSaveBizInfoSummary(){
-        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoSummaryView);
-
+    public void onSearchBizInfoSummaryByWorkCase(){
         log.info( " Initial session ");
         HttpSession session = FacesUtil.getSession(true);
         log.info( " Initial session is " + session);
@@ -158,14 +117,76 @@ public class BizInfoSummary implements Serializable {
         log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         log.info( " get FROM session workCaseId is " + workCaseId);
+        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+
+    }
+    public void onChangeProvince() {
+
+        //log.info("onChangeProvince :::: provinceID :::  ", provinceID);
+
+        Province proSelect = bizInfoSummaryView.getSubDistrict().getDistrict().getProvince();
+        //Province province = provinceDAO.findById(provinceID);
+        log.info("onChangeProvince :::: province ::: ", proSelect);
+
+        districtList = districtDAO.getListByProvince(proSelect);
+        log.info("onChangeProvince :::: districtList.size ::: ", districtList.size());
+    }
+
+    public void onChangeDistrict() {
+
+        District districtSelect= bizInfoSummaryView.getSubDistrict().getDistrict();
+        log.info("onChangeDistrict :::: district ::: ", districtSelect);
+
+        subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
+        log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
+    }
+
+
+    public List<BizInfoDetailView> getBusinessInfoListDB(){
+        log.info("getBusinessInfoListDB bizInfoSum");
+        long bizInfoSummaryViewId;
+
+        bizInfoSummaryViewId = bizInfoSummaryView.getId();
+
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
+
+        return bizInfoDetailViewList;
+    }
+
+
+    public void onSaveBizInfoSummary(){
+        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoSummaryView);
+
+        log.info( " Initial session ");
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("workCaseId", 10001);
+        session.setAttribute("bizInfoDetailViewId", -1 );
+
+        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        log.info( " get FROM session workCaseId is " + workCaseId);
 
         bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+
+        session.setAttribute("bizInfoSummaryId",bizInfoSummaryView.getId() );
+
     }
 
     public void onViewDetail(){
-        log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
+        log.info(" onViewDetail begin !! {}");
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("bizInfoDetailViewId",selectBizInfoDetailView.getId() );
+        //log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
+        log.info(" onViewDetail end !! {}");
 
-        log.info(" success !! {}",true);
+
+    }
+
+
+    public void onDeleteBizInfoToDB(){
+
+        bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
+
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {
@@ -224,12 +245,12 @@ public class BizInfoSummary implements Serializable {
         this.subDistrictList = subDistrictList;
     }
 
-    public List<BizInfoDetail> getBizInfoDetailDetailList() {
-        return bizInfoDetailDetailList;
+    public List<BizInfoDetail> getBizInfoDetailList() {
+        return bizInfoDetailList;
     }
 
-    public void setBizInfoDetailDetailList(List<BizInfoDetail> bizInfoDetailDetailList) {
-        this.bizInfoDetailDetailList = bizInfoDetailDetailList;
+    public void setBizInfoDetailList(List<BizInfoDetail> bizInfoDetailList) {
+        this.bizInfoDetailList = bizInfoDetailList;
     }
 
     public BizInfoSummaryView getBizInfoSummaryView() {

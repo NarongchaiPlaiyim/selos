@@ -68,8 +68,9 @@ public class BizInfoDetail implements Serializable {
     @Column(name="biz_doc_permission")
     private String bizDocPermission;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="biz_doc_expiry_date")
-    private String bizDocExpiryDate;
+    private Date bizDocExpiryDate;
 
     @Column(name="exp_ind_country_name")
     private String expIndCountryName;
@@ -299,11 +300,11 @@ public class BizInfoDetail implements Serializable {
         this.bizDocPermission = bizDocPermission;
     }
 
-    public String getBizDocExpiryDate() {
+    public Date getBizDocExpiryDate() {
         return bizDocExpiryDate;
     }
 
-    public void setBizDocExpiryDate(String bizDocExpiryDate) {
+    public void setBizDocExpiryDate(Date bizDocExpiryDate) {
         this.bizDocExpiryDate = bizDocExpiryDate;
     }
 

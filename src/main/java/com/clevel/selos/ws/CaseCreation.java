@@ -319,7 +319,7 @@ public class CaseCreation implements WSCaseCreation {
             }
 
             //generate ref number
-            String applicationNumber = stpExecutor.getApplicationNumber("XX");   // todo: where to get segment code
+            String applicationNumber = stpExecutor.getApplicationNumber("04");
             caseCreationHistory.setAppNumber(applicationNumber+"01");
 
             //all validation passed including new case creation in BPM.
