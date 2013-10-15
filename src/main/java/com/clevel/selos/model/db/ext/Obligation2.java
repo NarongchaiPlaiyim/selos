@@ -88,7 +88,7 @@ public class Obligation2 implements Serializable {
     private BigDecimal currBookBal;
 
     @Column(name="tenors")
-    private int tenors;
+    private BigDecimal tenors;
 
     @Column(name="account_number", length =  10)
     private String accountNumber;
@@ -112,15 +112,15 @@ public class Obligation2 implements Serializable {
     private String tdrFlag;
 
     @Column(name="num_month_int_past_due")
-    private int numMonthIntPastDue;
+    private BigDecimal numMonthIntPastDue;
 
     @Column(name="num_month_int_past_due_tdr_acc")
-    private int numMonthIntPastDueTDRAcc;
+    private BigDecimal numMonthIntPastDueTDRAcc;
 
     public Obligation2() {
     }
 
-    public Obligation2(long id, String tmbCusId, String tmbBotCusId, String serviceSegment, String adjustClass, Date lastContractDate, String misProductGroup, String accountServiceSegment, String productCode, String projectCode, String dataSource, String accountName, Date lastReviewDate, Date nextReviewDate, Date extendedReviewDate, String scfScoreFinalRate, String scfScoreMsFinal, String scfScoreModelTypeIbnr, BigDecimal claimAmount, BigDecimal comAmount, BigDecimal tmbPaidExpenseAmount, BigDecimal intUnEarned, BigDecimal intAccrued, BigDecimal tmbBotCommitment, BigDecimal currBookBal, int tenors, String accountNumber, String accountSuffix, String accountRef, String accountStatus, String cardBlockCode, String cusRelAccount, String tdrFlag, int numMonthIntPastDue, int numMonthIntPastDueTDRAcc) {
+    public Obligation2(long id, String tmbCusId, String tmbBotCusId, String serviceSegment, String adjustClass, Date lastContractDate, String misProductGroup, String accountServiceSegment, String productCode, String projectCode, String dataSource, String accountName, Date lastReviewDate, Date nextReviewDate, Date extendedReviewDate, String scfScoreFinalRate, String scfScoreMsFinal, String scfScoreModelTypeIbnr, BigDecimal claimAmount, BigDecimal comAmount, BigDecimal tmbPaidExpenseAmount, BigDecimal intUnEarned, BigDecimal intAccrued, BigDecimal tmbBotCommitment, BigDecimal currBookBal, BigDecimal tenors, String accountNumber, String accountSuffix, String accountRef, String accountStatus, String cardBlockCode, String cusRelAccount, String tdrFlag, BigDecimal numMonthIntPastDue, BigDecimal numMonthIntPastDueTDRAcc) {
         this.id = id;
         this.tmbCusId = tmbCusId;
         this.tmbBotCusId = tmbBotCusId;
@@ -358,11 +358,11 @@ public class Obligation2 implements Serializable {
         this.currBookBal = currBookBal;
     }
 
-    public int getTenors() {
+    public BigDecimal getTenors() {
         return tenors;
     }
 
-    public void setTenors(int tenors) {
+    public void setTenors(BigDecimal tenors) {
         this.tenors = tenors;
     }
 
@@ -422,19 +422,19 @@ public class Obligation2 implements Serializable {
         this.tdrFlag = tdrFlag;
     }
 
-    public int getNumMonthIntPastDue() {
+    public BigDecimal getNumMonthIntPastDue() {
         return numMonthIntPastDue;
     }
 
-    public void setNumMonthIntPastDue(int numMonthIntPastDue) {
+    public void setNumMonthIntPastDue(BigDecimal numMonthIntPastDue) {
         this.numMonthIntPastDue = numMonthIntPastDue;
     }
 
-    public int getNumMonthIntPastDueTDRAcc() {
+    public BigDecimal getNumMonthIntPastDueTDRAcc() {
         return numMonthIntPastDueTDRAcc;
     }
 
-    public void setNumMonthIntPastDueTDRAcc(int numMonthIntPastDueTDRAcc) {
+    public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 }
