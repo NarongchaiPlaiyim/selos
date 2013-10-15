@@ -28,6 +28,7 @@ public class Obligation2DAO extends GenericDAO<Obligation2,Long> {
             List<Obligation2> obligation2List = criteria.list();
 
             log.debug("getListByTmbCusId. (result size: {})", obligation2List.size());
+            return obligation2List;
         }
 
         return null;

@@ -8,6 +8,7 @@ import com.clevel.selos.integration.dwh.model.Obligation;
 import com.clevel.selos.model.db.ext.Obligation1;
 import com.clevel.selos.model.db.ext.Obligation2;
 import com.clevel.selos.model.db.system.SystemParameter;
+import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -21,6 +22,10 @@ public class DWHService implements Serializable {
     @Inject
     @DWH
     Logger log;
+
+    @Inject
+    @Config(name = "interface.dwh.table.sysparam")
+    String sysParam;
 
     @Inject
     SystemParameterDAO systemParameterDAO;
@@ -39,7 +44,7 @@ public class DWHService implements Serializable {
         List<Obligation> obligationList = new ArrayList<Obligation>();
 
         //check which table is current
-        SystemParameter systemParameter = systemParameterDAO.findByParameterName("EXT_DWH_OBLIGATION");
+        SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
 
         if(systemParameter!=null){
             String value = systemParameter.getValue();
