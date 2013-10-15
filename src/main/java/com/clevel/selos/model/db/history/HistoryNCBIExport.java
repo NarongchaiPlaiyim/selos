@@ -9,9 +9,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "his_ext_ncbi_export")
 public class HistoryNCBIExport implements Serializable {
+    /*@SequenceGenerator(name="SEQ_HIS_EXT_NCBI_ID", sequenceName="SEQ_HIS_EXT_NCBI_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_EXT_NCBI_ID")   */
     @Id
-    @SequenceGenerator(name="SEQ_HIS_EXT_NCBI_ID", sequenceName="SEQ_HIS_EXT_NCBI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_EXT_NCBI_ID")
+    @Column(name="id", length = 19)
     private long id;
     @Column(name="staff_id", length = 5)
     private String staffId;

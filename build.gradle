@@ -51,6 +51,24 @@ war {
         }
     }
     war.rootSpec.exclude '**/*.java'
+    war.rootSpec.exclude '**/logback.xml'
+    war.rootSpec.exclude '**/selos.properties'
 
-    excludes = ['mockup/**']
+    // exclude resources to be static
+    war.rootSpec.exclude 'resources/css'
+    war.rootSpec.exclude 'resources/images'
+    war.rootSpec.exclude 'resources/js'
+//    war.rootSpec.exclude 'resources/primefaces-theme'
+
+    // exclude temporary files
+    war.rootSpec.exclude 'mockup'
+
+    // replace with bank environment
+    rootSpec.eachFile { details ->
+        if (details.name == "persistence.xml") {
+            details.exclude()
+        } else if (details.name == "persistence.bank.xml") {
+            details.name = "persistence.xml"
+        }
+    }
 }
