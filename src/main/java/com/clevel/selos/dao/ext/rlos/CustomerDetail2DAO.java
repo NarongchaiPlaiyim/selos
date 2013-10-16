@@ -3,7 +3,6 @@ package com.clevel.selos.dao.ext.rlos;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.ext.rlos.CustomerDetail2;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
