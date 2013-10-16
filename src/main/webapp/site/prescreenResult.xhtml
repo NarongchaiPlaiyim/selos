@@ -40,7 +40,8 @@
                             <td><p:commandButton id="btnRetrieveInterfaceInfo"
                                                  value="#{msg.get('app.prescreen.result.retrieveInterfaceInfo')}"
                                                  styleClass="largest"
-                                                 actionListener="#{prescreen.onRetrieveInterfaceInfo}">
+                                                 actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
+                                                 update="frmMain:resultTableFacility">
 
                             </p:commandButton></td>
                         </tr>
@@ -56,33 +57,44 @@
                             <td class="title" colspan="2"><h:outputText value="#{msg.get('app.prescreen.result.existingCredit')}"/></td>
                         </tr>
                         <tr>
-                            <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
+                            <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.borrower')}"/></td>
                             <td>
                                 <p:dataTable id="resultTableFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCredit}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
                                     <p:column headerText="" styleClass="center" style="width:22px;">
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.account')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.account')}" styleClass="left" style="width: 250px; line-height: 15px;">
+                                        <h:outputText value="#{creditItem.accountName}"/><br/>
+                                        Acc No.: <h:outputText value="#{creditItem.accountNumber}"/> Suf.<h:outputText value="#{creditItem.accountSuf}"/><br/>
+                                        Acc Status: <h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center">
+                                        <h:outputText value="#{creditItem.productProgram}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center">
+                                        <h:outputText value="#{creditItem.creditType}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right">
+                                        <h:outputText value="#{creditItem.limit}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" styleClass="right">
+                                        <h:outputText value="#{creditItem.outstanding}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" styleClass="center" style="width:22px;">
-                                        <h:outputText value="#{rowIndex+1}"/>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" styleClass="right" style="width:22px;">
+                                        <h:outputText value="#{creditItem.tenor}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
+                                        </h:outputText>
                                     </p:column>
                                 </p:dataTable>
                             </td>
+                        </tr>
+                        <tr>
+                            <td></td>
                         </tr>
                     </table>
                 </div>
@@ -101,7 +113,7 @@
     </p:panel>
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{prescreenResult.messageHeader}" message="#{prescreenResult.message}" >
+                         header="" message="" >
 
         </p:confirmDialog>
     </p:panel>

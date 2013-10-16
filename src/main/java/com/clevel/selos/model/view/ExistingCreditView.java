@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 public class ExistingCreditView implements Serializable {
     private long id;
     private String accountName;
-    private int accountSuf;
+    private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
     private String accountStatus;
@@ -38,11 +38,11 @@ public class ExistingCreditView implements Serializable {
         this.accountName = accountName;
     }
 
-    public int getAccountSuf() {
+    public String getAccountSuf() {
         return accountSuf;
     }
 
-    public void setAccountSuf(int accountSuf) {
+    public void setAccountSuf(String accountSuf) {
         this.accountSuf = accountSuf;
     }
 

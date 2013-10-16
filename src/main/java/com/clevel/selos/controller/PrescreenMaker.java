@@ -38,7 +38,7 @@ import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "prescreenMaker")
-public class PrescreenMaker extends BaseController implements Serializable {
+public class PrescreenMaker implements Serializable {
     @Inject
     Logger log;
     @Inject
@@ -121,7 +121,8 @@ public class PrescreenMaker extends BaseController implements Serializable {
     private int previousProductGroupId;
 
 
-
+    enum ModeForButton{ ADD, EDIT, DELETE }
+    private ModeForButton modeForButton;
     private String messageHeader;
     private String message;
     private int rowIndex;
