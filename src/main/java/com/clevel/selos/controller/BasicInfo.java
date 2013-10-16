@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -95,6 +96,9 @@ public class BasicInfo implements Serializable {
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
 
+    private String messageHeader;
+    private String message;
+
     //session
     private long workCaseId;
     private long stepId;
@@ -136,17 +140,7 @@ public class BasicInfo implements Serializable {
 
         preRender();
 
-        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
-        if(basicInfoView == null){
-            basicInfoView = new BasicInfoView();
-        }
-
-        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
-
-        basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
-        basicInfoView.setIndividual(customerEntity.isChangeQualtiEnable());
-
-        basicInfoAccountView = new BasicInfoAccountView();
+        basicInfoView = new BasicInfoView();
 
         productGroupList = productGroupDAO.findAll();
         specialProgramList = specialProgramDAO.findAll();
@@ -166,6 +160,8 @@ public class BasicInfo implements Serializable {
             basicInfoAccountPurposeViewList.add(purposeView);
         }
 
+        CustomerEntity customerEntity = basicInfoControl.getCustomerEntityByWorkCaseId(workCaseId);
+
         borrowingTypeList = borrowingTypeDAO.findByCustomerEntity(customerEntity);
 
         baPaymentMethodList = baPaymentMethodDAO.findAll();
@@ -173,6 +169,20 @@ public class BasicInfo implements Serializable {
         if(baPaymentMethodList != null){
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
+
+        basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
+
+        if(basicInfoView.getId() == 0){
+            basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
+        }
+
+        if(customerEntity.isChangeQualtiEnable()){
+            basicInfoView.setIndividual(1);
+        }else{
+            basicInfoView.setIndividual(0);
+        }
+
+        basicInfoAccountView = new BasicInfoAccountView();
     }
 
     public void onAddAccount(){
@@ -246,19 +256,49 @@ public class BasicInfo implements Serializable {
     }
 
     public void onDeleteAccount() {
-        basicInfoView.getBasicInfoAccountViews().remove(basicInfoAccountView);
+        basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
     public void onSave(){
-        log.debug("basicInfoView : {}", basicInfoView);
-        com.clevel.selos.model.db.working.BasicInfo basicInfo = basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+        try{
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+            messageHeader = "Save Basic Info Success.";
+            message = "Save Basic Info data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Basic Info Failed.";
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
 
-        basicInfoControl.deleteOpenAccount(basicInfo.getId());
+    public void onChangeSpecialProgram(){
+        basicInfoView.getSpecialProgram().setId(0);
+    }
 
-        System.out.println("basicInfoView : "+basicInfoView);
+    public void onChangeRefIn(){
+        basicInfoView.getRefinanceIn().setCode(0);
+    }
 
-        basicInfoControl.addOpenAccount(basicInfoView,basicInfo);
+    public void onChangeRefOut(){
+        basicInfoView.getRefinanceOut().setCode(0);
+    }
 
+    public void onChangeBA(){
+        if(basicInfoView.getApplyBA() == 0){
+            basicInfoView.getBaPaymentMethod().setId(0);
+        }else{
+            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
+            }else{
+                basicInfoView.getBaPaymentMethod().setId(0);
+            }
+        }
     }
 
     // Get Set
@@ -388,5 +428,21 @@ public class BasicInfo implements Serializable {
 
     public void setBaPaymentMethodList(List<BAPaymentMethod> baPaymentMethodList) {
         this.baPaymentMethodList = baPaymentMethodList;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

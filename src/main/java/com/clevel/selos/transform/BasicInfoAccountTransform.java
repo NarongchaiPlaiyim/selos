@@ -4,6 +4,7 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.OpenAccount;
 import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 
@@ -52,6 +53,22 @@ public class BasicInfoAccountTransform extends Transform {
         if(basicInfoAccountView.getAccountType() == null){
             basicInfoAccountView.setAccountType(new OpenAccountType());
         }
+
+        BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();
+        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews =  basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());
+
+        basicInfoAccountView.setBasicInfoAccountPurposeView(basicInfoAccountPurposeViews);
+
+        //for show view
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i=0;i<basicInfoAccountView.getBasicInfoAccountPurposeView().size();i++){
+            if(i == 0){
+                stringBuilder.append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+            }else{
+                stringBuilder.append(", "+basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+            }
+        }
+        basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
 
         return basicInfoAccountView;
     }

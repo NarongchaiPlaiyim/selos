@@ -157,7 +157,10 @@ public class WelcomePage implements Serializable {
     public void testDWHObligation() {
         try{
             List<Obligation> obligationList = new ArrayList<Obligation>();
-            obligationList = dwh.getObligation("BDM001","1234");
+            List<String> customerList = new ArrayList<String>();
+            customerList.add("1234");
+            customerList.add("1235");
+            obligationList = dwh.getObligation("BDM001",customerList);
             log.debug("obligation result : {}",obligationList);
         } catch (Exception e) {
             log.error("",e);

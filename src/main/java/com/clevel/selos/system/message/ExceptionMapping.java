@@ -30,11 +30,11 @@ public interface ExceptionMapping {
     //RLOS exception
     public static final String RLOS_CSI_EXCEPTION = "030";
 
-    public static final String RM_SERVICE_FAILED = "500";
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
     public static final String RM_FAIL = "502";
     public static final String RM_DATA_NOT_FOUND = "503";
     public static final String RM_CUSTOMER_RESULT_MULTIPLE = "504";
+    public static final String RM_SERVICE_FAILED = "505";
 
     //NCB
     public static final String NCB_EXCEPTION = "601";
