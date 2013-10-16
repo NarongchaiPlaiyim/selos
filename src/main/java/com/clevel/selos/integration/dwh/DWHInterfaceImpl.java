@@ -10,6 +10,7 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Default
@@ -28,12 +29,11 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
 
 
     @Override
-    public List<Obligation> getObligation(String userId,String tmbCusId) {
-        log.debug("getObligation (userId : {}, tmbCusId : {})",userId,tmbCusId);
-        List<Obligation> obligationList = new ArrayList<Obligation>();
-        if(!Util.isEmpty(tmbCusId)){
-            obligationList = dwhService.getObligationByTmbCusId(tmbCusId);
-
+    public List<Obligation> getObligation(String userId, List<String> tmbCusIdList) {
+        log.debug("getObligation (userId : {}, tmbCusIdList : {})",userId,tmbCusIdList);
+        List<Obligation> obligationList = Collections.EMPTY_LIST;
+        if(tmbCusIdList!=null && tmbCusIdList.size()>0){
+            obligationList = dwhService.getObligationByTmbCusId(tmbCusIdList);
             log.debug("getObligation result (obligationList size : {})",obligationList.size());
         }
         return obligationList;

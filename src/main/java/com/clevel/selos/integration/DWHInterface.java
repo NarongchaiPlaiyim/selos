@@ -7,5 +7,5 @@ import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import java.util.List;
 
 public interface DWHInterface {
-    public List<Obligation> getObligation(String userId, String tmbCusId);
+    public List<Obligation> getObligation(String userId, List<String> tmbCusIdList);
 }

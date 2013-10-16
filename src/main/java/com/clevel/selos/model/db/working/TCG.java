@@ -39,7 +39,7 @@ public class TCG implements Serializable{
     private User modifyBy;
 
     @Column(name="tcg_flag")
-    private boolean tcgFlag;
+    private int tcgFlag;
 
     @Column(name="request_limit_tcg")
     private BigDecimal requestLimitRequiredTCG;
@@ -92,11 +92,11 @@ public class TCG implements Serializable{
     }
 
 
-    public boolean isTcgFlag() {
+    public int getTcgFlag() {
         return tcgFlag;
     }
 
-    public void setTcgFlag(boolean tcgFlag) {
+    public void setTcgFlag(int tcgFlag) {
         this.tcgFlag = tcgFlag;
     }
 

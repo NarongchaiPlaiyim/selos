@@ -26,7 +26,7 @@ public class NCBDetail implements Serializable {
     private AccountType accountType;
 
     @Column(name="account_tmb_flag")
-    private boolean accountTBMFlag;
+    private int accountTMBFlag;
 
     @OneToOne
     @JoinColumn(name="account_status_id")
@@ -65,7 +65,7 @@ public class NCBDetail implements Serializable {
     private int overLimit;
 
     @Column(name="refinance_flag")
-    private boolean refinanceFlag;
+    private int refinanceFlag;
 
     @Column(name="no_of_months_payment")
     private int noOfMonthPayment;
@@ -89,7 +89,7 @@ public class NCBDetail implements Serializable {
     private BigDecimal month6;
 
     @Column(name="wcFlag")
-    private boolean wcFlag;
+    private int wcFlag;
 
     public long getId() {
         return id;
@@ -113,14 +113,6 @@ public class NCBDetail implements Serializable {
 
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
-    }
-
-    public boolean isAccountTBMFlag() {
-        return accountTBMFlag;
-    }
-
-    public void setAccountTBMFlag(boolean accountTBMFlag) {
-        this.accountTBMFlag = accountTBMFlag;
     }
 
     public AccountStatus getAccountStatus() {
@@ -211,14 +203,6 @@ public class NCBDetail implements Serializable {
         this.overLimit = overLimit;
     }
 
-    public boolean isRefinanceFlag() {
-        return refinanceFlag;
-    }
-
-    public void setRefinanceFlag(boolean refinanceFlag) {
-        this.refinanceFlag = refinanceFlag;
-    }
-
     public int getNoOfMonthPayment() {
         return noOfMonthPayment;
     }
@@ -275,11 +259,27 @@ public class NCBDetail implements Serializable {
         this.month6 = month6;
     }
 
-    public boolean isWcFlag() {
+    public int getRefinanceFlag() {
+        return refinanceFlag;
+    }
+
+    public void setRefinanceFlag(int refinanceFlag) {
+        this.refinanceFlag = refinanceFlag;
+    }
+
+    public int getWcFlag() {
         return wcFlag;
     }
 
-    public void setWcFlag(boolean wcFlag) {
+    public void setWcFlag(int wcFlag) {
         this.wcFlag = wcFlag;
+    }
+
+    public int getAccountTMBFlag() {
+        return accountTMBFlag;
+    }
+
+    public void setAccountTMBFlag(int accountTMBFlag) {
+        this.accountTMBFlag = accountTMBFlag;
     }
 }

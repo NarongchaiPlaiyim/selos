@@ -3,6 +3,8 @@ package com.clevel.selos.integration.rlos;
 import com.clevel.selos.exception.RLOSInterfaceException;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
+import com.clevel.selos.integration.rlos.appin.AppInProcessService;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.csi.CSIService;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
@@ -16,7 +18,9 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
     @Inject
@@ -33,6 +37,8 @@ public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
 
     @Inject
     CSIService csiService;
+    @Inject
+    AppInProcessService appInProcessService;
 
     @Inject
     public RLOSInterfaceImpl(){
@@ -56,5 +62,16 @@ public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
             throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_EXCEPTION,msg.get(ExceptionMapping.RLOS_CSI_EXCEPTION,userId));
         }
         return csiResult;
+    }
+
+    @Override
+    public List<AppInProcess> getAppInProcess(String userId, List<String> citizenIdList) {
+        log.debug("getAppInProcess (userId : {}, citizenIdList : {})",userId,citizenIdList);
+        List<AppInProcess> appInProcessList = Collections.EMPTY_LIST;
+        if(citizenIdList!=null && citizenIdList.size()>0){
+            appInProcessList = appInProcessService.getAppInProcessData(citizenIdList);
+            log.debug("getAppInProcess result (appInProcessList size : {})",appInProcessList.size());
+        }
+        return appInProcessList;
     }
 }

@@ -1,14 +1,17 @@
-package com.clevel.selos.model.db.ext;
+package com.clevel.selos.model.db.ext.dwh;
 
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "ext_dwh_obligation1")
-public class Obligation1 implements Serializable {
+@Table(name = "ext_dwh_obligation2")
+public class Obligation2 implements Serializable {
     @Id
     private long id;
 
@@ -63,7 +66,7 @@ public class Obligation1 implements Serializable {
     @Column(name="scfscore_model_type_ibnr", length = 50)
     private String scfScoreModelTypeIbnr;
 
-    @Column(name="claim_amaount")
+    @Column(name="claim_amount")
     private BigDecimal claimAmount;
 
     @Column(name="com_amount")
@@ -114,10 +117,10 @@ public class Obligation1 implements Serializable {
     @Column(name="num_month_int_past_due_tdr_acc")
     private BigDecimal numMonthIntPastDueTDRAcc;
 
-    public Obligation1() {
+    public Obligation2() {
     }
 
-    public Obligation1(long id, String tmbCusId, String tmbBotCusId, String serviceSegment, String adjustClass, Date lastContractDate, String misProductGroup, String accountServiceSegment, String productCode, String projectCode, String dataSource, String accountName, Date lastReviewDate, Date nextReviewDate, Date extendedReviewDate, String scfScoreFinalRate, String scfScoreMsFinal, String scfScoreModelTypeIbnr, BigDecimal claimAmount, BigDecimal comAmount, BigDecimal tmbPaidExpenseAmount, BigDecimal intUnEarned, BigDecimal intAccrued, BigDecimal tmbBotCommitment, BigDecimal currBookBal, BigDecimal tenors, String accountNumber, String accountSuffix, String accountRef, String accountStatus, String cardBlockCode, String cusRelAccount, String tdrFlag, BigDecimal numMonthIntPastDue, BigDecimal numMonthIntPastDueTDRAcc) {
+    public Obligation2(long id, String tmbCusId, String tmbBotCusId, String serviceSegment, String adjustClass, Date lastContractDate, String misProductGroup, String accountServiceSegment, String productCode, String projectCode, String dataSource, String accountName, Date lastReviewDate, Date nextReviewDate, Date extendedReviewDate, String scfScoreFinalRate, String scfScoreMsFinal, String scfScoreModelTypeIbnr, BigDecimal claimAmount, BigDecimal comAmount, BigDecimal tmbPaidExpenseAmount, BigDecimal intUnEarned, BigDecimal intAccrued, BigDecimal tmbBotCommitment, BigDecimal currBookBal, BigDecimal tenors, String accountNumber, String accountSuffix, String accountRef, String accountStatus, String cardBlockCode, String cusRelAccount, String tdrFlag, BigDecimal numMonthIntPastDue, BigDecimal numMonthIntPastDueTDRAcc) {
         this.id = id;
         this.tmbCusId = tmbCusId;
         this.tmbBotCusId = tmbBotCusId;
