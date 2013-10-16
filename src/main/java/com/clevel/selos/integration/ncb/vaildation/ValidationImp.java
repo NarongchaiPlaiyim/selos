@@ -43,7 +43,7 @@ public class ValidationImp implements Validation, Serializable {
         /*if(!ValidationUtil.isValueInRange(20, 20, inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
         }
-        if(!ValidationUtil.isValueInRange(9, 10, inputModel.getReferenceTel())){
+        if(!ValidationUtil.isValueInRange(1, 10, inputModel.getReferenceTel())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "Reference Tel"));
         }
         if(!ValidationUtil.isNumeric(inputModel.getReferenceTel())){

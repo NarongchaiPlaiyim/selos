@@ -78,14 +78,11 @@ public class Obligation1 implements Serializable {
     @Column(name="int_accrued")
     private BigDecimal intAccrued;
 
-    @Column(name="tmb_bot_commitment")
-    private BigDecimal tmbBotCommitment;
+    @Column(name="limit")
+    private BigDecimal limit;
 
-    @Column(name="curr_book_bal")
-    private BigDecimal currBookBal;
-
-    @Column(name="tenors")
-    private BigDecimal tenors;
+    @Column(name="outstanding")
+    private BigDecimal outstanding;
 
     @Column(name="account_number", length =  10)
     private String accountNumber;
@@ -115,44 +112,6 @@ public class Obligation1 implements Serializable {
     private BigDecimal numMonthIntPastDueTDRAcc;
 
     public Obligation1() {
-    }
-
-    public Obligation1(long id, String tmbCusId, String tmbBotCusId, String serviceSegment, String adjustClass, Date lastContractDate, String misProductGroup, String accountServiceSegment, String productCode, String projectCode, String dataSource, String accountName, Date lastReviewDate, Date nextReviewDate, Date extendedReviewDate, String scfScoreFinalRate, String scfScoreMsFinal, String scfScoreModelTypeIbnr, BigDecimal claimAmount, BigDecimal comAmount, BigDecimal tmbPaidExpenseAmount, BigDecimal intUnEarned, BigDecimal intAccrued, BigDecimal tmbBotCommitment, BigDecimal currBookBal, BigDecimal tenors, String accountNumber, String accountSuffix, String accountRef, String accountStatus, String cardBlockCode, String cusRelAccount, String tdrFlag, BigDecimal numMonthIntPastDue, BigDecimal numMonthIntPastDueTDRAcc) {
-        this.id = id;
-        this.tmbCusId = tmbCusId;
-        this.tmbBotCusId = tmbBotCusId;
-        this.serviceSegment = serviceSegment;
-        this.adjustClass = adjustClass;
-        this.lastContractDate = lastContractDate;
-        this.misProductGroup = misProductGroup;
-        this.accountServiceSegment = accountServiceSegment;
-        this.productCode = productCode;
-        this.projectCode = projectCode;
-        this.dataSource = dataSource;
-        this.accountName = accountName;
-        this.lastReviewDate = lastReviewDate;
-        this.nextReviewDate = nextReviewDate;
-        this.extendedReviewDate = extendedReviewDate;
-        this.scfScoreFinalRate = scfScoreFinalRate;
-        this.scfScoreMsFinal = scfScoreMsFinal;
-        this.scfScoreModelTypeIbnr = scfScoreModelTypeIbnr;
-        this.claimAmount = claimAmount;
-        this.comAmount = comAmount;
-        this.tmbPaidExpenseAmount = tmbPaidExpenseAmount;
-        this.intUnEarned = intUnEarned;
-        this.intAccrued = intAccrued;
-        this.tmbBotCommitment = tmbBotCommitment;
-        this.currBookBal = currBookBal;
-        this.tenors = tenors;
-        this.accountNumber = accountNumber;
-        this.accountSuffix = accountSuffix;
-        this.accountRef = accountRef;
-        this.accountStatus = accountStatus;
-        this.cardBlockCode = cardBlockCode;
-        this.cusRelAccount = cusRelAccount;
-        this.tdrFlag = tdrFlag;
-        this.numMonthIntPastDue = numMonthIntPastDue;
-        this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
     }
 
     public long getId() {
@@ -339,28 +298,20 @@ public class Obligation1 implements Serializable {
         this.intAccrued = intAccrued;
     }
 
-    public BigDecimal getTmbBotCommitment() {
-        return tmbBotCommitment;
+    public BigDecimal getLimit() {
+        return limit;
     }
 
-    public void setTmbBotCommitment(BigDecimal tmbBotCommitment) {
-        this.tmbBotCommitment = tmbBotCommitment;
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
-    public BigDecimal getCurrBookBal() {
-        return currBookBal;
+    public BigDecimal getOutstanding() {
+        return outstanding;
     }
 
-    public void setCurrBookBal(BigDecimal currBookBal) {
-        this.currBookBal = currBookBal;
-    }
-
-    public BigDecimal getTenors() {
-        return tenors;
-    }
-
-    public void setTenors(BigDecimal tenors) {
-        this.tenors = tenors;
+    public void setOutstanding(BigDecimal outstanding) {
+        this.outstanding = outstanding;
     }
 
     public String getAccountNumber() {

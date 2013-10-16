@@ -9,31 +9,31 @@ import java.util.List;
 @Table(name = "ext_rlos_appin2")
 public class AppInProcess2 implements Serializable {
     @Id
-    @Column(name="app_ref_number")
+    @Column(name="app_ref_number", length=9)
     private String appRefNumber;
 
-    @Column(name="product_code")
+    @Column(name="product_code", length=4)
     private String productCode;
 
-    @Column(name="project_code")
+    @Column(name="project_code", length=5)
     private String projectCode;
 
-    @Column(name="interest_rate")
+    @Column(name="interest_rate", length=5)
     private String interestRate;
 
-    @Column(name="request_tenor")
+    @Column(name="request_tenor", length=2)
     private String requestTenor;
 
-    @Column(name="request_limit")
+    @Column(name="request_limit", length=9)
     private String requestLimit;
 
-    @Column(name="final_tenors")
+    @Column(name="final_tenors", length=3)
     private String finalTenors;
 
-    @Column(name="final_limit")
+    @Column(name="final_limit", length=9)
     private String finalLimit;
 
-    @Column(name="final_installment")
+    @Column(name="final_installment", length=9)
     private String finalInstallment;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="appInProcess2")

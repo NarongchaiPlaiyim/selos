@@ -30,4 +30,14 @@ public class PrescreenBusinessDAO extends GenericDAO<PrescreenBusiness, Long> {
 
         return prescreenBusinessList;
     }
+
+    public List<PrescreenBusiness> findByPreScreenId(long prescreenId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("prescreen.id", prescreenId));
+        criteria.addOrder(Order.asc("id"));
+        List<PrescreenBusiness> prescreenBusinessList = criteria.list();
+        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+
+        return prescreenBusinessList;
+    }
 }
