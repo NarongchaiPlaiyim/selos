@@ -770,7 +770,8 @@
     <tr>
         <td class="title">
             <h:outputLabel value="วันที่ :"/>
-            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate" >
+                <f:convertDateTime  pattern="dd/MM/yyyy"/>
             </h:outputText>
         </td>
         <td class="title">

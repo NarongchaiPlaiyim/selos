@@ -66,8 +66,9 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.NCBDetailView.dateOfInfo}" id="dateOfInfo" pattern="d/M/yyyy"
+        <p:calendar value="#{ncbInfo.NCBDetailView.dateOfInfo}" id="dateOfInfo"  pattern="dd/MM/yyyy"
                     showOn="button" required="#{not empty param[addRowData.clientId]}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
         </p:calendar>
     </td>
 </tr>
@@ -77,8 +78,10 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.NCBDetailView.accountOpenDate}" id="accountOpenDate" pattern="d/M/yyyy"
-                    showOn="button" required="#{not empty param[addRowData.clientId]}"/>
+        <p:calendar value="#{ncbInfo.NCBDetailView.accountOpenDate}" id="accountOpenDate"  pattern="dd/MM/yyyy"
+                    showOn="button" required="#{not empty param[addRowData.clientId]}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </p:calendar>
     </td>
 </tr>
 <tr>
@@ -126,8 +129,10 @@
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.NCBDetailView.dateOfDebtRestructuring}" pattern="d/M/yyyy"
-                    id="dateOfDebtRestructuring" showOn="button" required="#{not empty param[addRowData.clientId]}"/>
+        <p:calendar value="#{ncbInfo.NCBDetailView.dateOfDebtRestructuring}"  pattern="dd/MM/yyyy"
+                    id="dateOfDebtRestructuring" showOn="button" required="#{not empty param[addRowData.clientId]}">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </p:calendar>
 
     </td>
 </tr>
