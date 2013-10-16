@@ -13,6 +13,8 @@ public class ExistingCreditControl extends BusinessControl{
 
     public List<ExistingCreditView> getExistingCredit(List<String> tmbCusIDList){
         log.debug("Start GetExistingCredit with {}", tmbCusIDList);
+
+        dwhInterface.getObligation(getCurrentUserID(), tmbCusIDList);
         //dwhInterface.getObligation(tmbCusIDList);
 
         return null;
