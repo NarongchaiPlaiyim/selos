@@ -9,7 +9,7 @@
 <table class="content_form">
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.loanAccountType')}"/>:
+        <h:outputText value="#{msg.get('app.loanAccountType')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -18,7 +18,7 @@
                          styleClass="largest"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
             <f:selectItems value="#{ncbInfo.accountTypeList}"
                            var="dlgAccountTypeList"
                            itemLabel="#{dlgAccountTypeList.name}"
@@ -29,20 +29,20 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.isTMBAccount')}"/>:
+        <h:outputText value="#{msg.get('app.isTMBAccount')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <h:selectOneRadio id="radioTmbAccount" value="#{ncbInfo.NCBDetailView.TMBAccount}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="true"/>
-            <f:selectItem itemLabel="No" itemValue="false"/>
+            <f:selectItem itemLabel="Yes" itemValue="1"/>
+            <f:selectItem itemLabel="No" itemValue="0"/>
         </h:selectOneRadio>
     </td>
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.loanAccountStatus')}"/>:
+        <h:outputText value="#{msg.get('app.loanAccountStatus')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -51,7 +51,7 @@
                          styleClass="largest"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
             <f:selectItems value="#{ncbInfo.accountStatusList}"
                            var="dlgAccountStatusList"
                            itemLabel="#{dlgAccountStatusList.name}"
@@ -62,20 +62,18 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.dateOfInfo')}"/>:
+        <h:outputText value="#{msg.get('app.dateOfInfo')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
         <p:calendar value="#{ncbInfo.NCBDetailView.dateOfInfo}" id="dateOfInfo" pattern="d/M/yyyy"
                     showOn="button" required="#{not empty param[addRowData.clientId]}">
-            <!--            <f:convertDateTime pattern="d/M/yyyy"/>
-                        <p:ajax event="blur" update=":ncbDlgForm:dateOfInfo"/>-->
         </p:calendar>
     </td>
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.accountOpenDate')}"/>:
+        <h:outputText value="#{msg.get('app.accountOpenDate')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -85,11 +83,11 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.limit')}"/>:
+        <h:outputText value="#{msg.get('app.limit')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText id="limit" styleClass="large right numeric"
+        <p:inputText id="limit" styleClass="large"
                      value="#{ncbInfo.NCBDetailView.limit}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:limit"/>
@@ -98,11 +96,11 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.outstanding')}"/>:
+        <h:outputText value="#{msg.get('app.outstanding')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText id="outstanding" styleClass="large right numeric"
+        <p:inputText id="outstanding" styleClass="large"
                      value="#{ncbInfo.NCBDetailView.outstanding}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:outstanding"/>
@@ -111,11 +109,11 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.installment')}"/>:
+        <h:outputText value="#{msg.get('app.installment')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
-        <p:inputText id="installment" styleClass="large right numeric"
+        <p:inputText id="installment" styleClass="large"
                      value="#{ncbInfo.NCBDetailView.installment}" required="#{not empty param[addRowData.clientId]}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
             <p:ajax event="blur" update=":ncbDlgForm:installment"/>
@@ -124,7 +122,7 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.dateOfDebtRestructuring')}"/>:
+        <h:outputText value="#{msg.get('app.dateOfDebtRestructuring')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -135,7 +133,7 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="ลักษณะการชำระหนี้ ณ ปัจจุบัน"/>:
+        <h:outputText value="ลักษณะการชำระหนี้ ณ ปัจจุบัน"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -144,7 +142,7 @@
                          style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
             <f:selectItems value="#{ncbInfo.settlementStatusList}"
                            var="dlgtdrCurrentList"
                            itemLabel="#{dlgtdrCurrentList.name}"
@@ -155,7 +153,7 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="ลักษณะการชำระหนี้ที่ผ่านมา"/>:
+        <h:outputText value="ลักษณะการชำระหนี้ที่ผ่านมา"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -164,7 +162,7 @@
                          style="width: 200px;"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
             <f:selectItems value="#{ncbInfo.settlementStatusList}"
                            var="dlgHistoryList"
                            itemLabel="#{dlgHistoryList.name}"
@@ -174,7 +172,7 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.noOfOutstandingPaymentIn12months')}"/>:
+        <h:outputText value="#{msg.get('app.noOfOutstandingPaymentIn12months')}"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -185,7 +183,7 @@
 </tr>
 <tr>
     <td class="title" style="width: 200px;">
-        <h:outputText value="Over Limit Last 6 Months"/>:
+        <h:outputText value="Over Limit Last 6 Months"/> :
         <h:outputLabel value="*" styleClass="require-field"/>
     </td>
     <td>
@@ -196,11 +194,11 @@
 <tr>
     <p:panel style="border-width: 0;width: 500" rendered="#{ncbInfo.noOfmonthsPaymentFlag}">
         <td class="title" style="width: 200px;">
-            <h:outputText value="#{msg.get('app.noOfmonthsPayment')}"/>:
+            <h:outputText value="#{msg.get('app.noOfmonthsPayment')}"/> :
         </td>
         <td>
             <h:selectOneMenu value="#{ncbInfo.NCBDetailView.noOfmonthsPayment}">
-                <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+                <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
                 <f:selectItem itemLabel="1" itemValue="1"/>
                 <f:selectItem itemLabel="2" itemValue="2"/>
                 <f:selectItem itemLabel="3" itemValue="3"/>
@@ -311,8 +309,8 @@
     <td>
         <h:selectOneRadio id="radioRefinanceFlag" value="#{ncbInfo.NCBDetailView.refinanceFlag}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="true"/>
-            <f:selectItem itemLabel="No" itemValue="false"/>
+            <f:selectItem itemLabel="Yes" itemValue="1"/>
+            <f:selectItem itemLabel="No" itemValue="0"/>
         </h:selectOneRadio>
     </td>
 </tr>
@@ -324,8 +322,8 @@
     <td>
         <h:selectOneRadio id="radioWCFlag" value="#{ncbInfo.NCBDetailView.wcFlag}"
                           required="#{not empty param[addRowData.clientId]}">
-            <f:selectItem itemLabel="Yes" itemValue="true"/>
-            <f:selectItem itemLabel="No" itemValue="false"/>
+            <f:selectItem itemLabel="Yes" itemValue="1"/>
+            <f:selectItem itemLabel="No" itemValue="0"/>
         </h:selectOneRadio>
     </td>
 </tr>

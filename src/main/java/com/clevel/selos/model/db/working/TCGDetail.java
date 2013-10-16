@@ -34,7 +34,7 @@ public class TCGDetail implements Serializable {
     private BigDecimal ltvValue;
 
     @Column(name="propose_in_this_request_flag")
-    private boolean isProposeInThisRequest;
+    private int isProposeInThisRequest;
 
     public long getId() {
         return id;
@@ -84,13 +84,11 @@ public class TCGDetail implements Serializable {
         this.ltvValue = ltvValue;
     }
 
-    public boolean isProposeInThisRequest() {
+    public int getProposeInThisRequest() {
         return isProposeInThisRequest;
     }
 
-    public void setProposeInThisRequest(boolean proposeInThisRequest) {
+    public void setProposeInThisRequest(int proposeInThisRequest) {
         isProposeInThisRequest = proposeInThisRequest;
     }
-
-
 }
