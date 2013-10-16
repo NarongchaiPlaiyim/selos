@@ -1,11 +1,18 @@
 package com.clevel.selos.dao.working;
 
-/**
- * Created with IntelliJ IDEA.
- * User: pinthip
- * Date: 10/16/13 AD
- * Time: 7:12 PM
- * To change this template use File | Settings | File Templates.
- */
-public class ExistingCreditDAO {
+import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.ExistingCredit;
+import org.slf4j.Logger;
+
+import javax.inject.Inject;
+
+public class ExistingCreditDAO extends GenericDAO<ExistingCredit,Long> {
+
+    @Inject
+    private Logger log;
+
+    @Inject
+    public ExistingCreditDAO() {
+    }
+
 }

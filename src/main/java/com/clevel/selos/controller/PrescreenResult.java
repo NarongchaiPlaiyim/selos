@@ -1,17 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.ExistingCreditView;
+import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.PrescreenResultView;
-import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -112,11 +109,11 @@ public class PrescreenResult implements Serializable {
         //TODO get all data to Screen
     }
 
-    private List<ExistingCreditView> getCreditFact(int num){
+    private List<ExistingCreditDetailView> getCreditFact(int num){
 
-        List<ExistingCreditView> existingCreditViewList = new ArrayList<ExistingCreditView>();
+        List<ExistingCreditDetailView> existingCreditViewList = new ArrayList<ExistingCreditDetailView>();
         for(int i = 0; i < num; i++){
-            ExistingCreditView existingCreditView = new ExistingCreditView();
+            ExistingCreditDetailView existingCreditView = new ExistingCreditDetailView();
             existingCreditView.setAccountName("Test 0" + (i+1));
             existingCreditView.setAccountNumber("123456789" + i);
             existingCreditView.setAccountSuf("00"+(i+1));

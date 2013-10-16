@@ -1,6 +1,10 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.User;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "wrk_existing_credit")
@@ -17,6 +21,9 @@ public class ExistingCredit {
     @Column(name="account_number")
     private String accountNumber;
 
+    @Column(name="product_group")
+    private String productGroup;
+
     @Column(name="product_program")
     private String productProgram;
 
@@ -26,6 +33,46 @@ public class ExistingCredit {
     @Column(name="product_code")
     private String productCode;
 
+    @Column(name="credit_type")
+    private String creditType;
+
+    @Column(name="limit")
+    private BigDecimal limit;
+
+    @Column(name="pce_percent")
+    private BigDecimal pcePercent;
+
+    @Column(name="pce_limit")
+    private BigDecimal pceLimit;
+
+    @Column(name="outstanding")
+    private BigDecimal outstanding;
+
+    @Column(name="installment")
+    private BigDecimal installment;
+
+    @Column(name="int_fee")
+    private BigDecimal intFee;
+
+    @Column(name="tenor")
+    private int tenor;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
+
     @ManyToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
@@ -33,4 +80,172 @@ public class ExistingCredit {
     @ManyToOne
     @JoinColumn(name="workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getProductGroup() {
+        return productGroup;
+    }
+
+    public void setProductGroup(String productGroup) {
+        this.productGroup = productGroup;
+    }
+
+    public String getProductProgram() {
+        return productProgram;
+    }
+
+    public void setProductProgram(String productProgram) {
+        this.productProgram = productProgram;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getCreditType() {
+        return creditType;
+    }
+
+    public void setCreditType(String creditType) {
+        this.creditType = creditType;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
+    }
+
+    public BigDecimal getPcePercent() {
+        return pcePercent;
+    }
+
+    public void setPcePercent(BigDecimal pcePercent) {
+        this.pcePercent = pcePercent;
+    }
+
+    public BigDecimal getPceLimit() {
+        return pceLimit;
+    }
+
+    public void setPceLimit(BigDecimal pceLimit) {
+        this.pceLimit = pceLimit;
+    }
+
+    public BigDecimal getOutstanding() {
+        return outstanding;
+    }
+
+    public void setOutstanding(BigDecimal outstanding) {
+        this.outstanding = outstanding;
+    }
+
+    public BigDecimal getInstallment() {
+        return installment;
+    }
+
+    public void setInstallment(BigDecimal installment) {
+        this.installment = installment;
+    }
+
+    public BigDecimal getIntFee() {
+        return intFee;
+    }
+
+    public void setIntFee(BigDecimal intFee) {
+        this.intFee = intFee;
+    }
+
+    public int getTenor() {
+        return tenor;
+    }
+
+    public void setTenor(int tenor) {
+        this.tenor = tenor;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
 }

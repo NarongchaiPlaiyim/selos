@@ -1,13 +1,12 @@
 package com.clevel.selos.model.view;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class PrescreenResultView {
     private Double groupExposure;
     private Double groupIncome;
-    private List<ExistingCreditView> existingCredit;
-    private List<ExistingCreditView> appInRLOS;
+    private List<ExistingCreditDetailView> existingCredit;
+    private List<ExistingCreditDetailView> appInRLOS;
     private List<UWRuleResult> groupRuleResults;
     private List<UWRuleResult> customerRuleResults;
 
@@ -27,19 +26,19 @@ public class PrescreenResultView {
         this.groupIncome = groupIncome;
     }
 
-    public List<ExistingCreditView> getExistingCredit() {
+    public List<ExistingCreditDetailView> getExistingCredit() {
         return existingCredit;
     }
 
-    public void setExistingCredit(List<ExistingCreditView> existingCredit) {
+    public void setExistingCredit(List<ExistingCreditDetailView> existingCredit) {
         this.existingCredit = existingCredit;
     }
 
-    public List<ExistingCreditView> getAppInRLOS() {
+    public List<ExistingCreditDetailView> getAppInRLOS() {
         return appInRLOS;
     }
 
-    public void setAppInRLOS(List<ExistingCreditView> appInRLOS) {
+    public void setAppInRLOS(List<ExistingCreditDetailView> appInRLOS) {
         this.appInRLOS = appInRLOS;
     }
 
