@@ -107,7 +107,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     NCBInterfaceImpl ncbInterface;
 
-    @Inject
+
     public PrescreenBusinessControl(){
 
     }

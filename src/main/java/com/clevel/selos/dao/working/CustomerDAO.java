@@ -54,7 +54,6 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("juristic.registrationId", registrationId));
         Customer customer = (Customer)criteria.uniqueResult();
-
         return customer;
     }
 }

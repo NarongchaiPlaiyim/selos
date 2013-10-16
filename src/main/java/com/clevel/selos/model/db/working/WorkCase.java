@@ -41,6 +41,9 @@ public class WorkCase implements Serializable {
     @OneToMany(mappedBy="workCase")
     private List<Customer> customerList;
 
+    @OneToMany(mappedBy="workCase")
+    private List<DBR> dbrList;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;
