@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.dwh;
 
-import com.clevel.selos.dao.ext.Obligation1DAO;
-import com.clevel.selos.dao.ext.Obligation2DAO;
+import com.clevel.selos.dao.ext.dwh.Obligation1DAO;
+import com.clevel.selos.dao.ext.dwh.Obligation2DAO;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.dwh.model.Obligation;
@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DWHService implements Serializable {
@@ -24,7 +22,7 @@ public class DWHService implements Serializable {
     Logger log;
 
     @Inject
-    @Config(name = "interface.dwh.table.sysparam")
+    @Config(name = "interface.dwh.obligation.table.sysparam")
     String sysParam;
 
     @Inject
@@ -39,8 +37,8 @@ public class DWHService implements Serializable {
 
     }
 
-    public List<Obligation> getObligationByTmbCusId(String tmbCusId){
-        log.debug("getObligationByTmbCusId (tmbCusId : {})",tmbCusId);
+    public List<Obligation> getObligationByTmbCusId(List<String> tmbCusIdList){
+        log.debug("getObligationByTmbCusId (tmbCusIdList : {})",tmbCusIdList);
         List<Obligation> obligationList = new ArrayList<Obligation>();
 
         //check which table is current
@@ -51,13 +49,13 @@ public class DWHService implements Serializable {
 
             if(value.equalsIgnoreCase("1")){
                 //get from table 1 (Obligation1)
-                List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusId(tmbCusId);
+                List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation1List!=null && obligation1List.size()>0){
                     return transformObligation(obligation1List,null);
                 }
             } else if(value.equalsIgnoreCase("2")){
                 //get from table 2 (Obligation2)
-                List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusId(tmbCusId);
+                List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation2List!=null && obligation2List.size()>0){
                     return transformObligation(null,obligation2List);
                 }

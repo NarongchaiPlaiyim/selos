@@ -1,4 +1,4 @@
-package com.clevel.selos.dao.ext;
+package com.clevel.selos.dao.ext.dwh;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
@@ -18,16 +18,17 @@ public class Obligation2DAO extends GenericDAO<Obligation2,Long> {
     public Obligation2DAO() {
     }
 
-    public List<Obligation2> getListByTmbCusId(String tmbCusId) {
-        log.debug("getListByTmbCusId. (tmbCusId: {})",tmbCusId);
+    public List<Obligation2> getListByTmbCusIdList(List<String> tmbCusIdList) {
+        log.debug("getListByTmbCusId. (tmbCusIdList: {})",tmbCusIdList);
 
-        if(!Util.isEmpty(tmbCusId)){
+        if(tmbCusIdList!=null && tmbCusIdList.size()>0){
             Criteria criteria = createCriteria();
-            criteria.add(Restrictions.eq("tmbCusId", tmbCusId));
+            criteria.add(Restrictions.in("tmbCusId", tmbCusIdList));
 
             List<Obligation2> obligation2List = criteria.list();
 
             log.debug("getListByTmbCusId. (result size: {})", obligation2List.size());
+
             return obligation2List;
         }
 

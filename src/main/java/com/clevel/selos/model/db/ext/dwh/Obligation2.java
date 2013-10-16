@@ -66,7 +66,7 @@ public class Obligation2 implements Serializable {
     @Column(name="scfscore_model_type_ibnr", length = 50)
     private String scfScoreModelTypeIbnr;
 
-    @Column(name="claim_amaount")
+    @Column(name="claim_amount")
     private BigDecimal claimAmount;
 
     @Column(name="com_amount")
