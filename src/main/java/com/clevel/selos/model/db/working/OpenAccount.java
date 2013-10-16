@@ -7,6 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="wrk_open_account")
@@ -30,6 +31,9 @@ public class OpenAccount implements Serializable {
     @OneToOne
     @JoinColumn(name="open_account_product_id")
     private OpenAccountProduct accountProduct;
+
+    @OneToMany(mappedBy="openAccount")
+    private List<OpenAccPurpose> openAccPurposeList;
 
     public long getId() {
         return id;
@@ -71,6 +75,14 @@ public class OpenAccount implements Serializable {
         this.accountProduct = accountProduct;
     }
 
+    public List<OpenAccPurpose> getOpenAccPurposeList() {
+        return openAccPurposeList;
+    }
+
+    public void setOpenAccPurposeList(List<OpenAccPurpose> openAccPurposeList) {
+        this.openAccPurposeList = openAccPurposeList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -79,6 +91,7 @@ public class OpenAccount implements Serializable {
                 append("accountName", accountName).
                 append("accountType", accountType).
                 append("accountProduct", accountProduct).
+                append("openAccPurposeList", openAccPurposeList).
                 toString();
     }
 }
