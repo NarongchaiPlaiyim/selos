@@ -1,10 +1,10 @@
-package com.clevel.selos.integration.dwh;
+package com.clevel.selos.integration.dwh.obligation;
 
 import com.clevel.selos.dao.ext.dwh.Obligation1DAO;
 import com.clevel.selos.dao.ext.dwh.Obligation2DAO;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.model.db.ext.dwh.Obligation1;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
 import com.clevel.selos.model.db.system.SystemParameter;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DWHService implements Serializable {
+public class ObligationService implements Serializable {
     @Inject
     @DWH
     Logger log;
@@ -33,7 +33,7 @@ public class DWHService implements Serializable {
     Obligation2DAO obligation2DAO;
 
     @Inject
-    public DWHService() {
+    public ObligationService() {
 
     }
 

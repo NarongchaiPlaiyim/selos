@@ -65,12 +65,12 @@ public class RLOSInterfaceImpl implements RLOSInterface,Serializable{
     }
 
     @Override
-    public List<AppInProcess> getAppInProcess(String userId, List<String> citizenIdList) {
-        log.debug("getAppInProcess (userId : {}, citizenIdList : {})",userId,citizenIdList);
+    public List<AppInProcess> getAppInProcessData(String userId, List<String> citizenIdList) {
+        log.debug("getAppInProcessData (userId : {}, citizenIdList : {})",userId,citizenIdList);
         List<AppInProcess> appInProcessList = Collections.EMPTY_LIST;
         if(citizenIdList!=null && citizenIdList.size()>0){
             appInProcessList = appInProcessService.getAppInProcessData(citizenIdList);
-            log.debug("getAppInProcess result (appInProcessList size : {})",appInProcessList.size());
+            log.debug("getAppInProcessData result (appInProcessList size : {})",appInProcessList.size());
         }
         return appInProcessList;
     }
