@@ -11,7 +11,6 @@ import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.view.*;
-import com.clevel.selos.service.PrescreenService;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -205,8 +204,6 @@ public class PrescreenMaker implements Serializable {
     @Inject
     private BorrowingTypeDAO borrowingTypeDAO;
 
-    @Inject
-    private PrescreenService prescreenService;
     @Inject
     private PrescreenTransform prescreenTransform;
     @Inject
