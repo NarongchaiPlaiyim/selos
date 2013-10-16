@@ -40,11 +40,12 @@
                             <tr>
                                 <td class="title" style="min-width: 200px; width: 200px;">Product Group :</td>
                                 <td>
+                                    <h:inputHidden value="#{prescreenMaker.previousProductGroupId}"/>
                                     <p:selectOneMenu id="selProdGroupId"
                                                      styleClass="largest"
                                                      size="1"
                                                      value="#{prescreenMaker.prescreenView.productGroup.id}"
-                                                     required="#{not empty param[savePreMakerButton.clientId]}">
+                                                     required="#{not empty param[btnAddFacility.clientId] || not empty param[btnSaveInitialButton.clientId]}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{prescreenMaker.productGroupList}"
                                                        var="productGroupList"
@@ -52,13 +53,17 @@
                                                        itemValue="#{productGroupList.id}"/>
                                         <p:ajax event="change" listener="#{prescreenMaker.checkOnChangeProductGroup()}" />
                                     </p:selectOneMenu>
-                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg"   message="Are you want to change Productgroup? If you click 'YES' facility added will be remove!!">`
+                                    <p:confirmDialog id="msgBoxFacilityDialog" widgetVar="msgBoxFacilityDlg" header="Confirm" message="#{msg.get('app.prescreen.message.changeproductgroup')}">`
                                         <p:commandButton value="YES"
                                                          process="@this"
                                                          actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                                                         oncomplete="msgBoxFacilityDlg.hide()"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
                                                          update=":frmMain:resultTableFacility,:facilityDlgForm" />
-                                        <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+                                        <p:commandButton value="NO"
+                                                         process="@this"
+                                                         actionListener="#{prescreenMaker.onCancelChangeProductGroup()}"
+                                                         oncomplete="PF('msgBoxFacilityDlg').hide()"
+                                                         update=":frmMain"/>
                                     </p:confirmDialog>
                                 </td>
                             </tr>
@@ -177,11 +182,11 @@
                                         </p:column>
 
                                         <p:column headerText="Citizen ID/Registration ID" styleClass="center">
-                                            <h:outputText value="#{borrowerItem.citizenId}"/>
+                                            <h:outputText value="#{borrowerItem.citizenId}"/><h:outputText value="#{borrowerItem.registrationId}"/>
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
-                                            <h:outputText value="#{borrowerItem.customerId}"/>
+                                            <h:outputText value="#{borrowerItem.tmbCustomerId}"/>
                                         </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -235,7 +240,7 @@
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
-                                            <h:outputText value="#{guarantorItem.customerId}"/>
+                                            <h:outputText value="#{guarantorItem.tmbCustomerId}"/>
                                         </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -289,7 +294,7 @@
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
-                                            <h:outputText value="#{relatedItem.customerId}"/>
+                                            <h:outputText value="#{relatedItem.tmbCustomerId}"/>
                                         </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -516,7 +521,7 @@
                                 <td></td>
                                 <td>
                                     <p:dataTable id="resultTableProposeCollateral" var="proposeCollateral"
-                                                 value="#{prescreenMaker.proposeCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
+                                                 value="#{prescreenMaker.proposePrescreenCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
                                                  paginator="false" rowKey="#{proposeCollateral.id}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
@@ -562,7 +567,7 @@
                                                      styleClass="medium"
                                                      process="@form"
                                                      action="#{prescreenMaker.onSavePrescreen()}"
-                                                     update=":frmMain"/>
+                                                     update=":frmMain :msgBoxSystemMessagePanel"/>
                                     <p:commandButton id="btnCancel" value="Cancel"
                                                      styleClass="medium"
                                                      process="@this"
@@ -591,11 +596,10 @@
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
                          header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
-            <p:commandButton value="YES"
+            <p:commandButton value="OK"
                              process="@this"
-                             actionListener="#{prescreenMaker.onChangeProductGroup()}"
-                             oncomplete="msgBoxFacilityDlg.hide()" />
-            <p:commandButton value="NO" onclick="msgBoxFacilityDlg.hide()"/>
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
     <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"

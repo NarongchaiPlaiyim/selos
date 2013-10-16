@@ -302,7 +302,7 @@
                                 <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
                                           style="width: 100px;"/>
                                 <p:column headerText="ลักษณะการชำระหนี้ ณ ปัจจุบัน" styleClass="center"
-                                          style="width: 110px;"/>
+                                          style="width: 50px;"/>
                                 <p:column headerText="ลักษณะการชำระหนี้ที่ผ่านมา" styleClass="center"
                                           style="width: 110px;"/>
                                 <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}"
@@ -337,13 +337,13 @@
 
                             <p:column>
                                 <h:outputText value="#{item.dateOfInfo}" >
-                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                    <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column>
                                 <h:outputText value="#{item.accountOpenDate}" >
-                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                    <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
@@ -367,7 +367,7 @@
 
                             <p:column>
                                 <h:outputText value="#{item.dateOfDebtRestructuring}">
-                                    <f:convertDateTime pattern="d/M/yyyy"/>
+                                    <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
@@ -395,7 +395,7 @@
                                 <h:outputText   value="#{item.wc}"/>
                             </p:column>
 
-                            <p:column rendered="#{ncbInfo.genColumnEdit}">
+                            <p:column>
                                 <p:commandButton icon="ui-icon-pencil"
                                                  action="#{ncbInfo.onEditNcbDetail()}"
                                                  update=":ncbDlgForm"

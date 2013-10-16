@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class CollateralView implements Serializable {
+public class PrescreenCollateralView implements Serializable {
     @Inject
     Logger log;
 
@@ -24,7 +24,7 @@ public class CollateralView implements Serializable {
     private String     collateralTypeName;
     private BigDecimal collateralAmount;
 
-    public CollateralView() {
+    public PrescreenCollateralView() {
     }
 
     public void reset(){

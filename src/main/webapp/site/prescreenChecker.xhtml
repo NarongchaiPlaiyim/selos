@@ -90,13 +90,7 @@
                              process="@this"
                              update=":frmMain"
                              actionListener="#{prescreenChecker.onCompleteCheckNCB}"
-                             render="#{prescreenChecker.messageErr}"
-                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
-            <p:commandButton value="OK"
-                             process="@this"
-                             update=":frmMain"
-                             render="#{!prescreenChecker.messageErr}"
-                             onclick="gotoInbox('#{request.contextPath}/site/inbox.jsf')"
+                             rendered="#{prescreenChecker.messageErr == true}"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>

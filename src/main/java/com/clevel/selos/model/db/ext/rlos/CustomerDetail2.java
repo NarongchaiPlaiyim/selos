@@ -14,31 +14,31 @@ public class CustomerDetail2 implements Serializable {
     @JoinColumn(name="app_ref_number")
     private AppInProcess2 appInProcess2;
 
-    @Column(name="citizen_id")
+    @Column(name="citizen_id", length=25)
     private String citizenId;
 
-    @Column(name="title")
+    @Column(name="title", length=3)
     private String title;
 
-    @Column(name="firstname_th")
+    @Column(name="firstname_th", length=25)
     private String firstNameTh;
 
-    @Column(name="lastname_th")
+    @Column(name="lastname_th", length=30)
     private String lastNameTh;
 
-    @Column(name="borrower_order")
+    @Column(name="borrower_order", length=5)
     private String borrowerOrder;
 
-    @Column(name="spouse_citizen_id")
+    @Column(name="spouse_citizen_id", length=25)
     private String spouseCitizenId;
 
-    @Column(name="spouse_firstname_th")
+    @Column(name="spouse_firstname_th", length=25)
     private String spouseFirstNameTh;
 
-    @Column(name="spouse_lastname_th")
+    @Column(name="spouse_lastname_th", length=30)
     private String spouseLastNameTh;
 
-    @Column(name="is_spouse_coapplicant")
+    @Column(name="is_spouse_coapplicant", length=1)
     private String spouseCoApplicant;
 
     public CustomerDetail2() {

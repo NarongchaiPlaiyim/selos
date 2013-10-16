@@ -2,7 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.PrescreenCollateral;
-import com.clevel.selos.model.view.CollateralView;
+import com.clevel.selos.model.view.PrescreenCollateralView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -14,24 +14,45 @@ public class PrescreenCollateralTransform extends Transform {
 
     }
 
-    public PrescreenCollateral transformToModel(CollateralView collateralView, Prescreen prescreen){
+    public PrescreenCollateral transformToModel(PrescreenCollateralView prescreenCollateralView, Prescreen prescreen){
         PrescreenCollateral prescreenCollateral = new PrescreenCollateral();
 
         prescreenCollateral.setPrescreen(prescreen);
-        prescreenCollateral.setCollateralType(collateralView.getCollateralType());
+        prescreenCollateral.setCollateralType(prescreenCollateralView.getCollateralType());
 
         return prescreenCollateral;
     }
 
-    public List<PrescreenCollateral> transformToModelList(List<CollateralView> collateralViews, Prescreen prescreen){
+    public List<PrescreenCollateral> transformToModelList(List<PrescreenCollateralView> prescreenCollateralViews, Prescreen prescreen){
         List<PrescreenCollateral> prescreenCollateralList = new ArrayList<PrescreenCollateral>();
 
-        for(CollateralView collateralView : collateralViews){
+        for(PrescreenCollateralView prescreenCollateralView : prescreenCollateralViews){
             PrescreenCollateral prescreenCollateral = new PrescreenCollateral();
-            prescreenCollateral = transformToModel(collateralView, prescreen);
+            prescreenCollateral = transformToModel(prescreenCollateralView, prescreen);
             prescreenCollateralList.add(prescreenCollateral);
         }
 
         return prescreenCollateralList;
+    }
+
+    public PrescreenCollateralView transformToView(PrescreenCollateral prescreenCollateral){
+        PrescreenCollateralView prescreenCollateralView = new PrescreenCollateralView();
+        prescreenCollateralView.setId(prescreenCollateral.getId());
+        prescreenCollateralView.setCollateralType(prescreenCollateral.getCollateralType());
+        prescreenCollateralView.setCollateralTypeName(prescreenCollateral.getCollateralType().getDescription());
+
+        return prescreenCollateralView;
+    }
+
+    public List<PrescreenCollateralView> transformToViewList(List<PrescreenCollateral> prescreenCollaterals){
+        List<PrescreenCollateralView> prescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
+
+        for(PrescreenCollateral prescreenCollateral : prescreenCollaterals){
+            PrescreenCollateralView prescreenCollateralView = new PrescreenCollateralView();
+            prescreenCollateralView = transformToView(prescreenCollateral);
+            prescreenCollateralViewList.add(prescreenCollateralView);
+        }
+
+        return prescreenCollateralViewList;
     }
 }

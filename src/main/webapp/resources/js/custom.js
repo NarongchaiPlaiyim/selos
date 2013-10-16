@@ -1,8 +1,11 @@
-$(document).ready(function(){
-    $(".numberonly").bind("keypress", function (e) {
-        alert('5');
-        return !(e.which != 8 && e.which != 0 &&
-            (e.which < 48 || e.which > 57) && e.which != 46);
+/*$(document).ready(function(){
+    $(".number-only").keypress(function(event) {
+        var validNums = '0123456789';
+
+        if (!event.charCode) k = String.fromCharCode(event.which);
+        else k = String.fromCharCode(event.charCode);
+
+        if (validNums.indexOf(k) == -1) event.preventDefault();
     });
 });
 
@@ -10,7 +13,7 @@ $(document).ready(function() {
     $(".readonly").bind("onclick", function(e) {
         $(".readonly").blur();
     })
-});
+});*/
 
 function gotoInbox(contextUrl){
     window.location = contextUrl;
@@ -38,9 +41,22 @@ function formatNumber(obj){
     }
 }
 
-function numberOnly(e){
-    return !(e.which != 8 && e.which != 0 &&
-        (e.which < 48 || e.which > 57) && e.which != 46);
+function numberOnly(evt){
+    var validNums = '0123456789.';
+    var chr;
+
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
+
+    if(evt.keyCode == '9' || evt.keyCode == '37' || evt.keyCode == '38' || evt.keyCode == '39' || evt.keyCode == '40' || evt.keyCode == '46' || evt.keyCode == '16' || (nbr > 95 && nbr < 106) || evt.keyCode == '110'){
+        return true;
+    }else{
+        keychar = String.fromCharCode(nbr);
+        validNums  += String.fromCharCode(8);
+        if (validNums.indexOf(keychar) < 0){
+            return false;
+        }
+        return true;
+    }
 }
 
 function hideWindowsScrollBar(){
@@ -83,6 +99,18 @@ function handlencbInfoRequest(xhr, status, args) {
 function handleFullappBizProductRequest(xhr, status, args) {
     if(args.functionComplete){
         bizProductViewDlg.hide();
+    }
+}
+
+function handleFullappBizStakeHolderRequest(xhr, status, args) {
+
+    if(args.functionComplete){
+        stakeholderViewDlg.hide();
+    }
+
+    if(args.functionCalSum){
+        alert("ผลรวมผิดพลาด ระบบจะคืนค่าเดิม");
+        stakeholderViewDlg.hide();
     }
 }
 

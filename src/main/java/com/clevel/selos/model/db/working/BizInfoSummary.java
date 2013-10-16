@@ -2,6 +2,7 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.ReferredExperience;
 import com.clevel.selos.model.db.master.SubDistrict;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,13 +13,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 7/10/2556
- * Time: 15:03 น.
- * To change this template use File | Settings | File Templates.
- */
 @Entity
 @Table(name="wrk_biz_info_summary")
 public class BizInfoSummary implements Serializable {
@@ -31,7 +25,7 @@ public class BizInfoSummary implements Serializable {
     private String bizLocationName;
 
     @Column(name="is_rental")
-    private String isRental;
+    private int isRental;
 
     @Column(name="owner_name")
     private String ownerName;
@@ -87,6 +81,10 @@ public class BizInfoSummary implements Serializable {
     @Column(name="establish_date")
     private Date establishDate;
 
+    @OneToOne
+    @JoinColumn(name="refer_exp_id")
+    private ReferredExperience referredExperience;
+
     @Column(name="biz_interview_info")
     private String bizInterviewInfo;
 
@@ -139,10 +137,10 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal netMarginPercentage;
 
     @Column(name="net_fix_asset")
-    private String netFixAsset;
+    private BigDecimal netFixAsset;
 
     @Column(name="no_of_employee")
-    private String noOfEmployee;
+    private int noOfEmployee;
 
     @Column(name="sum_income_amount")
     private BigDecimal  sumIncomeAmount;
@@ -197,11 +195,11 @@ public class BizInfoSummary implements Serializable {
         this.bizLocationName = bizLocationName;
     }
 
-    public String getRental() {
+    public int getRental() {
         return isRental;
     }
 
-    public void setRental(String rental) {
+    public void setRental(int rental) {
         isRental = rental;
     }
 
@@ -331,6 +329,14 @@ public class BizInfoSummary implements Serializable {
 
     public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
+    }
+
+    public ReferredExperience getReferredExperience() {
+        return referredExperience;
+    }
+
+    public void setReferredExperience(ReferredExperience referredExperience) {
+        this.referredExperience = referredExperience;
     }
 
     public String getBizInterviewInfo() {
@@ -469,19 +475,19 @@ public class BizInfoSummary implements Serializable {
         this.netMarginPercentage = netMarginPercentage;
     }
 
-    public String getNetFixAsset() {
+    public BigDecimal getNetFixAsset() {
         return netFixAsset;
     }
 
-    public void setNetFixAsset(String netFixAsset) {
+    public void setNetFixAsset(BigDecimal netFixAsset) {
         this.netFixAsset = netFixAsset;
     }
 
-    public String getNoOfEmployee() {
+    public int getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(String noOfEmployee) {
+    public void setNoOfEmployee(int noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 
@@ -589,6 +595,7 @@ public class BizInfoSummary implements Serializable {
                 .append("extension", extension)
                 .append("registrationDate", registrationDate)
                 .append("establishDate", establishDate)
+                .append("referredExperience", referredExperience)
                 .append("bizInterviewInfo", bizInterviewInfo)
                 .append("circulationAmount", circulationAmount)
                 .append("circulationPercentage", circulationPercentage)
