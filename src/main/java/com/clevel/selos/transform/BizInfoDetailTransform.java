@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
-    @Inject
-    Logger log;
+
     public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView){
 
         BizInfoDetail bizInfoDetail = new BizInfoDetail();
@@ -21,7 +20,7 @@ public class BizInfoDetailTransform extends Transform {
         }
 
         bizInfoDetail.setBizInfoText(bizInfoDetailView.getBizInfoText());
-        bizInfoDetail.setTradeType(bizInfoDetailView.getTradeType());
+        bizInfoDetail.setBusinessActivity(bizInfoDetailView.getBizActivity());
         bizInfoDetail.setBusinessType(bizInfoDetailView.getBizType());
         bizInfoDetail.setBusinessGroup(bizInfoDetailView.getBizGroup());
         bizInfoDetail.setBusinessDescription(bizInfoDetailView.getBizDesc());
@@ -35,21 +34,6 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setBizDocExpiryDate(bizInfoDetailView.getBizDocExpiryDate());
         bizInfoDetail.setExpIndCountryName(bizInfoDetailView.getExpIndCountryName());
         bizInfoDetail.setPercentExpIndCountryName(bizInfoDetailView.getPercentExpIndCountryName());
-
-        log.info( " BizInfoDetailTransform bizInfoDetailView Supplier \n SupplierTotal 1 " + bizInfoDetailView.getSupplierTotalPercentBuyVolume() +
-                " \n SupplierTotal 2 " + bizInfoDetailView.getSupplierTotalPercentCredit() +
-                " \n SupplierTotal 3 " + bizInfoDetailView.getSupplierTotalCreditTerm());
-
-        log.info( "BizInfoDetailTransform \n SupplierUWAdjust 1 " + bizInfoDetailView.getSupplierUWAdjustPercentCredit() +
-                " \n SupplierUWAdjust2 " + bizInfoDetailView.getSupplierUWAdjustCreditTerm());
-
-        log.info( "BizInfoDetailTransform bizInfoDetailView Buyer \n BuyerTotal 1 " + bizInfoDetailView.getBuyerTotalPercentBuyVolume() +
-                " \n BuyerTotal 2 " + bizInfoDetailView.getBuyerTotalPercentCredit() +
-                " \n BuyerTotal 3 " + bizInfoDetailView.getBuyerTotalCreditTerm());
-
-        log.info( "BizInfoDetailTransform \n BuyerUWAdjust 1 " + bizInfoDetailView.getBuyerUWAdjustPercentCredit() +
-                " \n BuyerUWAdjust2 " + bizInfoDetailView.getBuyerUWAdjustCreditTerm());
-
         bizInfoDetail.setSupplierTotalPercentBuyVolume(bizInfoDetailView.getSupplierTotalPercentBuyVolume());
         bizInfoDetail.setSupplierTotalPercentCredit(bizInfoDetailView.getSupplierTotalPercentCredit());
         bizInfoDetail.setSupplierTotalCreditTerm(bizInfoDetailView.getSupplierTotalCreditTerm());
@@ -88,7 +72,7 @@ public class BizInfoDetailTransform extends Transform {
 
         bizInfoDetailView.setId(bizInfoDetail.getId());
         bizInfoDetailView.setBizInfoText(bizInfoDetail.getBizInfoText());
-        bizInfoDetailView.setTradeType(bizInfoDetail.getTradeType());
+        bizInfoDetailView.setBizActivity(bizInfoDetail.getBusinessActivity());
         bizInfoDetailView.setBizType(bizInfoDetail.getBusinessType());
         bizInfoDetailView.setBizGroup(bizInfoDetail.getBusinessGroup());
         bizInfoDetailView.setBizDesc(bizInfoDetail.getBusinessDescription());

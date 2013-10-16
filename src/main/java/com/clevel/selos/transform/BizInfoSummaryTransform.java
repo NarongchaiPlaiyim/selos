@@ -1,4 +1,4 @@
-package com.clevel.selos.transform.business;
+package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -34,6 +34,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummary.setRegistrationDate(bizInfoSummaryView.getRegistrationDate());
         bizInfoSummary.setEstablishDate(bizInfoSummaryView.getEstablishDate());
+        bizInfoSummary.setReferredExperience(bizInfoSummaryView.getReferredExperience());
 
         bizInfoSummary.setCirculationAmount(bizInfoSummaryView.getCirculationAmount());
         bizInfoSummary.setCirculationPercentage(bizInfoSummaryView.getCirculationPercentage());
@@ -94,6 +95,7 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setRegistrationDate(bizInfoSummary.getRegistrationDate());
         bizInfoSummaryView.setEstablishDate(bizInfoSummary.getEstablishDate());
+        bizInfoSummaryView.setReferredExperience(bizInfoSummary.getReferredExperience());
 
         bizInfoSummaryView.setCirculationAmount(bizInfoSummary.getCirculationAmount());
         bizInfoSummaryView.setCirculationPercentage(bizInfoSummary.getCirculationPercentage());

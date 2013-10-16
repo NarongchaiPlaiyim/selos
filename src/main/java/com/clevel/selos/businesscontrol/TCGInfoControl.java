@@ -26,7 +26,7 @@ import java.util.List;
 
 
 @Stateless
-public class TCGInfoControl extends BusinessControl {
+public class  TCGInfoControl extends BusinessControl {
     @Inject
     Logger log;
     @Inject
@@ -58,9 +58,8 @@ public class TCGInfoControl extends BusinessControl {
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
             tcgDetailDAO.persist(tcgDetailList);
         }catch (Exception e){
-            log.error( "onSaveTCGToDB error ::: {}" , e);
+            log.error( "onSaveTCGToDB error ::: {}" , e.getMessage());
         }finally{
-
             log.info( "onSaveTCGToDB end" );
         }
 
@@ -85,7 +84,7 @@ public class TCGInfoControl extends BusinessControl {
             log.info("persist tcgDetailList");
 
         }catch (Exception e){
-            log.error( "onEditTCGToDB error ::: {}" , e);
+            log.error( "onEditTCGToDB error ::: {}" , e.getMessage());
         }finally{
             log.info( "onEditTCGToDB end" );
         }
@@ -95,31 +94,38 @@ public class TCGInfoControl extends BusinessControl {
     public TCGView getTcgView(long workCaseId){
         log.info("getTcgView :: workCaseId  :: {}", workCaseId);
         TCGView tcgView = null;
-        WorkCase workCase  = workCaseDAO.findById(workCaseId);
-        log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
-        if(workCase != null)
-        {
-           TCG tcg =  tcgDAO.findByWorkCase(workCase);
+        try{
+            WorkCase workCase  = workCaseDAO.findById(workCaseId);
+            log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
+            if(workCase != null)
+            {
+               TCG tcg =  tcgDAO.findByWorkCase(workCase);
 
-           if(tcg != null){
-               log.info("tcg :: {} ",tcg.getId());
-               tcgView  = tcgTransform.transformTCGToTcgView(tcg);
-           }
-
+               if(tcg != null){
+                   log.info("tcg :: {} ",tcg.getId());
+                   tcgView  = tcgTransform.transformTCGToTcgView(tcg);
+               }
+            }
+        }catch (Exception e){
+            log.error( "find workCase error ::: {}" , e.getMessage());
         }
+
         return tcgView;
     }
 
     public List<TCGDetailView> getTcgDetailListView(TCGView tcgView){
         log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
-
         List<TCGDetailView> tcgDetailViewList = null;
 
+        try{
             List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
 
             if(TCGDetailList.size() > 0){
                 tcgDetailViewList  = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
             }
+        }catch (Exception e){
+            log.error( "find workCase error ::: {}" , e.getMessage());
+        }
 
         return tcgDetailViewList;
     }

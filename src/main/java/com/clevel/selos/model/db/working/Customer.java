@@ -264,9 +264,15 @@ public class Customer implements Serializable {
     public Juristic getJuristic() {
         return juristic;
     }
+    public NCB getNcb() {
+        return ncb;
+    }
 
     public void setJuristic(Juristic juristic) {
         this.juristic = juristic;
+    }
+    public void setNcb(NCB ncb) {
+        this.ncb = ncb;
     }
 
     public List<Address> getAddressesList() {

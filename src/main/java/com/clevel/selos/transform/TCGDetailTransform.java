@@ -26,7 +26,7 @@ public class TCGDetailTransform extends Transform {
             tcgDetail.setLtvValue(tcgDetailView.getLtvValue());
             tcgDetail.setAppraisalAmount(tcgDetailView.getAppraisalAmount());
             tcgDetail.setPotentialCollateral(tcgDetailView.getPotentialCollateral());
-            tcgDetail.setProposeInThisRequest(tcgDetailView.isProposeInThisRequest());
+            tcgDetail.setProposeInThisRequest(tcgDetailView.getProposeInThisRequest());
             tcgDetail.setTcgCollateralType(tcgDetailView.getTcgCollateralType());
 
             tcgDetailList.add(tcgDetail);
@@ -44,7 +44,7 @@ public class TCGDetailTransform extends Transform {
             tcgDetailView.setLtvValue(tcgDetail.getLtvValue());
             tcgDetailView.setAppraisalAmount(tcgDetail.getAppraisalAmount());
             tcgDetailView.setPotentialCollateral(tcgDetail.getPotentialCollateral());
-            tcgDetailView.setProposeInThisRequest(tcgDetail.isProposeInThisRequest());
+            tcgDetailView.setProposeInThisRequest(tcgDetail.getProposeInThisRequest());
             tcgDetailView.setTcgCollateralType(tcgDetail.getTcgCollateralType());
 
             tcgDetailViewList.add(tcgDetailView);
