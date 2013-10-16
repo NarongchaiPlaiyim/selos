@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.model.db.master.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -37,10 +38,10 @@ public class NCB implements Serializable{
     private String historyPaymentType;
 
     @Column(name="npl_flag")
-    private boolean nplFlag;
+    private int nplFlag;
 
     @Column(name="npl_tmb_flag")
-    private boolean nplTMBFlag;
+    private int nplTMBFlag;
 
     @Column(name="npl_tmb_month")
     private int nplTMBMonth;
@@ -49,7 +50,7 @@ public class NCB implements Serializable{
     private int nplTMBYear;
 
     @Column(name="npl_other_flag")
-    private boolean nplOtherFlag;
+    private int nplOtherFlag;
 
     @Column(name="npl_other_month")
     private int nplOtherMonth;
@@ -58,10 +59,10 @@ public class NCB implements Serializable{
     private int nplOtherYear;
 
     @Column(name="tdr_flag")
-    private boolean tdrFlag;
+    private int tdrFlag;
 
     @Column(name="tdr_tmb_flag")
-    private boolean tdrTMBFlag;
+    private int tdrTMBFlag;
 
     @Column(name="tdr_tmb_month")
     private int tdrTMBMonth;
@@ -70,7 +71,7 @@ public class NCB implements Serializable{
     private int tdrTMBYear;
 
     @Column(name="tdr_other_flag")
-    private boolean tdrOhterFlag;
+    private int tdrOhterFlag;
 
     @Column(name="tdr_other_month")
     private int tdrOtherMonth;
@@ -101,6 +102,26 @@ public class NCB implements Serializable{
 
     @Column (name="ncb_cus_address")
     private String ncbCusAddress;
+
+    @Column(name="active")
+    private boolean active;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
+
 
     public long getId() {
         return id;
@@ -166,22 +187,6 @@ public class NCB implements Serializable{
         this.historyPaymentType = historyPaymentType;
     }
 
-    public boolean isNplFlag() {
-        return nplFlag;
-    }
-
-    public void setNplFlag(boolean nplFlag) {
-        this.nplFlag = nplFlag;
-    }
-
-    public boolean isNplTMBFlag() {
-        return nplTMBFlag;
-    }
-
-    public void setNplTMBFlag(boolean nplTMBFlag) {
-        this.nplTMBFlag = nplTMBFlag;
-    }
-
     public int getNplTMBMonth() {
         return nplTMBMonth;
     }
@@ -198,13 +203,6 @@ public class NCB implements Serializable{
         this.nplTMBYear = nplTMBYear;
     }
 
-    public boolean isNplOtherFlag() {
-        return nplOtherFlag;
-    }
-
-    public void setNplOtherFlag(boolean nplOtherFlag) {
-        this.nplOtherFlag = nplOtherFlag;
-    }
 
     public int getNplOtherMonth() {
         return nplOtherMonth;
@@ -222,21 +220,7 @@ public class NCB implements Serializable{
         this.nplOtherYear = nplOtherYear;
     }
 
-    public boolean isTdrFlag() {
-        return tdrFlag;
-    }
 
-    public void setTdrFlag(boolean tdrFlag) {
-        this.tdrFlag = tdrFlag;
-    }
-
-    public boolean isTdrTMBFlag() {
-        return tdrTMBFlag;
-    }
-
-    public void setTdrTMBFlag(boolean tdrTMBFlag) {
-        this.tdrTMBFlag = tdrTMBFlag;
-    }
 
     public int getTdrTMBMonth() {
         return tdrTMBMonth;
@@ -254,13 +238,6 @@ public class NCB implements Serializable{
         this.tdrTMBYear = tdrTMBYear;
     }
 
-    public boolean isTdrOhterFlag() {
-        return tdrOhterFlag;
-    }
-
-    public void setTdrOhterFlag(boolean tdrOhterFlag) {
-        this.tdrOhterFlag = tdrOhterFlag;
-    }
 
     public int getTdrOtherMonth() {
         return tdrOtherMonth;
@@ -332,5 +309,93 @@ public class NCB implements Serializable{
 
     public void setNcbCusAddress(String ncbCusAddress) {
         this.ncbCusAddress = ncbCusAddress;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public int getNplFlag() {
+        return nplFlag;
+    }
+
+    public void setNplFlag(int nplFlag) {
+        this.nplFlag = nplFlag;
+    }
+
+    public int getNplTMBFlag() {
+        return nplTMBFlag;
+    }
+
+    public void setNplTMBFlag(int nplTMBFlag) {
+        this.nplTMBFlag = nplTMBFlag;
+    }
+
+    public int getNplOtherFlag() {
+        return nplOtherFlag;
+    }
+
+    public void setNplOtherFlag(int nplOtherFlag) {
+        this.nplOtherFlag = nplOtherFlag;
+    }
+
+    public int getTdrFlag() {
+        return tdrFlag;
+    }
+
+    public void setTdrFlag(int tdrFlag) {
+        this.tdrFlag = tdrFlag;
+    }
+
+    public int getTdrTMBFlag() {
+        return tdrTMBFlag;
+    }
+
+    public void setTdrTMBFlag(int tdrTMBFlag) {
+        this.tdrTMBFlag = tdrTMBFlag;
+    }
+
+    public int getTdrOhterFlag() {
+        return tdrOhterFlag;
+    }
+
+    public void setTdrOhterFlag(int tdrOhterFlag) {
+        this.tdrOhterFlag = tdrOhterFlag;
     }
 }

@@ -821,6 +821,7 @@
                                              action="#{qualitative.onSaveQualitativeA}"
                                              update=":frmMain"/>
                             <p:commandButton value="Cancel"
+                                             id="btnCancel"
                                              styleClass="medium"
                                              process=":frmMain"
                                              action="#{qualitative.onCancelQualitativeA}"
@@ -844,6 +845,10 @@
 </div>
 </h:form>
 </p:panel>
+
+<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
+    Loading...
+</p:blockUI>
 
 </h:body>
 </f:view>

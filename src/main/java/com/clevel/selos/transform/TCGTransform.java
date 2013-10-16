@@ -33,7 +33,7 @@ public class TCGTransform extends Transform {
         tcg.setRequestLimitNotRequiredTCG(tcgView.getRequestLimitNotRequiredTCG());
         tcg.setRequestTCGAmount(tcgView.getRequestTCGAmount());
         tcg.setTcbFloodAmount(tcgView.getTcbFloodAmount());
-        tcg.setTcgFlag(tcgView.isTCG());
+        tcg.setTcgFlag(tcgView.getTCG());
         tcg.setSumAppraisalAmount(tcgView.getSumAppraisalAmount());
         tcg.setSumLtvValue(tcgView.getSumLtvValue());
         tcg.setSumInThisAppraisalAmount(tcgView.getSumInThisAppraisalAmount());
@@ -59,7 +59,7 @@ public class TCGTransform extends Transform {
         tcgView.setRequestLimitNotRequiredTCG(tcg.getRequestLimitNotRequiredTCG());
         tcgView.setRequestTCGAmount(tcg.getRequestTCGAmount());
         tcgView.setTcbFloodAmount(tcg.getTcbFloodAmount());
-        tcgView.setTCG(tcg.isTcgFlag());
+        tcgView.setTCG(tcg.getTcgFlag());
         tcgView.setSumAppraisalAmount(tcg.getSumAppraisalAmount());
         tcgView.setSumLtvValue(tcg.getSumLtvValue());
         tcgView.setSumInThisAppraisalAmount(tcg.getSumInThisAppraisalAmount());

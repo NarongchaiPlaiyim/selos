@@ -76,7 +76,7 @@ public class Qualitative {
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
         if(page.equals("qualitativeA.jsf")){
-            session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+            session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -112,7 +112,11 @@ public class Qualitative {
             qualityLevelList = new ArrayList<QualityLevel>();
         }
 
-        qualityLevelList = qualityLevelDAO.findAll();
+        try{
+            qualityLevelList = qualityLevelDAO.findAll();
+        }catch (Exception e){
+            log.error( "qualityLevelDAO.findAll  error ::: {}" , e.getMessage());
+        }
     }
 
     public void onSaveQualitativeA(){

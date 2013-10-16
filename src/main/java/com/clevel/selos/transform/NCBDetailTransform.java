@@ -15,18 +15,17 @@ public class NCBDetailTransform extends Transform{
 
         for(NCBDetailView NCBDetailView : NCBDetailViewList){
             NCBDetail ncbDetail = new NCBDetail();
-            ncbDetail.setId(NCBDetailView.getId());
             ncbDetail.setNcb(ncb);
             ncbDetail.setAccountStatus(NCBDetailView.getAccountStatus());
             ncbDetail.setAccountType(NCBDetailView.getAccountType());
             ncbDetail.setAccountOpenDate(NCBDetailView.getAccountOpenDate());
-            ncbDetail.setAccountTBMFlag(NCBDetailView.isTMBAccount());
+            ncbDetail.setAccountTMBFlag(NCBDetailView.getTMBAccount());
             ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
             ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
             ncbDetail.setAsOfDate(NCBDetailView.getDateOfInfo());
             ncbDetail.setLastReStructureDate(NCBDetailView.getDateOfDebtRestructuring());
             ncbDetail.setInstallment(NCBDetailView.getInstallment());
-            ncbDetail.setRefinanceFlag(NCBDetailView.isRefinanceFlag());
+            ncbDetail.setRefinanceFlag(NCBDetailView.getRefinanceFlag());
             ncbDetail.setOutstanding(NCBDetailView.getOutstanding());
             ncbDetail.setOutstandingIn12Month(NCBDetailView.getNoOfOutstandingPaymentIn12months());
             ncbDetail.setNoOfMonthPayment(NCBDetailView.getNoOfmonthsPayment());
@@ -37,17 +36,44 @@ public class NCBDetailTransform extends Transform{
             ncbDetail.setMonth4(NCBDetailView.getMonth4());
             ncbDetail.setMonth5(NCBDetailView.getMonth5());
             ncbDetail.setMonth6(NCBDetailView.getMonth6());
-
+            ncbDetail.setWcFlag(NCBDetailView.getWcFlag());
+            ncbDetail.setOverLimit(NCBDetailView.getNoOfOverLimit());
             NCBDetailList.add(ncbDetail);
         }
-
-
         return NCBDetailList;
     }
 
-    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList ,NCB ncb){
+    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList){
+        List<NCBDetailView> ncbDetailViewList = new ArrayList<NCBDetailView>();
 
-        return null;
+        for(NCBDetail ncbDetail : ncbDetailList){
+            NCBDetailView ncbDetailView = new NCBDetailView();
+            ncbDetailView.setAccountStatus(ncbDetail.getAccountStatus());
+            ncbDetailView.setAccountType(ncbDetail.getAccountType());
+            ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
+            ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
+            ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
+            ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
+            ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
+            ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
+            ncbDetailView.setInstallment(ncbDetail.getInstallment());
+            ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
+            ncbDetailView.setOutstanding(ncbDetail.getOutstanding());
+            ncbDetailView.setNoOfOutstandingPaymentIn12months(ncbDetail.getOutstandingIn12Month());
+            ncbDetailView.setNoOfmonthsPayment(ncbDetail.getNoOfMonthPayment());
+            ncbDetailView.setLimit(ncbDetail.getLimit());
+            ncbDetailView.setMonth1(ncbDetail.getMonth1());
+            ncbDetailView.setMonth2(ncbDetail.getMonth2());
+            ncbDetailView.setMonth3(ncbDetail.getMonth3());
+            ncbDetailView.setMonth4(ncbDetail.getMonth4());
+            ncbDetailView.setMonth5(ncbDetail.getMonth5());
+            ncbDetailView.setMonth6(ncbDetail.getMonth6());
+            ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
+            ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
+            ncbDetailViewList.add(ncbDetailView);
+        }
+
+        return ncbDetailViewList;
 
     }
 

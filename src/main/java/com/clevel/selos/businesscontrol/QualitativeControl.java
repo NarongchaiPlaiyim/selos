@@ -27,16 +27,12 @@ public class QualitativeControl extends BusinessControl {
 
     @Inject
     Logger log;
-
     @Inject
     WorkCaseDAO workCaseDAO;
-
     @Inject
     QualitativeADAO qualitativeADAO;
-
     @Inject
     QualitativeBDAO qualitativeBDAO;
-
     @Inject
     QualitativeTransform qualitativeTransform;
 
@@ -47,15 +43,15 @@ public class QualitativeControl extends BusinessControl {
     }
 
     public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId) {
+        log.info("start saveQualitativeA ::: ");
+
         try {
-            log.info("start saveQualitativeA ::: ");
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
             qualitativeADAO.persist(qualitativeA);
         } catch (Exception e) {
-            log.error("save QualitativeA error" + e);
+            log.error("save QualitativeA error" + e.getMessage());
         } finally {
-
             log.info("saveQualitativeA end");
         }
 
@@ -65,17 +61,23 @@ public class QualitativeControl extends BusinessControl {
         log.info("getQualitativeA ::: workCaseId : {}", workCaseId);
         QualitativeView  qualitativeView = null;
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        if(workCase != null)
-        {
-            QualitativeA  qualitativeA = qualitativeADAO.findByWorkCase(workCase);
-
-            if(qualitativeA != null)
+            if(workCase != null)
             {
-                log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA);
-                qualitativeView = qualitativeTransform.transformQualitativeAToView(qualitativeA);
+                QualitativeA  qualitativeA = qualitativeADAO.findByWorkCase(workCase);
+
+                if(qualitativeA != null)
+                {
+                    log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA);
+                    qualitativeView = qualitativeTransform.transformQualitativeAToView(qualitativeA);
+                }
             }
+        }catch (Exception e){
+            log.error( "find workCase error ::: {}" , e.getMessage());
+        }finally {
+            log.info("getQualitativeA end");
         }
 
         log.info("getQualitativeA ::: qualitativeView : {}", qualitativeView);
@@ -90,7 +92,7 @@ public class QualitativeControl extends BusinessControl {
             QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
             qualitativeBDAO.persist(qualitativeB);
         } catch (Exception e) {
-            log.error("saveQualitativeB error" + e);
+            log.error("saveQualitativeB error" + e.getMessage());
         } finally {
 
             log.info("saveQualitativeB end");
@@ -101,18 +103,21 @@ public class QualitativeControl extends BusinessControl {
     public QualitativeView getQualitativeB(long workCaseId){
         log.info("getQualitativeB ::: workCaseId : {}", workCaseId);
         QualitativeView  qualitativeView = null;
+        try{
+            WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-
-        if(workCase != null)
-        {
-            QualitativeB  qualitativeB = qualitativeBDAO.findByWorkCase(workCase);
-
-            if(qualitativeB != null)
+            if(workCase != null)
             {
-                log.info("get QualitativeB ::: QualitativeB : {}", qualitativeB);
-                qualitativeView = qualitativeTransform.transformQualitativeBToView(qualitativeB);
+                QualitativeB  qualitativeB = qualitativeBDAO.findByWorkCase(workCase);
+
+                if(qualitativeB != null)
+                {
+                    log.info("get QualitativeB ::: QualitativeB : {}", qualitativeB);
+                    qualitativeView = qualitativeTransform.transformQualitativeBToView(qualitativeB);
+                }
             }
+        } catch (Exception e) {
+            log.error("saveQualitativeB error" + e.getMessage());
         }
 
         log.info("getQualitativeB ::: qualitativeView : {}", qualitativeView);
