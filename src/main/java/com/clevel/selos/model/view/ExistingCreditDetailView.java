@@ -3,7 +3,7 @@ package com.clevel.selos.model.view;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ExistingCreditView implements Serializable {
+public class ExistingCreditDetailView implements Serializable {
     private long id;
     private String accountName;
     private String accountSuf;

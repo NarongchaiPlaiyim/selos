@@ -1,12 +1,13 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
-
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import org.slf4j.Logger;
@@ -15,13 +16,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 26/9/2556
- * Time: 16:01 น.
- * To change this template use File | Settings | File Templates.
- */
 
 @Stateless
 public class NCBInfoControl extends BusinessControl {
@@ -35,6 +29,10 @@ public class NCBInfoControl extends BusinessControl {
     NCBDAO ncbDAO;
     @Inject
     NCBDetailDAO ncbDetailDAO;
+    @Inject
+    WorkCaseDAO workCaseDAO;
+    @Inject
+    private CustomerDAO customerDAO;
 
     @Inject
     public void NCBInfoControl(){
@@ -42,22 +40,67 @@ public class NCBInfoControl extends BusinessControl {
     }
 
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList){
-        try{
-            log.info("onSaveNCBToDB begin");
+        log.info("onSaveNCBToDB begin");
 
-            NCB ncb = ncbTransform.transformToModel(NCBInfoView);
+        try{
+            NCB ncb = ncbTransform.transformToModel( NCBInfoView );
             ncbDAO.persist(ncb);
             log.info("persist ncb");
+
+            List<NCBDetail> NCBDetailListToDelete =  ncbDetailDAO.findNCBDetailByTcgId(ncb.getId());
+            log.info("NCBDetailListToDelete :: {}",NCBDetailListToDelete.size());
+            ncbDetailDAO.delete(NCBDetailListToDelete);
+            log.info("delete NCBDetailListToDelete");
+
             List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
             ncbDetailDAO.persist(ncbDetailList);
-        }catch (Exception e){
-            log.error( "onSaveNCBToDB error" + e);
-        }finally{
 
+        }catch (Exception e){
+            log.error( "onSaveNCBToDB error :: " + e.getMessage());
+        }finally{
             log.info( "onSaveNCBToDB end" );
         }
 
-
-
     }
+
+
+    public NCBInfoView getNCBInfoView(long customerId){
+        log.info("getNCBInfoView :: customer id  :: {}", customerId);
+        NCBInfoView ncbInfoView = null;
+
+        try{
+            NCB ncb =  ncbDAO.findNcbByCustomer(customerId);
+            if(ncb != null){
+                log.info("ncb :: {} ",ncb.getId());
+                ncbInfoView  = ncbTransform.transformToView(ncb);
+            }
+        }catch (Exception e){
+            log.error( "getNCBInfoView error :: " + e.getMessage());
+        }finally{
+            log.info( "getNCBInfoView end" );
+        }
+
+        return ncbInfoView;
+    }
+
+    public List<NCBDetailView> getNcbDetailListView(NCBInfoView ncbInfoView){
+        log.info("getNcbDetailListView :: ncbId  :: {}", ncbInfoView.getId());
+        List<NCBDetailView> ncbDetailViewList = null;
+
+        try{
+            List<NCBDetail> NCBDetailList =  ncbDetailDAO.findNCBDetailByTcgId(ncbInfoView.getId());
+
+            if(NCBDetailList.size() > 0){
+                ncbDetailViewList  = ncbDetailTransform.transformToView(NCBDetailList);
+            }
+
+        }catch (Exception e){
+            log.error( "getNcbDetailListView error :: " + e.getMessage());
+        }finally{
+            log.info( "getNcbDetailListView end" );
+        }
+
+        return ncbDetailViewList;
+    }
+
 }

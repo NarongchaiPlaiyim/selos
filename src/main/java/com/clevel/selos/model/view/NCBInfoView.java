@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.TDRCondition;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 
 import java.io.Serializable;
@@ -17,18 +18,18 @@ public class NCBInfoView implements Serializable {
     private String personalId;
     private String currentPaymentType;
     private String historyPaymentType;
-    private boolean nplFlag;
+    private int nplFlag;
     private boolean nplTMBFlag;
     private int nplTMBMonth;
     private int nplTMBYear;
     private boolean nplOtherFlag;
     private int nplOtherMonth;
     private int nplOtherYear;
-    private boolean tdrFlag;
+    private int tdrFlag;
     private boolean tdrTMBFlag;
     private int tdrTMBMonth;
     private int tdrTMBYear;
-    private boolean tdrOhterFlag;
+    private boolean tdrOtherFlag;
     private int tdrOtherMonth;
     private int tdrOtherYear;
     private String remark;
@@ -37,27 +38,36 @@ public class NCBInfoView implements Serializable {
     private String ncbCusName;
     private String ncbCusAddress;
 
+    private boolean active;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
 
-    public void NcbResultView() {
+    public NCBInfoView(){
+        reset();
+    }
+
+    public void reset(){
         this.checkingDate  = new Date();
         this.checkIn6Month = 0;
         this.paymentClass  = "";
         this.personalId    = "";
         this.currentPaymentType = "";
         this.historyPaymentType = "";
-        this.nplFlag     = false;
+        this.nplFlag     = 0;
         this.nplTMBFlag  = false;
         this.nplTMBMonth = 0;
         this.nplTMBYear  = 0;
         this.nplOtherFlag = false;
         this.nplOtherMonth = 0;
         this.nplOtherYear  = 0;
-        this.tdrFlag = false;
+        this.tdrFlag = 0;
         this.tdrTMBFlag = false;
         this.tdrTMBMonth = 0;
         this.tdrTMBYear = 0;
-        this.tdrOhterFlag = false;
+        this.tdrOtherFlag = false;
         this.tdrOtherMonth = 0;
         this.tdrOtherYear = 0;
         this.remark = "";
@@ -123,22 +133,6 @@ public class NCBInfoView implements Serializable {
         this.historyPaymentType = historyPaymentType;
     }
 
-    public boolean isNplFlag() {
-        return nplFlag;
-    }
-
-    public void setNplFlag(boolean nplFlag) {
-        this.nplFlag = nplFlag;
-    }
-
-    public boolean isNplTMBFlag() {
-        return nplTMBFlag;
-    }
-
-    public void setNplTMBFlag(boolean nplTMBFlag) {
-        this.nplTMBFlag = nplTMBFlag;
-    }
-
     public int getNplTMBMonth() {
         return nplTMBMonth;
     }
@@ -155,13 +149,6 @@ public class NCBInfoView implements Serializable {
         this.nplTMBYear = nplTMBYear;
     }
 
-    public boolean isNplOtherFlag() {
-        return nplOtherFlag;
-    }
-
-    public void setNplOtherFlag(boolean nplOtherFlag) {
-        this.nplOtherFlag = nplOtherFlag;
-    }
 
     public int getNplOtherMonth() {
         return nplOtherMonth;
@@ -179,22 +166,6 @@ public class NCBInfoView implements Serializable {
         this.nplOtherYear = nplOtherYear;
     }
 
-    public boolean isTdrFlag() {
-        return tdrFlag;
-    }
-
-    public void setTdrFlag(boolean tdrFlag) {
-        this.tdrFlag = tdrFlag;
-    }
-
-    public boolean isTdrTMBFlag() {
-        return tdrTMBFlag;
-    }
-
-    public void setTdrTMBFlag(boolean tdrTMBFlag) {
-        this.tdrTMBFlag = tdrTMBFlag;
-    }
-
     public int getTdrTMBMonth() {
         return tdrTMBMonth;
     }
@@ -209,14 +180,6 @@ public class NCBInfoView implements Serializable {
 
     public void setTdrTMBYear(int tdrTMBYear) {
         this.tdrTMBYear = tdrTMBYear;
-    }
-
-    public boolean isTdrOhterFlag() {
-        return tdrOhterFlag;
-    }
-
-    public void setTdrOhterFlag(boolean tdrOhterFlag) {
-        this.tdrOhterFlag = tdrOhterFlag;
     }
 
     public int getTdrOtherMonth() {
@@ -298,4 +261,93 @@ public class NCBInfoView implements Serializable {
     public void setNcbCusAddress(String ncbCusAddress) {
         this.ncbCusAddress = ncbCusAddress;
     }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public int getNplFlag() {
+        return nplFlag;
+    }
+    public void setNplFlag(int nplFlag) {
+        this.nplFlag = nplFlag;
+    }
+
+    public int getTdrFlag() {
+        return tdrFlag;
+    }
+
+    public void setTdrFlag(int tdrFlag) {
+        this.tdrFlag = tdrFlag;
+    }
+
+    public boolean isNplTMBFlag() {
+        return nplTMBFlag;
+    }
+
+    public void setNplTMBFlag(boolean nplTMBFlag) {
+        this.nplTMBFlag = nplTMBFlag;
+    }
+
+    public boolean isNplOtherFlag() {
+        return nplOtherFlag;
+    }
+
+    public void setNplOtherFlag(boolean nplOtherFlag) {
+        this.nplOtherFlag = nplOtherFlag;
+    }
+
+    public boolean isTdrTMBFlag() {
+        return tdrTMBFlag;
+    }
+
+    public void setTdrTMBFlag(boolean tdrTMBFlag) {
+        this.tdrTMBFlag = tdrTMBFlag;
+    }
+
+    public boolean isTdrOtherFlag() {
+        return tdrOtherFlag;
+    }
+
+    public void setTdrOtherFlag(boolean tdrOtherFlag) {
+        this.tdrOtherFlag = tdrOtherFlag;
+    }
+
+
 }

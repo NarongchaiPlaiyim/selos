@@ -11,7 +11,7 @@ import java.util.Date;
 
 public class TCGView implements Serializable {
     private long id;
-    private boolean isTCG;
+    private int isTCG;
     private BigDecimal requestLimitRequiredTCG;
     private BigDecimal requestLimitNotRequiredTCG;
     private BigDecimal existingLoanRatioUnderSameCollateral;
@@ -42,7 +42,7 @@ public class TCGView implements Serializable {
 
     public void reset(){
 
-        this.isTCG = false;
+        this.isTCG = 0;
         this.requestLimitRequiredTCG = new BigDecimal(0);
         this.requestLimitNotRequiredTCG = new BigDecimal(0);
         this.existingLoanRatioUnderSameCollateral = new BigDecimal(0);
@@ -68,11 +68,11 @@ public class TCGView implements Serializable {
         this.id = id;
     }
 
-    public boolean isTCG() {
+    public int getTCG() {
         return isTCG;
     }
 
-    public void setTCG(boolean TCG) {
+    public void setTCG(int TCG) {
         isTCG = TCG;
     }
 

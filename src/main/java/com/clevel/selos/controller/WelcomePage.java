@@ -10,6 +10,7 @@ import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.dwh.model.Obligation;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.model.AccountInfoId;
 import com.clevel.selos.model.AccountInfoName;
@@ -162,6 +163,20 @@ public class WelcomePage implements Serializable {
             customerList.add("1235");
             obligationList = dwh.getObligation("BDM001",customerList);
             log.debug("obligation result : {}",obligationList);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testRLOSAppIn() {
+        try{
+            List<AppInProcess> appInProcessList = new ArrayList<AppInProcess>();
+            List<String> citizenIdList = new ArrayList<String>();
+            citizenIdList.add("11111");
+            citizenIdList.add("22222");
+            appInProcessList = rlos.getAppInProcess("BDM001",citizenIdList);
+            log.debug("testRLOSAppIn result : {}",appInProcessList);
         } catch (Exception e) {
             log.error("",e);
         }

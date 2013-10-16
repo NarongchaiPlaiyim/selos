@@ -39,7 +39,7 @@
                                 <table id="content_form_sum">
                                     <tr>
                                         <td colspan="2">
-                                            <table class="table_content">
+                                            <!--<table class="table_content">
                                                 <tr>
                                                     <td>
                                                         <p:dataTable id="ncbSum" var="item" value="#{ncbSummary.ncbSumList}"
@@ -90,9 +90,46 @@
                                                         </p:dataTable>
                                                     </td>
                                                 </tr>
+                                            </table>-->
+                                            <table class="table_content">
+                                                <tr>
+                                                    <td>
+                                                        <p:dataTable id="A" var="item" value="#{ncbSummary.customerViewTest}"
+                                                                     paginator="false" rowKey="#{item.customer}" rowIndexVar="rowIndex">
+
+                                                            <p:column headerText="No." styleClass="center" style="width:20px;">
+                                                                <h:outputText value="#{rowIndex+1}"/>
+                                                            </p:column>
+
+                                                            <p:column headerText="nameTh" styleClass="center" style="width: 50px;">
+                                                                <h:outputText value="#{item.nameTh}"/>
+                                                            </p:column>
+
+                                                            <p:column headerText="id" styleClass="center" style="width: 50px;">
+                                                                <h:outputText value="#{item.id}"/>
+                                                            </p:column>
+
+                                                            <p:column headerText="idNumber" styleClass="center" style="width: 50px;">
+                                                                <h:outputText value="#{item.idNumber}"/>
+                                                            </p:column>
+
+                                                            <p:column  styleClass="center" style="width:54px;">
+                                                                <p:commandButton  icon="ui-icon-pencil"
+                                                                                  action="#{ncbSummary.onEditNCBInfo()}"
+                                                                                  process="@this" >
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{ncbSummary.customerItem}"/>
+                                                                </p:commandButton>
+                                                            </p:column>
+-->
+                                                        </p:dataTable>
+                                                    </td>
+                                                </tr>
                                             </table>
                                         </td>
                                     </tr>
+
+
                                 </table>
                                 <!-- end content -->
                             </div>

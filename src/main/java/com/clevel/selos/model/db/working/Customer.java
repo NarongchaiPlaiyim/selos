@@ -86,8 +86,8 @@ public class Customer implements Serializable {
     @JoinColumn(name="relation_id")
     private Relation relation;
 
-    @OneToMany(mappedBy="customer")
-    private List<NCB> ncbList;
+    @OneToOne(mappedBy="customer")
+    private NCB ncb;
 
     public Customer() {
     }
@@ -204,12 +204,12 @@ public class Customer implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
-    public List<NCB> getNcbList() {
-        return ncbList;
+    public NCB getNcb() {
+        return ncb;
     }
 
-    public void setNcbList(List<NCB> ncbList) {
-        this.ncbList = ncbList;
+    public void setNcb(NCB ncb) {
+        this.ncb = ncb;
     }
 
     public String getLastNameTh() {
@@ -264,7 +264,7 @@ public class Customer implements Serializable {
                 .append("juristic", juristic)
                 .append("addressesList", addressesList)
                 .append("relation", relation)
-                .append("ncbList", ncbList)
+                .append("ncb", ncb)
                 .toString();
     }
 }
