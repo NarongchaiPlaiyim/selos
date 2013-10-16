@@ -67,21 +67,6 @@ public class BizInfoDetailControl {
             bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
 
-
-            log.info( "bizControl \n SupplierTotal 1 " + bizInfoDetail.getSupplierTotalPercentBuyVolume() +
-                    " \n SupplierTotal 2 " + bizInfoDetail.getSupplierTotalPercentCredit() +
-                    " \n SupplierTotal 3 " + bizInfoDetail.getSupplierTotalCreditTerm());
-
-            log.info( "bizControl \n SupplierUWAdjust 1 " + bizInfoDetail.getSupplierUWAdjustPercentCredit() +
-                    " \n SupplierUWAdjust2 " + bizInfoDetail.getSupplierUWAdjustCreditTerm());
-
-            log.info( "bizControl \n BuyerTotal 1 " + bizInfoDetail.getBuyerTotalPercentBuyVolume() +
-                    " \n BuyerTotal 2 " + bizInfoDetail.getBuyerTotalPercentCredit() +
-                    " \n BuyerTotal 3 " + bizInfoDetail.getBuyerTotalCreditTerm());
-
-            log.info( "bizControl \n BuyerUWAdjust 1 " + bizInfoDetail.getBuyerUWAdjustPercentCredit() +
-                    " \n BuyerUWAdjust2 " + bizInfoDetail.getBuyerUWAdjustCreditTerm());
-
             bizInfoDetailDAO.persist(bizInfoDetail);
             log.info( "bizInfoDetailDAO persist end" );
 

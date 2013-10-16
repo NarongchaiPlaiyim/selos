@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.BusinessActivity;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.BusinessType;
@@ -14,7 +15,7 @@ import java.util.List;
 public class BizInfoDetailView implements Serializable {
     private long id;
     private String bizInfoText;
-    private String tradeType;
+    private BusinessActivity bizActivity;
     private BusinessType bizType;
     private BusinessGroup bizGroup;
     private BusinessDescription bizDesc;
@@ -85,12 +86,12 @@ public class BizInfoDetailView implements Serializable {
         this.bizInfoText = bizInfoText;
     }
 
-    public String getTradeType() {
-        return tradeType;
+    public BusinessActivity getBizActivity() {
+        return bizActivity;
     }
 
-    public void setTradeType(String tradeType) {
-        this.tradeType = tradeType;
+    public void setBizActivity(BusinessActivity bizActivity) {
+        this.bizActivity = bizActivity;
     }
 
     public BusinessType getBizType() {
@@ -458,7 +459,7 @@ public class BizInfoDetailView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("bizInfoText", bizInfoText)
-                .append("tradeType", tradeType)
+                .append("bizActivity", bizActivity)
                 .append("bizType", bizType)
                 .append("bizGroup", bizGroup)
                 .append("bizDesc", bizDesc)
