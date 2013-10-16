@@ -2,6 +2,7 @@ package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.ReferredExperience;
 import com.clevel.selos.model.db.master.SubDistrict;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -12,13 +13,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 7/10/2556
- * Time: 15:03 น.
- * To change this template use File | Settings | File Templates.
- */
 @Entity
 @Table(name="wrk_biz_info_summary")
 public class BizInfoSummary implements Serializable {
@@ -27,20 +21,18 @@ public class BizInfoSummary implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_SUM_ID")
     private long id;
 
-    @Column(name="biz_location_detail")
-    private String bizLocationDetail;
-
     @Column(name="bizLocationName")
     private String bizLocationName;
 
     @Column(name="is_rental")
-    private String isRental;
+    private int isRental;
 
     @Column(name="owner_name")
     private String ownerName;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="expiry_date")
-    private String expiryDate;
+    private Date expiryDate;
 
     @Column(name="address_no")
     private String addressNo;
@@ -81,11 +73,17 @@ public class BizInfoSummary implements Serializable {
     @Column(name="extension")
     private String extension;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="registration_date")
-    private String registrationDate;
+    private Date registrationDate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="establish_date")
-    private String establishDate;
+    private Date establishDate;
+
+    @OneToOne
+    @JoinColumn(name="refer_exp_id")
+    private ReferredExperience referredExperience;
 
     @Column(name="biz_interview_info")
     private String bizInterviewInfo;
@@ -139,10 +137,10 @@ public class BizInfoSummary implements Serializable {
     private BigDecimal netMarginPercentage;
 
     @Column(name="net_fix_asset")
-    private String netFixAsset;
+    private BigDecimal netFixAsset;
 
     @Column(name="no_of_employee")
-    private String noOfEmployee;
+    private int noOfEmployee;
 
     @Column(name="sum_income_amount")
     private BigDecimal  sumIncomeAmount;
@@ -189,14 +187,6 @@ public class BizInfoSummary implements Serializable {
         this.id = id;
     }
 
-    public String getBizLocationDetail() {
-        return bizLocationDetail;
-    }
-
-    public void setBizLocationDetail(String bizLocationDetail) {
-        this.bizLocationDetail = bizLocationDetail;
-    }
-
     public String getBizLocationName() {
         return bizLocationName;
     }
@@ -205,11 +195,11 @@ public class BizInfoSummary implements Serializable {
         this.bizLocationName = bizLocationName;
     }
 
-    public String getRental() {
+    public int getRental() {
         return isRental;
     }
 
-    public void setRental(String rental) {
+    public void setRental(int rental) {
         isRental = rental;
     }
 
@@ -221,11 +211,11 @@ public class BizInfoSummary implements Serializable {
         this.ownerName = ownerName;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -325,20 +315,28 @@ public class BizInfoSummary implements Serializable {
         this.extension = extension;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public String getEstablishDate() {
+    public Date getEstablishDate() {
         return establishDate;
     }
 
-    public void setEstablishDate(String establishDate) {
+    public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
+    }
+
+    public ReferredExperience getReferredExperience() {
+        return referredExperience;
+    }
+
+    public void setReferredExperience(ReferredExperience referredExperience) {
+        this.referredExperience = referredExperience;
     }
 
     public String getBizInterviewInfo() {
@@ -477,19 +475,19 @@ public class BizInfoSummary implements Serializable {
         this.netMarginPercentage = netMarginPercentage;
     }
 
-    public String getNetFixAsset() {
+    public BigDecimal getNetFixAsset() {
         return netFixAsset;
     }
 
-    public void setNetFixAsset(String netFixAsset) {
+    public void setNetFixAsset(BigDecimal netFixAsset) {
         this.netFixAsset = netFixAsset;
     }
 
-    public String getNoOfEmployee() {
+    public int getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(String noOfEmployee) {
+    public void setNoOfEmployee(int noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 
@@ -579,7 +577,6 @@ public class BizInfoSummary implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 
                 .append("id", id)
-                .append("bizLocationDetail", bizLocationDetail)
                 .append("bizLocationName", bizLocationName)
                 .append("isRental", isRental)
                 .append("ownerName", ownerName)
@@ -598,6 +595,7 @@ public class BizInfoSummary implements Serializable {
                 .append("extension", extension)
                 .append("registrationDate", registrationDate)
                 .append("establishDate", establishDate)
+                .append("referredExperience", referredExperience)
                 .append("bizInterviewInfo", bizInterviewInfo)
                 .append("circulationAmount", circulationAmount)
                 .append("circulationPercentage", circulationPercentage)

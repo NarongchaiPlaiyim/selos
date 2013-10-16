@@ -1,6 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 
+import com.clevel.selos.model.db.master.BusinessActivity;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.BusinessType;
@@ -32,8 +33,9 @@ public class BizInfoDetail implements Serializable {
     @Column(name="biz_info_text")
     private String bizInfoText;
 
-    @Column(name="trade_type")
-    private String tradeType;
+    @OneToOne
+    @JoinColumn(name="business_activity_id")
+    private BusinessActivity BusinessActivity;
 
     @OneToOne
     @JoinColumn(name="business_type_id")
@@ -68,8 +70,9 @@ public class BizInfoDetail implements Serializable {
     @Column(name="biz_doc_permission")
     private String bizDocPermission;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="biz_doc_expiry_date")
-    private String bizDocExpiryDate;
+    private Date bizDocExpiryDate;
 
     @Column(name="exp_ind_country_name")
     private String expIndCountryName;
@@ -211,12 +214,12 @@ public class BizInfoDetail implements Serializable {
         this.bizInfoText = bizInfoText;
     }
 
-    public String getTradeType() {
-        return tradeType;
+    public BusinessActivity getBusinessActivity() {
+        return BusinessActivity;
     }
 
-    public void setTradeType(String tradeType) {
-        this.tradeType = tradeType;
+    public void setBusinessActivity(BusinessActivity businessActivity) {
+        BusinessActivity = businessActivity;
     }
 
     public BusinessType getBusinessType() {
@@ -299,11 +302,11 @@ public class BizInfoDetail implements Serializable {
         this.bizDocPermission = bizDocPermission;
     }
 
-    public String getBizDocExpiryDate() {
+    public Date getBizDocExpiryDate() {
         return bizDocExpiryDate;
     }
 
-    public void setBizDocExpiryDate(String bizDocExpiryDate) {
+    public void setBizDocExpiryDate(Date bizDocExpiryDate) {
         this.bizDocExpiryDate = bizDocExpiryDate;
     }
 

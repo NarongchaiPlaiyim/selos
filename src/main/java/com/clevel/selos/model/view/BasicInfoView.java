@@ -1,7 +1,8 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.integration.ncb.nccrs.models.response.AccountDisputeModel;
 import com.clevel.selos.model.db.master.*;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BasicInfoView implements Serializable {
+    private long id;
     private String appNo;
     private String refAppNo;
     private String caNo;
@@ -22,28 +24,34 @@ public class BasicInfoView implements Serializable {
     private boolean charFCAba;
     private boolean charFCLate;
     private boolean charFCFund;
-    private boolean isSpProgram;
+    private int spProgram;
     private SpecialProgram specialProgram;
-    private boolean isRefIn;
+    private int refIn;
     private Bank refinanceIn;
-    private boolean isRefOut;
+    private int refOut;
     private Bank refinanceOut;
     private RiskType riskType;
-    private String qualitative;
-    private boolean existingSME;
+    private int qualitative;
+    private int existingSME;
     private String since;
     private Date lastReviewDate;
     private Date extReviewDate;
     private SBFScore sbfScore;
-    private boolean isLoan;
-    private boolean isMoreOneYear;
-    private boolean isAnnual;
-//    private xxxxx style;
+    private int loan;
+    private int moreOneYear;
+    private int annual;
+    private BorrowingType loanRequestPattern;
     private String refName;
     private String refId;
     private List<BasicInfoAccountView> basicInfoAccountViews;
-    private boolean isApplyBA;
-    private String baPayment;
+    private int applyBA;
+    private BAPaymentMethod baPaymentMethod;
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
+    //for disable
+    private int individual;
 
     public BasicInfoView(){
         reset();
@@ -57,7 +65,17 @@ public class BasicInfoView implements Serializable {
         this.refinanceOut = new Bank();
         this.riskType = new RiskType();
         this.sbfScore = new SBFScore();
+        this.loanRequestPattern = new BorrowingType();
         this.basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
+        this.baPaymentMethod = new BAPaymentMethod();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getAppNo() {
@@ -164,12 +182,12 @@ public class BasicInfoView implements Serializable {
         this.charFCFund = charFCFund;
     }
 
-    public boolean isSpProgram() {
-        return isSpProgram;
+    public int getSpProgram() {
+        return spProgram;
     }
 
-    public void setSpProgram(boolean spProgram) {
-        isSpProgram = spProgram;
+    public void setSpProgram(int spProgram) {
+        this.spProgram = spProgram;
     }
 
     public SpecialProgram getSpecialProgram() {
@@ -180,12 +198,12 @@ public class BasicInfoView implements Serializable {
         this.specialProgram = specialProgram;
     }
 
-    public boolean isRefIn() {
-        return isRefIn;
+    public int getRefIn() {
+        return refIn;
     }
 
-    public void setRefIn(boolean refIn) {
-        isRefIn = refIn;
+    public void setRefIn(int refIn) {
+        this.refIn = refIn;
     }
 
     public Bank getRefinanceIn() {
@@ -196,12 +214,12 @@ public class BasicInfoView implements Serializable {
         this.refinanceIn = refinanceIn;
     }
 
-    public boolean isRefOut() {
-        return isRefOut;
+    public int getRefOut() {
+        return refOut;
     }
 
-    public void setRefOut(boolean refOut) {
-        isRefOut = refOut;
+    public void setRefOut(int refOut) {
+        this.refOut = refOut;
     }
 
     public Bank getRefinanceOut() {
@@ -220,19 +238,19 @@ public class BasicInfoView implements Serializable {
         this.riskType = riskType;
     }
 
-    public String getQualitative() {
+    public int getQualitative() {
         return qualitative;
     }
 
-    public void setQualitative(String qualitative) {
+    public void setQualitative(int qualitative) {
         this.qualitative = qualitative;
     }
 
-    public boolean isExistingSME() {
+    public int getExistingSME() {
         return existingSME;
     }
 
-    public void setExistingSME(boolean existingSME) {
+    public void setExistingSME(int existingSME) {
         this.existingSME = existingSME;
     }
 
@@ -268,28 +286,36 @@ public class BasicInfoView implements Serializable {
         this.sbfScore = sbfScore;
     }
 
-    public boolean isLoan() {
-        return isLoan;
+    public int getLoan() {
+        return loan;
     }
 
-    public void setLoan(boolean loan) {
-        isLoan = loan;
+    public void setLoan(int loan) {
+        this.loan = loan;
     }
 
-    public boolean isMoreOneYear() {
-        return isMoreOneYear;
+    public int getMoreOneYear() {
+        return moreOneYear;
     }
 
-    public void setMoreOneYear(boolean moreOneYear) {
-        isMoreOneYear = moreOneYear;
+    public void setMoreOneYear(int moreOneYear) {
+        this.moreOneYear = moreOneYear;
     }
 
-    public boolean isAnnual() {
-        return isAnnual;
+    public int getAnnual() {
+        return annual;
     }
 
-    public void setAnnual(boolean annual) {
-        isAnnual = annual;
+    public void setAnnual(int annual) {
+        this.annual = annual;
+    }
+
+    public BorrowingType getLoanRequestPattern() {
+        return loanRequestPattern;
+    }
+
+    public void setLoanRequestPattern(BorrowingType loanRequestPattern) {
+        this.loanRequestPattern = loanRequestPattern;
     }
 
     public String getRefName() {
@@ -316,19 +342,106 @@ public class BasicInfoView implements Serializable {
         this.basicInfoAccountViews = basicInfoAccountViews;
     }
 
-    public boolean isApplyBA() {
-        return isApplyBA;
+    public int getApplyBA() {
+        return applyBA;
     }
 
-    public void setApplyBA(boolean applyBA) {
-        isApplyBA = applyBA;
+    public void setApplyBA(int applyBA) {
+        this.applyBA = applyBA;
     }
 
-    public String getBaPayment() {
-        return baPayment;
+    public BAPaymentMethod getBaPaymentMethod() {
+        return baPaymentMethod;
     }
 
-    public void setBaPayment(String baPayment) {
-        this.baPayment = baPayment;
+    public void setBaPaymentMethod(BAPaymentMethod baPaymentMethod) {
+        this.baPaymentMethod = baPaymentMethod;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public int getIndividual() {
+        return individual;
+    }
+
+    public void setIndividual(int individual) {
+        this.individual = individual;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("appNo", appNo).
+                append("refAppNo", refAppNo).
+                append("caNo", caNo).
+                append("requestType", requestType).
+                append("productGroup", productGroup).
+                append("charUnPaid", charUnPaid).
+                append("charNoPending", charNoPending).
+                append("charFCLG", charFCLG).
+                append("charFCIns", charFCIns).
+                append("charFCCom", charFCCom).
+                append("charFCAba", charFCAba).
+                append("charFCLate", charFCLate).
+                append("charFCFund", charFCFund).
+                append("spProgram", spProgram).
+                append("specialProgram", specialProgram).
+                append("refIn", refIn).
+                append("refinanceIn", refinanceIn).
+                append("refOut", refOut).
+                append("refinanceOut", refinanceOut).
+                append("riskType", riskType).
+                append("qualitative", qualitative).
+                append("existingSME", existingSME).
+                append("since", since).
+                append("lastReviewDate", lastReviewDate).
+                append("extReviewDate", extReviewDate).
+                append("sbfScore", sbfScore).
+                append("loan", loan).
+                append("moreOneYear", moreOneYear).
+                append("annual", annual).
+                append("loanRequestPattern", loanRequestPattern).
+                append("refName", refName).
+                append("refId", refId).
+                append("basicInfoAccountViews", basicInfoAccountViews).
+                append("applyBA", applyBA).
+                append("baPaymentMethod", baPaymentMethod).
+                append("createDate", createDate).
+                append("modifyDate", modifyDate).
+                append("createBy", createBy).
+                append("modifyBy", modifyBy).
+                append("individual", individual).
+                toString();
     }
 }

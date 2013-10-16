@@ -1,9 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
+import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
+import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.model.view.BizProductDetailView;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
@@ -19,16 +21,10 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 5/9/2556
- * Time: 16:26 น.
- * To change this template use File | Settings | File Templates.
- */
 @ViewScoped
 @ManagedBean(name = "bizInfoDetail")
 public class BizInfoDetail implements Serializable {
@@ -50,6 +46,9 @@ public class BizInfoDetail implements Serializable {
     private String modeForButton;
     private String dlgStakeName;
     private int bizGroupId;
+    long bizInfoSummaryId;
+    long bizInfoDetailViewId;
+    private String descType;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -60,6 +59,9 @@ public class BizInfoDetail implements Serializable {
     private List<BizProductDetailView> bizProductDetailViewList;
     private List<BusinessGroup> businessGroupList;
     private List<BusinessDescription> businessDescriptionList;
+    private List<BusinessType> businessTypeList;
+    private List<BusinessActivity> businessActivityList;
+
     private BizStakeHolderDetailView bizStakeHolderTemp;
     private BizStakeHolderDetailView selectStakeHolder;
 
@@ -68,6 +70,11 @@ public class BizInfoDetail implements Serializable {
     private BusinessGroup bizGroup;
     private BusinessDescription bizDesc;
 
+    private BusinessActivity bizActivity;
+    private BusinessType bizType;
+
+    private BizInfoSummaryView bizInfoSummaryView;
+
     @Inject
     Logger log;
     @Inject
@@ -75,7 +82,14 @@ public class BizInfoDetail implements Serializable {
     @Inject
     private BusinessDescriptionDAO businessDescriptionDAO;
     @Inject
+    private BusinessTypeDAO businessTypeDAO;
+    @Inject
+    private BusinessActivityDAO businessActivityDAO;
+    @Inject
     BizInfoDetailControl bizInfoDetailControl;
+    @Inject
+    private BizInfoSummaryControl bizInfoSummaryControl;
+
     public BizInfoDetail(){
 
     }
@@ -83,43 +97,96 @@ public class BizInfoDetail implements Serializable {
     @PostConstruct
     public void onCreation(){
         log.info("onCreation ");
-        bizInfoDetailView = new BizInfoDetailView();
 
-        bizProductDetailViewList = new ArrayList<BizProductDetailView>();
-        supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
-        buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+        HttpSession session = FacesUtil.getSession(true);
 
+        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+        log.info( " get FROM session workCaseId is " + workCaseId);
+
+        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+        bizInfoSummaryId = bizInfoSummaryView.getId();
+        bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+
+        descType = "";
+
+        businessActivityList = businessActivityDAO.findAll();
+        businessTypeList = businessTypeDAO.findAll();
+        businessGroupList = businessGroupDAO.findAll();
+
+        if(bizInfoDetailViewId == -1 ){
+
+            log.info( "bizInfoDetailView NEW RECORD");
+
+            bizInfoDetailView = new BizInfoDetailView();
+
+            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
+            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
+            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+
+            bizStakeHolderDetailView = new BizStakeHolderDetailView();
+            bizProductDetailView = new BizProductDetailView();
+
+            bizGroup = new BusinessGroup();
+            bizDesc = new BusinessDescription();
+
+            bizType = new BusinessType();
+            bizActivity = new BusinessActivity();
+
+
+            bizInfoDetailView.setBizDesc(bizDesc);
+            bizInfoDetailView.setBizGroup(bizGroup);
+            bizInfoDetailView.setBizType(bizType);
+            bizInfoDetailView.setBizActivity(bizActivity);
+
+        }else{
+            //
+            log.info( "bizInfoDetailView FIND BY ID ");
+            bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
+
+            log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
+            if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
+                bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
+            }else {
+                bizProductDetailViewList =   new ArrayList<BizProductDetailView>();
+            }
+            log.info( "bizInfoDetailView getSupplierDetailList Size " +  bizInfoDetailView.getSupplierDetailList().size());
+            if(bizInfoDetailView.getSupplierDetailList().size()>0){
+                supplierDetailList =   bizInfoDetailView.getSupplierDetailList();
+            }else {
+                supplierDetailList =   new ArrayList<BizStakeHolderDetailView>();
+            }
+            log.info( "bizInfoDetailView getBuyerDetailList Size " +  bizInfoDetailView.getBuyerDetailList().size());
+            if(bizInfoDetailView.getBuyerDetailList().size()>0){
+                buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
+            }else {
+                buyerDetailList =   new ArrayList<BizStakeHolderDetailView>();
+            }
+            bizGroup =  bizInfoDetailView.getBizGroup();
+            bizDesc =  bizInfoDetailView.getBizDesc();
+
+            descType = "1";
+            onChangeBusinessGroup();
+            onChangeBusinessDesc();
+            descType = "";
+        }
         bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
         bizInfoDetailView.setSupplierDetailList(supplierDetailList);
         bizInfoDetailView.setBuyerDetailList(buyerDetailList);
 
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-        bizProductDetailView = new BizProductDetailView();
-
-
-        bizGroup = new BusinessGroup();
-        bizDesc = new BusinessDescription();
-
-        bizInfoDetailView.setBizDesc(bizDesc);
-        bizInfoDetailView.setBizGroup(bizGroup);
-        bizInfoDetailView.setBizPermission("Y");
-        log.info("bizInfoDetailView " + bizInfoDetailView);
-
-        businessGroupList = businessGroupDAO.findAll();
-
-        log.info("businessGroupList size is ====  " + businessGroupList.size());
     }
 
     public void onChangeBusinessGroup(){
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizGroup);
 
-        bizInfoDetailView.setBizCode("");
-        bizInfoDetailView.setIncomeFactor(null);
-        bizInfoDetailView.setAdjustedIncomeFactor(null);
-        bizInfoDetailView.setBizComment("");
-        bizInfoDetailView.setBizPermission("");
-        bizInfoDetailView.setBizDocPermission("");
-        bizInfoDetailView.setBizDocExpiryDate("");
+        if(descType.equals("")){
+            bizInfoDetailView.setBizCode("");
+            bizInfoDetailView.setIncomeFactor(null);
+            bizInfoDetailView.setAdjustedIncomeFactor(null);
+            bizInfoDetailView.setBizComment("");
+            bizInfoDetailView.setBizPermission("");
+            bizInfoDetailView.setBizDocPermission("");
+            bizInfoDetailView.setBizDocExpiryDate(null);
+        }
     }
 
     public void onChangeBusinessDesc(){
@@ -129,11 +196,13 @@ public class BizInfoDetail implements Serializable {
         viewBizDesc = bizInfoDetailView.getBizDesc();
         businessDesc = bizInfoDetailControl.onFindBizDescByID(viewBizDesc);
 
-        bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
-        bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
-        bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
-        bizInfoDetailView.setBizComment(businessDesc.getComment());
-        bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
+        if(descType.equals("")){
+            bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
+            bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
+            bizInfoDetailView.setBizPermission(businessDesc.getBusinessPermission());
+            bizInfoDetailView.setBizComment(businessDesc.getComment());
+            bizInfoDetailView.setBizDocPermission(businessDesc.getBusinessPermissionDesc());
+        }
 
     }
 
@@ -172,18 +241,24 @@ public class BizInfoDetail implements Serializable {
 
     public void onSetRowNoBizBizStakeHolderDetail(){
         BizStakeHolderDetailView bizStakeHolderDetailViewTemp;
-
+        bizStakeHolderDetailViewTemp = new BizStakeHolderDetailView();
         if(stakeType.equals("1")){
-          for(int i=0;i<supplierDetailList.size();i++){
-              bizStakeHolderDetailViewTemp = supplierDetailList.get(i);
-              bizStakeHolderDetailViewTemp.setNo(i+1);
-          }
-      }else if(stakeType.equals("2")){
-          for(int i=0;i<buyerDetailList.size();i++){
-              bizStakeHolderDetailViewTemp = buyerDetailList.get(i);
-              bizStakeHolderDetailViewTemp.setNo(i+1);
-          }
-      }
+            for(int i=0;i<supplierDetailList.size();i++){
+                bizStakeHolderDetailViewTemp = supplierDetailList.get(i);
+                bizStakeHolderDetailViewTemp.setNo(i+1);
+            }
+        }else if(stakeType.equals("2")){
+            for(int i=0;i<buyerDetailList.size();i++){
+                bizStakeHolderDetailViewTemp = buyerDetailList.get(i);
+                bizStakeHolderDetailViewTemp.setNo(i+1);
+            }
+        }
+        bizStakeHolderTemp = new BizStakeHolderDetailView();
+
+        bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,bizStakeHolderDetailViewTemp);
+
+        log.info( " bizStakeHolderTemp at onRow is " + bizStakeHolderTemp);
+
 
     }
 
@@ -234,6 +309,12 @@ public class BizInfoDetail implements Serializable {
         bizStakeHolderDetailView = new BizStakeHolderDetailView();
         bizStakeHolderDetailView.setStakeHolderType(stakeType);
         bizStakeHolderDetailView = onSetStakeHolder(bizStakeHolderDetailView,selectStakeHolder);
+
+        bizStakeHolderTemp = new BizStakeHolderDetailView();
+        bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,selectStakeHolder);
+
+        log.info( " bizStakeHolderTemp at onRow is " + bizStakeHolderTemp);
+
     }
 
     private void onSetLabelStakeHolder(){
@@ -265,62 +346,63 @@ public class BizInfoDetail implements Serializable {
         boolean buyer;
         BizStakeHolderDetailView  stakeHolderRow;
 
-        boolean complete = false;
+        boolean complete = onValidateStakeHolder();
+        log.info("Validate StakeHolder complete is " + complete);
 
         RequestContext context = RequestContext.getCurrentInstance();
+        if(complete){
+            if(modeForButton.equalsIgnoreCase("add")){
+                if(stakeType.equals("1")){
+                    bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
+                    supplierDetailList.add(bizStakeHolderDetailView);
+                    supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     if(!supplier){
+                         context.addCallbackParam("functionCalSum", true);
+                         supplierDetailList.remove(bizStakeHolderDetailView);
+                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     }
+                }else if(stakeType.equals("2")){
+                    bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
+                     buyerDetailList.add(bizStakeHolderDetailView);
+                     buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                     if(!buyer){
+                         context.addCallbackParam("functionCalSum", true);
+                         buyerDetailList.remove(bizStakeHolderDetailView);
+                         calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                     }
+                }
+            }else if(modeForButton.equalsIgnoreCase("edit")){
+                log.info( " bizStakeHolderTemp at mode edit is " + bizStakeHolderTemp);
+                if(stakeType.equals("1")){
+                     stakeHolderRow = supplierDetailList.get(rowIndex);
+                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                     supplierDetailList.set(rowIndex, stakeHolderRow);
+                     supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
 
-        if(modeForButton.equalsIgnoreCase("add")){
-            if(stakeType.equals("1")){
-                bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
-                supplierDetailList.add(bizStakeHolderDetailView);
-                supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                 if(!supplier){
-                     context.addCallbackParam("functionCalSum", true);
-                     supplierDetailList.remove(bizStakeHolderDetailView);
-                     calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                 }
-            }else if(stakeType.equals("2")){
-                bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
-                 buyerDetailList.add(bizStakeHolderDetailView);
-                 buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                 if(!buyer){
-                     context.addCallbackParam("functionCalSum", true);
-                     buyerDetailList.remove(bizStakeHolderDetailView);
-                     calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                 }
+                     if(!supplier){
+                         stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                         supplierDetailList.set(rowIndex,stakeHolderRow);
+                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                         context.addCallbackParam("functionCalSum", true);
+                     }
 
-            }
-        }else if(modeForButton.equalsIgnoreCase("edit")){
-            if(stakeType.equals("1")){
-                 stakeHolderRow = supplierDetailList.get(rowIndex);
-                 stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                 supplierDetailList.set(rowIndex, stakeHolderRow);
-                 supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                }else if(stakeType.equals("2")){
+                    stakeHolderRow = buyerDetailList.get(rowIndex);
+                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                    buyerDetailList.set(rowIndex, stakeHolderRow);
+                    buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
 
-                 if(!supplier){
-                     context.addCallbackParam("functionCalSum", true);
-                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                     supplierDetailList.set(rowIndex,stakeHolderRow);
-                     calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                 }
-
-            }else if(stakeType.equals("2")){
-                stakeHolderRow = buyerDetailList.get(rowIndex);
-                stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                buyerDetailList.set(rowIndex, stakeHolderRow);
-                buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-
-                if(!buyer){
-                    context.addCallbackParam("functionCalSum", true);
-                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                    buyerDetailList.set(rowIndex,stakeHolderRow);
-                    calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-
+                    if(!buyer){
+                        stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                        buyerDetailList.set(rowIndex,stakeHolderRow);
+                        calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                        context.addCallbackParam("functionCalSum", true);
+                    }
                 }
             }
         }
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-        context.addCallbackParam("functionComplete", true);
+
+        context.addCallbackParam("functionComplete", complete);
     }
 
     private BizStakeHolderDetailView onSetStakeHolder(BizStakeHolderDetailView stakeHolderMaster ,BizStakeHolderDetailView stakeHolderChild){
@@ -340,62 +422,69 @@ public class BizInfoDetail implements Serializable {
     private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeHolder){
         float summ1 = 0.0f;
         float summ2 = 0.0f;
-        int summ3 = 0;
+        int   summ3 = 0;
 
         BizStakeHolderDetailView stakeHoldersCal;
 
         for(int i=0 ; i<stakeHoldersCalList.size(); i++){
             stakeHoldersCal = stakeHoldersCalList.get(i);
-
             summ1 += stakeHoldersCal.getPercentSalesVolume().doubleValue();
             summ2 += stakeHoldersCal.getPercentCredit().doubleValue() + stakeHoldersCal.getPercentCash().doubleValue();
             summ3 += stakeHoldersCal.getCreditTerm().intValue();
-
         }
-        if(summ1>99.999 ||summ2>99.999 ){
+
+        if(summ1>100.001 ||summ2>100.001 ){
             return false;
         }
 
         if(stakeType.equals("1")){
-            supplierVolumeSum1 = new BigDecimal(summ1);
-            supplierVolumeSum2 = new BigDecimal(summ2);
-            supplierTermSum = new BigDecimal(summ3);
+            supplierVolumeSum1 = new BigDecimal(summ1).setScale(2, RoundingMode.HALF_EVEN);;
+            supplierVolumeSum2 = new BigDecimal(summ2).setScale(2, RoundingMode.HALF_EVEN);
+            supplierTermSum = new BigDecimal(summ3).setScale(2, RoundingMode.HALF_EVEN);
 
             bizInfoDetailView.setSupplierTotalPercentBuyVolume(supplierVolumeSum1);
             bizInfoDetailView.setSupplierTotalPercentCredit(supplierVolumeSum2);
             bizInfoDetailView.setSupplierTotalCreditTerm(supplierTermSum);
-
+            bizInfoDetailView.setSupplierUWAdjustPercentCredit(supplierVolumeSum2);
+            bizInfoDetailView.setSupplierUWAdjustCreditTerm(supplierTermSum);
         }else if(stakeType.equals("2")){
-            buyerVolumeSum1 = new BigDecimal(summ1);
-            buyerVolumeSum2 = new BigDecimal(summ2);
-            buyerTermSum = new BigDecimal(summ3);
+            buyerVolumeSum1 = new BigDecimal(summ1).setScale(2, RoundingMode.HALF_EVEN);;
+            buyerVolumeSum2 = new BigDecimal(summ2).setScale(2, RoundingMode.HALF_EVEN);;
+            buyerTermSum = new BigDecimal(summ3).setScale(2, RoundingMode.HALF_EVEN);;
 
             bizInfoDetailView.setBuyerTotalPercentBuyVolume(buyerVolumeSum1);
             bizInfoDetailView.setBuyerTotalPercentCredit(buyerVolumeSum2);
             bizInfoDetailView.setBuyerTotalCreditTerm(buyerTermSum);
+            bizInfoDetailView.setBuyerUWAdjustPercentCredit(buyerVolumeSum2);
+            bizInfoDetailView.setBuyerUWAdjustCreditTerm(buyerTermSum);
 
         }
 
-
         return true;
     }
+    private boolean onValidateStakeHolder(){
+        boolean validate  = false;
 
+        if(!bizStakeHolderDetailView.getName().equals("" )
+                &&!bizStakeHolderDetailView.getContactName().equals("")
+                &&!bizStakeHolderDetailView.getPhoneNo().equals("")
+                &&!bizStakeHolderDetailView.getContactYear().equals("")
+                &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
+                &&!bizStakeHolderDetailView.getPercentCash().equals("")
+                &&!bizStakeHolderDetailView.getPercentCredit().equals("")
+                &&!bizStakeHolderDetailView.getCreditTerm().equals("")
+                ){
+            validate = true;
+        }
+
+        return validate;
+    }
     public void onSaveBizInfoView(){
+        bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView,bizInfoSummaryId);
+    }
 
-        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoDetailView);
-
-        log.info( " Initial session ");
-        HttpSession session = FacesUtil.getSession(true);
-        log.info( " Initial session is " + session);
-
-        session.setAttribute("workCaseId", 10001);
-
-        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        log.info( " get FROM session workCaseId is " + workCaseId);
-
-        bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView);
-
+    public void onDeleteBizInfoView(){
+        bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
     }
 
     public BizStakeHolderDetailView getBizStakeHolderDetailView() {
@@ -410,7 +499,7 @@ public class BizInfoDetail implements Serializable {
         return supplierDetailList;
     }
 
-    public void setSupplierList(List<BizStakeHolderDetailView> supplierDetailList) {
+    public void setSupplierDetailList(List<BizStakeHolderDetailView> supplierDetailList) {
         this.supplierDetailList = supplierDetailList;
     }
 
@@ -557,4 +646,22 @@ public class BizInfoDetail implements Serializable {
     public void setBizInfoDetailView(BizInfoDetailView bizInfoDetailView) {
         this.bizInfoDetailView = bizInfoDetailView;
     }
+
+    public List<BusinessType> getBusinessTypeList() {
+        return businessTypeList;
+    }
+
+    public void setBusinessTypeList(List<BusinessType> businessTypeList) {
+        this.businessTypeList = businessTypeList;
+    }
+
+    public List<BusinessActivity> getBusinessActivityList() {
+        return businessActivityList;
+    }
+
+    public void setBusinessActivityList(List<BusinessActivity> businessActivityList) {
+        this.businessActivityList = businessActivityList;
+    }
+
+
 }

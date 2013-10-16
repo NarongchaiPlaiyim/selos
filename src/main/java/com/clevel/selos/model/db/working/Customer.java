@@ -1,14 +1,12 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Relation;
-import com.clevel.selos.model.db.master.Title;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +33,21 @@ public class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name="documenttype_id")
     private DocumentType documentType;
+
+    @Column(name="document_authorize_by")
+    private String documentAuthorizeBy;
+
+    @Column(name="service_segment")
+    private String serviceSegment;
+
+    @Column(name="collateral_owner")
+    private int collateralOwner;
+
+    @Column(name="percent_share")
+    private BigDecimal percent_share;
+
+    @Column(name="approx_income")
+    private BigDecimal approx_income;
 
     @Column(name="id_number")
     private String idNumber;
@@ -63,7 +76,7 @@ public class Customer implements Serializable {
     private int age;
 
     @Column(name="ncb_checked", nullable=false, columnDefinition="int default 0")
-    private boolean ncbFlag;
+    private int ncbFlag;
 
     @OneToOne(mappedBy="customer")
     private Individual individual;
@@ -74,20 +87,16 @@ public class Customer implements Serializable {
     @OneToMany(mappedBy="customer")
     private List<Address> addressesList;
 
-    /*@OneToOne
-    @JoinColumn(name="individual_id")
-    private Individual individual;
-
     @OneToOne
-    @JoinColumn(name="juristic_id")
-    private Juristic juristic;*/
+    @JoinColumn(name="businesstype_id")
+    private BusinessType businessType;
 
     @OneToOne
     @JoinColumn(name="relation_id")
     private Relation relation;
 
-    @OneToMany(mappedBy="customer")
-    private List<NCB> ncbList;
+    @OneToOne(mappedBy="customer")
+    private NCB ncb;
 
     public Customer() {
     }
@@ -108,12 +117,60 @@ public class Customer implements Serializable {
         this.workCase = workCase;
     }
 
+    public WorkCasePrescreen getWorkCasePrescreen() {
+        return workCasePrescreen;
+    }
+
+    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
+        this.workCasePrescreen = workCasePrescreen;
+    }
+
     public CustomerEntity getCustomerEntity() {
         return customerEntity;
     }
 
     public void setCustomerEntity(CustomerEntity customerEntity) {
         this.customerEntity = customerEntity;
+    }
+
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
+
+    public String getDocumentAuthorizeBy() {
+        return documentAuthorizeBy;
+    }
+
+    public void setDocumentAuthorizeBy(String documentAuthorizeBy) {
+        this.documentAuthorizeBy = documentAuthorizeBy;
+    }
+
+    public String getServiceSegment() {
+        return serviceSegment;
+    }
+
+    public void setServiceSegment(String serviceSegment) {
+        this.serviceSegment = serviceSegment;
+    }
+
+    public BigDecimal getPercent_share() {
+        return percent_share;
+    }
+
+    public void setPercent_share(BigDecimal percent_share) {
+        this.percent_share = percent_share;
+    }
+
+    public BigDecimal getApprox_income() {
+        return approx_income;
+    }
+
+    public void setApprox_income(BigDecimal approx_income) {
+        this.approx_income = approx_income;
     }
 
     public String getIdNumber() {
@@ -156,62 +213,6 @@ public class Customer implements Serializable {
         this.nameTh = nameTh;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Individual getIndividual() {
-        return individual;
-    }
-
-    public void setIndividual(Individual individual) {
-        this.individual = individual;
-    }
-
-    public Juristic getJuristic() {
-        return juristic;
-    }
-
-    public void setJuristic(Juristic juristic) {
-        this.juristic = juristic;
-    }
-
-    public Relation getRelation() {
-        return relation;
-    }
-
-    public void setRelation(Relation relation) {
-        this.relation = relation;
-    }
-
-    public DocumentType getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
-    }
-
-    public WorkCasePrescreen getWorkCasePrescreen() {
-        return workCasePrescreen;
-    }
-
-    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
-        this.workCasePrescreen = workCasePrescreen;
-    }
-
-    public List<NCB> getNcbList() {
-        return ncbList;
-    }
-
-    public void setNcbList(List<NCB> ncbList) {
-        this.ncbList = ncbList;
-    }
-
     public String getLastNameTh() {
         return lastNameTh;
     }
@@ -228,6 +229,52 @@ public class Customer implements Serializable {
         this.lastNameEn = lastNameEn;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(int ncbFlag) {
+        this.ncbFlag = ncbFlag;
+    }
+
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
+    }
+
+    public Individual getIndividual() {
+        return individual;
+    }
+
+    public void setIndividual(Individual individual) {
+        this.individual = individual;
+    }
+
+    public Juristic getJuristic() {
+        return juristic;
+    }
+    public NCB getNcb() {
+        return ncb;
+    }
+
+    public void setJuristic(Juristic juristic) {
+        this.juristic = juristic;
+    }
+    public void setNcb(NCB ncb) {
+        this.ncb = ncb;
+    }
+
     public List<Address> getAddressesList() {
         return addressesList;
     }
@@ -236,12 +283,28 @@ public class Customer implements Serializable {
         this.addressesList = addressesList;
     }
 
-    public boolean isNcbFlag() {
-        return ncbFlag;
+    public Relation getRelation() {
+        return relation;
     }
 
-    public void setNcbFlag(boolean ncbFlag) {
-        this.ncbFlag = ncbFlag;
+    public void setRelation(Relation relation) {
+        this.relation = relation;
+    }
+
+    public int getCollateralOwner() {
+        return collateralOwner;
+    }
+
+    public void setCollateralOwner(int collateralOwner) {
+        this.collateralOwner = collateralOwner;
+    }
+
+    public NCB getNcb() {
+        return ncb;
+    }
+
+    public void setNcb(NCB ncb) {
+        this.ncb = ncb;
     }
 
     @Override
@@ -252,6 +315,11 @@ public class Customer implements Serializable {
                 .append("workCasePrescreen", workCasePrescreen)
                 .append("customerEntity", customerEntity)
                 .append("documentType", documentType)
+                .append("documentAuthorizeBy", documentAuthorizeBy)
+                .append("serviceSegment", serviceSegment)
+                .append("collateralOwner", collateralOwner)
+                .append("percent_share", percent_share)
+                .append("approx_income", approx_income)
                 .append("idNumber", idNumber)
                 .append("expireDate", expireDate)
                 .append("title", title)
@@ -260,11 +328,13 @@ public class Customer implements Serializable {
                 .append("lastNameTh", lastNameTh)
                 .append("lastNameEn", lastNameEn)
                 .append("age", age)
+                .append("ncbFlag", ncbFlag)
                 .append("individual", individual)
                 .append("juristic", juristic)
                 .append("addressesList", addressesList)
+                .append("businessType", businessType)
                 .append("relation", relation)
-                .append("ncbList", ncbList)
+                .append("ncb", ncb)
                 .toString();
     }
 }

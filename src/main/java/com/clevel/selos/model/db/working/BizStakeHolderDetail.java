@@ -24,7 +24,7 @@ public class BizStakeHolderDetail implements Serializable {
     @JoinColumn(name="biz_info_detail_id")
     private BizInfoDetail bizInfoDetail;
 
-    @Column(name = "stake_Holder_type")
+    @Column(name = "stake_holder_type")
     private String stakeHolderType;
 
     @Column(name = "no")

@@ -1,9 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.BusinessActivity;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.master.BusinessType;
+import com.clevel.selos.model.db.master.Country;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,6 +16,7 @@ public class Juristic implements Serializable {
     @SequenceGenerator(name="SEQ_WRK_JURISTIC_ID", sequenceName="SEQ_WRK_JURISTIC_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_JURISTIC_ID")
     private long id;
+
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -27,8 +25,13 @@ public class Juristic implements Serializable {
     private String registrationId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="founded")
-    private Date founded;
+    @JoinColumn(name="register_date")
+    private Date registerDate;
+
+    @OneToOne
+    @JoinColumn(name="register_country")
+    private Country registerCountry;
+
     @OneToOne
     @JoinColumn(name="owner_id")
     private Individual owner;
@@ -36,25 +39,15 @@ public class Juristic implements Serializable {
     @Column(name="financial_year")
     private int financialYear;
 
-    @OneToOne
-    @JoinColumn(name="businesstype_id")
-    private BusinessType businessType;
-    @OneToOne
-    @JoinColumn(name="businessgroup_id")
-    private BusinessGroup businessGroup;
-    @OneToOne
-    @JoinColumn(name="businessdescription_id")
-    private BusinessDescription businessDescription;
-    @OneToOne
-    @JoinColumn(name="businessactivity_id")
-    private BusinessActivity businessActivity;
-
     @Column(name="capital")
     private BigDecimal capital;
+
     @Column(name="paidCapital")
     private BigDecimal paidCapital;
+
     @Column(name="totalShare")
     private BigDecimal totalShare;
+
     @Column(name="signCondition")
     private String signCondition;
 
@@ -85,12 +78,20 @@ public class Juristic implements Serializable {
         this.registrationId = registrationId;
     }
 
-    public Date getFounded() {
-        return founded;
+    public Date getRegisterDate() {
+        return registerDate;
     }
 
-    public void setFounded(Date founded) {
-        this.founded = founded;
+    public void setRegisterDate(Date registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public Country getRegisterCountry() {
+        return registerCountry;
+    }
+
+    public void setRegisterCountry(Country registerCountry) {
+        this.registerCountry = registerCountry;
     }
 
     public Individual getOwner() {
@@ -107,38 +108,6 @@ public class Juristic implements Serializable {
 
     public void setFinancialYear(int financialYear) {
         this.financialYear = financialYear;
-    }
-
-    public BusinessType getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(BusinessType businessType) {
-        this.businessType = businessType;
-    }
-
-    public BusinessGroup getBusinessGroup() {
-        return businessGroup;
-    }
-
-    public void setBusinessGroup(BusinessGroup businessGroup) {
-        this.businessGroup = businessGroup;
-    }
-
-    public BusinessDescription getBusinessDescription() {
-        return businessDescription;
-    }
-
-    public void setBusinessDescription(BusinessDescription businessDescription) {
-        this.businessDescription = businessDescription;
-    }
-
-    public BusinessActivity getBusinessActivity() {
-        return businessActivity;
-    }
-
-    public void setBusinessActivity(BusinessActivity businessActivity) {
-        this.businessActivity = businessActivity;
     }
 
     public BigDecimal getCapital() {
@@ -179,13 +148,10 @@ public class Juristic implements Serializable {
                 .append("id", id)
                 .append("customer", customer)
                 .append("registrationId", registrationId)
-                .append("founded", founded)
+                .append("registerDate", registerDate)
+                .append("registerCountry", registerCountry)
                 .append("owner", owner)
                 .append("financialYear", financialYear)
-                .append("businessType", businessType)
-                .append("businessGroup", businessGroup)
-                .append("businessDescription", businessDescription)
-                .append("businessActivity", businessActivity)
                 .append("capital", capital)
                 .append("paidCapital", paidCapital)
                 .append("totalShare", totalShare)

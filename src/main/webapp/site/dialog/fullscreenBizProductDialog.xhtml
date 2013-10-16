@@ -16,7 +16,7 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentSalesVolume')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText id="percentSalesVolume" value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
+                    <p:inputText id="percentSalesVolume" styleClass="right" value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2" />
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
                     </p:inputText>
@@ -25,7 +25,7 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.percentEBIT')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:inputText id="percentEBIT" value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true" >
+                    <p:inputText id="percentEBIT" styleClass="right" value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true" >
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
                         <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
                     </p:inputText>
@@ -37,7 +37,11 @@
                     <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="true"/>
                 </td>
             </tr>
-
+            <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
+                </td>
+            </tr>
             <tr>
                 <td colspan="2" class="center">
                     <p:commandButton

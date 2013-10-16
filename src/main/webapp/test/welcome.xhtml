@@ -10,8 +10,6 @@
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
     </h:head>
     <h:body>
-        <h:link outcome="testRM" value="TESTRM"/>
-
 
         <p:panel id="welcomePanel">
             <h:form>
@@ -46,6 +44,8 @@
                 <p:commandButton value="test RM" action="#{welcomePage.testRM}" update=":welcomePanel"/>
                 <p:commandButton value="test BRMS" action="#{welcomePage.testBRMS}" update=":welcomePanel"/>
                 <p:commandButton value="test RLOS CSI" action="#{welcomePage.testRLOSCSI}" update=":welcomePanel"/>
+                <p:commandButton value="test DWH Obligation" action="#{welcomePage.testDWHObligation()}" update=":welcomePanel"/>
+                <p:commandButton value="test RLOS AppIn" action="#{welcomePage.testRLOSAppIn()}" update=":welcomePanel"/>
                 <p:separator/>
                 <p:commandButton value="001" action="#{welcomePage.on001}" update=":welcomePanel"/>
                 <p:commandButton value="002" action="#{welcomePage.on002}" update=":welcomePanel"/>
@@ -53,6 +53,7 @@
                 <p:commandButton value="test BPM" action="#{welcomePage.testBPM}" update=":welcomePanel"/>
                 <p:commandButton value="test Exception" action="#{welcomePage.testException}" />
                 <p:commandButton value="test Email" action="#{welcomePage.testEmail}" />
+                <p:commandButton value="load discription" action="#{welcomePage.onLoadDescription()}" />
 
             </h:form>
         </p:panel>

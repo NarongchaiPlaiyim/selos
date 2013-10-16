@@ -2,6 +2,7 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.ReferredExperience;
 import com.clevel.selos.model.db.master.SubDistrict;
 import com.clevel.selos.model.db.working.WorkCase;
 
@@ -10,12 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 public class BizInfoSummaryView {
-
-    private String bizLocationDetail;
+    private long id;
     private String bizLocationName;
-    private String isRental;
+    private int isRental;
     private String ownerName;
-    private String expiryDate;
+    private Date expiryDate;
     private String addressNo;
     private String addressMoo;
     private String addressBuilding;
@@ -28,8 +28,9 @@ public class BizInfoSummaryView {
     private String addressEng;
     private String phoneNo;
     private String extension;
-    private String registrationDate;
-    private String establishDate;
+    private Date registrationDate;
+    private Date establishDate;
+    private ReferredExperience referredExperience;
     private String bizInterviewInfo;
     private BigDecimal circulationAmount;
     private BigDecimal circulationPercentage;
@@ -47,28 +48,28 @@ public class BizInfoSummaryView {
     private BigDecimal reduceTaxPercentage;
     private BigDecimal netMarginAmount;
     private BigDecimal netMarginPercentage;
-    private String netFixAsset;
-    private String noOfEmployee;
-    private BigDecimal  sumIncomeAmount;
+    private BigDecimal netFixAsset;
+    private int noOfEmployee;
+    private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal weightIncomeFactor;
-    private BigDecimal  sumWeightInterviewedIncomeFactorPercent;
-    private BigDecimal  sumWeightAR;
+    private BigDecimal sumWeightInterviewedIncomeFactorPercent;
+    private BigDecimal sumWeightAR;
     private BigDecimal sumWeightAP;
     private WorkCase workCase;
     private Date createDate;
     private Date modifyDate;
-    private List<BizInfoDetailView> bizInfoDetailList;
+    private List<BizInfoDetailView> bizInfoDetailViewList;
 
     public BizInfoSummaryView() {
     }
 
-    public String getBizLocationDetail() {
-        return bizLocationDetail;
+    public long getId() {
+        return id;
     }
 
-    public void setBizLocationDetail(String bizLocationDetail) {
-        this.bizLocationDetail = bizLocationDetail;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getBizLocationName() {
@@ -79,11 +80,11 @@ public class BizInfoSummaryView {
         this.bizLocationName = bizLocationName;
     }
 
-    public String getRental() {
+    public int getRental() {
         return isRental;
     }
 
-    public void setRental(String rental) {
+    public void setRental(int rental) {
         isRental = rental;
     }
 
@@ -95,11 +96,11 @@ public class BizInfoSummaryView {
         this.ownerName = ownerName;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -199,20 +200,28 @@ public class BizInfoSummaryView {
         this.extension = extension;
     }
 
-    public String getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(String registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public String getEstablishDate() {
+    public Date getEstablishDate() {
         return establishDate;
     }
 
-    public void setEstablishDate(String establishDate) {
+    public void setEstablishDate(Date establishDate) {
         this.establishDate = establishDate;
+    }
+
+    public ReferredExperience getReferredExperience() {
+        return referredExperience;
+    }
+
+    public void setReferredExperience(ReferredExperience referredExperience) {
+        this.referredExperience = referredExperience;
     }
 
     public String getBizInterviewInfo() {
@@ -351,19 +360,19 @@ public class BizInfoSummaryView {
         this.netMarginPercentage = netMarginPercentage;
     }
 
-    public String getNetFixAsset() {
+    public BigDecimal getNetFixAsset() {
         return netFixAsset;
     }
 
-    public void setNetFixAsset(String netFixAsset) {
+    public void setNetFixAsset(BigDecimal netFixAsset) {
         this.netFixAsset = netFixAsset;
     }
 
-    public String getNoOfEmployee() {
+    public int getNoOfEmployee() {
         return noOfEmployee;
     }
 
-    public void setNoOfEmployee(String noOfEmployee) {
+    public void setNoOfEmployee(int noOfEmployee) {
         this.noOfEmployee = noOfEmployee;
     }
 
@@ -439,11 +448,11 @@ public class BizInfoSummaryView {
         this.modifyDate = modifyDate;
     }
 
-    public List<BizInfoDetailView> getBizInfoDetailList() {
-        return bizInfoDetailList;
+    public List<BizInfoDetailView> getBizInfoDetailViewList() {
+        return bizInfoDetailViewList;
     }
 
-    public void setBizInfoDetailList(List<BizInfoDetailView> bizInfoDetailList) {
-        this.bizInfoDetailList = bizInfoDetailList;
+    public void setBizInfoDetailViewList(List<BizInfoDetailView> bizInfoDetailViewList) {
+        this.bizInfoDetailViewList = bizInfoDetailViewList;
     }
 }

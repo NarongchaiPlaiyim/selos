@@ -1,5 +1,6 @@
 package com.clevel.selos.dao.working;
 
+import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -11,13 +12,6 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 20/9/2556
- * Time: 16:02 น.
- * To change this template use File | Settings | File Templates.
- */
 public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
     @Inject
     private Logger log;
@@ -45,4 +39,16 @@ public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
 
         return bizInfoDetailList;
     }
+
+    public List<BizInfoDetail> findByBizInfoSummaryId(BizInfoSummary bizInfoSummary){
+        log.info("findByBizInfoSummaryId begin ");
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("bizInfoSummary", bizInfoSummary));
+        criteria.addOrder(Order.asc("id"));
+        List<BizInfoDetail> bizInfoDetailList = criteria.list();
+        log.info("findByBizInfoSummaryId. (result size: {})", bizInfoDetailList.size());
+
+        return bizInfoDetailList;
+    }
+
 }

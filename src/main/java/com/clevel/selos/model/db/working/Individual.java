@@ -1,10 +1,7 @@
 package com.clevel.selos.model.db.working;
 
 import com.clevel.selos.model.Gender;
-import com.clevel.selos.model.db.master.Education;
-import com.clevel.selos.model.db.master.MaritalStatus;
-import com.clevel.selos.model.db.master.Nationality;
-import com.clevel.selos.model.db.master.Occupation;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -37,6 +34,14 @@ public class Individual implements Serializable {
     @OneToOne
     @JoinColumn(name="nationality_id")
     private Nationality nationality;
+
+    @OneToOne
+    @JoinColumn(name="snd_nationality_id")
+    private Nationality sndNationality;
+
+    @OneToOne
+    @JoinColumn(name="race_id")
+    private Race race;
 
     @OneToOne
     @JoinColumn(name="education_id")
@@ -104,6 +109,22 @@ public class Individual implements Serializable {
         this.nationality = nationality;
     }
 
+    public Nationality getSndNationality() {
+        return sndNationality;
+    }
+
+    public void setSndNationality(Nationality sndNationality) {
+        this.sndNationality = sndNationality;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
+    }
+
     public Education getEducation() {
         return education;
     }
@@ -145,6 +166,8 @@ public class Individual implements Serializable {
                 .append("birthDate", birthDate)
                 .append("gender", gender)
                 .append("nationality", nationality)
+                .append("sndNationality", sndNationality)
+                .append("race", race)
                 .append("education", education)
                 .append("occupation", occupation)
                 .append("maritalStatus", maritalStatus)

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+        <title>#{msg.get('app.dbr.title')}</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+<h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.dbr.header')}</div>
+                    <div id="content">
+                        <div id="content_info">
+                            <div id="content_trackchange">[ View Track Change ]</div>
+                             <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
+                        </div>
+                        <div id="content_form">
+                            <table id="content_form_table" >
+                                <tr>
+                                    <td>
+                                        <table id="dbr_table">
+                                            <tr>
+                                                <td>
+                                                    <h:outputText value="#{msg.get('app.dbr.label.incomeFactor')}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.incomeFactor}" onkeypress="return numberOnly(event);">
+
+                                                    </h:inputText>
+                                                </td>
+                                                <td>
+                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrInterest')}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.dbrInterest}">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncome')}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.monthlyIncome}">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <h:outputText value=""/>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </h:form>
+    </p:panel>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteFacilityDialog"/>
+        <ui:param name="name" value="confirmDeleteFacilityDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteFacility"/>
+        <ui:param name="controller" value="#{dbrInfo}"/>
+        <ui:param name="action" value="onDeleteFacility"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteCustomerDialog"/>
+        <ui:param name="name" value="confirmDeleteCustomerDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteCustomer"/>
+        <ui:param name="controller" value="#{dbrInfo}"/>
+        <ui:param name="action" value="onDeleteCustomer"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
+</h:body>
+</f:view>
+</html>

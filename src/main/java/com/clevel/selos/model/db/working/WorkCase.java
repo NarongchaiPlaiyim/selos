@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
@@ -19,40 +20,59 @@ public class WorkCase implements Serializable {
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_ID")
     @Column(name="id", nullable=false)
     private long id;
+
     @Column(name="ca_number", length = 30, nullable=false)
     private String caNumber;
+
     @Column(name="app_number", nullable=false)
     private String appNumber;
+
     @Column(name="ref_app_number")
     private String refAppNumber;
+
     @Column(name="wob_number")
     private String wobNumber;
+
     @Column(name="case_lock")
     private int lock;
+
     @Column(name="lock_user")
     private String lockUser;
+
     @OneToOne
     @JoinColumn(name="step_id")
     private Step step;
+
     @OneToOne
     @JoinColumn(name="status_id")
     private Status status;
 
+    @OneToOne
+    @JoinColumn(name="borrower_type_id")
+    private CustomerEntity borrowerType;
+
     @OneToMany(mappedBy="workCase")
     private List<Customer> customerList;
+
+    @OneToMany(mappedBy="workCase")
+    private List<DBR> dbrList;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="create_date")
     private Date createDate;
+
     @OneToOne
     @JoinColumn(name="create_by")
     private User createBy;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_date")
     private Date modifyDate;
+
     @OneToOne
     @JoinColumn(name="modify_by")
     private User modifyBy;
+
     @OneToOne
     @JoinColumn(name="step_owner")
     private User stepOwner;
@@ -60,6 +80,9 @@ public class WorkCase implements Serializable {
     @OneToOne
     @JoinColumn(name="workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
+
+    @OneToOne
+    private BizInfoSummary bizInfoSummary;
 
     public WorkCase() {
     }
@@ -84,8 +107,16 @@ public class WorkCase implements Serializable {
         return appNumber;
     }
 
-    public void setAppNumber(String appRefNumber) {
-        this.appNumber = appRefNumber;
+    public void setAppNumber(String appNumber) {
+        this.appNumber = appNumber;
+    }
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
     }
 
     public String getWobNumber() {
@@ -126,6 +157,14 @@ public class WorkCase implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public CustomerEntity getBorrowerType() {
+        return borrowerType;
+    }
+
+    public void setBorrowerType(CustomerEntity borrowerType) {
+        this.borrowerType = borrowerType;
     }
 
     public List<Customer> getCustomerList() {
@@ -184,25 +223,35 @@ public class WorkCase implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
+    public BizInfoSummary getBizInfoSummary() {
+        return bizInfoSummary;
+    }
+
+    public void setBizInfoSummary(BizInfoSummary bizInfoSummary) {
+        this.bizInfoSummary = bizInfoSummary;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("caNumber", caNumber).
-                append("appNumber", appNumber).
-                append("refAppNumber", refAppNumber).
-                append("wobNumber", wobNumber).
-                append("lock", lock).
-                append("lockUser", lockUser).
-                append("step", step).
-                append("status", status).
-                append("customerList", customerList).
-                append("createDate", createDate).
-                append("createBy", createBy).
-                append("modifyDate", modifyDate).
-                append("modifyBy", modifyBy).
-                append("stepOwner", stepOwner).
-                append("workCasePrescreen", workCasePrescreen).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("caNumber", caNumber)
+                .append("appNumber", appNumber)
+                .append("refAppNumber", refAppNumber)
+                .append("wobNumber", wobNumber)
+                .append("lock", lock)
+                .append("lockUser", lockUser)
+                .append("step", step)
+                .append("status", status)
+                .append("borrowerType", borrowerType)
+                .append("customerList", customerList)
+                .append("createDate", createDate)
+                .append("createBy", createBy)
+                .append("modifyDate", modifyDate)
+                .append("modifyBy", modifyBy)
+                .append("stepOwner", stepOwner)
+                .append("workCasePrescreen", workCasePrescreen)
+                .append("bizInfoSummary", bizInfoSummary)
+                .toString();
     }
 }

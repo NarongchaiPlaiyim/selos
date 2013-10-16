@@ -5,8 +5,8 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
+<p:panel id="facilityDlgPanel" styleClass="panel-dialog">
     <h:form id="facilityDlgForm">
-        <!--<p:growl id="growl" showDetail="true" life="4000"/>-->
         <table class="content_form">
             <tr>
                 <td class="title" style="width:145px;">Product Program :</td>
@@ -40,10 +40,11 @@
             <tr>
                 <td class="title">Request Amount :</td>
                 <td>
+                    <p:inputMask value="#{prescreenMaker.facility.requestAmount}" mask="999,999,999"/>
                     <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
                                  maxlength="10" styleClass="large right"
                                  onkeypress="return numberOnly(event);" onfocus="removeComma(this)">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                        <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" integerOnly="true" maxIntegerDigits="10" />
                         <p:ajax event="change" update=":facilityDlgForm" process="@form"/>
                     </p:inputText> Baht.
                 </td>
@@ -53,18 +54,24 @@
             </tr>
             <tr>
                 <td colspan="2" class="center">
-                    <p:commandButton
-                            id="addFacility"
-                            binding="#{addFacilityButton}"
-                            value="Add"
-                            styleClass="small"
-                            action="#{prescreenMaker.onSaveFacility}"
-                            process="@form"
-                            update=":facilityDlgForm :frmMain:resultTableFacility"
-                            oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
-                    <p:commandButton type="button" value="Cancel" styleClass="small" onclick="facilityDlg.hide()" update=":facilityDlgForm"/>
+                    <p:commandButton id="dlgSaveFacilityBtn" styleClass="small"
+                                     binding="#{addFacilityButton}"
+                                     value="#{msg.get('app.button.ok')}"
+                                     action="#{prescreenMaker.onSaveFacility}"
+                                     process="@form"
+                                     update=":facilityDlgForm :frmMain:resultTableFacility"
+                                     oncomplete="handlePrescreenFacilityRequest(xhr, status, args)"/>
+                    <p:commandButton type="button" styleClass="small"
+                                     value="#{msg.get('app.button.cancel')}"
+                                     onclick="PF('facilityDlg').hide()"
+                                     update=":facilityDlgForm"/>
                 </td>
             </tr>
         </table>
     </h:form>
+</p:panel>
+<p:blockUI widgetVar="blockFacilityDlg" block="facilityDlgPanel" trigger=":facilityDlgForm:dlgSaveFacilityBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

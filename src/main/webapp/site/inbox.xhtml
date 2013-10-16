@@ -81,6 +81,10 @@
                 </div>
             </h:form>
         </p:panel>
+        <p:blockUI block=":frmMain" trigger=":frmMain:resultInbox">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </h:body>
 </f:view>
 </html>

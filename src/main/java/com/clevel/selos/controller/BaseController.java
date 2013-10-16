@@ -28,6 +28,7 @@ public class BaseController implements Serializable {
     private ManageButton manageButton;
     private User user;
     private AppHeaderView appHeaderView;
+    private long stepId;
 
 
     public BaseController(){
@@ -40,7 +41,7 @@ public class BaseController implements Serializable {
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
         long workCasePreScreenId = 0;
-        long stepId = 0;
+        stepId = 0;
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -104,5 +105,13 @@ public class BaseController implements Serializable {
 
     public void setAppHeaderView(AppHeaderView appHeaderView) {
         this.appHeaderView = appHeaderView;
+    }
+
+    public long getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(long stepId) {
+        this.stepId = stepId;
     }
 }

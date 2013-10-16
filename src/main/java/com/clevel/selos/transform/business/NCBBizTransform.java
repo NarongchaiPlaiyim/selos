@@ -141,9 +141,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         AccountType accountType = accountTypeDAO.getIndividualByCode(subjectAccountModel.getAccounttype());
                                         ncbDetailView.setAccountType(accountType);
                                         //set tmb account
-                                        ncbDetailView.setTMBAccount(false);
+                                        ncbDetailView.setTMBAccount(0);
                                         if(subjectAccountModel.getShortname().equals(TMB_BANK)){ //todo: change to master
-                                            ncbDetailView.setTMBAccount(true);
+                                            ncbDetailView.setTMBAccount(1);
                                             isTMBAccount = true;
                                         }
                                         //set account status

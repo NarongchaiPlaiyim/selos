@@ -172,6 +172,8 @@ public class LoginBean {
 
     public String logout() {
         log.debug("logging out.");
+        HttpSession httpSession = FacesUtil.getSession(false);
+        httpSession.setAttribute("user", null);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
         securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "",new Date());

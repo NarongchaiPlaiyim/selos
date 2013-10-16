@@ -9,6 +9,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
     @Inject
@@ -46,5 +47,14 @@ public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
             return accountType;
         }
         return null;
+    }
+
+    public List<AccountType> getListLoanTypeByCusEntity(int customerEntityId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        criteria.add(Restrictions.eq("active", 1));
+        List<AccountType> accountTypes =  criteria.list();
+        log.debug("getListLoanTypeByCusEntity. (AccountType:{} )", accountTypes);
+        return accountTypes;
     }
 }
