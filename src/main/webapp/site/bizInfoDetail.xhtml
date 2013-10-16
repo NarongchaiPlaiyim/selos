@@ -66,7 +66,7 @@
                                                    var="businessGroup"
                                                    itemLabel="#{businessGroup.name}"
                                                    itemValue="#{businessGroup.id}"/>
-                                    <p:ajax listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain" />
+                                    <p:ajax process="@this" listener="#{bizInfoDetail.onChangeBusinessGroup()}" update=":frmMain" />
                                 </p:selectOneMenu>
                     </td>
                 </tr>
@@ -95,14 +95,14 @@
                         <tr>
                             <td class="title" style="width: 100px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> : </td>
                             <td>
-                                <p:inputText styleClass="medium" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}">
+                                <p:inputText styleClass="right" id="incomeFactor" value="#{bizInfoDetail.bizInfoDetailView.incomeFactor}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:incomeFactor"/>
                                 </p:inputText>
                             </td>
                             <td class="title" style="width: 220px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/> :</td>
                             <td>
-                                <p:inputText styleClass="medium" id="adjustedIncomeFactor" value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}">
+                                <p:inputText styleClass="right" id="adjustedIncomeFactor" value="#{bizInfoDetail.bizInfoDetailView.adjustedIncomeFactor}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                     <p:ajax event="blur" update=":frmMain:adjustedIncomeFactor"/>
                                 </p:inputText>
@@ -115,7 +115,7 @@
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.percentBusiness')}"/> : </td>
                             <td colspan="5">
-                                <p:inputText styleClass="small" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}">
+                                <p:inputText styleClass="right" id="percentBiz" value="#{bizInfoDetail.bizInfoDetailView.percentBiz}">
                                     <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
                                     <p:ajax event="blur" update=":frmMain:percentBiz"/>
                                 </p:inputText>
@@ -151,7 +151,12 @@
                                 <h:outputText styleClass="large" value="expired Date"/> :
                             </td>
                             <td colspan="2" class="title">
-                                <p:inputText styleClass="small" id="bizDocExpiryDate" value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"  />
+                                <p:calendar id="bizDocExpiryDate" showOn="button" navigator="true"
+                                            value="#{bizInfoDetail.bizInfoDetailView.bizDocExpiryDate}"
+                                            pattern="dd/MM/yyyy">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:calendar>
+
                             </td>
                         </tr>
                         <tr>
@@ -163,8 +168,10 @@
                         <tr>
                             <td class="title"> % Export indirect Country Name : </td>
                             <td colspan="5">
-                                <p:inputText styleClass="large" id="percentExportIndirectCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}"/>
-
+                                <p:inputText styleClass="right" id="percentExpIndCountryName" value="#{bizInfoDetail.bizInfoDetailView.percentExpIndCountryName}">
+                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                    <p:ajax event="blur" update=":frmMain:percentExpIndCountryName"/>
+                                </p:inputText>
                             </td>
                         </tr>
                         <tr>
@@ -194,23 +201,23 @@
                                              rowIndexVar="rowIndex"
                                              style="width: 100%">
 
-                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                    <p:column headerText="" styleClass="center" style="width:5%;">
                                         <h:outputText value="#{bizProductDetailView.no}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.productType')}" styleClass="center" style="width: 110px;">
+                                    <p:column headerText="#{msg.get('app.productType')}" styleClass="center" style="width: 20%;">
                                         <h:outputText value="#{bizProductDetailView.productType}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width: 25%;">
                                         <h:outputText value="#{bizProductDetailView.percentSalesVolume}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentEBIT')}" styleClass="center" style="width: 110px;">
+                                    <p:column headerText="#{msg.get('app.percentEBIT')}" styleClass="center" style="width: 20%;">
                                         <h:outputText value="#{bizProductDetailView.percentEBIT}"/>
                                     </p:column>
 
-                                    <p:column headerText="#{msg.get('app.productDetail')}" styleClass="center" style="width: 110px;">
+                                    <p:column headerText="#{msg.get('app.productDetail')}" styleClass="center" style="width: 20%;">
                                         <h:outputText value="#{bizProductDetailView.productDetail}"/>
                                     </p:column>
-                                    <p:column headerText="" styleClass="center" style="width:54px;">
+                                    <p:column headerText="" styleClass="center" style="width:10%;">
                                         <p:commandButton icon="ui-icon-pencil"
                                                          action="#{bizInfoDetail.onEditBizProductDetailView()}"
                                                          update=":bizProductViewDlgForm"
@@ -258,32 +265,32 @@
                                              paginator="false"
                                              rowKey="#{supplierItem.no}"
                                              rowIndexVar="rowIndex">
-                                    <p:column headerText="" style="width:4%;">
+                                    <p:column headerText="" styleClass="center" style="width:4%;">
                                         <h:outputText value="#{supplierItem.no}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.supplierName')}" style="width:11%;">
+                                    <p:column headerText="#{msg.get('app.supplierName')}" styleClass="center" style="width:11%;">
                                         <h:outputText value="#{supplierItem.name}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.contactName')}" style="width:11%;">
+                                    <p:column headerText="#{msg.get('app.contactName')}" styleClass="center" style="width:11%;">
                                         <h:outputText value="#{supplierItem.contactName}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.phoneNo')}" style="width:11%;">
+                                    <p:column headerText="#{msg.get('app.phoneNo')}" styleClass="center" style="width:11%;">
                                         <h:outputText value="#{supplierItem.phoneNo}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.contactYear')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.contactYear}"/>
+                                    <p:column headerText="#{msg.get('app.contactYear')}" styleClass="center" style="width:11%;">
+                                        <h:outputText styleClass="right" value="#{supplierItem.contactYear}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.percentSalesVolume}"/>
+                                    <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width:11%;">
+                                        <h:outputText styleClass="right" value="#{supplierItem.percentSalesVolume}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentCash')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.percentCash}"/>
+                                    <p:column headerText="#{msg.get('app.percentCash')}" styleClass="center" style="width:11%;">
+                                        <h:outputText styleClass="right" value="#{supplierItem.percentCash}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.percentCredit')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.percentCredit}"/>
+                                    <p:column headerText="#{msg.get('app.percentCredit')}" styleClass="center" style="width:11%;">
+                                        <h:outputText styleClass="right" value="#{supplierItem.percentCredit}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditTerm')}" style="width:11%;">
-                                        <h:outputText value="#{supplierItem.creditTerm}"/>
+                                    <p:column headerText="#{msg.get('app.creditTerm')}" styleClass="center" style="width:11%;">
+                                        <h:outputText styleClass="right" value="#{supplierItem.creditTerm}"/>
                                     </p:column>
                                     <p:column headerText="" style="width:8%;">
                                         <p:commandButton icon="ui-icon-pencil"
@@ -332,13 +339,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="right" style="width:11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentBuyVolume}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentBuyVolume}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" colspan="2" >
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentCredit}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.supplierTotalPercentCredit}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.supplierTotalCreditTerm}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.supplierTotalCreditTerm}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:8%;">
 
@@ -349,11 +356,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="right" style="width: 11%;" >
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustPercentCredit}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustPercentCredit}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="right" style="width: 11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustCreditTerm}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.supplierUWAdjustCreditTerm}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">
@@ -407,19 +414,19 @@
                                     </p:column>
 
                                     <p:column headerText="#{msg.get('app.contactYear')}" styleClass="center" style="width: 30px;">
-                                        <h:outputText value="#{buyerItem.contactYear}"/>
+                                        <h:outputText styleClass="right" value="#{buyerItem.contactYear}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentSalesVolume')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{buyerItem.percentSalesVolume}"/>
+                                        <h:outputText styleClass="right" value="#{buyerItem.percentSalesVolume}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentCash')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{buyerItem.percentCash}"/>
+                                        <h:outputText styleClass="right" alue="#{buyerItem.percentCash}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.percentCredit')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{buyerItem.percentCredit}"/>
+                                        <h:outputText styleClass="right" value="#{buyerItem.percentCredit}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditTerm')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{buyerItem.creditTerm}"/>
+                                        <h:outputText styleClass="right" value="#{buyerItem.creditTerm}"/>
                                     </p:column>
                                     <p:column headerText="" styleClass="center" style="width:54px;">
                                         <p:commandButton icon="ui-icon-pencil"
@@ -469,13 +476,13 @@
                                             Total
                                         </p:column>
                                         <p:column styleClass="right" style="width:11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.buyerTotalPercentBuyVolume}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.buyerTotalPercentBuyVolume}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:22%;" colspan="2" >
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.buyerTotalPercentCredit}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.buyerTotalPercentCredit}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="right" style="width:11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.buyerTotalCreditTerm}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.buyerTotalCreditTerm}" size="5" />
                                         </p:column>
                                         <p:column  styleClass="center" style="width:8%;">
 
@@ -486,11 +493,11 @@
                                             Adjust Term By UW
                                         </p:column>
                                         <p:column  styleClass="right" style="width: 11%;" >
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustPercentCredit}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustPercentCredit}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="right" style="width: 11%;">
-                                            <p:inputText value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustCreditTerm}" size="5" />
+                                            <p:inputText styleClass="right" value="#{bizInfoDetail.bizInfoDetailView.buyerUWAdjustCreditTerm}" size="5" />
                                         </p:column>
 
                                         <p:column  styleClass="center" style="width:8%;">

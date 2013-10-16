@@ -7,6 +7,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.dwh.model.Obligation;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.csi.model.*;
@@ -80,6 +81,8 @@ public class WelcomePage implements Serializable {
     BRMSInterface brms;
     @Inject
     RLOSInterface rlos;
+    @Inject
+    DWHInterface dwh;
 
     //user auditor
     @Inject
@@ -145,6 +148,20 @@ public class WelcomePage implements Serializable {
             csiInputData.setNameModelList(nameModelList);
             csiResult = rlos.getCSIData("10001", csiInputData);
             log.debug("csi result : {}",csiResult);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testDWHObligation() {
+        try{
+            List<Obligation> obligationList = new ArrayList<Obligation>();
+            List<String> customerList = new ArrayList<String>();
+            customerList.add("1234");
+            customerList.add("1235");
+            obligationList = dwh.getObligation("BDM001",customerList);
+            log.debug("obligation result : {}",obligationList);
         } catch (Exception e) {
             log.error("",e);
         }

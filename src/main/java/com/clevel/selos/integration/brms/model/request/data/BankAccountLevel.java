@@ -1,54 +1,27 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class BankAccountLevel {
-    public String accountId;
-    public int chequeReturn;
-    public BigDecimal tradeChequeReturnPercent;
-    public BigDecimal utilizationPercent;
-    public BigDecimal swingPercent;
-    public BigDecimal averageIncomeGross;
-    public int overLimitDays;
-    public boolean isMainAccount;
-    //todo add more field
+public class BankAccountLevel implements Serializable {
+    private BigDecimal utilizationPercent;
+    private BigDecimal swingPercent;
+    private BigDecimal avgBalanceL6Mth;
+    private int numberOfTransaction;
+    private boolean excludeIncomeFlag;
 
     public BankAccountLevel() {
     }
 
-    public BankAccountLevel(String accountId, int chequeReturn, BigDecimal tradeChequeReturnPercent, BigDecimal utilizationPercent, BigDecimal swingPercent, BigDecimal averageIncomeGross, int overLimitDays, boolean mainAccount) {
-        this.accountId = accountId;
-        this.chequeReturn = chequeReturn;
-        this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+    public BankAccountLevel(BigDecimal utilizationPercent, BigDecimal swingPercent, BigDecimal avgBalanceL6Mth, int numberOfTransaction, boolean excludeIncomeFlag) {
         this.utilizationPercent = utilizationPercent;
         this.swingPercent = swingPercent;
-        this.averageIncomeGross = averageIncomeGross;
-        this.overLimitDays = overLimitDays;
-        isMainAccount = mainAccount;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public int getChequeReturn() {
-        return chequeReturn;
-    }
-
-    public void setChequeReturn(int chequeReturn) {
-        this.chequeReturn = chequeReturn;
-    }
-
-    public BigDecimal getTradeChequeReturnPercent() {
-        return tradeChequeReturnPercent;
-    }
-
-    public void setTradeChequeReturnPercent(BigDecimal tradeChequeReturnPercent) {
-        this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+        this.avgBalanceL6Mth = avgBalanceL6Mth;
+        this.numberOfTransaction = numberOfTransaction;
+        this.excludeIncomeFlag = excludeIncomeFlag;
     }
 
     public BigDecimal getUtilizationPercent() {
@@ -67,27 +40,38 @@ public class BankAccountLevel {
         this.swingPercent = swingPercent;
     }
 
-    public BigDecimal getAverageIncomeGross() {
-        return averageIncomeGross;
+    public BigDecimal getAvgBalanceL6Mth() {
+        return avgBalanceL6Mth;
     }
 
-    public void setAverageIncomeGross(BigDecimal averageIncomeGross) {
-        this.averageIncomeGross = averageIncomeGross;
+    public void setAvgBalanceL6Mth(BigDecimal avgBalanceL6Mth) {
+        this.avgBalanceL6Mth = avgBalanceL6Mth;
     }
 
-    public int getOverLimitDays() {
-        return overLimitDays;
+    public int getNumberOfTransaction() {
+        return numberOfTransaction;
     }
 
-    public void setOverLimitDays(int overLimitDays) {
-        this.overLimitDays = overLimitDays;
+    public void setNumberOfTransaction(int numberOfTransaction) {
+        this.numberOfTransaction = numberOfTransaction;
     }
 
-    public boolean isMainAccount() {
-        return isMainAccount;
+    public boolean isExcludeIncomeFlag() {
+        return excludeIncomeFlag;
     }
 
-    public void setMainAccount(boolean mainAccount) {
-        isMainAccount = mainAccount;
+    public void setExcludeIncomeFlag(boolean excludeIncomeFlag) {
+        this.excludeIncomeFlag = excludeIncomeFlag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("utilizationPercent", utilizationPercent)
+                .append("swingPercent", swingPercent)
+                .append("avgBalanceL6Mth", avgBalanceL6Mth)
+                .append("numberOfTransaction", numberOfTransaction)
+                .append("excludeIncomeFlag", excludeIncomeFlag)
+                .toString();
     }
 }

@@ -64,6 +64,10 @@ public class WorkCase implements Serializable {
     @JoinColumn(name="workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
+    @OneToOne
+    private BizInfoSummary bizInfoSummary;
+
+
     public WorkCase() {
     }
 
@@ -185,6 +189,22 @@ public class WorkCase implements Serializable {
 
     public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
         this.workCasePrescreen = workCasePrescreen;
+    }
+
+    public String getRefAppNumber() {
+        return refAppNumber;
+    }
+
+    public void setRefAppNumber(String refAppNumber) {
+        this.refAppNumber = refAppNumber;
+    }
+
+    public BizInfoSummary getBizInfoSummary() {
+        return bizInfoSummary;
+    }
+
+    public void setBizInfoSummary(BizInfoSummary bizInfoSummary) {
+        this.bizInfoSummary = bizInfoSummary;
     }
 
     @Override

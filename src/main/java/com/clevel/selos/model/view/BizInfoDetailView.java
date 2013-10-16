@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class BizInfoDetailView implements Serializable {
@@ -24,7 +25,7 @@ public class BizInfoDetailView implements Serializable {
     private BigDecimal percentBiz;
     private String bizPermission;
     private String bizDocPermission;
-    private String bizDocExpiryDate;
+    private Date bizDocExpiryDate;
     private String expIndCountryName;
     private BigDecimal percentExpIndCountryName;
     private BigDecimal supplierTotalPercentBuyVolume;
@@ -64,6 +65,8 @@ public class BizInfoDetailView implements Serializable {
     public void reset(){
         this.bizDesc = new BusinessDescription();
         this.bizDesc.setBusinessGroup(new BusinessGroup());
+        this.bizGroup = new BusinessGroup();
+        this.bizType = new BusinessType();
     }
 
     public long getId() {
@@ -170,11 +173,11 @@ public class BizInfoDetailView implements Serializable {
         this.bizDocPermission = bizDocPermission;
     }
 
-    public String getBizDocExpiryDate() {
+    public Date getBizDocExpiryDate() {
         return bizDocExpiryDate;
     }
 
-    public void setBizDocExpiryDate(String bizDocExpiryDate) {
+    public void setBizDocExpiryDate(Date bizDocExpiryDate) {
         this.bizDocExpiryDate = bizDocExpiryDate;
     }
 
