@@ -1,6 +1,9 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
@@ -8,12 +11,16 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,6 +44,9 @@ public class CustomerInfoSummary implements Serializable {
 
     @Inject
     private CustomerEntityDAO customerEntityDAO;
+
+    @Inject
+    private CustomerInfoSummaryControl customerInfoSummaryControl;
 
     //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
@@ -63,7 +73,7 @@ public class CustomerInfoSummary implements Serializable {
     }
 
     public void preRender(){
-        /*HttpSession session = FacesUtil.getSession(false);
+        HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
@@ -86,17 +96,17 @@ public class CustomerInfoSummary implements Serializable {
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
             }
-        }*/
+        }
     }
 
 
     @PostConstruct
     public void onCreation() {
         preRender();
-
         customerEntityList = customerEntityDAO.findAll();
-
         customerInfoSummaryView = new CustomerInfoSummaryView();
+
+        customerInfoSummaryView = customerInfoSummaryControl.getCustomerInfoSummary(workCaseId);
     }
 
     public CustomerInfoSummaryView getCustomerInfoSummaryView() {

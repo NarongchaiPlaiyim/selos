@@ -12,6 +12,8 @@ import java.util.List;
 public class CustomerInfoSummaryView implements Serializable {
     private long id;
     private CustomerEntity customerEntity;
+    private List<CustomerInfoView> customerInfoViewList;
+    private List<CustomerInfoView> borrowerCustomerViewList;
 
     public CustomerInfoSummaryView(){
         reset();
@@ -19,6 +21,8 @@ public class CustomerInfoSummaryView implements Serializable {
 
     public void reset(){
         this.customerEntity = new CustomerEntity();
+        this.customerInfoViewList = new ArrayList<CustomerInfoView>();
+        this.borrowerCustomerViewList = new ArrayList<CustomerInfoView>();
     }
 
     public long getId() {
@@ -35,5 +39,21 @@ public class CustomerInfoSummaryView implements Serializable {
 
     public void setCustomerEntity(CustomerEntity customerEntity) {
         this.customerEntity = customerEntity;
+    }
+
+    public List<CustomerInfoView> getCustomerInfoViewList() {
+        return customerInfoViewList;
+    }
+
+    public void setCustomerInfoViewList(List<CustomerInfoView> customerInfoViewList) {
+        this.customerInfoViewList = customerInfoViewList;
+    }
+
+    public List<CustomerInfoView> getBorrowerCustomerViewList() {
+        return borrowerCustomerViewList;
+    }
+
+    public void setBorrowerCustomerViewList(List<CustomerInfoView> borrowerCustomerViewList) {
+        this.borrowerCustomerViewList = borrowerCustomerViewList;
     }
 }

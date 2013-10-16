@@ -98,6 +98,10 @@ public class Customer implements Serializable {
     @OneToOne(mappedBy="customer")
     private NCB ncb;
 
+    @OneToOne
+    @JoinColumn(name="warningcode_id")
+    private WarningCode csi;
+
     public Customer() {
     }
 
@@ -264,15 +268,9 @@ public class Customer implements Serializable {
     public Juristic getJuristic() {
         return juristic;
     }
-    public NCB getNcb() {
-        return ncb;
-    }
 
     public void setJuristic(Juristic juristic) {
         this.juristic = juristic;
-    }
-    public void setNcb(NCB ncb) {
-        this.ncb = ncb;
     }
 
     public List<Address> getAddressesList() {
@@ -307,34 +305,43 @@ public class Customer implements Serializable {
         this.ncb = ncb;
     }
 
+    public WarningCode getCsi() {
+        return csi;
+    }
+
+    public void setCsi(WarningCode csi) {
+        this.csi = csi;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("workCasePrescreen", workCasePrescreen)
-                .append("customerEntity", customerEntity)
-                .append("documentType", documentType)
-                .append("documentAuthorizeBy", documentAuthorizeBy)
-                .append("serviceSegment", serviceSegment)
-                .append("collateralOwner", collateralOwner)
-                .append("percent_share", percent_share)
-                .append("approx_income", approx_income)
-                .append("idNumber", idNumber)
-                .append("expireDate", expireDate)
-                .append("title", title)
-                .append("nameEn", nameEn)
-                .append("nameTh", nameTh)
-                .append("lastNameTh", lastNameTh)
-                .append("lastNameEn", lastNameEn)
-                .append("age", age)
-                .append("ncbFlag", ncbFlag)
-                .append("individual", individual)
-                .append("juristic", juristic)
-                .append("addressesList", addressesList)
-                .append("businessType", businessType)
-                .append("relation", relation)
-                .append("ncb", ncb)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("workCasePrescreen", workCasePrescreen).
+                append("customerEntity", customerEntity).
+                append("documentType", documentType).
+                append("documentAuthorizeBy", documentAuthorizeBy).
+                append("serviceSegment", serviceSegment).
+                append("collateralOwner", collateralOwner).
+                append("percent_share", percent_share).
+                append("approx_income", approx_income).
+                append("idNumber", idNumber).
+                append("expireDate", expireDate).
+                append("title", title).
+                append("nameEn", nameEn).
+                append("nameTh", nameTh).
+                append("lastNameTh", lastNameTh).
+                append("lastNameEn", lastNameEn).
+                append("age", age).
+                append("ncbFlag", ncbFlag).
+                append("individual", individual).
+                append("juristic", juristic).
+                append("addressesList", addressesList).
+                append("businessType", businessType).
+                append("relation", relation).
+                append("ncb", ncb).
+                append("csi", csi).
+                toString();
     }
 }
