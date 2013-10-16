@@ -28,15 +28,13 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
+import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
@@ -98,6 +96,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenBusinessDAO prescreenBusinessDAO;
     @Inject
     PrescreenCollateralDAO prescreenCollateralDAO;
+    @Inject
+    RelationDAO relationDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -135,7 +135,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
             searcyBy = RMInterface.SearchBy.TMBCUS_ID;
-            masterDocumentType = documentTypeDAO.findById(3);
+            masterDocumentType = documentTypeDAO.findById(1);
         }
 
         String userId = user.getId();
@@ -437,6 +437,18 @@ public class PrescreenBusinessControl extends BusinessControl {
         brmsResultDAO.persist(brmsResultList);
     }
 
+    // *** Function for PreScreen *** //
+    public int getCaseBorrowerTypeId(long workCasePreScreenId){
+        int caseBorrowerTypeId = 0;
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        if(workCasePrescreen != null){
+            if(workCasePrescreen.getBorrowerType() != null){
+                caseBorrowerTypeId = workCasePrescreen.getBorrowerType().getId();
+            }
+        }
+        return caseBorrowerTypeId;
+    }
+
     // *** Function for PreScreen Initial *** //
     public PrescreenView getPreScreen(long workCasePreScreenId){
         log.info("getPreScreen ::: workCasePreScreenId : {}", workCasePreScreenId);
@@ -463,15 +475,25 @@ public class PrescreenBusinessControl extends BusinessControl {
         return facilityViewList;
     }
 
-    public List<BizInfoDetailView> getBusinessInfo(long workCasePreScreenId){
-        List<BizInfoDetailView> bizInfoViewList = null;
-        List<BizInfoDetail> bizInfoList = bizInfoDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-
-        if(bizInfoList != null){
-            bizInfoViewList = bizInfoTransform.transformToPreScreenView(bizInfoList);
+    public List<BizInfoDetailView> getPreScreenBusinessInfo(long prescreenId){
+        List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessDAO.findByPreScreenId(prescreenId);
+        if(prescreenBusinessList != null){
+            bizInfoDetailViewList = prescreenBusinessTransform.transformToViewList(prescreenBusinessList);
         }
 
-        return bizInfoViewList;
+        return bizInfoDetailViewList;
+    }
+
+    public List<PrescreenCollateralView> getPreScreenCollateral(long prescreenId){
+        List<PrescreenCollateralView> prescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
+        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralDAO.findByPreScreenId(prescreenId);
+
+        if(prescreenCollateralList != null){
+            prescreenCollateralViewList = prescreenCollateralTransform.transformToViewList(prescreenCollateralList);
+        }
+
+        return prescreenCollateralViewList;
     }
 
     public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId, User user){
@@ -524,18 +546,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                 juristicDAO.persist(juristic);
             }
         }
-
-        /*//Remove all Business before add new
-        List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
-        if(bizInfoListDelete != null){
-            bizInfoDAO.delete(bizInfoListDelete);
-        }
-
-        List<BizInfoDetail> bizInfoList = bizInfoTransform.transformPrescreenToModel(bizInfoViewList, workCasePrescreen);
-        bizInfoDAO.persist(bizInfoList);*/
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoViewList, long workCasePreScreenId, User user){
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
@@ -595,6 +608,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessTransform.transformToModelList(bizInfoViewList, prescreen);
         prescreenBusinessDAO.persist(prescreenBusinessList);
 
+        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
+        prescreenCollateralDAO.persist(prescreenCollateralList);
+
         /*List<BizInfoDetail> bizInfoListDelete = bizInfoDAO.findByWorkCasePreScreen(workCasePrescreen);
         if(bizInfoListDelete != null){
             bizInfoDAO.delete(bizInfoListDelete);
@@ -626,7 +642,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<CollateralView> collateralViewList, long workCasePreScreenId, User user){
+    public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
@@ -692,7 +708,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             prescreenCollateralDAO.delete(prescreenCollateralDelete);
         }
 
-        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(collateralViewList, prescreen);
+        List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
         prescreenCollateralDAO.persist(prescreenCollateralList);
 
     }
@@ -799,5 +815,27 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     // *** Function for Drop Down *** //
+    public List<Relation> getRelationByStepId(long stepId){
+        List<Relation> relationList = new ArrayList<Relation>();
+        List<Relation> borrowerRelationList = new ArrayList<Relation>();
+        List<Relation> otherRelationList = new ArrayList<Relation>();
+        List<Relation> tempList = relationDAO.findAll();
+
+        for(Relation relation : tempList){
+            if(relation.getId() != 1){
+                otherRelationList.add(relation);
+            } else {
+                borrowerRelationList.add(relation);
+            }
+        }
+
+        if(stepId == 1001){
+            relationList = borrowerRelationList;
+        } else if (stepId == 1003){
+            relationList = otherRelationList;
+        }
+
+        return relationList;
+    }
 
 }

@@ -41,13 +41,22 @@ function formatNumber(obj){
     }
 }
 
-function numberOnly(e){
-    var validNums = '0123456789.,';
+function numberOnly(evt){
+    var validNums = '0123456789.';
+    var chr;
 
-    if (!event.charCode) k = String.fromCharCode(event.which);
-    else k = String.fromCharCode(event.charCode);
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
-    if (validNums.indexOf(k) == -1) event.preventDefault();
+    if(evt.keyCode == '9' || evt.keyCode == '37' || evt.keyCode == '38' || evt.keyCode == '39' || evt.keyCode == '40' || evt.keyCode == '46' || evt.keyCode == '16' || (nbr > 95 && nbr < 106) || evt.keyCode == '110'){
+        return true;
+    }else{
+        keychar = String.fromCharCode(nbr);
+        validNums  += String.fromCharCode(8);
+        if (validNums.indexOf(keychar) < 0){
+            return false;
+        }
+        return true;
+    }
 }
 
 function hideWindowsScrollBar(){

@@ -182,7 +182,7 @@
                                         </p:column>
 
                                         <p:column headerText="Citizen ID/Registration ID" styleClass="center">
-                                            <h:outputText value="#{borrowerItem.citizenId}"/>
+                                            <h:outputText value="#{borrowerItem.citizenId}"/><h:outputText value="#{borrowerItem.registrationId}"/>
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
@@ -521,7 +521,7 @@
                                 <td></td>
                                 <td>
                                     <p:dataTable id="resultTableProposeCollateral" var="proposeCollateral"
-                                                 value="#{prescreenMaker.proposeCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
+                                                 value="#{prescreenMaker.proposePrescreenCollateralViewList}" selection="#{prescreenMaker.selectProposeCollateralItem}"
                                                  paginator="false" rowKey="#{proposeCollateral.id}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
@@ -567,7 +567,7 @@
                                                      styleClass="medium"
                                                      process="@form"
                                                      action="#{prescreenMaker.onSavePrescreen()}"
-                                                     update=":frmMain"/>
+                                                     update=":frmMain :msgBoxSystemMessagePanel"/>
                                     <p:commandButton id="btnCancel" value="Cancel"
                                                      styleClass="medium"
                                                      process="@this"

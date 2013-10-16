@@ -149,6 +149,7 @@ public class CustomerTransform extends Transform {
         } else {
             //Juristic
             Juristic juristic = customer.getJuristic();
+            log.info("transform juristic : {}", juristic);
 
             if(juristic != null){
                 customerInfoView.setCapital(juristic.getCapital());
@@ -413,6 +414,7 @@ public class CustomerTransform extends Transform {
             if(customer.getJuristic() != null){
                 juristic = customer.getJuristic();
             }
+            juristic.setCustomer(customer);
             juristic.setCapital(customerInfoView.getCapital());
             juristic.setPaidCapital(customerInfoView.getPaidCapital());
             juristic.setFinancialYear(customerInfoView.getFinancialYear());

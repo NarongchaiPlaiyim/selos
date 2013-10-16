@@ -9,7 +9,7 @@
 <div id="customer_relation">
 <table class="content_form" border="0" style="width:650px;">
     <tr>
-        <td class="title" style="min-width: 124px; width: 124px; max-width: 124px;">Document Type :</td>
+        <td class="title" style="min-width: 144px; width: 144px; max-width: 144px;">Document Type :</td>
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
                              required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}"
@@ -52,18 +52,11 @@
         </td>
     </tr>
     <tr>
-
-        <td colspan="4">
-            <div class="separate"><!-- --></div>
-        </td>
-
-    </tr>
-    <tr>
         <td class="title">Customer Entity :</td>
         <td colspan="3">
             <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}"
                               disabled="#{not prescreenMaker.enableCustomerEntity}"
-                              required="#{not empty param[saveCustomerButton.clientId]}">
+                              required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}">
                 <f:selectItems value="#{prescreenMaker.customerEntityList}"
                                var="customerEntityItem"
                                itemLabel="#{customerEntityItem.description}"
@@ -76,11 +69,18 @@
             </p:selectOneRadio>
         </td>
     </tr>
+    <tr>
+
+        <td colspan="4">
+            <div class="separate"><!-- --></div>
+        </td>
+
+    </tr>
 </table>
 <p:panel id="pnlIndividual"  rendered="#{prescreenMaker.borrowerInfo.customerEntity.id == 1 || prescreenMaker.borrowerInfo.customerEntity.id == 0}"  style="border:0; margin:0; padding: 0;">
 <table class="content_form" border="0" style="width:650px;">
     <tr>
-        <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Citizen ID :</td>
+        <td class="title" style="min-width: 144px; width:144px; max-width: 144px;">Citizen ID :</td>
         <td colspan="3">
             <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
                          required="#{not empty param[saveCustomerButton.clientId]}"
@@ -114,6 +114,10 @@
                                var="relationItem"
                                itemLabel="#{relationItem.description}"
                                itemValue="#{relationItem.id}"/>
+                <p:ajax event="change"
+                        listener="#{prescreenMaker.onChangeRelation()}"
+                        process="@form"
+                        update=":customerDlgForm"/>
             </p:selectOneMenu>
         </td>
         <td class="title right">Collateral Owner :</td>
@@ -455,7 +459,7 @@
 <p:panel id="pnlJuristic" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id == 2}" styleClass="panel">
     <table class="content_form" border="0" style="width:650px;">
         <tr>
-            <td class="title" style="min-width: 124px; width:124px; max-width: 124px;">Registration ID :</td>
+            <td class="title" style="min-width: 144px; width:144px; max-width: 144px;">Registration ID :</td>
             <td colspan="3">
                 <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
                              required="#{not empty param[saveCustomerButton.clientId]}"
@@ -550,6 +554,7 @@
                 <p:calendar id="dlgCalJrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
                             value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
                             timeZone="Asia/Bangkok"
+                            disabled="#{not prescreenMaker.enableCustomerForm}"
                             pattern="dd/MM/yyyy">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
                     <p:ajax event="dateSelect"

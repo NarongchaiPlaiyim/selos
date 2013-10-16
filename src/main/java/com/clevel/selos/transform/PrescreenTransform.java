@@ -1,10 +1,6 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.dao.master.BankDAO;
-import com.clevel.selos.dao.master.ProductGroupDAO;
-import com.clevel.selos.dao.master.ProvinceDAO;
-import com.clevel.selos.dao.master.ReferredExperienceDAO;
-import com.clevel.selos.dao.working.BorrowingTypeDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -63,10 +59,12 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setRefinanceBank(null);
         }
+        prescreen.setBorrowingType(prescreenView.getBorrowingType());
         if(prescreenView.getBorrowingType() != null && prescreenView.getBorrowingType().getId() != 0){
             prescreen.setBorrowingType(borrowingTypeDAO.findById(prescreenView.getBorrowingType().getId()));
+        } else {
+            prescreen.setBorrowingType(null);
         }
-        prescreen.setBorrowingType(prescreenView.getBorrowingType());
         prescreen.setModifyDate(new DateTime().now().toDate());
         prescreen.setModifyBy(user);
         return prescreen;
