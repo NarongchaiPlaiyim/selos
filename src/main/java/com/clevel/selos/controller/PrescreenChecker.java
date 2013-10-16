@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.NcbView;
@@ -198,7 +199,7 @@ public class PrescreenChecker implements Serializable {
             int index = 0;
             int failedCount = 0;
             for(CustomerInfoView customerInfoView : customerInfoViewList){
-                if(customerInfoView.isNcbFlag()){
+                if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
                     customerInfoView.setNcbReason("");
                     customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
                 }
@@ -216,7 +217,7 @@ public class PrescreenChecker implements Serializable {
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
                                         if(item.getResult().equals(ActionResult.SUCCEED)){
-                                            customerInfoView.setNcbFlag(true);
+                                            customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;
                                         }
@@ -227,7 +228,7 @@ public class PrescreenChecker implements Serializable {
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
                                         if(item.getResult().equals(ActionResult.SUCCEED)){
-                                            customerInfoView.setNcbFlag(true);
+                                            customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;
                                         }
@@ -282,8 +283,6 @@ public class PrescreenChecker implements Serializable {
     }
 
     public void onCompleteCheckNCB(){
-        String actionCode = "1004";
-        prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");

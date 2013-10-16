@@ -34,6 +34,7 @@ public class PrescreenBusinessTransform extends Transform {
         BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
         bizInfoDetailView.reset();
         bizInfoDetailView.setBizDesc(prescreenBusiness.getBusinessDescription());
+        bizInfoDetailView.setBizGroup(prescreenBusiness.getBusinessDescription().getBusinessGroup());
 
         return bizInfoDetailView;
     }

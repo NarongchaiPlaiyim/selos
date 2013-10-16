@@ -40,6 +40,7 @@
             <tr>
                 <td class="title">Request Amount :</td>
                 <td>
+                    <p:inputMask value="#{prescreenMaker.facility.requestAmount}" mask="999,999,999"/>
                     <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
                                  maxlength="10" styleClass="large right"
                                  onkeypress="return numberOnly(event);" onfocus="removeComma(this)">

@@ -29,4 +29,14 @@ public class PrescreenCollateralDAO extends GenericDAO<PrescreenCollateral, Long
 
         return prescreenBusinessList;
     }
+
+    public List<PrescreenCollateral> findByPreScreenId(long prescreenId){
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("prescreen.id", prescreenId));
+        criteria.addOrder(Order.asc("id"));
+        List<PrescreenCollateral> prescreenBusinessList = criteria.list();
+        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+
+        return prescreenBusinessList;
+    }
 }

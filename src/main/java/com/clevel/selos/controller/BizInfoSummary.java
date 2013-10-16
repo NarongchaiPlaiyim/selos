@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
+import com.clevel.selos.model.db.master.ReferredExperience;
 import com.clevel.selos.model.db.master.SubDistrict;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.view.BizInfoDetailView;
@@ -40,9 +41,11 @@ public class BizInfoSummary implements Serializable {
     private List<Province> provinceList;
     private List<District> districtList;
     private List<SubDistrict> subDistrictList;
+    private List<ReferredExperience> referredExperienceList;
     private Province province;
     private District district;
     private SubDistrict subDistrict;
+    private ReferredExperience  referredExperience;
     public int provinceID;
     public int districtID;
     public int subDistrictID;
@@ -61,8 +64,9 @@ public class BizInfoSummary implements Serializable {
     private DistrictDAO districtDAO;
     @Inject
     private SubDistrictDAO subDistrictDAO;
-
     @Inject
+    private ReferredExperienceDAO referredExperienceDAO;
+
     private BizInfoDetailControl bizInfoDetailControl;
     @Inject
     private BizInfoDetailTransform bizProductDetailTransform;
@@ -76,12 +80,13 @@ public class BizInfoSummary implements Serializable {
 
     @PostConstruct
     public void onCreation(){
-        //bizInfoDetailViewList = getBusinessInfoList();
         log.info("onCreation bizInfoSum");
 
         onSearchBizInfoSummaryByWorkCase();
 
+
         provinceList = provinceDAO.getListOrderByParameter("name");
+        referredExperienceList = referredExperienceDAO.findAll();
 
         if(bizInfoSummaryView == null){
 
@@ -92,64 +97,51 @@ public class BizInfoSummary implements Serializable {
             province = new Province();
             district = new District();
             subDistrict = new SubDistrict();
+            referredExperience = new ReferredExperience();
 
             district.setProvince(province);
             subDistrict.setDistrict(district);
             subDistrict.setProvince(province);
             bizInfoSummaryView.setSubDistrict(subDistrict);
+            bizInfoSummaryView.setReferredExperience(referredExperience);
 
         }else{
-
             getBusinessInfoListDB();
             onChangeProvince();
             onChangeDistrict();
         }
+
 
     }
 
     public void onSearchBizInfoSummaryByWorkCase(){
         log.info( " Initial session ");
         HttpSession session = FacesUtil.getSession(true);
-        log.info( " Initial session is " + session);
+        log.info(" Initial session is " + session);
 
         session.setAttribute("workCaseId", 10001);
-
-        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
         log.info( " get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
     }
     public void onChangeProvince() {
-
-        //log.info("onChangeProvince :::: provinceID :::  ", provinceID);
-
         Province proSelect = bizInfoSummaryView.getSubDistrict().getDistrict().getProvince();
-        //Province province = provinceDAO.findById(provinceID);
-        log.info("onChangeProvince :::: province ::: ", proSelect);
-
         districtList = districtDAO.getListByProvince(proSelect);
         log.info("onChangeProvince :::: districtList.size ::: ", districtList.size());
     }
 
     public void onChangeDistrict() {
-
         District districtSelect= bizInfoSummaryView.getSubDistrict().getDistrict();
-        log.info("onChangeDistrict :::: district ::: ", districtSelect);
-
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
         log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
     }
 
 
     public List<BizInfoDetailView> getBusinessInfoListDB(){
-        log.info("getBusinessInfoListDB bizInfoSum");
         long bizInfoSummaryViewId;
-
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
-
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
-
         return bizInfoDetailViewList;
     }
 
@@ -267,5 +259,13 @@ public class BizInfoSummary implements Serializable {
 
     public void setSelectBizInfoDetailView(BizInfoDetailView selectBizInfoDetailView) {
         this.selectBizInfoDetailView = selectBizInfoDetailView;
+    }
+
+    public List<ReferredExperience> getReferredExperienceList() {
+        return referredExperienceList;
+    }
+
+    public void setReferredExperienceList(List<ReferredExperience> referredExperienceList) {
+        this.referredExperienceList = referredExperienceList;
     }
 }
