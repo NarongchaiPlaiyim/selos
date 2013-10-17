@@ -20,7 +20,9 @@
                                var="docTypeItem"
                                itemLabel="#{docTypeItem.description}"
                                itemValue="#{docTypeItem.id}"/>
-
+                <p:ajax event="change" process="@form"
+                        listener="#{prescreenMaker.onChangeDocType}"
+                        update=":customerDlgForm" />
             </p:selectOneMenu>
         </td>
 
@@ -33,9 +35,6 @@
                               required="#{not empty param[searchButton.clientId]}">
                 <f:selectItem itemLabel="Personal ID" itemValue="1"/>
                 <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
-                <p:ajax event="change" process="@form"
-                        listener="#{prescreenMaker.onDisableDocType}"
-                        update=":customerDlgForm:dlgSelBrDocType" />
             </p:selectOneRadio>
         </td>
         <td>
@@ -55,18 +54,14 @@
     <tr>
         <td class="title">Customer Entity :</td>
         <td colspan="3">
-            <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.borrowerInfo.customerEntity.id}"
-                              disabled="#{not prescreenMaker.enableCustomerEntity}"
+            <h:inputHidden value="#{prescreenMaker.borrowerInfo.customerEntity.id}"/>
+            <p:selectOneRadio id="radioCustomerType" value="#{prescreenMaker.customerEntity.id}"
+                              disabled="true"
                               required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}">
                 <f:selectItems value="#{prescreenMaker.customerEntityList}"
                                var="customerEntityItem"
                                itemLabel="#{customerEntityItem.description}"
                                itemValue="#{customerEntityItem.id}"/>
-                <p:ajax event="change"
-                        process="@form" immediate="true" />
-                <p:ajax event="change"
-                        listener="#{prescreenMaker.onChangeCustomerEntity()}"
-                        update=":customerDlgForm" />
             </p:selectOneRadio>
         </td>
     </tr>
@@ -334,6 +329,10 @@
                                    var="relationItem"
                                    itemLabel="#{relationItem.description}"
                                    itemValue="#{relationItem.id}"/>
+                    <p:ajax event="change"
+                            listener="#{prescreenMaker.onChangeRelation()}"
+                            process="@form"
+                            update=":customerDlgForm"/>
                 </p:selectOneMenu>
             </td>
             <td class="title">Collateral Owner :</td>
@@ -477,7 +476,7 @@
         <tr>
             <td class="title" style="min-width: 144px; width:144px; max-width: 144px;">Registration ID :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.registrationId}" styleClass="large"
                              required="#{not empty param[saveCustomerButton.clientId]}"
                              onkeydown="return numberOnly(event);" maxlength="13"
                              readonly="#{not prescreenMaker.enableCitizenId}"/>
@@ -510,6 +509,10 @@
                                    var="relationItem"
                                    itemLabel="#{relationItem.description}"
                                    itemValue="#{relationItem.id}"/>
+                    <p:ajax event="change"
+                            listener="#{prescreenMaker.onChangeRelation()}"
+                            process="@form"
+                            update=":customerDlgForm"/>
                 </p:selectOneMenu>
             </td>
             <td class="title right">Collateral Owner :</td>

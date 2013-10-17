@@ -267,6 +267,8 @@ public class PrescreenChecker implements Serializable {
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
                 if(failedCount != 0){
                     success = false;
+                } else {
+                    success = true;
                 }
             }
         } catch(Exception ex){

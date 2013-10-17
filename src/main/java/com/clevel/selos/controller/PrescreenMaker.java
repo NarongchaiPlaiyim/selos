@@ -7,8 +7,9 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
-import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import com.clevel.selos.model.db.working.Customer;
@@ -123,6 +124,7 @@ public class PrescreenMaker implements Serializable {
     private int previousProductGroupId;
     private int caseBorrowerTypeId;
     private CustomerEntity caseBorrowerType;
+    private CustomerEntity customerEntity;
 
 
     enum ModeForButton{ ADD, EDIT, DELETE }
@@ -434,6 +436,7 @@ public class PrescreenMaker implements Serializable {
         if(proposeCollateral == null){ proposeCollateral = new PrescreenCollateralView(); }
         if(borrowerInfo == null){ borrowerInfo = new CustomerInfoView(); }
         if(spouseInfo == null) { spouseInfo = new CustomerInfoView(); }
+        if(customerEntity == null){ customerEntity = new CustomerEntity(); }
 
 
         proposeCollateral.reset();
@@ -573,10 +576,14 @@ public class PrescreenMaker implements Serializable {
         borrowerInfo = new CustomerInfoView();
         spouseInfo = new CustomerInfoView();
 
+        customerEntity = new CustomerEntity();
+
         borrowerInfo.reset();
         spouseInfo.reset();
 
         log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
+
+        //TODO Check caseBorrowerType;
 
         enableCustomerForm = false;
         enableDocumentType = true;
@@ -629,6 +636,7 @@ public class PrescreenMaker implements Serializable {
                     //--- Borrower ---
                     if(borrowerInfo.getRelation().getId() == 1){
                         //Borrower
+                        //TODO assign caseBorrowerType
                         borrowerInfoViewList.add(borrowerInfo);
                         customerInfoViewList.add(borrowerInfo);
                     }else if(borrowerInfo.getRelation().getId() == 2){
@@ -821,29 +829,6 @@ public class PrescreenMaker implements Serializable {
 
     }
 
-    public void onChangeCustomerEntity(){
-        log.info("onChangeCustomerEntity ::: Custoemr Entity : {}", borrowerInfo.getCustomerEntity().getId());
-        log.info("onChangeCustomerEntity ::: Search By : {}", borrowerInfo.getSearchBy());
-        titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
-        log.info("onChangeCustomerEntity ::: titleList : {}", titleList);
-        log.info("onChangeCustomerEntity ::{}", borrowerInfo);
-        if ( borrowerInfo.getCustomerEntity().getId() == 1){
-            if(Integer.toString(borrowerInfo.getSearchBy()) != null){
-                if(borrowerInfo.getSearchBy() == 1){
-                    enableDocumentType = true;
-                } else {
-                    enableDocumentType = false;
-                }
-            } else {
-                enableDocumentType = true;
-            }
-
-        }else{
-            enableDocumentType = false;
-        }
-        /*enableCustomerForm = true;*/
-    }
-
     public void onChangeRelation(){
         log.info("onChangeRelation ::: ");
         if(caseBorrowerTypeId == 0){
@@ -856,10 +841,26 @@ public class PrescreenMaker implements Serializable {
         log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
 
-    public void onDisableDocType(){
+    public void onChangeDocType(){
         log.info("onDisableDocType ::: searchBy : {}", borrowerInfo.getSearchBy());
         log.info("onDisableDocType ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
-        if(borrowerInfo.getSearchBy() == 1){
+
+        //*** Fixed Customer Entity BY DocumentType ***//
+        CustomerEntity customerEntity = new CustomerEntity();
+        for(DocumentType documentType : documentTypeList){
+            if(documentType.getId() == borrowerInfo.getDocumentType().getId()){
+                customerEntity.setId(documentType.getCustomerEntity().getId());
+            }
+        }
+
+        borrowerInfo.setCustomerEntity(customerEntity);
+        this.customerEntity = customerEntity;
+
+        titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
+
+        enableCustomerEntity = false;
+
+        /*if(borrowerInfo.getSearchBy() == 1){
             if(borrowerInfo.getCustomerEntity() != null){
                 if(borrowerInfo.getCustomerEntity().getId() == 1){
                     enableDocumentType = true;
@@ -873,7 +874,7 @@ public class PrescreenMaker implements Serializable {
             }
         } else {
             enableDocumentType = false;
-        }
+        }*/
     }
 
     /*// *** Calculate Age And Year In Business ***//*/
@@ -1710,5 +1711,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setEnableCustomerEntity(boolean enableCustomerEntity) {
         this.enableCustomerEntity = enableCustomerEntity;
+    }
+
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
     }
 }
