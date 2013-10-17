@@ -1,6 +1,6 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.model.view.BankStmtSummaryView;
+import com.clevel.selos.model.view.BankStmtView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -11,8 +11,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.Flash;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -48,12 +46,12 @@ public class BankStatementSummary {
         - BSS : Bank Statement Summary
         - TCR : Trade Cheque Return
      */
-    private List<BankStmtSummaryView> tmbBankStmtSumList;
+    private List<BankStmtView> tmbBankStmtSumList;
     private BigDecimal totalTmbBSSIncomeGross;
     private BigDecimal totalTmbBSSIncomeNetBDM;
     private BigDecimal totalTmbBSSIncomeNetUW;
 
-    private List<BankStmtSummaryView> otherBankStmtSumList;
+    private List<BankStmtView> otherBankStmtSumList;
     private BigDecimal totalOtherBSSIncomeGross;
     private BigDecimal totalOtherBSSIncomeNetBDM;
     private BigDecimal totalOtherBSSIncomeNetUW;
@@ -64,7 +62,7 @@ public class BankStatementSummary {
     private BigDecimal grandTotalTCRAmount;
     private BigDecimal grandTotalTCRPercent;
 
-    private List<BankStmtSummaryView> srcOfCollateralProofList;
+    private List<BankStmtView> srcOfCollateralProofList;
     private BigDecimal grandTotalAverageAmount;
 
     public BankStatementSummary(){
@@ -136,19 +134,19 @@ public class BankStatementSummary {
         this.expectedSubmissionDate = expectedSubmissionDate;
     }
 
-    public List<BankStmtSummaryView> getTmbBankStmtSumList() {
+    public List<BankStmtView> getTmbBankStmtSumList() {
         return tmbBankStmtSumList;
     }
 
-    public void setTmbBankStmtSumList(List<BankStmtSummaryView> tmbBankStmtSumList) {
+    public void setTmbBankStmtSumList(List<BankStmtView> tmbBankStmtSumList) {
         this.tmbBankStmtSumList = tmbBankStmtSumList;
     }
 
-    public List<BankStmtSummaryView> getOtherBankStmtSumList() {
+    public List<BankStmtView> getOtherBankStmtSumList() {
         return otherBankStmtSumList;
     }
 
-    public void setOtherBankStmtSumList(List<BankStmtSummaryView> otherBankStmtSumList) {
+    public void setOtherBankStmtSumList(List<BankStmtView> otherBankStmtSumList) {
         this.otherBankStmtSumList = otherBankStmtSumList;
     }
 
@@ -248,11 +246,11 @@ public class BankStatementSummary {
         this.grandTotalTCRPercent = grandTotalTCRPercent;
     }
 
-    public List<BankStmtSummaryView> getSrcOfCollateralProofList() {
+    public List<BankStmtView> getSrcOfCollateralProofList() {
         return srcOfCollateralProofList;
     }
 
-    public void setSrcOfCollateralProofList(List<BankStmtSummaryView> srcOfCollateralProofList) {
+    public void setSrcOfCollateralProofList(List<BankStmtView> srcOfCollateralProofList) {
         this.srcOfCollateralProofList = srcOfCollateralProofList;
     }
 
