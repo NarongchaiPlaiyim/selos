@@ -9,7 +9,9 @@
         <div id="header_button_bar">
             <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
             <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
-            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()"/>
+            <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()" update=":assignCheckerDlgForm">
+                <p:resetInput target=":assignCheckerDlgForm" />
+            </p:commandButton>
             <p:commandButton id="btnMandateDoc" value="Check Mandate Doc" styleClass="blueButton" rendered="#{baseController.manageButton.checkMandateDocButton}" disabled="true" />
             <p:commandButton id="btnCheckPreScreen" value="Check Prescreen" styleClass="blueButton" rendered="#{baseController.manageButton.checkBRMSButton}" action="#{prescreenMaker.onCheckPreScreen}" disabled="true" />
             <p:commandButton id="btnRequestAppraisal" value="Request Appraisal" styleClass="blueButton" rendered="#{baseController.manageButton.requestAppraisalButton}" disabled="true" />
@@ -124,30 +126,6 @@
         </div>
     </div>
     <div class="clear"></div>
-    <p:dialog id="assignDialog" header="Check NCB - Assign to" widgetVar="assignDlg" modal="true">
-        <table class="content_form">
-            <tr>
-                <td class="title right" width="90">Assign to :</td>
-                <td>
-                    <select class="large">
-                        <option>- Please Select -</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="title top right">Remark :</td>
-                <td>
-                    <textarea cols="18" rows="4" style="resize:none;"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <p:commandButton value="Submit" styleClass="small"/>
-                    <p:commandButton value="Cancel" styleClass="small"/>
-                </td>
-            </tr>
-        </table>
-    </p:dialog>
     <script type="text/javascript" language="javascript">
         function collapseDetail(){
             var currentState = $("#header_collapse").attr("class");

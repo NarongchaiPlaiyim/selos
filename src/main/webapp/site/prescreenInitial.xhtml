@@ -199,7 +199,7 @@
                                     </p:dataTable>
                                 </td>
                             </tr>
-                            <tr>
+                            <!--<tr>
                                 <td class="title top">Guarantor :</td>
                                 <td>
                                     <p:dataTable id="resultTableGuarantor" var="guarantorItem" value="#{prescreenMaker.guarantorInfoViewList}"
@@ -304,7 +304,7 @@
                                         </p:column>
                                     </p:dataTable>
                                 </td>
-                            </tr>
+                            </tr>-->
                             <!--<tr>
                                 <td class="title top">Borrower :</td>
                                 <td>
@@ -471,7 +471,7 @@
 </p:panel>
  -->
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" style="width:180px!important;"
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
         <p:commandButton value="OK"
                          process="@this"

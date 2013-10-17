@@ -13,7 +13,8 @@
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
                              required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}"
-                             size="1" style="width: 200px;" disabled="#{not prescreenMaker.enableDocumentType}">
+                             size="1" style="width: 200px;"
+                             disabled="#{not prescreenMaker.enableDocumentType}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                 <f:selectItems value="#{prescreenMaker.documentTypeList}"
                                var="docTypeItem"
@@ -32,15 +33,14 @@
                               required="#{not empty param[searchButton.clientId]}">
                 <f:selectItem itemLabel="Personal ID" itemValue="1"/>
                 <f:selectItem itemLabel="TMB Customer ID" itemValue="2"/>
-                <p:ajax event="change" process="@form" immediate="true"/>
-                <p:ajax event="change"
+                <p:ajax event="change" process="@form"
                         listener="#{prescreenMaker.onDisableDocType}"
                         update=":customerDlgForm:dlgSelBrDocType" />
             </p:selectOneRadio>
         </td>
         <td>
             <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
-                         required="#{not empty param[searchButton.clientId]}" onkeypress="return numberOnly(event);" />
+                         required="#{not empty param[searchButton.clientId]}" onkeydown="return numberOnly(event);" />
         </td>
         <td>
             <h:outputText value="#{param[searchButton]}"/>
@@ -84,7 +84,7 @@
         <td colspan="3">
             <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
                          required="#{not empty param[saveCustomerButton.clientId]}"
-                         onkeypress="return numberOnly(event);" maxlength="13"
+                         onkeydown="return numberOnly(event);" maxlength="13"
                          readonly="#{not prescreenMaker.enableCitizenId}"/>
         </td>
     </tr>
@@ -92,13 +92,13 @@
         <td class="title">TMB Customer ID :</td>
         <td>
             <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large"
-                         onkeypress="return numberOnly(event);" maxlength="15"
+                         onkeydown="return numberOnly(event);" maxlength="15"
                          readonly="#{not prescreenMaker.enableTMBCustomerId}"/>
         </td>
         <td class="title right">Service Segment :</td>
         <td>
             <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"
-                         onkeypress="return numberOnly(event)" maxlength="15"
+                         onkeydown="return numberOnly(event)" maxlength="15"
                          readonly="#{not prescreenMaker.enableCustomerForm}"/>
         </td>
     </tr>
@@ -144,10 +144,12 @@
         </td>
         <td class="title right">Percent Share :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="10" styleClass="small" readonly="#{not prescreenMaker.enableCustomerForm}">
+            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="5" styleClass="small"
+                         onkeydown="return numberOnly(event);"
+                         readonly="#{not prescreenMaker.enableCustomerForm}">
                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                 <f:validateDoubleRange maximum="100"/>
-                <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
             </p:inputText>
         </td>
     </tr>
@@ -198,6 +200,7 @@
         <td class="title">Nationality :</td>
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrNationality" value="#{prescreenMaker.borrowerInfo.nationality.id}"
+                             filter="true" filterMatchMode="startsWith"
                              size="1" style="width: 200px;"
                              disabled="#{not prescreenMaker.enableCustomerForm}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -209,17 +212,21 @@
         </td>
     </tr>
     <tr>
-        <td class="title top">Mailing Address :</td>
+        <td class="title top" style="padding-top: 8px;">Mailing Address :</td>
         <td colspan="3" class="top">
             <table class="table_noborder">
                 <tr>
                     <td class="title left">Addr. No.</td>
                     <td class="left">
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"
+                                     onkeydown="return numberOnly(event);"
+                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
                     </td>
                     <td class="title right">Moo.</td>
                     <td class="left">
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                        <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
+                                     onkeydown="return numberOnly(event);"
+                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
                     </td>
                     <td class="title right">Building</td>
                     <td class="left">
@@ -238,7 +245,9 @@
     <tr>
         <td class="title">Postal Code :</td>
         <td colspan="3">
-            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small"
+                         onkeydown="return numberOnly(event);"
+                         readonly="#{not prescreenMaker.enableCustomerForm}"/>
         </td>
     </tr>
     <tr>
@@ -246,9 +255,9 @@
         <td colspan="3">
             <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" styleClass="small right"
                          maxlength="10" readonly="#{not prescreenMaker.enableCustomerForm}"
-                         onkeypress="return numberOnly(event)" onfocus="removeComma(this)">
+                         onkeydown="return numberOnly(event)" onfocus="removeComma(this)">
                 <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
-                <p:ajax event="change" update="customerDlgForm" process="@form"/>
+                <p:ajax event="blur" update="customerDlgForm" process="@form"/>
             </p:inputText>
             <p:spacer width="5"/>Baht/Year
         </td>
@@ -297,7 +306,7 @@
             <td class="title">Citizen ID :</td>
             <td colspan="3">
                 <p:inputText value="#{prescreenMaker.spouseInfo.citizenId}" styleClass="large"
-                             onkeypress="return numberOnly(event);" maxlength="13"
+                             onkeydown="return numberOnly(event);" maxlength="13"
                              required="#{not empty param[saveCustomerButton.clientId]}"/>
             </td>
         </tr>
@@ -305,12 +314,12 @@
             <td class="title">TMB Customer ID :</td>
             <td>
                 <p:inputText value="#{prescreenMaker.spouseInfo.tmbCustomerId}" styleClass="large"
-                             onkeypress="return numberOnly(event);" maxlength="15"/>
+                             onkeydown="return numberOnly(event);" maxlength="15"/>
             </td>
             <td class="title">Service Segment :</td>
             <td>
                 <p:inputText value="#{prescreenMaker.spouseInfo.serviceSegment}" styleClass="large"
-                             onkeypress="return numberOnly(event);" maxlength="15"/>
+                             onkeydown="return numberOnly(event);" maxlength="15"/>
             </td>
         </tr>
         <tr>
@@ -349,10 +358,11 @@
             </td>
             <td class="title">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}" maxlength="10" styleClass="small">
+                <p:inputText value="#{prescreenMaker.spouseInfo.percentShare}" maxlength="5" styleClass="small"
+                             onkeydown="return numberOnly(event);">
                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                     <f:validateDoubleRange maximum="100"/>
-                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                    <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
                 </p:inputText>
             </td>
         </tr>
@@ -411,17 +421,19 @@
             </td>
         </tr>
         <tr>
-            <td class="title top">Mailing Address :</td>
+            <td class="title top" style="padding-top: 8px;">Mailing Address :</td>
             <td colspan="3" class="top">
                 <table class="table_noborder">
                     <tr>
                         <td class="title left">Addr. No.</td>
                         <td class="left">
-                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.addressNo}" styleClass="smallest"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.addressNo}" styleClass="smallest"
+                                         onkeydown="return numberOnly(event);"/>
                         </td>
                         <td class="title right">Moo.</td>
                         <td class="left">
-                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.moo}" styleClass="smallest"/>
+                            <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.moo}" styleClass="smallest"
+                                         onkeydown="return numberOnly(event);"/>
                         </td>
                         <td class="title right">Building</td>
                         <td class="left">
@@ -440,15 +452,18 @@
         <tr>
             <td class="title">Postal Code :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.postalCode}" styleClass="small"/>
+                <p:inputText value="#{prescreenMaker.spouseInfo.currentAddress.postalCode}" styleClass="small"
+                             onkeydown="return numberOnly(event);"/>
             </td>
         </tr>
         <tr>
             <td class="title">Approx. Income :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" maxlength="7">
+                <p:inputText value="#{prescreenMaker.spouseInfo.approxIncome}" styleClass="small right"
+                             maxlength="10"
+                             onkeydown="return numberOnly(event)" onfocus="removeComma(this)">
                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
-                    <p:ajax event="change" update="customerDlgForm" process="@form"/>
+                    <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
                 </p:inputText>
                 <p:spacer width="5"/>Baht/Year
             </td>
@@ -463,7 +478,7 @@
             <td colspan="3">
                 <p:inputText value="#{prescreenMaker.borrowerInfo.citizenId}" styleClass="large"
                              required="#{not empty param[saveCustomerButton.clientId]}"
-                             onkeypress="return numberOnly(event);" maxlength="13"
+                             onkeydown="return numberOnly(event);" maxlength="13"
                              readonly="#{not prescreenMaker.enableCitizenId}"/>
             </td>
         </tr>
@@ -471,13 +486,14 @@
             <td class="title">TMB Customer ID :</td>
             <td>
                 <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large"
-                             onkeypress="return numberOnly(event);" maxlength="15"
+                             onkeydown="return numberOnly(event);" maxlength="15"
                              readonly="#{not prescreenMaker.enableTMBCustomerId}"/>
             </td>
             <td class="title right">Service Segment :</td>
             <td>
                 <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large"
-                             onkeypress="return numberOnly(event);"
+                             maxlength="15"
+                             onkeydown="return numberOnly(event);"
                              readonly="#{not prescreenMaker.enableCustomerForm}"/>
             </td>
         </tr>
@@ -520,10 +536,12 @@
             </td>
             <td class="title right">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="10" styleClass="small" readonly="#{not prescreenMaker.enableCustomerForm}">
+                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="5" styleClass="small"
+                             onkeydown="return numberOnly(event);"
+                             readonly="#{not prescreenMaker.enableCustomerForm}">
                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                     <f:validateDoubleRange maximum="100"/>
-                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                    <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
                 </p:inputText>
             </td>
         </tr>
@@ -583,17 +601,21 @@
             </td>
         </tr>
         <tr>
-            <td class="title top">Mailing Address :</td>
+            <td class="title top" style="padding-top: 8px;">Mailing Address :</td>
             <td colspan="3" class="top">
                 <table class="table_noborder">
                     <tr>
                         <td class="title left">Addr. No.</td>
                         <td class="left">
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.addressNo}" styleClass="smallest"
+                                         onkeydown="return numberOnly(event);"
+                                         readonly="#{not prescreenMaker.enableCustomerForm}"/>
                         </td>
                         <td class="title right">Moo.</td>
                         <td class="left">
-                            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                            <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.moo}" styleClass="smallest"
+                                         onkeydown="return numberOnly(event);"
+                                         readonly="#{not prescreenMaker.enableCustomerForm}"/>
                         </td>
                         <td class="title right">Building</td>
                         <td class="left">
@@ -612,15 +634,19 @@
         <tr>
             <td class="title">Postal Code :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small" readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                <p:inputText value="#{prescreenMaker.borrowerInfo.currentAddress.postalCode}" styleClass="small"
+                             onkeydown="return numberOnly(event);"
+                             readonly="#{not prescreenMaker.enableCustomerForm}"/>
             </td>
         </tr>
         <tr>
             <td class="title">Approx. Income :</td>
             <td colspan="3">
-                <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" maxlength="10" styleClass="small" readonly="#{not prescreenMaker.enableCustomerForm}">
+                <p:inputText value="#{prescreenMaker.borrowerInfo.approxIncome}" maxlength="10" styleClass="small"
+                             onkeydown="return numberOnly(event);" onfocus="removeComma(this)"
+                             readonly="#{not prescreenMaker.enableCustomerForm}">
                     <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" maxIntegerDigits="10"/>
-                    <p:ajax event="change" update=":customerDlgForm" process="@form"/>
+                    <p:ajax event="blur" update=":customerDlgForm" process="@form"/>
                 </p:inputText>
                 <p:spacer width="5"/>Baht/Year
             </td>
@@ -629,7 +655,7 @@
 </p:panel>
 </div>
 
-<p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">
+<p:panel id="pnlButton" rendered="#{prescreenMaker.borrowerInfo.customerEntity.id != 0 and prescreenMaker.enableCustomerForm}" styleClass="center" style="margin-top: 20px; padding-bottom: 10px; border: 0;">
 
     <p:commandButton
             id="addCustomer"

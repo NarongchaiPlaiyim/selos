@@ -89,8 +89,6 @@
             <p:commandButton value="OK"
                              process="@this"
                              update=":frmMain"
-                             actionListener="#{prescreenChecker.onCompleteCheckNCB}"
-                             rendered="#{prescreenChecker.messageErr == true}"
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>

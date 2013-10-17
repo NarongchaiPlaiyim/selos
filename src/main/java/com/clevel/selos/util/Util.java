@@ -92,6 +92,13 @@ public class Util {
         return str != null && str.matches("[tT]rue|[yY]es|1");
     }
 
+    public static boolean isTrue(int value){
+        if(value == 1){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static boolean isNull(String string){
         if(string == null || "null".equals(string.toLowerCase().trim())){
