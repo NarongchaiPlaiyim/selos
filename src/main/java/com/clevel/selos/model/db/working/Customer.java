@@ -44,10 +44,10 @@ public class Customer implements Serializable {
     private int collateralOwner;
 
     @Column(name="percent_share")
-    private BigDecimal percent_share;
+    private BigDecimal percentShare;
 
     @Column(name="approx_income")
-    private BigDecimal approx_income;
+    private BigDecimal approxIncome;
 
     @Column(name="id_number")
     private String idNumber;
@@ -157,20 +157,20 @@ public class Customer implements Serializable {
         this.serviceSegment = serviceSegment;
     }
 
-    public BigDecimal getPercent_share() {
-        return percent_share;
+    public BigDecimal getPercentShare() {
+        return percentShare;
     }
 
-    public void setPercent_share(BigDecimal percent_share) {
-        this.percent_share = percent_share;
+    public void setPercentShare(BigDecimal percent_share) {
+        this.percentShare = percent_share;
     }
 
-    public BigDecimal getApprox_income() {
-        return approx_income;
+    public BigDecimal getApproxIncome() {
+        return approxIncome;
     }
 
-    public void setApprox_income(BigDecimal approx_income) {
-        this.approx_income = approx_income;
+    public void setApproxIncome(BigDecimal approx_income) {
+        this.approxIncome = approx_income;
     }
 
     public String getIdNumber() {
@@ -264,15 +264,9 @@ public class Customer implements Serializable {
     public Juristic getJuristic() {
         return juristic;
     }
-    public NCB getNcb() {
-        return ncb;
-    }
 
     public void setJuristic(Juristic juristic) {
         this.juristic = juristic;
-    }
-    public void setNcb(NCB ncb) {
-        this.ncb = ncb;
     }
 
     public List<Address> getAddressesList() {
@@ -318,8 +312,8 @@ public class Customer implements Serializable {
                 .append("documentAuthorizeBy", documentAuthorizeBy)
                 .append("serviceSegment", serviceSegment)
                 .append("collateralOwner", collateralOwner)
-                .append("percent_share", percent_share)
-                .append("approx_income", approx_income)
+                .append("percent_share", percentShare)
+                .append("approx_income", approxIncome)
                 .append("idNumber", idNumber)
                 .append("expireDate", expireDate)
                 .append("title", title)
