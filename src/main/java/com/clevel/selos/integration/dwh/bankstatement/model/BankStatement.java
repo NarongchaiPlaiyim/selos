@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class BankStatement implements Serializable {
     private String accountStatus;
-    Date accountOpenDate;
+    private Date accountOpenDate;
     private String branchCode;
     private String accountType;
     private String accountNumber;
