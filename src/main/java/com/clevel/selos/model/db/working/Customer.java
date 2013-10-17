@@ -95,6 +95,10 @@ public class Customer implements Serializable {
     @JoinColumn(name="relation_id")
     private Relation relation;
 
+    @OneToOne
+    @JoinColumn(name="reference_id")
+    private Reference reference;
+
     @OneToOne(mappedBy="customer")
     private NCB ncb;
 
@@ -159,6 +163,14 @@ public class Customer implements Serializable {
 
     public void setServiceSegment(String serviceSegment) {
         this.serviceSegment = serviceSegment;
+    }
+
+    public int getCollateralOwner() {
+        return collateralOwner;
+    }
+
+    public void setCollateralOwner(int collateralOwner) {
+        this.collateralOwner = collateralOwner;
     }
 
     public BigDecimal getPercent_share() {
@@ -249,14 +261,6 @@ public class Customer implements Serializable {
         this.ncbFlag = ncbFlag;
     }
 
-    public BusinessType getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(BusinessType businessType) {
-        this.businessType = businessType;
-    }
-
     public Individual getIndividual() {
         return individual;
     }
@@ -281,6 +285,14 @@ public class Customer implements Serializable {
         this.addressesList = addressesList;
     }
 
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
+    }
+
     public Relation getRelation() {
         return relation;
     }
@@ -289,12 +301,12 @@ public class Customer implements Serializable {
         this.relation = relation;
     }
 
-    public int getCollateralOwner() {
-        return collateralOwner;
+    public Reference getReference() {
+        return reference;
     }
 
-    public void setCollateralOwner(int collateralOwner) {
-        this.collateralOwner = collateralOwner;
+    public void setReference(Reference reference) {
+        this.reference = reference;
     }
 
     public NCB getNcb() {
@@ -315,33 +327,34 @@ public class Customer implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("workCase", workCase).
-                append("workCasePrescreen", workCasePrescreen).
-                append("customerEntity", customerEntity).
-                append("documentType", documentType).
-                append("documentAuthorizeBy", documentAuthorizeBy).
-                append("serviceSegment", serviceSegment).
-                append("collateralOwner", collateralOwner).
-                append("percent_share", percent_share).
-                append("approx_income", approx_income).
-                append("idNumber", idNumber).
-                append("expireDate", expireDate).
-                append("title", title).
-                append("nameEn", nameEn).
-                append("nameTh", nameTh).
-                append("lastNameTh", lastNameTh).
-                append("lastNameEn", lastNameEn).
-                append("age", age).
-                append("ncbFlag", ncbFlag).
-                append("individual", individual).
-                append("juristic", juristic).
-                append("addressesList", addressesList).
-                append("businessType", businessType).
-                append("relation", relation).
-                append("ncb", ncb).
-                append("csi", csi).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("workCase", workCase)
+                .append("workCasePrescreen", workCasePrescreen)
+                .append("customerEntity", customerEntity)
+                .append("documentType", documentType)
+                .append("documentAuthorizeBy", documentAuthorizeBy)
+                .append("serviceSegment", serviceSegment)
+                .append("collateralOwner", collateralOwner)
+                .append("percent_share", percent_share)
+                .append("approx_income", approx_income)
+                .append("idNumber", idNumber)
+                .append("expireDate", expireDate)
+                .append("title", title)
+                .append("nameEn", nameEn)
+                .append("nameTh", nameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("lastNameEn", lastNameEn)
+                .append("age", age)
+                .append("ncbFlag", ncbFlag)
+                .append("individual", individual)
+                .append("juristic", juristic)
+                .append("addressesList", addressesList)
+                .append("businessType", businessType)
+                .append("relation", relation)
+                .append("reference", reference)
+                .append("ncb", ncb)
+                .append("csi", csi)
+                .toString();
     }
 }
