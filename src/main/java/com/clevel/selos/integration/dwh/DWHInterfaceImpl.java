@@ -2,14 +2,13 @@ package com.clevel.selos.integration.dwh;
 
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.DWHInterface;
-import com.clevel.selos.integration.dwh.model.Obligation;
-import com.clevel.selos.util.Util;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.ObligationService;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
     Logger log;
 
     @Inject
-    DWHService dwhService;
+    ObligationService obligationService;
 
     @Inject
     public DWHInterfaceImpl() {
@@ -29,12 +28,12 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
 
 
     @Override
-    public List<Obligation> getObligation(String userId, List<String> tmbCusIdList) {
-        log.debug("getObligation (userId : {}, tmbCusIdList : {})",userId,tmbCusIdList);
+    public List<Obligation> getObligationData(String userId, List<String> tmbCusIdList) {
+        log.debug("getObligationData (userId : {}, tmbCusIdList : {})",userId,tmbCusIdList);
         List<Obligation> obligationList = Collections.EMPTY_LIST;
         if(tmbCusIdList!=null && tmbCusIdList.size()>0){
-            obligationList = dwhService.getObligationByTmbCusId(tmbCusIdList);
-            log.debug("getObligation result (obligationList size : {})",obligationList.size());
+            obligationList = obligationService.getObligationByTmbCusId(tmbCusIdList);
+            log.debug("getObligationData result (obligationList size : {})",obligationList.size());
         }
         return obligationList;
     }

@@ -169,6 +169,11 @@ public class CustomerTransform extends Transform {
 
         }
 
+        customerInfoView.setCsi(customer.getCsi());
+        if(customerInfoView.getCsi() == null){
+            customerInfoView.setCsi(new WarningCode());
+        }
+
         return customerInfoView;
     }
 
@@ -430,6 +435,11 @@ public class CustomerTransform extends Transform {
             juristic.setTotalShare(customerInfoView.getTotalShare());
 
             customer.setJuristic(juristic);
+        }
+
+        customer.setCsi(customerInfoView.getCsi());
+        if(customer.getCsi().getId() == 0){
+            customer.setCsi(null);
         }
 
         return customer;

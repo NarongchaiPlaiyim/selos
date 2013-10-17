@@ -138,10 +138,12 @@ public class PrescreenChecker implements Serializable {
             if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
                 log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
                 customer.setValidId(1);
+                customer.setNcbReason("");
                 tmpValidate = true;
             }else{
                 log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
                 customer.setValidId(0);
+                customer.setNcbReason("");
                 tmpValidate = false;
             }
             if(count == 0){

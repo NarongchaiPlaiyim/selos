@@ -7,7 +7,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
@@ -18,19 +18,16 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.*;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -161,7 +158,7 @@ public class WelcomePage implements Serializable {
             List<String> customerList = new ArrayList<String>();
             customerList.add("1234");
             customerList.add("1235");
-            obligationList = dwh.getObligation("BDM001",customerList);
+            obligationList = dwh.getObligationData("BDM001", customerList);
             log.debug("obligation result : {}",obligationList);
         } catch (Exception e) {
             log.error("",e);
@@ -175,7 +172,7 @@ public class WelcomePage implements Serializable {
             List<String> citizenIdList = new ArrayList<String>();
             citizenIdList.add("11111");
             citizenIdList.add("22222");
-            appInProcessList = rlos.getAppInProcess("BDM001",citizenIdList);
+            appInProcessList = rlos.getAppInProcessData("BDM001", citizenIdList);
             log.debug("testRLOSAppIn result : {}",appInProcessList);
         } catch (Exception e) {
             log.error("",e);

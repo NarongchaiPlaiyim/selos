@@ -54,6 +54,7 @@ public class BaseController implements Serializable {
         if(stepId == 1001){
             manageButton.setAssignToCheckerButton(true);
             manageButton.setCancelCAButton(true);
+            manageButton.setCheckMandateDocButton(true);
         }
 
         if(stepId == 1002){
