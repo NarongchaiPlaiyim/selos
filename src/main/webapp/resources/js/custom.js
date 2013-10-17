@@ -119,3 +119,7 @@ function handletcgInfoRequest(xhr, status, args) {
         tcgDlg.hide();
     }
 }
+
+function testHandle(){
+    return true;
+}
