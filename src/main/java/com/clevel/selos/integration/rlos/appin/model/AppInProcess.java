@@ -16,6 +16,7 @@ public class AppInProcess implements Serializable {
     private String finalTenors;
     private String finalLimit;
     private String finalInstallment;
+    private String status;
     private List<CustomerDetail> customerDetailList;
 
     public String getAppNumber() {
@@ -90,6 +91,14 @@ public class AppInProcess implements Serializable {
         this.finalInstallment = finalInstallment;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public List<CustomerDetail> getCustomerDetailList() {
         return customerDetailList;
     }
@@ -110,6 +119,7 @@ public class AppInProcess implements Serializable {
                 .append("finalTenors", finalTenors)
                 .append("finalLimit", finalLimit)
                 .append("finalInstallment", finalInstallment)
+                .append("status", status)
                 .append("customerDetailList", customerDetailList)
                 .toString();
     }

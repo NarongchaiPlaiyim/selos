@@ -85,6 +85,7 @@
                     <p:commandButton
                             id="save"
                             value="#{msg.get('app.saveButton')}"
+                            binding="#{addRowData}"
                             styleClass="small"
                             actionListener="#{tcgInfo.onSaveCollateralDetail}"
                             process=":tcgDlgForm"

@@ -405,7 +405,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         exportModel.setOfficeCode("XXX");
 
         exportModel.setRequestNo(memberRef);
-        exportModel.setStaffId(userId);
+        exportModel.setStaffId(userId.substring(0,5));
 
         exportModel.setInquiryType("01");
         exportModel.setCustomerType("02");

@@ -36,6 +36,9 @@ public class AppInProcess2 implements Serializable {
     @Column(name="final_installment", length=9)
     private String finalInstallment;
 
+    @Column(name="status")
+    private String status;
+
     @OneToMany(fetch=FetchType.LAZY, mappedBy="appInProcess2")
     private List<CustomerDetail2> customerDetail1s;
 
@@ -112,6 +115,14 @@ public class AppInProcess2 implements Serializable {
 
     public void setFinalInstallment(String finalInstallment) {
         this.finalInstallment = finalInstallment;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<CustomerDetail2> getCustomerDetail1s() {

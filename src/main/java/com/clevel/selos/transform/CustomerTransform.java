@@ -27,6 +27,8 @@ public class CustomerTransform extends Transform {
     @Inject
     RelationDAO relationDAO;
     @Inject
+    ReferenceDAO referenceDAO;
+    @Inject
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     EducationDAO educationDAO;
@@ -219,6 +221,14 @@ public class CustomerTransform extends Transform {
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
             customer.setRelation(relationDAO.findById(customerInfoView.getRelation().getId()));
+        } else {
+            customer.setRelation(null);
+        }
+
+        if(customerInfoView.getReference() != null && customerInfoView.getReference().getId() != 0){
+            customer.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
+        } else {
+            customer.setReference(null);
         }
 
         log.info("transformToModel : customer before adding address : {}", customer);
