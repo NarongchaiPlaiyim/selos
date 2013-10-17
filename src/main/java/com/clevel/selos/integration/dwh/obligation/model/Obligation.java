@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.dwh.model;
+package com.clevel.selos.integration.dwh.obligation.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

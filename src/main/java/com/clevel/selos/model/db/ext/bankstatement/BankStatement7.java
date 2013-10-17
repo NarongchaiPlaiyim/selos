@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "ext_bankstatment9")
-public class BankStatment9 implements Serializable {
+@Table(name = "ext_dwh_bankstatement7")
+public class BankStatement7 implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_BANKSTATMENT9", sequenceName="SEQ_EXT_BANKSTATMENT9", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_BANKSTATMENT9")
+    @SequenceGenerator(name="SEQ_EXT_BANKSTATEMENT7", sequenceName="SEQ_EXT_BANKSTATEMENT7", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_BANKSTATEMENT7")
     private long id;
 
     @Column(name="account_status", length = 2)
@@ -98,7 +98,7 @@ public class BankStatment9 implements Serializable {
     public void setDebitTXNNumber(int debitTXNNumber) {
         this.debitTXNNumber = debitTXNNumber;
     }
-    public BankStatment9() {
+    public BankStatement7() {
     }
 
     public long getId() {

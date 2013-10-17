@@ -14,5 +14,5 @@ public interface RLOSInterface {
     enum DocumentType {CITIZEN_ID,PASSPORT,CORPORATE_ID}
 
     public CSIResult getCSIData(String userId, CSIInputData csiInputData); //todo: change return type to CSI View
-    public List<AppInProcess> getAppInProcess(String userId, List<String> citizenIdList);
+    public List<AppInProcess> getAppInProcessData(String userId, List<String> citizenIdList);
 }
