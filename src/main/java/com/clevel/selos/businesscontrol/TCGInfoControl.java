@@ -46,7 +46,6 @@ public class  TCGInfoControl extends BusinessControl {
     }
 
     public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
-        try{
             log.info("onSaveTCGToDB begin");
             log.info("workCaseId {} ",workCaseId);
             log.info("tcgView  {} ",tcgView.toString() );
@@ -57,16 +56,10 @@ public class  TCGInfoControl extends BusinessControl {
             log.info("persist tcg");
             List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
             tcgDetailDAO.persist(tcgDetailList);
-        }catch (Exception e){
-            log.error( "onSaveTCGToDB error ::: {}" , e.getMessage());
-        }finally{
-            log.info( "onSaveTCGToDB end" );
-        }
-
     }
 
     public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
-        try{
+
             log.info("onEditTCGToDB begin");
             log.info("workCaseId {} ",workCaseId);
             WorkCase workCase  = workCaseDAO.findById(workCaseId);
@@ -83,31 +76,22 @@ public class  TCGInfoControl extends BusinessControl {
             tcgDetailDAO.persist(tcgDetailList);
             log.info("persist tcgDetailList");
 
-        }catch (Exception e){
-            log.error( "onEditTCGToDB error ::: {}" , e.getMessage());
-        }finally{
-            log.info( "onEditTCGToDB end" );
-        }
-
     }
 
     public TCGView getTcgView(long workCaseId){
         log.info("getTcgView :: workCaseId  :: {}", workCaseId);
         TCGView tcgView = null;
-        try{
-            WorkCase workCase  = workCaseDAO.findById(workCaseId);
-            log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
-            if(workCase != null)
-            {
-               TCG tcg =  tcgDAO.findByWorkCase(workCase);
 
-               if(tcg != null){
-                   log.info("tcg :: {} ",tcg.getId());
-                   tcgView  = tcgTransform.transformTCGToTcgView(tcg);
-               }
-            }
-        }catch (Exception e){
-            log.error( "find workCase error ::: {}" , e.getMessage());
+        WorkCase workCase  = workCaseDAO.findById(workCaseId);
+        log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
+        if(workCase != null)
+        {
+           TCG tcg =  tcgDAO.findByWorkCase(workCase);
+
+           if(tcg != null){
+               log.info("tcg :: {} ",tcg.getId());
+               tcgView  = tcgTransform.transformTCGToTcgView(tcg);
+           }
         }
 
         return tcgView;
@@ -117,14 +101,10 @@ public class  TCGInfoControl extends BusinessControl {
         log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
         List<TCGDetailView> tcgDetailViewList = null;
 
-        try{
-            List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
+        List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
 
-            if(TCGDetailList.size() > 0){
-                tcgDetailViewList  = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
-            }
-        }catch (Exception e){
-            log.error( "find workCase error ::: {}" , e.getMessage());
+        if(TCGDetailList.size() > 0){
+            tcgDetailViewList  = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
         }
 
         return tcgDetailViewList;

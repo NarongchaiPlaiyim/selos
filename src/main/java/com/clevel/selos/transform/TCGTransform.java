@@ -4,13 +4,7 @@ import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGView;
 
-/**
- * Created with IntelliJ IDEA.
- * User: acer
- * Date: 1/10/2556
- * Time: 14:27 น.
- * To change this template use File | Settings | File Templates.
- */
+
 public class TCGTransform extends Transform {
 
     public TCG transformTCGViewToModel(TCGView tcgView ,WorkCase workCase) {
@@ -28,7 +22,7 @@ public class TCGTransform extends Transform {
         tcg.setModifyDate(tcgView.getModifyDate());
         tcg.setCollateralRuleResult(tcgView.getCollateralRuleResult());
         tcg.setExistingLoanRatioUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
-        tcg.setExistingLoanRatioNotUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
+        tcg.setExistingLoanRatioNotUnderSameCollateral(tcgView.getExistingLoanRatioNotUnderSameCollateral());
         tcg.setRequestLimitRequiredTCG(tcgView.getRequestLimitRequiredTCG());
         tcg.setRequestLimitNotRequiredTCG(tcgView.getRequestLimitNotRequiredTCG());
         tcg.setRequestTCGAmount(tcgView.getRequestTCGAmount());
@@ -54,7 +48,7 @@ public class TCGTransform extends Transform {
         tcgView.setModifyDate(tcg.getModifyDate());
         tcgView.setCollateralRuleResult(tcg.getCollateralRuleResult());
         tcgView.setExistingLoanRatioUnderSameCollateral(tcg.getExistingLoanRatioUnderSameCollateral());
-        tcgView.setExistingLoanRatioNotUnderSameCollateral(tcg.getExistingLoanRatioUnderSameCollateral());
+        tcgView.setExistingLoanRatioNotUnderSameCollateral(tcg.getExistingLoanRatioNotUnderSameCollateral());
         tcgView.setRequestLimitRequiredTCG(tcg.getRequestLimitRequiredTCG());
         tcgView.setRequestLimitNotRequiredTCG(tcg.getRequestLimitNotRequiredTCG());
         tcgView.setRequestTCGAmount(tcg.getRequestTCGAmount());
