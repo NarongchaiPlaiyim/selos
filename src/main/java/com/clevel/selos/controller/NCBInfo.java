@@ -76,10 +76,9 @@ public class NCBInfo implements Serializable {
     private NCBDetailView selectNcbRecordItem;
     private List<NCBDetailView> NCBDetailViewList;
     private NCBInfoView NCBInfoView;
-
-//    enum ModeForDB{ ADD_DB, EDIT_DB,CANCEL_DB }
-//    private ModeForDB  modeForDB;
-    private Long workCaseId;
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
     private Long customerId;
     private User user;
 
@@ -123,9 +122,9 @@ public class NCBInfo implements Serializable {
 
             if(NCBInfoView != null){
                 NCBDetailViewList = ncbInfoControl.getNcbDetailListView(NCBInfoView);
+                log.info("NCBDetailViewList  :::::::::::: {} ", NCBDetailViewList);
             }
         }
-        log.info("NCBDetailViewList  :::::::::::: {} ", NCBDetailViewList);
 
         if (NCBDetailView == null) {
             NCBDetailView = new NCBDetailView();
@@ -461,15 +460,39 @@ public class NCBInfo implements Serializable {
     public void onSaveNcb() {    // call transform  and then call businessControl
         log.info("onSaveNcb::::");
         log.info("NCBDetailViewList.size() ::: {} ",NCBDetailViewList.size());
+        try{
+            if(NCBDetailViewList.size() > 0){
+                if(NCBInfoView.getId() == 0){
+                    NCBInfoView.setCreateBy(user);
+                    NCBInfoView.setCreateDate(DateTime.now().toDate());
+                }
 
-        if(NCBDetailViewList.size() > 0){
-            log.info("String for money total :: {} ",NCBDetailViewList.get(3).getMoneyTotal());
-            if(NCBInfoView.getId() == 0){
-                NCBInfoView.setCreateBy(user);
-                NCBInfoView.setCreateDate(DateTime.now().toDate());
+                ncbInfoControl.onSaveNCBToDB(NCBInfoView, NCBDetailViewList);
+
+                messageHeader = "Save NCB Success.";
+                message = "Save NCB data success.";
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else{
+                messageHeader = "can not to save NCB .";
+                message = "please add NCB record information.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
-            log.info("onSaveNcb :: NCBInfoView :: {}",NCBInfoView.toString());
-           ncbInfoControl.onSaveNCBToDB(NCBInfoView, NCBDetailViewList);
+
+
+         } catch(Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Save NCB failed.";
+
+            if(ex.getCause() != null){
+                message = "Save NCB failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save NCB failed. Cause : " + ex.getMessage();
+            }
+
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         }
     }
 
@@ -669,5 +692,29 @@ public class NCBInfo implements Serializable {
 
     public void setGenColumnEdit(boolean genColumnEdit) {
         this.genColumnEdit = genColumnEdit;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isMessageErr() {
+        return messageErr;
+    }
+
+    public void setMessageErr(boolean messageErr) {
+        this.messageErr = messageErr;
     }
 }

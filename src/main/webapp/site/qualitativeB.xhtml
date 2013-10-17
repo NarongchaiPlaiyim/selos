@@ -34,9 +34,9 @@
                                                               value="MR.BDM Maker"/>,
         <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
 </div>
-<div id="content_form">
+<div id="content_form" style="padding-left:1%;width:97%">
 <!-- start content -->
-<table class="table_content">
+<table class="table_content" style="width:95%">
 
     <tr style="background-color: #3f3f3f">
         <td style="width: 400px;text-align: center" class="title" colspan="2">
@@ -55,7 +55,7 @@
         <td>
             <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}"/>
         </td>
-        <td >
+        <td>
             <h:outputText value="- มีความสามารถในการดำเนินธุรกิจจากรายได้ปกติของกิจการ"/>
         </td>
         <td colspan="2">
@@ -218,7 +218,7 @@
     <b>การพิจารณาลูกหนี้ตามเกณฑ์ ธปท. ข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่ง ตามเกณฑ์ดังต่อไปนี้ ให้จัดชั้นตามเกณฑ์ดังกล่าว แต่หากลูกหนี้อยู่ในเกณฑ์ของการจัดชั้นที่ต่างกัน ให้จัดชั้นที่ด้อยที่สุด) </b>
 </p>
 
-<table class="table_content">
+<table class="table_content" style="width:95%">
 
     <tr style="background-color: #3f3f3f">
         <td style="width: 330px;text-align: center" class="title" colspan="2">
@@ -338,7 +338,7 @@
 <p style="float:left; padding-bottom:5px;">
     <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้(หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้นตามหลักเกณฑ์ท้ายแนวทางฯนี้)</b>
 </p>
-<table class="table_content">
+<table class="table_content" style="width:95%">
 
     <tr style="background-color: #3f3f3f">
         <td style="width: 330px;text-align: center" class="title" colspan="2">
@@ -488,7 +488,7 @@
     <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้น)</b>
 </p>
 
-<table class="table_content">
+<table class="table_content" style="width:95%">
 
 <tr style="background-color: #3f3f3f">
     <td style="width: 330px;text-align: center" class="title" colspan="2">
@@ -635,7 +635,7 @@
 </tr>
 <tr>
     <td>
-       <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss19}"/>
+        <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss19}"/>
     </td>
     <td>
         <h:outputText
@@ -730,7 +730,7 @@
     <p><b>สรุปการจัดชั้นหนี้</b></p>
 </div>
 
-<table class="table_content">
+<table class="table_content" style="width:95%">
     <tr>
         <td style="width: 30%;text-align: left">
             <h:outputLabel value="สรุปการจัดชั้นหนี้ : "/>
@@ -739,7 +739,7 @@
         <td style="width: 70%;text-align: left">
             <table class="table_noborder">
                 <tr>
-                    <td  class="title" style="width: 25%;text-align: left">
+                    <td class="title" style="width: 25%;text-align: left">
                         <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
                     </td>
                     <td>
@@ -747,8 +747,8 @@
                                          value="#{qualitative.qualitativeView.qualityLevel.id}"
                                          styleClass="largest"
                                          size="1"
-                                         required="#{not empty param[addRowData.clientId]}">
-                            <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                                         required="true">
+                            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
                             <f:selectItems value="#{qualitative.qualityLevelList}"
                                            var="qualityItemsB"
                                            itemLabel="#{qualityItemsB.description}"
@@ -761,7 +761,8 @@
                         <h:outputLabel value="เหตุผล :"/>
                     </td>
                     <td>
-                        <h:inputTextarea cols="70" rows="3" name="remark" value="#{qualitative.qualitativeView.reason}"/>
+                        <h:inputTextarea cols="70" rows="3" name="remark"
+                                         value="#{qualitative.qualitativeView.reason}"/>
                     </td>
                 </tr>
             </table>
@@ -770,8 +771,8 @@
     <tr>
         <td class="title">
             <h:outputLabel value="วันที่ :"/>
-            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate" >
-                <f:convertDateTime  pattern="dd/MM/yyyy"/>
+            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+                <f:convertDateTime pattern="dd/MM/yyyy"/>
             </h:outputText>
         </td>
         <td class="title">
@@ -785,7 +786,7 @@
     <p><b>หลักเกณฑ์ในการจัดชั้นลูกหนี้</b></p>
 </div>
 
-<table class="table_content">
+<table class="table_content" style="width:95%">
     <tr>
         <td style="width: 50px;text-align: left">
             <h:outputLabel value="Pass : "/>
@@ -832,7 +833,7 @@
 
 </table>
 
-<h:form>
+<h:form id="form_button">
     <table class="table_noborder" style="width:100%">
         <tr>
             <td colspan="2" class="center">
@@ -840,7 +841,7 @@
                                  styleClass="medium"
                                  process=":frmMain"
                                  action="#{qualitative.onSaveQualitativeB()}"
-                                 update=":frmMain"/>
+                                 update=":msgBoxSystemMessagePanel"/>
                 <p:commandButton value="Cancel"
                                  id="btnCancel"
                                  styleClass="medium"
@@ -866,9 +867,21 @@
 </h:form>
 </p:panel>
 
-<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    Loading...
+
+<p:blockUI block="pnl_maincontainer" trigger=":frmMain:form_button:btnSave,:frmMain:form_button:btnCancel">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
+
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="#{qualitative.messageHeader}" message="#{qualitative.message}">
+        <p:commandButton value="OK"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
 
 </h:body>
 </f:view>
