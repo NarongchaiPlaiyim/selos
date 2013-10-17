@@ -84,6 +84,9 @@ public class Obligation1 implements Serializable {
     @Column(name="outstanding")
     private BigDecimal outstanding;
 
+    @Column(name="maturity_date")
+    private Date maturityDate;
+
     @Column(name="account_number", length =  10)
     private String accountNumber;
 
@@ -312,6 +315,14 @@ public class Obligation1 implements Serializable {
 
     public void setOutstanding(BigDecimal outstanding) {
         this.outstanding = outstanding;
+    }
+
+    public Date getMaturityDate() {
+        return maturityDate;
+    }
+
+    public void setMaturityDate(Date maturityDate) {
+        this.maturityDate = maturityDate;
     }
 
     public String getAccountNumber() {

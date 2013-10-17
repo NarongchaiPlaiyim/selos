@@ -33,6 +33,7 @@ public class Obligation implements Serializable {
     private BigDecimal tmbIntAccrued;
     private BigDecimal limit;
     private BigDecimal outstanding;
+    private Date maturityDate;
     private String accountNumber;
     private String accountSuffix;
     private String accountRef;
@@ -243,6 +244,14 @@ public class Obligation implements Serializable {
         this.outstanding = outstanding;
     }
 
+    public Date getMaturityDate() {
+        return maturityDate;
+    }
+
+    public void setMaturityDate(Date maturityDate) {
+        this.maturityDate = maturityDate;
+    }
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -343,6 +352,7 @@ public class Obligation implements Serializable {
                 .append("tmbIntAccrued", tmbIntAccrued)
                 .append("limit", limit)
                 .append("outstanding", outstanding)
+                .append("maturityDate", maturityDate)
                 .append("accountNumber", accountNumber)
                 .append("accountSuffix", accountSuffix)
                 .append("accountRef", accountRef)
