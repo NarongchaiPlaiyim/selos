@@ -1,15 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -19,6 +18,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "prescreenResult")
@@ -44,6 +45,8 @@ public class PrescreenResult implements Serializable {
     private long stepId;
     private String queueName;
     private User user;
+
+    private PrescreenResultView prescreenResultView;
 
     public PrescreenResult(){
 
@@ -94,15 +97,53 @@ public class PrescreenResult implements Serializable {
 
             modeForButton = ModeForButton.ADD;
         }
+
+        prescreenResultView = new PrescreenResultView();
+        prescreenResultView.setExistingCredit(getCreditFact(1));
     }
 
-    public void onRetrieveInterface(){
+    public void onRetrieveInterfaceInfo(){
 
+        prescreenResultView = new PrescreenResultView();
+        prescreenResultView.setExistingCredit(getCreditFact(4));
         //TODO get all data to Screen
-        onCreation();
+    }
+
+    private List<ExistingCreditDetailView> getCreditFact(int num){
+
+        List<ExistingCreditDetailView> existingCreditViewList = new ArrayList<ExistingCreditDetailView>();
+        for(int i = 0; i < num; i++){
+            ExistingCreditDetailView existingCreditView = new ExistingCreditDetailView();
+            existingCreditView.setAccountName("Test 0" + (i+1));
+            existingCreditView.setAccountNumber("123456789" + i);
+            existingCreditView.setAccountSuf("00"+(i+1));
+            existingCreditView.setAccountStatusID(1);
+            existingCreditView.setAccountStatus("Normal");
+            existingCreditView.setCreditType("Loan");
+            existingCreditView.setId(1);
+            existingCreditView.setInstallment(10000d + ((i+1)*5000));
+            existingCreditView.setIntFeePercent(1f);
+            existingCreditView.setLimit(10000000d + ((i+1)*5000000));
+            existingCreditView.setOutstanding(8000000d + ((i+1)*500000));
+            existingCreditView.setProductCode("EAC1");
+            existingCreditView.setProjectCode("1000" + i);
+            existingCreditView.setProductProgram("SME Smart Biz");
+            existingCreditView.setTenor(24 + ((i+1)*12));
+
+            existingCreditViewList.add(existingCreditView);
+        }
+        return existingCreditViewList;
     }
 
     public void onCloseSale(){
 
+    }
+
+    public PrescreenResultView getPrescreenResultView() {
+        return prescreenResultView;
+    }
+
+    public void setPrescreenResultView(PrescreenResultView prescreenResultView) {
+        this.prescreenResultView = prescreenResultView;
     }
 }
