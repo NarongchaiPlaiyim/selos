@@ -1,10 +1,10 @@
-package com.clevel.selos.integration.dwh;
+package com.clevel.selos.integration.dwh.obligation;
 
 import com.clevel.selos.dao.ext.dwh.Obligation1DAO;
 import com.clevel.selos.dao.ext.dwh.Obligation2DAO;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.model.db.ext.dwh.Obligation1;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
 import com.clevel.selos.model.db.system.SystemParameter;
@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DWHService implements Serializable {
+public class ObligationService implements Serializable {
     @Inject
     @DWH
     Logger log;
@@ -33,7 +33,7 @@ public class DWHService implements Serializable {
     Obligation2DAO obligation2DAO;
 
     @Inject
-    public DWHService() {
+    public ObligationService() {
 
     }
 
@@ -91,11 +91,10 @@ public class DWHService implements Serializable {
                 obligation.setClaimAmount(obligation1.getClaimAmount());
                 obligation.setComAmount(obligation1.getComAmount());
                 obligation.setTmbPaidExpenseAmount(obligation1.getTmbPaidExpenseAmount());
-                obligation.setIntUnEarned(obligation1.getIntUnEarned());
-                obligation.setIntAccrued(obligation1.getIntAccrued());
-                obligation.setTmbBotCommitment(obligation1.getTmbBotCommitment());
-                obligation.setCurrBookBal(obligation1.getCurrBookBal());
-                obligation.setTenors(obligation1.getTenors());
+                obligation.setTmbIntUnEarned(obligation1.getIntUnEarned());
+                obligation.setTmbIntAccrued(obligation1.getIntAccrued());
+                obligation.setLimit(obligation1.getLimit());
+                obligation.setOutstanding(obligation1.getOutstanding());
                 obligation.setAccountNumber(obligation1.getAccountNumber());
                 obligation.setAccountSuffix(obligation1.getAccountSuffix());
                 obligation.setAccountRef(obligation1.getAccountRef());
@@ -131,11 +130,10 @@ public class DWHService implements Serializable {
                 obligation.setClaimAmount(obligation2.getClaimAmount());
                 obligation.setComAmount(obligation2.getComAmount());
                 obligation.setTmbPaidExpenseAmount(obligation2.getTmbPaidExpenseAmount());
-                obligation.setIntUnEarned(obligation2.getIntUnEarned());
-                obligation.setIntAccrued(obligation2.getIntAccrued());
-                obligation.setTmbBotCommitment(obligation2.getTmbBotCommitment());
-                obligation.setCurrBookBal(obligation2.getCurrBookBal());
-                obligation.setTenors(obligation2.getTenors());
+                obligation.setTmbIntUnEarned(obligation2.getIntUnEarned());
+                obligation.setTmbIntAccrued(obligation2.getIntAccrued());
+                obligation.setLimit(obligation2.getLimit());
+                obligation.setOutstanding(obligation2.getOutstanding());
                 obligation.setAccountNumber(obligation2.getAccountNumber());
                 obligation.setAccountSuffix(obligation2.getAccountSuffix());
                 obligation.setAccountRef(obligation2.getAccountRef());

@@ -1,4 +1,4 @@
-package com.clevel.selos.integration.dwh.model;
+package com.clevel.selos.integration.dwh.obligation.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -29,11 +29,10 @@ public class Obligation implements Serializable {
     private BigDecimal claimAmount;
     private BigDecimal comAmount;
     private BigDecimal tmbPaidExpenseAmount;
-    private BigDecimal intUnEarned;
-    private BigDecimal intAccrued;
-    private BigDecimal tmbBotCommitment;
-    private BigDecimal currBookBal;
-    private BigDecimal tenors;
+    private BigDecimal tmbIntUnEarned;
+    private BigDecimal tmbIntAccrued;
+    private BigDecimal limit;
+    private BigDecimal outstanding;
     private String accountNumber;
     private String accountSuffix;
     private String accountRef;
@@ -212,44 +211,36 @@ public class Obligation implements Serializable {
         this.tmbPaidExpenseAmount = tmbPaidExpenseAmount;
     }
 
-    public BigDecimal getIntUnEarned() {
-        return intUnEarned;
+    public BigDecimal getTmbIntUnEarned() {
+        return tmbIntUnEarned;
     }
 
-    public void setIntUnEarned(BigDecimal intUnEarned) {
-        this.intUnEarned = intUnEarned;
+    public void setTmbIntUnEarned(BigDecimal tmbIntUnEarned) {
+        this.tmbIntUnEarned = tmbIntUnEarned;
     }
 
-    public BigDecimal getIntAccrued() {
-        return intAccrued;
+    public BigDecimal getTmbIntAccrued() {
+        return tmbIntAccrued;
     }
 
-    public void setIntAccrued(BigDecimal intAccrued) {
-        this.intAccrued = intAccrued;
+    public void setTmbIntAccrued(BigDecimal tmbIntAccrued) {
+        this.tmbIntAccrued = tmbIntAccrued;
     }
 
-    public BigDecimal getTmbBotCommitment() {
-        return tmbBotCommitment;
+    public BigDecimal getLimit() {
+        return limit;
     }
 
-    public void setTmbBotCommitment(BigDecimal tmbBotCommitment) {
-        this.tmbBotCommitment = tmbBotCommitment;
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
-    public BigDecimal getCurrBookBal() {
-        return currBookBal;
+    public BigDecimal getOutstanding() {
+        return outstanding;
     }
 
-    public void setCurrBookBal(BigDecimal currBookBal) {
-        this.currBookBal = currBookBal;
-    }
-
-    public BigDecimal getTenors() {
-        return tenors;
-    }
-
-    public void setTenors(BigDecimal tenors) {
-        this.tenors = tenors;
+    public void setOutstanding(BigDecimal outstanding) {
+        this.outstanding = outstanding;
     }
 
     public String getAccountNumber() {
@@ -348,11 +339,10 @@ public class Obligation implements Serializable {
                 .append("claimAmount", claimAmount)
                 .append("comAmount", comAmount)
                 .append("tmbPaidExpenseAmount", tmbPaidExpenseAmount)
-                .append("intUnEarned", intUnEarned)
-                .append("intAccrued", intAccrued)
-                .append("tmbBotCommitment", tmbBotCommitment)
-                .append("currBookBal", currBookBal)
-                .append("tenors", tenors)
+                .append("tmbIntUnEarned", tmbIntUnEarned)
+                .append("tmbIntAccrued", tmbIntAccrued)
+                .append("limit", limit)
+                .append("outstanding", outstanding)
                 .append("accountNumber", accountNumber)
                 .append("accountSuffix", accountSuffix)
                 .append("accountRef", accountRef)

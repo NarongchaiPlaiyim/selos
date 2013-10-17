@@ -8,14 +8,6 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 7/10/2556
- * Time: 16:56 น.
- * To change this template use File | Settings | File Templates.
- */
 public class AddressFilterControl {
 
     @Inject

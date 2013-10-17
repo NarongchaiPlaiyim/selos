@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "ext_bankstatment1")
-public class BankStatment1 implements Serializable {
+@Table(name = "ext_dwh_bankstatement6")
+public class BankStatement6 implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_BANKSTATMENT1", sequenceName="SEQ_EXT_BANKSTATMENT1", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_BANKSTATMENT1")
+    @SequenceGenerator(name="SEQ_EXT_BANKSTATEMENT6", sequenceName="SEQ_EXT_BANKSTATEMENT6", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_BANKSTATEMENT6")
     private long id;
 
     @Column(name="account_status", length = 2)
@@ -43,28 +43,6 @@ public class BankStatment1 implements Serializable {
 
     @Column(name="credit_txn_number", length = 5)
     private int creditTXNNumber;
-
-    @Column(name="gross_debit_balance", length = 14, scale = 2)
-    private BigDecimal grossDebitBalance;
-
-    @Column(name="debit_txn_number", length = 14, scale = 2)
-    private int debitTXNNumber;
-
-    public BigDecimal getGrossDebitBalance() {
-        return grossDebitBalance;
-    }
-
-    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
-        this.grossDebitBalance = grossDebitBalance;
-    }
-
-    public int getDebitTXNNumber() {
-        return debitTXNNumber;
-    }
-
-    public void setDebitTXNNumber(int debitTXNNumber) {
-        this.debitTXNNumber = debitTXNNumber;
-    }
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="highest_balance_date")
@@ -99,8 +77,28 @@ public class BankStatment1 implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="end_od_date")
     private Date endOdDate;
+    @Column(name="gross_debit_balance", length = 14, scale = 2)
+    private BigDecimal grossDebitBalance;
 
-    public BankStatment1() {
+    @Column(name="debit_txn_number", length = 14, scale = 2)
+    private int debitTXNNumber;
+
+    public BigDecimal getGrossDebitBalance() {
+        return grossDebitBalance;
+    }
+
+    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
+        this.grossDebitBalance = grossDebitBalance;
+    }
+
+    public int getDebitTXNNumber() {
+        return debitTXNNumber;
+    }
+
+    public void setDebitTXNNumber(int debitTXNNumber) {
+        this.debitTXNNumber = debitTXNNumber;
+    }
+    public BankStatement6() {
     }
 
     public long getId() {
