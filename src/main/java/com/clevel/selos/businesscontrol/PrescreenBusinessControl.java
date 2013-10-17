@@ -114,6 +114,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     NCBInterfaceImpl ncbInterface;
 
+    @Inject
+    ExistingCreditControl existingCreditControl;
+
 
     public PrescreenBusinessControl(){
 
@@ -182,24 +185,23 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoResultSearch;
     }
 
-    // *** Function for DWH (BankStatement) *** //
-    public void getBankStatementFromDWH(PrescreenView prescreenView, User user) throws Exception{
-        Date expectedSubmitDate = prescreenView.getExpectedSubmitDate();
-        //TODO if expected submit date less than 15 get current month -2 if more than 15 get current month -1
-        expectedSubmitDate = DateTime.now().toDate();
-        int months = Util.getMonthOfDate(expectedSubmitDate);
-        int days = Util.getDayOfDate(expectedSubmitDate);
-        log.info("getBankStatementFromDWH ::: months : {}", months);
-        log.info("getBankStatementFromDWH ::: days : {}", days);
+    public PrescreenResultView getInterfaceInfo(long workCaseId){
 
-        if(days < 15){
-            // *** Get data from database *** //
+        List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
 
-        }else {
-            // *** Get data from database *** //
+        List<CustomerInfoView> borrowerInfoViewList = getBorrowerViewListByCustomerViewList(customerInfoViewList);
+        List<CustomerInfoView> relatedInfoViewList = getRelatedViewListByCustomerViewList(customerInfoViewList);
+        List<CustomerInfoView> guarantorInfoViewList = getGuarantorViewListByCustomerViewList(customerInfoViewList);
 
-        }
+        List<CustomerInfoView> fullRelatedViewList = new ArrayList<CustomerInfoView>();
+        fullRelatedViewList.addAll(relatedInfoViewList);
+        fullRelatedViewList.addAll(guarantorInfoViewList);
 
+        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(borrowerInfoViewList, fullRelatedViewList);
+
+
+
+        return null;
     }
 
     // *** Function for BRMS (PreScreenRules) ***//

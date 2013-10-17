@@ -409,7 +409,7 @@ public class PrescreenMaker implements Serializable {
         nationalityList = nationalityDAO.findAll();
         log.info("onLoadSelectList ::: nationalityList size : {}", nationalityList.size());
 
-        provinceList = provinceDAO.findAll();
+        provinceList = provinceDAO.getListOrderByParameter("name");
         log.info("onLoadSelectList ::: provinceList size : {}", provinceList.size());
 
         districtList = districtDAO.findAll();
@@ -752,8 +752,11 @@ public class PrescreenMaker implements Serializable {
                     enableCustomerEntity = false;
                     enableTMBCustomerId = false;
                     enableCitizenId = false;
+
+                    messageHeader = "Customer search complete.";
+                    message = "Customer found.";
                 }else{
-                    log.info("else borrowerInfo = null");
+                    log.info("else borrowerInfo = null, can not find customer.");
                     if(borrowerInfo.getSearchBy() == 2){
                         enableDocumentType = true;
                     }else{
@@ -769,16 +772,16 @@ public class PrescreenMaker implements Serializable {
                     customerEntity.setId(0);
                     borrowerInfo.setCustomerEntity(customerEntity);
                     messageHeader = customerInfoResultView.getActionResult().toString();
-                    message = "Search Customer not found.";
-                    RequestContext.getCurrentInstance().execute("PF('msgBoxSystemMessageDlg').show()");
+                    message = "Search customer not found.";
                 }
-            }else {
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else {
                 enableDocumentType = true;
                 enableCustomerForm = true;
                 enableCustomerEntity = true;
                 enableTMBCustomerId = true;
                 enableCitizenId = true;
-                messageHeader = customerInfoResultView.getActionResult().toString();
+                messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
@@ -789,7 +792,7 @@ public class PrescreenMaker implements Serializable {
             enableTMBCustomerId = true;
             enableCitizenId = true;
             log.info("onSearchCustomerInfo Exception");
-            messageHeader = "Failed to Search Customer.";
+            messageHeader = "Customer search failed.";
             message = ex.getMessage();
             //TODO Show message box
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -799,11 +802,21 @@ public class PrescreenMaker implements Serializable {
 
     public void onChangeCustomerEntity(){
         log.info("onChangeCustomerEntity ::: Custoemr Entity : {}", borrowerInfo.getCustomerEntity().getId());
+        log.info("onChangeCustomerEntity ::: Search By : {}", borrowerInfo.getSearchBy());
         titleList = titleDAO.getListByCustomerEntity(borrowerInfo.getCustomerEntity());
         log.info("onChangeCustomerEntity ::: titleList : {}", titleList);
         log.info("onChangeCustomerEntity ::{}", borrowerInfo);
         if ( borrowerInfo.getCustomerEntity().getId() == 1){
-            enableDocumentType = true;
+            if(Integer.toString(borrowerInfo.getSearchBy()) != null){
+                if(borrowerInfo.getSearchBy() == 1){
+                    enableDocumentType = true;
+                } else {
+                    enableDocumentType = false;
+                }
+            } else {
+                enableDocumentType = true;
+            }
+
         }else{
             enableDocumentType = false;
         }
@@ -820,14 +833,21 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDisableDocType(){
-        log.info("onDisableDocType ::: {}", borrowerInfo.getSearchBy());
-        if(borrowerInfo.getCustomerEntity() != null && borrowerInfo.getCustomerEntity().getId() == 1){
-            if(borrowerInfo.getSearchBy() == 2){    //If Search By == TMB Customer Id
-                enableDocumentType = false;
-            }else{
+        log.info("onDisableDocType ::: searchBy : {}", borrowerInfo.getSearchBy());
+        log.info("onDisableDocType ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
+        if(borrowerInfo.getSearchBy() == 1){
+            if(borrowerInfo.getCustomerEntity() != null){
+                if(borrowerInfo.getCustomerEntity().getId() == 1){
+                    enableDocumentType = true;
+                } else if (borrowerInfo.getCustomerEntity().getId() == 2){
+                    enableDocumentType = false;
+                } else {
+                    enableDocumentType = true;
+                }
+            } else {
                 enableDocumentType = true;
             }
-        } else if (borrowerInfo.getCustomerEntity() != null && borrowerInfo.getCustomerEntity().getId() == 2){
+        } else {
             enableDocumentType = false;
         }
     }

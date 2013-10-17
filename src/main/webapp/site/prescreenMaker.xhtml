@@ -594,7 +594,7 @@
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
                          header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
             <p:commandButton value="OK"
                              process="@this"

@@ -32,7 +32,7 @@
                                                          selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
                                                          paginator="false" rowKey="#{item.fnWobNum}" rowIndexVar="rowIndex" >
 
-                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox" listener="#{inbox.onSelectInbox}" />
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox" listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()" />
 
                                                 <p:column headerText="" styleClass="center" style="width:22px;">
                                                     <h:outputText value="#{rowIndex+1}"/>
@@ -81,7 +81,7 @@
                 </div>
             </h:form>
         </p:panel>
-        <p:blockUI block=":frmMain" trigger=":frmMain:resultInbox">
+        <p:blockUI widgetVar="blockInbox" block=":frmMain">
             LOADING<br />
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
