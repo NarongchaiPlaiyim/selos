@@ -1,13 +1,24 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.BankStatement;
+import com.clevel.selos.model.db.working.BankStatementSummary;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
+import javax.inject.Inject;
 import java.util.Date;
+import java.util.List;
 
 public class BankStmtControl extends BusinessControl{
+
+    @Inject
+    private RMInterface rmInterface;
 
     // *** Function for DWH (BankStatement) *** //
     public void getBankStatementFromDWH(PrescreenView prescreenView, User user) throws Exception{
@@ -27,5 +38,17 @@ public class BankStmtControl extends BusinessControl{
 
         }
 
+    }
+
+    public BankStatementSummary getBankStatment(List<CustomerInfoView> customerInfoViewList){
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
+                CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+                if(customerAccountResult.getActionResult().equals(ActionResult.SUCCEED)){
+
+                }
+            }
+        }
+        return null;
     }
 }

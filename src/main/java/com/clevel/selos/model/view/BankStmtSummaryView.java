@@ -5,191 +5,168 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class BankStmtSummaryView implements Serializable {
-    private String accountName;
-    private String accountNumber;
-    private String accountType;
-    private boolean isMainAccount;
-    private BigDecimal limit;
-    private BigDecimal incomeGross;
-    private BigDecimal incomeNetBDM;
-    private BigDecimal incomeNetUW;
-    private BigDecimal utilizationPercent;
-    private BigDecimal swingPercent;
-    private int overLimitTimes;
-    private int overLimitDays;
-    private int chequeReturn;
-    private BigDecimal cashFlowLimit;
-    private BigDecimal tradeChequeReturnAmount;
-    private BigDecimal tradeChequeReturnPercent;
 
-    public BankStmtSummaryView() {
-        reset();
+    private String interfaceResult;
+    private String interfaceResultReason;
+
+    private int seasonal;
+    private BigDecimal TMBTotalIncomeGross;
+    private BigDecimal TMBTotalIncomeNetBDM;
+    private BigDecimal TMBTotalIncomeNetUW;
+
+    private BigDecimal OthTotalIncomeGross;
+    private BigDecimal OthTotalIncomeNetBDM;
+    private BigDecimal OthTotalIncomeNetUW;
+
+    private BigDecimal grdTotalIncomeGross;
+    private BigDecimal grdTotalIncomeNetBDM;
+    private BigDecimal grdTotalIncomeNetUW;
+    private BigDecimal grdTotalTDChqRetAmount;
+    private BigDecimal grdTotalTDChqRetPercent;
+
+    private List<BankStmtView> bankStmtViewList;
+
+    public String getInterfaceResult() {
+        return interfaceResult;
     }
 
-    public void reset() {
-        this.accountName = "";
-        this.accountNumber = "";
-        this.accountType = "";
-        this.limit = BigDecimal.ZERO;
-        this.incomeGross = BigDecimal.ZERO;
-        this.incomeNetBDM = BigDecimal.ZERO;
-        this.incomeNetUW = BigDecimal.ZERO;
-        this.utilizationPercent = BigDecimal.ZERO;
-        this.swingPercent = BigDecimal.ZERO;
-        this.cashFlowLimit = BigDecimal.ZERO;
-        this.tradeChequeReturnAmount = BigDecimal.ZERO;
-        this.tradeChequeReturnPercent = BigDecimal.ZERO;
+    public void setInterfaceResult(String interfaceResult) {
+        this.interfaceResult = interfaceResult;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public String getInterfaceResultReason() {
+        return interfaceResultReason;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setInterfaceResultReason(String interfaceResultReason) {
+        this.interfaceResultReason = interfaceResultReason;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public int getSeasonal() {
+        return seasonal;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
+    public void setSeasonal(int seasonal) {
+        this.seasonal = seasonal;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public BigDecimal getTMBTotalIncomeGross() {
+        return TMBTotalIncomeGross;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setTMBTotalIncomeGross(BigDecimal TMBTotalIncomeGross) {
+        this.TMBTotalIncomeGross = TMBTotalIncomeGross;
     }
 
-    public boolean isMainAccount() {
-        return isMainAccount;
+    public BigDecimal getTMBTotalIncomeNetBDM() {
+        return TMBTotalIncomeNetBDM;
     }
 
-    public void setMainAccount(boolean mainAccount) {
-        isMainAccount = mainAccount;
+    public void setTMBTotalIncomeNetBDM(BigDecimal TMBTotalIncomeNetBDM) {
+        this.TMBTotalIncomeNetBDM = TMBTotalIncomeNetBDM;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
+    public BigDecimal getTMBTotalIncomeNetUW() {
+        return TMBTotalIncomeNetUW;
     }
 
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
+    public void setTMBTotalIncomeNetUW(BigDecimal TMBTotalIncomeNetUW) {
+        this.TMBTotalIncomeNetUW = TMBTotalIncomeNetUW;
     }
 
-    public BigDecimal getIncomeGross() {
-        return incomeGross;
+    public BigDecimal getOthTotalIncomeGross() {
+        return OthTotalIncomeGross;
     }
 
-    public void setIncomeGross(BigDecimal incomeGross) {
-        this.incomeGross = incomeGross;
+    public void setOthTotalIncomeGross(BigDecimal othTotalIncomeGross) {
+        OthTotalIncomeGross = othTotalIncomeGross;
     }
 
-    public BigDecimal getIncomeNetBDM() {
-        return incomeNetBDM;
+    public BigDecimal getOthTotalIncomeNetBDM() {
+        return OthTotalIncomeNetBDM;
     }
 
-    public void setIncomeNetBDM(BigDecimal incomeNetBDM) {
-        this.incomeNetBDM = incomeNetBDM;
+    public void setOthTotalIncomeNetBDM(BigDecimal othTotalIncomeNetBDM) {
+        OthTotalIncomeNetBDM = othTotalIncomeNetBDM;
     }
 
-    public BigDecimal getIncomeNetUW() {
-        return incomeNetUW;
+    public BigDecimal getOthTotalIncomeNetUW() {
+        return OthTotalIncomeNetUW;
     }
 
-    public void setIncomeNetUW(BigDecimal incomeNetUW) {
-        this.incomeNetUW = incomeNetUW;
+    public void setOthTotalIncomeNetUW(BigDecimal othTotalIncomeNetUW) {
+        OthTotalIncomeNetUW = othTotalIncomeNetUW;
     }
 
-    public BigDecimal getUtilizationPercent() {
-        return utilizationPercent;
+    public BigDecimal getGrdTotalIncomeGross() {
+        return grdTotalIncomeGross;
     }
 
-    public void setUtilizationPercent(BigDecimal utilizationPercent) {
-        this.utilizationPercent = utilizationPercent;
+    public void setGrdTotalIncomeGross(BigDecimal grdTotalIncomeGross) {
+        this.grdTotalIncomeGross = grdTotalIncomeGross;
     }
 
-    public BigDecimal getSwingPercent() {
-        return swingPercent;
+    public BigDecimal getGrdTotalIncomeNetBDM() {
+        return grdTotalIncomeNetBDM;
     }
 
-    public void setSwingPercent(BigDecimal swingPercent) {
-        this.swingPercent = swingPercent;
+    public void setGrdTotalIncomeNetBDM(BigDecimal grdTotalIncomeNetBDM) {
+        this.grdTotalIncomeNetBDM = grdTotalIncomeNetBDM;
     }
 
-    public int getOverLimitTimes() {
-        return overLimitTimes;
+    public BigDecimal getGrdTotalIncomeNetUW() {
+        return grdTotalIncomeNetUW;
     }
 
-    public void setOverLimitTimes(int overLimitTimes) {
-        this.overLimitTimes = overLimitTimes;
+    public void setGrdTotalIncomeNetUW(BigDecimal grdTotalIncomeNetUW) {
+        this.grdTotalIncomeNetUW = grdTotalIncomeNetUW;
     }
 
-    public int getOverLimitDays() {
-        return overLimitDays;
+    public BigDecimal getGrdTotalTDChqRetAmount() {
+        return grdTotalTDChqRetAmount;
     }
 
-    public void setOverLimitDays(int overLimitDays) {
-        this.overLimitDays = overLimitDays;
+    public void setGrdTotalTDChqRetAmount(BigDecimal grdTotalTDChqRetAmount) {
+        this.grdTotalTDChqRetAmount = grdTotalTDChqRetAmount;
     }
 
-    public int getChequeReturn() {
-        return chequeReturn;
+    public BigDecimal getGrdTotalTDChqRetPercent() {
+        return grdTotalTDChqRetPercent;
     }
 
-    public void setChequeReturn(int chequeReturn) {
-        this.chequeReturn = chequeReturn;
+    public void setGrdTotalTDChqRetPercent(BigDecimal grdTotalTDChqRetPercent) {
+        this.grdTotalTDChqRetPercent = grdTotalTDChqRetPercent;
     }
 
-    public BigDecimal getCashFlowLimit() {
-        return cashFlowLimit;
+    public List<BankStmtView> getBankStmtViewList() {
+        return bankStmtViewList;
     }
 
-    public void setCashFlowLimit(BigDecimal cashFlowLimit) {
-        this.cashFlowLimit = cashFlowLimit;
-    }
-
-    public BigDecimal getTradeChequeReturnAmount() {
-        return tradeChequeReturnAmount;
-    }
-
-    public void setTradeChequeReturnAmount(BigDecimal tradeChequeReturnAmount) {
-        this.tradeChequeReturnAmount = tradeChequeReturnAmount;
-    }
-
-    public BigDecimal getTradeChequeReturnPercent() {
-        return tradeChequeReturnPercent;
-    }
-
-    public void setTradeChequeReturnPercent(BigDecimal tradeChequeReturnPercent) {
-        this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+    public void setBankStmtViewList(List<BankStmtView> bankStmtViewList) {
+        this.bankStmtViewList = bankStmtViewList;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountName", accountName)
-                .append("accountNumber", accountNumber)
-                .append("accountType", accountType)
-                .append("isMainAccount", isMainAccount)
-                .append("limit", limit)
-                .append("incomeGross", incomeGross)
-                .append("incomeNetBDM", incomeNetBDM)
-                .append("incomeNetUW", incomeNetUW)
-                .append("utilizationPercent", utilizationPercent)
-                .append("swingPercent", swingPercent)
-                .append("overLimitTimes", overLimitTimes)
-                .append("overLimitDays", overLimitDays)
-                .append("chequeReturn", chequeReturn)
-                .append("cashFlowLimit", cashFlowLimit)
-                .append("tradeChequeReturnAmount", tradeChequeReturnAmount)
-                .append("tradeChequeReturnPercent", tradeChequeReturnPercent)
+                .append("interfaceResult", interfaceResult)
+                .append("interfaceResultReason", interfaceResultReason)
+                .append("seasonal", seasonal)
+                .append("TMBTotalIncomeGross", TMBTotalIncomeGross)
+                .append("TMBTotalIncomeNetBDM", TMBTotalIncomeNetBDM)
+                .append("TMBTotalIncomeNetUW", TMBTotalIncomeNetUW)
+                .append("OthTotalIncomeGross", OthTotalIncomeGross)
+                .append("OthTotalIncomeNetBDM", OthTotalIncomeNetBDM)
+                .append("OthTotalIncomeNetUW", OthTotalIncomeNetUW)
+                .append("grdTotalIncomeGross", grdTotalIncomeGross)
+                .append("grdTotalIncomeNetBDM", grdTotalIncomeNetBDM)
+                .append("grdTotalIncomeNetUW", grdTotalIncomeNetUW)
+                .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
+                .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
+                .append("bankStmtViewList", bankStmtViewList)
                 .toString();
     }
 }
