@@ -15,7 +15,6 @@ public class NCBTransform extends Transform {
         }
 
         ncb.setActive(true);
-        ncb.setCustomer(NCBInfoView.getCustomer());
         ncb.setCreateBy(NCBInfoView.getCreateBy());
         ncb.setModifyBy(NCBInfoView.getModifyBy());
         ncb.setCreateDate(NCBInfoView.getCreateDate());
@@ -33,7 +32,7 @@ public class NCBTransform extends Transform {
         ncb.setNplTMBMonth(NCBInfoView.getNplTMBMonth());
         ncb.setNplTMBYear(NCBInfoView.getNplTMBYear());
         ncb.setPaymentClass(NCBInfoView.getPaymentClass());
-        ncb.setPersonalId("12345");
+        ncb.setPersonalId("");
         ncb.setRemark(NCBInfoView.getRemark());
         ncb.setTdrFlag(NCBInfoView.getTdrFlag());
         ncb.setTdrOhterFlag(transFormBooleanToDb(NCBInfoView.isTdrOtherFlag()));
@@ -68,7 +67,7 @@ public class NCBTransform extends Transform {
         NCBInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
         NCBInfoView.setNplTMBYear(ncb.getNplTMBYear());
         NCBInfoView.setPaymentClass(ncb.getPaymentClass());
-        NCBInfoView.setPersonalId("12345");
+        NCBInfoView.setPersonalId("");
         NCBInfoView.setRemark(ncb.getRemark());
         NCBInfoView.setTdrFlag(ncb.getTdrFlag());
         NCBInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
@@ -84,7 +83,6 @@ public class NCBTransform extends Transform {
     }
 
     // convert value for checkbox boolean
-
     public int transFormBooleanToDb(boolean viewObj){
 
          if(viewObj == true){
@@ -95,12 +93,7 @@ public class NCBTransform extends Transform {
     }
 
     public boolean transFormBooleanToView(int viewObj){
-
-        if(viewObj == 1){
-            return true;
-        }else{
-            return false;
-        }
+        return (viewObj==1?true:false);
     }
 
 }

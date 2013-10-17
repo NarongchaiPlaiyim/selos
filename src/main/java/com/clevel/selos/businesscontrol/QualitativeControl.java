@@ -13,13 +13,6 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA
- * Date: 30/9/2556
- * Time: 11:20 น.
- * To change this template use File | Settings | File Templates.
- */
 
 
 @Stateless
@@ -45,15 +38,9 @@ public class QualitativeControl extends BusinessControl {
     public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId) {
         log.info("start saveQualitativeA ::: ");
 
-        try {
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
-            qualitativeADAO.persist(qualitativeA);
-        } catch (Exception e) {
-            log.error("save QualitativeA error" + e.getMessage());
-        } finally {
-            log.info("saveQualitativeA end");
-        }
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
+        qualitativeADAO.persist(qualitativeA);
 
     }
 
@@ -70,7 +57,7 @@ public class QualitativeControl extends BusinessControl {
 
                 if(qualitativeA != null)
                 {
-                    log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA);
+                    log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA.getId());
                     qualitativeView = qualitativeTransform.transformQualitativeAToView(qualitativeA);
                 }
             }
@@ -86,17 +73,10 @@ public class QualitativeControl extends BusinessControl {
 
 
     public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId) {
-        try {
-            log.info("start saveQualitativeB ::: ");
-            WorkCase workCase = workCaseDAO.findById(workCaseId);
-            QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
-            qualitativeBDAO.persist(qualitativeB);
-        } catch (Exception e) {
-            log.error("saveQualitativeB error" + e.getMessage());
-        } finally {
-
-            log.info("saveQualitativeB end");
-        }
+        log.info("start saveQualitativeB ::: ");
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
+        qualitativeBDAO.persist(qualitativeB);
 
     }
 

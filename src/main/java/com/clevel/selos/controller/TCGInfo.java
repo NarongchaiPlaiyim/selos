@@ -328,7 +328,7 @@ public class TCGInfo implements Serializable {
 
                     tcgInfoControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
                     messageHeader = "Save TCG Success.";
-                    message = "Save TCG data success.";
+                    message = "Save TCG success.";
 
                 } else if(modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                     TCGView.setModifyBy(user);
@@ -336,7 +336,7 @@ public class TCGInfo implements Serializable {
                     tcgInfoControl.onEditTCGToDB(TCGView,TCGDetailViewList,workCaseId);
 
                     messageHeader = "Edit TCG Success.";
-                    message = "Edit TCG data success.";
+                    message = "Edit TCG success.";
                 }
 
                 onCreation();
