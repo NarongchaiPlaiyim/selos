@@ -114,6 +114,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     NCBInterfaceImpl ncbInterface;
 
+    @Inject
+    ExistingCreditControl existingCreditControl;
+
 
     public PrescreenBusinessControl(){
 
@@ -185,6 +188,17 @@ public class PrescreenBusinessControl extends BusinessControl {
     public PrescreenResultView getInterfaceInfo(long workCaseId){
 
         List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
+
+        List<CustomerInfoView> borrowerInfoViewList = getBorrowerViewListByCustomerViewList(customerInfoViewList);
+        List<CustomerInfoView> relatedInfoViewList = getRelatedViewListByCustomerViewList(customerInfoViewList);
+        List<CustomerInfoView> guarantorInfoViewList = getGuarantorViewListByCustomerViewList(customerInfoViewList);
+
+        List<CustomerInfoView> fullRelatedViewList = new ArrayList<CustomerInfoView>();
+        fullRelatedViewList.addAll(relatedInfoViewList);
+        fullRelatedViewList.addAll(guarantorInfoViewList);
+
+        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(borrowerInfoViewList, fullRelatedViewList);
+
 
 
         return null;
