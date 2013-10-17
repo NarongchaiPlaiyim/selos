@@ -48,6 +48,7 @@
                              binding="#{searchButton}"
                              process="@form"
                              actionListener="#{prescreenMaker.onSearchCustomerInfo}"
+                             oncomplete="testHandle()"
                              update=":msgBoxSystemMessagePanel :customerDlgForm" />
         </td>
     </tr>

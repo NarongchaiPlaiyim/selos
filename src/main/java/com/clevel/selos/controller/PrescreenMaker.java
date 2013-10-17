@@ -679,7 +679,7 @@ public class PrescreenMaker implements Serializable {
                 }
                 complete = true;
             }
-        } else {
+        } else { // Edit
 
             complete = true;
         }
@@ -688,8 +688,23 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDeleteCustomerInfo() {
-        log.info("onDeleteFacility ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.info("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         customerInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteBorrower(){
+        log.info("onDeleteBorrower ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        borrowerInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteGuarantor(){
+        log.info("onDeleteGuarantor ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        guarantorInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteRelatedPerson(){
+        log.info("onDeleteRelatedPerson ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        relatedInfoViewList.remove(selectCustomerInfoItem);
     }
 
     public void onChangeDate(String borrowerType){
