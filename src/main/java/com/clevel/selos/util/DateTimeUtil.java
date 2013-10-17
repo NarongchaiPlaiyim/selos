@@ -125,4 +125,10 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
+    public static Date parseToDate(String dateString,String dateFormat, Locale locale) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(dateFormat);
+        DateTime dt = formatter.withChronology(BuddhistChronology.getInstance()).withLocale(locale).parseDateTime(dateString);
+        return dt.toDate();
+    }
+
 }

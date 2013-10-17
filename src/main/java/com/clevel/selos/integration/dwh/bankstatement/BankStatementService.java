@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class BankStatementService implements Serializable {
     @Inject
@@ -111,7 +112,7 @@ public class BankStatementService implements Serializable {
             SystemParameter systemParameter = systemParameterDAO.findByParameterName(lastMonth);
 
             if(systemParameter!=null){
-                Date lastMonth = DateTimeUtil.parseToDate(systemParameter.getValue(),"MMyyyy");
+                Date lastMonth = Util.strToDateFormat(systemParameter.getValue(),"MMyyyy");
                 int numOfDifMonth = DateTimeUtil.monthBetween2DatesWithNoDate(fromDate, lastMonth);
                 String tableNumber = "";
                 String firstMonth = "";

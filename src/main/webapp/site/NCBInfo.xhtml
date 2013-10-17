@@ -38,7 +38,7 @@
 </div>
 <div id="content_form">
 <!-- start content -->
-<table class="content_table_form">
+<table class="content_table_form" >
 
 <tr>
     <td style="width: 50px" class="title">
@@ -279,11 +279,63 @@
                 <td>
 
                     <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.NCBDetailViewList}"
-                                 rowKey="#{item.NCBDetailView}" rowIndexVar="rowIndex">
+                                 rowKey="#{item.NCBDetailView}" rowIndexVar="rowIndex" >
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column headerText="No." styleClass="center" style="width:22px;"/>
-                                <p:column headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
+                                <p:column>
+                                    <f:facet style="width:20px" name="header">No.</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:50px" name="header">ประเภทบัญชี</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:50px" name="header">TMB</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:60px" name="header">สถานะบัญชี</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:90px" name="header">ข้อมูล ณ วันที<br/>(วัน/เดือน/ปี)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:90px" name="header">วันที่เปิดบัญชี<br/>(วัน/เดือน/ปี)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:120px" name="header">วงเงิน(หน่วย:บาท)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:120px" name="header">ภาระคงค้าง/ยอดใช้<br/>(หน่วย:บาท)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:120px" name="header">ยอดชำระต่อเดือน<br/>(หน่วย:บาท)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:60px" name="header">วันที่ปรับปรุงโครงสร้างหนี้<br/>(วัน/เดือน/ปี)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:60px" name="header">ลักษณะการชำระหนี้ <br/>ณ ปัจจุบัน</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:60px" name="header">ลักษณะการชำระหนี้<br/>ที่ผ่านมา</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:50px" name="header">จำนวนการค้างชำระ<br/>ในรอบ 12 เดือน</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:50px" name="header">Over Limit<br/> (Times)</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:50px" name="header">Refinance/<br/>ชำระปิดบัญชี</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:30px" name="header">W/C Flag</f:facet>
+                                </p:column>
+                                <p:column>
+                                    <f:facet style="width:40px" name="header"></f:facet>
+                                </p:column>
+                               <!--
+                                <p:column  headerText="" styleClass="center" style="width:22px;">No.</p:column>
+                                <p:column rowspan="2" headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
                                           style="width: 110px;"/>
                                 <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center"
                                           style="width: 25px;"/>
@@ -313,17 +365,17 @@
                                           style="width: 30px;"/>
                                 <p:column headerText="W/C Flag" styleClass="center"
                                           style="width: 30px;"/>
-                                <p:column styleClass="center" style="width:60px;"/>
+                                <p:column styleClass="center" style="width:60px;"/>-->
                             </p:row>
                         </p:columnGroup>
-                        <p:subTable var="item1" value="#{ncbInfo.NCBDetailView}">
+                         <p:subTable var="item1" value="#{ncbInfo.NCBDetailView}">
                             <f:facet name="header">
                             </f:facet>
-                            <p:column>
+                            <p:column styleClass="center">
                                 <h:outputText value="#{rowIndex+1}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.accountType.name}"/>
                             </p:column>
 
@@ -331,59 +383,59 @@
                                 <h:outputText  value="#{item.TMB}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.accountStatus.name}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="center">
                                 <h:outputText value="#{item.dateOfInfo}" >
                                     <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="center">
                                 <h:outputText value="#{item.accountOpenDate}" >
                                     <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="right">
                                 <h:outputText value="#{item.limit}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="right">
                                 <h:outputText value="#{item.outstanding}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="right">
                                 <h:outputText value="#{item.installment}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="center">
                                 <h:outputText value="#{item.dateOfDebtRestructuring}">
                                     <f:convertDateTime  pattern="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.currentPayment.name}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.historyPayment.name}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column styleClass="left">
                                 <h:outputText value="#{item.noOfOverLimit}"/>
                             </p:column>
 
@@ -438,7 +490,7 @@
                          styleClass="medium"
                          process=":frmMain"
                          action="#{ncbInfo.onSaveNcb()}"
-                         update=":frmMain" />
+                         update=":msgBoxSystemMessagePanel" />
 
         <p:commandButton value="#{msg.get('app.cancelButton')}"
                          id="btnCancel"
@@ -478,9 +530,21 @@
     <ui:param name="update" value=":frmMain"/>
 </ui:include>
 
+
 <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-    Loading...
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
+
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="#{ncbInfo.messageHeader}" message="#{ncbInfo.message}" >
+        <p:commandButton value="OK"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
 
 </h:body>
 </f:view>

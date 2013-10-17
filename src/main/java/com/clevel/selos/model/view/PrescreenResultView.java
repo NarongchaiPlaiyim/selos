@@ -1,45 +1,56 @@
 package com.clevel.selos.model.view;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PrescreenResultView {
-    private Double groupExposure;
-    private Double groupIncome;
-    private List<ExistingCreditDetailView> existingCredit;
-    private List<ExistingCreditDetailView> appInRLOS;
+    private String interfaceResult;
+    private String interfaceReason;
+    private BigDecimal groupExposure;
+    private BigDecimal groupIncome;
+    private ExistingCreditView existingCreditView;
+
     private List<UWRuleResult> groupRuleResults;
     private List<UWRuleResult> customerRuleResults;
 
-    public Double getGroupExposure() {
+    public String getInterfaceResult() {
+        return interfaceResult;
+    }
+
+    public void setInterfaceResult(String interfaceResult) {
+        this.interfaceResult = interfaceResult;
+    }
+
+    public String getInterfaceReason() {
+        return interfaceReason;
+    }
+
+    public void setInterfaceReason(String interfaceReason) {
+        this.interfaceReason = interfaceReason;
+    }
+
+    public BigDecimal getGroupExposure() {
         return groupExposure;
     }
 
-    public void setGroupExposure(Double groupExposure) {
+    public void setGroupExposure(BigDecimal groupExposure) {
         this.groupExposure = groupExposure;
     }
 
-    public Double getGroupIncome() {
+    public BigDecimal getGroupIncome() {
         return groupIncome;
     }
 
-    public void setGroupIncome(Double groupIncome) {
+    public void setGroupIncome(BigDecimal groupIncome) {
         this.groupIncome = groupIncome;
     }
 
-    public List<ExistingCreditDetailView> getExistingCredit() {
-        return existingCredit;
+    public ExistingCreditView getExistingCreditView() {
+        return existingCreditView;
     }
 
-    public void setExistingCredit(List<ExistingCreditDetailView> existingCredit) {
-        this.existingCredit = existingCredit;
-    }
-
-    public List<ExistingCreditDetailView> getAppInRLOS() {
-        return appInRLOS;
-    }
-
-    public void setAppInRLOS(List<ExistingCreditDetailView> appInRLOS) {
-        this.appInRLOS = appInRLOS;
+    public void setExistingCreditView(ExistingCreditView existingCreditView) {
+        this.existingCreditView = existingCreditView;
     }
 
     public List<UWRuleResult> getGroupRuleResults() {
