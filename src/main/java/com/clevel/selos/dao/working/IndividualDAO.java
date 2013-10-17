@@ -16,10 +16,11 @@ public class IndividualDAO extends GenericDAO<Individual,Long> {
     public IndividualDAO() {
     }
 
-    public Individual findByCitizenId(String citizenId){
+    public Individual findByCitizenId(String citizenId, long workCasePreScreenId){
         log.info("findByCitizenId : {}", citizenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("citizenId", citizenId));
+        criteria.add(Restrictions.eq("customer.workCasePrescreen.id", workCasePreScreenId));
         Individual individual = (Individual)criteria.uniqueResult();
 
         return individual;

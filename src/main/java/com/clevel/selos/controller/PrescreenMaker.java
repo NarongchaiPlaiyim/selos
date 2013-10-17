@@ -255,6 +255,7 @@ public class PrescreenMaker implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
+
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
@@ -281,7 +282,7 @@ public class PrescreenMaker implements Serializable {
     public void onCheckButton(){
         if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
             disableAssignButton = false;
-        }else{
+        } else {
             disableAssignButton = true;
         }
     }
@@ -679,7 +680,7 @@ public class PrescreenMaker implements Serializable {
                 }
                 complete = true;
             }
-        } else {
+        } else { // Edit
 
             complete = true;
         }
@@ -688,8 +689,23 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDeleteCustomerInfo() {
-        log.info("onDeleteFacility ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.info("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         customerInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteBorrower(){
+        log.info("onDeleteBorrower ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        borrowerInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteGuarantor(){
+        log.info("onDeleteGuarantor ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        guarantorInfoViewList.remove(selectCustomerInfoItem);
+    }
+
+    public void onDeleteRelatedPerson(){
+        log.info("onDeleteRelatedPerson ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        relatedInfoViewList.remove(selectCustomerInfoItem);
     }
 
     public void onChangeDate(String borrowerType){
@@ -825,6 +841,9 @@ public class PrescreenMaker implements Serializable {
 
     public void onChangeRelation(){
         log.info("onChangeRelation ::: ");
+        if(caseBorrowerTypeId == 0){
+            caseBorrowerTypeId = borrowerInfo.getCustomerEntity().getId();
+        }
         referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getRelation().getId());
     }
 
