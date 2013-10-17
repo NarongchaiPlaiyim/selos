@@ -2,7 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ReferenceDAO;
 import com.clevel.selos.integration.DWHInterface;
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
@@ -30,7 +30,7 @@ public class ExistingCreditControl extends BusinessControl{
         getCustomerList(relatedList, tmbCusIDList);
         log.debug("Customer List all : ");
 
-        List<Obligation> obligationList = dwhInterface.getObligation(getCurrentUserID(), tmbCusIDList);
+        List<Obligation> obligationList = dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
 
         ExistingCreditView existingCreditView = new ExistingCreditView();
 
