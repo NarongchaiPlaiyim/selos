@@ -57,6 +57,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setAge(customer.getAge());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
         customerInfoView.setRelation(customer.getRelation());
+        customerInfoView.setReference(customer.getReference());
         customerInfoView.setDocumentType(customer.getDocumentType());
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setValidId(2);

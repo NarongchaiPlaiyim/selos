@@ -10,4 +10,6 @@ public class BankStatementSummary implements Serializable {
     @SequenceGenerator(name="SEQ_WRK_BANKSTMT_SUM_ID", sequenceName="SEQ_WRK_BANKSTMT_SUM_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BANKSTMT_SUM_ID")
     private long id;
+
+
 }

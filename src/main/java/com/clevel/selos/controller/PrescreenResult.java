@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.PrescreenResultView;
@@ -39,6 +40,10 @@ public class PrescreenResult implements Serializable {
     @Inject
     @ExceptionMessage
     Message exceptionMsg;
+
+
+    @Inject
+    PrescreenBusinessControl prescreenBusinessControl;
 
     enum ModeForButton{ ADD, EDIT, DELETE }
     private ModeForButton modeForButton;
@@ -98,16 +103,16 @@ public class PrescreenResult implements Serializable {
 
             modeForButton = ModeForButton.ADD;
         }
-
         prescreenResultView = new PrescreenResultView();
-        prescreenResultView.setExistingCredit(getCreditFact(1));
     }
 
     public void onRetrieveInterfaceInfo(){
+        if(workCasePreScreenId != 0){
+            PrescreenResultView _tmpPrescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
 
-        prescreenResultView = new PrescreenResultView();
-        prescreenResultView.setExistingCredit(getCreditFact(4));
-        //TODO get all data to Screen
+            prescreenResultView.setExistingCreditView(_tmpPrescreenResultView.getExistingCreditView());
+
+        }
     }
 
     private List<ExistingCreditDetailView> getCreditFact(int num){
