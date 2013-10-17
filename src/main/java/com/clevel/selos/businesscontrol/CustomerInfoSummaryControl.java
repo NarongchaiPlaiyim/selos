@@ -34,9 +34,15 @@ public class CustomerInfoSummaryControl extends BusinessControl {
 
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
         List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
-        List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
 
+        List<CustomerInfoView> borrowerCustomerList = customerTransform.transformToBorrowerViewList(customerInfoViewList);
         customerInfoSummaryView.setBorrowerCustomerViewList(borrowerCustomerList);
+
+        List<CustomerInfoView> guarantorCustomerList = customerTransform.transformToGuarantorViewList(customerInfoViewList);
+        customerInfoSummaryView.setGuarantorCustomerViewList(guarantorCustomerList);
+
+        List<CustomerInfoView> relatedCustomerList = customerTransform.transformToRelatedViewList(customerInfoViewList);
+        customerInfoSummaryView.setRelatedCustomerViewList(relatedCustomerList);
 
         return customerInfoSummaryView;
     }
