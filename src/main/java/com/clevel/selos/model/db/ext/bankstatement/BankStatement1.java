@@ -42,13 +42,13 @@ public class BankStatement1 implements Serializable {
     private BigDecimal grossCreditBalance;
 
     @Column(name="credit_txn_number", length = 5)
-    private int creditTXNNumber;
+    private Integer creditTXNNumber;
 
     @Column(name="gross_debit_balance", length = 14, scale = 2)
     private BigDecimal grossDebitBalance;
 
     @Column(name="debit_txn_number", length = 14, scale = 2)
-    private int debitTXNNumber;
+    private Integer debitTXNNumber;
 
     public BigDecimal getGrossDebitBalance() {
         return grossDebitBalance;
@@ -58,7 +58,7 @@ public class BankStatement1 implements Serializable {
         this.grossDebitBalance = grossDebitBalance;
     }
 
-    public int getDebitTXNNumber() {
+    public Integer getDebitTXNNumber() {
         return debitTXNNumber;
     }
 
@@ -84,13 +84,13 @@ public class BankStatement1 implements Serializable {
     private BigDecimal monthEndBalance;
 
     @Column(name="check_return_number", length = 5)
-    private int checkReturnNumber;
+    private Integer checkReturnNumber;
 
     @Column(name="check_return_amount", length = 3)
-    private int checkReturnAmount;
+    private Integer checkReturnAmount;
 
     @Column(name="od_limit_number", length = 5)
-    private int odLimitNumber;
+    private Integer odLimitNumber;
 
     
     @Column(name="start_od_date")
@@ -178,7 +178,7 @@ public class BankStatement1 implements Serializable {
         this.grossCreditBalance = grossCreditBalance;
     }
 
-    public int getCreditTXNNumber() {
+    public Integer getCreditTXNNumber() {
         return creditTXNNumber;
     }
 
@@ -226,7 +226,7 @@ public class BankStatement1 implements Serializable {
         this.monthEndBalance = monthEndBalance;
     }
 
-    public int getCheckReturnNumber() {
+    public Integer getCheckReturnNumber() {
         return checkReturnNumber;
     }
 
@@ -234,7 +234,7 @@ public class BankStatement1 implements Serializable {
         this.checkReturnNumber = checkReturnNumber;
     }
 
-    public int getCheckReturnAmount() {
+    public Integer getCheckReturnAmount() {
         return checkReturnAmount;
     }
 
@@ -242,7 +242,7 @@ public class BankStatement1 implements Serializable {
         this.checkReturnAmount = checkReturnAmount;
     }
 
-    public int getOdLimitNumber() {
+    public Integer getOdLimitNumber() {
         return odLimitNumber;
     }
 

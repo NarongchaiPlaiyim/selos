@@ -19,7 +19,7 @@ public class BankStatement7 implements Serializable {
     @Column(name="account_status", length = 2)
     private String accountStatus;
 
-    
+
     @Column(name="account_open_date")
     private Date accountOpenDate;
 
@@ -42,16 +42,38 @@ public class BankStatement7 implements Serializable {
     private BigDecimal grossCreditBalance;
 
     @Column(name="credit_txn_number", length = 5)
-    private int creditTXNNumber;
+    private Integer creditTXNNumber;
 
-    
+    @Column(name="gross_debit_balance", length = 14, scale = 2)
+    private BigDecimal grossDebitBalance;
+
+    @Column(name="debit_txn_number", length = 14, scale = 2)
+    private Integer debitTXNNumber;
+
+    public BigDecimal getGrossDebitBalance() {
+        return grossDebitBalance;
+    }
+
+    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
+        this.grossDebitBalance = grossDebitBalance;
+    }
+
+    public Integer getDebitTXNNumber() {
+        return debitTXNNumber;
+    }
+
+    public void setDebitTXNNumber(int debitTXNNumber) {
+        this.debitTXNNumber = debitTXNNumber;
+    }
+
+
     @Column(name="highest_balance_date")
     private Date highestBalanceDate;
 
     @Column(name="highest_balance", length = 14, scale = 2)
     private BigDecimal highestBalance;
 
-    
+
     @Column(name="lowest_balance_date")
     private Date lowestBalanceDate;
 
@@ -62,46 +84,25 @@ public class BankStatement7 implements Serializable {
     private BigDecimal monthEndBalance;
 
     @Column(name="check_return_number", length = 5)
-    private int checkReturnNumber;
+    private Integer checkReturnNumber;
 
     @Column(name="check_return_amount", length = 3)
-    private int checkReturnAmount;
+    private Integer checkReturnAmount;
 
     @Column(name="od_limit_number", length = 5)
-    private int odLimitNumber;
+    private Integer odLimitNumber;
 
-    
+
     @Column(name="start_od_date")
     private Date startOdDate;
 
-    
+
     @Column(name="end_od_date")
     private Date endOdDate;
-    @Column(name="gross_debit_balance", length = 14, scale = 2)
-    private BigDecimal grossDebitBalance;
 
-    @Column(name="debit_txn_number", length = 14, scale = 2)
-    private int debitTXNNumber;
-
-    
     @Column(name="as_of_date")
     private Date asOfDate;
 
-    public BigDecimal getGrossDebitBalance() {
-        return grossDebitBalance;
-    }
-
-    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
-        this.grossDebitBalance = grossDebitBalance;
-    }
-
-    public int getDebitTXNNumber() {
-        return debitTXNNumber;
-    }
-
-    public void setDebitTXNNumber(int debitTXNNumber) {
-        this.debitTXNNumber = debitTXNNumber;
-    }
     public BankStatement7() {
     }
 
@@ -177,7 +178,7 @@ public class BankStatement7 implements Serializable {
         this.grossCreditBalance = grossCreditBalance;
     }
 
-    public int getCreditTXNNumber() {
+    public Integer getCreditTXNNumber() {
         return creditTXNNumber;
     }
 
@@ -225,7 +226,7 @@ public class BankStatement7 implements Serializable {
         this.monthEndBalance = monthEndBalance;
     }
 
-    public int getCheckReturnNumber() {
+    public Integer getCheckReturnNumber() {
         return checkReturnNumber;
     }
 
@@ -233,7 +234,7 @@ public class BankStatement7 implements Serializable {
         this.checkReturnNumber = checkReturnNumber;
     }
 
-    public int getCheckReturnAmount() {
+    public Integer getCheckReturnAmount() {
         return checkReturnAmount;
     }
 
@@ -241,7 +242,7 @@ public class BankStatement7 implements Serializable {
         this.checkReturnAmount = checkReturnAmount;
     }
 
-    public int getOdLimitNumber() {
+    public Integer getOdLimitNumber() {
         return odLimitNumber;
     }
 

@@ -187,7 +187,7 @@ public class WelcomePage implements Serializable {
         try{
             List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
             Date fromDate = Util.strToDateFormat("092013","MMyyyy");
-            bankStatementList = dwh.getBankStatementData("BDM001","11111",fromDate,4);
+            bankStatementList = dwh.getBankStatementData("BDM001","3042582720",fromDate,12);
             log.debug("BankStatement result : {}",bankStatementList);
         } catch (Exception e) {
             log.error("",e);
