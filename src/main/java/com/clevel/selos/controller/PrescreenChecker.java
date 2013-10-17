@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -124,10 +125,12 @@ public class PrescreenChecker implements Serializable {
             citizenID = new String[row];
         }
 
+        log.info("customerinfoList : {}", customerInfoViewList);
 
     }
 
     public void onCheckCustomer(){
+        log.info("onCheckCustomer :::");
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
@@ -135,17 +138,33 @@ public class PrescreenChecker implements Serializable {
         boolean tmpValidate = false;
         int count = 0;
         for(CustomerInfoView customer : tmpCustomerInfoViewList){
-            if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
-                log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
-                customer.setValidId(1);
-                customer.setNcbReason("");
-                tmpValidate = true;
-            }else{
-                log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
-                customer.setValidId(0);
-                customer.setNcbReason("");
-                tmpValidate = false;
+            log.info("CustomerInfo : {}", customer);
+            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
+                    log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    tmpValidate = true;
+                }else{
+                    log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    tmpValidate = false;
+                }
+            } else {
+                if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
+                    log.info("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    tmpValidate = true;
+                }else{
+                    log.info("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    tmpValidate = false;
+                }
             }
+
             if(count == 0){
                 if(tmpValidate == true)
                     validate = true;

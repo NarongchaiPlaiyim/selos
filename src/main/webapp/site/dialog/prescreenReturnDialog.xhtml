@@ -15,7 +15,7 @@
                 <td class="title">Reason Code :</td>
                 <td>
                     <p:selectOneMenu id="creditTypeName" value="#{prescreenChecker.returnReason.id}"
-                                     size="1" style="width: 200px;" required="true" >
+                                     size="1" style="max-width: 200px; width: 200px; min-width: 200px;" required="true" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{prescreenChecker.reasonList}"
                                        var="reasonItem"

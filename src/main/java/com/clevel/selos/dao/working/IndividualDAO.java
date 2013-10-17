@@ -1,7 +1,9 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.Individual;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -16,13 +18,12 @@ public class IndividualDAO extends GenericDAO<Individual,Long> {
     public IndividualDAO() {
     }
 
-    public Individual findByCitizenId(String citizenId, long workCasePreScreenId){
-        log.info("findByCitizenId : {}", citizenId);
-        Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("citizenId", citizenId));
-        criteria.add(Restrictions.eq("customer.workCasePrescreen.id", workCasePreScreenId));
-        Individual individual = (Individual)criteria.uniqueResult();
+    public Customer findByCitizenId(String citizenId, long workCasePreScreenId){
+        log.info("findByCitizenId ::: citizenId : {}, workCasePreScreenId : {}", citizenId, workCasePreScreenId);
+        String query = "SELECT customer FROM Individual individual WHERE individual.customer.workCasePrescreen.id = " + workCasePreScreenId + " AND individual.citizenId = '" + citizenId + "'";
+        Customer customer = (Customer)getSession().createQuery(query).uniqueResult();
 
-        return individual;
+        return customer;
+
     }
 }

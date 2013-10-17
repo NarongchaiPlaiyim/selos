@@ -8,7 +8,7 @@
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
             <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
-            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
+            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" process="@form" update=":frmMain :msgBoxSystemMessagePanel" />
             <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()" update=":assignCheckerDlgForm">
                 <p:resetInput target=":assignCheckerDlgForm" />
             </p:commandButton>

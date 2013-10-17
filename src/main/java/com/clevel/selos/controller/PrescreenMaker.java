@@ -4,12 +4,15 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
 import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
+import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.Individual;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -190,6 +193,9 @@ public class PrescreenMaker implements Serializable {
     private BorrowingTypeDAO borrowingTypeDAO;
 
     @Inject
+    private IndividualDAO individualDAO;
+
+    @Inject
     private PrescreenTransform prescreenTransform;
     @Inject
     private PrescreenBusinessControl prescreenBusinessControl;
@@ -255,7 +261,6 @@ public class PrescreenMaker implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
-
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
