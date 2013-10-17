@@ -2,10 +2,13 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.PrescreenView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class BankStmtControl extends BusinessControl{
 
@@ -27,5 +30,18 @@ public class BankStmtControl extends BusinessControl{
 
         }
 
+    }
+
+    public Date getPreviousStartDate(boolean seasonalFlag, Date expectedSubmissionDate) {
+        if (expectedSubmissionDate != null) {
+            int days = Util.getDayOfDate(expectedSubmissionDate);
+            //If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
+            //If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
+            //Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
+            int retrieveMonth = days < 15 ? 2 : 1;
+                retrieveMonth += seasonalFlag ? 11 : 5;
+            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
+        }
+        return null;
     }
 }
