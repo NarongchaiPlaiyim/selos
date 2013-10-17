@@ -16,10 +16,11 @@ public class ExistingCreditDetailView implements Serializable {
 
     private String productProgram;
     private String creditType;
-    private Double limit;
-    private Double outstanding;
-    private Double installment;
-    private Float intFeePercent;
+    private BigDecimal limit;
+    private BigDecimal outstanding;
+    private BigDecimal installment;
+    private BigDecimal intFeePercent;
+    private String source;
     private int tenor;
 
     public long getId() {
@@ -102,36 +103,44 @@ public class ExistingCreditDetailView implements Serializable {
         this.creditType = creditType;
     }
 
-    public Double getLimit() {
+    public BigDecimal getLimit() {
         return limit;
     }
 
-    public void setLimit(Double limit) {
+    public void setLimit(BigDecimal limit) {
         this.limit = limit;
     }
 
-    public Double getOutstanding() {
+    public BigDecimal getOutstanding() {
         return outstanding;
     }
 
-    public void setOutstanding(Double outstanding) {
+    public void setOutstanding(BigDecimal outstanding) {
         this.outstanding = outstanding;
     }
 
-    public Double getInstallment() {
+    public BigDecimal getInstallment() {
         return installment;
     }
 
-    public void setInstallment(Double installment) {
+    public void setInstallment(BigDecimal installment) {
         this.installment = installment;
     }
 
-    public Float getIntFeePercent() {
+    public BigDecimal getIntFeePercent() {
         return intFeePercent;
     }
 
-    public void setIntFeePercent(Float intFeePercent) {
+    public void setIntFeePercent(BigDecimal intFeePercent) {
         this.intFeePercent = intFeePercent;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public int getTenor() {

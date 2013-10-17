@@ -18,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,10 +122,10 @@ public class PrescreenResult implements Serializable {
             existingCreditView.setAccountStatus("Normal");
             existingCreditView.setCreditType("Loan");
             existingCreditView.setId(1);
-            existingCreditView.setInstallment(10000d + ((i+1)*5000));
-            existingCreditView.setIntFeePercent(1f);
-            existingCreditView.setLimit(10000000d + ((i+1)*5000000));
-            existingCreditView.setOutstanding(8000000d + ((i+1)*500000));
+            existingCreditView.setInstallment(new BigDecimal(10000 + ((i+1)*5000)));
+            existingCreditView.setIntFeePercent(new BigDecimal(1));
+            existingCreditView.setLimit(new BigDecimal(10000000 + ((i+1)*5000000)));
+            existingCreditView.setOutstanding(new BigDecimal(8000000 + ((i+1)*500000)));
             existingCreditView.setProductCode("EAC1");
             existingCreditView.setProjectCode("1000" + i);
             existingCreditView.setProductProgram("SME Smart Biz");
