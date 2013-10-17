@@ -5,50 +5,83 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class BankStmtView implements Serializable {
-    private String accountName;
+    private int isNotCountIncome;
+    private BankView bankView;
+    private String branchName;
+    private AccountTypeView accountTypeView;
+    private String otherAccountType;
     private String accountNumber;
-    private String accountType;
-    private boolean isMainAccount;
-    private BigDecimal limit;
-    private BigDecimal incomeGross;
-    private BigDecimal incomeNetBDM;
-    private BigDecimal incomeNetUW;
-    private BigDecimal utilizationPercent;
+    private String accountName;
+    private AccountStatusView accountStatusView;
+    private String accountStatus;
+    private int isMainAccount;
+    private int accountCharacteristic;
+
+    private BigDecimal averageIncomeGross;
+    private BigDecimal averageIncomeNetBDM;
+    private BigDecimal averageIncomeNetUW;
+    private BigDecimal averageDrawAmount;
     private BigDecimal swingPercent;
-    private int overLimitTimes;
-    private int overLimitDays;
-    private int chequeReturn;
-    private BigDecimal cashFlowLimit;
+    private BigDecimal utilizationPercent;
+    private BigDecimal averageGrossInflowPerLimit;
+    private BigDecimal chequeReturn;
     private BigDecimal tradeChequeReturnAmount;
-    private BigDecimal tradeChequeReturnPercent;
+    private BigDecimal overLimitTimes;
+    private BigDecimal overLimitDays;
+    private String remark;
+
+    private List<BankStmtDetailView> bankStmtDetailViewList;
+    private List<BankStmtSrcCollateralProof> bankStmtSrcCollateralProofList;
 
     public BankStmtView() {
         reset();
     }
 
     public void reset() {
-        this.accountName = "";
-        this.accountNumber = "";
-        this.accountType = "";
-        this.limit = BigDecimal.ZERO;
-        this.incomeGross = BigDecimal.ZERO;
-        this.incomeNetBDM = BigDecimal.ZERO;
-        this.incomeNetUW = BigDecimal.ZERO;
-        this.utilizationPercent = BigDecimal.ZERO;
-        this.swingPercent = BigDecimal.ZERO;
-        this.cashFlowLimit = BigDecimal.ZERO;
-        this.tradeChequeReturnAmount = BigDecimal.ZERO;
-        this.tradeChequeReturnPercent = BigDecimal.ZERO;
+
     }
 
-    public String getAccountName() {
-        return accountName;
+    public int getNotCountIncome() {
+        return isNotCountIncome;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setNotCountIncome(int notCountIncome) {
+        isNotCountIncome = notCountIncome;
+    }
+
+    public BankView getBankView() {
+        return bankView;
+    }
+
+    public void setBankView(BankView bankView) {
+        this.bankView = bankView;
+    }
+
+    public String getBranchName() {
+        return branchName;
+    }
+
+    public void setBranchName(String branchName) {
+        this.branchName = branchName;
+    }
+
+    public AccountTypeView getAccountTypeView() {
+        return accountTypeView;
+    }
+
+    public void setAccountTypeView(AccountTypeView accountTypeView) {
+        this.accountTypeView = accountTypeView;
+    }
+
+    public String getOtherAccountType() {
+        return otherAccountType;
+    }
+
+    public void setOtherAccountType(String otherAccountType) {
+        this.otherAccountType = otherAccountType;
     }
 
     public String getAccountNumber() {
@@ -59,60 +92,76 @@ public class BankStmtView implements Serializable {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
-    public boolean isMainAccount() {
+    public AccountStatusView getAccountStatusView() {
+        return accountStatusView;
+    }
+
+    public void setAccountStatusView(AccountStatusView accountStatusView) {
+        this.accountStatusView = accountStatusView;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public int getMainAccount() {
         return isMainAccount;
     }
 
-    public void setMainAccount(boolean mainAccount) {
+    public void setMainAccount(int mainAccount) {
         isMainAccount = mainAccount;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
+    public int getAccountCharacteristic() {
+        return accountCharacteristic;
     }
 
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
+    public void setAccountCharacteristic(int accountCharacteristic) {
+        this.accountCharacteristic = accountCharacteristic;
     }
 
-    public BigDecimal getIncomeGross() {
-        return incomeGross;
+    public BigDecimal getAverageIncomeGross() {
+        return averageIncomeGross;
     }
 
-    public void setIncomeGross(BigDecimal incomeGross) {
-        this.incomeGross = incomeGross;
+    public void setAverageIncomeGross(BigDecimal averageIncomeGross) {
+        this.averageIncomeGross = averageIncomeGross;
     }
 
-    public BigDecimal getIncomeNetBDM() {
-        return incomeNetBDM;
+    public BigDecimal getAverageIncomeNetBDM() {
+        return averageIncomeNetBDM;
     }
 
-    public void setIncomeNetBDM(BigDecimal incomeNetBDM) {
-        this.incomeNetBDM = incomeNetBDM;
+    public void setAverageIncomeNetBDM(BigDecimal averageIncomeNetBDM) {
+        this.averageIncomeNetBDM = averageIncomeNetBDM;
     }
 
-    public BigDecimal getIncomeNetUW() {
-        return incomeNetUW;
+    public BigDecimal getAverageIncomeNetUW() {
+        return averageIncomeNetUW;
     }
 
-    public void setIncomeNetUW(BigDecimal incomeNetUW) {
-        this.incomeNetUW = incomeNetUW;
+    public void setAverageIncomeNetUW(BigDecimal averageIncomeNetUW) {
+        this.averageIncomeNetUW = averageIncomeNetUW;
     }
 
-    public BigDecimal getUtilizationPercent() {
-        return utilizationPercent;
+    public BigDecimal getAverageDrawAmount() {
+        return averageDrawAmount;
     }
 
-    public void setUtilizationPercent(BigDecimal utilizationPercent) {
-        this.utilizationPercent = utilizationPercent;
+    public void setAverageDrawAmount(BigDecimal averageDrawAmount) {
+        this.averageDrawAmount = averageDrawAmount;
     }
 
     public BigDecimal getSwingPercent() {
@@ -123,36 +172,28 @@ public class BankStmtView implements Serializable {
         this.swingPercent = swingPercent;
     }
 
-    public int getOverLimitTimes() {
-        return overLimitTimes;
+    public BigDecimal getUtilizationPercent() {
+        return utilizationPercent;
     }
 
-    public void setOverLimitTimes(int overLimitTimes) {
-        this.overLimitTimes = overLimitTimes;
+    public void setUtilizationPercent(BigDecimal utilizationPercent) {
+        this.utilizationPercent = utilizationPercent;
     }
 
-    public int getOverLimitDays() {
-        return overLimitDays;
+    public BigDecimal getAverageGrossInflowPerLimit() {
+        return averageGrossInflowPerLimit;
     }
 
-    public void setOverLimitDays(int overLimitDays) {
-        this.overLimitDays = overLimitDays;
+    public void setAverageGrossInflowPerLimit(BigDecimal averageGrossInflowPerLimit) {
+        this.averageGrossInflowPerLimit = averageGrossInflowPerLimit;
     }
 
-    public int getChequeReturn() {
+    public BigDecimal getChequeReturn() {
         return chequeReturn;
     }
 
-    public void setChequeReturn(int chequeReturn) {
+    public void setChequeReturn(BigDecimal chequeReturn) {
         this.chequeReturn = chequeReturn;
-    }
-
-    public BigDecimal getCashFlowLimit() {
-        return cashFlowLimit;
-    }
-
-    public void setCashFlowLimit(BigDecimal cashFlowLimit) {
-        this.cashFlowLimit = cashFlowLimit;
     }
 
     public BigDecimal getTradeChequeReturnAmount() {
@@ -163,33 +204,74 @@ public class BankStmtView implements Serializable {
         this.tradeChequeReturnAmount = tradeChequeReturnAmount;
     }
 
-    public BigDecimal getTradeChequeReturnPercent() {
-        return tradeChequeReturnPercent;
+    public BigDecimal getOverLimitTimes() {
+        return overLimitTimes;
     }
 
-    public void setTradeChequeReturnPercent(BigDecimal tradeChequeReturnPercent) {
-        this.tradeChequeReturnPercent = tradeChequeReturnPercent;
+    public void setOverLimitTimes(BigDecimal overLimitTimes) {
+        this.overLimitTimes = overLimitTimes;
+    }
+
+    public BigDecimal getOverLimitDays() {
+        return overLimitDays;
+    }
+
+    public void setOverLimitDays(BigDecimal overLimitDays) {
+        this.overLimitDays = overLimitDays;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public List<BankStmtDetailView> getBankStmtDetailViewList() {
+        return bankStmtDetailViewList;
+    }
+
+    public void setBankStmtDetailViewList(List<BankStmtDetailView> bankStmtDetailViewList) {
+        this.bankStmtDetailViewList = bankStmtDetailViewList;
+    }
+
+    public List<BankStmtSrcCollateralProof> getBankStmtSrcCollateralProofList() {
+        return bankStmtSrcCollateralProofList;
+    }
+
+    public void setBankStmtSrcCollateralProofList(List<BankStmtSrcCollateralProof> bankStmtSrcCollateralProofList) {
+        this.bankStmtSrcCollateralProofList = bankStmtSrcCollateralProofList;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("accountName", accountName)
+                .append("isNotCountIncome", isNotCountIncome)
+                .append("bankView", bankView)
+                .append("branchName", branchName)
+                .append("accountTypeView", accountTypeView)
+                .append("otherAccountType", otherAccountType)
                 .append("accountNumber", accountNumber)
-                .append("accountType", accountType)
+                .append("accountName", accountName)
+                .append("accountStatusView", accountStatusView)
+                .append("accountStatus", accountStatus)
                 .append("isMainAccount", isMainAccount)
-                .append("limit", limit)
-                .append("incomeGross", incomeGross)
-                .append("incomeNetBDM", incomeNetBDM)
-                .append("incomeNetUW", incomeNetUW)
-                .append("utilizationPercent", utilizationPercent)
+                .append("accountCharacteristic", accountCharacteristic)
+                .append("averageIncomeGross", averageIncomeGross)
+                .append("averageIncomeNetBDM", averageIncomeNetBDM)
+                .append("averageIncomeNetUW", averageIncomeNetUW)
+                .append("averageDrawAmount", averageDrawAmount)
                 .append("swingPercent", swingPercent)
+                .append("utilizationPercent", utilizationPercent)
+                .append("averageGrossInflowPerLimit", averageGrossInflowPerLimit)
+                .append("chequeReturn", chequeReturn)
+                .append("tradeChequeReturnAmount", tradeChequeReturnAmount)
                 .append("overLimitTimes", overLimitTimes)
                 .append("overLimitDays", overLimitDays)
-                .append("chequeReturn", chequeReturn)
-                .append("cashFlowLimit", cashFlowLimit)
-                .append("tradeChequeReturnAmount", tradeChequeReturnAmount)
-                .append("tradeChequeReturnPercent", tradeChequeReturnPercent)
+                .append("remark", remark)
+                .append("bankStmtDetailViewList", bankStmtDetailViewList)
+                .append("bankStmtSrcCollateralProofList", bankStmtSrcCollateralProofList)
                 .toString();
     }
 }
