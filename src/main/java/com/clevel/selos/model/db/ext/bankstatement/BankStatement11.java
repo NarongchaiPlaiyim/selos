@@ -19,7 +19,7 @@ public class BankStatement11 implements Serializable {
     @Column(name="account_status", length = 2)
     private String accountStatus;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="account_open_date")
     private Date accountOpenDate;
 
@@ -44,14 +44,14 @@ public class BankStatement11 implements Serializable {
     @Column(name="credit_txn_number", length = 5)
     private int creditTXNNumber;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="highest_balance_date")
     private Date highestBalanceDate;
 
     @Column(name="highest_balance", length = 14, scale = 2)
     private BigDecimal highestBalance;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="lowest_balance_date")
     private Date lowestBalanceDate;
 
@@ -70,11 +70,11 @@ public class BankStatement11 implements Serializable {
     @Column(name="od_limit_number", length = 5)
     private int odLimitNumber;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="start_od_date")
     private Date startOdDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    
     @Column(name="end_od_date")
     private Date endOdDate;
     @Column(name="gross_debit_balance", length = 14, scale = 2)
@@ -82,6 +82,10 @@ public class BankStatement11 implements Serializable {
 
     @Column(name="debit_txn_number", length = 14, scale = 2)
     private int debitTXNNumber;
+
+    
+    @Column(name="as_of_date")
+    private Date asOfDate;
 
     public BigDecimal getGrossDebitBalance() {
         return grossDebitBalance;
@@ -261,6 +265,14 @@ public class BankStatement11 implements Serializable {
         this.endOdDate = endOdDate;
     }
 
+    public Date getAsOfDate() {
+        return asOfDate;
+    }
+
+    public void setAsOfDate(Date asOfDate) {
+        this.asOfDate = asOfDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -284,6 +296,7 @@ public class BankStatement11 implements Serializable {
                 .append("odLimitNumber", odLimitNumber)
                 .append("startOdDate", startOdDate)
                 .append("endOdDate", endOdDate)
+                .append("asOfDate", asOfDate)
                 .toString();
     }
 }

@@ -45,8 +45,8 @@ public class DateTimeUtil {
         return Days.daysBetween(new DateTime(date1), new DateTime(date2)).getDays();
     }
 
-    public static int monthBetween2Dates(Date date1, Date date2) {
-        return Months.monthsBetween(new DateTime(date1).withDayOfMonth(0), new DateTime(date2).withDayOfMonth(0)).getMonths();
+    public static int monthBetween2DatesWithNoDate(Date date1, Date date2) {
+        return Months.monthsBetween(new DateTime(date1).withDayOfMonth(1), new DateTime(date2).withDayOfMonth(1)).getMonths();
     }
 
     public static int checkDateDelete(Date startDate,Date endDate){

@@ -83,6 +83,10 @@ public class BankStatement3 implements Serializable {
     @Column(name="debit_txn_number", length = 14, scale = 2)
     private int debitTXNNumber;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="as_of_date")
+    private Date asOfDate;
+
     public BigDecimal getGrossDebitBalance() {
         return grossDebitBalance;
     }
@@ -261,6 +265,14 @@ public class BankStatement3 implements Serializable {
         this.endOdDate = endOdDate;
     }
 
+    public Date getAsOfDate() {
+        return asOfDate;
+    }
+
+    public void setAsOfDate(Date asOfDate) {
+        this.asOfDate = asOfDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -284,6 +296,7 @@ public class BankStatement3 implements Serializable {
                 .append("odLimitNumber", odLimitNumber)
                 .append("startOdDate", startOdDate)
                 .append("endOdDate", endOdDate)
+                .append("asOfDate", asOfDate)
                 .toString();
     }
 }

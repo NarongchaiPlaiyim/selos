@@ -4,7 +4,6 @@ import com.clevel.selos.dao.ext.dwh.*;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
-import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.model.db.ext.bankstatement.*;
 import com.clevel.selos.model.db.system.SystemParameter;
 import com.clevel.selos.system.Config;
@@ -113,7 +112,7 @@ public class BankStatementService implements Serializable {
 
             if(systemParameter!=null){
                 Date lastMonth = DateTimeUtil.parseToDate(systemParameter.getValue(),"MMyyyy");
-                int numOfDifMonth = DateTimeUtil.monthBetween2Dates(fromDate,lastMonth);
+                int numOfDifMonth = DateTimeUtil.monthBetween2DatesWithNoDate(fromDate, lastMonth);
                 String tableNumber = "";
                 String firstMonth = "";
                 if(numOfDifMonth==0){
@@ -1042,6 +1041,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1070,6 +1070,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1098,6 +1099,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1126,6 +1128,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1154,6 +1157,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1182,6 +1186,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1210,6 +1215,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1238,6 +1244,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1266,6 +1273,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1294,6 +1302,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1322,6 +1331,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1350,6 +1360,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1378,6 +1389,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
@@ -1406,6 +1418,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setNumberOfTimesOD(bankStatement.getOdLimitNumber());
             bankStatementResult.setStartODDate(bankStatement.getStartOdDate());
             bankStatementResult.setEndODDate(bankStatement.getEndOdDate());
+            bankStatementResult.setAsOfDate(bankStatement.getAsOfDate());
         }
         return bankStatementResult;
     }
