@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class BankStmtSummaryView implements Serializable {
+public class BankStmtView implements Serializable {
     private String accountName;
     private String accountNumber;
     private String accountType;
@@ -24,7 +24,7 @@ public class BankStmtSummaryView implements Serializable {
     private BigDecimal tradeChequeReturnAmount;
     private BigDecimal tradeChequeReturnPercent;
 
-    public BankStmtSummaryView() {
+    public BankStmtView() {
         reset();
     }
 

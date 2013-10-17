@@ -46,8 +46,6 @@ public class BankStmtControl extends BusinessControl{
                 CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
                 if(customerAccountResult.getActionResult().equals(ActionResult.SUCCEED)){
 
-                } else {
-
                 }
             }
         }
