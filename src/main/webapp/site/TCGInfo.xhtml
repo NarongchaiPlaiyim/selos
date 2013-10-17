@@ -244,12 +244,14 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="center">
-                                        <p:commandButton id="btnSave" value="Save"
+                                        <p:commandButton id="btnSave"
+                                                         value="Save"
+                                                         binding="#{addData}"
                                                          styleClass="medium"
                                                          process=":frmMain"
                                                          action="#{tcgInfo.onSaveTcgInfo()}"
-                                                         update=":frmMain"/>
-                                        <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                                         update=":msgBoxSystemMessagePanel"/>
+                                        <p:commandButton value="Cancel"
                                                          id="btnCancel"
                                                          styleClass="medium"
                                                          process=":frmMain"
@@ -289,8 +291,20 @@
     </ui:include>
 
     <p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
-        Loading...
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{tcgInfo.messageHeader}" message="#{tcgInfo.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
 </h:body>
 </f:view>
 </html>
