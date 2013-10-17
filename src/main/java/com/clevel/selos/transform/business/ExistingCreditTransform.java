@@ -1,6 +1,6 @@
 package com.clevel.selos.transform.business;
 
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 
 import java.util.List;
