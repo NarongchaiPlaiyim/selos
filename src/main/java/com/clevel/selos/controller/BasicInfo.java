@@ -166,7 +166,7 @@ public class BasicInfo implements Serializable {
 
         baPaymentMethodList = baPaymentMethodDAO.findAll();
 
-        if(baPaymentMethodList != null){
+        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
 
