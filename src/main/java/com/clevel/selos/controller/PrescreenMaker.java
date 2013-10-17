@@ -255,6 +255,7 @@ public class PrescreenMaker implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
+
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
 
