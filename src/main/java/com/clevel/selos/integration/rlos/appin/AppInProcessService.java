@@ -178,6 +178,7 @@ public class AppInProcessService implements Serializable {
             appInProcess.setFinalTenors(appInProcessEntity.getFinalTenors());
             appInProcess.setFinalLimit(appInProcessEntity.getFinalLimit());
             appInProcess.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+            appInProcess.setStatus(appInProcessEntity.getStatus());
             appInProcess.setCustomerDetailList(customerDetailList);
         } else if(customerDetail2!=null){
             CustomerDetail customerDetail = transformCustomerDetail(null,customerDetail2);
@@ -192,6 +193,7 @@ public class AppInProcessService implements Serializable {
             appInProcess.setFinalTenors(appInProcessEntity.getFinalTenors());
             appInProcess.setFinalLimit(appInProcessEntity.getFinalLimit());
             appInProcess.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+            appInProcess.setStatus(appInProcessEntity.getStatus());
             appInProcess.setCustomerDetailList(customerDetailList);
         }
 

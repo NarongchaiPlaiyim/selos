@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class BankStatement implements Serializable {
     private String accountStatus;
-    Date accountOpenDate;
+    private Date accountOpenDate;
     private String branchCode;
     private String accountType;
     private String accountNumber;
@@ -29,6 +29,7 @@ public class BankStatement implements Serializable {
     private int numberOfTimesOD;
     private Date startODDate;
     private Date endODDate;
+    private Date asOfDate;
 
     public String getAccountStatus() {
         return accountStatus;
@@ -198,6 +199,14 @@ public class BankStatement implements Serializable {
         this.endODDate = endODDate;
     }
 
+    public Date getAsOfDate() {
+        return asOfDate;
+    }
+
+    public void setAsOfDate(Date asOfDate) {
+        this.asOfDate = asOfDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -222,6 +231,7 @@ public class BankStatement implements Serializable {
                 .append("numberOfTimesOD", numberOfTimesOD)
                 .append("startODDate", startODDate)
                 .append("endODDate", endODDate)
+                .append("asOfDate", asOfDate)
                 .toString();
     }
 }
