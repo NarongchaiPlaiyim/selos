@@ -13,7 +13,7 @@ public class NCBIExport implements Serializable {
     @SequenceGenerator(name="SEQ_EXT_NCBI_ID", sequenceName="SEQ_EXT_NCBI_ID", allocationSize=1)
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCBI_ID")
     private long id;
-    @Column(name="staff_id", length = 5)
+    @Column(name="staff_id", length = 10)
     private String staffId;
     @Column(name="request_no", length = 20)
     private String requestNo;
