@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class BankStatementService implements Serializable {
     @Inject
@@ -166,7 +165,7 @@ public class BankStatementService implements Serializable {
                     if(systemParameter!=null){
                         List<BankStatement> bankStatementList = getList(accountNumber,systemParameter.getValue(),numberOfMonth);
                         if(bankStatementList!=null && bankStatementList.size()>0){
-                            bankStatementResult.setActionResult(ActionResult.SUCCEED);
+                            bankStatementResult.setActionResult(ActionResult.SUCCESS);
                             bankStatementResult.setBankStatementList(bankStatementList);
                         } else {
                             bankStatementResult.setActionResult(ActionResult.FAILED);

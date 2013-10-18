@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
@@ -201,7 +200,7 @@ public class RMService implements Serializable {
                 log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
                 }
                 //Audit Data
-                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
+                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -489,7 +488,7 @@ public class RMService implements Serializable {
                 }
 
                 //Audit Data
-                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
+                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
@@ -658,11 +657,11 @@ public class RMService implements Serializable {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }
                 customerAccountResult = new CustomerAccountResult();
-                customerAccountResult.setActionResult(ActionResult.SUCCEED);
+                customerAccountResult.setActionResult(ActionResult.SUCCESS);
                 customerAccountResult.setCustomerId(searchCustomerAccountModel.getCustNbr());
 
                 //Audit Data
-                rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), linkKey);
+                rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());

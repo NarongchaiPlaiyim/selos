@@ -32,13 +32,13 @@ public class NCBBizTransform extends BusinessTransform {
     SettlementStatusDAO settlementStatusDAO;
 
     private final String TMB_BANK = "TMB";
-    private final String TMB_BANK_THAI = "บมจ. ทหารไทย";
+    private final String TMB_BANK_THAI = "�?ม�?. ทหาร�?ทย";
     private final int SIX_MONTH = 6;
     private final int TWELVE_MONTH = 12;
     private final String ACCOUNT_TYPE_OD_IND = "04";
-    private final String ACCOUNT_TYPE_OD_JUR = "เงินเบิกเกินบัญชี";
+    private final String ACCOUNT_TYPE_OD_JUR = "เ�?ิ�?เ�?ิ�?เ�?ิ�?�?ั�?�?ี";
     private final String ENQ_PURPOSE_IND = "01";
-    private final String ENQ_PURPOSE_JUR = "อนุมัติสินเชื่อใหม่";
+    private final String ENQ_PURPOSE_JUR = "อ�?ุมัติสิ�?เ�?ื�?อ�?หม�?";
 
     public List<NcbView> transformIndividual(List<NCRSOutputModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
@@ -68,8 +68,8 @@ public class NCBBizTransform extends BusinessTransform {
                 accountInfoNameList.add(accountInfoName);
                 accountInfoIdList.add(accountInfoId);
                 ncbView.setIdNumber(responseNCRSModel.getIdNumber());
-                if(responseNCRSModel.getActionResult() == ActionResult.SUCCEED){
-                    ncbView.setResult(ActionResult.SUCCEED);
+                if(responseNCRSModel.getActionResult() == ActionResult.SUCCESS){
+                    ncbView.setResult(ActionResult.SUCCESS);
 
                     //Transform NCB Account Logic
                     if(responseNCRSModel.getResponseModel()!=null){
@@ -949,8 +949,8 @@ public class NCBBizTransform extends BusinessTransform {
                 accountInfoNameList.add(accountInfoName);
                 accountInfoIdList.add(accountInfoId);
                 ncbView.setIdNumber(responseNCCRSModel.getIdNumber());
-                if(responseNCCRSModel.getActionResult() == ActionResult.SUCCEED){
-                    ncbView.setResult(ActionResult.SUCCEED);
+                if(responseNCCRSModel.getActionResult() == ActionResult.SUCCESS){
+                    ncbView.setResult(ActionResult.SUCCESS);
                     //Transform NCB Account Logic
                     if(responseNCCRSModel.getResponseModel()!=null){
                         NCCRSResponseModel nccrsResponseModel = responseNCCRSModel.getResponseModel();
