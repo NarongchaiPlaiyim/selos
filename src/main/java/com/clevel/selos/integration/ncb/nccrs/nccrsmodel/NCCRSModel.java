@@ -10,12 +10,16 @@ public class NCCRSModel implements Serializable {
     private String registType;
     private String registId;
     private String companyName;
-    private String inqPurose;
-    private String productType;
+    private String inqPurose = "1170001";
+    private String productType = "2030001";
     private String memberRef;
-    private String confirmConsent;
-    private String language;
-    private String historicalBalanceReport;
+    private String confirmConsent = "Y";
+    /*
+    2060001 = English
+    2060002 = Thai
+    */
+    private String language = "2060002";
+    private String historicalBalanceReport = "Y";
     private String trackingId;
     private String juristicType;
 
