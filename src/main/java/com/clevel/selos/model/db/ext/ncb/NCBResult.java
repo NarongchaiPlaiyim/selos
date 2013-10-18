@@ -13,7 +13,7 @@ public class NCBResult implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCB_RESULT_ID")
     private long id;
 
-    @Column(name="appNnumber", length = 16)
+    @Column(name="appNumber", length = 16)
     private String appNumber;
 
     @Column(name="customer_type", length = 7)

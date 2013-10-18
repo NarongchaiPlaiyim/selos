@@ -504,3 +504,8 @@ h2{
 .ui-panel .ui-panel-content {
     padding: 0!important;
 }
+.messageDialog{
+    min-width:250px!important;
+    max-width:450px!important;
+    width: auto;
+}

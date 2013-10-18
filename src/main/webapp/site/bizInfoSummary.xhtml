@@ -53,8 +53,8 @@
                                         <td><h:outputText value="สถานประกอบการเป็นที่เช่า"/> : </td>
                                         <td>
                                             <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom">
-                                                <f:selectItem itemLabel="Yes"  itemValue="N" />
-                                                <f:selectItem itemLabel="No" itemValue="Y" />
+                                                <f:selectItem itemLabel="No"  itemValue="0" />
+                                                <f:selectItem itemLabel="Yes" itemValue="1" />
                                             </p:selectOneRadio>
                                             <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer />
                                             <h:outputLabel for="Peropt1" value="NO" />
@@ -95,7 +95,7 @@
                                                     <td colspan="5">
                                                         <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}"
                                                                          id="provinceCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
                                                                            var="province"
                                                                            itemLabel="#{province.name}"
@@ -106,7 +106,7 @@
 
                                                         <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}"
                                                                          id="districtCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
                                                                            var="district"
                                                                            itemLabel="#{district.name}"
@@ -116,7 +116,7 @@
 
                                                         <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
                                                                          id="subDistrictCode">
-                                                            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
                                                                            var="subDistrict"
                                                                            itemLabel="#{subDistrict.name}"
@@ -168,10 +168,15 @@
                                             </p:calendar>
                                             <p:spacer width="20px"/>
                                             อ้างอิงจาก
-                                            <p:inputText/>
-
+                                            <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
+                                                             id="referExpId">
+                                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
+                                                               var="referExp"
+                                                               itemLabel="#{referExp.description}"
+                                                               itemValue="#{referExp.id}"/>
+                                            </p:selectOneMenu>
                                         </td>
-
                                     </tr>
                                 </table>
                             </td>
@@ -179,17 +184,17 @@
                         <tr>
                             <td class="left" colspan="2">
                                 <h:outputLabel  class="title" value="ข้อมูลรายได้จากการสัมภาษณ์" /><br/>
-                                <table style="padding: 0%" >
+                                <table class="table_content" style="padding: 0%" >
                                     <tr>
-                                        <td>
+                                        <th>
                                             รายการ
-                                        </td>
-                                        <td>
+                                        </th>
+                                        <th>
                                             จำนวน
-                                        </td>
-                                        <td>
+                                        </th>
+                                        <th>
                                             % ยอดขาย
-                                        </td>
+                                        </th>
                                     </tr>
                                     <tr>
                                         <td>
@@ -197,7 +202,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:circulationAmount"/>
                                             </p:inputText>
                                         </td>
@@ -214,7 +219,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:productionCostsAmount"/>
                                             </p:inputText>
                                         </td>
@@ -231,7 +236,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:profitMarginAmount"/>
                                             </p:inputText>
                                         </td>
@@ -248,7 +253,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="operatingExpenseAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:operatingExpenseAmount"/>
                                             </p:inputText>
                                         </td>
@@ -265,7 +270,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="earningsBeforeTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:earningsBeforeTaxAmount"/>
                                             </p:inputText>
                                         </td>
@@ -282,7 +287,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceInterestAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2"  />
                                                 <p:ajax event="blur" update=":frmMain:reduceInterestAmount"/>
                                             </p:inputText>
                                         </td>
@@ -299,7 +304,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="reduceTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0" minFractionDigits="2"  maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:reduceTaxAmount"/>
                                             </p:inputText>
                                         </td>
@@ -316,7 +321,7 @@
                                         </td>
                                         <td>
                                             <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}">
-                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
+                                                <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2" />
                                                 <p:ajax event="blur" update=":frmMain:netMarginAmount"/>
                                             </p:inputText>
                                         </td>
@@ -328,17 +333,17 @@
                                         </td>
                                     </tr>
                                 </table>
-
                                 <br/>
                                 สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน
                                 <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}">
-                                    <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>
                                 </p:inputText>
-                                <br/><br/>
+                                <br/>
+                                <br/>
                                 จำนวนแรงงาน
                                 <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}">
-                                    <f:convertNumber pattern="#,##0"  />
+                                    <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                     <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
                                 </p:inputText>
                             </td>

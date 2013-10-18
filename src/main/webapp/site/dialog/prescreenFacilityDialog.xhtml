@@ -42,9 +42,9 @@
                 <td>
                     <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
                                  maxlength="10" styleClass="large right"
-                                 onkeypress="return numberOnly(event);" onfocus="removeComma(this)">
+                                 onkeydown="return numberOnly(event);" onfocus="removeComma(this)">
                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" integerOnly="true" maxIntegerDigits="10" />
-                        <p:ajax event="change" update=":facilityDlgForm" process="@form"/>
+                        <p:ajax event="blur" update=":facilityDlgForm" process="@form"/>
                     </p:inputText> Baht.
                 </td>
             </tr>

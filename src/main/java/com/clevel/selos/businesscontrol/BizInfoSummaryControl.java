@@ -9,7 +9,7 @@ import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.transform.BizInfoDetailTransform;
-import com.clevel.selos.transform.business.BizInfoSummaryTransform;
+import com.clevel.selos.transform.BizInfoSummaryTransform;
 import org.slf4j.Logger;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 

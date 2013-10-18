@@ -17,6 +17,6 @@ public class NCBResultDAO extends GenericDAO<NCBResult,Long> {
 
     public boolean isExist(String appRefNumber) {
         log.debug("NCRS Call isExist({})", appRefNumber);
-        return isRecordExist(Restrictions.eq("appRefNumber", appRefNumber));
+        return isRecordExist(Restrictions.eq("appNumber", appRefNumber));
     }
 }

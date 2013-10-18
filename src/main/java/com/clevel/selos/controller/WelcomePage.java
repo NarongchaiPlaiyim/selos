@@ -7,9 +7,14 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.dwh.model.Obligation;
+import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
+import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.model.AccountInfoId;
 import com.clevel.selos.model.AccountInfoName;
@@ -17,19 +22,18 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.*;
+import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -156,12 +160,38 @@ public class WelcomePage implements Serializable {
 
     public void testDWHObligation() {
         try{
-            List<Obligation> obligationList = new ArrayList<Obligation>();
+            ObligationResult obligationResult = new ObligationResult();
             List<String> customerList = new ArrayList<String>();
             customerList.add("1234");
             customerList.add("1235");
-            obligationList = dwh.getObligation("BDM001",customerList);
-            log.debug("obligation result : {}",obligationList);
+            obligationResult = dwh.getObligationData("BDM001", customerList);
+            log.debug("obligation result : {}",obligationResult);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testRLOSAppIn() {
+        try{
+            AppInProcessResult appInProcessResult = new AppInProcessResult();
+            List<String> citizenIdList = new ArrayList<String>();
+            citizenIdList.add("11111");
+            citizenIdList.add("22222");
+            appInProcessResult = rlos.getAppInProcessData("BDM001", citizenIdList);
+            log.debug("testRLOSAppIn result : {}",appInProcessResult);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testBankStatement() {
+        try{
+            BankStatementResult bankStatementResult = new BankStatementResult();
+            Date fromDate = Util.strToDateFormat("082013","MMyyyy");
+            bankStatementResult = dwh.getBankStatementData("BDM001","3042582720",fromDate,12);
+            log.debug("BankStatement result : {}",bankStatementResult);
         } catch (Exception e) {
             log.error("",e);
         }

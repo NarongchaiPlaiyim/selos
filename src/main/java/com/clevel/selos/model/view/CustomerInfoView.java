@@ -12,62 +12,88 @@ import java.util.Date;
 import java.util.List;
 
 public class CustomerInfoView implements Serializable {
-    private long id;
+    //*** Var for transform ***//
     private long individualId;
     private long juristicId;
+
+    //*** Var for search ***//
     private int searchBy;
     private String searchId;
-    private DocumentType documentType;
-    private CustomerEntity customerEntity;
-    private Relation relation;
-    private Reference reference;
-    private String citizenId;
-    private String registrationId;
+
+    //*** Var for Check Citizen ***//
     private String inputId;
-    private String cardAuthorizeBy;
+    private int validId;
+    private String ncbResult;
+    private String ncbReason;
+
+    //*** Var for Customer ***//
+    private long id;
+    private int age;
     private Date documentExpiredDate;
-    private String customerId;
-    private String serviceSegment;
-    private Boolean collateralOwner;
-    private BigDecimal percentShare;
     private Title titleTh;
     private Title titleEn;
     private String firstNameTh;
     private String lastNameTh;
     private String firstNameEn;
     private String lastNameEn;
+    private int ncbFlag;
+    private CustomerEntity customerEntity;
+    private DocumentType documentType;
+    private Relation relation;
+    private Reference reference;
+    private String documentAuthorizeBy;
+    private String serviceSegment;
+    private String tmbCustomerId;
+    private int collateralOwner;
+    private BigDecimal percentShare;
+    private BigDecimal approxIncome;
+
+    //*** Var for Individual ***//
     private Date dateOfBirth;
-    private Date dateOfRegister;
+    private String citizenId;
     private Gender gender;
-    private int age;
-    private Race origin;
-    private Nationality nationality;
-    private Education education;
-    private Occupation occupation;
-    private MaritalStatus maritalStatus;
     private int numberOfChild;
-    private List<ChildrenView> childrenList;
-    private Country citizenCountry;
-    private Country registrationCountry;
+    private Education education;
+    private MaritalStatus maritalStatus;
+    private Nationality nationality;
+    private Nationality sndNationality;
+    private Race origin;
+    private Occupation occupation;
+
+    //*** Var for Juristic ***//
+    private BigDecimal capital;
+    private int financialYear;
+    private Date dateOfRegister;
+    private BigDecimal paidCapital;
+    private String registrationId;
+    private String signCondition;
+    private BigDecimal totalShare;
+
+    //*** Var for Address ***//
     private AddressView currentAddress;
     private AddressView workAddress;
     private AddressView registerAddress;
     private AddressType mailingAddressType;
-    private BigDecimal approxIncome;
+
+    //*** Var for Children ***//
+    private List<ChildrenView> childrenList;
+
+    private Country citizenCountry;
+    private Country registrationCountry;
     private String mobileNumber;
     private String faxNumber;
     private String email;
     private KYCLevel kycLevel;
-    private boolean convenantFlag;
-    private boolean ewsFlag;
-    private boolean reviewFlag;
+    private int convenantFlag;
+    private int ewsFlag;
+    private int reviewFlag;
     private String reason;
     private BusinessType businessType;
+
     private CustomerInfoView spouse;
-    private int validId;
-    private boolean ncbFlag;
-    private String ncbResult;
-    private String ncbReason;
+
+    private WarningCode csi;
+
 
     public CustomerInfoView(){
         //reset();
@@ -85,11 +111,11 @@ public class CustomerInfoView implements Serializable {
         this.reference = new Reference();
         this.citizenId = "";
         this.registrationId = "";
-        this.cardAuthorizeBy = "";
+        this.documentAuthorizeBy = "";
         this.documentExpiredDate = new Date();
-        this.customerId = "";
+        this.tmbCustomerId = "";
         this.serviceSegment = "";
-        this.collateralOwner = false;
+        this.collateralOwner = -1;
         this.percentShare = new BigDecimal(0);
         this.titleTh = new Title();
         this.titleEn = new Title();
@@ -119,19 +145,12 @@ public class CustomerInfoView implements Serializable {
         this.faxNumber = "";
         this.email = "";
         this.kycLevel = new KYCLevel();
-        this.convenantFlag = false;
-        this.ewsFlag = false;
-        this.reviewFlag = false;
+        this.convenantFlag = -1;
+        this.ewsFlag = -1;
+        this.reviewFlag = -1;
         this.reason = "";
         this.spouse = new CustomerInfoView();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.csi = new WarningCode();
     }
 
     public long getIndividualId() {
@@ -166,60 +185,52 @@ public class CustomerInfoView implements Serializable {
         this.searchId = searchId;
     }
 
-    public DocumentType getDocumentType() {
-        return documentType;
+    public String getInputId() {
+        return inputId;
     }
 
-    public void setDocumentType(DocumentType documentType) {
-        this.documentType = documentType;
+    public void setInputId(String inputId) {
+        this.inputId = inputId;
     }
 
-    public CustomerEntity getCustomerEntity() {
-        return customerEntity;
+    public int getValidId() {
+        return validId;
     }
 
-    public void setCustomerEntity(CustomerEntity customerEntity) {
-        this.customerEntity = customerEntity;
+    public void setValidId(int validId) {
+        this.validId = validId;
     }
 
-    public Relation getRelation() {
-        return relation;
+    public String getNcbResult() {
+        return ncbResult;
     }
 
-    public void setRelation(Relation relation) {
-        this.relation = relation;
+    public void setNcbResult(String ncbResult) {
+        this.ncbResult = ncbResult;
     }
 
-    public Reference getReference() {
-        return reference;
+    public String getNcbReason() {
+        return ncbReason;
     }
 
-    public void setReference(Reference reference) {
-        this.reference = reference;
+    public void setNcbReason(String ncbReason) {
+        this.ncbReason = ncbReason;
     }
 
-    public String getCitizenId() {
-        return citizenId;
+    public long getId() {
+        return id;
     }
 
-    public void setCitizenId(String citizenId) {
-        this.citizenId = citizenId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public String getRegistrationId() {
-        return registrationId;
+    public int getAge() {
+        return age;
     }
 
-    public void setRegistrationId(String registrationId) {
-        this.registrationId = registrationId;
-    }
-
-    public String getCardAuthorizeBy() {
-        return cardAuthorizeBy;
-    }
-
-    public void setCardAuthorizeBy(String cardAuthorizeBy) {
-        this.cardAuthorizeBy = cardAuthorizeBy;
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public Date getDocumentExpiredDate() {
@@ -228,38 +239,6 @@ public class CustomerInfoView implements Serializable {
 
     public void setDocumentExpiredDate(Date documentExpiredDate) {
         this.documentExpiredDate = documentExpiredDate;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getServiceSegment() {
-        return serviceSegment;
-    }
-
-    public void setServiceSegment(String serviceSegment) {
-        this.serviceSegment = serviceSegment;
-    }
-
-    public Boolean getCollateralOwner() {
-        return collateralOwner;
-    }
-
-    public void setCollateralOwner(Boolean collateralOwner) {
-        this.collateralOwner = collateralOwner;
-    }
-
-    public BigDecimal getPercentShare() {
-        return percentShare;
-    }
-
-    public void setPercentShare(BigDecimal percentShare) {
-        this.percentShare = percentShare;
     }
 
     public Title getTitleTh() {
@@ -310,6 +289,118 @@ public class CustomerInfoView implements Serializable {
         this.lastNameEn = lastNameEn;
     }
 
+    public int getNcbFlag() {
+        return ncbFlag;
+    }
+
+    public void setNcbFlag(int ncbFlag) {
+        this.ncbFlag = ncbFlag;
+    }
+
+    public int getCollateralOwner() {
+        return collateralOwner;
+    }
+
+    public void setCollateralOwner(int collateralOwner) {
+        this.collateralOwner = collateralOwner;
+    }
+
+    public int getConvenantFlag() {
+        return convenantFlag;
+    }
+
+    public void setConvenantFlag(int convenantFlag) {
+        this.convenantFlag = convenantFlag;
+    }
+
+    public int getEwsFlag() {
+        return ewsFlag;
+    }
+
+    public void setEwsFlag(int ewsFlag) {
+        this.ewsFlag = ewsFlag;
+    }
+
+    public int getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(int reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
+    }
+
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
+    }
+
+    public Relation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(Relation relation) {
+        this.relation = relation;
+    }
+
+    public Reference getReference() {
+        return reference;
+    }
+
+    public void setReference(Reference reference) {
+        this.reference = reference;
+    }
+
+    public String getDocumentAuthorizeBy() {
+        return documentAuthorizeBy;
+    }
+
+    public void setDocumentAuthorizeBy(String documentAuthorizeBy) {
+        this.documentAuthorizeBy = documentAuthorizeBy;
+    }
+
+    public String getServiceSegment() {
+        return serviceSegment;
+    }
+
+    public void setServiceSegment(String serviceSegment) {
+        this.serviceSegment = serviceSegment;
+    }
+
+    public String getTmbCustomerId() {
+        return tmbCustomerId;
+    }
+
+    public void setTmbCustomerId(String tmbCustomerId) {
+        this.tmbCustomerId = tmbCustomerId;
+    }
+
+    public BigDecimal getPercentShare() {
+        return percentShare;
+    }
+
+    public void setPercentShare(BigDecimal percentShare) {
+        this.percentShare = percentShare;
+    }
+
+    public BigDecimal getApproxIncome() {
+        return approxIncome;
+    }
+
+    public void setApproxIncome(BigDecimal approxIncome) {
+        this.approxIncome = approxIncome;
+    }
+
     public Date getDateOfBirth() {
         return dateOfBirth;
     }
@@ -318,12 +409,12 @@ public class CustomerInfoView implements Serializable {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Date getDateOfRegister() {
-        return dateOfRegister;
+    public String getCitizenId() {
+        return citizenId;
     }
 
-    public void setDateOfRegister(Date dateOfRegister) {
-        this.dateOfRegister = dateOfRegister;
+    public void setCitizenId(String citizenId) {
+        this.citizenId = citizenId;
     }
 
     public Gender getGender() {
@@ -334,28 +425,12 @@ public class CustomerInfoView implements Serializable {
         this.gender = gender;
     }
 
-    public int getAge() {
-        return age;
+    public int getNumberOfChild() {
+        return numberOfChild;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Race getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(Race origin) {
-        this.origin = origin;
-    }
-
-    public Nationality getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(Nationality nationality) {
-        this.nationality = nationality;
+    public void setNumberOfChild(int numberOfChild) {
+        this.numberOfChild = numberOfChild;
     }
 
     public Education getEducation() {
@@ -366,14 +441,6 @@ public class CustomerInfoView implements Serializable {
         this.education = education;
     }
 
-    public Occupation getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(Occupation occupation) {
-        this.occupation = occupation;
-    }
-
     public MaritalStatus getMaritalStatus() {
         return maritalStatus;
     }
@@ -382,36 +449,92 @@ public class CustomerInfoView implements Serializable {
         this.maritalStatus = maritalStatus;
     }
 
-    public int getNumberOfChild() {
-        return numberOfChild;
+    public Nationality getNationality() {
+        return nationality;
     }
 
-    public void setNumberOfChild(int numberOfChild) {
-        this.numberOfChild = numberOfChild;
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
     }
 
-    public List<ChildrenView> getChildrenList() {
-        return childrenList;
+    public Nationality getSndNationality() {
+        return sndNationality;
     }
 
-    public void setChildrenList(List<ChildrenView> childrenList) {
-        this.childrenList = childrenList;
+    public void setSndNationality(Nationality sndNationality) {
+        this.sndNationality = sndNationality;
     }
 
-    public Country getCitizenCountry() {
-        return citizenCountry;
+    public Race getOrigin() {
+        return origin;
     }
 
-    public void setCitizenCountry(Country citizenCountry) {
-        this.citizenCountry = citizenCountry;
+    public void setOrigin(Race origin) {
+        this.origin = origin;
     }
 
-    public Country getRegistrationCountry() {
-        return registrationCountry;
+    public Occupation getOccupation() {
+        return occupation;
     }
 
-    public void setRegistrationCountry(Country registrationCountry) {
-        this.registrationCountry = registrationCountry;
+    public void setOccupation(Occupation occupation) {
+        this.occupation = occupation;
+    }
+
+    public BigDecimal getCapital() {
+        return capital;
+    }
+
+    public void setCapital(BigDecimal capital) {
+        this.capital = capital;
+    }
+
+    public int getFinancialYear() {
+        return financialYear;
+    }
+
+    public void setFinancialYear(int financialYear) {
+        this.financialYear = financialYear;
+    }
+
+    public Date getDateOfRegister() {
+        return dateOfRegister;
+    }
+
+    public void setDateOfRegister(Date dateOfRegister) {
+        this.dateOfRegister = dateOfRegister;
+    }
+
+    public BigDecimal getPaidCapital() {
+        return paidCapital;
+    }
+
+    public void setPaidCapital(BigDecimal paidCapital) {
+        this.paidCapital = paidCapital;
+    }
+
+    public String getRegistrationId() {
+        return registrationId;
+    }
+
+    public void setRegistrationId(String registrationId) {
+        this.registrationId = registrationId;
+    }
+
+    public String getSignCondition() {
+        return signCondition;
+    }
+
+    public void setSignCondition(String signCondition) {
+        this.signCondition = signCondition;
+    }
+
+    public BigDecimal getTotalShare() {
+        return totalShare;
+    }
+
+    public void setTotalShare(BigDecimal totalShare) {
+        this.totalShare = totalShare;
     }
 
     public AddressView getCurrentAddress() {
@@ -446,12 +569,28 @@ public class CustomerInfoView implements Serializable {
         this.mailingAddressType = mailingAddressType;
     }
 
-    public BigDecimal getApproxIncome() {
-        return approxIncome;
+    public List<ChildrenView> getChildrenList() {
+        return childrenList;
     }
 
-    public void setApproxIncome(BigDecimal approxIncome) {
-        this.approxIncome = approxIncome;
+    public void setChildrenList(List<ChildrenView> childrenList) {
+        this.childrenList = childrenList;
+    }
+
+    public Country getCitizenCountry() {
+        return citizenCountry;
+    }
+
+    public void setCitizenCountry(Country citizenCountry) {
+        this.citizenCountry = citizenCountry;
+    }
+
+    public Country getRegistrationCountry() {
+        return registrationCountry;
+    }
+
+    public void setRegistrationCountry(Country registrationCountry) {
+        this.registrationCountry = registrationCountry;
     }
 
     public String getMobileNumber() {
@@ -486,36 +625,20 @@ public class CustomerInfoView implements Serializable {
         this.kycLevel = kycLevel;
     }
 
-    public boolean isConvenantFlag() {
-        return convenantFlag;
-    }
-
-    public void setConvenantFlag(boolean convenantFlag) {
-        this.convenantFlag = convenantFlag;
-    }
-
-    public boolean isEwsFlag() {
-        return ewsFlag;
-    }
-
-    public void setEwsFlag(boolean ewsFlag) {
-        this.ewsFlag = ewsFlag;
-    }
-
-    public boolean isReviewFlag() {
-        return reviewFlag;
-    }
-
-    public void setReviewFlag(boolean reviewFlag) {
-        this.reviewFlag = reviewFlag;
-    }
-
     public String getReason() {
         return reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
     }
 
     public CustomerInfoView getSpouse() {
@@ -525,113 +648,81 @@ public class CustomerInfoView implements Serializable {
     public void setSpouse(CustomerInfoView spouse) {
         this.spouse = spouse;
     }
-    public BusinessType getBusinessType() {
-        return businessType;
+
+    public WarningCode getCsi() {
+        return csi;
     }
 
-    public void setBusinessType(BusinessType businessType) {
-        this.businessType = businessType;
-    }
-
-    public String getInputId() {
-        return inputId;
-    }
-
-    public void setInputId(String inputId) {
-        this.inputId = inputId;
-    }
-
-    public int getValidId() {
-        return validId;
-    }
-
-    public void setValidId(int validId) {
-        this.validId = validId;
-    }
-
-    public boolean isNcbFlag() {
-        return ncbFlag;
-    }
-
-    public void setNcbFlag(boolean ncbFlag) {
-        this.ncbFlag = ncbFlag;
-    }
-
-    public String getNcbResult() {
-        return ncbResult;
-    }
-
-    public void setNcbResult(String ncbResult) {
-        this.ncbResult = ncbResult;
-    }
-
-    public String getNcbReason() {
-        return ncbReason;
-    }
-
-    public void setNcbReason(String ncbReason) {
-        this.ncbReason = ncbReason;
+    public void setCsi(WarningCode csi) {
+        this.csi = csi;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("individualId", individualId)
-                .append("juristicId", juristicId)
-                .append("searchBy", searchBy)
-                .append("searchId", searchId)
-                .append("documentType", documentType)
-                .append("customerEntity", customerEntity)
-                .append("relation", relation)
-                .append("reference", reference)
-                .append("citizenId", citizenId)
-                .append("registrationId", registrationId)
-                .append("inputId", inputId)
-                .append("cardAuthorizeBy", cardAuthorizeBy)
-                .append("documentExpiredDate", documentExpiredDate)
-                .append("customerId", customerId)
-                .append("serviceSegment", serviceSegment)
-                .append("collateralOwner", collateralOwner)
-                .append("percentShare", percentShare)
-                .append("titleTh", titleTh)
-                .append("titleEn", titleEn)
-                .append("firstNameTh", firstNameTh)
-                .append("lastNameTh", lastNameTh)
-                .append("firstNameEn", firstNameEn)
-                .append("lastNameEn", lastNameEn)
-                .append("dateOfBirth", dateOfBirth)
-                .append("dateOfRegister", dateOfRegister)
-                .append("gender", gender)
-                .append("age", age)
-                .append("origin", origin)
-                .append("nationality", nationality)
-                .append("education", education)
-                .append("occupation", occupation)
-                .append("maritalStatus", maritalStatus)
-                .append("numberOfChild", numberOfChild)
-                .append("childrenList", childrenList)
-                .append("citizenCountry", citizenCountry)
-                .append("registrationCountry", registrationCountry)
-                .append("currentAddress", currentAddress)
-                .append("workAddress", workAddress)
-                .append("registerAddress", registerAddress)
-                .append("mailingAddressType", mailingAddressType)
-                .append("approxIncome", approxIncome)
-                .append("mobileNumber", mobileNumber)
-                .append("faxNumber", faxNumber)
-                .append("email", email)
-                .append("kycLevel", kycLevel)
-                .append("convenantFlag", convenantFlag)
-                .append("ewsFlag", ewsFlag)
-                .append("reviewFlag", reviewFlag)
-                .append("reason", reason)
-                .append("businessType", businessType)
-                .append("spouse", spouse)
-                .append("validId", validId)
-                .append("ncbFlag", ncbFlag)
-                .append("ncbResult", ncbResult)
-                .append("ncbReason", ncbReason)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("individualId", individualId).
+                append("juristicId", juristicId).
+                append("searchBy", searchBy).
+                append("searchId", searchId).
+                append("inputId", inputId).
+                append("validId", validId).
+                append("ncbResult", ncbResult).
+                append("ncbReason", ncbReason).
+                append("id", id).
+                append("age", age).
+                append("documentExpiredDate", documentExpiredDate).
+                append("titleTh", titleTh).
+                append("titleEn", titleEn).
+                append("firstNameTh", firstNameTh).
+                append("lastNameTh", lastNameTh).
+                append("firstNameEn", firstNameEn).
+                append("lastNameEn", lastNameEn).
+                append("ncbFlag", ncbFlag).
+                append("customerEntity", customerEntity).
+                append("documentType", documentType).
+                append("relation", relation).
+                append("reference", reference).
+                append("documentAuthorizeBy", documentAuthorizeBy).
+                append("serviceSegment", serviceSegment).
+                append("tmbCustomerId", tmbCustomerId).
+                append("collateralOwner", collateralOwner).
+                append("percentShare", percentShare).
+                append("approxIncome", approxIncome).
+                append("dateOfBirth", dateOfBirth).
+                append("citizenId", citizenId).
+                append("gender", gender).
+                append("numberOfChild", numberOfChild).
+                append("education", education).
+                append("maritalStatus", maritalStatus).
+                append("nationality", nationality).
+                append("sndNationality", sndNationality).
+                append("origin", origin).
+                append("occupation", occupation).
+                append("capital", capital).
+                append("financialYear", financialYear).
+                append("dateOfRegister", dateOfRegister).
+                append("paidCapital", paidCapital).
+                append("registrationId", registrationId).
+                append("signCondition", signCondition).
+                append("totalShare", totalShare).
+                append("currentAddress", currentAddress).
+                append("workAddress", workAddress).
+                append("registerAddress", registerAddress).
+                append("mailingAddressType", mailingAddressType).
+                append("childrenList", childrenList).
+                append("citizenCountry", citizenCountry).
+                append("registrationCountry", registrationCountry).
+                append("mobileNumber", mobileNumber).
+                append("faxNumber", faxNumber).
+                append("email", email).
+                append("kycLevel", kycLevel).
+                append("convenantFlag", convenantFlag).
+                append("ewsFlag", ewsFlag).
+                append("reviewFlag", reviewFlag).
+                append("reason", reason).
+                append("businessType", businessType).
+                append("spouse", spouse).
+                append("csi", csi).
+                toString();
     }
 }

@@ -27,6 +27,8 @@ public class CustomerTransform extends Transform {
     @Inject
     RelationDAO relationDAO;
     @Inject
+    ReferenceDAO referenceDAO;
+    @Inject
     MaritalStatusDAO maritalStatusDAO;
     @Inject
     EducationDAO educationDAO;
@@ -42,9 +44,138 @@ public class CustomerTransform extends Transform {
     DistrictDAO districtDAO;
     @Inject
     SubDistrictDAO subDistrictDAO;
+    @Inject
+    CountryDAO countryDAO;
 
     public CustomerInfoView transformToView(Customer customer){
+
         CustomerInfoView customerInfoView = new CustomerInfoView();
+
+        customerInfoView.setId(customer.getId());
+        customerInfoView.setTitleTh(customer.getTitle());
+        customerInfoView.setFirstNameTh(customer.getNameTh());
+        customerInfoView.setLastNameTh(customer.getLastNameTh());
+        customerInfoView.setCustomerEntity(customer.getCustomerEntity());
+        customerInfoView.setAge(customer.getAge());
+        customerInfoView.setTmbCustomerId(customer.getIdNumber());
+        customerInfoView.setRelation(customer.getRelation());
+        customerInfoView.setReference(customer.getReference());
+        customerInfoView.setDocumentType(customer.getDocumentType());
+        customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setValidId(2);
+
+        if(customer.getAddressesList() != null){
+            List<Address> addressList = customer.getAddressesList();
+            for(Address address : addressList){
+                AddressView addressView = new AddressView();
+                addressView.setAddressType(address.getAddressType());
+                addressView.setAddressNo(address.getAddressNo());
+                addressView.setMoo(address.getMoo());
+                addressView.setBuilding(address.getBuilding());
+                addressView.setRoad(address.getRoad());
+                addressView.setProvince(address.getProvince());
+                addressView.setDistrict(address.getDistrict());
+                addressView.setSubDistrict(address.getSubDistrict());
+                addressView.setPostalCode(address.getPostalCode());
+                addressView.setCountry(address.getCountry());
+                addressView.setPhoneNumber(address.getPhoneNumber());
+                addressView.setExtension(address.getExtension());
+                addressView.setContactName(address.getContactName());
+                addressView.setContactPhone(address.getContactPhone());
+
+                if(address.getAddressType().getId() == 1){
+                    // Current address
+                    customerInfoView.setCurrentAddress(addressView);
+                } else if(address.getAddressType().getId() == 2){
+                    // Register Address
+                    customerInfoView.setRegisterAddress(addressView);
+                } else if(address.getAddressType().getId() == 3){
+                    // Work Address
+                    customerInfoView.setWorkAddress(addressView);
+                }
+            }
+        } else {
+            customerInfoView.setCurrentAddress(new AddressView());
+            customerInfoView.setRegisterAddress(new AddressView());
+            customerInfoView.setWorkAddress(new AddressView());
+        }
+
+        if(customer.getCustomerEntity().getId() == 1){
+            //Individual
+            Individual individual = customer.getIndividual();
+
+            if(individual != null){
+                customerInfoView.setIndividualId(individual.getId());
+                customerInfoView.setCitizenId(individual.getCitizenId());
+                customerInfoView.setGender(individual.getGender());
+                customerInfoView.setDateOfBirth(individual.getBirthDate());
+                customerInfoView.setNumberOfChild(individual.getNumberOfChildren());
+
+                if(individual.getEducation() != null){
+                    customerInfoView.setEducation(individual.getEducation());
+                } else {
+                    customerInfoView.setEducation(new Education());
+                }
+
+                if(individual.getMaritalStatus() != null){
+                    customerInfoView.setMaritalStatus(individual.getMaritalStatus());
+                } else {
+                    customerInfoView.setMaritalStatus(new MaritalStatus());
+                }
+
+                if(individual.getNationality() != null){
+                    customerInfoView.setNationality(individual.getNationality());
+                } else {
+                    customerInfoView.setNationality(new Nationality());
+                }
+
+                if(individual.getSndNationality() != null){
+                    customerInfoView.setSndNationality(individual.getSndNationality());
+                } else {
+                    customerInfoView.setSndNationality(new Nationality());
+                }
+
+                if(individual.getOccupation() != null){
+                    customerInfoView.setOccupation(individual.getOccupation());
+                } else {
+                    customerInfoView.setOccupation(new Occupation());
+                }
+            } else {
+                customerInfoView.setEducation(new Education());
+                customerInfoView.setMaritalStatus(new MaritalStatus());
+                customerInfoView.setNationality(new Nationality());
+                customerInfoView.setSndNationality(new Nationality());
+                customerInfoView.setOccupation(new Occupation());
+            }
+
+
+        } else {
+            //Juristic
+            Juristic juristic = customer.getJuristic();
+            log.info("transform juristic : {}", juristic);
+
+            if(juristic != null){
+                customerInfoView.setCapital(juristic.getCapital());
+                customerInfoView.setPaidCapital(juristic.getPaidCapital());
+                customerInfoView.setFinancialYear(juristic.getFinancialYear());
+                customerInfoView.setDateOfRegister(juristic.getRegisterDate());
+                customerInfoView.setSignCondition(juristic.getSignCondition());
+                customerInfoView.setRegistrationId(juristic.getRegistrationId());
+                if(juristic.getRegisterCountry() != null){
+                    customerInfoView.setRegistrationCountry(juristic.getRegisterCountry());
+                } else {
+                    customerInfoView.setRegistrationCountry(new Country());
+                }
+            } else {
+                customerInfoView.setRegistrationCountry(new Country());
+            }
+
+        }
+
+        customerInfoView.setCsi(customer.getCsi());
+        if(customerInfoView.getCsi() == null){
+            customerInfoView.setCsi(new WarningCode());
+        }
 
         return customerInfoView;
     }
@@ -75,7 +206,7 @@ public class CustomerTransform extends Transform {
             customer.setDocumentType(null);
         }
 
-        customer.setIdNumber(customerInfoView.getCustomerId());
+        customer.setIdNumber(customerInfoView.getTmbCustomerId());
         //customer.setExpireDate(item.getExpireDate());
         if(customerInfoView.getTitleTh() != null && customerInfoView.getTitleTh().getId() != 0){
             customer.setTitle(titleDAO.findById(customerInfoView.getTitleTh().getId()));
@@ -86,10 +217,18 @@ public class CustomerTransform extends Transform {
         customer.setNameTh(customerInfoView.getFirstNameTh());
         customer.setLastNameTh(customerInfoView.getLastNameTh());
         customer.setAge(customerInfoView.getAge());
-        customer.setNcbFlag(customerInfoView.isNcbFlag());
+        customer.setNcbFlag(customerInfoView.getNcbFlag());
 
         if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
             customer.setRelation(relationDAO.findById(customerInfoView.getRelation().getId()));
+        } else {
+            customer.setRelation(null);
+        }
+
+        if(customerInfoView.getReference() != null && customerInfoView.getReference().getId() != 0){
+            customer.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
+        } else {
+            customer.setReference(null);
         }
 
         log.info("transformToModel : customer before adding address : {}", customer);
@@ -285,16 +424,33 @@ public class CustomerTransform extends Transform {
                 individual.setOccupation(null);
             }
             customer.setIndividual(individual);
-            //customer.setIndividual(null);
         } else {
             //Juristic
             Juristic juristic = new Juristic();
             if(customer.getJuristic() != null){
                 juristic = customer.getJuristic();
             }
+            juristic.setCustomer(customer);
+            juristic.setCapital(customerInfoView.getCapital());
+            juristic.setPaidCapital(customerInfoView.getPaidCapital());
+            juristic.setFinancialYear(customerInfoView.getFinancialYear());
+            juristic.setRegisterDate(customerInfoView.getDateOfRegister());
             juristic.setRegistrationId(customerInfoView.getRegistrationId());
+            juristic.setRegisterCountry(customerInfoView.getRegistrationCountry());
+            if(juristic.getRegisterCountry() != null && juristic.getRegisterCountry().getId() != 0){
+                juristic.setRegisterCountry(countryDAO.findById(juristic.getRegisterCountry().getId()));
+            }else{
+                juristic.setRegisterCountry(null);
+            }
+            juristic.setSignCondition(customerInfoView.getSignCondition());
+            juristic.setTotalShare(customerInfoView.getTotalShare());
 
             customer.setJuristic(juristic);
+        }
+
+        customer.setCsi(customerInfoView.getCsi());
+        if(customer.getCsi().getId() == 0){
+            customer.setCsi(null);
         }
 
         return customer;
@@ -310,91 +466,7 @@ public class CustomerTransform extends Transform {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
 
         for(Customer item : customers){
-            CustomerInfoView customerInfoView = new CustomerInfoView();
-            customerInfoView.setId(item.getId());
-            customerInfoView.setTitleTh(item.getTitle());
-            customerInfoView.setFirstNameTh(item.getNameTh());
-            customerInfoView.setLastNameTh(item.getLastNameTh());
-            customerInfoView.setCustomerEntity(item.getCustomerEntity());
-            customerInfoView.setAge(item.getAge());
-            customerInfoView.setCustomerId(item.getIdNumber());
-            customerInfoView.setRelation(item.getRelation());
-            customerInfoView.setDocumentType(item.getDocumentType());
-            customerInfoView.setNcbFlag(item.isNcbFlag());
-            customerInfoView.setValidId(2);
-
-            if(item.getAddressesList() != null){
-                List<Address> addressList = item.getAddressesList();
-                for(Address address : addressList){
-                    AddressView addressView = new AddressView();
-                    addressView.setAddressType(address.getAddressType());
-                    addressView.setAddressNo(address.getAddressNo());
-                    addressView.setMoo(address.getMoo());
-                    addressView.setBuilding(address.getBuilding());
-                    addressView.setRoad(address.getRoad());
-                    addressView.setProvince(address.getProvince());
-                    addressView.setDistrict(address.getDistrict());
-                    addressView.setSubDistrict(address.getSubDistrict());
-                    addressView.setPostalCode(address.getPostalCode());
-                    addressView.setCountry(address.getCountry());
-                    addressView.setPhoneNumber(address.getPhoneNumber());
-                    addressView.setExtension(address.getExtension());
-                    addressView.setContactName(address.getContactName());
-                    addressView.setContactPhone(address.getContactPhone());
-
-                    if(address.getAddressType().getId() == 1){
-                        // Current address
-                        customerInfoView.setCurrentAddress(addressView);
-                    } else if(address.getAddressType().getId() == 2){
-                        // Register Address
-                        customerInfoView.setRegisterAddress(addressView);
-                    } else if(address.getAddressType().getId() == 3){
-                        // Work Address
-                        customerInfoView.setWorkAddress(addressView);
-                    }
-                }
-            } else {
-                customerInfoView.setCurrentAddress(new AddressView());
-                customerInfoView.setRegisterAddress(new AddressView());
-                customerInfoView.setWorkAddress(new AddressView());
-            }
-
-            if(item.getCustomerEntity().getId() == 1){
-                //Individual
-                Individual individual = item.getIndividual();
-                customerInfoView.setIndividualId(individual.getId());
-                customerInfoView.setCitizenId(individual.getCitizenId());
-                customerInfoView.setGender(individual.getGender());
-                customerInfoView.setDateOfBirth(individual.getBirthDate());
-                customerInfoView.setNumberOfChild(individual.getNumberOfChildren());
-
-                if(individual.getEducation() != null){
-                    customerInfoView.setEducation(individual.getEducation());
-                } else {
-                    customerInfoView.setEducation(new Education());
-                }
-
-                if(individual.getMaritalStatus() != null){
-                    customerInfoView.setMaritalStatus(individual.getMaritalStatus());
-                } else {
-                    customerInfoView.setMaritalStatus(new MaritalStatus());
-                }
-
-                if(individual.getNationality() != null){
-                    customerInfoView.setNationality(individual.getNationality());
-                } else {
-                    customerInfoView.setNationality(new Nationality());
-                }
-
-                if(individual.getOccupation() != null){
-                    customerInfoView.setOccupation(individual.getOccupation());
-                } else {
-                    customerInfoView.setOccupation(new Occupation());
-                }
-            } else {
-                //Juristic
-                customerInfoView.setRegistrationId(item.getJuristic().getRegistrationId());
-            }
+            CustomerInfoView customerInfoView = transformToView(item);
             customerInfoViewList.add(customerInfoView);
         }
 

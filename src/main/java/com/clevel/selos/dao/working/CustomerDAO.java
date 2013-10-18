@@ -7,7 +7,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -40,9 +39,11 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
         return customerList;
     }
 
-    public Customer findByCitizenlId(String citizenId){
+
+    public Customer findByCitizenlId(String citizenId, long workCasePreScreenId){
         log.info("findByCitizenlId : {}", citizenId);
         Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.add(Restrictions.eq("individual.citizenId", citizenId));
         Customer customer = (Customer)criteria.uniqueResult();
 

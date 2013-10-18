@@ -14,6 +14,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -60,6 +61,9 @@ public class Qualitative {
     private User user;
     enum ModeForButton{ ADD, EDIT, CANCEL }
     private ModeForButton modeForButton;
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
 
     public Qualitative(){
 
@@ -71,12 +75,11 @@ public class Qualitative {
 
         HttpSession session = FacesUtil.getSession(true);
         user = userDAO.findById("10001");
-        log.info("onSaveQualitativeA ::: user : {}", user);
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
         if(page.equals("qualitativeA.jsf")){
-            session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+            session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -86,7 +89,7 @@ public class Qualitative {
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
 
         } else if(page.equals("qualitativeB.jsf")){
-            session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+            session.setAttribute("workCaseId", new Long(4)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
             if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -112,30 +115,53 @@ public class Qualitative {
             qualityLevelList = new ArrayList<QualityLevel>();
         }
 
-        qualityLevelList = qualityLevelDAO.findAll();
+        try{
+            qualityLevelList = qualityLevelDAO.findAll();
+        }catch (Exception e){
+            log.error( "qualityLevelDAO.findAll  error ::: {}" , e.getMessage());
+        }
     }
 
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
         log.info("modeForButton :: {} ",modeForButton);
 
+        try{
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+                if(qualitativeView.getId() == 0){
+                    qualitativeView.setCreateDate(DateTime.now().toDate());
+                    qualitativeView.setCreateBy(user);
+                }
 
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-            HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+                modeForButton = ModeForButton.EDIT;
+                messageHeader = "Save QualitativeA Success.";
+                message = "Save QualitativeA success.";
 
-            if(qualitativeView.getId() == 0){
-                qualitativeView.setCreateDate(DateTime.now().toDate());
-                qualitativeView.setCreateBy(user);
+            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+                qualitativeView.setModifyBy(user);
+                qualitativeView.setModifyDate(DateTime.now().toDate());
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+                messageHeader = "Edit QualitativeA Success.";
+                message = "Edit QualitativeA  success.";
             }
 
-            qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
-            modeForButton = ModeForButton.EDIT;
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-            qualitativeView.setModifyBy(user);
-            qualitativeView.setModifyDate(DateTime.now().toDate());
-            qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+        } catch(Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Save  QualitativeA failed.";
+
+            if(ex.getCause() != null){
+                message = "Save QualitativeA failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save QualitativeA failed. Cause : " + ex.getMessage();
+            }
+
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         }
     }
 
@@ -151,22 +177,47 @@ public class Qualitative {
         log.info(" onSaveQualitativeB :::");
         log.info("modeForButton :: {} ",modeForButton);
 
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-            HttpSession session = FacesUtil.getSession(true);
-            session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        try{
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+                HttpSession session = FacesUtil.getSession(true);
+                session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-            if(qualitativeView.getId() == 0){
-                qualitativeView.setCreateDate(DateTime.now().toDate());
-                qualitativeView.setCreateBy(user);
+                if(qualitativeView.getId() == 0){
+                    qualitativeView.setCreateDate(DateTime.now().toDate());
+                    qualitativeView.setCreateBy(user);
+                }
+
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+                modeForButton = ModeForButton.EDIT;
+
+                messageHeader = "Save QualitativeB Success.";
+                message = "Save QualitativeB success.";
+
+
+            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+                qualitativeView.setModifyBy(user);
+                qualitativeView.setModifyDate(DateTime.now().toDate());
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+                messageHeader = "Edit QualitativeB Success.";
+                message = "Edit QualitativeB  success.";
             }
 
-            qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
-            modeForButton = ModeForButton.EDIT;
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-            qualitativeView.setModifyBy(user);
-            qualitativeView.setModifyDate(DateTime.now().toDate());
-            qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+        }catch(Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Save  QualitativeB failed.";
+
+            if(ex.getCause() != null){
+                message = "Save QualitativeB failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save QualitativeB failed. Cause : " + ex.getMessage();
+            }
+
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
         }
 
     }
@@ -192,5 +243,29 @@ public class Qualitative {
 
     public void setQualityLevelList(List<QualityLevel> qualityLevelList) {
         this.qualityLevelList = qualityLevelList;
+    }
+
+    public boolean isMessageErr() {
+        return messageErr;
+    }
+
+    public void setMessageErr(boolean messageErr) {
+        this.messageErr = messageErr;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

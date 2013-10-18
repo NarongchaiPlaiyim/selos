@@ -483,7 +483,7 @@ public class NCRSImp implements NCRS, Serializable{
         exportModel.setOfficeCode("XXX");
 
         exportModel.setRequestNo(memberref);
-        exportModel.setStaffId(userId);
+        exportModel.setStaffId(userId.substring(0,5));
         exportModel.setInquiryType("01");//01
         exportModel.setCustomerType("01");//01
         exportModel.setJuristicType(null);
