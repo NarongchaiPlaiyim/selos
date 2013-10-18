@@ -30,7 +30,7 @@ public class BizInfoSummary implements Serializable {
     @Column(name="owner_name")
     private String ownerName;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="expiry_date")
     private Date expiryDate;
 
@@ -73,11 +73,11 @@ public class BizInfoSummary implements Serializable {
     @Column(name="extension")
     private String extension;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="registration_date")
     private Date registrationDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="establish_date")
     private Date establishDate;
 
