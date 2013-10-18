@@ -99,6 +99,15 @@ public class CustomerInfoIndividual implements Serializable {
     private List<Province> provinceForm3List;
     private List<District> districtForm3List;
     private List<SubDistrict> subDistrictForm3List;
+    private List<Province> provinceForm4List;
+    private List<District> districtForm4List;
+    private List<SubDistrict> subDistrictForm4List;
+    private List<Province> provinceForm5List;
+    private List<District> districtForm5List;
+    private List<SubDistrict> subDistrictForm5List;
+    private List<Province> provinceForm6List;
+    private List<District> districtForm6List;
+    private List<SubDistrict> subDistrictForm6List;
 
     private List<Country> countryList;
 
@@ -108,6 +117,11 @@ public class CustomerInfoIndividual implements Serializable {
 
     private String messageHeader;
     private String message;
+
+    private int addressFlagForm2;
+    private int addressFlagForm3;
+    private int addressFlagForm5;
+    private int addressFlagForm6;
 
     //session
     private long workCaseId;
@@ -171,6 +185,9 @@ public class CustomerInfoIndividual implements Serializable {
         provinceForm1List = provinceDAO.getListOrderByParameter("name");
         provinceForm2List = provinceDAO.getListOrderByParameter("name");
         provinceForm3List = provinceDAO.getListOrderByParameter("name");
+        provinceForm4List = provinceDAO.getListOrderByParameter("name");
+        provinceForm5List = provinceDAO.getListOrderByParameter("name");
+        provinceForm6List = provinceDAO.getListOrderByParameter("name");
 
         countryList = countryDAO.findAll();
 
@@ -207,12 +224,15 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
-    /*public void onChangeProvinceForm2() {
+    public void onChangeProvinceForm2() {
         if(customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
             Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
             districtForm2List = districtDAO.getListByProvince(province);
+            customerInfoView.getRegisterAddress().setDistrict(new District());
         }else{
             provinceForm2List = provinceDAO.getListOrderByParameter("name");
+            districtForm2List = new ArrayList<District>();
+            subDistrictForm2List = new ArrayList<SubDistrict>();
         }
     }
 
@@ -222,6 +242,7 @@ public class CustomerInfoIndividual implements Serializable {
             subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
         }else{
             onChangeProvinceForm2();
+            subDistrictForm2List = new ArrayList<SubDistrict>();
         }
     }
 
@@ -229,8 +250,11 @@ public class CustomerInfoIndividual implements Serializable {
         if(customerInfoView.getWorkAddress().getProvince().getCode() != 0){
             Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
             districtForm3List = districtDAO.getListByProvince(province);
+            customerInfoView.getWorkAddress().setDistrict(new District());
         }else{
             provinceForm3List = provinceDAO.getListOrderByParameter("name");
+            districtForm3List = new ArrayList<District>();
+            subDistrictForm3List = new ArrayList<SubDistrict>();
         }
     }
 
@@ -240,8 +264,75 @@ public class CustomerInfoIndividual implements Serializable {
             subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
         }else{
             onChangeProvinceForm3();
+            subDistrictForm3List = new ArrayList<SubDistrict>();
         }
-    }*/
+    }
+
+    public void onChangeProvinceForm4() {
+        if(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtDAO.getListByProvince(province);
+            customerInfoView.getSpouse().getCurrentAddress().setDistrict(new District());
+        }else{
+            provinceForm4List = provinceDAO.getListOrderByParameter("name");
+            districtForm4List = new ArrayList<District>();
+            subDistrictForm4List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictForm4() {
+        if(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            onChangeProvinceForm4();
+            subDistrictForm4List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceForm5() {
+        if(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtDAO.getListByProvince(province);
+            customerInfoView.getSpouse().getRegisterAddress().setDistrict(new District());
+        }else{
+            provinceForm5List = provinceDAO.getListOrderByParameter("name");
+            districtForm5List = new ArrayList<District>();
+            subDistrictForm5List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictForm5() {
+        if(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            onChangeProvinceForm5();
+            subDistrictForm5List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceForm6() {
+        if(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtDAO.getListByProvince(province);
+            customerInfoView.getSpouse().getWorkAddress().setDistrict(new District());
+        }else{
+            provinceForm6List = provinceDAO.getListOrderByParameter("name");
+            districtForm6List = new ArrayList<District>();
+            subDistrictForm6List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictForm6() {
+        if(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            onChangeProvinceForm6();
+            subDistrictForm6List = new ArrayList<SubDistrict>();
+        }
+    }
 
     //Get Set
     public CustomerInfoView getCustomerInfoView() {
@@ -434,5 +525,37 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setCountryList(List<Country> countryList) {
         this.countryList = countryList;
+    }
+
+    public int getAddressFlagForm2() {
+        return addressFlagForm2;
+    }
+
+    public void setAddressFlagForm2(int addressFlagForm2) {
+        this.addressFlagForm2 = addressFlagForm2;
+    }
+
+    public int getAddressFlagForm3() {
+        return addressFlagForm3;
+    }
+
+    public void setAddressFlagForm3(int addressFlagForm3) {
+        this.addressFlagForm3 = addressFlagForm3;
+    }
+
+    public int getAddressFlagForm5() {
+        return addressFlagForm5;
+    }
+
+    public void setAddressFlagForm5(int addressFlagForm5) {
+        this.addressFlagForm5 = addressFlagForm5;
+    }
+
+    public int getAddressFlagForm6() {
+        return addressFlagForm6;
+    }
+
+    public void setAddressFlagForm6(int addressFlagForm6) {
+        this.addressFlagForm6 = addressFlagForm6;
     }
 }

@@ -428,6 +428,10 @@
                                     </td>
                                 </tr>
                                 <!-- ############################################################################################# -->
+                                <tr style="height: 10px">
+                                    <td colspan="100%"><p:spacer width="2" height="10px"/></td>
+                                </tr>
+
                                 <tr>
                                     <td class="title top">
                                         <h:outputText value="ที่อยู่ปัจจุบัน :"/>
@@ -544,6 +548,269 @@
                                                     <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.currentAddress.phoneNumber}"/>
                                                     <h:outputText value=" ต่อ " styleClass="title"/>
                                                     <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.currentAddress.extension}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="height: 10px">
+                                    <td colspan="100%"><p:spacer width="2" height="10px"/></td>
+                                </tr>
+                                <!-- ############################################################################################# -->
+                                <tr>
+                                    <td class="title top">
+                                        <h:outputText value="ที่อยู่ทะเบียนบ้าน :"/>
+                                    </td>
+                                    <td colspan="2">
+                                        <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm2}">
+                                            <f:selectItem itemLabel="ที่อยู่ปัจจุบัน" itemValue="1"/>
+                                            <f:selectItem itemLabel="อื่นๆ" itemValue="3"/>
+                                        </h:selectOneRadio>
+                                    </td>
+                                    <td colspan="3">
+                                        <table>
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="เลขที่"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.addressNo}"/>
+                                                </td>
+                                                <td class="title right">
+                                                    <h:outputText value="หมู่ที่"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.moo}"/>
+                                                </td>
+                                                <td class="small title right">
+                                                    <h:outputText value="อาคาร/หมู่บ้าน"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.building}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="ตรอก/ซอย/ถนน"/>
+                                                </td>
+                                                <td class="left" colspan="5">
+                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="5">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.province.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.provinceForm2List}"
+                                                                                   var="province"
+                                                                                   itemLabel="#{province.name}"
+                                                                                   itemValue="#{province.code}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm2()}"
+                                                                            update=":frmMain:districtForm2,:frmMain:subDistrictForm2"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm2"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.district.id}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.districtForm2List}"
+                                                                                   var="district"
+                                                                                   itemLabel="#{district.name}"
+                                                                                   itemValue="#{district.id}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm2()}"
+                                                                            update=":frmMain:subDistrictForm2"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm2"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.subDistrict.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.subDistrictForm2List}"
+                                                                                   var="subDistrict"
+                                                                                   itemLabel="#{subDistrict.name}"
+                                                                                   itemValue="#{subDistrict.code}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="รหัสไปรษณีย์ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputMask mask="99999" styleClass="smaller" maxlength="5" value="#{custInfoSumIndi.customerInfoView.registerAddress.postalCode}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="ประเทศ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                                     value="#{custInfoSumIndi.customerInfoView.registerAddress.country.id}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{custInfoSumIndi.countryList}"
+                                                                       var="country"
+                                                                       itemLabel="#{country.name}"
+                                                                       itemValue="#{country.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="Address :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputText style="width: 500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.address}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="โทรศัพท์ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.phoneNumber}"/>
+                                                    <h:outputText value=" ต่อ " styleClass="title"/>
+                                                    <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.registerAddress.extension}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr style="height: 10px">
+                                    <td colspan="100%"><p:spacer width="2" height="10px"/></td>
+                                </tr>
+                                <!-- ############################################################################################# -->
+                                <tr>
+                                    <td class="title top">
+                                        <h:outputText value="ที่อยู่ที่ทำงาน :"/>
+                                    </td>
+                                    <td colspan="3">
+                                        <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm3}">
+                                            <f:selectItem itemLabel="ที่อยู่ปัจจุบัน" itemValue="1"/>
+                                            <f:selectItem itemLabel="ที่อยู่ตามทะเบียนบ้าน" itemValue="2"/>
+                                            <f:selectItem itemLabel="อื่นๆ" itemValue="3"/>
+                                        </h:selectOneRadio>
+                                    </td>
+                                    <td colspan="3">
+                                        <table>
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="เลขที่"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.workAddress.addressNo}"/>
+                                                </td>
+                                                <td class="title right">
+                                                    <h:outputText value="หมู่ที่"/>
+                                                </td>
+                                                <td class="smallest left">
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.workAddress.moo}"/>
+                                                </td>
+                                                <td class="small title right">
+                                                    <h:outputText value="อาคาร/หมู่บ้าน"/>
+                                                </td>
+                                                <td class="left">
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.workAddress.building}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title left">
+                                                    <h:outputText value="ตรอก/ซอย/ถนน"/>
+                                                </td>
+                                                <td class="left" colspan="5">
+                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.workAddress.road}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="5">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.workAddress.province.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.provinceForm3List}"
+                                                                                   var="province"
+                                                                                   itemLabel="#{province.name}"
+                                                                                   itemValue="#{province.code}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeProvinceForm3()}"
+                                                                            update=":frmMain:districtForm3,:frmMain:subDistrictForm3"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="districtForm3"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.workAddress.district.id}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.districtForm3List}"
+                                                                                   var="district"
+                                                                                   itemLabel="#{district.name}"
+                                                                                   itemValue="#{district.id}"/>
+                                                                    <p:ajax listener="#{custInfoSumIndi.onChangeDistrictForm3()}"
+                                                                            update=":frmMain:subDistrictForm3"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm3"
+                                                                                 value="#{custInfoSumIndi.customerInfoView.workAddress.subDistrict.code}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                    <f:selectItems value="#{custInfoSumIndi.subDistrictForm3List}"
+                                                                                   var="subDistrict"
+                                                                                   itemLabel="#{subDistrict.name}"
+                                                                                   itemValue="#{subDistrict.code}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="รหัสไปรษณีย์ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputMask mask="99999" styleClass="smaller" maxlength="5" value="#{custInfoSumIndi.customerInfoView.workAddress.postalCode}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="ประเทศ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:selectOneMenu size="1" style="width: 200px;"
+                                                                     value="#{custInfoSumIndi.customerInfoView.workAddress.country.id}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{custInfoSumIndi.countryList}"
+                                                                       var="country"
+                                                                       itemLabel="#{country.name}"
+                                                                       itemValue="#{country.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="Address :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputText style="width: 500px;" value="#{custInfoSumIndi.customerInfoView.workAddress.address}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="โทรศัพท์ :"/>
+                                                </td>
+                                                <td colspan="5">
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.workAddress.phoneNumber}"/>
+                                                    <h:outputText value=" ต่อ " styleClass="title"/>
+                                                    <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.workAddress.extension}"/>
                                                 </td>
                                             </tr>
                                         </table>
