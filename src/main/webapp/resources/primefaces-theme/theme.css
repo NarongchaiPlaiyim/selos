@@ -1271,6 +1271,10 @@ body .ui-tooltip {
 .ui-radiobutton-box.ui-state-error {
     border: 1px solid #cd0a0a!important;
 }
+.ui-selectonemenu-items-wrapper{
+    overflow-x: hidden!important;
+    overflow-y: auto!important;
+}
 
 
 /*

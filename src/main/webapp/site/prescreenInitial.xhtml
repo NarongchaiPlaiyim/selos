@@ -9,6 +9,7 @@
 <h:head>
     <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.filter_input.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
 </h:head>
 
@@ -470,7 +471,7 @@
 </p:panel>
  -->
 <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" style="width:180px!important;"
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
         <p:commandButton value="OK"
                          process="@this"

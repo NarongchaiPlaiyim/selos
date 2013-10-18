@@ -249,6 +249,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncrsModel.setTitleNameCode(TitleName.Miss);
                     } else {
                         //send other
+                        ncrsModel.setTitleNameCode(TitleName.Other);
                     }
                 }
                 ncrsModel.setFirstName(customerItem.getFirstNameTh());
@@ -282,6 +283,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                             nccrsModel.setRegistType(RegistType.LimitedPartnership);
                         } else if(customerItem.getTitleTh().getCode().equals("4")){
                             nccrsModel.setRegistType(RegistType.RegisteredOrdinaryPartnership);
+                        } else {
+                            nccrsModel.setRegistType(RegistType.ForeignRegistrationIdOrOthers);
                         }
                     }
                 }

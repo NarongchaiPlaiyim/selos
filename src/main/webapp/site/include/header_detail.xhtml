@@ -26,7 +26,7 @@
                 <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()" styleClass="ui-confirmdialog-no"/>
             </p:confirmDialog>
             <p:commandButton id="btnCloseSale" value="Closed Sales" styleClass="blueButton" rendered="#{baseController.manageButton.closeSaleButton}" type="button" onclick="confirmCloseSaleCA.show()"/>
-            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale CA?" styleClass="left" icon="ui-icon-alert"
+            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale?" styleClass="left" icon="ui-icon-alert"
                              widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
                              rendered="#{baseController.manageButton.closeSaleButton}">
                 <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"

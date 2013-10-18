@@ -12,7 +12,7 @@
                 <td class="title" style="width:145px;">Product Program :</td>
                 <td>
                     <p:selectOneMenu id="dlgSelProdProgram" value="#{prescreenMaker.facility.productProgram.id}"
-                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}">
+                                        size="1" style="min-width: 200px; width: 200px; max-width: 200px;" required="#{not empty param[addFacilityButton.clientId]}">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                     <f:selectItems value="#{prescreenMaker.prdGroupToPrdProgramList}"
                                    var="prodProgramItem"
@@ -28,7 +28,7 @@
                 <td class="title">Facility :</td>
                 <td>
                     <p:selectOneMenu id="creditTypeName" value="#{prescreenMaker.facility.creditType.id}"
-                                        size="1" style="width: 200px;" required="#{not empty param[addFacilityButton.clientId]}" >
+                                        size="1" style="min-width: 200px; width: 200px; max-width: 200px;" required="#{not empty param[addFacilityButton.clientId]}" >
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{prescreenMaker.prdProgramToCreditTypeList}"
                                        var="dlgCreditType"
@@ -42,7 +42,8 @@
                 <td>
                     <p:inputText value="#{prescreenMaker.facility.requestAmount}" required="#{not empty param[addFacilityButton.clientId]}"
                                  maxlength="10" styleClass="large right"
-                                 onkeydown="return numberOnly(event);" onfocus="removeComma(this)">
+                                 onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                 onfocus="removeComma(this)">
                         <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" integerOnly="true" maxIntegerDigits="10" />
                         <p:ajax event="blur" update=":facilityDlgForm" process="@form"/>
                     </p:inputText> Baht.
@@ -73,4 +74,5 @@
     LOADING<br />
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
+
 </ui:composition>

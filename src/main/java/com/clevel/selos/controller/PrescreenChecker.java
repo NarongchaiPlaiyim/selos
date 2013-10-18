@@ -284,9 +284,9 @@ public class PrescreenChecker implements Serializable {
         if(success){
             //TODO submit case
             try{
+                log.info("Submit case to Maker :::");
                 String actionCode = "1004";
-                log.info("todo send to bpm");
-                //prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+                prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
             }catch (Exception ex){
                 messageHeader = "Check NCB failed.";
                 message = ex.getMessage();
@@ -295,13 +295,13 @@ public class PrescreenChecker implements Serializable {
             }
             //TODO Redirect to inbox
             log.debug("onCheckNCB ::: success without failed. redirect to inbox!");
-            /*try{
+            try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
-            }*/
+            }
         }
 
     }

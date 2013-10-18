@@ -269,6 +269,7 @@ public class PrescreenMaker implements Serializable {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             caseBorrowerTypeId = prescreenBusinessControl.getCaseBorrowerTypeId(workCasePreScreenId);
+            log.info("onCreation ::: caseBorrowerTYpeId : {}", caseBorrowerTypeId);
             queueName = session.getAttribute("queueName").toString();
 
             log.debug("onCreation ::: workCasePreScreenId : {}", workCasePreScreenId);
@@ -581,13 +582,23 @@ public class PrescreenMaker implements Serializable {
         borrowerInfo.reset();
         spouseInfo.reset();
 
-        log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
+        if(stepId == 1001){
+            borrowerInfo.getRelation().setId(1);    //Set default relation to borrower
+            //TODO Check caseBorrowerType;
+            if(caseBorrowerTypeId == BorrowerType.INDIVIDUAL.value()){    //case borrower type = individual
+                borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
+                documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+            } else if (caseBorrowerTypeId == BorrowerType.JURISTIC.value()){
+                borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
+                documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
+            }
+        }
 
-        //TODO Check caseBorrowerType;
+        log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
 
         enableCustomerForm = false;
         enableDocumentType = true;
-        enableCustomerEntity = true;
+        /*enableCustomerEntity = true;*/
         enableTMBCustomerId = false;
         enableCitizenId = false;
     }
@@ -603,6 +614,7 @@ public class PrescreenMaker implements Serializable {
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
+
         //** validate form **//
         if(customerInfoViewList == null){
             customerInfoViewList = new ArrayList<CustomerInfoView>();
@@ -632,73 +644,118 @@ public class PrescreenMaker implements Serializable {
         if(modeForButton.equals(ModeForButton.ADD)){
             if(borrowerInfo.getCustomerEntity().getId() != 0){
                 if(borrowerInfo.getCustomerEntity().getId() == 1){ //Individual
-                    log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
-                    //--- Borrower ---
-                    if(borrowerInfo.getRelation().getId() == 1){
-                        //Borrower
-                        //TODO assign caseBorrowerType
-                        borrowerInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else if(borrowerInfo.getRelation().getId() == 2){
-                        //Guarantor
-                        guarantorInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
-                        //Relate Person
-                        relatedInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else{
-                        customerInfoViewList.add(borrowerInfo);
+                    //---- Validate CitizenId ----//
+                    boolean validateCitizen = true;
+                    for(CustomerInfoView customerInfoView : customerInfoViewList ){
+                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                            validateCitizen = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Duplicate citizenId.";
+                            break;
+                        }
                     }
 
-                    //--- Spouse ---
-                    log.info("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
-                    if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
-                        if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
-                            CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
-                            log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
-                            if(spouseInfo.getRelation().getId() == 1) {
-                                //Spouse - Borrower
-                                borrowerInfoViewList.add(spouseInfo);
-                            } else if(spouseInfo.getRelation().getId() == 2) {
-                                //Spouse - Guarantor
-                                guarantorInfoViewList.add(spouseInfo);
-                            } else if(spouseInfo.getRelation().getId() == 3 || spouseInfo.getRelation().getId() == 4) {
-                                //Spouse - Relate Person
-                                relatedInfoViewList.add(spouseInfo);
+                    if(validateCitizen){
+                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        //--- Borrower ---
+                        if(borrowerInfo.getRelation().getId() == 1){
+                            //Borrower
+                            //TODO assign caseBorrowerType
+                            borrowerInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+                            //Set case borrower type id
+                            if(caseBorrowerTypeId == 0){
+                                caseBorrowerTypeId = BorrowerType.INDIVIDUAL.value();
                             }
+                        }else if(borrowerInfo.getRelation().getId() == 2){
+                            //Guarantor
+                            guarantorInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+                        }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
+                            //Relate Person
+                            relatedInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+                        }else{
+                            customerInfoViewList.add(borrowerInfo);
                         }
+
+                        //--- Spouse ---
+                        log.info("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
+                        if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
+                            if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
+                                CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
+                                log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
+                                if(spouseInfo.getRelation().getId() == 1) {
+                                    //Spouse - Borrower
+                                    borrowerInfoViewList.add(spouseInfo);
+                                } else if(spouseInfo.getRelation().getId() == 2) {
+                                    //Spouse - Guarantor
+                                    guarantorInfoViewList.add(spouseInfo);
+                                } else if(spouseInfo.getRelation().getId() == 3 || spouseInfo.getRelation().getId() == 4) {
+                                    //Spouse - Relate Person
+                                    relatedInfoViewList.add(spouseInfo);
+                                }
+                            }
+                            complete = true;
+                        }
+                    } else {
+                        complete = false;
                     }
 
                 }else if(borrowerInfo.getCustomerEntity().getId() == 2){ //Juristic
                     DocumentType documentType = new DocumentType();
                     documentType.setId(3);
                     borrowerInfo.setDocumentType(documentType);
-                    //--- Borrower ---
-                    if(borrowerInfo.getRelation().getId() == 1){
-                        //Borrower
-                        borrowerInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else if(borrowerInfo.getRelation().getId() == 2){
-                        //Guarantor
-                        guarantorInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
-                        //Relate Person
-                        relatedInfoViewList.add(borrowerInfo);
-                        customerInfoViewList.add(borrowerInfo);
-                    }else{
-                        customerInfoViewList.add(borrowerInfo);
+
+                    boolean validateCitizen = true;
+                    for(CustomerInfoView customerInfoView : customerInfoViewList ){
+                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                            validateCitizen = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Duplicate registrationId.";
+                            break;
+                        }
+                    }
+
+                    if(validateCitizen){
+                        //--- Borrower ---
+                        if(borrowerInfo.getRelation().getId() == 1){
+                            //Borrower
+                            borrowerInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+
+                            //Set case borrower type id
+                            if(caseBorrowerTypeId == 0){
+                                caseBorrowerTypeId = BorrowerType.JURISTIC.value();
+                            }
+                        }else if(borrowerInfo.getRelation().getId() == 2){
+                            //Guarantor
+                            guarantorInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+                        }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
+                            //Relate Person
+                            relatedInfoViewList.add(borrowerInfo);
+                            customerInfoViewList.add(borrowerInfo);
+                        }else{
+                            customerInfoViewList.add(borrowerInfo);
+                        }
+                        complete = true;
+                    } else {
+                        complete = false;
                     }
                 }
-                complete = true;
             }
         } else { // Edit
 
             complete = true;
         }
-        onCheckButton();
+        //onCheckButton();
         context.addCallbackParam("functionComplete", complete);
+
+        if(!complete){
+            log.info("onSaveCustomerInfo ::: duplicate personal id : {}", complete);
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     public void onDeleteCustomerInfo() {
@@ -834,9 +891,11 @@ public class PrescreenMaker implements Serializable {
     public void onChangeRelation(){
         log.info("onChangeRelation ::: ");
         if(caseBorrowerTypeId == 0){
-            caseBorrowerTypeId = borrowerInfo.getCustomerEntity().getId();
+            referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getRelation().getId());
+        } else{
+            referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getRelation().getId());
         }
-        referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getRelation().getId());
+
     }
 
     public void onChangeMaritalStatus(){
@@ -852,6 +911,11 @@ public class PrescreenMaker implements Serializable {
         for(DocumentType documentType : documentTypeList){
             if(documentType.getId() == borrowerInfo.getDocumentType().getId()){
                 customerEntity.setId(documentType.getCustomerEntity().getId());
+                if(caseBorrowerTypeId == 0){
+                    referenceList = referenceDAO.findByCustomerEntityId(documentType.getCustomerEntity().getId(), documentType.getCustomerEntity().getId(), borrowerInfo.getRelation().getId());
+                }else{
+                    referenceList = referenceDAO.findByCustomerEntityId(documentType.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getRelation().getId());
+                }
             }
         }
 

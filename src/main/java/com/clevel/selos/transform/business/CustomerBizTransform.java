@@ -129,78 +129,87 @@ public class CustomerBizTransform extends BusinessTransform {
                     String homePhoneNumber="";
                     String homePhoneExtension="";
 
-                    //If Telephone type 1  = M move telephoneNumber1 to Mobile (1)
-                    if(individualModel.getTelephoneNumber1().getTelephoneType().equals("M")){
-                        mobileNumber1=individualModel.getTelephoneNumber1().getTelephoneNumber();
-                    }
-                    // If Telephone type 1 = B move telephoneNumber1 to Working Address- Contact Number move extension1 to Working Address - Ext Number
-                    if(individualModel.getTelephoneNumber1().getTelephoneType().equals("B")){
-                        workPhoneNumber=individualModel.getTelephoneNumber1().getTelephoneNumber();
-                        workPhoneExtension=individualModel.getTelephoneNumber1().getExtension();
-                    }
-                    //If Telephone type 1 = R move telephoneNumber1 to Personal Information-Home Number move extension1 to Personal Information-Ext Number
-                    if(individualModel.getTelephoneNumber1().getTelephoneType().equals("R")){
+                    if(individualModel.getTelephoneNumber1() != null){
+                        //If Telephone type 1  = M move telephoneNumber1 to Mobile (1)
+                        if(individualModel.getTelephoneNumber1().getTelephoneType() != null && individualModel.getTelephoneNumber1().getTelephoneType().equals("M")){
+                            mobileNumber1=individualModel.getTelephoneNumber1().getTelephoneNumber();
+                        }
+                        // If Telephone type 1 = B move telephoneNumber1 to Working Address- Contact Number move extension1 to Working Address - Ext Number
+                        if(individualModel.getTelephoneNumber1().getTelephoneType() != null && individualModel.getTelephoneNumber1().getTelephoneType().equals("B")){
+                            workPhoneNumber=individualModel.getTelephoneNumber1().getTelephoneNumber();
+                            workPhoneExtension=individualModel.getTelephoneNumber1().getExtension();
+                        }
+                        //If Telephone type 1 = R move telephoneNumber1 to Personal Information-Home Number move extension1 to Personal Information-Ext Number
+                        if(individualModel.getTelephoneNumber1().getTelephoneType() != null && individualModel.getTelephoneNumber1().getTelephoneType().equals("R")){
 
-                    }
-
-                    //If Telephone type 2 = M : If no value in Mobile (1) , move telephoneNumber2 to Mobile (1),else move telephoneNumber2 to Mobile (2)
-                    if(individualModel.getTelephoneNumber2().getTelephoneType().equals("M")){
-                        if(mobileNumber1==""||mobileNumber1==null){
-                            mobileNumber1=individualModel.getTelephoneNumber2().getTelephoneNumber();
-                        }else{
-                            mobileNumber2=individualModel.getTelephoneNumber2().getTelephoneNumber();            //****************
                         }
                     }
-                    //If Telephone type 2 = B if no value in Working Address- Contact Number , move telephoneNumber2 to Working Address- Contact Number move extension2 to Working Address - Ext Number
-                    if(individualModel.getTelephoneNumber2().getTelephoneType().equals("B")){
-                        if(workPhoneNumber==""||workPhoneNumber==null){
-                            workPhoneNumber=individualModel.getTelephoneNumber2().getTelephoneNumber();
-                            workPhoneExtension=individualModel.getTelephoneNumber2().getExtension();
+
+                    if(individualModel.getTelephoneNumber2() != null){
+                        //If Telephone type 2 = M : If no value in Mobile (1) , move telephoneNumber2 to Mobile (1),else move telephoneNumber2 to Mobile (2)
+                        if(individualModel.getTelephoneNumber2().getTelephoneType() != null && individualModel.getTelephoneNumber2().getTelephoneType().equals("M")){
+                            if(mobileNumber1==""||mobileNumber1==null){
+                                mobileNumber1=individualModel.getTelephoneNumber2().getTelephoneNumber();
+                            }else{
+                                mobileNumber2=individualModel.getTelephoneNumber2().getTelephoneNumber();            //****************
+                            }
+                        }
+                        //If Telephone type 2 = B if no value in Working Address- Contact Number , move telephoneNumber2 to Working Address- Contact Number move extension2 to Working Address - Ext Number
+                        if(individualModel.getTelephoneNumber2().getTelephoneType() != null && individualModel.getTelephoneNumber2().getTelephoneType().equals("B")){
+                            if(workPhoneNumber==""||workPhoneNumber==null){
+                                workPhoneNumber=individualModel.getTelephoneNumber2().getTelephoneNumber();
+                                workPhoneExtension=individualModel.getTelephoneNumber2().getExtension();
+                            }
+                        }
+                        // If Telephone type 2 = R , if no value in Personal Information-Home Number ,  move telephoneNumber2 to  Personal Information-Home Number move extension2 to Personal Information-Ext Number
+                        if(individualModel.getTelephoneNumber2().getTelephoneType() != null && individualModel.getTelephoneNumber2().getTelephoneType().equals("R")){
+
                         }
                     }
-                    // If Telephone type 2 = R , if no value in Personal Information-Home Number ,  move telephoneNumber2 to  Personal Information-Home Number move extension2 to Personal Information-Ext Number
-                    if(individualModel.getTelephoneNumber2().getTelephoneType().equals("R")){
 
-                    }
+                    if(individualModel.getTelephoneNumber3() != null){
+                        //If Telephone type 3 = M : If no value in Mobile (1) , move telephoneNumber3 to Mobile (1),else move telephoneNumber3 to Mobile (2)
+                        if(individualModel.getTelephoneNumber3().getTelephoneType() != null && individualModel.getTelephoneNumber3().getTelephoneType().equals("M")){
+                            if(mobileNumber1==""||mobileNumber1==null){
+                                mobileNumber1=individualModel.getTelephoneNumber3().getTelephoneNumber();
+                            }else{
+                                mobileNumber2=individualModel.getTelephoneNumber3().getTelephoneNumber();            //****************
+                            }
+                        }
 
-                    //If Telephone type 3 = M : If no value in Mobile (1) , move telephoneNumber3 to Mobile (1),else move telephoneNumber3 to Mobile (2)
-                    if(individualModel.getTelephoneNumber3().getTelephoneType().equals("M")){
-                        if(mobileNumber1==""||mobileNumber1==null){
-                            mobileNumber1=individualModel.getTelephoneNumber3().getTelephoneNumber();
-                        }else{
-                            mobileNumber2=individualModel.getTelephoneNumber3().getTelephoneNumber();            //****************
+                        //If Telephone type 3 = B if no value in Working Address- Contact Number , move telephoneNumber3 to Working Address- Contact Number move extension3 to Working Address - Ext Number
+                        if(individualModel.getTelephoneNumber3().getTelephoneType() != null && individualModel.getTelephoneNumber3().getTelephoneType().equals("B")){
+                            if(workPhoneNumber==""||workPhoneNumber==null){
+                                workPhoneNumber=individualModel.getTelephoneNumber3().getTelephoneNumber();
+                                workPhoneExtension=individualModel.getTelephoneNumber3().getExtension();
+                            }
+                        }
+                        // If Telephone type 3 = R , if no value in Personal Information-Home Number ,  move telephoneNumber3 to  Personal Information-Home Number move extension3 to Personal Information-Ext Number
+                        if(individualModel.getTelephoneNumber3().getTelephoneType() != null && individualModel.getTelephoneNumber3().getTelephoneType().equals("R")){
+
                         }
                     }
-                    //If Telephone type 3 = B if no value in Working Address- Contact Number , move telephoneNumber3 to Working Address- Contact Number move extension3 to Working Address - Ext Number
-                    if(individualModel.getTelephoneNumber3().getTelephoneType().equals("B")){
-                        if(workPhoneNumber==""||workPhoneNumber==null){
-                            workPhoneNumber=individualModel.getTelephoneNumber3().getTelephoneNumber();
-                            workPhoneExtension=individualModel.getTelephoneNumber3().getExtension();
-                        }
-                    }
-                    // If Telephone type 3 = R , if no value in Personal Information-Home Number ,  move telephoneNumber3 to  Personal Information-Home Number move extension3 to Personal Information-Ext Number
-                    if(individualModel.getTelephoneNumber3().getTelephoneType().equals("R")){
 
-                    }
-
-                    //If Telephone type 4 = M : If no value in Mobile (1) , move telephoneNumber4 to Mobile (1),else move telephoneNumber4 to Mobile (2)
-                    if(individualModel.getTelephoneNumber4().getTelephoneType().equals("M")){
-                        if(mobileNumber1==""||mobileNumber1==null){
-                            mobileNumber1=individualModel.getTelephoneNumber4().getTelephoneNumber();
-                        }else{
-                            mobileNumber2=individualModel.getTelephoneNumber4().getTelephoneNumber();            //****************
+                    if(individualModel.getTelephoneNumber4() != null){
+                        //If Telephone type 4 = M : If no value in Mobile (1) , move telephoneNumber4 to Mobile (1),else move telephoneNumber4 to Mobile (2)
+                        if(individualModel.getTelephoneNumber4().getTelephoneType() != null && individualModel.getTelephoneNumber4().getTelephoneType().equals("M")){
+                            if(mobileNumber1==""||mobileNumber1==null){
+                                mobileNumber1=individualModel.getTelephoneNumber4().getTelephoneNumber();
+                            }else{
+                                mobileNumber2=individualModel.getTelephoneNumber4().getTelephoneNumber();            //****************
+                            }
                         }
-                    }
-                    //If Telephone type 4 = B if no value in Working Address- Contact Number , move telephoneNumber4 to Working Address- Contact Number move extension4 to Working Address - Ext Number
-                    if(individualModel.getTelephoneNumber4().getTelephoneType().equals("B")){
-                        if(workPhoneNumber==""||workPhoneNumber==null){
-                            workPhoneNumber=individualModel.getTelephoneNumber4().getTelephoneNumber();
-                            workPhoneExtension=individualModel.getTelephoneNumber4().getExtension();
+                        //If Telephone type 4 = B if no value in Working Address- Contact Number , move telephoneNumber4 to Working Address- Contact Number move extension4 to Working Address - Ext Number
+                        if(individualModel.getTelephoneNumber4().getTelephoneType() != null && individualModel.getTelephoneNumber4().getTelephoneType().equals("B")){
+                            if(workPhoneNumber==""||workPhoneNumber==null){
+                                workPhoneNumber=individualModel.getTelephoneNumber4().getTelephoneNumber();
+                                workPhoneExtension=individualModel.getTelephoneNumber4().getExtension();
+                            }
                         }
-                    }
-                    // If Telephone type 4 = R , if no value in Personal Information-Home Number ,  move telephoneNumber4 to  Personal Information-Home Number move extension4 to Personal Information-Ext Number
-                    if(individualModel.getTelephoneNumber4().getTelephoneType().equals("R")){
+                        // If Telephone type 4 = R , if no value in Personal Information-Home Number ,  move telephoneNumber4 to  Personal Information-Home Number move extension4 to Personal Information-Ext Number
+                        if(individualModel.getTelephoneNumber4().getTelephoneType() != null && individualModel.getTelephoneNumber4().getTelephoneType().equals("R")){
 
+                        }
                     }
 
                     customerInfoView.setMobileNumber(mobileNumber1);
@@ -311,6 +320,8 @@ public class CustomerBizTransform extends BusinessTransform {
                 if(corporateResult.getCorporateModel()!=null){
                     CorporateModel corporateModel = corporateResult.getCorporateModel();
                     CustomerInfoView customerInfoView =new CustomerInfoView();
+
+                    customerInfoView.reset();
 
                     customerInfoView.setTmbCustomerId(corporateModel.getTmbCusID());
                     customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", corporateModel.getTitleTH())));

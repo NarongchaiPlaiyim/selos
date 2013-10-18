@@ -9,7 +9,13 @@
 <h:head>
     <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.filter_input.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#test_test').filter_input({regex:'[0-9]'});
+        })
+    </script>
 </h:head>
 
 <h:body>

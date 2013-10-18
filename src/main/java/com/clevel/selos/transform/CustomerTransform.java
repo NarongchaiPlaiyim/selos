@@ -55,6 +55,9 @@ public class CustomerTransform extends Transform {
         customerInfoView.setTitleTh(customer.getTitle());
         customerInfoView.setFirstNameTh(customer.getNameTh());
         customerInfoView.setLastNameTh(customer.getLastNameTh());
+        if(customerInfoView.getLastNameTh() == null){
+            customerInfoView.setLastNameTh("");
+        }
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
         customerInfoView.setAge(customer.getAge());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
