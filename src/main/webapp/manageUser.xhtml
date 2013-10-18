@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>ManageUser</title>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+        <script type="text/javascript" language="javascript"
+                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    </h:head>
+    <h:body>
+        <p:panel id="pnl_maincontainer">
+            <div id="main_container">
+                <div id="header_logo">
+                    <div id="header_logo_image">
+                        <img src="#{request.contextPath}/resources/images/shared/header_logo.jpg" alt=""
+                             title="TMB SE-LOS Application"/>
+                    </div>
+                </div>
+
+                <div id="content_container">
+                    <h:form id="userTableData">
+                        <div id="content_info"/>
+                            <p:panelGrid columns="3">
+                                <p:inputText/>
+                                <p:commandButton value="Search"/>
+                                <h:outputText value=" TotalUser : #{isa.testString}"/>
+                            </p:panelGrid>
+
+                        <p:dataTable id="dataTable" var="c" value="#{isa.userDetail}" styleClass="center"
+                                     rowIndexVar="rowIndex" rows="20" paginator="true">
+                            <!--scrollable="true" scrollHeight="400">-->
+                            <p:column headerText="rowNumber">
+                                <h:outputText value="#{rowIndex +1}"/>
+                            </p:column>
+                            <p:column headerText="Id">
+                                <h:outputText value="#{c.id}"/>
+                            </p:column>
+                            <p:column headerText="Username">
+                                <h:outputText value="#{c.userName}"/>
+                            </p:column>
+                            <p:column headerText="EmailAddress">
+                                <h:outputText value="#{c.emailAddress}"/>
+                            </p:column>
+                            <p:column headerText="Active">
+                                <h:outputText value="#{c.active}"/>
+                            </p:column>
+                            <p:column headerText="BuCode">
+                                <h:outputText value="#{c.buCode}"/>
+                            </p:column>
+                            <p:column headerText="LastIp">
+                                <h:outputText value="#{c.lastIP}"/>
+                            </p:column>
+                            <p:column headerText="LastLogon">
+                                <h:outputText value="#{c.lastLogon}"/>
+                            </p:column>
+                            <p:column headerText="PhoneNumber">
+                                <h:outputText value="#{c.phoneNumber}"/>
+                            </p:column>
+                            <p:column headerText="Role">
+                                <h:outputText value="#{c.role.name}"/>
+                            </p:column>
+                            <p:column headerText="Department">
+                                <h:outputText value="#{c.department.name}"/>
+                            </p:column>
+                            <p:column headerText="Division">
+                                <h:outputText value="#{c.division.name}"/>
+                            </p:column>
+                            <p:column headerText="Region">
+                                <h:outputText value="#{c.region.name}"/>
+                            </p:column>
+                            <p:column headerText="Team">
+                                <h:outputText value="#{c.team.name}"/>
+                            </p:column>
+                            <p:column headerText="Title">
+                                <h:outputText value="#{c.title.name}"/>
+                            </p:column>
+                            <p:column headerText="Zone">
+                                <h:outputText value="#{c.zone.name}"/>
+                            </p:column>
+
+                            <p:column headerText="Status">
+                                <h:outputText value="#{c.userStatus}"/>
+                            </p:column>
+                            <p:column headerText="Management">
+                                <p:commandButton icon="ui-icon-pencil" title="hh"/>
+                                <p:commandButton icon="ui-icon-trash" title="hh"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:commandButton value="Add New User" actionListener="#{isa.onOpenNewUserForm()}"
+                                         oncomplete="PF('newUserDialog').show()"
+                                         update=":createUserDialog"/>
+
+                    </h:form>
+                </div>
+
+            </div>
+
+        </p:panel>
+
+        <p:dialog  header="Create new User" width="600" height="400" modal="true" widgetVar="newUserDialog">
+            <!--<p:panel header="...">-->
+            <h:form id="createUserDialog">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value="Username :"/>
+                    <p:inputText value="#{isa.createUserView.username}"/>
+
+                    <h:outputText value="EmailAddress :"/>
+                    <p:inputText value="#{isa.createUserView.emailAddress}"/>
+
+                    <h:outputText value="BuCode :"/>
+                    <p:inputText value="#{isa.createUserView.buCode}"/>
+
+                    <h:outputText value="PhoneExt :"/>
+                    <p:inputText value="#{isa.createUserView.phoneExt}"/>
+
+                    <h:outputText value="PhoneNumber :"/>
+                    <p:inputText value="#{isa.createUserView.phoneNumber}"/>
+
+                    <h:outputText value="Role"/>
+                    <p:selectOneMenu value="#{isa.createUserView.roleId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRoleList}"
+                                       var="roleItem"
+                                       itemLabel="#{roleItem.name}"
+                                       itemValue="#{roleItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Department"/>
+                    <p:selectOneMenu value="#{isa.createUserView.departmentId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDepartmentList}"
+                                       var="departmentItem"
+                                       itemLabel="#{departmentItem.name}"
+                                       itemValue="#{departmentItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Division"/>
+                    <p:selectOneMenu value="#{isa.createUserView.divisionId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDivisionList}"
+                                       var="divisionItem"
+                                       itemLabel="#{divisionItem.name}"
+                                       itemValue="#{divisionItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Region"/>
+                    <p:selectOneMenu value="#{isa.createUserView.regionId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRegionList}"
+                                       var="regionItem"
+                                       itemLabel="#{regionItem.name}"
+                                       itemValue="#{regionItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Team"/>
+                    <p:selectOneMenu value="#{isa.createUserView.teamId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTeamList}"
+                                       var="teamItem"
+                                       itemLabel="#{teamItem.name}"
+                                       itemValue="#{teamItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Title"/>
+                    <p:selectOneMenu value="#{isa.createUserView.titleId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTitleList}"
+                                       var="titleItem"
+                                       itemLabel="#{titleItem.name}"
+                                       itemValue="#{titleItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Zone"/>
+                    <p:selectOneMenu value="#{isa.createUserView.zoneId}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userZoneList}"
+                                       var="zoneItem"
+                                       itemLabel="#{zoneItem.name}"
+                                       itemValue="#{zoneItem.code}"/>
+                    </p:selectOneMenu>
+
+
+                    <p:commandButton value="Create" actionListener="#{isa.onCreateNewUser()}" update=":userTableData" />
+                    <p:commandButton value="Cancel"/>
+                </h:panelGrid>
+            </h:form>
+            <!--</p:panel>-->
+        </p:dialog>
+    </h:body>
+
+</f:view>
+</html>
