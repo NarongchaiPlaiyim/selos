@@ -199,6 +199,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         BigDecimal groupIncome = new BigDecimal(0);
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                if(customerInfoView.getApproxIncome() != null)
                 groupIncome.add(customerInfoView.getApproxIncome());
             }
         }
