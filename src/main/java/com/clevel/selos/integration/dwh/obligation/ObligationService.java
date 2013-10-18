@@ -5,10 +5,15 @@ import com.clevel.selos.dao.ext.dwh.Obligation2DAO;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.ext.dwh.Obligation1;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
 import com.clevel.selos.model.db.system.SystemParameter;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -33,13 +38,17 @@ public class ObligationService implements Serializable {
     Obligation2DAO obligation2DAO;
 
     @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
+    @Inject
     public ObligationService() {
 
     }
 
-    public List<Obligation> getObligationByTmbCusId(List<String> tmbCusIdList){
+    public ObligationResult getObligationByTmbCusId(List<String> tmbCusIdList){
         log.debug("getObligationByTmbCusId (tmbCusIdList : {})",tmbCusIdList);
-        List<Obligation> obligationList = new ArrayList<Obligation>();
+        ObligationResult obligationResult = new ObligationResult();
 
         //check which table is current
         SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
@@ -51,18 +60,38 @@ public class ObligationService implements Serializable {
                 //get from table 1 (Obligation1)
                 List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation1List!=null && obligation1List.size()>0){
-                    return transformObligation(obligation1List,null);
+                    List<Obligation> obligationList = transformObligation(obligation1List,null);
+                    obligationResult.setActionResult(ActionResult.SUCCEED);
+                    obligationResult.setObligationList(obligationList);
+                } else {
+                    obligationResult.setActionResult(ActionResult.FAILED);
+                    obligationResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
+                    obligationResult.setObligationList(new ArrayList<Obligation>());
                 }
             } else if(value.equalsIgnoreCase("2")){
                 //get from table 2 (Obligation2)
                 List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation2List!=null && obligation2List.size()>0){
-                    return transformObligation(null,obligation2List);
+                    List<Obligation> obligationList = transformObligation(null,obligation2List);
+                    obligationResult.setActionResult(ActionResult.SUCCEED);
+                    obligationResult.setObligationList(obligationList);
+                } else {
+                    obligationResult.setActionResult(ActionResult.FAILED);
+                    obligationResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
+                    obligationResult.setObligationList(new ArrayList<Obligation>());
                 }
+            } else {
+                obligationResult.setActionResult(ActionResult.FAILED);
+                obligationResult.setReason(exceptionMsg.get(ExceptionMapping.INVALID_SYSTEM_PARAM));
+                obligationResult.setObligationList(new ArrayList<Obligation>());
             }
+        } else {
+            obligationResult.setActionResult(ActionResult.FAILED);
+            obligationResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
+            obligationResult.setObligationList(new ArrayList<Obligation>());
         }
 
-        return obligationList;
+        return obligationResult;
     }
 
     public List<Obligation> transformObligation(List<Obligation1> obligation1List, List<Obligation2> obligation2List){

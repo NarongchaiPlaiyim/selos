@@ -37,6 +37,8 @@ public class TestNCRS implements Serializable {
     @Inject
     NCBInterfaceImpl ncbInterface;
 
+
+
 //    @Inject
 //    NCBIService ncbiService;
     //NCRS
@@ -120,7 +122,7 @@ public class TestNCRS implements Serializable {
 
         NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
         try {
-            ArrayList<NCRSOutputModel> ncrsOutputModelArrayList = null;//ncbInterface.request(inputModel);
+            ArrayList<NCRSOutputModel> ncrsOutputModelArrayList = ncbInterface.request(inputModel);
             for(NCRSOutputModel ncrsOutputModel : ncrsOutputModelArrayList){
                 log.info("NCRS response : {}", ncrsOutputModel.toString());
             }
@@ -174,7 +176,7 @@ public class TestNCRS implements Serializable {
 
         NCCRSInputModel inputModel = new NCCRSInputModel("55555", "0123456789012345", CANumber, referenceTel, modelArrayList);
         try {
-            ArrayList<NCCRSOutputModel> nccrsOutputModelArrayList = null;//ncbInterface.request(inputModel);
+            ArrayList<NCCRSOutputModel> nccrsOutputModelArrayList = ncbInterface.request(inputModel);
             for(NCCRSOutputModel nccrsOutputModel : nccrsOutputModelArrayList){
                 log.info("NCCRS response : {}", nccrsOutputModel.toString());
             }

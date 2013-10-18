@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "ext_rlos_appin2")
 public class AppInProcess2 implements Serializable {
     @Id
-    @Column(name="app_ref_number", length=9)
+    @Column(name="app_ref_number", length=14)
     private String appRefNumber;
 
     @Column(name="product_code", length=4)
