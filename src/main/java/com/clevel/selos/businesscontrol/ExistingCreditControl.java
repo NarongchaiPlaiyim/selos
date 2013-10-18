@@ -7,11 +7,15 @@ import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditView;
+import com.clevel.selos.transform.business.ExistingCreditTransform;
 import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ExistingCreditControl extends BusinessControl{
 
@@ -21,49 +25,73 @@ public class ExistingCreditControl extends BusinessControl{
     @Inject
     ReferenceDAO referenceDAO;
 
-    public ExistingCreditView getExistingCredit(List<CustomerInfoView> borrowerList, List<CustomerInfoView> relatedList){
-        log.debug("Start GetExistingCredit with borrowers{}, related{}");
+    @Inject
+    ExistingCreditTransform existingCreditTransform;
+
+    public ExistingCreditView getExistingCredit(List<CustomerInfoView> customerInfoViewList){
+        log.info("Start GetExistingCredit with borrowers{}, related{}");
 
         List<String> tmbCusIDList = new ArrayList<String>();
-        getCustomerList(borrowerList, tmbCusIDList);
-        log.debug("Customer List from Borrower :", tmbCusIDList);
-        getCustomerList(relatedList, tmbCusIDList);
-        log.debug("Customer List all : ");
+        List<String> _borrowerTMBCusID = new ArrayList<String>();
+        List<String> _relatedTMBCusID = new ArrayList<String>();
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
+                log.info("get tmbCusId {}", customerInfoView.getTmbCustomerId());
+                Reference reference = customerInfoView.getReference();
+                if(Util.isTrue(reference.getSll())){
+                    tmbCusIDList.add(customerInfoView.getTmbCustomerId());
+                    log.info("get reference {}", reference);
+                }
 
-        List<Obligation> obligationList = dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
+                if(customerInfoView.getRelation().getId() == 1){
+                    _borrowerTMBCusID.add(customerInfoView.getTmbCustomerId());
+                }
+            }
+        }
 
+        List<Obligation> obligationList = new ArrayList<Obligation>();
+        if(tmbCusIDList.size() > 0)
+            dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
+
+        Map<String, ExistingCreditDetailView> borrowerComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
+        Map<String, ExistingCreditDetailView> borrowerRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
+
+        Map<String, ExistingCreditDetailView> relatedComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
+        Map<String, ExistingCreditDetailView> relatedRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
+
+        BigDecimal _totalBorrowerComLimit = new BigDecimal(0);
+        BigDecimal _totalRelatedComLimit = new BigDecimal(0);
         ExistingCreditView existingCreditView = new ExistingCreditView();
 
         for(Obligation obligation : obligationList){
-
+            ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(obligation);
+            if(_borrowerTMBCusID.contains(obligation.getTmbCusId())){
+                borrowerComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
+                _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+            } else {
+                relatedComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
+                _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+            }
         }
 
-        List<ExistingCreditDetailView> _borrowerComExistingCredit;
-        List<ExistingCreditDetailView> _borrowerRetailExistingCredit;
-        List<ExistingCreditDetailView> _relatedComExistingCredit;
-        List<ExistingCreditDetailView> _relatedRetailExistingCredit;
+        existingCreditView.setBorrowerComExistingCredit(new ArrayList<ExistingCreditDetailView>(borrowerComCreditDetailHashMap.values()));
+        existingCreditView.setTotalBorrowerComLimit(_totalBorrowerComLimit);
+        existingCreditView.setRelatedComExistingCredit(new ArrayList<ExistingCreditDetailView>(relatedComCreditDetailHashMap.values()));
+        existingCreditView.setTotalRelatedComLimit(_totalRelatedComLimit);
 
-        for(Obligation obligation : obligationList){
-
-        }
-        //dwhInterface.getObligation(tmbCusIDList);
 
         return existingCreditView;
     }
 
     /**
      * @param customerInfoViewList
-     * @param tmbCusIDList - to add TMB Customer ID which required for retrieving Existing Credit and Calculate Group Exposure
      * @return
      */
-    private void getCustomerList(List<CustomerInfoView> customerInfoViewList, List<String> tmbCusIDList){
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
-            if(Util.isEmpty(customerInfoView.getTmbCustomerId())){
-                Reference reference = customerInfoView.getReference();
-                if(Util.isTrue(reference.getSll())){
-                    tmbCusIDList.add(customerInfoView.getTmbCustomerId());
-                }
-            }
-        }
+
+    private List<String> getCustomerList(List<CustomerInfoView> customerInfoViewList){
+        log.info("Start getCustomerList");
+        List<String> tmbCusIDList = new ArrayList<String>();
+
+        return tmbCusIDList;
     }
 }

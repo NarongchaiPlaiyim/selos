@@ -42,24 +42,17 @@ public class NCBInfoControl extends BusinessControl {
     public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList){
         log.info("onSaveNCBToDB begin");
 
-        try{
-            NCB ncb = ncbTransform.transformToModel( NCBInfoView );
-            ncbDAO.persist(ncb);
-            log.info("persist ncb");
+        NCB ncb = ncbTransform.transformToModel( NCBInfoView );
+        ncbDAO.persist(ncb);
+        log.info("persist ncb");
 
-            List<NCBDetail> NCBDetailListToDelete =  ncbDetailDAO.findNCBDetailByTcgId(ncb.getId());
-            log.info("NCBDetailListToDelete :: {}",NCBDetailListToDelete.size());
-            ncbDetailDAO.delete(NCBDetailListToDelete);
-            log.info("delete NCBDetailListToDelete");
+        List<NCBDetail> NCBDetailListToDelete =  ncbDetailDAO.findNCBDetailByNcbId(ncb.getId());
+        log.info("NCBDetailListToDelete :: {}",NCBDetailListToDelete.size());
+        ncbDetailDAO.delete(NCBDetailListToDelete);
+        log.info("delete NCBDetailListToDelete");
 
-            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
-            ncbDetailDAO.persist(ncbDetailList);
-
-        }catch (Exception e){
-            log.error( "onSaveNCBToDB error :: " + e.getMessage());
-        }finally{
-            log.info( "onSaveNCBToDB end" );
-        }
+        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
+        ncbDetailDAO.persist(ncbDetailList);
 
     }
 
@@ -88,7 +81,7 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViewList = null;
 
         try{
-            List<NCBDetail> NCBDetailList =  ncbDetailDAO.findNCBDetailByTcgId(ncbInfoView.getId());
+            List<NCBDetail> NCBDetailList =  ncbDetailDAO.findNCBDetailByNcbId(ncbInfoView.getId());
 
             if(NCBDetailList.size() > 0){
                 ncbDetailViewList  = ncbDetailTransform.transformToView(NCBDetailList);

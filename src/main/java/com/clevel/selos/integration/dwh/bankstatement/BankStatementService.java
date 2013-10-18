@@ -4,9 +4,14 @@ import com.clevel.selos.dao.ext.dwh.*;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
+import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.ext.bankstatement.*;
 import com.clevel.selos.model.db.system.SystemParameter;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
@@ -16,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class BankStatementService implements Serializable {
     @Inject
@@ -100,20 +106,25 @@ public class BankStatementService implements Serializable {
     BankStatement14DAO bankStatement14DAO;
 
     @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
+    private static final String FORMAT_MONTH_YEAR = "MMyyyy";
+
+
+    @Inject
     public BankStatementService() {
 
     }
 
-    public List<BankStatement> getBankStatementData(String accountNumber, Date fromDate, int numberOfMonth){
-        List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
+    public BankStatementResult getBankStatementData(String accountNumber, Date fromDate, int numberOfMonth){
+        BankStatementResult bankStatementResult = new BankStatementResult();
         if(fromDate!=null && numberOfMonth>0 && numberOfMonth<13 && !Util.isEmpty(accountNumber)){
             //find last month on system param
             SystemParameter systemParameter = systemParameterDAO.findByParameterName(lastMonth);
-
             if(systemParameter!=null){
-                Date lastMonth = DateTimeUtil.parseToDate(systemParameter.getValue(),"MMyyyy");
+                Date lastMonth = Util.strToDateFormat(systemParameter.getValue(),FORMAT_MONTH_YEAR);
                 int numOfDifMonth = DateTimeUtil.monthBetween2DatesWithNoDate(fromDate, lastMonth);
-                String tableNumber = "";
                 String firstMonth = "";
                 if(numOfDifMonth==0){
                     firstMonth = month1;
@@ -143,16 +154,42 @@ public class BankStatementService implements Serializable {
                     firstMonth = month13;
                 } else if(numOfDifMonth==13 && numberOfMonth<2){
                     firstMonth = monthTmp;
+                } else {
+                    bankStatementResult.setActionResult(ActionResult.FAILED);
+                    bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_ENOUGH));
+                    bankStatementResult.setBankStatementList(new ArrayList<BankStatement>());
                 }
 
                 //get first table
-                systemParameter = systemParameterDAO.findByParameterName(firstMonth);
-                if(systemParameter!=null){
-                    return getList(accountNumber,systemParameter.getValue(),numberOfMonth);
+                if(!Util.isEmpty(firstMonth)){
+                    systemParameter = systemParameterDAO.findByParameterName(firstMonth);
+                    if(systemParameter!=null){
+                        List<BankStatement> bankStatementList = getList(accountNumber,systemParameter.getValue(),numberOfMonth);
+                        if(bankStatementList!=null && bankStatementList.size()>0){
+                            bankStatementResult.setActionResult(ActionResult.SUCCEED);
+                            bankStatementResult.setBankStatementList(bankStatementList);
+                        } else {
+                            bankStatementResult.setActionResult(ActionResult.FAILED);
+                            bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
+                            bankStatementResult.setBankStatementList(new ArrayList<BankStatement>());
+                        }
+                    } else {
+                        bankStatementResult.setActionResult(ActionResult.FAILED);
+                        bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
+                        bankStatementResult.setBankStatementList(new ArrayList<BankStatement>());
+                    }
                 }
+            } else {
+                bankStatementResult.setActionResult(ActionResult.FAILED);
+                bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
+                bankStatementResult.setBankStatementList(new ArrayList<BankStatement>());
             }
+        } else {
+            bankStatementResult.setActionResult(ActionResult.FAILED);
+            bankStatementResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_INVALID_INPUT));
+            bankStatementResult.setBankStatementList(new ArrayList<BankStatement>());
         }
-        return bankStatementList;
+        return bankStatementResult;
     }
 
     public List<BankStatement> getList(String accountNumber, String tableNumber, int numberOfMonth){

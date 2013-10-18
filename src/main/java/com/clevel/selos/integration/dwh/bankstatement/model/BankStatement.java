@@ -99,7 +99,7 @@ public class BankStatement implements Serializable {
         return numberOfCreditTxn;
     }
 
-    public void setNumberOfCreditTxn(int numberOfCreditTxn) {
+    public void setNumberOfCreditTxn(Integer numberOfCreditTxn) {
         this.numberOfCreditTxn = numberOfCreditTxn;
     }
 
@@ -115,8 +115,12 @@ public class BankStatement implements Serializable {
         return numberOfDebitTxn;
     }
 
-    public void setNumberOfDebitTxn(int numberOfDebitTxn) {
-        this.numberOfDebitTxn = numberOfDebitTxn;
+    public void setNumberOfDebitTxn(Integer numberOfDebitTxn) {
+        if(numberOfDebitTxn==null){
+            this.numberOfDebitTxn = 0;
+        } else {
+            this.numberOfDebitTxn = numberOfDebitTxn.intValue();
+        }
     }
 
     public Date getHighestBalanceDate() {
@@ -163,24 +167,36 @@ public class BankStatement implements Serializable {
         return numberOfChequeReturn;
     }
 
-    public void setNumberOfChequeReturn(int numberOfChequeReturn) {
-        this.numberOfChequeReturn = numberOfChequeReturn;
+    public void setNumberOfChequeReturn(Integer numberOfChequeReturn) {
+        if(numberOfChequeReturn==null){
+            this.numberOfChequeReturn = 0;
+        } else {
+            this.numberOfChequeReturn = numberOfChequeReturn.intValue();
+        }
     }
 
     public int getChequeReturnAmount() {
         return chequeReturnAmount;
     }
 
-    public void setChequeReturnAmount(int chequeReturnAmount) {
-        this.chequeReturnAmount = chequeReturnAmount;
+    public void setChequeReturnAmount(Integer chequeReturnAmount) {
+        if(chequeReturnAmount==null){
+            this.chequeReturnAmount = 0;
+        } else {
+            this.chequeReturnAmount = chequeReturnAmount.intValue();
+        }
     }
 
     public int getNumberOfTimesOD() {
         return numberOfTimesOD;
     }
 
-    public void setNumberOfTimesOD(int numberOfTimesOD) {
-        this.numberOfTimesOD = numberOfTimesOD;
+    public void setNumberOfTimesOD(Integer numberOfTimesOD) {
+        if(numberOfTimesOD==null){
+            this.numberOfTimesOD = 0;
+        } else {
+            this.numberOfTimesOD = numberOfTimesOD.intValue();
+        }
     }
 
     public Date getStartODDate() {

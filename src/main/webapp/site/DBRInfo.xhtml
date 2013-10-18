@@ -33,21 +33,21 @@
                              <div id="content_lastupdate">Last update by <h:outputText value="#{prescreenMaker.prescreenView.modifyBy.userName}"/>, <h:outputText value="#{prescreenMaker.prescreenView.modifyDate}"/></div>
                         </div>
                         <div id="content_form">
-                            <table id="content_form_table" >
+                            <table id="content_form_table" style="width: 100%">
                                 <tr>
                                     <td>
-                                        <table id="dbr_table">
+                                        <table id="dbr_table" >
                                             <tr>
-                                                <td>
-                                                    <h:outputText value="#{msg.get('app.dbr.label.incomeFactor')}"/>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
                                                 </td>
                                                 <td>
                                                     <h:inputText value="#{dbrInfo.dbrView.incomeFactor}" onkeypress="return numberOnly(event);">
 
                                                     </h:inputText>
                                                 </td>
-                                                <td>
-                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrInterest')}"/>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                                 </td>
                                                 <td>
                                                     <h:inputText value="#{dbrInfo.dbrView.dbrInterest}">
@@ -56,8 +56,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncome')}"/>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
                                                 </td>
                                                 <td>
                                                     <h:inputText value="#{dbrInfo.dbrView.monthlyIncome}">
@@ -66,22 +66,177 @@
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center"/>
+                                                </td>
                                                 <td>
-                                                    <h:outputText value=""/>
+                                                    <h:inputText value="#{dbrInfo.dbrView.monthlyIncomeAdjust}" >
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"  type="number"/>
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.monthlyIncomePerMonth}" >
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"  type="number"/>
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.netMonthlyIncome}" >
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"  type="number"/>
+                                                    </h:inputText>
+                                                </td>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.currentDBR}" >
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"  type="number"/>
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText value="#{dbrInfo.dbrView.dbrBeforeRequest}" >
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"  type="number"/>
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="separate"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table >
+                                            <tr>
+                                                <td class="title top">
+                                                    <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <!--*** NCB table *** -->
+                                                <td >
+                                                    <p:dataTable value="" var="itemNCB" rowIndexVar="rowIndex" paginator="false">
+                                                        <p:column headerText=" " styleClass="center" style="width:22px;">
+                                                            <h:outputText value="#{rowIndex+1}"/>
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}">
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}">
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}">
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}">
+                                                            <h:outputText value="" />
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="separate"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table >
+                                            <tr>
+                                                <td class="title top" style="width: 200px">
+                                                  <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
+
+                                                </td>
+                                                <td>
+                                                    <p:commandButton value="#{msg.get('app.button.add')}" title="#{msg.get('app.button.add')}">
+
+                                                    </p:commandButton>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" >
+                                                    <p:dataTable value="#{dbrInfo.dbrView.dbrDetailViews}" var="item" rowIndexVar="rowIndex" paginator="false">
+                                                        <p:column headerText=" " styleClass="center" style="width:22px;">
+                                                            <h:outputText value="#{rowIndex+1}"/>
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.accountName')}">
+                                                            <h:outputText value="#{item.accountName}" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
+                                                            <h:outputText value="#{item.loanType}" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.limit')}">
+                                                            <h:outputText value="#{item.limit}" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.installment')}">
+                                                            <h:outputText value="#{item.installment}" />
+                                                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.dbr.table.column.debtForCalculate')}">
+                                                            <h:outputText value="#{item.debtForCalculate}" />
+                                                        </p:column>
+                                                        <p:column styleClass="center">
+                                                            <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                             icon="ui-icon-pencil">
+                                                            </p:commandButton>
+                                                            <p:commandButton title="#{msg.get('app.button.delete')}"
+                                                                             icon="ui-icon-trash">
+
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                    </p:dataTable>
                                                 </td>
                                             </tr>
 
                                         </table>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <div class="separate"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="center">
+                                        <p:commandButton value="#{msg.get('app.button.save')}"></p:commandButton>
+                                    </td>
+                                </tr>
                             </table>
-
                         </div>
                     </div>
-
-
                 </div>
-            </div>
+                    <div id="bottom_line"><!-- --></div>
+                </div>
+
+                     <div class="clear"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml" />
+            <h:inputHidden id="pagename" value="mnuprescreen"/>
+            <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </h:form>
     </p:panel>
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
