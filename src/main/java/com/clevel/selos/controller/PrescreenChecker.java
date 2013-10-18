@@ -217,6 +217,7 @@ public class PrescreenChecker implements Serializable {
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
             log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+            log.info("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
             for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -272,7 +273,6 @@ public class PrescreenChecker implements Serializable {
                 }
             }
         } catch(Exception ex){
-            ex.printStackTrace();
             log.error("Exception : {}", ex);
             messageHeader = "Check NCB failed.";
             message = ex.getMessage();
@@ -285,7 +285,8 @@ public class PrescreenChecker implements Serializable {
             //TODO submit case
             try{
                 String actionCode = "1004";
-                prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
+                log.info("todo send to bpm");
+                //prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
             }catch (Exception ex){
                 messageHeader = "Check NCB failed.";
                 message = ex.getMessage();
@@ -294,13 +295,13 @@ public class PrescreenChecker implements Serializable {
             }
             //TODO Redirect to inbox
             log.debug("onCheckNCB ::: success without failed. redirect to inbox!");
-            try{
+            /*try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
             }catch (Exception ex){
                 log.info("Exception :: {}",ex);
-            }
+            }*/
         }
 
     }

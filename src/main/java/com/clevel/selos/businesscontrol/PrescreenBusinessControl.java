@@ -366,8 +366,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(nccrsInputModel != null){
                 log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
                 List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
-                log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
+                log.info("getNCBFromNCB ::: nccrsOutputModelList : {}", nccrsOutputModelList);
                 List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
+                log.info("getNCBFromNCB ::: ncbJuristicViewList : {}", ncbJuristicViewList);
                 if(ncbJuristicViewList != null){
                     for(NcbView item : ncbJuristicViewList){
                         ncbViewList.add(item);
