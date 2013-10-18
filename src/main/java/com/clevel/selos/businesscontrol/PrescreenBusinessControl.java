@@ -332,7 +332,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Customer customer = individualDAO.findByCitizenId("123123123", new Long(67));
+                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
                         log.info("findByCitizenId customer : {}", customer);
 
                         if(customer == null ){

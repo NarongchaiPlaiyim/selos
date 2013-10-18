@@ -226,7 +226,7 @@ public class PrescreenChecker implements Serializable {
                     customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
                 }
             }
-            if(ncbViewList != null){
+            if(ncbViewList != null && ncbViewList.size() > 0){
                 for(NcbView item : ncbViewList){
                     index = 0;
                     for(CustomerInfoView customerInfoView : customerInfoViewList){

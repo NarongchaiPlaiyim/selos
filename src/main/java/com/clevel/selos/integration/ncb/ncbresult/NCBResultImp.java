@@ -36,32 +36,32 @@ public class NCBResultImp implements Serializable {
 
     public List<NCBResult> getListByAppRefNumber(String appRefNumber){
         log.debug("Call getListByAppRefNumber({})", appRefNumber);
-        return ncbResult.findByCriteria(Restrictions.eq("appRefNumber", appRefNumber));
+        return ncbResult.findByCriteria(Restrictions.eq("appNumber", appRefNumber));
     }
 
     public boolean isSUCCEED(String appRefNumber, String customerId){
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         boolean result = "SUCCEED".equals(model.getResult())?true:false;
         log.debug("Call isSUCCEED({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
     public String getRequestNo(String appRefNumber, String customerId){
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         String result = model.getRequestNo();
         log.debug("Call getRequestNo({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
     public boolean isFAILED(String appRefNumber, String customerId){
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         boolean result = "FAILED".equals(model.getResult())?true:false;
         log.debug("Call isFAILED({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
     public boolean isEXCEPTION(String appRefNumber, String customerId){
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         boolean result = "EXCEPTION".equals(model.getResult())?true:false;
         log.debug("Call isEXCEPTION({}, {}) is {}", appRefNumber, customerId, result);
         return result;
@@ -74,7 +74,7 @@ public class NCBResultImp implements Serializable {
     }
 
     public void updateSUCCEED(String appRefNumber, String customerId, String trackingId){
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         model.setResult("SUCCEED");
         model.setReason(trackingId);
         ncbResult.save(model);
@@ -83,7 +83,7 @@ public class NCBResultImp implements Serializable {
 
     public void checkStatus(String appRefNumber, String customerId, String trackingId){
         log.debug("Call checkStatus({}, {})", appRefNumber, customerId);
-        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appRefNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
+        NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         if (!"SUCCEED".equals(model.getResult())){
             updateSUCCEED(appRefNumber, customerId, trackingId);
             log.debug("Call checkStatus({}, {}) updated", appRefNumber, customerId);

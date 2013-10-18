@@ -771,10 +771,12 @@ public class PrescreenMaker implements Serializable {
             log.info("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCEED)){
                 log.info("onSearchCustomerInfo ActionResult.SUCCEED");
-                if(customerInfoResultView.getCustomerInfoView() != null && customerInfoResultView.getCustomerInfoView().getSpouse() != null){
+                if(customerInfoResultView.getCustomerInfoView() != null){
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
                     if(borrowerInfo.getMaritalStatus().getId() == 2){
-                        spouseInfo = borrowerInfo.getSpouse();
+                        if(borrowerInfo.getSpouse() != null){
+                            spouseInfo = borrowerInfo.getSpouse();
+                        }
                     }
                     enableCustomerForm = true;
                     enableDocumentType = false;

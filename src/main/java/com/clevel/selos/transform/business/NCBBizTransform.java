@@ -18,12 +18,15 @@ import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NCBSummaryView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.util.Util;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.*;
 
 public class NCBBizTransform extends BusinessTransform {
+    @Inject
+    Logger log;
     @Inject
     AccountTypeDAO accountTypeDAO;
     @Inject
@@ -921,12 +924,14 @@ public class NCBBizTransform extends BusinessTransform {
     }
 
     public List<NcbView> transformJuristic(List<NCCRSOutputModel> responseNCCRSModels){
+        log.debug("NCBBizTransform : transformJuristic ::: responseNCCRSModels : {}");
         List<NcbView> ncbViews = null;
         List<NCBDetailView> ncbDetailViews = null;
         NCBSummaryView ncbSummaryView = null;
         if(responseNCCRSModels!=null && responseNCCRSModels.size()>0){
             ncbViews = new ArrayList<NcbView>();
             for(NCCRSOutputModel responseNCCRSModel: responseNCCRSModels){
+                log.debug("NCCRSOutputModel : {}", responseNCCRSModel);
                 NcbView ncbView = new NcbView();
                 List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
                 List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
@@ -1800,9 +1805,11 @@ public class NCBBizTransform extends BusinessTransform {
                         }
                     }
                 } else {
+                    log.debug("NCCRSTransformJuristic : Failed");
                     ncbView.setResult(ActionResult.FAILED);
                     ncbView.setReason(responseNCCRSModel.getReason());
                 }
+                ncbViews.add(ncbView);
             }
         }
         return ncbViews;
