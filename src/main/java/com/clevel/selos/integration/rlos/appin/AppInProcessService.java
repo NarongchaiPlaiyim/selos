@@ -5,13 +5,18 @@ import com.clevel.selos.dao.ext.rlos.CustomerDetail2DAO;
 import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.ext.rlos.AppInProcess1;
 import com.clevel.selos.model.db.ext.rlos.AppInProcess2;
 import com.clevel.selos.model.db.ext.rlos.CustomerDetail1;
 import com.clevel.selos.model.db.ext.rlos.CustomerDetail2;
 import com.clevel.selos.model.db.system.SystemParameter;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
+import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -39,13 +44,17 @@ public class AppInProcessService implements Serializable {
     CustomerDetail2DAO customerDetail2DAO;
 
     @Inject
+    @ExceptionMessage
+    Message exceptionMsg;
+
+    @Inject
     public AppInProcessService(){
 
     }
 
-    public List<AppInProcess> getAppInProcessData(List<String> citizenIdList){
+    public AppInProcessResult getAppInProcessData(List<String> citizenIdList){
         log.debug("getAppInProcessData (citizenIdList : {})",citizenIdList);
-        List<AppInProcess> obligationList = new ArrayList<AppInProcess>();
+        AppInProcessResult appInProcessResult = new AppInProcessResult();
 
         //check which table is current
         SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
@@ -56,15 +65,39 @@ public class AppInProcessService implements Serializable {
             if(value.equalsIgnoreCase("1")){
                 //get from table 1
                 List<CustomerDetail1> customerDetail1List = customerDetail1DAO.getListCustomerByCitizenId(citizenIdList);
-                return getAppInProcessList(customerDetail1List, null);
+                List<AppInProcess> appInProcessList = getAppInProcessList(customerDetail1List, null);
+                if(appInProcessList!=null && appInProcessList.size()>0){
+                    appInProcessResult.setActionResult(ActionResult.SUCCEED);
+                    appInProcessResult.setAppInProcessList(appInProcessList);
+                } else {
+                    appInProcessResult.setActionResult(ActionResult.FAILED);
+                    appInProcessResult.setReason(exceptionMsg.get(ExceptionMapping.RLOS_DATA_NOT_FOUND));
+                    appInProcessResult.setAppInProcessList(new ArrayList<AppInProcess>());
+                }
             } else if(value.equalsIgnoreCase("2")){
                 //get from table 2
                 List<CustomerDetail2> customerDetail2List = customerDetail2DAO.getListCustomerByCitizenId(citizenIdList);
-                return getAppInProcessList(null, customerDetail2List);
+                List<AppInProcess> appInProcessList = getAppInProcessList(null, customerDetail2List);
+                if(appInProcessList!=null && appInProcessList.size()>0){
+                    appInProcessResult.setActionResult(ActionResult.SUCCEED);
+                    appInProcessResult.setAppInProcessList(appInProcessList);
+                } else {
+                    appInProcessResult.setActionResult(ActionResult.FAILED);
+                    appInProcessResult.setReason(exceptionMsg.get(ExceptionMapping.RLOS_DATA_NOT_FOUND));
+                    appInProcessResult.setAppInProcessList(new ArrayList<AppInProcess>());
+                }
+            } else {
+                appInProcessResult.setActionResult(ActionResult.FAILED);
+                appInProcessResult.setReason(exceptionMsg.get(ExceptionMapping.INVALID_SYSTEM_PARAM));
+                appInProcessResult.setAppInProcessList(new ArrayList<AppInProcess>());
             }
+        } else {
+            appInProcessResult.setActionResult(ActionResult.FAILED);
+            appInProcessResult.setReason(exceptionMsg.get(ExceptionMapping.NOT_FOUND_SYSTEM_PARAM));
+            appInProcessResult.setAppInProcessList(new ArrayList<AppInProcess>());
         }
 
-        return obligationList;
+        return appInProcessResult;
     }
 
     private List<AppInProcess> getAppInProcessList(List<CustomerDetail1> customerDetail1List, List<CustomerDetail2> customerDetail2List){
