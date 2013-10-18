@@ -25,7 +25,7 @@ public class UserAuditor {
     }
 
     public void addSucceed(String userName,String action,String actionDetail) {
-        add(userName,action,actionDetail,ActionResult.SUCCEED,"");
+        add(userName,action,actionDetail,ActionResult.SUCCESS,"");
     }
 
     public void addFailed(String userName,String action,String actionDetail,String resultDetail) {

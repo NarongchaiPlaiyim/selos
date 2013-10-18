@@ -223,7 +223,7 @@ public class PrescreenChecker implements Serializable {
             for(CustomerInfoView customerInfoView : customerInfoViewList){
                 if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
                     customerInfoView.setNcbReason("");
-                    customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
+                    customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
                 }
             }
             if(ncbViewList != null && ncbViewList.size() > 0){
@@ -238,7 +238,7 @@ public class PrescreenChecker implements Serializable {
                                         log.info("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                        if(item.getResult().equals(ActionResult.SUCCESS)){
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;
@@ -249,7 +249,7 @@ public class PrescreenChecker implements Serializable {
                                         log.info("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                        if(item.getResult().equals(ActionResult.SUCCESS)){
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;

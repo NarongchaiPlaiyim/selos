@@ -28,8 +28,6 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -325,7 +323,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                    if(ncbView.getResult() == ActionResult.SUCCESS){
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
@@ -383,7 +381,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                    if(ncbView.getResult() == ActionResult.SUCCESS){
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());

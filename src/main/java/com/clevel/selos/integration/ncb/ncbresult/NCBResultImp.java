@@ -41,7 +41,7 @@ public class NCBResultImp implements Serializable {
 
     public boolean isSUCCEED(String appRefNumber, String customerId){
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        boolean result = "SUCCEED".equals(model.getResult())?true:false;
+        boolean result = "SUCCESS".equals(model.getResult())?true:false;
         log.debug("Call isSUCCEED({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
@@ -75,7 +75,7 @@ public class NCBResultImp implements Serializable {
 
     public void updateSUCCEED(String appRefNumber, String customerId, String trackingId){
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        model.setResult("SUCCEED");
+        model.setResult("SUCCESS");
         model.setReason(trackingId);
         ncbResult.save(model);
         log.debug("Call updateSUCCEED({}, {}) has updated", appRefNumber, customerId);
@@ -84,7 +84,7 @@ public class NCBResultImp implements Serializable {
     public void checkStatus(String appRefNumber, String customerId, String trackingId){
         log.debug("Call checkStatus({}, {})", appRefNumber, customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        if (!"SUCCEED".equals(model.getResult())){
+        if (!"SUCCESS".equals(model.getResult())){
             updateSUCCEED(appRefNumber, customerId, trackingId);
             log.debug("Call checkStatus({}, {}) updated", appRefNumber, customerId);
         }

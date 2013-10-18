@@ -36,6 +36,24 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
+    public static Date getOnlyDatePlusMonth(Date date, int monthAdd) {
+        DateTime dt = new DateTime(date);
+        dt = dt.plusMonths(monthAdd).dayOfMonth().roundFloorCopy();
+        return dt.toDate();
+    }
+
+    public static Date getFirstDayOfMonth(Date date) {
+        DateTime dt = new DateTime(date);
+        dt = dt.dayOfMonth().withMinimumValue();
+        return dt.toDate();
+    }
+
+    public static Date getLastDayOfMonth(Date date) {
+        DateTime dt = new DateTime(date);
+        dt = dt.dayOfMonth().withMaximumValue();
+        return dt.toDate();
+    }
+
     public static Date getMaxDate() {
         DateTime dt = new DateTime(9999,12,31,0,0,0,0, BuddhistChronology.getInstance());
         return dt.toDate();

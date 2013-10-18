@@ -826,8 +826,8 @@ public class PrescreenMaker implements Serializable {
         try{
             customerInfoResultView = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
             log.info("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
-            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCEED)){
-                log.info("onSearchCustomerInfo ActionResult.SUCCEED");
+            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                log.info("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
                     if(borrowerInfo.getMaritalStatus().getId() == 2){

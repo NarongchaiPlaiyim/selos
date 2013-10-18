@@ -17,13 +17,24 @@ public class BankDAO extends GenericDAO<Bank,Integer> {
     public BankDAO() {
     }
 
+    public Bank getTMBBank() {
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.eq("shortName", "TMB"));
+        List list = criteria.list();
+        return (list != null && list.size() > 0) ?
+                (Bank) list.get(0) : null;
+    }
+
     public List<Bank> getListExcludeTMB() {
-        //todo: change later
-        return findAll();
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("active", 1))
+                .add(Restrictions.ne("shortName", "TMB"));
+        return criteria.list();
     }
 
     public List<Bank> getListRefinance() {
-        Criteria criteria = getSession().createCriteria(getEntityClass())
+        Criteria criteria = createCriteria()
                 .add(Restrictions.eq("active", 1))
                 .add(Restrictions.eq("refinance",1));
         List<Bank> list = criteria.list();

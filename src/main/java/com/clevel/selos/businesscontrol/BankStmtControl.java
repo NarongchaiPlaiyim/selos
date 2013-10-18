@@ -4,14 +4,15 @@ import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BankStatement;
 import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,10 +45,23 @@ public class BankStmtControl extends BusinessControl{
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
                 CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
-                if(customerAccountResult.getActionResult().equals(ActionResult.SUCCEED)){
+                if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
 
                 }
             }
+        }
+        return null;
+    }
+
+    public Date getPreviousStartDate(boolean seasonalFlag, Date expectedSubmissionDate) {
+        if (expectedSubmissionDate != null) {
+            int days = Util.getDayOfDate(expectedSubmissionDate);
+            //If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
+            //If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
+            //Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
+            int retrieveMonth = days < 15 ? 2 : 1;
+            retrieveMonth += seasonalFlag ? 11 : 5;
+            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
         }
         return null;
     }

@@ -71,6 +71,14 @@ public class RMService implements Serializable {
     String customerAccountAddress;
 
     @Inject
+    @Config(name = "interface.rm.customerAccount.serverURL")
+    String customerServerUrl;
+
+    @Inject
+    @Config(name = "interface.rm.customerAccount.sessionId")
+    String customerSessionId;
+
+    @Inject
     @Config(name = "interface.rm.service.connectTimeout")
     String connectTimeout;
 
@@ -104,49 +112,49 @@ public class RMService implements Serializable {
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             if(searchIndividual.getReqId()==null||searchIndividual.getReqId().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate CustType
         if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             if(searchIndividual.getCustType()==null||searchIndividual.getCustType().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(custType)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(custType)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custType)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custType)"));
             }
         }
         //Validate Type
         if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             if(searchIndividual.getType()==null||searchIndividual.getType().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(type)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(type)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(type)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(type)"));
             }
         }
         //Validate CustId
         if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custId)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custId)"));
         }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate CustName
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custName)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custName)"));
         }
         //Validate CustSurname
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustSurname().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(surname)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(surname)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             if(searchIndividual.getRadSelectSearch()==null||searchIndividual.getRadSelectSearch().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -192,7 +200,7 @@ public class RMService implements Serializable {
                 log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
                 }
                 //Audit Data
-                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
+                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -398,45 +406,45 @@ public class RMService implements Serializable {
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
             if(searchIndividual.getReqId()==null||searchIndividual.getReqId().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate CustType
         if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
             if(searchIndividual.getCustType()==null||searchIndividual.getCustType().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(custType)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(custType)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custType)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custType)"));
             }
         }
         //Validate Type
         if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
             if(searchIndividual.getType()==null||searchIndividual.getType().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(type)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(type)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(type)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(type)"));
             }
         }
         //Validate CustId
         if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custId)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custId)"));
         }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate CustName
         if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custName)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custName)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
             if(searchIndividual.getRadSelectSearch()==null||searchIndividual.getRadSelectSearch().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -480,7 +488,7 @@ public class RMService implements Serializable {
                 }
 
                 //Audit Data
-                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
+                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
@@ -561,25 +569,25 @@ public class RMService implements Serializable {
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchCustomerAccountModel.getReqId().length())) {
             if(searchCustomerAccountModel.getReqId()==null||searchCustomerAccountModel.getReqId().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(reqId)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(reqId)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(reqId)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(reqId)"));
             }
         }
         //Validate Acronym
         if (!ValidationUtil.isValueInRange(1, 20, searchCustomerAccountModel.getAcronym().length())) {
             if(searchCustomerAccountModel.getAcronym()==null||searchCustomerAccountModel.getAcronym().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(acronym)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(acronym)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(acronym)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(acronym)"));
             }
         }
         //Validate ProductCode
         if (!ValidationUtil.isValueInRange(1, 8, searchCustomerAccountModel.getProductCode().length())) {
             if(searchCustomerAccountModel.getProductCode()==null||searchCustomerAccountModel.getProductCode().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(productCode)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(productCode)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(productCode)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(productCode)"));
             }
         }
 //        //Validate ServerURL
@@ -592,14 +600,14 @@ public class RMService implements Serializable {
 //        }
         //Validate CustNbr
         if (ValidationUtil.isGreaterThan(14, searchCustomerAccountModel.getCustNbr().length())) {
-            throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(custNbr)"));
+            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(custNbr)"));
         }
         //Validate RadSelectSearch
         if (!ValidationUtil.isValueInRange(1, 10, searchCustomerAccountModel.getRadSelectSearch().length())) {
             if(searchCustomerAccountModel.getRadSelectSearch()==null||searchCustomerAccountModel.getRadSelectSearch().equals("")){
-                throw new ValidationException(ValidationMapping.RM_DATA_REQUIRED,validationMsg.get(ValidationMapping.RM_DATA_REQUIRED,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED,validationMsg.get(ValidationMapping.DATA_REQUIRED,"(radSelectSearch)"));
             }else{
-                throw new ValidationException(ValidationMapping.RM_FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.RM_FIELD_LENGTH_INVALID,"(radSelectSearch)"));
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID,validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID,"(radSelectSearch)"));
             }
         }
         log.debug("Validate Pass!");
@@ -608,8 +616,9 @@ public class RMService implements Serializable {
         header.setReqId(searchCustomerAccountModel.getReqId());
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
-//        header.setServerURL("");
-//        header.setSessionId("");
+        //todo
+//        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl),String.class,customerServerUrl));
+//        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId),String.class,customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();
@@ -648,11 +657,11 @@ public class RMService implements Serializable {
                     log.debug("accountListData " + i + 1 + " : {}", resSearchCustomerAccount.getBody().getAccountList().get(i).toString());
                 }
                 customerAccountResult = new CustomerAccountResult();
-                customerAccountResult.setActionResult(ActionResult.SUCCEED);
+                customerAccountResult.setActionResult(ActionResult.SUCCESS);
                 customerAccountResult.setCustomerId(searchCustomerAccountModel.getCustNbr());
 
                 //Audit Data
-                rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.SUCCEED, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), linkKey);
+                rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCustomerAccount.getHeader().getResDesc(), new Date(), linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCustomerAccount.getHeader().getResDesc());
