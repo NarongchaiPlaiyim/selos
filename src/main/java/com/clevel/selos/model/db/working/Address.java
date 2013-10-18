@@ -66,6 +66,9 @@ public class Address implements Serializable {
     @Column(name="contact_phone")
     private String contactPhone;
 
+    @Column(name="address")
+    private String address;
+
     public Address(){
 
     }
@@ -198,25 +201,34 @@ public class Address implements Serializable {
         this.contactPhone = contactPhone;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("customer", customer)
-                .append("addressType", addressType)
-                .append("addressNo", addressNo)
-                .append("moo", moo)
-                .append("building", building)
-                .append("road", road)
-                .append("province", province)
-                .append("district", district)
-                .append("subDistrict", subDistrict)
-                .append("postalCode", postalCode)
-                .append("country", country)
-                .append("phoneNumber", phoneNumber)
-                .append("extension", extension)
-                .append("contactName", contactName)
-                .append("contactPhone", contactPhone)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("customer", customer).
+                append("addressType", addressType).
+                append("addressNo", addressNo).
+                append("moo", moo).
+                append("building", building).
+                append("road", road).
+                append("province", province).
+                append("district", district).
+                append("subDistrict", subDistrict).
+                append("postalCode", postalCode).
+                append("country", country).
+                append("phoneNumber", phoneNumber).
+                append("extension", extension).
+                append("contactName", contactName).
+                append("contactPhone", contactPhone).
+                append("address", address).
+                toString();
     }
 }

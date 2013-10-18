@@ -26,6 +26,9 @@ public class CustomerInfoSummaryControl extends BusinessControl {
     @Inject
     CustomerDAO customerDAO;
     @Inject
+    WorkCaseDAO workCaseDAO;
+
+    @Inject
     CustomerTransform customerTransform;
 
     public CustomerInfoSummaryView getCustomerInfoSummary(long workCaseId){
@@ -45,5 +48,17 @@ public class CustomerInfoSummaryControl extends BusinessControl {
         customerInfoSummaryView.setRelatedCustomerViewList(relatedCustomerList);
 
         return customerInfoSummaryView;
+    }
+
+    // For Customer Info. Detail - Individual
+    public int getCaseBorrowerTypeIdByWorkCase(long workCaseId){
+        int caseBorrowerTypeId = 0;
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        if(workCase != null){
+            if(workCase.getBorrowerType() != null){
+                caseBorrowerTypeId = workCase.getBorrowerType().getId();
+            }
+        }
+        return caseBorrowerTypeId;
     }
 }
