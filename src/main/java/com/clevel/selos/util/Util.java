@@ -62,6 +62,20 @@ public class Util {
         return date;
     }
 
+    public static Date strYYYYMMtoDateFormat(String dateStr){
+        Date date = new Date();
+        if(dateStr==null){
+            return null;
+        }
+        try{
+            DateFormat formatter = new SimpleDateFormat("yyyyMM", Locale.US);
+            date = (Date) formatter.parse(dateStr);
+        } catch (ParseException e) {
+            log.error("",e);
+        }
+        return date;
+    }
+
     public static Date strToDateFormat(String dateStr, String format){
         Date date = new Date();
         if(dateStr==null){
@@ -216,5 +230,12 @@ public class Util {
 
         resultDay = (nowDay.get(Calendar.YEAR) - birthDay.get(Calendar.YEAR));
         return resultDay;
+    }
+
+    public static String[] splitSpace(String str){
+        if(str!=null){
+            return str.split(" ");
+        }
+        return null;
     }
 }

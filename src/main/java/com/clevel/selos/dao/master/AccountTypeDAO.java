@@ -21,32 +21,32 @@ public class AccountTypeDAO extends GenericDAO<AccountType,Integer> {
 
     public AccountType getIndividualByCode(String code){
         log.debug("getIndividualByCode. (code: {}",code);
+        AccountType accountType = new AccountType();
         if(!Util.isEmpty(code)){
             //set for individual
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 1));
-            criteria.add(Restrictions.eq("ncbCode", code));
-            AccountType accountType = (AccountType) criteria.uniqueResult();
+            criteria.add(Restrictions.eq("ncbCode", code.trim()));
+            accountType = (AccountType) criteria.uniqueResult();
 
             log.debug("getIndividualByCode. (accountType: {})",accountType);
-            return accountType;
         }
-        return null;
+        return accountType;
     }
 
     public AccountType getJuristicByCode(String code){
         log.debug("getJuristicByCode. (code: {}",code);
+        AccountType accountType = new AccountType();
         if(!Util.isEmpty(code)){
             //set for juristic
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("customerEntity.id", 2));
-            criteria.add(Restrictions.eq("ncbCode", code));
-            AccountType accountType = (AccountType) criteria.uniqueResult();
+            criteria.add(Restrictions.eq("ncbCode", code.trim()));
+            accountType = (AccountType) criteria.uniqueResult();
 
             log.debug("getJuristicByCode. (accountType: {})",accountType);
-            return accountType;
         }
-        return null;
+        return accountType;
     }
 
     public List<AccountType> getListLoanTypeByCusEntity(int customerEntityId){

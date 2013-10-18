@@ -67,7 +67,7 @@ public class AppInProcessService implements Serializable {
                 List<CustomerDetail1> customerDetail1List = customerDetail1DAO.getListCustomerByCitizenId(citizenIdList);
                 List<AppInProcess> appInProcessList = getAppInProcessList(customerDetail1List, null);
                 if(appInProcessList!=null && appInProcessList.size()>0){
-                    appInProcessResult.setActionResult(ActionResult.SUCCEED);
+                    appInProcessResult.setActionResult(ActionResult.SUCCESS);
                     appInProcessResult.setAppInProcessList(appInProcessList);
                 } else {
                     appInProcessResult.setActionResult(ActionResult.FAILED);
@@ -79,7 +79,7 @@ public class AppInProcessService implements Serializable {
                 List<CustomerDetail2> customerDetail2List = customerDetail2DAO.getListCustomerByCitizenId(citizenIdList);
                 List<AppInProcess> appInProcessList = getAppInProcessList(null, customerDetail2List);
                 if(appInProcessList!=null && appInProcessList.size()>0){
-                    appInProcessResult.setActionResult(ActionResult.SUCCEED);
+                    appInProcessResult.setActionResult(ActionResult.SUCCESS);
                     appInProcessResult.setAppInProcessList(appInProcessList);
                 } else {
                     appInProcessResult.setActionResult(ActionResult.FAILED);

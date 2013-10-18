@@ -52,7 +52,7 @@ public class CustomerBizTransform extends BusinessTransform {
         CustomerInfoResultView customerInfoResultView = null;
         if(individualResult!=null){
             customerInfoResultView = new CustomerInfoResultView();
-            if(individualResult.getActionResult() == ActionResult.SUCCEED){
+            if(individualResult.getActionResult() == ActionResult.SUCCESS){
                 customerInfoResultView.setActionResult(individualResult.getActionResult());
                 customerInfoResultView.setCustomerId(individualResult.getCustomerId());
                 if(individualResult.getIndividualModel()!=null){
@@ -305,7 +305,7 @@ public class CustomerBizTransform extends BusinessTransform {
         CustomerInfoResultView customerInfoResultView = null;
         if(corporateResult != null){
             customerInfoResultView = new CustomerInfoResultView();
-            if(corporateResult.getActionResult() == ActionResult.SUCCEED){
+            if(corporateResult.getActionResult() == ActionResult.SUCCESS){
                 customerInfoResultView.setActionResult(corporateResult.getActionResult());
                 customerInfoResultView.setCustomerId(corporateResult.getCustomerId());
                 if(corporateResult.getCorporateModel()!=null){
@@ -391,7 +391,7 @@ public class CustomerBizTransform extends BusinessTransform {
         CustomerAccountView customerAccountView = null;
         if(customerAccountResult != null){
             customerAccountView = new CustomerAccountView();
-            if(customerAccountResult.getActionResult() == ActionResult.SUCCEED){
+            if(customerAccountResult.getActionResult() == ActionResult.SUCCESS){
                 customerAccountView.setActionResult(customerAccountResult.getActionResult());
                 customerAccountView.setCustomerId(customerAccountResult.getCustomerId());
                 if(customerAccountResult.getAccountListModels()!=null && customerAccountResult.getAccountListModels().size() > 0){
