@@ -10,6 +10,7 @@ import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SecurityAuditor;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -20,6 +21,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.filenet.api.exception.EngineRuntimeException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.GenericJDBCException;
 import org.primefaces.context.RequestContext;
@@ -68,6 +70,8 @@ public class LoginBean {
     @Inject
     @Config(name = "interface.ldap.enable")
     String ldapEnable;
+    @Inject
+    EncryptionService encryptionService;
 
     @Inject
     @ExceptionMessage
@@ -98,14 +102,14 @@ public class LoginBean {
                 }
                 return "failed";
             }
-
         }
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
         UserDetail userDetail = null;
+        password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
         try {
-            userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+            userDetail = new UserDetail(user.getId(),password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {
             String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
             log.debug("{}",message);

@@ -13,6 +13,7 @@ import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.history.CaseCreationHistory;
 import com.clevel.selos.security.UserDetail;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.BPMAuditor;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -22,6 +23,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.Util;
 import com.clevel.selos.ws.WSDataPersist;
 import com.filenet.api.exception.EngineRuntimeException;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -57,6 +59,9 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
     @Inject
     @Config(name = "interface.bpm.password")
     String bpmPassword;
+
+    @Inject
+    EncryptionService encryptionService;
 
     @Inject
     WSDataPersist wsDataPersist;
@@ -130,8 +135,10 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             log.error("[{}] Exception while authentication with BPM!",linkKey,e);
             bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
             throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
-        } catch (EngineRuntimeException e){
-
+        } catch (Exception e){
+            log.error("[{}] Exception while authentication with BPM!",linkKey,e);
+            bpmAuditor.add(userName, "Authenticate", "", now, ActionResult.FAILED, e.getMessage(), linkKey);
+            throw new BPMInterfaceException(e, ExceptionMapping.BPM_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.BPM_AUTHENTICATION_FAILED,userName));
         }
     }
 
@@ -212,8 +219,9 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         UserDTO userDTO = new UserDTO();
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userDTO.setUserName(userDetail.getUserName());
-        userDTO.setPassword(userDetail.getPassword());
-        log.debug("getUserDTO username: {}, password: {}",userDetail.getUserName(),userDetail.getPassword());
+        String password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
+        userDTO.setPassword(password);
+        log.debug("getUserDTO username: {}, password: {}",userDetail.getUserName(),password);
         return userDTO;
     }
 
