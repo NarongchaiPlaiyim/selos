@@ -21,6 +21,7 @@ import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.filenet.api.exception.EngineRuntimeException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.exception.GenericJDBCException;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -88,9 +89,13 @@ public class LoginBean {
             try {
                 ldapInterface.authenticate(userName,password);
             } catch (ApplicationRuntimeException e) {
-                log.debug("LDAP authentication failed! (user: {})", userName.trim());
-                securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
-                loginExceptionMessage=e.getMessage();
+                try{
+                    log.debug("LDAP authentication failed! (user: {})", userName.trim());
+                    securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
+                    loginExceptionMessage=e.getMessage();
+                }catch (Exception ex){
+                    loginExceptionMessage=ex.getCause().getMessage();
+                }
                 return "failed";
             }
 
