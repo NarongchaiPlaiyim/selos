@@ -18,7 +18,7 @@
                                      size="1"
                                      style="width: 200px;"
                                      required="true" >
-                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue="0"/>
+                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
                         <f:selectItems value="#{tcgInfo.potentialCollateralList}"
                                        var="potentialCollateralList"
                                        itemLabel="#{potentialCollateralList.description}"
@@ -85,6 +85,7 @@
                     <p:commandButton
                             id="save"
                             value="#{msg.get('app.saveButton')}"
+                            binding="#{addRowData}"
                             styleClass="small"
                             actionListener="#{tcgInfo.onSaveCollateralDetail}"
                             process=":tcgDlgForm"

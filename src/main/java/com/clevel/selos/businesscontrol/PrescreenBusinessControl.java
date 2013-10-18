@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Stateless
@@ -189,19 +190,24 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
 
-        List<CustomerInfoView> borrowerInfoViewList = getBorrowerViewListByCustomerViewList(customerInfoViewList);
-        List<CustomerInfoView> relatedInfoViewList = getRelatedViewListByCustomerViewList(customerInfoViewList);
-        List<CustomerInfoView> guarantorInfoViewList = getGuarantorViewListByCustomerViewList(customerInfoViewList);
+        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(customerInfoViewList);
 
-        List<CustomerInfoView> fullRelatedViewList = new ArrayList<CustomerInfoView>();
-        fullRelatedViewList.addAll(relatedInfoViewList);
-        fullRelatedViewList.addAll(guarantorInfoViewList);
+        PrescreenResultView prescreenResultView = new PrescreenResultView();
+        prescreenResultView.setExistingCreditView(existingCreditView);
 
-        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(borrowerInfoViewList, fullRelatedViewList);
+        //Calculate for Group Income
+        BigDecimal groupIncome = new BigDecimal(0);
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                groupIncome.add(customerInfoView.getApproxIncome());
+            }
+        }
+        prescreenResultView.setGroupIncome(groupIncome);
 
+        //Calculate for Group Exposure
+        BigDecimal groupExposure = new BigDecimal(0);
 
-
-        return null;
+        return prescreenResultView;
     }
 
     // *** Function for BRMS (PreScreenRules) ***//
@@ -326,8 +332,15 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Individual individual = individualDAO.findByCitizenId(ncbView.getIdNumber());
-                        Customer customer = individual.getCustomer();
+                        Individual individual = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+
+
+                        Customer customer;
+                        if(individual != null){
+                            customer = individual.getCustomer();
+                        } else {
+                            customer = new Customer();
+                        }
 
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 

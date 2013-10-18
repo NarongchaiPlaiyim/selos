@@ -665,7 +665,7 @@
             styleClass="small"
             action="#{prescreenMaker.onSaveCustomerInfo}"
             process="@form"
-            update=":customerDlgForm :frmMain:resultTableBorrower :frmMain:resultTableGuarantor :frmMain:resultTableRelated"
+            update=":customerDlgForm :frmMain"
             oncomplete="handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
     <p:commandButton value="Cancel" styleClass="small"
                      process="@this" update=":customerDlgForm"

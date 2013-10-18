@@ -56,44 +56,39 @@ public class TCGInfo implements Serializable {
     private TCGDetailView TCGDetailView;
     private TCGDetailView selectCollateralItem;
     private TCGView TCGView;
-
     private int rowIndex;
     private Long workCaseId;
     private User user;
     enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
-
     enum ModeForDB{ ADD_DB, EDIT_DB,CANCEL_DB }
     private ModeForDB  modeForDB;
+    private String messageHeader;
+    private String message;
+    private boolean messageErr;
 
     private List<PotentialCollateral> potentialCollateralList;
     private List<PotentialColToTCGCol> potentialColToTCGColList;
 
     @Inject
     private PotentialCollateralDAO potentialCollateralDAO;
-
     @Inject
     private PotentialColToTCGColDAO potentialColToTCGColDAO;
-
     @Inject
     private TCGCollateralTypeDAO tcgCollateralTypeDAO;
-
     @Inject
     TCGInfoControl tcgInfoControl ;
-
     @Inject
     UserDAO userDAO;
 
-    public TCGInfo() {}
+    public TCGInfo(){}
 
 
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
 
-        HttpSession session = FacesUtil.getSession(true);
-        user = userDAO.findById("10001");
-
+        HttpSession session  = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
         if(session.getAttribute("workCaseId") != null){
@@ -101,14 +96,18 @@ public class TCGInfo implements Serializable {
             log.info("workCaseId :: {} ",workCaseId);
         }
 
-        TCGView = tcgInfoControl.getTcgView(workCaseId);
+        try{
+            TCGView = tcgInfoControl.getTcgView(workCaseId);
 
-        if(TCGView != null){
-            TCGDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
-            modeForDB = ModeForDB.EDIT_DB;
-        }else if(TCGView == null){
-            TCGView = new TCGView();
-            modeForDB = ModeForDB.ADD_DB;
+            if(TCGView != null){
+                TCGDetailViewList = tcgInfoControl.getTcgDetailListView(TCGView);
+                modeForDB = ModeForDB.EDIT_DB;
+            }else if(TCGView == null){
+                TCGView = new TCGView();
+                modeForDB = ModeForDB.ADD_DB;
+            }
+        }catch (Exception ex){
+            log.info("Exception :: {}",ex);
         }
 
         if (TCGDetailView == null) {
@@ -319,22 +318,49 @@ public class TCGInfo implements Serializable {
     public void onSaveTcgInfo(){
         log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
 
-        if(modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-            if(TCGView.getId() == 0){
-                TCGView.setCreateBy(user);
-                TCGView.setCreateDate(DateTime.now().toDate());
-            }
+        try{
             if (TCGDetailViewList.size() > 0) {
-                tcgInfoControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+                if(modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
+                    if(TCGView.getId() == 0){
+                        TCGView.setCreateBy(user);
+                        TCGView.setCreateDate(DateTime.now().toDate());
+                    }
+
+                    tcgInfoControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+                    messageHeader = "Save TCG Success.";
+                    message = "Save TCG success.";
+
+                } else if(modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
+                    TCGView.setModifyBy(user);
+                    TCGView.setModifyDate(DateTime.now().toDate());
+                    tcgInfoControl.onEditTCGToDB(TCGView,TCGDetailViewList,workCaseId);
+
+                    messageHeader = "Edit TCG Success.";
+                    message = "Edit TCG success.";
+                }
+
+                onCreation();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            } else{
+                messageHeader = "can not to save TCG .";
+                message = "please add collateral information.";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
-        } else if(modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-            TCGView.setModifyBy(user);
-            TCGView.setModifyDate(DateTime.now().toDate());
-            tcgInfoControl.onEditTCGToDB(TCGView,TCGDetailViewList,workCaseId);
-        }
+        } catch(Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Save TCG failed.";
 
-        onCreation();
+            if(ex.getCause() != null){
+                message = "Save TCG failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save TCG failed. Cause : " + ex.getMessage();
+            }
+
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+        }
 
     }
 
@@ -414,6 +440,28 @@ public class TCGInfo implements Serializable {
         this.TCGView = TCGView;
     }
 
+    public boolean isMessageErr() {
+        return messageErr;
+    }
 
+    public void setMessageErr(boolean messageErr) {
+        this.messageErr = messageErr;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
 }
 

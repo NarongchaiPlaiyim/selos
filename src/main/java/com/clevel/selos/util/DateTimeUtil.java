@@ -2,6 +2,7 @@ package com.clevel.selos.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.Months;
 import org.joda.time.chrono.BuddhistChronology;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,6 +43,10 @@ public class DateTimeUtil {
 
     public static int daysBetween2Dates(Date date1, Date date2) {
         return Days.daysBetween(new DateTime(date1), new DateTime(date2)).getDays();
+    }
+
+    public static int monthBetween2DatesWithNoDate(Date date1, Date date2) {
+        return Months.monthsBetween(new DateTime(date1).withDayOfMonth(1), new DateTime(date2).withDayOfMonth(1)).getMonths();
     }
 
     public static int checkDateDelete(Date startDate,Date endDate){
@@ -120,6 +125,10 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
-
+    public static Date parseToDate(String dateString,String dateFormat, Locale locale) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern(dateFormat);
+        DateTime dt = formatter.withChronology(BuddhistChronology.getInstance()).withLocale(locale).parseDateTime(dateString);
+        return dt.toDate();
+    }
 
 }

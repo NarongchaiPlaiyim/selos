@@ -29,7 +29,18 @@ public interface ExceptionMapping {
 
     //RLOS exception
     public static final String RLOS_CSI_EXCEPTION = "030";
+    public static final String RLOS_APPIN_EXCEPTION = "031";
+    public static final String RLOS_DATA_NOT_FOUND = "032";
+    public static final String RLOS_INVALID_INPUT = "033";
 
+    //DWH exception
+    public static final String DWH_OBLIGATION_EXCEPTION = "040";
+    public static final String DWH_BANK_STATEMENT_EXCEPTION = "041";
+    public static final String DWH_DATA_NOT_FOUND = "042";
+    public static final String DWH_INVALID_INPUT = "043";
+    public static final String DWH_DATA_NOT_ENOUGH = "044";
+
+    //RM
     public static final String RM_HOST_PARAMETER_IS_NULL = "501";
     public static final String RM_FAIL = "502";
     public static final String RM_DATA_NOT_FOUND = "503";
@@ -41,4 +52,8 @@ public interface ExceptionMapping {
     public static final String NCB_FAILED = "602";
     public static final String NCB_HTTPHOSTCONNECTEXCEPTION = "603";
     public static final String NCB_CONNECTTIMEOUTEXCEPTION = "604";
+
+    //DB Inteface
+    public static final String INVALID_SYSTEM_PARAM = "701";
+    public static final String NOT_FOUND_SYSTEM_PARAM = "702";
 }

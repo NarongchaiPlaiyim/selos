@@ -9,7 +9,7 @@ import java.util.List;
 @Table(name = "ext_rlos_appin2")
 public class AppInProcess2 implements Serializable {
     @Id
-    @Column(name="app_ref_number", length=9)
+    @Column(name="app_ref_number", length=14)
     private String appRefNumber;
 
     @Column(name="product_code", length=4)
@@ -35,6 +35,9 @@ public class AppInProcess2 implements Serializable {
 
     @Column(name="final_installment", length=9)
     private String finalInstallment;
+
+    @Column(name="status")
+    private String status;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="appInProcess2")
     private List<CustomerDetail2> customerDetail1s;
@@ -112,6 +115,14 @@ public class AppInProcess2 implements Serializable {
 
     public void setFinalInstallment(String finalInstallment) {
         this.finalInstallment = finalInstallment;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<CustomerDetail2> getCustomerDetail1s() {

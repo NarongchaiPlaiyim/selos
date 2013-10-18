@@ -7,10 +7,14 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
+import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
+import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
+import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.model.AccountInfoId;
 import com.clevel.selos.model.AccountInfoName;
@@ -21,6 +25,8 @@ import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.*;
+import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 
@@ -154,12 +160,12 @@ public class WelcomePage implements Serializable {
 
     public void testDWHObligation() {
         try{
-            List<Obligation> obligationList = new ArrayList<Obligation>();
+            ObligationResult obligationResult = new ObligationResult();
             List<String> customerList = new ArrayList<String>();
             customerList.add("1234");
             customerList.add("1235");
-            obligationList = dwh.getObligationData("BDM001", customerList);
-            log.debug("obligation result : {}",obligationList);
+            obligationResult = dwh.getObligationData("BDM001", customerList);
+            log.debug("obligation result : {}",obligationResult);
         } catch (Exception e) {
             log.error("",e);
         }
@@ -168,12 +174,24 @@ public class WelcomePage implements Serializable {
 
     public void testRLOSAppIn() {
         try{
-            List<AppInProcess> appInProcessList = new ArrayList<AppInProcess>();
+            AppInProcessResult appInProcessResult = new AppInProcessResult();
             List<String> citizenIdList = new ArrayList<String>();
             citizenIdList.add("11111");
             citizenIdList.add("22222");
-            appInProcessList = rlos.getAppInProcessData("BDM001", citizenIdList);
-            log.debug("testRLOSAppIn result : {}",appInProcessList);
+            appInProcessResult = rlos.getAppInProcessData("BDM001", citizenIdList);
+            log.debug("testRLOSAppIn result : {}",appInProcessResult);
+        } catch (Exception e) {
+            log.error("",e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testBankStatement() {
+        try{
+            BankStatementResult bankStatementResult = new BankStatementResult();
+            Date fromDate = Util.strToDateFormat("082013","MMyyyy");
+            bankStatementResult = dwh.getBankStatementData("BDM001","3042582720",fromDate,12);
+            log.debug("BankStatement result : {}",bankStatementResult);
         } catch (Exception e) {
             log.error("",e);
         }
