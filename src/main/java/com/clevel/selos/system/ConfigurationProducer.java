@@ -51,9 +51,9 @@ public class ConfigurationProducer {
     @Config
     public String getConfiguration(InjectionPoint ip) {
         Config configClass = ip.getAnnotated().getAnnotation(Config.class);
-        if (configClass.name().contains("password")) {
-            return encryptionService.decrypt(Base64.decodeBase64(config.getProperty(configClass.name())));
-        }
+//        if (configClass.name().contains("password")) {
+//            return encryptionService.decrypt(Base64.decodeBase64(config.getProperty(configClass.name())));
+//        }
         return config.getProperty(configClass.name());
     }
 
