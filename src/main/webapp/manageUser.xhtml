@@ -87,8 +87,8 @@
                                 <h:outputText value="#{c.userStatus}"/>
                             </p:column>
                             <p:column headerText="Management">
-                                <p:commandButton icon="ui-icon-pencil" title="hh"/>
-                                <p:commandButton icon="ui-icon-trash" title="hh"/>
+                                <p:commandButton icon="ui-icon-pencil" title="hh" actionListener="#{isa.onEdit(c.id)}"/>
+                                <p:commandButton icon="ui-icon-trash" title="hh" actionListener="#{isa.onDelete(c.id)}"/>
                             </p:column>
                         </p:dataTable>
 
@@ -103,7 +103,7 @@
 
         </p:panel>
 
-        <p:dialog  header="Create new User" width="600" height="400" modal="true" widgetVar="newUserDialog">
+        <p:dialog  header="Create new User" width="650" height="400" modal="true" widgetVar="newUserDialog">
             <!--<p:panel header="...">-->
             <h:form id="createUserDialog">
                 <h:panelGrid columns="2">
@@ -124,7 +124,7 @@
                     <p:inputText value="#{isa.createUserView.phoneNumber}"/>
 
                     <h:outputText value="Role"/>
-                    <p:selectOneMenu value="#{isa.createUserView.roleId}">
+                    <p:selectOneMenu value="#{isa.createUserView.role.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userRoleList}"
                                        var="roleItem"
@@ -132,7 +132,7 @@
                                        itemValue="#{roleItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Department"/>
-                    <p:selectOneMenu value="#{isa.createUserView.departmentId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userDepartment.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userDepartmentList}"
                                        var="departmentItem"
@@ -140,7 +140,7 @@
                                        itemValue="#{departmentItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Division"/>
-                    <p:selectOneMenu value="#{isa.createUserView.divisionId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userDivision.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userDivisionList}"
                                        var="divisionItem"
@@ -148,7 +148,7 @@
                                        itemValue="#{divisionItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Region"/>
-                    <p:selectOneMenu value="#{isa.createUserView.regionId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userRegion.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userRegionList}"
                                        var="regionItem"
@@ -156,7 +156,7 @@
                                        itemValue="#{regionItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Team"/>
-                    <p:selectOneMenu value="#{isa.createUserView.teamId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userTeam.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userTeamList}"
                                        var="teamItem"
@@ -164,7 +164,7 @@
                                        itemValue="#{teamItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Title"/>
-                    <p:selectOneMenu value="#{isa.createUserView.titleId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userTitle.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userTitleList}"
                                        var="titleItem"
@@ -172,7 +172,7 @@
                                        itemValue="#{titleItem.id}"/>
                     </p:selectOneMenu>
                     <h:outputText value="Zone"/>
-                    <p:selectOneMenu value="#{isa.createUserView.zoneId}">
+                    <p:selectOneMenu value="#{isa.createUserView.userZone.id}">
                         <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                         <f:selectItems value="#{isa.userZoneList}"
                                        var="zoneItem"
@@ -182,7 +182,10 @@
 
 
                     <p:commandButton value="Create" actionListener="#{isa.onCreateNewUser()}" update=":userTableData" />
-                    <p:commandButton value="Cancel"/>
+                    <p:commandButton value="Cancel"
+                                     onclick="newUserDialog.hide()"
+                                     styleClass="small"
+                                     type="button"/>
                 </h:panelGrid>
             </h:form>
             <!--</p:panel>-->

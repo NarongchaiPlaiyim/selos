@@ -48,6 +48,7 @@ public class Isa implements Serializable {
     @Inject
     UserZoneDAO userZoneDAO;
 
+    @Inject
     IsaBusinessControl isaBusinessControl;
 
     public Isa(){
@@ -77,8 +78,7 @@ public class Isa implements Serializable {
 
     @PostConstruct
     public void onCreate(){
-
-             onSelectUser();
+         onSelectUser();
     }
 
     public void onCreateNewUser(){
@@ -87,12 +87,20 @@ public class Isa implements Serializable {
 
         isaBusinessControl.createUser(createUserView);
 
-        RequestContext.getCurrentInstance().closeDialog("createUserDialog");
+        onSelectUser();
     }
 
     public void onOpenNewUserForm(){
+        log.debug("onCreateNewUser()");
         createUserView=new IsaCreateUserView();
-        createUserView.setId("55");
+        createUserView.setRole(new Role());
+        createUserView.setUserDepartment(new UserDepartment());
+        createUserView.setUserDivision(new UserDivision());
+        createUserView.setUserRegion(new UserRegion());
+        createUserView.setUserTeam(new UserTeam());
+        createUserView.setUserTitle(new UserTitle());
+        createUserView.setUserZone(new UserZone());
+
 
         userRoleList=roleDAO.findAll();
         userDepartmentList=userDepartmentDAO.findAll();
@@ -104,11 +112,24 @@ public class Isa implements Serializable {
     }
 
     public void onSelectUser(){
+        log.debug("onSelectUser()");
         userDetail =new ArrayList<User>();
         User user=new User();
         userDetail=userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
         testString=userDetail.size()+"";
     }
+
+    public void onEdit(String id){
+        System.out.println("------------------ "+id);
+    }
+
+    public void onDelete(String id){
+        System.out.println("------------------ "+id);
+
+        isaBusinessControl.deleteUser(id);
+    }
+
+
 
 
     public List<User> getUserDetail() {
