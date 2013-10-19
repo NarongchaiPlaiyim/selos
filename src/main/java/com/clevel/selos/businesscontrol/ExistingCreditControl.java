@@ -165,7 +165,7 @@ public class ExistingCreditControl extends BusinessControl{
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
                 for(AppInProcess appInProcess : appInProcessList){
-                    ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(appInProcess);
+                    List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
                     List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
                     boolean isBorrower = false;
                     for(CustomerDetail customerDetail : customerDetailList) {
@@ -173,12 +173,15 @@ public class ExistingCreditControl extends BusinessControl{
                             isBorrower = true;
                         }
                     }
-                    if(isBorrower){
-                        borrowerRLOSApp.add(existingCreditDetailView);
-                        totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
-                    } else {
-                        relatedRLOSApp.add(existingCreditDetailView);
-                        totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
+
+                    for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
+                        if(isBorrower){
+                            borrowerRLOSApp.add(existingCreditDetailView);
+                            totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
+                        } else {
+                            relatedRLOSApp.add(existingCreditDetailView);
+                            totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
+                        }
                     }
 
                 }

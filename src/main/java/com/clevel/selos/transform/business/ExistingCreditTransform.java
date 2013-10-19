@@ -2,11 +2,13 @@ package com.clevel.selos.transform.business;
 
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
+import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.util.DateTimeUtil;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,10 +29,11 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailView;
     }
 
-    public ExistingCreditDetailView getExistingCredit(AppInProcess appInProcess){
-        ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
+    public List<ExistingCreditDetailView> getExistingCredit(AppInProcess appInProcess){
+        List<ExistingCreditDetailView> existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
         List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
+        List<CreditDetail> creditDetailList = appInProcess.getCreditDetailList();
         StringBuilder accountName = new StringBuilder();
         for(int i = 0; i < customerDetailList.size(); i++){
             CustomerDetail customerDetail = customerDetailList.get(i);
@@ -39,21 +42,27 @@ public class ExistingCreditTransform extends BusinessTransform {
                 accountName.append(",");
         }
 
-        existingCreditDetailView.setAccountName(accountName.toString());
-        existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
-        existingCreditDetailView.setAccountStatus(appInProcess.getStatus());
-        existingCreditDetailView.setAccountSuf("-");
-        existingCreditDetailView.setProductCode(appInProcess.getProductCode());
-        existingCreditDetailView.setProjectCode(appInProcess.getProjectCode());
-        if(appInProcess.getFinalLimit() != null && !appInProcess.getFinalLimit().equals(BigDecimal.ZERO)){
-            existingCreditDetailView.setLimit(appInProcess.getFinalLimit());
-            existingCreditDetailView.setTenor(appInProcess.getFinalTenors());
-            existingCreditDetailView.setInstallment(appInProcess.getFinalInstallment());
-        } else {
-            existingCreditDetailView.setLimit(appInProcess.getRequestLimit());
-            existingCreditDetailView.setTenor(appInProcess.getRequestTenor());
-            existingCreditDetailView.setInstallment(BigDecimal.ZERO);
+        for(CreditDetail creditDetail : creditDetailList){
+            if(creditDetail!=null){
+                ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
+                existingCreditDetailView.setAccountName(accountName.toString());
+                existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
+                existingCreditDetailView.setAccountStatus(appInProcess.getStatus());
+                existingCreditDetailView.setAccountSuf("-");
+                existingCreditDetailView.setProductCode(creditDetail.getProductCode());
+                existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());
+                if(creditDetail.getFinalLimit() != null && !creditDetail.getFinalLimit().equals(BigDecimal.ZERO)){
+                    existingCreditDetailView.setLimit(creditDetail.getFinalLimit());
+                    existingCreditDetailView.setTenor(creditDetail.getFinalTenors());
+                    existingCreditDetailView.setInstallment(creditDetail.getFinalInstallment());
+                } else {
+                    existingCreditDetailView.setLimit(creditDetail.getRequestLimit());
+                    existingCreditDetailView.setTenor(creditDetail.getRequestTenor());
+                    existingCreditDetailView.setInstallment(BigDecimal.ZERO);
+                }
+                existingCreditDetailViewList.add(existingCreditDetailView);
+            }
         }
-        return existingCreditDetailView;
+        return existingCreditDetailViewList;
     }
 }
