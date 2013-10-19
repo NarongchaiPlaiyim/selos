@@ -4,6 +4,7 @@ import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.master.Province;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -25,5 +26,14 @@ public class ProvinceDAO extends GenericDAO<Province,Integer> {
         List<Province> provinces = criteria.list();
         log.info("getListByCustomerType. (result size: {})",provinces.size());
         return provinces;
+    }
+
+    public Province getByName(String provinceName){
+        log.info("getByName. (provinceName: {})",provinceName);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("name", provinceName));
+        Province province =  (Province)criteria.uniqueResult();
+        log.info("getByName . (result : {})",province);
+        return province;
     }
 }

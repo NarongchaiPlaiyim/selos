@@ -221,17 +221,21 @@ public class CustomerBizTransform extends BusinessTransform {
                     workAddress.setMoo(individualModel.getWorkAddress().getAddressMoo());
                     workAddress.setBuilding(individualModel.getWorkAddress().getAddressBuilding());
                     workAddress.setRoad(individualModel.getWorkAddress().getAddressStreet());
-                    workAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getSubdistrict())));
-                    if(workAddress.getSubDistrict() == null){
-                        workAddress.setSubDistrict(new SubDistrict());
-                    }
-                    workAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getDistrict())));
-                    if(workAddress.getDistrict() == null){
-                        workAddress.setDistrict(new District());
-                    }
-                    workAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getWorkAddress().getProvince())));
-                    if(workAddress.getProvince() == null){
+                    workAddress.setProvince(provinceDAO.getByName(individualModel.getWorkAddress().getProvince()));
+                    if(workAddress.getProvince() == null || workAddress.getProvince()!=null && workAddress.getProvince().getCode()==0){
                         workAddress.setProvince(new Province());
+                        workAddress.setDistrict(new District());
+                        workAddress.setSubDistrict(new SubDistrict());
+                    } else {
+                        workAddress.setDistrict(districtDAO.getByNameAndProvince(individualModel.getWorkAddress().getDistrict(),workAddress.getProvince()));
+                        if(workAddress.getDistrict() == null || workAddress.getDistrict()!=null && workAddress.getDistrict().getId()==0){
+                            workAddress.setDistrict(new District());
+                        } else {
+                            workAddress.setSubDistrict(subDistrictDAO.getByNameAndDistrict(individualModel.getWorkAddress().getSubdistrict(),workAddress.getDistrict()));
+                            if(workAddress.getSubDistrict() == null){
+                                workAddress.setSubDistrict(new SubDistrict());
+                            }
+                        }
                     }
                     workAddress.setAddressType(addressTypeDAO.findById(3));
                     workAddress.setPostalCode(individualModel.getWorkAddress().getPostcode());
@@ -249,17 +253,21 @@ public class CustomerBizTransform extends BusinessTransform {
                     currentAddress.setMoo(individualModel.getCurrentAddress().getAddressMoo());
                     currentAddress.setBuilding(individualModel.getCurrentAddress().getAddressBuilding());
                     currentAddress.setRoad(individualModel.getCurrentAddress().getAddressStreet());
-                    currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getSubdistrict())));
-                    if(currentAddress.getSubDistrict() == null){
-                        currentAddress.setSubDistrict(new SubDistrict());
-                    }
-                    currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getDistrict())));
-                    if(currentAddress.getDistrict() == null){
-                        currentAddress.setDistrict(new District());
-                    }
-                    currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name", individualModel.getCurrentAddress().getProvince())));
-                    if(currentAddress.getProvince() == null){
+                    currentAddress.setProvince(provinceDAO.getByName(individualModel.getCurrentAddress().getProvince()));
+                    if(currentAddress.getProvince() == null || currentAddress.getProvince()!=null && currentAddress.getProvince().getCode()==0){
                         currentAddress.setProvince(new Province());
+                        currentAddress.setDistrict(new District());
+                        currentAddress.setSubDistrict(new SubDistrict());
+                    } else {
+                        currentAddress.setDistrict(districtDAO.getByNameAndProvince(individualModel.getCurrentAddress().getDistrict(),currentAddress.getProvince()));
+                        if(currentAddress.getDistrict() == null || currentAddress.getDistrict()!=null && currentAddress.getDistrict().getId()==0){
+                            currentAddress.setDistrict(new District());
+                        } else {
+                            currentAddress.setSubDistrict(subDistrictDAO.getByNameAndDistrict(individualModel.getCurrentAddress().getSubdistrict(),currentAddress.getDistrict()));
+                            if(currentAddress.getSubDistrict() == null){
+                                currentAddress.setSubDistrict(new SubDistrict());
+                            }
+                        }
                     }
                     currentAddress.setAddressType(addressTypeDAO.findById(1));
                     currentAddress.setPostalCode(individualModel.getCurrentAddress().getPostcode());
@@ -277,17 +285,21 @@ public class CustomerBizTransform extends BusinessTransform {
                     homeAddress.setMoo(individualModel.getHomeAddress().getAddressMoo());
                     homeAddress.setBuilding(individualModel.getHomeAddress().getAddressBuilding());
                     homeAddress.setRoad(individualModel.getHomeAddress().getAddressStreet());
-                    homeAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getSubdistrict())));
-                    if(homeAddress.getSubDistrict() == null){
-                        homeAddress.setSubDistrict(new SubDistrict());
-                    }
-                    homeAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getDistrict())));
-                    if(homeAddress.getDistrict() == null){
-                        homeAddress.setDistrict(new District());
-                    }
-                    homeAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",individualModel.getHomeAddress().getProvince())));
-                    if(homeAddress.getProvince() == null){
+                    homeAddress.setProvince(provinceDAO.getByName(individualModel.getHomeAddress().getProvince()));
+                    if(homeAddress.getProvince() == null || homeAddress.getProvince()!=null && homeAddress.getProvince().getCode()==0){
                         homeAddress.setProvince(new Province());
+                        homeAddress.setDistrict(new District());
+                        homeAddress.setSubDistrict(new SubDistrict());
+                    } else {
+                        homeAddress.setDistrict(districtDAO.getByNameAndProvince(individualModel.getHomeAddress().getDistrict(),homeAddress.getProvince()));
+                        if(homeAddress.getDistrict() == null || homeAddress.getDistrict()!=null && homeAddress.getDistrict().getId()==0){
+                            homeAddress.setDistrict(new District());
+                        } else {
+                            homeAddress.setSubDistrict(subDistrictDAO.getByNameAndDistrict(individualModel.getHomeAddress().getSubdistrict(),homeAddress.getDistrict()));
+                            if(homeAddress.getSubDistrict() == null){
+                                homeAddress.setSubDistrict(new SubDistrict());
+                            }
+                        }
                     }
                     homeAddress.setAddressType(addressTypeDAO.findById(2));
                     homeAddress.setPostalCode(individualModel.getHomeAddress().getPostcode());
@@ -344,17 +356,21 @@ public class CustomerBizTransform extends BusinessTransform {
 
                     //CurrentAddress
                     AddressView currentAddress = new AddressView();
-                    currentAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getSubdistrict())));
-                    if(currentAddress.getSubDistrict() == null){
-                        currentAddress.setSubDistrict(new SubDistrict());
-                    }
-                    currentAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getDistrict())));
-                    if(currentAddress.getDistrict() == null){
-                        currentAddress.setDistrict(new District());
-                    }
-                    currentAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getProvince())));
-                    if(currentAddress.getProvince() == null){
+                    currentAddress.setProvince(provinceDAO.getByName(corporateModel.getProvince()));
+                    if(currentAddress.getProvince() == null || currentAddress.getProvince()!=null && currentAddress.getProvince().getCode()==0){
                         currentAddress.setProvince(new Province());
+                        currentAddress.setDistrict(new District());
+                        currentAddress.setSubDistrict(new SubDistrict());
+                    } else {
+                        currentAddress.setDistrict(districtDAO.getByNameAndProvince(corporateModel.getDistrict(),currentAddress.getProvince()));
+                        if(currentAddress.getDistrict() == null || currentAddress.getDistrict()!=null && currentAddress.getDistrict().getId()==0){
+                            currentAddress.setDistrict(new District());
+                        } else {
+                            currentAddress.setSubDistrict(subDistrictDAO.getByNameAndDistrict(corporateModel.getSubdistrict(),currentAddress.getDistrict()));
+                            if(currentAddress.getSubDistrict() == null){
+                                currentAddress.setSubDistrict(new SubDistrict());
+                            }
+                        }
                     }
                     currentAddress.setPostalCode(corporateModel.getPostcode());
                     currentAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getCountryCode())));
@@ -364,17 +380,21 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.setCurrentAddress(currentAddress);
 
                     AddressView registrationAddress = new AddressView();
-                    registrationAddress.setSubDistrict(subDistrictDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getSubdistrict())));
-                    if(registrationAddress.getSubDistrict() == null){
-                        registrationAddress.setSubDistrict(new SubDistrict());
-                    }
-                    registrationAddress.setDistrict(districtDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getDistrict())));
-                    if(registrationAddress.getDistrict() == null){
-                        registrationAddress.setDistrict(new District());
-                    }
-                    registrationAddress.setProvince(provinceDAO.findOneByCriteria(Restrictions.eq("name",corporateModel.getRegistrationAddress().getProvince())));
-                    if(registrationAddress.getProvince() == null){
+                    registrationAddress.setProvince(provinceDAO.getByName(corporateModel.getProvince()));
+                    if(registrationAddress.getProvince() == null || registrationAddress.getProvince()!=null && registrationAddress.getProvince().getCode()==0){
                         registrationAddress.setProvince(new Province());
+                        registrationAddress.setDistrict(new District());
+                        registrationAddress.setSubDistrict(new SubDistrict());
+                    } else {
+                        registrationAddress.setDistrict(districtDAO.getByNameAndProvince(corporateModel.getDistrict(),registrationAddress.getProvince()));
+                        if(registrationAddress.getDistrict() == null || registrationAddress.getDistrict()!=null && registrationAddress.getDistrict().getId()==0){
+                            registrationAddress.setDistrict(new District());
+                        } else {
+                            registrationAddress.setSubDistrict(subDistrictDAO.getByNameAndDistrict(corporateModel.getSubdistrict(),registrationAddress.getDistrict()));
+                            if(registrationAddress.getSubDistrict() == null){
+                                registrationAddress.setSubDistrict(new SubDistrict());
+                            }
+                        }
                     }
                     registrationAddress.setCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2",corporateModel.getRegistrationAddress().getCountryCode())));
                     if(registrationAddress.getCountry() == null){
