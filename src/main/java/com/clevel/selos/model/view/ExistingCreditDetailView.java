@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -21,7 +24,7 @@ public class ExistingCreditDetailView implements Serializable {
     private BigDecimal installment;
     private BigDecimal intFeePercent;
     private String source;
-    private int tenor;
+    private BigDecimal tenor;
 
     public long getId() {
         return id;
@@ -143,11 +146,33 @@ public class ExistingCreditDetailView implements Serializable {
         this.source = source;
     }
 
-    public int getTenor() {
+    public BigDecimal getTenor() {
         return tenor;
     }
 
-    public void setTenor(int tenor) {
+    public void setTenor(BigDecimal tenor) {
         this.tenor = tenor;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountName", accountName)
+                .append("accountSuf", accountSuf)
+                .append("accountNumber", accountNumber)
+                .append("accountStatusID", accountStatusID)
+                .append("accountStatus", accountStatus)
+                .append("productCode", productCode)
+                .append("projectCode", projectCode)
+                .append("productProgram", productProgram)
+                .append("creditType", creditType)
+                .append("limit", limit)
+                .append("outstanding", outstanding)
+                .append("installment", installment)
+                .append("intFeePercent", intFeePercent)
+                .append("source", source)
+                .append("tenor", tenor)
+                .toString();
     }
 }
