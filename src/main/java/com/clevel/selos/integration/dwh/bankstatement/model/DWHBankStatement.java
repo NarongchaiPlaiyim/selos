@@ -180,11 +180,7 @@ public class DWHBankStatement implements Serializable {
     }
 
     public void setChequeReturnAmount(BigDecimal chequeReturnAmount) {
-        if(chequeReturnAmount==null){
-            this.chequeReturnAmount = BigDecimal.ZERO;
-        } else {
-            this.chequeReturnAmount = chequeReturnAmount;
-        }
+        this.chequeReturnAmount = chequeReturnAmount;
     }
 
     public int getNumberOfTimesOD() {
