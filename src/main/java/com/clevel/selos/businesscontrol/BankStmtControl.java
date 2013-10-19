@@ -95,11 +95,10 @@ public class BankStmtControl extends BusinessControl{
 
     /**
      * To get starting date of retrieving bank account
-     * If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
      * If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
-     * Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
+     * Ex. expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'September'
      * @param expectedSubmissionDate
-     * @return
+     * @return Start previous date by bank account condition
      */
     public Date getStartBankStmtDate(Date expectedSubmissionDate) {
         if (expectedSubmissionDate != null) {
