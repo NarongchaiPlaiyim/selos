@@ -327,7 +327,7 @@ public class CaseCreation implements WSCaseCreation {
                 // return success
                 response.setValue(WSResponse.SUCCESS,normalMsg.get("ws.newCase.response.success"),caseCreationHistory.getAppNumber());
             } else {
-                response.setValue(WSResponse.FAILED,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppNumber());
+                response.setValue(WSResponse.BPM_EXCEPTION,normalMsg.get("ws.newCase.response.failed"),caseCreationHistory.getAppNumber());
             }
 
 

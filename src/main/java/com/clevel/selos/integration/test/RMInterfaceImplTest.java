@@ -2,13 +2,11 @@ package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.view.CustomerInfoView;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
@@ -35,7 +33,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
         log.debug("======= IndividualServiceTest =======");
         IndividualResult individualResult=new IndividualResult();
         individualResult.setCustomerId(customerId);
-        individualResult.setActionResult(ActionResult.SUCCEED);
+        individualResult.setActionResult(ActionResult.SUCCESS);
 //        IndividualModel individualModel = new IndividualModel();
 //        individualModel.setResCode("0000");
 //        individualModel.setResDesc("SUCCESS");
@@ -74,7 +72,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateResult corporateResult = new CorporateResult();
-        corporateResult.setActionResult(ActionResult.SUCCEED);
+        corporateResult.setActionResult(ActionResult.SUCCESS);
         corporateResult.setCustomerId(customerId);
 //        corporateModel.setResCode("0000");
 //        corporateModel.setResDesc("SUCCESS");
@@ -119,7 +117,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
         log.debug("======= CustomerAccountServiceTest =======");
 
         CustomerAccountResult customerAccountResult = new CustomerAccountResult();
-        customerAccountResult.setActionResult(ActionResult.SUCCEED);
+        customerAccountResult.setActionResult(ActionResult.SUCCESS);
 
         List<CustomerAccountListModel> listModelList=new ArrayList<CustomerAccountListModel>();
 

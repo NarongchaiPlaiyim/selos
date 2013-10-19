@@ -89,7 +89,7 @@ public abstract class EmailService implements EmailInterface,Serializable {
             msg.setSentDate(now);
 
             Transport.send(msg);
-            emailAuditor.add(userId,"sendMail","",now, ActionResult.SUCCEED,"", Util.getLinkKey(userId));
+            emailAuditor.add(userId,"sendMail","",now, ActionResult.SUCCESS,"", Util.getLinkKey(userId));
         } catch (AuthenticationFailedException e) {
             log.error("[{}]",linkKey,e);
             emailAuditor.add(userId,"sendMail","",now, ActionResult.EXCEPTION,e.getMessage(), linkKey);

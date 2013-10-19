@@ -42,6 +42,7 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
 
     public Customer findByCitizenlId(String citizenId, long workCasePreScreenId){
         log.info("findByCitizenlId : {}", citizenId);
+
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.add(Restrictions.eq("individual.citizenId", citizenId));

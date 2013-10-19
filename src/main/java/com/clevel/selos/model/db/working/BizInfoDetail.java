@@ -70,7 +70,7 @@ public class BizInfoDetail implements Serializable {
     @Column(name="biz_doc_permission")
     private String bizDocPermission;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="biz_doc_expiry_date")
     private Date bizDocExpiryDate;
 
