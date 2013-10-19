@@ -53,12 +53,18 @@ public class BankStmtControl extends BusinessControl{
         return null;
     }
 
-    public Date getPreviousStartDate(boolean seasonalFlag, Date expectedSubmissionDate) {
+    /**
+     * To get starting date of retrieving bank account
+     * If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
+     * If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
+     * Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
+     * @param seasonalFlag
+     * @param expectedSubmissionDate
+     * @return
+     */
+    public Date getStartBankStmtDate(boolean seasonalFlag, Date expectedSubmissionDate) {
         if (expectedSubmissionDate != null) {
             int days = Util.getDayOfDate(expectedSubmissionDate);
-            //If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
-            //If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
-            //Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
             int retrieveMonth = days < 15 ? 2 : 1;
             retrieveMonth += seasonalFlag ? 11 : 5;
             return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
