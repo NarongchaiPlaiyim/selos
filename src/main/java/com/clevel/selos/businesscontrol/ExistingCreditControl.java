@@ -48,7 +48,7 @@ public class ExistingCreditControl extends BusinessControl{
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
 
         ActionStatusView actionStatusView = new ActionStatusView();
-        actionStatusView.setStatusCode(ActionResult.SUCCEED);
+        actionStatusView.setStatusCode(ActionResult.SUCCESS);
         actionStatusView.setStatusDesc("No Account Found");
         existingCreditView.setStatus(actionStatusView);
         log.info("return existing credit view {}", existingCreditView);
@@ -79,7 +79,7 @@ public class ExistingCreditControl extends BusinessControl{
             //Retrieve Obligation
             log.info("retrieve interface");
             ObligationResult obligationResult = dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
-            if(obligationResult.getActionResult().equals(ActionResult.SUCCEED)){
+            if(obligationResult.getActionResult().equals(ActionResult.SUCCESS)){
 
                 Map<String, ExistingCreditDetailView> borrowerComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
                 Map<String, ExistingCreditDetailView> borrowerRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
@@ -145,7 +145,7 @@ public class ExistingCreditControl extends BusinessControl{
             //Retrieve Obligation
             log.info("retrieve RLOS interface");
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
-            if(appInProcessResult.getActionResult().equals(ActionResult.SUCCEED)){
+            if(appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)){
 
                 Map<String, ExistingCreditDetailView> borrowerRLOSAppInHashMap = new HashMap<String, ExistingCreditDetailView>();
 
@@ -158,9 +158,7 @@ public class ExistingCreditControl extends BusinessControl{
                 }
             }
         }
-
-
-
+        return null;
     }
 
     /**
