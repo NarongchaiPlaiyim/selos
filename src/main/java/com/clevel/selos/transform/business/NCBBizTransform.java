@@ -17,6 +17,7 @@ import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NCBSummaryView;
 import com.clevel.selos.model.view.NcbView;
+import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -34,14 +35,22 @@ public class NCBBizTransform extends BusinessTransform {
     @Inject
     SettlementStatusDAO settlementStatusDAO;
 
-    private final String TMB_BANK = "TMB";
-    private final String TMB_BANK_THAI = "TMB_BANK_THAI";//"�?ม�?. ทหาร�?ทย";
     private final int SIX_MONTH = 6;
     private final int TWELVE_MONTH = 12;
+
+    private final String TMB_BANK = "TMB";
     private final String ACCOUNT_TYPE_OD_IND = "04";
-    private final String ACCOUNT_TYPE_OD_JUR = "ACCOUNT_TYPE_OD_JUR";//"เ�?ิ�?เ�?ิ�?เ�?ิ�?�?ั�?�?ี";
     private final String ENQ_PURPOSE_IND = "01";
-    private final String ENQ_PURPOSE_JUR = "ENQ_PURPOSE_JUR";//"อ�?ุมัติสิ�?เ�?ื�?อ�?หม�?";
+
+    @Inject
+    @Config(name = "ncb.nccrs.bank.tmb")
+    String TMB_BANK_THAI;
+    @Inject
+    @Config(name = "ncb.nccrs.purpose.type")
+    String ENQ_PURPOSE_JUR;
+    @Inject
+    @Config(name = "ncb.nccrs.account.type")
+    String ACCOUNT_TYPE_OD_JUR;
 
     public List<NcbView> transformIndividual(List<NCRSOutputModel> responseNCRSModels){
         List<NcbView> ncbViews = null;
