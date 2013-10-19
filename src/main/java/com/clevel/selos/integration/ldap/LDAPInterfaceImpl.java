@@ -39,7 +39,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
 
     @Override
     public void authenticate(String userName, String password) {
-        log.debug("authenticate. (userName: {}, password: [hidden])", userName);
+        log.debug("authenticate. (userName: {}, password: [HIDDEN])", userName);
         DirContext ctx;
         if (userName == null || "".equalsIgnoreCase(userName)){
             log.debug("username is null or empty!");
