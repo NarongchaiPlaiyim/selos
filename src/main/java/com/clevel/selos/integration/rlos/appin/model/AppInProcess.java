@@ -4,18 +4,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AppInProcess implements Serializable {
     private String appNumber;
     private String productCode;
     private String projectCode;
-    private String interestRate;
-    private String requestTenor;
-    private String requestLimit;
-    private String finalTenors;
-    private String finalLimit;
-    private String finalInstallment;
+    private BigDecimal interestRate;
+    private BigDecimal requestTenor;
+    private BigDecimal requestLimit;
+    private BigDecimal finalTenors;
+    private BigDecimal finalLimit;
+    private BigDecimal finalInstallment;
     private String status;
     private List<CustomerDetail> customerDetailList;
 
@@ -43,51 +44,51 @@ public class AppInProcess implements Serializable {
         this.projectCode = projectCode;
     }
 
-    public String getInterestRate() {
+    public BigDecimal getInterestRate() {
         return interestRate;
     }
 
-    public void setInterestRate(String interestRate) {
+    public void setInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
     }
 
-    public String getRequestTenor() {
+    public BigDecimal getRequestTenor() {
         return requestTenor;
     }
 
-    public void setRequestTenor(String requestTenor) {
+    public void setRequestTenor(BigDecimal requestTenor) {
         this.requestTenor = requestTenor;
     }
 
-    public String getRequestLimit() {
+    public BigDecimal getRequestLimit() {
         return requestLimit;
     }
 
-    public void setRequestLimit(String requestLimit) {
+    public void setRequestLimit(BigDecimal requestLimit) {
         this.requestLimit = requestLimit;
     }
 
-    public String getFinalTenors() {
+    public BigDecimal getFinalTenors() {
         return finalTenors;
     }
 
-    public void setFinalTenors(String finalTenors) {
+    public void setFinalTenors(BigDecimal finalTenors) {
         this.finalTenors = finalTenors;
     }
 
-    public String getFinalLimit() {
+    public BigDecimal getFinalLimit() {
         return finalLimit;
     }
 
-    public void setFinalLimit(String finalLimit) {
+    public void setFinalLimit(BigDecimal finalLimit) {
         this.finalLimit = finalLimit;
     }
 
-    public String getFinalInstallment() {
+    public BigDecimal getFinalInstallment() {
         return finalInstallment;
     }
 
-    public void setFinalInstallment(String finalInstallment) {
+    public void setFinalInstallment(BigDecimal finalInstallment) {
         this.finalInstallment = finalInstallment;
     }
 
