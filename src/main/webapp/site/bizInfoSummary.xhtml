@@ -7,13 +7,14 @@
         xmlns:p="http://primefaces.org/ui">
 
     <h:head>
-        <title>Business Info Summary</title>
+        <title>Business Information Summary</title>
         <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
         <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
         <script type="text/javascript" src="../resources/js/superfish.js"></script>
     </h:head>
     <h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
         <div id="main_container">
             <!-- Start Header Logo -->
@@ -26,47 +27,70 @@
             <ui:include src="include/menubar.xhtml" />
             <!-- End Menu -->
             <div id="content_container">
-                <div id="content_name">Business Information Summary</div>
+                <div id="content_name"><p:outputLabel value="#{msg.get('app.bizInfoSummary.header')}"/></div>
                 <div id="content">
-                    <table id="content_form">
+                    <table id="content_form" class="content_table_form" style="width:100%">
+                        <colgroup>
+                            <col style="width: 150px"/>
+                            <col style="width: 150px"/>
+                            <col style="width: 80px"/>
+                            <col style="width: 120px"/>
+                            <col style="width: 400px"/>
+                        </colgroup>
+
                         <tr>
-                            <td class="right" style="padding-right: 10px;">
+                            <td class="right" colspan="5" style="padding-right: 10px;">
                                 Last update by MR.BDM Maker , 06/06/2556 10:05:39
                                 <a style="cursor: pointer;" href="#">[View Track Change]</a>
                             </td>
                         </tr>
                         <tr>
-                            <td><div class="separate"><!-- --></div></td>
+                            <td colspan="5"><div class="separate"><!-- --></div></td>
                         </tr>
                         <tr>
-                            <td  class="title" >รายละเอียดสถานประกอบการณ์</td>
+                            <td colspan="5" class="title" ><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationDetail')}"/></td>
                         </tr>
-
                         <tr>
-                            <td>
-                                <table >
+                            <td colspan="5">
+                                <table style="width:100%;"  >
+                                    <colgroup>
+                                        <col style="width: 150px"/>
+                                        <col style="width: 120px"/>
+                                        <col style="width: 150px"/>
+                                        <col style="width: auto"/>
+                                    </colgroup>
                                     <tr>
-                                        <td>ชื่อสถานประกอบการณ์</td>
+                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
                                         <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}"/></td>
                                     </tr>
                                     <tr>
-                                        <td><h:outputText value="สถานประกอบการเป็นที่เช่า"/> : </td>
+                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
                                         <td>
                                             <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom">
                                                 <f:selectItem itemLabel="No"  itemValue="0" />
                                                 <f:selectItem itemLabel="Yes" itemValue="1" />
                                             </p:selectOneRadio>
-                                            <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer />
+
+                                            <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt1" value="NO" />
-                                            เป็นกรรมสิทธิ์ของ <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}"/>
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :
+                                        </td>
+                                        <td>
+                                            <p:inputText id="ownerName" value="#{bizInfoSummary.bizInfoSummaryView.ownerName}"/>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td></td>
                                         <td>
-                                            <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer />
+                                            <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt2" value="Yes" />
-                                            หมดสัญญาวันที่
+                                        </td>
+                                        <td>
+                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
+                                        </td>
+                                        <td>
                                             <p:calendar id="expiryDate" showOn="button" navigator="true"
                                                         value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
                                                         pattern="dd/MM/yyyy">
@@ -75,25 +99,38 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>ที่อยู่สถานประกอบการ :</td>
-                                        <td style="padding: 0%" >
-                                            <table style="padding: 0%">
+                                        <td style="vertical-align: top;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
+                                        <td colspan="3">
+                                            <table>
+                                                <colgroup>
+                                                    <col style="width: 150px"/>
+                                                    <col style="width: 100px"/>
+                                                    <col style="width: 130px"/>
+                                                    <col style="width: 200px"/>
+                                                </colgroup>
                                                 <tr>
-                                                    <td class="title left">เลขที่</td>
-                                                    <td class="left"><p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"/></td>
-                                                    <td class="title right">หมู่ที่</td>
-                                                    <td class="left"><p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/></td>
-                                                    <td class="title right">อาคาร/หมู่บ้าน</td>
-                                                    <td class="left"><p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" /></td>
+                                                    <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
+                                                    <td class="left" colspan="3">
+                                                        <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"/>
+                                                        <p:spacer width="30px"/>
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}"/> :
+                                                        <p:spacer width="30px"/>
+                                                        <p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
+                                                        <p:spacer width="30px"/>
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressBuilding')}"/> :
+                                                        <p:spacer width="30px"/>
+                                                        <p:inputText styleClass="large" id="addressBuilding" value="#{bizInfoSummary.bizInfoSummaryView.addressBuilding}" />
+                                                    </td>
+
                                                 </tr>
                                                 <tr>
-                                                    <td class="title left">ตรอก/ซอย/ถนน</td>
+                                                    <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressStreet')}"/> :</td>
                                                     <td class="left" colspan="5"><p:inputText styleClass="large" id="addressStreet" value="#{bizInfoSummary.bizInfoSummaryView.addressStreet}" /></td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
-                                                    <td colspan="5">
-                                                        <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}"
+                                                    <td>
+                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}"
                                                                          id="provinceCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
@@ -103,8 +140,9 @@
                                                             <p:ajax listener="#{bizInfoSummary.onChangeProvince}"
                                                                     update=":frmMain:districtCode,:frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
-
-                                                        <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}"
+                                                    </td>
+                                                    <td>
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}"
                                                                          id="districtCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
@@ -113,8 +151,9 @@
                                                                            itemValue="#{district.id}"/>
                                                             <p:ajax listener="#{bizInfoSummary.onChangeDistrict()}" update=":frmMain:subDistrictCode"/>
                                                         </p:selectOneMenu>
-
-                                                        <p:selectOneMenu styleClass="largest" size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
+                                                    </td>
+                                                    <td>
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
                                                                          id="subDistrictCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
@@ -125,80 +164,105 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="title">รหัสไปรษณีย์ :</td>
-                                                    <td colspan="5"><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" /></td>
+                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.postCode')}"/> :</td>
+                                                    <td><p:inputMask mask="99999" styleClass="medium" id="posCode" value="#{bizInfoSummary.bizInfoSummaryView.postCode}" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="title">โทรศัพท์สถานประกอบการ :</td>
-                                                    <td colspan="5">
-                                                        <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" /> ต่อ <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
+                                                    <td>
+                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country}" id="country">
+                                                            <f:selectItem itemLabel="- THAI -" itemValue="TH"/>
+                                                            <f:selectItem itemLabel="- ETC -" itemValue="ETC"/>
+                                                        </p:selectOneMenu>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
+                                                    <td><p:inputText styleClass="medium" id="addressEng" value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> :</td>
+                                                    <td>
+                                                        <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" />
+                                                    </td>
+                                                    <td colspan="2">
+                                                        <p:spacer width="20px"></p:spacer>
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
+                                                        <p:spacer width="20px"></p:spacer>
+                                                        <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
                                                     </td>
                                                 </tr>
                                             </table>
-
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <h:outputLabel  class="title" value="ระยะเวลาดำเนินธุรกิจ"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            วันจดทะเบียนพาณิชย์
-
-                                        </td>
-                                        <td>
-                                            <p:calendar id="registrationDate" showOn="button" navigator="true"
-                                                        value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
-                                                        pattern="dd/MM/yyyy">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                            </p:calendar>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            วันก่อตั้งกิจการ / อ้างอิงประสบการณ์
-                                        </td>
-                                        <td>
-                                            <p:calendar id="establishDate" showOn="button" navigator="true"
-                                                        value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
-                                                        pattern="dd/MM/yyyy">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                            </p:calendar>
-                                            <p:spacer width="20px"/>
-                                            อ้างอิงจาก
-                                            <p:selectOneMenu styleClass="largest" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
-                                                             id="referExpId">
-                                                <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
-                                                               var="referExp"
-                                                               itemLabel="#{referExp.description}"
-                                                               itemValue="#{referExp.id}"/>
-                                            </p:selectOneMenu>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
                         <tr>
-                            <td class="left" colspan="2">
-                                <h:outputLabel  class="title" value="ข้อมูลรายได้จากการสัมภาษณ์" /><br/>
+                            <td colspan="5">
+                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.businessPeriod')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
+                            </td>
+                            <td colspan="4">
+                                <p:calendar id="registrationDate" showOn="button" navigator="true"
+                                            value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
+                                            pattern="dd/MM/yyyy">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:calendar>
+                            </td>
+
+                        </tr>
+                        <tr >
+                            <td>
+                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
+                            </td>
+                            <td>
+                                <p:calendar id="establishDate" showOn="button" navigator="true"
+                                            value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
+                                            pattern="dd/MM/yyyy">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:calendar>
+                            </td>
+                            <td>
+                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
+                                                 id="referExpId">
+                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                    <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
+                                                   var="referExp"
+                                                   itemLabel="#{referExp.description}"
+                                                   itemValue="#{referExp.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left" colspan="5">
+                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.bizInterviewInfo')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left" colspan="5">
                                 <table class="table_content" style="padding: 0%" >
                                     <tr>
                                         <th>
-                                            รายการ
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.list')}"/>
                                         </th>
                                         <th>
-                                            จำนวน
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.amount')}"/>
                                         </th>
                                         <th>
-                                            % ยอดขาย
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.table.column.percent')}"/>
                                         </th>
                                     </tr>
                                     <tr>
                                         <td>
-                                           ยอดขาย/รายได้
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.circulation')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="circulationAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.circulationAmount}">
@@ -215,7 +279,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            ต้นทุนการผลิต
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.productionCosts')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="productionCostsAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.productionCostsAmount}">
@@ -232,7 +296,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            กำไรเบื้องต้น
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.profitMargin')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="profitMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.profitMarginAmount}">
@@ -249,7 +313,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            หักค่าใช้จ่ายดำเนินงาน
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="operatingExpenseAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.operatingExpenseAmount}">
@@ -266,7 +330,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            กำไรก่อนหักดอกเบี้ยและภาษี
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.earningsBeforeTax')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="earningsBeforeTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.earningsBeforeTaxAmount}">
@@ -283,7 +347,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            หักดอกเบี้ย
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="reduceInterestAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceInterestAmount}">
@@ -300,7 +364,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            หักภาษี
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="reduceTaxAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.reduceTaxAmount}">
@@ -317,7 +381,7 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            กำไรสุทธิ
+                                            <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netMargin')}"/>
                                         </td>
                                         <td>
                                             <p:inputText id="netMarginAmount" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netMarginAmount}">
@@ -333,15 +397,24 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <br/>
-                                สินทรัพย์ถาวรสุทธิไม่รวมที่ดิน
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
+                            </td>
+                            <td class="left">
                                 <p:inputText id="netFixAsset" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.netFixAsset}">
                                     <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
                                     <p:ajax event="blur" update=":frmMain:netFixAsset"/>
                                 </p:inputText>
-                                <br/>
-                                <br/>
-                                จำนวนแรงงาน
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="left">
+                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
+                            </td>
+                            <td class="left">
                                 <p:inputText id="noOfEmployee" styleClass="right" value="#{bizInfoSummary.bizInfoSummaryView.noOfEmployee}">
                                     <f:convertNumber pattern="#,##0" integerOnly="true"/>
                                     <p:ajax event="blur" update=":frmMain:noOfEmployee"/>
@@ -349,148 +422,133 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="left">
-                                <p:commandButton value="Add" styleClass="small" action="#{bizInfoSummary.onSaveBizInfoSummary}"  oncomplete="document.location.replace('bizInfoDetail.jsf');return;"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <table class="table_content" >
-                                    <tr>
-                                        <th style="width:30px; line-height: 15px;"></th>
-                                        <th style="width:70px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizCode')}"/></th>
-                                        <th style="width:100px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizType')}"/> </th>
-                                        <th style="width:100px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizGroup')}"/> </th>
-                                        <th style="width:180px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizDesc')}"/> </th>
-                                        <th style="width:100px; line-height: 15px;">Income</th>
-                                        <th style="width:80px; line-height: 15px;">Income (%)</th>
-                                        <th style="width:80px; line-height: 15px;"><h:outputText value="#{msg.get('app.incomeFactor')}"/> </th>
-                                        <th style="width:80px; line-height: 15px;"><h:outputText value="#{msg.get('app.adjustedIncomeFactor')}"/></th>
-                                        <th style="width:60px; line-height: 15px;">AR</th>
-                                        <th style="width:60px; line-height: 15px;">AP</th>
-                                        <th style="width:60px; line-height: 15px;">INV</th>
-                                        <th style="width:70px; line-height: 15px;"><h:outputText value="#{msg.get('app.bizComment')}"/></th>
-                                        <th style="width:50px;"></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="center">1</td>
-                                        <td class="center">CD010001</td>
-                                        <td class="center">ธุรกิจค้าปลีก</td>
-                                        <td class="center" style="line-height: 15px;">Consumer Goods &amp; Services</td>
-                                        <td class="center" style="line-height: 15px;">การค้าสินค้าเบ็ดเตล็ด ซึ่งมิได้จัดประเภทไว้ที่อื่น</td>
-                                        <td class="right">###,###,###.00</td>
-                                        <td class="right">##.00</td>
-                                        <td class="right">##.00</td>
-                                        <td class="right">##.00</td>
-                                        <td class="right">-</td>
-                                        <td class="right">-</td>
-                                        <td class="right">-</td>
-                                        <td class="right">ผ่าน</td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-pencil" title="Edit" onclick="document.location.replace('bizInfoDetail.jsf');return;"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color:#f4f8b6;">
-                                        <td colspan="5">TOTAL INCOME</td>
-                                        <td class="right">###,###,###.00</td>
-                                        <td class="right">100.00</td>
-                                        <td colspan="7"/>
-                                    </tr>
-                                    <tr style="background-color:#f8d0b6;">
-                                        <td colspan="8">WEIGHT</td>
-                                        <td class="center">-</td>
-                                        <td class="right">0.00</td>
-                                        <td class="center">-</td>
-                                        <td class="center">-</td>
-                                        <td class="center">-</td>
-                                        <td class="center"></td>
-                                    </tr>
-                                </table>
+                            <td colspan="5" class="left">
+                                <p:commandButton value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                    <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
+                                </p:commandButton>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="100%"><p:spacer width="2"/></td>
                         </tr>
-                    </table>
-
-                    ///new DataTable
-                    <table>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="5" >
                                 <p:dataTable id="businessInfoTable"
                                              var="bizInfoDetailx"
                                              value="#{bizInfoSummary.bizInfoDetailViewList}"
                                              paginator="false"
                                              rowKey="#{bizInfoDetail.bizComment}"
-                                             style="width: 100%;"
                                              rowIndexVar="rowIndex">
 
-                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                    <p:column headerText="" styleClass="center" style="width:25px;">
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column headerText="bizCode" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizCode')}" styleClass="center" style="width: 70px;">
                                         <h:outputText value="#{bizInfoDetailx.bizCode}"/>
                                     </p:column>
-                                    <p:column headerText="bizType.name" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizType')}" styleClass="center" style="width: 100px;">
                                         <h:outputText value="#{bizInfoDetailx.bizType.name}"/>
                                     </p:column>
-                                    <p:column headerText="bizGroup.name" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizGroup')}" styleClass="center" style="width: 100px;">
                                         <h:outputText value="#{bizInfoDetailx.bizGroup.name}"/>
                                     </p:column>
-                                    <p:column headerText="bizDesc.name" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizDesc')}" styleClass="center" style="width: 140px;">
                                         <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
-                                    <p:column headerText="incomeFactor" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.incomeFactor}"/>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}"/>
                                     </p:column>
-                                    <p:column headerText="adjustedIncomeFactor" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.adjustedIncomeFactor}"/>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="center" style="width: 140px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerTotalPercentBuyVolume}"/>
                                     </p:column>
-                                    <p:column headerText="bizDesc.ar" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizDesc.ar}"/>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="center" style="width: 100px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}"/>
                                     </p:column>
-                                    <p:column headerText="bizDesc.ap" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizDesc.ap}"/>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="center" style="width: 100px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}"/>
                                     </p:column>
-                                    <p:column headerText="bizDesc.inv" styleClass="center" style="width: 140px;">
-                                        <h:outputText value="#{bizInfoDetailx.bizDesc.inv}"/>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="center" style="width: 50px;">
+                                        <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizComment')}" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="center" style="width: 50px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="center" style="width: 50px;">
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
                                         <h:outputText value="#{bizInfoDetailx.bizComment}"/>
                                     </p:column>
-                                    <p:column headerText="" styleClass="center" style="width:54px;">
+                                    <p:column headerText="" styleClass="center" style="width:80px;">
+
                                         <p:commandButton icon="ui-icon-pencil"
-                                                         title="Edit"
-                                                         action="#{bizInfoSummary.onViewDetail()}"
-                                                         oncomplete="document.location.replace('bizInfoDetail.jsf');"
-                                                        >
+                                                         title="Edit" process="@this"
+                                                         oncomplete="confirmAddBizInfoDetailDlg.show()" >
                                             <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
-                                         </p:commandButton>
-
-                                        <p:commandButton icon="ui-icon-trash"
-                                                         title="Remove" process="@this"
-                                                         oncomplete="confirmDeleteBizInfoDetailDlg.show();"
-
-                                                >
-                                            <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                            <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
                                         </p:commandButton>
 
+                                        <p:panel rendered="#{rowIndex!=0}" styleClass="panel" style="display: inline">
+                                            <p:commandButton icon="ui-icon-trash"
+                                                             title="Remove" process="@this"
+                                                             oncomplete="confirmDeleteBizInfoDetailDlg.show();" >
+                                                <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                            </p:commandButton>
+                                        </p:panel>
                                     </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="5" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumIncomeAmount')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumIncomeAmount}"
+                                                      style="background-color:#f4f8b6; text-align:right;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumIncomePercent}"
+                                                      style="background-color:#f4f8b6; text-align:right;"/>
+
+                                            <p:column style="background-color:#f4f8b6;" colspan="7" />
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="7" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumWeight')}"
+                                                        style="background-color:#f8d0b6;; text-align:left;"/>
+
+                                            <p:column footerText="-"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumweightAdjustIncomeFactor}"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumweightAR}"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumweightAP}"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column footerText="#{bizInfoSummary.sumweightINV}"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column footerText="-"
+                                                      style="background-color:#f8d0b6; text-align:right;"/>
+
+                                            <p:column style="background-color:#f8d0b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
                                 </p:dataTable>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="center">
+                            <td colspan="5" class="center">
                                 <p:commandButton id="btnAddBizInfoSummary"
-                                                 value="Save DB"
-                                                 styleClass="smaller"
+                                                 value="#{msg.get('app.button.save')}"
                                                  process=":frmMain"
                                                  actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
-                                                 update=":frmMain"
-                                                 oncomplete="document.location.replace('bizInfoSummary.jsf')"
-                                        />
+                                                 update=":msgBoxSystemMessagePanel,:frmMain"
+                                                 oncomplete="document.location.replace('bizInfoSummary.jsf')" />
 
-                                <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('bizInfoSummary.jsf')"/>
+                                <p:commandButton  value="#{msg.get('app.button.cancel')}" onclick="document.location.replace('bizInfoSummary.jsf')"/>
                             </td>
                         </tr>
                     </table>
@@ -504,15 +562,35 @@
             <!-- End Footer -->
         </div>
         </h:form>
-
+    </p:panel>
         <ui:include src="dialog/confirmDeleteDlg.xhtml">
             <ui:param name="id" value="confirmDeleteBizInfoDetailDialog"/>
             <ui:param name="name" value="confirmDeleteBizInfoDetailDlg"/>
             <ui:param name="formId" value="frmConfirmDeleteBizInfoDetail"/>
             <ui:param name="controller" value="#{bizInfoSummary}"/>
             <ui:param name="action" value="onDeleteBizInfoToDB"/>
-            <ui:param name="update" value=":frmMain:businessInfoTable"/>
+            <ui:param name="update" value=":frmMain"/>
         </ui:include>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{bizInfoSummary.messageHeader}" message="#{bizInfoSummary.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
+    <ui:include src="dialog/confirmAddDlg.xhtml">
+        <ui:param name="id" value="confirmAddBizInfoDetailDialog"/>
+        <ui:param name="name" value="confirmAddBizInfoDetailDlg"/>
+        <ui:param name="formId" value="frmConfirmAddBizInfoDetail"/>
+        <ui:param name="controller" value="#{bizInfoSummary}"/>
+        <ui:param name="action" value="onSaveBizInfoSummary"/>
+        <ui:param name="update" value=":msgBoxSystemMessagePanel,:frmMain"/>
+    </ui:include>
+
 
 
     </h:body>

@@ -12,10 +12,12 @@ import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.view.ActionStatusView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,10 +30,7 @@ public class BankStmtControl extends BusinessControl{
     @Inject
     DWHInterface dwhInterface;
 
-
-
     public BankStatementSummary retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, BankStatementSummary bankStatementSummary){
-
         Date startBankStmtDate = new Date();
         int numberOfMonthBankStmt = 6;
 
@@ -61,5 +60,26 @@ public class BankStmtControl extends BusinessControl{
     public BankStatementSummary getBankStmt(){
 
         return null;
+    }
+
+    /**
+     * To get starting date of retrieving bank account
+     * If seasonal flag is 'Yes' then retrieves 12 months and 'No' then retrieves 6 months
+     * If expected submission date less than 15 get current month -2 (T-2), If more than 15 get current month -1 (T-1)
+     * Ex. if expectedSubmissionDate: 15/10/2013 -> (T-1) -> start previous month at 'Sep', 'Aug', 'Jul', 'Jun', 'May', 'Apr'
+     * @param expectedSubmissionDate
+     * @return
+     */
+    public Date getStartBankStmtDate(Date expectedSubmissionDate) {
+        if (expectedSubmissionDate != null) {
+            int days = Util.getDayOfDate(expectedSubmissionDate);
+            int retrieveMonth = days < 15 ? 2 : 1;
+            return DateTimeUtil.getOnlyDatePlusMonth(expectedSubmissionDate, -retrieveMonth);
+        }
+        return null;
+    }
+
+    public int getRetrieveMonthBankStmt(boolean seasonalFlag) {
+        return seasonalFlag ? 12 : 6;
     }
 }

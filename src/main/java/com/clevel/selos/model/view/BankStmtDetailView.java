@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -33,6 +32,31 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal utilizationPercent;
     private BigDecimal grossInflowPerLimit;
     private int totalTransaction;
+
+    public BankStmtDetailView() {
+        reset();
+    }
+
+    public void reset() {
+        this.overLimitAmount = BigDecimal.valueOf(0.00);
+        this.grossCreditBalance = BigDecimal.valueOf(0.00);
+        this.excludeListBDM = BigDecimal.valueOf(0.0);
+        this.excludeListUW = BigDecimal.valueOf(0.0);
+        this.creditAmountBDM = BigDecimal.valueOf(0.00);
+        this.creditAmountUW = BigDecimal.valueOf(0.00);
+        this.timesOfAverageCreditBDM = BigDecimal.valueOf(0.00);
+        this.timesOfAverageCreditUW = BigDecimal.valueOf(0.00);
+        this.debitAmount = BigDecimal.valueOf(0.00);
+        this.dateOfMaxBalance = new Date();
+        this.maxBalance = BigDecimal.valueOf(0.00);
+        this.dateOfMinBalance = new Date();
+        this.minBalance = BigDecimal.valueOf(0.00);
+        this.monthBalance = BigDecimal.valueOf(0.00);
+        this.chequeReturnAmount = BigDecimal.valueOf(0.0);
+        this.swingPercent = BigDecimal.valueOf(0.00);
+        this.utilizationPercent = BigDecimal.valueOf(0.00);
+        this.grossInflowPerLimit = BigDecimal.valueOf(0.00);
+    }
 
     public BigDecimal getOverLimitAmount() {
         return overLimitAmount;

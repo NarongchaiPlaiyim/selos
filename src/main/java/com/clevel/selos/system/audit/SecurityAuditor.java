@@ -34,7 +34,7 @@ public class SecurityAuditor {
         user.setLastLogon(actionDate);
         user.setLastIP(FacesUtil.getRequest().getRemoteAddr());
         userDAO.persist(user);
-        add(userName,action,actionDetail,actionDate,ActionResult.SUCCEED,"");
+        add(userName,action,actionDetail,actionDate,ActionResult.SUCCESS,"");
     }
 
     public void addFailed(String userName,String action,String actionDetail,String resultDetail) {

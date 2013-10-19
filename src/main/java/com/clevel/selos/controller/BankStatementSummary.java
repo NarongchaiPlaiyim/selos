@@ -99,19 +99,22 @@ public class BankStatementSummary {
 
     public String onLinkToAddTmbBankDetail() {
         log.debug("Link to TMB Bank Statement Detail with params[isTmbBank: true, seasonal: {}, expectedSubmissionDate: {}]", seasonal, expectedSubmissionDate);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("isTmbBank", true);
-        map.put("seasonal", seasonal);
-        map.put("expectedSubmissionDate", expectedSubmissionDate);
-
-        FacesUtil.getExternalContext().getFlash().put("bankStmtSumParameters", map);
-
+        passedFlashParams(true, seasonal, expectedSubmissionDate);
         return "bankStatementDetail?faces-redirect=true";
     }
 
     public String onLinkToAddOtherBankDetail() {
         log.debug("Link to TMB Bank Statement Detail with params[isTmbBank: false, seasonal: {}, expectedSubmissionDate: {}]", seasonal, expectedSubmissionDate);
-        return "bankStatementDetail";
+        passedFlashParams(false, seasonal, expectedSubmissionDate);
+        return "bankStatementDetail?faces-redirect=true";
+    }
+
+    private void passedFlashParams(boolean isTmbBank, int seasonal, Date expectedSubmissionDate) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isTmbBank", isTmbBank);
+        map.put("seasonal", seasonal);
+        map.put("expectedSubmissionDate", expectedSubmissionDate);
+        FacesUtil.getExternalContext().getFlash().put("bankStmtSumParameters", map);
     }
 
     //---------- Getter/Setter ----------//

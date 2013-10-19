@@ -61,7 +61,7 @@ public class ObligationService implements Serializable {
                 List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation1List!=null && obligation1List.size()>0){
                     List<Obligation> obligationList = transformObligation(obligation1List,null);
-                    obligationResult.setActionResult(ActionResult.SUCCEED);
+                    obligationResult.setActionResult(ActionResult.SUCCESS);
                     obligationResult.setObligationList(obligationList);
                 } else {
                     obligationResult.setActionResult(ActionResult.FAILED);
@@ -73,7 +73,7 @@ public class ObligationService implements Serializable {
                 List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusIdList(tmbCusIdList);
                 if(obligation2List!=null && obligation2List.size()>0){
                     List<Obligation> obligationList = transformObligation(null,obligation2List);
-                    obligationResult.setActionResult(ActionResult.SUCCEED);
+                    obligationResult.setActionResult(ActionResult.SUCCESS);
                     obligationResult.setObligationList(obligationList);
                 } else {
                     obligationResult.setActionResult(ActionResult.FAILED);

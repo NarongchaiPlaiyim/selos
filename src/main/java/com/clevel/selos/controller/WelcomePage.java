@@ -7,13 +7,10 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
-import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
-import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.*;
 import com.clevel.selos.model.AccountInfoId;
@@ -25,7 +22,6 @@ import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.*;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -117,8 +113,8 @@ public class WelcomePage implements Serializable {
 //        }
 //        log.debug("system: {}",system);
         userAuditor.addSucceed("user1","test","test action");
-        rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCEED,"",new Date(),"12345");
-        ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCEED,"",new Date(),"67890");
+        rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCESS,"",new Date(),"12345");
+        ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCESS,"",new Date(),"67890");
     }
 
     public void testBRMS() {
