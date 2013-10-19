@@ -27,8 +27,30 @@ public class BankStmtSummaryView implements Serializable {
     private BigDecimal grdTotalIncomeNetUW;
     private BigDecimal grdTotalTDChqRetAmount;
     private BigDecimal grdTotalTDChqRetPercent;
+    private BigDecimal grdTotalAvgOSBalanceAmount;
 
     private List<BankStmtView> bankStmtViewList;
+
+    public BankStmtSummaryView() {
+    }
+
+    public void reset() {
+        this.expectedSubmitDate = new Date();
+        this.TMBTotalIncomeGross = BigDecimal.ZERO;
+        this.TMBTotalIncomeNetBDM = BigDecimal.ZERO;
+        this.TMBTotalIncomeNetUW = BigDecimal.ZERO;
+
+        this.OthTotalIncomeGross = BigDecimal.ZERO;
+        this.OthTotalIncomeNetBDM = BigDecimal.ZERO;
+        this.OthTotalIncomeNetUW = BigDecimal.ZERO;
+
+        this.grdTotalIncomeGross = BigDecimal.ZERO;
+        this.grdTotalIncomeNetBDM = BigDecimal.ZERO;
+        this.grdTotalIncomeNetUW = BigDecimal.ZERO;
+        this.grdTotalTDChqRetAmount = BigDecimal.ZERO;
+        this.grdTotalTDChqRetPercent = BigDecimal.ZERO;
+        this.grdTotalAvgOSBalanceAmount = BigDecimal.ZERO;
+    }
 
     public List<ActionStatusView> getActionStatusViewList() {
         return actionStatusViewList;
@@ -150,6 +172,14 @@ public class BankStmtSummaryView implements Serializable {
         this.bankStmtViewList = bankStmtViewList;
     }
 
+    public BigDecimal getGrdTotalAvgOSBalanceAmount() {
+        return grdTotalAvgOSBalanceAmount;
+    }
+
+    public void setGrdTotalAvgOSBalanceAmount(BigDecimal grdTotalAvgOSBalanceAmount) {
+        this.grdTotalAvgOSBalanceAmount = grdTotalAvgOSBalanceAmount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -167,6 +197,7 @@ public class BankStmtSummaryView implements Serializable {
                 .append("grdTotalIncomeNetUW", grdTotalIncomeNetUW)
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
+                .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
                 .append("bankStmtViewList", bankStmtViewList)
                 .toString();
     }

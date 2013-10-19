@@ -59,6 +59,9 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
     @Inject
     EncryptionService encryptionService;
+    @Inject
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
 
     @Inject
     WSDataPersist wsDataPersist;
@@ -118,7 +121,7 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
 
     @Override
     public void authenticate(String userName,String password) {
-        log.debug("BPM authentication");
+        log.debug("BPM authentication (userName: {}, password: [HIDDEN])",userName);
         Date now = new Date();
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName(userName);
@@ -216,17 +219,27 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         UserDTO userDTO = new UserDTO();
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userDTO.setUserName(userDetail.getUserName());
-//        String password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
-//        userDTO.setPassword(password);
-        userDTO.setPassword(userDetail.getPassword());
-        log.debug("getUserDTO username: {}, password: {}",userDetail.getUserName(),userDetail.getPassword());
+        String password;
+        if (Util.isTrue(encryptionEnable)) {
+            password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
+        } else {
+            password = userDetail.getPassword();
+        }
+        userDTO.setPassword(password);
+        log.debug("getUserDTO username: {}, password: [HIDDEN]",userDetail.getUserName());
         return userDTO;
     }
 
     private UserDTO getSystemUserDTO() {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserName(bpmUsername);
-        userDTO.setPassword(bpmPassword);
+        String password;
+        if (Util.isTrue(encryptionEnable)) {
+            password = encryptionService.decrypt(Base64.decodeBase64(bpmPassword));
+        } else {
+            password = bpmPassword;
+        }
+        userDTO.setPassword(password);
         return userDTO;
     }
 

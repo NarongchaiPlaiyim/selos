@@ -26,9 +26,10 @@ public class BankStmtView implements Serializable {
     private BigDecimal avgDrawAmount;
     private BigDecimal swingPercent;
     private BigDecimal utilizationPercent;
-    private BigDecimal averageGrossInflowPerLimit;
+    private BigDecimal avgGrossInflowPerLimit;
     private BigDecimal chequeReturn;
-    private BigDecimal tradeChequeReturnAmount;
+    private BigDecimal trdChequeReturnAmount;
+    private BigDecimal trdChequeReturnPercent;
     private BigDecimal overLimitTimes;
     private BigDecimal overLimitDays;
     private String remark;
@@ -36,12 +37,10 @@ public class BankStmtView implements Serializable {
     private List<BankStmtDetailView> bankStmtDetailViewList;
     private List<BankStmtSrcCollateralProof> bankStmtSrcCollateralProofList;
 
+    //Average = (Sum of bankStmtSrcCollateralProofList[i].OSBalanceAmount) / bankStmtSrcCollateralProofList.size()
+    private BigDecimal averageOSBalanceAmount;
+
     public BankStmtView() {
-        reset();
-    }
-
-    public void reset() {
-
     }
 
     public int getNotCountIncome() {
@@ -172,12 +171,12 @@ public class BankStmtView implements Serializable {
         this.utilizationPercent = utilizationPercent;
     }
 
-    public BigDecimal getAverageGrossInflowPerLimit() {
-        return averageGrossInflowPerLimit;
+    public BigDecimal getAvgGrossInflowPerLimit() {
+        return avgGrossInflowPerLimit;
     }
 
-    public void setAverageGrossInflowPerLimit(BigDecimal averageGrossInflowPerLimit) {
-        this.averageGrossInflowPerLimit = averageGrossInflowPerLimit;
+    public void setAvgGrossInflowPerLimit(BigDecimal avgGrossInflowPerLimit) {
+        this.avgGrossInflowPerLimit = avgGrossInflowPerLimit;
     }
 
     public BigDecimal getChequeReturn() {
@@ -188,12 +187,20 @@ public class BankStmtView implements Serializable {
         this.chequeReturn = chequeReturn;
     }
 
-    public BigDecimal getTradeChequeReturnAmount() {
-        return tradeChequeReturnAmount;
+    public BigDecimal getTrdChequeReturnAmount() {
+        return trdChequeReturnAmount;
     }
 
-    public void setTradeChequeReturnAmount(BigDecimal tradeChequeReturnAmount) {
-        this.tradeChequeReturnAmount = tradeChequeReturnAmount;
+    public void setTrdChequeReturnAmount(BigDecimal trdChequeReturnAmount) {
+        this.trdChequeReturnAmount = trdChequeReturnAmount;
+    }
+
+    public BigDecimal getTrdChequeReturnPercent() {
+        return trdChequeReturnPercent;
+    }
+
+    public void setTrdChequeReturnPercent(BigDecimal trdChequeReturnPercent) {
+        this.trdChequeReturnPercent = trdChequeReturnPercent;
     }
 
     public BigDecimal getOverLimitTimes() {
@@ -244,6 +251,14 @@ public class BankStmtView implements Serializable {
         this.limit = limit;
     }
 
+    public BigDecimal getAverageOSBalanceAmount() {
+        return averageOSBalanceAmount;
+    }
+
+    public void setAverageOSBalanceAmount(BigDecimal averageOSBalanceAmount) {
+        this.averageOSBalanceAmount = averageOSBalanceAmount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -264,14 +279,16 @@ public class BankStmtView implements Serializable {
                 .append("avgDrawAmount", avgDrawAmount)
                 .append("swingPercent", swingPercent)
                 .append("utilizationPercent", utilizationPercent)
-                .append("averageGrossInflowPerLimit", averageGrossInflowPerLimit)
+                .append("avgGrossInflowPerLimit", avgGrossInflowPerLimit)
                 .append("chequeReturn", chequeReturn)
-                .append("tradeChequeReturnAmount", tradeChequeReturnAmount)
+                .append("trdChequeReturnAmount", trdChequeReturnAmount)
+                .append("trdChequeReturnPercent", trdChequeReturnPercent)
                 .append("overLimitTimes", overLimitTimes)
                 .append("overLimitDays", overLimitDays)
                 .append("remark", remark)
                 .append("bankStmtDetailViewList", bankStmtDetailViewList)
                 .append("bankStmtSrcCollateralProofList", bankStmtSrcCollateralProofList)
+                .append("averageOSBalanceAmount", averageOSBalanceAmount)
                 .toString();
     }
 }
