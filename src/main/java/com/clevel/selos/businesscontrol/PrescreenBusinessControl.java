@@ -373,8 +373,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                         }
                         log.info("getCSI ::: customerCSIList : {}", customerCSIList);
                         if(customerCSIList != null && customerCSIList.size() > 0){
+                            log.info("getCSI ::: persist item");
                             customerCSIDAO.persist(customerCSIList);
                         }
+                        log.info("getCSI ::: end...");
                     }
                 }
             }
