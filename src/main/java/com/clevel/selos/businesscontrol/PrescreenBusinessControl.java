@@ -186,11 +186,20 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoResultSearch;
     }
 
+    /**
+     * To Retreive the following Interface Information in Prescreen
+     * <ul>
+     *     <li>DWH Obligation - Existing Credit</li>
+     *     <li>DWH BankStatement</li>
+     * </ul>
+     * @param workCaseId
+     * @return PrescreenResultView
+     */
     public PrescreenResultView getInterfaceInfo(long workCaseId){
-
+        log.info("retreive interface for workcase: {}", workCaseId);
         List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
 
-        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(customerInfoViewList);
+        ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
         PrescreenResultView prescreenResultView = new PrescreenResultView();
         prescreenResultView.setExistingCreditView(existingCreditView);

@@ -44,7 +44,7 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
     }
 
     @Override
-    public ObligationResult getObligationData(String userId, List<String> tmbCusIdList) {
+    public ObligationResult getObligationData(String userId, List<String> tmbCusIdList){
         log.debug("getObligationData (userId : {}, tmbCusIdList : {})",userId,tmbCusIdList);
         ObligationResult obligationResult = new ObligationResult();
         try{

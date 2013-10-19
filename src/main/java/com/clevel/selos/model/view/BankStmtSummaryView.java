@@ -5,14 +5,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class BankStmtSummaryView implements Serializable {
 
-    private String interfaceResult;
-    private String interfaceResultReason;
+    private List<ActionStatusView> actionStatusViewList;
 
     private int seasonal;
+    private Date expectedSubmitDate;
     private BigDecimal TMBTotalIncomeGross;
     private BigDecimal TMBTotalIncomeNetBDM;
     private BigDecimal TMBTotalIncomeNetUW;
@@ -29,20 +30,12 @@ public class BankStmtSummaryView implements Serializable {
 
     private List<BankStmtView> bankStmtViewList;
 
-    public String getInterfaceResult() {
-        return interfaceResult;
+    public List<ActionStatusView> getActionStatusViewList() {
+        return actionStatusViewList;
     }
 
-    public void setInterfaceResult(String interfaceResult) {
-        this.interfaceResult = interfaceResult;
-    }
-
-    public String getInterfaceResultReason() {
-        return interfaceResultReason;
-    }
-
-    public void setInterfaceResultReason(String interfaceResultReason) {
-        this.interfaceResultReason = interfaceResultReason;
+    public void setActionStatusViewList(List<ActionStatusView> actionStatusViewList) {
+        this.actionStatusViewList = actionStatusViewList;
     }
 
     public int getSeasonal() {
@@ -51,6 +44,14 @@ public class BankStmtSummaryView implements Serializable {
 
     public void setSeasonal(int seasonal) {
         this.seasonal = seasonal;
+    }
+
+    public Date getExpectedSubmitDate() {
+        return expectedSubmitDate;
+    }
+
+    public void setExpectedSubmitDate(Date expectedSubmitDate) {
+        this.expectedSubmitDate = expectedSubmitDate;
     }
 
     public BigDecimal getTMBTotalIncomeGross() {
@@ -152,9 +153,9 @@ public class BankStmtSummaryView implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("interfaceResult", interfaceResult)
-                .append("interfaceResultReason", interfaceResultReason)
+                .append("actionStatusViewList", actionStatusViewList)
                 .append("seasonal", seasonal)
+                .append("expectedSubmitDate", expectedSubmitDate)
                 .append("TMBTotalIncomeGross", TMBTotalIncomeGross)
                 .append("TMBTotalIncomeNetBDM", TMBTotalIncomeNetBDM)
                 .append("TMBTotalIncomeNetUW", TMBTotalIncomeNetUW)
