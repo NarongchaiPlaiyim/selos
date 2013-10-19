@@ -107,7 +107,8 @@ public class LoginBean {
         // find user profile in database
         User user = userDAO.findById(userName.trim());
         UserDetail userDetail = null;
-        password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
+//        password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
+        password = password.trim();
         try {
             userDetail = new UserDetail(user.getId(),password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {

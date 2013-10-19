@@ -216,9 +216,10 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
         UserDTO userDTO = new UserDTO();
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userDTO.setUserName(userDetail.getUserName());
-        String password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
-        userDTO.setPassword(password);
-        log.debug("getUserDTO username: {}, password: {}",userDetail.getUserName(),password);
+//        String password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
+//        userDTO.setPassword(password);
+        userDTO.setPassword(userDetail.getPassword());
+        log.debug("getUserDTO username: {}, password: {}",userDetail.getUserName(),userDetail.getPassword());
         return userDTO;
     }
 
