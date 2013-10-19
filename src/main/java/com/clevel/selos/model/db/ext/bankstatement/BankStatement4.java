@@ -86,8 +86,8 @@ public class BankStatement4 implements Serializable {
     @Column(name="check_return_number", length = 5)
     private Integer checkReturnNumber;
 
-    @Column(name="check_return_amount", length = 3)
-    private Integer checkReturnAmount;
+    @Column(name="check_return_amount", length = 14, scale = 2)
+    private BigDecimal checkReturnAmount;
 
     @Column(name="od_limit_number", length = 5)
     private Integer odLimitNumber;
@@ -234,11 +234,11 @@ public class BankStatement4 implements Serializable {
         this.checkReturnNumber = checkReturnNumber;
     }
 
-    public Integer getCheckReturnAmount() {
+    public BigDecimal getCheckReturnAmount() {
         return checkReturnAmount;
     }
 
-    public void setCheckReturnAmount(int checkReturnAmount) {
+    public void setCheckReturnAmount(BigDecimal checkReturnAmount) {
         this.checkReturnAmount = checkReturnAmount;
     }
 

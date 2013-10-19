@@ -16,14 +16,14 @@ public class BankStmtView implements Serializable {
     private String accountNumber;
     private String accountName;
     private AccountStatusView accountStatusView;
-    private String accountStatus;
     private int isMainAccount;
     private int accountCharacteristic;
 
-    private BigDecimal averageIncomeGross;
-    private BigDecimal averageIncomeNetBDM;
-    private BigDecimal averageIncomeNetUW;
-    private BigDecimal averageDrawAmount;
+    private BigDecimal limit;
+    private BigDecimal avgIncomeGross;
+    private BigDecimal avgIncomeNetBDM;
+    private BigDecimal avgIncomeNetUW;
+    private BigDecimal avgDrawAmount;
     private BigDecimal swingPercent;
     private BigDecimal utilizationPercent;
     private BigDecimal averageGrossInflowPerLimit;
@@ -108,14 +108,6 @@ public class BankStmtView implements Serializable {
         this.accountStatusView = accountStatusView;
     }
 
-    public String getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(String accountStatus) {
-        this.accountStatus = accountStatus;
-    }
-
     public int getMainAccount() {
         return isMainAccount;
     }
@@ -132,36 +124,36 @@ public class BankStmtView implements Serializable {
         this.accountCharacteristic = accountCharacteristic;
     }
 
-    public BigDecimal getAverageIncomeGross() {
-        return averageIncomeGross;
+    public BigDecimal getAvgIncomeGross() {
+        return avgIncomeGross;
     }
 
-    public void setAverageIncomeGross(BigDecimal averageIncomeGross) {
-        this.averageIncomeGross = averageIncomeGross;
+    public void setAvgIncomeGross(BigDecimal avgIncomeGross) {
+        this.avgIncomeGross = avgIncomeGross;
     }
 
-    public BigDecimal getAverageIncomeNetBDM() {
-        return averageIncomeNetBDM;
+    public BigDecimal getAvgIncomeNetBDM() {
+        return avgIncomeNetBDM;
     }
 
-    public void setAverageIncomeNetBDM(BigDecimal averageIncomeNetBDM) {
-        this.averageIncomeNetBDM = averageIncomeNetBDM;
+    public void setAvgIncomeNetBDM(BigDecimal avgIncomeNetBDM) {
+        this.avgIncomeNetBDM = avgIncomeNetBDM;
     }
 
-    public BigDecimal getAverageIncomeNetUW() {
-        return averageIncomeNetUW;
+    public BigDecimal getAvgIncomeNetUW() {
+        return avgIncomeNetUW;
     }
 
-    public void setAverageIncomeNetUW(BigDecimal averageIncomeNetUW) {
-        this.averageIncomeNetUW = averageIncomeNetUW;
+    public void setAvgIncomeNetUW(BigDecimal avgIncomeNetUW) {
+        this.avgIncomeNetUW = avgIncomeNetUW;
     }
 
-    public BigDecimal getAverageDrawAmount() {
-        return averageDrawAmount;
+    public BigDecimal getAvgDrawAmount() {
+        return avgDrawAmount;
     }
 
-    public void setAverageDrawAmount(BigDecimal averageDrawAmount) {
-        this.averageDrawAmount = averageDrawAmount;
+    public void setAvgDrawAmount(BigDecimal avgDrawAmount) {
+        this.avgDrawAmount = avgDrawAmount;
     }
 
     public BigDecimal getSwingPercent() {
@@ -244,6 +236,14 @@ public class BankStmtView implements Serializable {
         this.bankStmtSrcCollateralProofList = bankStmtSrcCollateralProofList;
     }
 
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -255,13 +255,13 @@ public class BankStmtView implements Serializable {
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("accountStatusView", accountStatusView)
-                .append("accountStatus", accountStatus)
                 .append("isMainAccount", isMainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
-                .append("averageIncomeGross", averageIncomeGross)
-                .append("averageIncomeNetBDM", averageIncomeNetBDM)
-                .append("averageIncomeNetUW", averageIncomeNetUW)
-                .append("averageDrawAmount", averageDrawAmount)
+                .append("limit", limit)
+                .append("avgIncomeGross", avgIncomeGross)
+                .append("avgIncomeNetBDM", avgIncomeNetBDM)
+                .append("avgIncomeNetUW", avgIncomeNetUW)
+                .append("avgDrawAmount", avgDrawAmount)
                 .append("swingPercent", swingPercent)
                 .append("utilizationPercent", utilizationPercent)
                 .append("averageGrossInflowPerLimit", averageGrossInflowPerLimit)

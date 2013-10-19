@@ -5,15 +5,24 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class BankView {
 
-    private String code;
+    private int code;
     private String bankName;
+    private String bankShortName;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getBankShortName() {
+        return bankShortName;
+    }
+
+    public void setBankShortName(String bankShortName) {
+        this.bankShortName = bankShortName;
     }
 
     public String getBankName() {
@@ -29,6 +38,7 @@ public class BankView {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("code", code)
                 .append("bankName", bankName)
+                .append("bankShortName", bankShortName)
                 .toString();
     }
 }

@@ -4,12 +4,15 @@ import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
-import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
+import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
+import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.view.ActionStatusView;
 import com.clevel.selos.model.view.BankStmtSummaryView;
+import com.clevel.selos.model.view.BankStmtView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.transform.ActionStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
@@ -26,6 +29,9 @@ public class BankStmtControl extends BusinessControl{
     @Inject
     DWHInterface dwhInterface;
 
+    @Inject
+    ActionStatusTransform actionStatusTransform;
+
     public BankStatementSummary retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, BankStmtSummaryView bankStmtSummaryView){
         Date startBankStmtDate = getStartBankStmtDate(bankStmtSummaryView.getExpectedSubmitDate());
         int numberOfMonthBankStmt = getRetrieveMonthBankStmt(bankStmtSummaryView.getSeasonal());
@@ -37,16 +43,22 @@ public class BankStmtControl extends BusinessControl{
                 if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
                     List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
                     for(CustomerAccountListModel customerAccountListModel : accountListModelList){
-                        BankStatementResult bankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
+                        DWHBankStatementResult bankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
+
+                        if(bankStatementResult.getActionResult().equals(ActionResult.SUCCESS)){
+                            List<DWHBankStatement> bankStatementList = bankStatementResult.getBankStatementList();
+                            BankStmtView bankStmtView = null;
+                            for(DWHBankStatement dwhBankStatement : bankStatementList){
 
 
+                            }
+                        } else {
+                            actionStatusViewList.add(actionStatusTransform.getActionStatusView(bankStatementResult.getActionResult(), bankStatementResult.getReason()));
+                        }
 
                     }
                 } else {
-                    ActionStatusView actionStatusView = new ActionStatusView();
-                    actionStatusView.setStatusCode(customerAccountResult.getActionResult());
-                    actionStatusView.setStatusDesc(customerAccountResult.getReason());
-                    actionStatusViewList.add(actionStatusView);
+                    actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
                 }
             }
         }
