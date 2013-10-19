@@ -103,7 +103,7 @@ public class Util {
     }
 
     public static boolean isTrue(String str) {
-        return str != null && str.matches("[tT]rue|[yY]es|1");
+        return str != null && str.trim().matches("[tT]rue|[yY]es|1");
     }
 
     public static boolean isTrue(int value){

@@ -47,10 +47,19 @@ public class ExistingCreditControl extends BusinessControl{
 
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
 
+        List<ExistingCreditDetailView> existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+
+        List<ActionStatusView> actionStatusViewList = new ArrayList<ActionStatusView>();
+
+
         ActionStatusView actionStatusView = new ActionStatusView();
         actionStatusView.setStatusCode(ActionResult.SUCCESS);
         actionStatusView.setStatusDesc("No Account Found");
-        existingCreditView.setStatus(actionStatusView);
+
+        actionStatusViewList.add(actionStatusView);
+
+        existingCreditView.setStatus(actionStatusViewList);
+
         log.info("return existing credit view {}", existingCreditView);
         return existingCreditView;
     }
@@ -112,7 +121,6 @@ public class ExistingCreditControl extends BusinessControl{
             actionStatusView.setStatusCode(obligationResult.getActionResult());
             actionStatusView.setStatusDesc(obligationResult.getReason());
 
-            existingCreditView.setStatus(actionStatusView);
 
             log.info("return existing credit view {}", existingCreditView);
 
