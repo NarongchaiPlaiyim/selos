@@ -8,11 +8,9 @@ import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.working.BankStatementSummary;
-import com.clevel.selos.model.view.ActionStatusView;
-import com.clevel.selos.model.view.BankStmtSummaryView;
-import com.clevel.selos.model.view.BankStmtView;
-import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ActionStatusTransform;
+import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
@@ -32,37 +30,62 @@ public class BankStmtControl extends BusinessControl{
     @Inject
     ActionStatusTransform actionStatusTransform;
 
-    public BankStatementSummary retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, BankStmtSummaryView bankStmtSummaryView){
-        Date startBankStmtDate = getStartBankStmtDate(bankStmtSummaryView.getExpectedSubmitDate());
-        int numberOfMonthBankStmt = getRetrieveMonthBankStmt(bankStmtSummaryView.getSeasonal());
+    @Inject
+    BankStmtTransform bankStmtTransform;
 
+    public BankStmtSummaryView retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSumitDate){
+        return retreiveBankStmtInterface(customerInfoViewList, expectedSumitDate, 0);
+    }
+
+    public BankStmtSummaryView retreiveBankStmtInterface(List<CustomerInfoView> customerInfoViewList, Date expectedSumitDate, int seasonal){
+        log.info("Start retreiveBankStmtInterface with {}", customerInfoViewList);
+        Date startBankStmtDate = getStartBankStmtDate(expectedSumitDate);
+        int numberOfMonthBankStmt = getRetrieveMonthBankStmt(seasonal);
+
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
         List<ActionStatusView> actionStatusViewList = new ArrayList<ActionStatusView>();
+        List<BankStmtView> bankStmtViewList = new ArrayList<BankStmtView>();
+
         for(CustomerInfoView customerInfoView : customerInfoViewList){
-            if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
-                CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
-                if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
-                    List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
-                    for(CustomerAccountListModel customerAccountListModel : accountListModelList){
-                        DWHBankStatementResult bankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
+            if(customerInfoView.getRelation().getId() == 1){
+                if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
+                    log.info("Finding Account Number List for TMB Cus ID: {}", customerInfoView.getTmbCustomerId());
+                    //CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+                    CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
+                    if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
+                        List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
+                        log.info("Finding account {}", accountListModelList);
+                        for(CustomerAccountListModel customerAccountListModel : accountListModelList){
+                            DWHBankStatementResult dwhBankStatementResult = dwhInterface.getBankStatementData(getCurrentUserID(), customerAccountListModel.getAccountNo(), startBankStmtDate, numberOfMonthBankStmt);
 
-                        if(bankStatementResult.getActionResult().equals(ActionResult.SUCCESS)){
-                            List<DWHBankStatement> bankStatementList = bankStatementResult.getBankStatementList();
-                            BankStmtView bankStmtView = null;
-                            for(DWHBankStatement dwhBankStatement : bankStatementList){
+                            if(dwhBankStatementResult.getActionResult().equals(ActionResult.SUCCESS)){
+                                List<DWHBankStatement> dwhBankStatementList = dwhBankStatementResult.getBankStatementList();
+                                BankStmtView bankStmtView = null;
+                                List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
+                                for(DWHBankStatement dwhBankStatement : dwhBankStatementList){
 
-
+                                    BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
+                                    if(bankStmtView == null){
+                                        bankStmtView = bankStmtTransform.getBankStmtView(dwhBankStatement);
+                                    }
+                                    bankStmtDetailViewList.add(bankStmtDetailView);
+                                }
+                                bankStmtView.setBankStmtDetailViewList(bankStmtDetailViewList);
+                                bankStmtViewList.add(bankStmtView);
+                            } else {
+                                actionStatusViewList.add(actionStatusTransform.getActionStatusView(dwhBankStatementResult.getActionResult(), dwhBankStatementResult.getReason()));
                             }
-                        } else {
-                            actionStatusViewList.add(actionStatusTransform.getActionStatusView(bankStatementResult.getActionResult(), bankStatementResult.getReason()));
                         }
+                    } else {
+                        actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
 
                     }
-                } else {
-                    actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
                 }
             }
         }
-        return null;
+        bankStmtSummaryView.setActionStatusViewList(actionStatusViewList);
+        bankStmtSummaryView.setBankStmtViewList(bankStmtViewList);
+        return bankStmtSummaryView;
     }
 
     public BankStatementSummary getBankStmt(){
@@ -88,5 +111,35 @@ public class BankStmtControl extends BusinessControl{
 
     public int getRetrieveMonthBankStmt(int seasonalFlag) {
         return seasonalFlag == 1 ? 12 : 6;
+    }
+
+    private CustomerAccountResult getBankAccountList(String tmbCusId){
+        List<CustomerAccountListModel> accountListModelList = new ArrayList<CustomerAccountListModel>();
+        if(tmbCusId.equals("001100000000000000000006106302")){
+            CustomerAccountListModel customerAccountListModel1 = new CustomerAccountListModel();
+            customerAccountListModel1.setAccountNo("3042582720");
+
+            CustomerAccountListModel customerAccountListModel2 = new CustomerAccountListModel();
+            customerAccountListModel2.setAccountNo("3042886758");
+
+            CustomerAccountListModel customerAccountListModel3 = new CustomerAccountListModel();
+            customerAccountListModel3.setAccountNo("3042843353");
+
+            CustomerAccountListModel customerAccountListModel4 = new CustomerAccountListModel();
+            customerAccountListModel4.setAccountNo("3052116807");
+
+            accountListModelList.add(customerAccountListModel1);
+            accountListModelList.add(customerAccountListModel2);
+            accountListModelList.add(customerAccountListModel3);
+            accountListModelList.add(customerAccountListModel4);
+
+
+        }
+
+        CustomerAccountResult customerAccountResult = new CustomerAccountResult();
+        customerAccountResult.setActionResult(ActionResult.SUCCESS);
+        customerAccountResult.setCustomerId(tmbCusId);
+        customerAccountResult.setAccountListModels(accountListModelList);
+        return customerAccountResult;
     }
 }
