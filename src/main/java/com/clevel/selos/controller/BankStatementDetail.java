@@ -5,7 +5,6 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.Bank;
-import com.clevel.selos.model.view.BankStatementView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -55,8 +54,6 @@ public class BankStatementDetail implements Serializable {
     private int seasonal;
     private Date expectedSubmissionDate;
 
-    //Bank Statement Form
-    private BankStatementView bankStmtView;
     private List<Bank> bankList;
     private List<AccountStatus> accountStatusList;
 
@@ -84,9 +81,6 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
-        //instantiated bank statement form
-        bankStmtView = new BankStatementView();
-
         //init select list
         bankList = new ArrayList<Bank>();
         if (isTmbBank) {
@@ -105,14 +99,6 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-    }
-
-    public BankStatementView getBankStmtView() {
-        return bankStmtView;
-    }
-
-    public void setBankStmtView(BankStatementView bankStmtView) {
-        this.bankStmtView = bankStmtView;
     }
 
     public List<AccountStatus> getAccountStatusList() {

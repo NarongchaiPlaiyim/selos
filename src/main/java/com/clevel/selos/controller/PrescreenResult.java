@@ -103,16 +103,12 @@ public class PrescreenResult implements Serializable {
 
             modeForButton = ModeForButton.ADD;
         }
-        prescreenResultView = new PrescreenResultView();
     }
 
     public void onRetrieveInterfaceInfo(){
-        if(workCasePreScreenId != 0){
-            PrescreenResultView _tmpPrescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
+        log.info("Start on Retrieve Interface Info");
+        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
 
-            prescreenResultView.setExistingCreditView(_tmpPrescreenResultView.getExistingCreditView());
-
-        }
     }
 
     private List<ExistingCreditDetailView> getCreditFact(int num){

@@ -613,7 +613,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
-        boolean complete = false;
+        boolean complete = true;        //Change only failed to save
 
         //** validate form **//
         if(customerInfoViewList == null){
@@ -643,7 +643,10 @@ public class PrescreenMaker implements Serializable {
 
         if(modeForButton.equals(ModeForButton.ADD)){
             if(borrowerInfo.getCustomerEntity().getId() != 0){
-                if(borrowerInfo.getCustomerEntity().getId() == 1){ //Individual
+                int customerListIndex = 0;
+                customerListIndex = customerInfoViewList.size();        //Index is already +1
+
+                if(borrowerInfo.getCustomerEntity().getId() == 1){      //Individual
                     //---- Validate CitizenId ----//
                     boolean validateCitizen = true;
                     for(CustomerInfoView customerInfoView : customerInfoViewList ){
@@ -658,8 +661,11 @@ public class PrescreenMaker implements Serializable {
                     if(validateCitizen){
                         log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
                         //--- Borrower ---
+                        borrowerInfo.setListIndex(customerListIndex);
                         if(borrowerInfo.getRelation().getId() == 1){
                             //Borrower
+                            borrowerInfo.setListName("BORROWER");
+                            borrowerInfo.setIsSpouse(0);
                             //TODO assign caseBorrowerType
                             borrowerInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
@@ -669,36 +675,54 @@ public class PrescreenMaker implements Serializable {
                             }
                         }else if(borrowerInfo.getRelation().getId() == 2){
                             //Guarantor
+                            borrowerInfo.setListName("GUARANTOR");
+                            borrowerInfo.setIsSpouse(0);
                             guarantorInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
                             //Relate Person
+                            borrowerInfo.setListName("RELATED");
+                            borrowerInfo.setIsSpouse(0);
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else{
-                            customerInfoViewList.add(borrowerInfo);
+                            //customerInfoViewList.add(borrowerInfo);
+                            complete = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Invalid relation type.";
                         }
 
-                        //--- Spouse ---
-                        log.info("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
-                        if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
-                            if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
-                                CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
-                                log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
-                                if(spouseInfo.getRelation().getId() == 1) {
-                                    //Spouse - Borrower
-                                    borrowerInfoViewList.add(spouseInfo);
-                                } else if(spouseInfo.getRelation().getId() == 2) {
-                                    //Spouse - Guarantor
-                                    guarantorInfoViewList.add(spouseInfo);
-                                } else if(spouseInfo.getRelation().getId() == 3 || spouseInfo.getRelation().getId() == 4) {
-                                    //Spouse - Relate Person
-                                    relatedInfoViewList.add(spouseInfo);
+                        if(complete){
+                            //--- Spouse ---
+                            log.info("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
+                            if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
+                                if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
+                                    CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
+                                    spouseInfo.setIsSpouse(1);
+                                    spouseInfo.setListIndex(customerListIndex);
+                                    log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
+                                    if(spouseInfo.getRelation().getId() == 1) {
+                                        //Spouse - Borrower
+                                        spouseInfo.setListName("BORROWER");
+                                        borrowerInfoViewList.add(spouseInfo);
+                                    } else if(spouseInfo.getRelation().getId() == 2) {
+                                        //Spouse - Guarantor
+                                        spouseInfo.setListName("GUARANTOR");
+                                        guarantorInfoViewList.add(spouseInfo);
+                                    } else if(spouseInfo.getRelation().getId() == 3 || spouseInfo.getRelation().getId() == 4) {
+                                        //Spouse - Relate Person
+                                        spouseInfo.setListName("RELATED");
+                                        relatedInfoViewList.add(spouseInfo);
+                                    } else {
+                                        complete = false;
+                                        messageHeader = "Save customer (Spouse) failed.";
+                                        message = "Invalid relation type.";
+                                    }
                                 }
                             }
-                            complete = true;
                         }
                     } else {
+                        // Validate citizen failed..
                         complete = false;
                     }
 
@@ -706,6 +730,8 @@ public class PrescreenMaker implements Serializable {
                     DocumentType documentType = new DocumentType();
                     documentType.setId(3);
                     borrowerInfo.setDocumentType(documentType);
+                    borrowerInfo.setIsSpouse(0);
+                    borrowerInfo.setListIndex(customerListIndex);
 
                     boolean validateCitizen = true;
                     for(CustomerInfoView customerInfoView : customerInfoViewList ){
@@ -720,6 +746,7 @@ public class PrescreenMaker implements Serializable {
                     if(validateCitizen){
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
+                            borrowerInfo.setListName("BORROWER");
                             //Borrower
                             borrowerInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
@@ -729,27 +756,96 @@ public class PrescreenMaker implements Serializable {
                                 caseBorrowerTypeId = BorrowerType.JURISTIC.value();
                             }
                         }else if(borrowerInfo.getRelation().getId() == 2){
+                            borrowerInfo.setListName("GUARANTOR");
                             //Guarantor
                             guarantorInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
+                            borrowerInfo.setListName("RELATED");
                             //Relate Person
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else{
-                            customerInfoViewList.add(borrowerInfo);
+                            complete = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Invalid relation type.";
                         }
-                        complete = true;
                     } else {
                         complete = false;
                     }
+                } else {
+                    complete = false;
+                    messageHeader = "Save customer failed.";
+                    message = "Invalid customer entity.";
                 }
             }
         } else { // Edit
+            if(borrowerInfo.getCustomerEntity().getId() != 0){
+                int customerListIndex = borrowerInfo.getListIndex();
+                int oldRelationId = 0;
+                String oldCitizenId = "";
+                String oldRegistrationId = "";
+                if(borrowerInfo.getCustomerEntity().getId() == 1){          //Individual
+                    //---- Validate CitizenId ----//
+                    boolean validateCitizen = true;
+                    for(CustomerInfoView customerInfoView : customerInfoViewList ){
+                        //Case when update customer and change citizen id to same another.
+                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && (borrowerInfo.getListIndex() != customerInfoView.getListIndex())){
+                            validateCitizen = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Duplicate citizenId.";
+                            break;
+                        }
 
+                        if(customerInfoView.getListIndex() == borrowerInfo.getListIndex()){
+                            oldRelationId = customerInfoView.getRelation().getId();
+                            oldCitizenId = customerInfoView.getCitizenId();
+                        }
+                    }
+
+                    if(validateCitizen){
+                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        //--- Borrower ---
+                        if(borrowerInfo.getRelation().getId() == 1){
+                            //Borrower
+                            borrowerInfo.setListName("BORROWER");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 1){
+                                //Update old borrowerList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                borrowerInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new borrowerList;
+                                borrowerInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 2){
+                                    //Remove from guarantor list
+                                    int index = 0;
+                                    for(CustomerInfoView customerInfoView : guarantorInfoViewList){
+
+                                        index = index + 1;
+                                    }
+                                } else {
+                                    //Remove from related list
+                                }
+                            }
+                            //TODO assign caseBorrowerType
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        }
+                    }
+
+                }else if(borrowerInfo.getCustomerEntity().getId() == 2){    //Juristic
+
+                } else {
+                    complete = false;
+                    messageHeader = "Save customer failed.";
+                    message = "Invalid customer entity.";
+                }
+            }
             complete = true;
         }
-        //onCheckButton();
+
         context.addCallbackParam("functionComplete", complete);
 
         if(!complete){
