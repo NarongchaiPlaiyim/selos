@@ -45,22 +45,15 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setAccountSuf("-");
         existingCreditDetailView.setProductCode(appInProcess.getProductCode());
         existingCreditDetailView.setProjectCode(appInProcess.getProjectCode());
-        if(appInProcess.getFinalLimit() != null && !appInProcess.getFinalLimit().equals(BigDecimal.ZERO))
+        if(appInProcess.getFinalLimit() != null && !appInProcess.getFinalLimit().equals(BigDecimal.ZERO)){
             existingCreditDetailView.setLimit(appInProcess.getFinalLimit());
-        else
-            existingCreditDetailView.setLimit(appInProcess.getRequestLimit());
-
-        if(appInProcess.getFinalTenors() != null && ! appInProcess.getFinalTenors().equals(BigDecimal.ZERO))
             existingCreditDetailView.setTenor(appInProcess.getFinalTenors());
-
-        if(appInProcess.getFinalLimit() != null && !appInProcess.getFinalLimit().equals(BigDecimal.ZERO))
-            existingCreditDetailView.setLimit(appInProcess.getFinalLimit());
-        else
+            existingCreditDetailView.setInstallment(appInProcess.getFinalInstallment());
+        } else {
             existingCreditDetailView.setLimit(appInProcess.getRequestLimit());
-
-        /*existingCreditDetailView.setInstallment(appInProcess.get);
-        existingCreditDetailView.setTenor((int)((DateTimeUtil.daysBetween2Dates(obligation.getMaturityDate(), obligation.getLastContractDate()))/30.4));
-                          */
-        return null;
+            existingCreditDetailView.setTenor(appInProcess.getRequestTenor());
+            existingCreditDetailView.setInstallment(BigDecimal.ZERO);
+        }
+        return existingCreditDetailView;
     }
 }

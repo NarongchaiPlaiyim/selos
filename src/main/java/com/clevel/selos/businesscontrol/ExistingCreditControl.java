@@ -49,6 +49,7 @@ public class ExistingCreditControl extends BusinessControl{
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
 
         ExistingCreditView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
+
         existingCreditView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
         existingCreditView.setRelatedAppInRLOSCredit(_tmpRLOSAppIn.getRelatedAppInRLOSCredit());
         existingCreditView.setTotalBorrowerAppInRLOSLimit(_tmpRLOSAppIn.getTotalBorrowerAppInRLOSLimit());
@@ -138,7 +139,7 @@ public class ExistingCreditControl extends BusinessControl{
                 log.info("get citizen {}", customerInfoView.getCitizenId());
                 Reference reference = customerInfoView.getReference();
                 if(Util.isTrue(reference.getSll())){
-                    personalIDList.add(customerInfoView.getTmbCustomerId());
+                    personalIDList.add(customerInfoView.getCitizenId());
                     log.info("get reference {}", reference);
                 }
 
@@ -152,13 +153,15 @@ public class ExistingCreditControl extends BusinessControl{
             //Retrieve Obligation
             log.info("retrieve RLOS interface");
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
+            log.info("Result from RLOSInterface, {} from personalID {}", appInProcessResult, personalIDList);
             if(appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)){
 
+                log.info("Start Transform Result");
                 List<ExistingCreditDetailView> borrowerRLOSApp = new ArrayList<ExistingCreditDetailView>();
                 BigDecimal totalBorrowerRLOSApp = BigDecimal.ZERO;
 
                 List<ExistingCreditDetailView> relatedRLOSApp = new ArrayList<ExistingCreditDetailView>();
-                BigDecimal totalRelatedRLOSApp = BigDecimal.ZERO;
+                BigDecimal totalRelatedRLOSApp = new BigDecimal(0);
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
                 for(AppInProcess appInProcess : appInProcessList){
