@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -9,6 +12,7 @@ public class PrescreenResultView {
     private BigDecimal groupExposure;
     private BigDecimal groupIncome;
     private ExistingCreditView existingCreditView;
+    private BankStmtSummaryView bankStmtSummaryView;
 
     private List<UWRuleResult> groupRuleResults;
     private List<UWRuleResult> customerRuleResults;
@@ -57,6 +61,14 @@ public class PrescreenResultView {
         return groupRuleResults;
     }
 
+    public BankStmtSummaryView getBankStmtSummaryView() {
+        return bankStmtSummaryView;
+    }
+
+    public void setBankStmtSummaryView(BankStmtSummaryView bankStmtSummaryView) {
+        this.bankStmtSummaryView = bankStmtSummaryView;
+    }
+
     public void setGroupRuleResults(List<UWRuleResult> groupRuleResults) {
         this.groupRuleResults = groupRuleResults;
     }
@@ -67,5 +79,19 @@ public class PrescreenResultView {
 
     public void setCustomerRuleResults(List<UWRuleResult> customerRuleResults) {
         this.customerRuleResults = customerRuleResults;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("interfaceResult", interfaceResult)
+                .append("interfaceReason", interfaceReason)
+                .append("groupExposure", groupExposure)
+                .append("groupIncome", groupIncome)
+                .append("existingCreditView", existingCreditView)
+                .append("bankStmtSummaryView", bankStmtSummaryView)
+                .append("groupRuleResults", groupRuleResults)
+                .append("customerRuleResults", customerRuleResults)
+                .toString();
     }
 }

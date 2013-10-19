@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BankStatement implements Serializable {
+public class DWHBankStatement implements Serializable {
     private String accountStatus;
     private Date accountOpenDate;
     private String branchCode;
@@ -25,7 +25,7 @@ public class BankStatement implements Serializable {
     private BigDecimal lowestBalance;
     private BigDecimal monthEndBalance;
     private int numberOfChequeReturn;
-    private int chequeReturnAmount;
+    private BigDecimal chequeReturnAmount;
     private int numberOfTimesOD;
     private Date startODDate;
     private Date endODDate;
@@ -175,15 +175,15 @@ public class BankStatement implements Serializable {
         }
     }
 
-    public int getChequeReturnAmount() {
+    public BigDecimal getChequeReturnAmount() {
         return chequeReturnAmount;
     }
 
-    public void setChequeReturnAmount(Integer chequeReturnAmount) {
+    public void setChequeReturnAmount(BigDecimal chequeReturnAmount) {
         if(chequeReturnAmount==null){
-            this.chequeReturnAmount = 0;
+            this.chequeReturnAmount = BigDecimal.ZERO;
         } else {
-            this.chequeReturnAmount = chequeReturnAmount.intValue();
+            this.chequeReturnAmount = chequeReturnAmount;
         }
     }
 

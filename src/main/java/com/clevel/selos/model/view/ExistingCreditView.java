@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ExistingCreditView {
 
-    private ActionStatusView status;
+    private List<ActionStatusView> status;
     private BigDecimal totalBorrowerComLimit;
     private BigDecimal totalBorrowerRetailLimit;
     private BigDecimal totalBorrowerAppInRLOSLimit;
@@ -146,11 +146,11 @@ public class ExistingCreditView {
         this.relatedAppInRLOSCredit = relatedAppInRLOSCredit;
     }
 
-    public ActionStatusView getStatus() {
+    public List<ActionStatusView> getStatus() {
         return status;
     }
 
-    public void setStatus(ActionStatusView status) {
+    public void setStatus(List<ActionStatusView> status) {
         this.status = status;
     }
 

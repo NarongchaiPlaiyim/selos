@@ -7,7 +7,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
-import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
+import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
 import com.clevel.selos.integration.email.Template1;
@@ -184,7 +184,7 @@ public class WelcomePage implements Serializable {
 
     public void testBankStatement() {
         try{
-            BankStatementResult bankStatementResult = new BankStatementResult();
+            DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
             Date fromDate = Util.strToDateFormat("082013","MMyyyy");
             bankStatementResult = dwh.getBankStatementData("BDM001","3042582720",fromDate,12);
             log.debug("BankStatement result : {}",bankStatementResult);

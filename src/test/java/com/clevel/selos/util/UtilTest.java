@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UtilTest {
     private static Logger log = LoggerFactory.getLogger(UtilTest.class);
@@ -27,5 +29,20 @@ public class UtilTest {
         assertEquals("expected equal.", "", Util.replaceToBlank(null,strToReplace));
         assertEquals("expected equal.", "เขตลาดพร้าว", Util.replaceToBlank(text1, null));
         assertEquals("expected equal.", "", Util.replaceToBlank(null,null));
+    }
+
+    @Test
+    public void testIsTrue() throws Exception {
+        log.info("testIsTrue.");
+        assertTrue("expected true", Util.isTrue("1"));
+        assertTrue("expected true", Util.isTrue("1 "));
+        assertTrue("expected true", Util.isTrue("yes"));
+        assertTrue("expected true", Util.isTrue("Yes"));
+        assertTrue("expected true", Util.isTrue("true"));
+        assertTrue("expected true", Util.isTrue("True"));
+
+        assertTrue("expected true", Util.isTrue(1));
+
+        assertFalse("expected false", Util.isTrue("0"));
     }
 }

@@ -4,8 +4,7 @@ import com.clevel.selos.exception.DWHInterfaceException;
 import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.dwh.bankstatement.BankStatementService;
-import com.clevel.selos.integration.dwh.bankstatement.model.BankStatement;
-import com.clevel.selos.integration.dwh.bankstatement.model.BankStatementResult;
+import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.ObligationService;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
@@ -19,7 +18,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -65,9 +63,9 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
     }
 
     @Override
-    public BankStatementResult getBankStatementData(String userId, String accountNumber, Date fromDate, int numberOfMonth){
+    public DWHBankStatementResult getBankStatementData(String userId, String accountNumber, Date fromDate, int numberOfMonth){
         log.debug("getBankStatementData (userId : {}, accountNumber : {}, fromDate : {}, numberOfMonth : {})",userId,accountNumber,fromDate,numberOfMonth);
-        BankStatementResult bankStatementResult = new BankStatementResult();
+        DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
         try{
             bankStatementResult = bankStatementService.getBankStatementData(accountNumber,fromDate,numberOfMonth);
         } catch (Exception e){
