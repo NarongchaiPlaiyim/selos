@@ -155,6 +155,9 @@ public class BankStatement3 implements Serializable {
     }
 
     public Integer getCreditTXNNumber() {
+        if(creditTXNNumber==null){
+            return 0;
+        }
         return creditTXNNumber;
     }
 
@@ -171,6 +174,9 @@ public class BankStatement3 implements Serializable {
     }
 
     public Integer getDebitTXNNumber() {
+        if(debitTXNNumber==null){
+            return 0;
+        }
         return debitTXNNumber;
     }
 
@@ -219,6 +225,9 @@ public class BankStatement3 implements Serializable {
     }
 
     public Integer getCheckReturnNumber() {
+        if(checkReturnNumber==null){
+            return 0;
+        }
         return checkReturnNumber;
     }
 
@@ -235,6 +244,9 @@ public class BankStatement3 implements Serializable {
     }
 
     public Integer getOdLimitNumber() {
+        if(odLimitNumber==null){
+            return 0;
+        }
         return odLimitNumber;
     }
 
