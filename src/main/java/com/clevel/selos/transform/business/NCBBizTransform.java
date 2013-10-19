@@ -122,7 +122,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     List<EnquiryModel> enquiryModels = subjectModel.getEnquiry();
                                     if(enquiryModels != null && enquiryModels.size() > 0){
                                         for(EnquiryModel enquiryModel : enquiryModels){
-                                            if(enquiryModel!=null && enquiryModel.getEnqpurpose().equals(ENQ_PURPOSE_IND)){
+                                            if(enquiryModel!=null && enquiryModel.getEnqpurpose()!=null && enquiryModel.getEnqpurpose().equals(ENQ_PURPOSE_IND)){
                                                 enquiryModelResults.add(enquiryModel);
                                             }
                                         }
@@ -998,7 +998,7 @@ public class NCBBizTransform extends BusinessTransform {
                                         && h2HResponseSubjectModel.getInquiryhistories().getInqhist().size()>0){
                                     List<InqHistModel> inqHistModels = h2HResponseSubjectModel.getInquiryhistories().getInqhist();
                                     for(InqHistModel inqHistModel : inqHistModels){
-                                        if(inqHistModel!=null && inqHistModel.getInqpurpose().equals(ENQ_PURPOSE_JUR)){
+                                        if(inqHistModel!=null && inqHistModel.getInqpurpose()!=null && inqHistModel.getInqpurpose().equals(ENQ_PURPOSE_JUR)){
                                             enquiryModelResults.add(inqHistModel);
                                         }
                                     }

@@ -353,6 +353,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
@@ -362,6 +363,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         }
 
                         for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
@@ -369,7 +371,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSI.setMatchedType("P");
                             customerCSIList.add(customerCSI);
                         }
-                        customerCSIDAO.persist(customerCSIList);
+                        log.info("getCSI ::: customerCSIList : {}", customerCSIList);
+                        if(customerCSIList != null && customerCSIList.size() > 0){
+                            customerCSIDAO.persist(customerCSIList);
+                        }
                     }
                 }
             }
@@ -422,7 +427,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSI.setMatchedType("P");
                             customerCSIList.add(customerCSI);
                         }
-                        customerCSIDAO.persist(customerCSIList);
+                        if(customerCSIList != null && customerCSIList.size() >0){
+                            customerCSIDAO.persist(customerCSIList);
+                        }
                     }
                 }
             }

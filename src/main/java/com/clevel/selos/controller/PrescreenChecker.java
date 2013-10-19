@@ -134,9 +134,7 @@ public class PrescreenChecker implements Serializable {
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
-        boolean validate = false;
-        boolean tmpValidate = false;
-        int count = 0;
+        int failCount = 0;
         for(CustomerInfoView customer : tmpCustomerInfoViewList){
             log.info("CustomerInfo : {}", customer);
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
@@ -144,42 +142,28 @@ public class PrescreenChecker implements Serializable {
                     log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
-                    tmpValidate = true;
                 }else{
                     log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
-                    tmpValidate = false;
+                    failCount = failCount + 1;
                 }
             } else {
                 if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
                     log.info("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
-                    tmpValidate = true;
                 }else{
                     log.info("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
-                    tmpValidate = false;
-                }
-            }
-
-            if(count == 0){
-                if(tmpValidate == true)
-                    validate = true;
-            } else {
-                if(tmpValidate == true && validate == true){
-                    validate = true;
-                } else if(tmpValidate == false && validate == true){
-                    validate = false;
-                } else if(tmpValidate == true && validate == false){
-                    validate = false;
+                    failCount = failCount + 1;
                 }
             }
             customerInfoViewList.add(customer);
         }
-        if(validate){
+
+        if(failCount == 0){
             //TODO Check ncb
             onCheckNCB();
         }

@@ -607,6 +607,10 @@ public class PrescreenMaker implements Serializable {
         log.info("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
         borrowerInfo = selectCustomerInfoItem;
         modeForButton = ModeForButton.EDIT;
+
+        this.customerEntity = borrowerInfo.getCustomerEntity();
+
+        enableCustomerForm = true;
     }
 
     public void onSaveCustomerInfo() {
@@ -733,17 +737,17 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setIsSpouse(0);
                     borrowerInfo.setListIndex(customerListIndex);
 
-                    boolean validateCitizen = true;
+                    boolean validateRegistration = true;
                     for(CustomerInfoView customerInfoView : customerInfoViewList ){
                         if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
-                            validateCitizen = false;
+                            validateRegistration = false;
                             messageHeader = "Save customer failed.";
                             message = "Duplicate registrationId.";
                             break;
                         }
                     }
 
-                    if(validateCitizen){
+                    if(validateRegistration){
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
                             borrowerInfo.setListName("BORROWER");
@@ -793,8 +797,16 @@ public class PrescreenMaker implements Serializable {
                         if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId()) && (borrowerInfo.getListIndex() != customerInfoView.getListIndex())){
                             validateCitizen = false;
                             messageHeader = "Save customer failed.";
-                            message = "Duplicate citizenId.";
+                            message = "Duplicate citizen id.";
                             break;
+                        }
+
+                        if(borrowerInfo.getSpouse() != null && customerInfoView.getSpouse() != null){
+                            if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId()) && borrowerInfo.getSpouse().getListIndex() != customerInfoView.getSpouse().getListIndex()){
+                                validateCitizen = false;
+                                messageHeader = "Save customer failed.";
+                                message = "Duplicate citizen id.";
+                            }
                         }
 
                         if(customerInfoView.getListIndex() == borrowerInfo.getListIndex()){
@@ -821,29 +833,122 @@ public class PrescreenMaker implements Serializable {
                                 //Remove from old list
                                 if(oldRelationId == 2){
                                     //Remove from guarantor list
-                                    int index = 0;
+                                    guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    List<CustomerInfoView> tmpGuarantorViewList = new ArrayList<CustomerInfoView>();
                                     for(CustomerInfoView customerInfoView : guarantorInfoViewList){
-
+                                        tmpGuarantorViewList.add(customerInfoView);
+                                    }
+                                    int index = 0;
+                                    guarantorInfoViewList.removeAll(guarantorInfoViewList);
+                                    for(CustomerInfoView customerInfoView : tmpGuarantorViewList){
+                                        customerInfoView.setSubIndex(index);
+                                        guarantorInfoViewList.add(customerInfoView);
                                         index = index + 1;
                                     }
                                 } else {
                                     //Remove from related list
+                                    relatedInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    List<CustomerInfoView> tmpRelatedViewList = new ArrayList<CustomerInfoView>();
+                                    for(CustomerInfoView customerInfoView : relatedInfoViewList){
+                                        tmpRelatedViewList.add(customerInfoView);
+                                    }
+                                    int index = 0;
+                                    relatedInfoViewList.removeAll(relatedInfoViewList);
+                                    for(CustomerInfoView customerInfoView : tmpRelatedViewList){
+                                        customerInfoView.setSubIndex(index);
+                                        relatedInfoViewList.add(customerInfoView);
+                                        index = index + 1;
+                                    }
                                 }
                             }
                             //TODO assign caseBorrowerType
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         }
+                    } else {
+                        complete = false;
                     }
 
                 }else if(borrowerInfo.getCustomerEntity().getId() == 2){    //Juristic
+                    //--- Validate Registration Id ---//
+                    DocumentType documentType = new DocumentType();
+                    documentType.setId(3);
+                    borrowerInfo.setDocumentType(documentType);
+                    borrowerInfo.setIsSpouse(0);
+                    borrowerInfo.setListIndex(customerListIndex);
 
+                    boolean validateRegistration = true;
+                    for(CustomerInfoView customerInfoView : customerInfoViewList ){
+                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                            validateRegistration = false;
+                            messageHeader = "Save customer failed.";
+                            message = "Duplicate registrationId.";
+                            break;
+                        }
+                    }
+
+                    if(validateRegistration){
+                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        //--- Borrower ---
+                        if(borrowerInfo.getRelation().getId() == 1){
+                            //Borrower
+                            borrowerInfo.setListName("BORROWER");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 1){
+                                //Update old borrowerList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                borrowerInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new borrowerList;
+                                borrowerInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 2){
+                                    //Remove from guarantor list
+                                    guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    List<CustomerInfoView> tmpGuarantorViewList = new ArrayList<CustomerInfoView>();
+                                    for(CustomerInfoView customerInfoView : guarantorInfoViewList){
+                                        tmpGuarantorViewList.add(customerInfoView);
+                                    }
+                                    int index = 0;
+                                    guarantorInfoViewList.removeAll(guarantorInfoViewList);
+                                    for(CustomerInfoView customerInfoView : tmpGuarantorViewList){
+                                        customerInfoView.setSubIndex(index);
+                                        guarantorInfoViewList.add(customerInfoView);
+                                        index = index + 1;
+                                    }
+                                } else {
+                                    //Remove from related list
+                                    relatedInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    List<CustomerInfoView> tmpRelatedViewList = new ArrayList<CustomerInfoView>();
+                                    for(CustomerInfoView customerInfoView : relatedInfoViewList){
+                                        tmpRelatedViewList.add(customerInfoView);
+                                    }
+                                    int index = 0;
+                                    relatedInfoViewList.removeAll(relatedInfoViewList);
+                                    for(CustomerInfoView customerInfoView : tmpRelatedViewList){
+                                        customerInfoView.setSubIndex(index);
+                                        relatedInfoViewList.add(customerInfoView);
+                                        index = index + 1;
+                                    }
+                                }
+                            }
+                            //TODO assign caseBorrowerType
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        }
+                    } else {
+                        complete = false;
+                    }
                 } else {
                     complete = false;
                     messageHeader = "Save customer failed.";
                     message = "Invalid customer entity.";
                 }
             }
-            complete = true;
+            //complete = true;
         }
 
         context.addCallbackParam("functionComplete", complete);
@@ -975,7 +1080,7 @@ public class PrescreenMaker implements Serializable {
             enableCustomerEntity = true;
             enableTMBCustomerId = true;
             enableCitizenId = true;
-            log.info("onSearchCustomerInfo Exception");
+            log.info("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
             //TODO Show message box
