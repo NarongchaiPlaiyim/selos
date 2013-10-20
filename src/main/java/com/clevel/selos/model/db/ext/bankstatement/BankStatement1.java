@@ -139,6 +139,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getOdLimit() {
+        if(odLimit==null){
+            return BigDecimal.ZERO;
+        }
         return odLimit;
     }
 
@@ -147,6 +150,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getGrossCreditBalance() {
+        if(grossCreditBalance==null){
+            return BigDecimal.ZERO;
+        }
         return grossCreditBalance;
     }
 
@@ -166,6 +172,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getGrossDebitBalance() {
+        if(grossDebitBalance==null){
+            return BigDecimal.ZERO;
+        }
         return grossDebitBalance;
     }
 
@@ -193,6 +202,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getHighestBalance() {
+        if(highestBalance==null){
+            return BigDecimal.ZERO;
+        }
         return highestBalance;
     }
 
@@ -209,6 +221,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getLowestBalance() {
+        if(lowestBalance==null){
+            return BigDecimal.ZERO;
+        }
         return lowestBalance;
     }
 
@@ -217,6 +232,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getMonthEndBalance() {
+        if(monthEndBalance==null){
+            return BigDecimal.ZERO;
+        }
         return monthEndBalance;
     }
 
@@ -236,6 +254,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getCheckReturnAmount() {
+        if(checkReturnAmount==null){
+            return BigDecimal.ZERO;
+        }
         return checkReturnAmount;
     }
 
