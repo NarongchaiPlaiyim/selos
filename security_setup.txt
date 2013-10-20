@@ -1,0 +1,6 @@
+library required:
+    bcprov-jdk15on-149.jar
+    commons-codec-1.8.jar
+
+add new line to <JAVA_HOME>\jre\lib\security\java.security
+security.provider.<last number+1>=org.bouncycastle.jce.provider.BouncyCastleProvider

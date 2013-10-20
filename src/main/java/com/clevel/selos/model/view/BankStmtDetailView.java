@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -20,10 +19,10 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal timesOfAverageCreditUW;
     private BigDecimal debitAmount;
     private int numberOfDebitTxn;
-    private Date dateOfMaxBalance;
-    private BigDecimal maxBalance;
-    private Date dateOfMinBalance;
-    private BigDecimal minBalance;
+    private Date highestBalanceDate;
+    private BigDecimal highestBalance;
+    private Date lowestBalanceDate;
+    private BigDecimal lowestBalance;
     private BigDecimal monthBalance;
     private int numberOfChequeReturn;
     private BigDecimal chequeReturnAmount;
@@ -33,6 +32,32 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal utilizationPercent;
     private BigDecimal grossInflowPerLimit;
     private int totalTransaction;
+    private Date asOfDate;
+
+    public BankStmtDetailView() {
+        reset();
+    }
+
+    public void reset() {
+        this.overLimitAmount = BigDecimal.valueOf(0.00);
+        this.grossCreditBalance = BigDecimal.valueOf(0.00);
+        this.excludeListBDM = BigDecimal.valueOf(0.0);
+        this.excludeListUW = BigDecimal.valueOf(0.0);
+        this.creditAmountBDM = BigDecimal.valueOf(0.00);
+        this.creditAmountUW = BigDecimal.valueOf(0.00);
+        this.timesOfAverageCreditBDM = BigDecimal.valueOf(0.00);
+        this.timesOfAverageCreditUW = BigDecimal.valueOf(0.00);
+        this.debitAmount = BigDecimal.valueOf(0.00);
+        this.highestBalanceDate = new Date();
+        this.highestBalance = BigDecimal.valueOf(0.00);
+        this.lowestBalanceDate = new Date();
+        this.lowestBalance = BigDecimal.valueOf(0.00);
+        this.monthBalance = BigDecimal.valueOf(0.00);
+        this.chequeReturnAmount = BigDecimal.valueOf(0.0);
+        this.swingPercent = BigDecimal.valueOf(0.00);
+        this.utilizationPercent = BigDecimal.valueOf(0.00);
+        this.grossInflowPerLimit = BigDecimal.valueOf(0.00);
+    }
 
     public BigDecimal getOverLimitAmount() {
         return overLimitAmount;
@@ -122,36 +147,36 @@ public class BankStmtDetailView implements Serializable{
         this.numberOfDebitTxn = numberOfDebitTxn;
     }
 
-    public Date getDateOfMaxBalance() {
-        return dateOfMaxBalance;
+    public Date getHighestBalanceDate() {
+        return highestBalanceDate;
     }
 
-    public void setDateOfMaxBalance(Date dateOfMaxBalance) {
-        this.dateOfMaxBalance = dateOfMaxBalance;
+    public void setHighestBalanceDate(Date highestBalanceDate) {
+        this.highestBalanceDate = highestBalanceDate;
     }
 
-    public BigDecimal getMaxBalance() {
-        return maxBalance;
+    public BigDecimal getHighestBalance() {
+        return highestBalance;
     }
 
-    public void setMaxBalance(BigDecimal maxBalance) {
-        this.maxBalance = maxBalance;
+    public void setHighestBalance(BigDecimal highestBalance) {
+        this.highestBalance = highestBalance;
     }
 
-    public Date getDateOfMinBalance() {
-        return dateOfMinBalance;
+    public Date getLowestBalanceDate() {
+        return lowestBalanceDate;
     }
 
-    public void setDateOfMinBalance(Date dateOfMinBalance) {
-        this.dateOfMinBalance = dateOfMinBalance;
+    public void setLowestBalanceDate(Date lowestBalanceDate) {
+        this.lowestBalanceDate = lowestBalanceDate;
     }
 
-    public BigDecimal getMinBalance() {
-        return minBalance;
+    public BigDecimal getLowestBalance() {
+        return lowestBalance;
     }
 
-    public void setMinBalance(BigDecimal minBalance) {
-        this.minBalance = minBalance;
+    public void setLowestBalance(BigDecimal lowestBalance) {
+        this.lowestBalance = lowestBalance;
     }
 
     public BigDecimal getMonthBalance() {
@@ -226,6 +251,14 @@ public class BankStmtDetailView implements Serializable{
         this.totalTransaction = totalTransaction;
     }
 
+    public Date getAsOfDate() {
+        return asOfDate;
+    }
+
+    public void setAsOfDate(Date asOfDate) {
+        this.asOfDate = asOfDate;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -240,10 +273,10 @@ public class BankStmtDetailView implements Serializable{
                 .append("timesOfAverageCreditUW", timesOfAverageCreditUW)
                 .append("debitAmount", debitAmount)
                 .append("numberOfDebitTxn", numberOfDebitTxn)
-                .append("dateOfMaxBalance", dateOfMaxBalance)
-                .append("maxBalance", maxBalance)
-                .append("dateOfMinBalance", dateOfMinBalance)
-                .append("minBalance", minBalance)
+                .append("highestBalanceDate", highestBalanceDate)
+                .append("highestBalance", highestBalance)
+                .append("lowestBalanceDate", lowestBalanceDate)
+                .append("lowestBalance", lowestBalance)
                 .append("monthBalance", monthBalance)
                 .append("numberOfChequeReturn", numberOfChequeReturn)
                 .append("chequeReturnAmount", chequeReturnAmount)
@@ -253,6 +286,7 @@ public class BankStmtDetailView implements Serializable{
                 .append("utilizationPercent", utilizationPercent)
                 .append("grossInflowPerLimit", grossInflowPerLimit)
                 .append("totalTransaction", totalTransaction)
+                .append("asOfDate", totalTransaction)
                 .toString();
     }
 }

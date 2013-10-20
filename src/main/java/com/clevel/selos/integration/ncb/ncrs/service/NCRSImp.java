@@ -20,7 +20,6 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.system.message.ExceptionMapping;
-import org.apache.http.HttpHost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
@@ -34,8 +33,6 @@ import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.net.ConnectException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -163,8 +160,8 @@ public class NCRSImp implements NCRS, Serializable{
                     reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                     log.debug("NCRS Tracking Id is {}", reason);
                 }
-                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCEED, reason, memberref);
-                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
+                resultImp.add(appRefNumber, customerType, customerId, inquiryDate, ActionResult.SUCCESS, reason, memberref);
+                outputModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
@@ -229,7 +226,7 @@ public class NCRSImp implements NCRS, Serializable{
                         reason = responseModel.getBodyModel().getTransaction().getTrackingid();
                         log.debug("NCRS Tracking Id is {}", reason);
                     }
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
+                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
                 } else if(resultImp.isEXCEPTION(appRefNumber, customerId)) {
                     responseModel = callOnline(ncrsModel);
                     reason = "";
@@ -239,7 +236,7 @@ public class NCRSImp implements NCRS, Serializable{
                     }
                     resultImp.updateSUCCEED(appRefNumber, customerId, reason);
                     saveNCBI(responseModel);
-                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, customerId, responseModel, ncrsModel));
+                    responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, customerId, responseModel, ncrsModel));
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
@@ -294,8 +291,8 @@ public class NCRSImp implements NCRS, Serializable{
             responseModel = checkOnlineResponseModel(request(ncrsModel, ONLINE));
             resultDate = new Date();
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey );
+                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey );
             saveNCBI(responseModel);
             return responseModel;
         } catch (HttpHostConnectException e) {
@@ -356,8 +353,8 @@ public class NCRSImp implements NCRS, Serializable{
             responseModel = checkOfflineResponseModel(request(ncrsModel, FIND));
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
+                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
             if(null!=responseModel.getBodyModel().getTrackingid()){
                 ArrayList<String> arrayList = responseModel.getBodyModel().getTrackingid();
                 if(1<=arrayList.size()){
@@ -379,8 +376,8 @@ public class NCRSImp implements NCRS, Serializable{
                         responseModel = checkOnlineResponseModel(responseModel);
                         resultDate = new Date();
                         log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                              linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-                        ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
+                              linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+                        ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, customerId, trackingId);
                         saveNCBI(responseModel);
                         return responseModel;

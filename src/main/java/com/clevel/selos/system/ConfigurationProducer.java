@@ -1,5 +1,8 @@
 package com.clevel.selos.system;
 
+import com.clevel.selos.security.encryption.EncryptionService;
+import com.clevel.selos.util.Util;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +22,10 @@ public class ConfigurationProducer {
 
     private volatile static Properties config;
     private static final String bundleName = "selos";
+    @Inject
+    EncryptionService encryptionService;
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
 
     @PostConstruct
     public void onCreation() {
@@ -31,6 +38,13 @@ public class ConfigurationProducer {
             log.debug("loading configuration file. (bundleName: {})", bundleName);
             config = getFromResource(bundleName);
         }
+        Enumeration keys = config.keys();
+        log.debug("===== selos.properties begin =====");
+        while (keys.hasMoreElements()) {
+            String key = (String) keys.nextElement();
+            log.debug("key: {}, value: {}",key,config.getProperty(key));
+        }
+        log.debug("===== selos.properties end =====");
         log.debug("load configuration properties done. (size: {})", config.size());
         return config;
     }
@@ -39,7 +53,6 @@ public class ConfigurationProducer {
     @Config
     public String getConfiguration(InjectionPoint ip) {
         Config configClass = ip.getAnnotated().getAnnotation(Config.class);
-        log.trace("key: {}, value: {}", configClass.name(), config.getProperty(configClass.name()));
         return config.getProperty(configClass.name());
     }
 

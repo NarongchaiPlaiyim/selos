@@ -19,7 +19,6 @@ public class BankStatement1 implements Serializable {
     @Column(name="account_status", length = 2)
     private String accountStatus;
 
-    
     @Column(name="account_open_date")
     private Date accountOpenDate;
 
@@ -50,30 +49,12 @@ public class BankStatement1 implements Serializable {
     @Column(name="debit_txn_number", length = 14, scale = 2)
     private Integer debitTXNNumber;
 
-    public BigDecimal getGrossDebitBalance() {
-        return grossDebitBalance;
-    }
-
-    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
-        this.grossDebitBalance = grossDebitBalance;
-    }
-
-    public Integer getDebitTXNNumber() {
-        return debitTXNNumber;
-    }
-
-    public void setDebitTXNNumber(int debitTXNNumber) {
-        this.debitTXNNumber = debitTXNNumber;
-    }
-
-    
     @Column(name="highest_balance_date")
     private Date highestBalanceDate;
 
     @Column(name="highest_balance", length = 14, scale = 2)
     private BigDecimal highestBalance;
 
-    
     @Column(name="lowest_balance_date")
     private Date lowestBalanceDate;
 
@@ -86,25 +67,20 @@ public class BankStatement1 implements Serializable {
     @Column(name="check_return_number", length = 5)
     private Integer checkReturnNumber;
 
-    @Column(name="check_return_amount", length = 3)
-    private Integer checkReturnAmount;
+    @Column(name="check_return_amount", length = 14, scale = 2)
+    private BigDecimal checkReturnAmount;
 
     @Column(name="od_limit_number", length = 5)
     private Integer odLimitNumber;
 
-    
     @Column(name="start_od_date")
     private Date startOdDate;
 
-    
     @Column(name="end_od_date")
     private Date endOdDate;
 
     @Column(name="as_of_date")
     private Date asOfDate;
-
-    public BankStatement1() {
-    }
 
     public long getId() {
         return id;
@@ -179,11 +155,33 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getCreditTXNNumber() {
+        if(creditTXNNumber==null){
+            return 0;
+        }
         return creditTXNNumber;
     }
 
-    public void setCreditTXNNumber(int creditTXNNumber) {
+    public void setCreditTXNNumber(Integer creditTXNNumber) {
         this.creditTXNNumber = creditTXNNumber;
+    }
+
+    public BigDecimal getGrossDebitBalance() {
+        return grossDebitBalance;
+    }
+
+    public void setGrossDebitBalance(BigDecimal grossDebitBalance) {
+        this.grossDebitBalance = grossDebitBalance;
+    }
+
+    public Integer getDebitTXNNumber() {
+        if(debitTXNNumber==null){
+            return 0;
+        }
+        return debitTXNNumber;
+    }
+
+    public void setDebitTXNNumber(Integer debitTXNNumber) {
+        this.debitTXNNumber = debitTXNNumber;
     }
 
     public Date getHighestBalanceDate() {
@@ -227,6 +225,9 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getCheckReturnNumber() {
+        if(checkReturnNumber==null){
+            return 0;
+        }
         return checkReturnNumber;
     }
 
@@ -234,15 +235,18 @@ public class BankStatement1 implements Serializable {
         this.checkReturnNumber = checkReturnNumber;
     }
 
-    public Integer getCheckReturnAmount() {
+    public BigDecimal getCheckReturnAmount() {
         return checkReturnAmount;
     }
 
-    public void setCheckReturnAmount(int checkReturnAmount) {
+    public void setCheckReturnAmount(BigDecimal checkReturnAmount) {
         this.checkReturnAmount = checkReturnAmount;
     }
 
     public Integer getOdLimitNumber() {
+        if(odLimitNumber==null){
+            return 0;
+        }
         return odLimitNumber;
     }
 
@@ -287,6 +291,8 @@ public class BankStatement1 implements Serializable {
                 .append("odLimit", odLimit)
                 .append("grossCreditBalance", grossCreditBalance)
                 .append("creditTXNNumber", creditTXNNumber)
+                .append("grossDebitBalance", grossDebitBalance)
+                .append("debitTXNNumber", debitTXNNumber)
                 .append("highestBalanceDate", highestBalanceDate)
                 .append("highestBalance", highestBalance)
                 .append("lowestBalanceDate", lowestBalanceDate)

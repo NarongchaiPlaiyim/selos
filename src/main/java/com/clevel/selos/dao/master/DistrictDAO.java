@@ -30,4 +30,14 @@ public class DistrictDAO extends GenericDAO<District,Integer> {
         log.info("getListByProvince. (result size: {})",districts.size());
         return districts;
     }
+
+    public District getByNameAndProvince(String districtName,Province province) {
+        log.info("getByNameAndProvince. (districtName: {}, province: {})",districtName,province);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("province", province));
+        criteria.add(Restrictions.eq("name", districtName));
+        District district = (District)criteria.uniqueResult();
+        log.info("getByNameAndProvince. (result : {})",district);
+        return district;
+    }
 }

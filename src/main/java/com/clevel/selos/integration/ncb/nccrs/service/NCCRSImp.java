@@ -22,7 +22,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
-import org.apache.http.HttpHost;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.protocol.HTTP;
@@ -30,7 +29,6 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -129,8 +127,8 @@ public class NCCRSImp implements NCCRS, Serializable {
                     reason = responseModel.getBody().getTransaction().getTrackingid();
                     log.debug("NCCRS Tracking Id is {}", reason);
                 }
-                resultImp.add(appRefNumber, registType, registId, inquiryDate, ActionResult.SUCCEED, reason, memberRef);
-                outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, registId, responseModel,nccrsModel));
+                resultImp.add(appRefNumber, registType, registId, inquiryDate, ActionResult.SUCCESS, reason, memberRef);
+                outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel,nccrsModel));
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
@@ -183,7 +181,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                         reason = responseModel.getBody().getTransaction().getTrackingid();
                         log.debug("NCCRS Tracking Id is {}", reason);
                     }
-                    outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, registId, responseModel,nccrsModel));
+                    outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel,nccrsModel));
                 } else if(resultImp.isEXCEPTION(appRefNumber, registId)) {
                     responseModel = callOnline(nccrsModel);
                     reason = "";
@@ -192,7 +190,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                         log.debug("NCCRS Tracking Id is {}", reason);
                     }
                     resultImp.updateSUCCEED(appRefNumber, registId, reason);
-                    outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCEED, reason, registId, responseModel,nccrsModel));
+                    outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.SUCCESS, reason, registId, responseModel,nccrsModel));
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
@@ -235,8 +233,8 @@ public class NCCRSImp implements NCCRS, Serializable {
             responseModel = checkOnlineResponseModel(request(nccrsModel, ONLINE));
             resultDate = new Date();
             log.debug("[{}] NCCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey );
+                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey );
             saveNCBI(responseModel);
             return responseModel;
         } catch (HttpHostConnectException e) {
@@ -287,8 +285,8 @@ public class NCCRSImp implements NCCRS, Serializable {
             responseModel = checkOfflineResponseModel(request(nccrsModel, FIND));
             resultDate = new Date();
             log.debug("[{}] NCCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
+                  linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
             if(null!=responseModel.getBody().getTrackingid()){
                 ArrayList<String> arrayList = responseModel.getBody().getTrackingid();
                 if(1<=arrayList.size()){
@@ -306,8 +304,8 @@ public class NCCRSImp implements NCCRS, Serializable {
                         responseModel = checkOnlineResponseModel(responseModel);
                         resultDate = new Date();
                         log.debug("[{}] NCCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}"  ,
-                              linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
-                        ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCEED, resultDesc, resultDate, linkKey);
+                              linkKey, userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
+                        ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.SUCCESS, resultDesc, resultDate, linkKey);
                         resultImp.updateSUCCEED(appRefNumber, registId, trackingId);
                         saveNCBI(responseModel);
                         return responseModel;

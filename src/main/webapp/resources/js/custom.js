@@ -1,20 +1,3 @@
-/*$(document).ready(function(){
-    $(".number-only").keypress(function(event) {
-        var validNums = '0123456789';
-
-        if (!event.charCode) k = String.fromCharCode(event.which);
-        else k = String.fromCharCode(event.charCode);
-
-        if (validNums.indexOf(k) == -1) event.preventDefault();
-    });
-});
-
-$(document).ready(function() {
-    $(".readonly").bind("onclick", function(e) {
-        $(".readonly").blur();
-    })
-});*/
-
 function gotoInbox(contextUrl){
     window.location = contextUrl;
 }
@@ -41,15 +24,67 @@ function formatNumber(obj){
     }
 }
 
-function numberOnly(evt){
-    var validNums = '0123456789.';
-    var chr;
-
+function onKeyNumber(evt){
+    var validNums = '0123456789';
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
-    if(evt.keyCode == '9' || evt.keyCode == '37' || evt.keyCode == '38' || evt.keyCode == '39' || evt.keyCode == '40' || evt.keyCode == '46' || evt.keyCode == '16' || (nbr > 95 && nbr < 106) || evt.keyCode == '110'){
+    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
+    /*  96-105 = numkey 0-9
+        8 = backspace
+        9 = tab
+        46 = delete
+     */
+    if( (evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' ){
         return true;
-    }else{
+    } else {
+        keychar = String.fromCharCode(nbr);
+        validNums  += String.fromCharCode(8);
+        if (validNums.indexOf(keychar) < 0){
+            return false;
+        }
+        return true;
+    }
+}
+
+function onKeyMoney(evt){
+    var validNums = '0123456789.,';
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
+
+    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
+    /*  96-105 = numkey 0-9
+     8 = backspace
+     9 = tab
+     46 = delete
+     188 = comma
+     190 = period
+     */
+    if( (evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' || evt.keyCode == 188 || evt.keyCode == 190 ){
+        return true;
+    } else {
+        keychar = String.fromCharCode(nbr);
+        validNums  += String.fromCharCode(8);
+        if (validNums.indexOf(keychar) < 0){
+            return false;
+        }
+        return true;
+    }
+}
+
+function onKeyAddress(evt){
+    /*string = string.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');*/
+    var validNums = '0123456789/';
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
+
+    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
+    /*  96-105 = numkey 0-9
+     8 = backspace
+     9 = tab
+     46 = delete
+     191 = fwd slash
+     */
+    if( (evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' || evt.keyCode == 191 ){
+        return true;
+    } else {
         keychar = String.fromCharCode(nbr);
         validNums  += String.fromCharCode(8);
         if (validNums.indexOf(keychar) < 0){

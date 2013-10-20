@@ -28,8 +28,6 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -118,6 +116,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     ExistingCreditControl existingCreditControl;
 
+    @Inject
+    BankStmtControl bankStmtControl;
+
 
     public PrescreenBusinessControl(){
 
@@ -186,19 +187,31 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoResultSearch;
     }
 
+    /**
+     * To Retreive the following Interface Information in Prescreen
+     * <ul>
+     *     <li>DWH Obligation - Existing Credit</li>
+     *     <li>DWH BankStatement</li>
+     * </ul>
+     * @param workCaseId
+     * @return PrescreenResultView
+     */
     public PrescreenResultView getInterfaceInfo(long workCaseId){
-
+        log.info("retreive interface for workcase: {}", workCaseId);
         List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
 
-        ExistingCreditView existingCreditView = existingCreditControl.getExistingCredit(customerInfoViewList);
+        ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
+
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, new Date());
 
         PrescreenResultView prescreenResultView = new PrescreenResultView();
         prescreenResultView.setExistingCreditView(existingCreditView);
-
+        prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
         //Calculate for Group Income
         BigDecimal groupIncome = new BigDecimal(0);
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
+                if(customerInfoView.getApproxIncome() != null)
                 groupIncome.add(customerInfoView.getApproxIncome());
             }
         }
@@ -206,6 +219,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
+        prescreenResultView.setGroupExposure(groupExposure);
+
 
         return prescreenResultView;
     }
@@ -249,6 +264,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncrsModel.setTitleNameCode(TitleName.Miss);
                     } else {
                         //send other
+                        ncrsModel.setTitleNameCode(TitleName.Other);
                     }
                 }
                 ncrsModel.setFirstName(customerItem.getFirstNameTh());
@@ -282,6 +298,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                             nccrsModel.setRegistType(RegistType.LimitedPartnership);
                         } else if(customerItem.getTitleTh().getCode().equals("4")){
                             nccrsModel.setRegistType(RegistType.RegisteredOrdinaryPartnership);
+                        } else {
+                            nccrsModel.setRegistType(RegistType.ForeignRegistrationIdOrOthers);
                         }
                     }
                 }
@@ -322,7 +340,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                    if(ncbView.getResult() == ActionResult.SUCCESS){
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
@@ -332,13 +350,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Individual individual = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                        log.info("findByCitizenId customer : {}", customer);
 
-
-                        Customer customer;
-                        if(individual != null){
-                            customer = individual.getCustomer();
-                        } else {
+                        if(customer == null ){
                             customer = new Customer();
                         }
 
@@ -369,8 +384,9 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(nccrsInputModel != null){
                 log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
                 List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
-                log.info("getNCBFromNCB ::: nccrsOutputModelList {}", nccrsOutputModelList);
+                log.info("getNCBFromNCB ::: nccrsOutputModelList : {}", nccrsOutputModelList);
                 List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
+                log.info("getNCBFromNCB ::: ncbJuristicViewList : {}", ncbJuristicViewList);
                 if(ncbJuristicViewList != null){
                     for(NcbView item : ncbJuristicViewList){
                         ncbViewList.add(item);
@@ -382,7 +398,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    if(ncbView.getResult() == ActionResult.SUCCEED){
+                    if(ncbView.getResult() == ActionResult.SUCCESS){
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());

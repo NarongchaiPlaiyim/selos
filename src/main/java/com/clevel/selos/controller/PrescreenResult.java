@@ -103,42 +103,12 @@ public class PrescreenResult implements Serializable {
 
             modeForButton = ModeForButton.ADD;
         }
-        prescreenResultView = new PrescreenResultView();
     }
 
     public void onRetrieveInterfaceInfo(){
-        if(workCasePreScreenId != 0){
-            PrescreenResultView _tmpPrescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
+        log.info("Start on Retrieve Interface Info");
+        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
 
-            prescreenResultView.setExistingCreditView(_tmpPrescreenResultView.getExistingCreditView());
-
-        }
-    }
-
-    private List<ExistingCreditDetailView> getCreditFact(int num){
-
-        List<ExistingCreditDetailView> existingCreditViewList = new ArrayList<ExistingCreditDetailView>();
-        for(int i = 0; i < num; i++){
-            ExistingCreditDetailView existingCreditView = new ExistingCreditDetailView();
-            existingCreditView.setAccountName("Test 0" + (i+1));
-            existingCreditView.setAccountNumber("123456789" + i);
-            existingCreditView.setAccountSuf("00"+(i+1));
-            existingCreditView.setAccountStatusID(1);
-            existingCreditView.setAccountStatus("Normal");
-            existingCreditView.setCreditType("Loan");
-            existingCreditView.setId(1);
-            existingCreditView.setInstallment(new BigDecimal(10000 + ((i+1)*5000)));
-            existingCreditView.setIntFeePercent(new BigDecimal(1));
-            existingCreditView.setLimit(new BigDecimal(10000000 + ((i+1)*5000000)));
-            existingCreditView.setOutstanding(new BigDecimal(8000000 + ((i+1)*500000)));
-            existingCreditView.setProductCode("EAC1");
-            existingCreditView.setProjectCode("1000" + i);
-            existingCreditView.setProductProgram("SME Smart Biz");
-            existingCreditView.setTenor(24 + ((i+1)*12));
-
-            existingCreditViewList.add(existingCreditView);
-        }
-        return existingCreditViewList;
     }
 
     public void onCloseSale(){

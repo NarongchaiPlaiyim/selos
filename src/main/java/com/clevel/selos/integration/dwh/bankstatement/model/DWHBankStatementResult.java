@@ -7,10 +7,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.List;
 
-public class BankStatementResult implements Serializable {
+public class DWHBankStatementResult implements Serializable {
     private ActionResult actionResult;
     private String reason;
-    private List<BankStatement> bankStatementList;
+    private List<DWHBankStatement> bankStatementList;
 
     public ActionResult getActionResult() {
         return actionResult;
@@ -28,11 +28,11 @@ public class BankStatementResult implements Serializable {
         this.reason = reason;
     }
 
-    public List<BankStatement> getBankStatementList() {
+    public List<DWHBankStatement> getBankStatementList() {
         return bankStatementList;
     }
 
-    public void setBankStatementList(List<BankStatement> bankStatementList) {
+    public void setBankStatementList(List<DWHBankStatement> bankStatementList) {
         this.bankStatementList = bankStatementList;
     }
 

@@ -1,10 +1,14 @@
 package com.clevel.selos.model.view;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.math.BigDecimal;
 import java.util.List;
 
 public class ExistingCreditView {
 
+    private List<ActionStatusView> status;
     private BigDecimal totalBorrowerComLimit;
     private BigDecimal totalBorrowerRetailLimit;
     private BigDecimal totalBorrowerAppInRLOSLimit;
@@ -140,5 +144,35 @@ public class ExistingCreditView {
 
     public void setRelatedAppInRLOSCredit(List<ExistingCreditDetailView> relatedAppInRLOSCredit) {
         this.relatedAppInRLOSCredit = relatedAppInRLOSCredit;
+    }
+
+    public List<ActionStatusView> getStatus() {
+        return status;
+    }
+
+    public void setStatus(List<ActionStatusView> status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("status", status)
+                .append("totalBorrowerComLimit", totalBorrowerComLimit)
+                .append("totalBorrowerRetailLimit", totalBorrowerRetailLimit)
+                .append("totalBorrowerAppInRLOSLimit", totalBorrowerAppInRLOSLimit)
+                .append("totalRelatedComLimit", totalRelatedComLimit)
+                .append("totalRelatedRetailLimit", totalRelatedRetailLimit)
+                .append("totalRelatedAppInRLOSLimit", totalRelatedAppInRLOSLimit)
+                .append("totalGroupCom", totalGroupCom)
+                .append("totalGroupComOBOD", totalGroupComOBOD)
+                .append("totalGroupExposure", totalGroupExposure)
+                .append("borrowerComExistingCredit", borrowerComExistingCredit)
+                .append("borrowerRetailExistingCredit", borrowerRetailExistingCredit)
+                .append("borrowerAppInRLOSCredit", borrowerAppInRLOSCredit)
+                .append("relatedComExistingCredit", relatedComExistingCredit)
+                .append("relatedRetailExistingCredit", relatedRetailExistingCredit)
+                .append("relatedAppInRLOSCredit", relatedAppInRLOSCredit)
+                .toString();
     }
 }

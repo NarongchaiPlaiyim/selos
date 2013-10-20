@@ -10,6 +10,7 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
 import com.clevel.selos.integration.test.NCBInterfaceImpTest;
 import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
@@ -28,7 +29,7 @@ public class NCRSService implements Serializable {
     NCRSImp ncrsImp;
 
     @Inject
-    @ValidationMessage
+    @ExceptionMessage
     Message message;
 
     @Inject
