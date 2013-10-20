@@ -149,6 +149,7 @@ public class ExistingCreditControl extends BusinessControl{
         List<String> personalIDList = new ArrayList<String>();
         List<String> _borrowerPersonalID = new ArrayList<String>();
         for(CustomerInfoView customerInfoView : customerInfoViewList){
+
             if(!Util.isEmpty(customerInfoView.getCitizenId())){
                 log.info("get citizen {}", customerInfoView.getCitizenId());
                 Reference reference = customerInfoView.getReference();
