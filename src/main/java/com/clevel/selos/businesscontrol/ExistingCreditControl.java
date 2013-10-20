@@ -7,6 +7,7 @@ import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
+import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.view.ActionStatusView;
@@ -47,16 +48,15 @@ public class ExistingCreditControl extends BusinessControl{
 
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
 
-        List<ExistingCreditDetailView> existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
+        ExistingCreditView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
+
+        existingCreditView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
+        existingCreditView.setRelatedAppInRLOSCredit(_tmpRLOSAppIn.getRelatedAppInRLOSCredit());
+        existingCreditView.setTotalBorrowerAppInRLOSLimit(_tmpRLOSAppIn.getTotalBorrowerAppInRLOSLimit());
+        existingCreditView.setTotalRelatedAppInRLOSLimit(_tmpRLOSAppIn.getTotalRelatedAppInRLOSLimit());
 
         List<ActionStatusView> actionStatusViewList = new ArrayList<ActionStatusView>();
 
-
-        ActionStatusView actionStatusView = new ActionStatusView();
-        actionStatusView.setStatusCode(ActionResult.SUCCESS);
-        actionStatusView.setStatusDesc("No Account Found");
-
-        actionStatusViewList.add(actionStatusView);
 
         existingCreditView.setStatus(actionStatusViewList);
 
@@ -139,7 +139,7 @@ public class ExistingCreditControl extends BusinessControl{
                 log.info("get citizen {}", customerInfoView.getCitizenId());
                 Reference reference = customerInfoView.getReference();
                 if(Util.isTrue(reference.getSll())){
-                    personalIDList.add(customerInfoView.getTmbCustomerId());
+                    personalIDList.add(customerInfoView.getCitizenId());
                     log.info("get reference {}", reference);
                 }
 
@@ -153,20 +153,48 @@ public class ExistingCreditControl extends BusinessControl{
             //Retrieve Obligation
             log.info("retrieve RLOS interface");
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
+            log.info("Result from RLOSInterface, {} from personalID {}", appInProcessResult, personalIDList);
             if(appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)){
 
-                Map<String, ExistingCreditDetailView> borrowerRLOSAppInHashMap = new HashMap<String, ExistingCreditDetailView>();
+                log.info("Start Transform Result");
+                List<ExistingCreditDetailView> borrowerRLOSApp = new ArrayList<ExistingCreditDetailView>();
+                BigDecimal totalBorrowerRLOSApp = BigDecimal.ZERO;
 
-                Map<String, ExistingCreditDetailView> relatedRLOSAppInHashMap = new HashMap<String, ExistingCreditDetailView>();
-
+                List<ExistingCreditDetailView> relatedRLOSApp = new ArrayList<ExistingCreditDetailView>();
+                BigDecimal totalRelatedRLOSApp = new BigDecimal(0);
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
                 for(AppInProcess appInProcess : appInProcessList){
+                    List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
+                    List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
+                    boolean isBorrower = false;
+                    for(CustomerDetail customerDetail : customerDetailList) {
+                        if(_borrowerPersonalID.contains(customerDetail.getCitizenId())){
+                            isBorrower = true;
+                        }
+                    }
+
+                    for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
+                        if(isBorrower){
+                            borrowerRLOSApp.add(existingCreditDetailView);
+                            totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
+                        } else {
+                            relatedRLOSApp.add(existingCreditDetailView);
+                            totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
+                        }
+                    }
 
                 }
+                existingCreditView.setBorrowerAppInRLOSCredit(borrowerRLOSApp);
+                existingCreditView.setTotalBorrowerAppInRLOSLimit(totalBorrowerRLOSApp);
+
+                existingCreditView.setRelatedAppInRLOSCredit(relatedRLOSApp);
+                existingCreditView.setTotalRelatedAppInRLOSLimit(totalRelatedRLOSApp);
             }
+
+            //TODO: Update Retrieving Status.
         }
-        return null;
+        return existingCreditView;
     }
 
     /**

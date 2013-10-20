@@ -6,6 +6,7 @@ import com.clevel.selos.dao.system.SystemParameterDAO;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
+import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.ext.rlos.AppInProcess1;
@@ -199,33 +200,69 @@ public class AppInProcessService implements Serializable {
         List<CustomerDetail> customerDetailList = new ArrayList<CustomerDetail>();
 
         if(customerDetail1!=null){
+            List<CreditDetail> creditDetails = new ArrayList<CreditDetail>();
             CustomerDetail customerDetail = transformCustomerDetail(customerDetail1,null);
             customerDetailList.add(customerDetail);
             AppInProcess1 appInProcessEntity = customerDetail1.getAppInProcess1();
             appInProcess.setAppNumber(appInProcessEntity.getAppRefNumber());
-            appInProcess.setProductCode(appInProcessEntity.getProductCode());
-            appInProcess.setProjectCode(appInProcessEntity.getProjectCode());
-            appInProcess.setInterestRate(appInProcessEntity.getInterestRate());
-            appInProcess.setRequestTenor(appInProcessEntity.getRequestTenor());
-            appInProcess.setRequestLimit(appInProcessEntity.getRequestLimit());
-            appInProcess.setFinalTenors(appInProcessEntity.getFinalTenors());
-            appInProcess.setFinalLimit(appInProcessEntity.getFinalLimit());
-            appInProcess.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+            if(!Util.isEmpty(appInProcessEntity.getProductCode()) || !Util.isEmpty(appInProcessEntity.getProjectCode())) {
+                CreditDetail creditDetail = new CreditDetail();
+                creditDetail.setProductCode(appInProcessEntity.getProductCode());
+                creditDetail.setProjectCode(appInProcessEntity.getProjectCode());
+                creditDetail.setInterestRate(appInProcessEntity.getInterestRate());
+                creditDetail.setRequestTenor(appInProcessEntity.getRequestTenor());
+                creditDetail.setRequestLimit(appInProcessEntity.getRequestLimit());
+                creditDetail.setFinalTenors(appInProcessEntity.getFinalTenors());
+                creditDetail.setFinalLimit(appInProcessEntity.getFinalLimit());
+                creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+                creditDetails.add(creditDetail);
+            }
+            if(!Util.isEmpty(appInProcessEntity.getProductCode2()) || !Util.isEmpty(appInProcessEntity.getProjectCode2())) {
+                CreditDetail creditDetail = new CreditDetail();
+                creditDetail.setProductCode(appInProcessEntity.getProductCode2());
+                creditDetail.setProjectCode(appInProcessEntity.getProjectCode2());
+                creditDetail.setInterestRate(appInProcessEntity.getInterestRate2());
+                creditDetail.setRequestTenor(appInProcessEntity.getRequestTenor2());
+                creditDetail.setRequestLimit(appInProcessEntity.getRequestLimit2());
+                creditDetail.setFinalTenors(appInProcessEntity.getFinalTenors2());
+                creditDetail.setFinalLimit(appInProcessEntity.getFinalLimit2());
+                creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment2());
+                creditDetails.add(creditDetail);
+            }
+            appInProcess.setCreditDetailList(creditDetails);
             appInProcess.setStatus(appInProcessEntity.getStatus());
             appInProcess.setCustomerDetailList(customerDetailList);
         } else if(customerDetail2!=null){
+            List<CreditDetail> creditDetails = new ArrayList<CreditDetail>();
             CustomerDetail customerDetail = transformCustomerDetail(null,customerDetail2);
             customerDetailList.add(customerDetail);
             AppInProcess2 appInProcessEntity = customerDetail2.getAppInProcess2();
             appInProcess.setAppNumber(appInProcessEntity.getAppRefNumber());
-            appInProcess.setProductCode(appInProcessEntity.getProductCode());
-            appInProcess.setProjectCode(appInProcessEntity.getProjectCode());
-            appInProcess.setInterestRate(appInProcessEntity.getInterestRate());
-            appInProcess.setRequestTenor(appInProcessEntity.getRequestTenor());
-            appInProcess.setRequestLimit(appInProcessEntity.getRequestLimit());
-            appInProcess.setFinalTenors(appInProcessEntity.getFinalTenors());
-            appInProcess.setFinalLimit(appInProcessEntity.getFinalLimit());
-            appInProcess.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+            if(appInProcessEntity.getProductCode()!=null && appInProcessEntity.getProjectCode()!=null) { //todo: wait for confirm codition
+                CreditDetail creditDetail = new CreditDetail();
+                creditDetail.setProductCode(appInProcessEntity.getProductCode());
+                creditDetail.setProjectCode(appInProcessEntity.getProjectCode());
+                creditDetail.setInterestRate(appInProcessEntity.getInterestRate());
+                creditDetail.setRequestTenor(appInProcessEntity.getRequestTenor());
+                creditDetail.setRequestLimit(appInProcessEntity.getRequestLimit());
+                creditDetail.setFinalTenors(appInProcessEntity.getFinalTenors());
+                creditDetail.setFinalLimit(appInProcessEntity.getFinalLimit());
+                creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment());
+                creditDetails.add(creditDetail);
+            }
+            if(appInProcessEntity.getProductCode2()!=null && appInProcessEntity.getProjectCode2()!=null) { //todo: wait for confirm codition
+                CreditDetail creditDetail = new CreditDetail();
+                creditDetail.setProductCode(appInProcessEntity.getProductCode2());
+                creditDetail.setProjectCode(appInProcessEntity.getProjectCode2());
+                creditDetail.setInterestRate(appInProcessEntity.getInterestRate2());
+                creditDetail.setRequestTenor(appInProcessEntity.getRequestTenor2());
+                creditDetail.setRequestLimit(appInProcessEntity.getRequestLimit2());
+                creditDetail.setFinalTenors(appInProcessEntity.getFinalTenors2());
+                creditDetail.setFinalLimit(appInProcessEntity.getFinalLimit2());
+                creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment2());
+                creditDetails.add(creditDetail);
+            }
+            appInProcess.setCreditDetailList(creditDetails);
             appInProcess.setStatus(appInProcessEntity.getStatus());
             appInProcess.setCustomerDetailList(customerDetailList);
         }

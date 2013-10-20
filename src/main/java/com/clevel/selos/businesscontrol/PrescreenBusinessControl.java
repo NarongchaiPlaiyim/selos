@@ -118,6 +118,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     @Inject
     ExistingCreditControl existingCreditControl;
 
+    @Inject
+    BankStmtControl bankStmtControl;
+
 
     public PrescreenBusinessControl(){
 
@@ -201,9 +204,11 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, new Date());
+
         PrescreenResultView prescreenResultView = new PrescreenResultView();
         prescreenResultView.setExistingCreditView(existingCreditView);
-
+        prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
         //Calculate for Group Income
         BigDecimal groupIncome = new BigDecimal(0);
         for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -216,6 +221,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
+        prescreenResultView.setGroupExposure(groupExposure);
+
 
         return prescreenResultView;
     }
