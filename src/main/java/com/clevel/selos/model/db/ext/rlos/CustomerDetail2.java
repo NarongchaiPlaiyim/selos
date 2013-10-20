@@ -1,6 +1,9 @@
 package com.clevel.selos.model.db.ext.rlos;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -130,5 +133,22 @@ public class CustomerDetail2 implements Serializable {
 
     public void setSpouseCoApplicant(String spouseCoApplicant) {
         this.spouseCoApplicant = spouseCoApplicant;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("appInProcess2", appInProcess2)
+                .append("citizenId", citizenId)
+                .append("title", title)
+                .append("firstNameTh", firstNameTh)
+                .append("lastNameTh", lastNameTh)
+                .append("borrowerOrder", borrowerOrder)
+                .append("spouseCitizenId", spouseCitizenId)
+                .append("spouseFirstNameTh", spouseFirstNameTh)
+                .append("spouseLastNameTh", spouseLastNameTh)
+                .append("spouseCoApplicant", spouseCoApplicant)
+                .toString();
     }
 }
