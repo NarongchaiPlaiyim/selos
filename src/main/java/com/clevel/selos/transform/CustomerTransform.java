@@ -302,7 +302,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(currentAddress.getContactPhone());
             address.setAddress(currentAddress.getAddress());
 
-            addressList.add(address);
+            //addressList.add(address);
         }
 
         if(customerInfoView.getRegisterAddress() != null){
@@ -351,7 +351,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(registerAddress.getContactPhone());
             address.setAddress(registerAddress.getAddress());
 
-            addressList.add(address);
+            //addressList.add(address);
         }
 
         if(customerInfoView.getWorkAddress() != null){
@@ -400,7 +400,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(workAddress.getContactPhone());
             address.setAddress(workAddress.getAddress());
 
-            addressList.add(address);
+            //addressList.add(address);
         }
         customer.setAddressesList(addressList);
         log.info("transformToModel : customer after adding address : {}", customer);
