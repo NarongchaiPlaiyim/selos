@@ -1,18 +1,24 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.CreditCategory;
+import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.User;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "wrk_existing_credit")
-public class ExistingCredit {
+@Table(name = "wrk_existing_credit_detail")
+public class ExistingCreditDetail {
 
     @Id
-    @SequenceGenerator(name="SEQ_WRK_EXISTING_CREDIT_ID", sequenceName="SEQ_WRK_EXISTING_CREDIT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_EXISTING_CREDIT_ID")
+    @SequenceGenerator(name="SEQ_WRK_EXISTING_CREDIT_DET_ID", sequenceName="SEQ_WRK_EXISTING_CREDIT_DET_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_EXISTING_CREDIT_DET_ID")
     private long id;
 
     @Column(name="account_name")
@@ -20,6 +26,9 @@ public class ExistingCredit {
 
     @Column(name="account_number")
     private String accountNumber;
+
+    @Column(name="account_suf")
+    private String accountSuf;
 
     @Column(name="product_group")
     private String productGroup;
@@ -35,6 +44,12 @@ public class ExistingCredit {
 
     @Column(name="credit_type")
     private String creditType;
+
+    @Column(name="credit_category")
+    private int creditCategory;
+
+    @Column(name="credit_relation_type")
+    private int creditRelationType;
 
     @Column(name="limit")
     private BigDecimal limit;
@@ -74,12 +89,8 @@ public class ExistingCredit {
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name="workcase_id")
-    private WorkCase workCase;
-
-    @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
-    private WorkCasePrescreen workCasePrescreen;
+    @JoinColumn(name="existing_credit_id")
+    private ExistingCreditSummary existingCreditSummary;
 
     public long getId() {
         return id;
@@ -103,6 +114,14 @@ public class ExistingCredit {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getAccountSuf() {
+        return accountSuf;
+    }
+
+    public void setAccountSuf(String accountSuf) {
+        this.accountSuf = accountSuf;
     }
 
     public String getProductGroup() {
@@ -143,6 +162,22 @@ public class ExistingCredit {
 
     public void setCreditType(String creditType) {
         this.creditType = creditType;
+    }
+
+    public int getCreditCategory() {
+        return creditCategory;
+    }
+
+    public void setCreditCategory(int creditCategory) {
+        this.creditCategory = creditCategory;
+    }
+
+    public int getCreditRelationType() {
+        return creditRelationType;
+    }
+
+    public void setCreditRelationType(int creditRelationType) {
+        this.creditRelationType = creditRelationType;
     }
 
     public BigDecimal getLimit() {
@@ -233,19 +268,38 @@ public class ExistingCredit {
         this.modifyBy = modifyBy;
     }
 
-    public WorkCase getWorkCase() {
-        return workCase;
+    public ExistingCreditSummary getExistingCreditSummary() {
+        return existingCreditSummary;
     }
 
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
+    public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
+        this.existingCreditSummary = existingCreditSummary;
     }
 
-    public WorkCasePrescreen getWorkCasePrescreen() {
-        return workCasePrescreen;
-    }
-
-    public void setWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
-        this.workCasePrescreen = workCasePrescreen;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("accountName", accountName)
+                .append("accountNumber", accountNumber)
+                .append("accountSuf", accountSuf)
+                .append("productGroup", productGroup)
+                .append("productProgram", productProgram)
+                .append("projectCode", projectCode)
+                .append("productCode", productCode)
+                .append("creditType", creditType)
+                .append("creditCategory", creditCategory)
+                .append("limit", limit)
+                .append("pcePercent", pcePercent)
+                .append("pceLimit", pceLimit)
+                .append("outstanding", outstanding)
+                .append("installment", installment)
+                .append("intFee", intFee)
+                .append("tenor", tenor)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }

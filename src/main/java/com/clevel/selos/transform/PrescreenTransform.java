@@ -1,13 +1,17 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.PrescreenResultView;
 import com.clevel.selos.model.view.PrescreenView;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PrescreenTransform extends Transform {
 
@@ -21,6 +25,9 @@ public class PrescreenTransform extends Transform {
     BankDAO bankDAO;
     @Inject
     BorrowingTypeDAO borrowingTypeDAO;
+
+    @Inject
+    PrescreenDAO prescreenDAO;
 
 
     public Prescreen transformToModel(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen, User user){
@@ -107,5 +114,25 @@ public class PrescreenTransform extends Transform {
         return prescreenView;
     }
 
+    public PrescreenResultView getPrescreenResultView(Prescreen prescreen){
+        PrescreenResultView prescreenResultView = new PrescreenResultView();
+        prescreenResultView.setId(prescreen.getId());
+        prescreenResultView.setBorrowingType(prescreen.getBorrowingType());
+        prescreenResultView.setExpectedSubmitDate(prescreen.getExpectedSubmitDate());
+        prescreenResultView.setGroupExposure(prescreen.getGroupExposure());
+        prescreenResultView.setGroupIncome(prescreen.getGroupIncome());
+        return prescreenResultView;
+    }
 
+    public Prescreen getPrescreen(PrescreenResultView prescreenResultView, User user){
+        Prescreen prescreen = null;
+        if(prescreenResultView.getId() != 0) {
+            prescreen = prescreenDAO.findById(prescreenResultView.getId());
+            prescreen.setGroupExposure(prescreenResultView.getGroupExposure());
+            prescreen.setGroupIncome(prescreenResultView.getGroupIncome());
+            prescreen.setModifyBy(user);
+            prescreen.setModifyDate(new Date());
+        }
+        return prescreen;
+    }
 }
