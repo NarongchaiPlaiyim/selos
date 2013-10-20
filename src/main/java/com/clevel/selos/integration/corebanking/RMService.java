@@ -388,7 +388,7 @@ public class RMService implements Serializable {
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
         } catch (Exception e) {
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call RM Individual", e);
             //Audit Data
             rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
@@ -550,7 +550,7 @@ public class RMService implements Serializable {
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
         } catch (Exception e) {
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call service RM Corporate!", e);
             //Audit Data
             rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
@@ -716,7 +716,7 @@ public class RMService implements Serializable {
 
         } catch (Exception e) {
 
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call service RM Search account!", e);
             //Audit Data
             rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
