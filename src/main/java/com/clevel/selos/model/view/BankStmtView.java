@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class BankStmtView implements Serializable {
+    private long id;
     private int isNotCountIncome;
     private BankView bankView;
     private String branchName;
@@ -23,7 +24,7 @@ public class BankStmtView implements Serializable {
     private BigDecimal avgIncomeGross;
     private BigDecimal avgIncomeNetBDM;
     private BigDecimal avgIncomeNetUW;
-    private BigDecimal avgDrawAmount;
+    private BigDecimal avgWithDrawAmount;
     private BigDecimal swingPercent;
     private BigDecimal utilizationPercent;
     private BigDecimal avgGrossInflowPerLimit;
@@ -56,7 +57,7 @@ public class BankStmtView implements Serializable {
         this.avgIncomeGross = BigDecimal.ZERO;
         this.avgIncomeNetBDM = BigDecimal.ZERO;
         this.avgIncomeNetUW = BigDecimal.ZERO;
-        this.avgDrawAmount = BigDecimal.ZERO;
+        this.avgWithDrawAmount = BigDecimal.ZERO;
         this.swingPercent = BigDecimal.ZERO;
         this.utilizationPercent = BigDecimal.ZERO;
         this.avgGrossInflowPerLimit = BigDecimal.ZERO;
@@ -66,6 +67,14 @@ public class BankStmtView implements Serializable {
         this.overLimitTimes = BigDecimal.ZERO;
         this.overLimitDays = BigDecimal.ZERO;
         this.remark = "";
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getNotCountIncome() {
@@ -188,12 +197,12 @@ public class BankStmtView implements Serializable {
         this.avgIncomeNetUW = avgIncomeNetUW;
     }
 
-    public BigDecimal getAvgDrawAmount() {
-        return avgDrawAmount;
+    public BigDecimal getAvgWithDrawAmount() {
+        return avgWithDrawAmount;
     }
 
-    public void setAvgDrawAmount(BigDecimal avgDrawAmount) {
-        this.avgDrawAmount = avgDrawAmount;
+    public void setAvgWithDrawAmount(BigDecimal avgWithDrawAmount) {
+        this.avgWithDrawAmount = avgWithDrawAmount;
     }
 
     public BigDecimal getSwingPercent() {
@@ -295,6 +304,7 @@ public class BankStmtView implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("isNotCountIncome", isNotCountIncome)
                 .append("bankView", bankView)
                 .append("branchName", branchName)
@@ -309,7 +319,7 @@ public class BankStmtView implements Serializable {
                 .append("avgIncomeGross", avgIncomeGross)
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)
                 .append("avgIncomeNetUW", avgIncomeNetUW)
-                .append("avgDrawAmount", avgDrawAmount)
+                .append("avgWithDrawAmount", avgWithDrawAmount)
                 .append("swingPercent", swingPercent)
                 .append("utilizationPercent", utilizationPercent)
                 .append("avgGrossInflowPerLimit", avgGrossInflowPerLimit)

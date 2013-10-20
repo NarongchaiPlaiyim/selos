@@ -115,8 +115,8 @@ public class BankStatementDetail implements Serializable {
         bankViewList = new ArrayList<BankView>();
         if (isTmbBank)
             bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
-        else
-            bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
+        /*else
+            bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());*/
 
         accTypeViewList = accountTypeTransform.transformToViewList(accountTypeDAO.findAll());
         othAccTypeViewList = accountTypeTransform.transformToViewList(accountTypeDAO.findAll());

@@ -6,11 +6,12 @@ import com.clevel.selos.model.db.master.ReferredExperience;
 import com.clevel.selos.model.db.master.SubDistrict;
 import com.clevel.selos.model.db.working.WorkCase;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class BizInfoSummaryView {
+public class BizInfoSummaryView implements Serializable {
     private long id;
     private String bizLocationName;
     private int isRental;
