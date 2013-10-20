@@ -194,7 +194,7 @@ public class CustomerTransform extends Transform {
         if(customerInfoView.getCsi() == null){
             customerInfoView.setCsi(new WarningCode());
         }
-
+        log.info("Return Customer {}", customerInfoView);
         return customerInfoView;
     }
 

@@ -220,6 +220,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
+
         groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerComLimit());
         groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerAppInRLOSLimit());
         groupExposure = groupExposure.add(existingCreditView.getTotalRelatedComLimit());
