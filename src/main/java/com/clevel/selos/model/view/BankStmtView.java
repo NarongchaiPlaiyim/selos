@@ -13,11 +13,7 @@ public class BankStmtView implements Serializable {
     private BankView bankView;
     private String branchName;
     private AccountTypeView accountTypeView;
-<<<<<<< HEAD
-    private int otherAccountType;
-=======
     private AccountTypeView othAccountTypeView;
->>>>>>> fd4f56faeb50c601ec3d9ef6a268cfef05c6d9f3
     private String accountNumber;
     private String accountName;
     private AccountStatusView accountStatusView;
@@ -61,7 +57,7 @@ public class BankStmtView implements Serializable {
         this.avgIncomeGross = BigDecimal.ZERO;
         this.avgIncomeNetBDM = BigDecimal.ZERO;
         this.avgIncomeNetUW = BigDecimal.ZERO;
-        this.avgDrawAmount = BigDecimal.ZERO;
+        this.avgWithDrawAmount = BigDecimal.ZERO;
         this.swingPercent = BigDecimal.ZERO;
         this.utilizationPercent = BigDecimal.ZERO;
         this.avgGrossInflowPerLimit = BigDecimal.ZERO;
@@ -121,8 +117,6 @@ public class BankStmtView implements Serializable {
         this.accountTypeView = accountTypeView;
     }
 
-<<<<<<< HEAD
-=======
     public AccountTypeView getOthAccountTypeView() {
         return othAccountTypeView;
     }
@@ -131,7 +125,6 @@ public class BankStmtView implements Serializable {
         this.othAccountTypeView = othAccountTypeView;
     }
 
->>>>>>> fd4f56faeb50c601ec3d9ef6a268cfef05c6d9f3
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -202,10 +195,6 @@ public class BankStmtView implements Serializable {
 
     public void setAvgIncomeNetUW(BigDecimal avgIncomeNetUW) {
         this.avgIncomeNetUW = avgIncomeNetUW;
-    }
-
-    public void setOtherAccountType(int otherAccountType) {
-        this.otherAccountType = otherAccountType;
     }
 
     public BigDecimal getAvgWithDrawAmount() {
