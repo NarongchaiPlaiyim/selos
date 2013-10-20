@@ -77,6 +77,7 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetailView.setProductCode(creditDetail.getProductCode());
                 existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());
                 existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
+
                 if(creditDetail.getFinalLimit() != null && !creditDetail.getFinalLimit().equals(BigDecimal.ZERO)){
                     existingCreditDetailView.setLimit(creditDetail.getFinalLimit());
                     existingCreditDetailView.setTenor(creditDetail.getFinalTenors());
@@ -152,8 +153,8 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
                 existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
                 existingCreditDetail.setExistingCreditSummary(existingCreditSummary);
-                existingCreditDetail.setCreditCategory(existingCreditDetail.getCreditCategory());
-                existingCreditDetail.setCreditRelationType(existingCreditDetail.getCreditRelationType());
+                existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
+                existingCreditDetail.setCreditRelationType(existingCreditDetailView.getCreditRelationType().value());
 
                 existingCreditDetail.setLimit(existingCreditDetailView.getLimit());
                 existingCreditDetail.setOutstanding(existingCreditDetailView.getOutstanding());

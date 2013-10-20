@@ -11,6 +11,7 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.working.ExistingCreditSummary;
@@ -59,7 +60,6 @@ public class ExistingCreditControl extends BusinessControl{
         log.info("Start refreshExistingCredit with customerInfo{}", customerInfoViewList);
 
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
-
         ExistingCreditView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
 
         existingCreditView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
@@ -178,6 +178,7 @@ public class ExistingCreditControl extends BusinessControl{
                 BigDecimal totalRelatedRLOSApp = BigDecimal.ZERO;
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
+                log.info("App In {}", appInProcessList);
                 for(AppInProcess appInProcess : appInProcessList){
                     List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
                     List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
@@ -192,6 +193,7 @@ public class ExistingCreditControl extends BusinessControl{
                     for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
                         if(isBorrower){
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+
                             borrowerRLOSApp.add(existingCreditDetailView);
 
                             log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
