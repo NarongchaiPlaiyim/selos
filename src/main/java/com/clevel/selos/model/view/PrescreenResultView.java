@@ -3,14 +3,11 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-public class PrescreenResultView {
+public class PrescreenResultView extends PrescreenView {
     private String interfaceResult;
     private String interfaceReason;
-    private BigDecimal groupExposure;
-    private BigDecimal groupIncome;
     private ExistingCreditView existingCreditView;
     private BankStmtSummaryView bankStmtSummaryView;
 
@@ -31,22 +28,6 @@ public class PrescreenResultView {
 
     public void setInterfaceReason(String interfaceReason) {
         this.interfaceReason = interfaceReason;
-    }
-
-    public BigDecimal getGroupExposure() {
-        return groupExposure;
-    }
-
-    public void setGroupExposure(BigDecimal groupExposure) {
-        this.groupExposure = groupExposure;
-    }
-
-    public BigDecimal getGroupIncome() {
-        return groupIncome;
-    }
-
-    public void setGroupIncome(BigDecimal groupIncome) {
-        this.groupIncome = groupIncome;
     }
 
     public ExistingCreditView getExistingCreditView() {
@@ -86,8 +67,6 @@ public class PrescreenResultView {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("interfaceResult", interfaceResult)
                 .append("interfaceReason", interfaceReason)
-                .append("groupExposure", groupExposure)
-                .append("groupIncome", groupIncome)
                 .append("existingCreditView", existingCreditView)
                 .append("bankStmtSummaryView", bankStmtSummaryView)
                 .append("groupRuleResults", groupRuleResults)

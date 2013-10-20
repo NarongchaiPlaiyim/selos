@@ -1,5 +1,8 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.CreditCategory;
+import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.Relation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -19,6 +22,8 @@ public class ExistingCreditDetailView implements Serializable {
 
     private String productProgram;
     private String creditType;
+    private CreditCategory creditCategory;
+    private CreditRelationType creditRelationType;
     private BigDecimal limit;
     private BigDecimal outstanding;
     private BigDecimal installment;
@@ -104,6 +109,22 @@ public class ExistingCreditDetailView implements Serializable {
 
     public void setCreditType(String creditType) {
         this.creditType = creditType;
+    }
+
+    public CreditCategory getCreditCategory() {
+        return creditCategory;
+    }
+
+    public void setCreditCategory(CreditCategory creditCategory) {
+        this.creditCategory = creditCategory;
+    }
+
+    public CreditRelationType getCreditRelationType() {
+        return creditRelationType;
+    }
+
+    public void setCreditRelationType(CreditRelationType creditRelationType) {
+        this.creditRelationType = creditRelationType;
     }
 
     public BigDecimal getLimit() {

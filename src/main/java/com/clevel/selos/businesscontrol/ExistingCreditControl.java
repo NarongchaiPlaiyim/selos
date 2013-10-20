@@ -1,6 +1,8 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.ReferenceDAO;
+import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
+import com.clevel.selos.dao.working.ExistingCreditSummaryDAO;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
@@ -9,7 +11,12 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.CreditCategory;
+import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
+import com.clevel.selos.model.db.working.ExistingCreditSummary;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.ActionStatusView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
@@ -38,6 +45,12 @@ public class ExistingCreditControl extends BusinessControl{
     @Inject
     ExistingCreditTransform existingCreditTransform;
 
+    @Inject
+    ExistingCreditSummaryDAO existingCreditSummaryDAO;
+
+    @Inject
+    ExistingCreditDetailDAO existingCreditDetailDAO;
+
     /**
      * To refresh/retrieve the Existing Credit Information from DWH Obligation Database.
      * @param customerInfoViewList
@@ -47,7 +60,6 @@ public class ExistingCreditControl extends BusinessControl{
         log.info("Start refreshExistingCredit with customerInfo{}", customerInfoViewList);
 
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
-
         ExistingCreditView _tmpRLOSAppIn = getRLOSAppInProcess(customerInfoViewList);
 
         existingCreditView.setBorrowerAppInRLOSCredit(_tmpRLOSAppIn.getBorrowerAppInRLOSCredit());
@@ -103,11 +115,13 @@ public class ExistingCreditControl extends BusinessControl{
                     ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(obligation);
                     if(_borrowerTMBCusID.contains(obligation.getTmbCusId())){
                         log.info("add obligation into borrower");
+                        existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
                         borrowerComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
-                        _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                        _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
                     } else {
+                        existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
                         relatedComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
-                        _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                        _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
                     }
                 }
 
@@ -161,9 +175,10 @@ public class ExistingCreditControl extends BusinessControl{
                 BigDecimal totalBorrowerRLOSApp = BigDecimal.ZERO;
 
                 List<ExistingCreditDetailView> relatedRLOSApp = new ArrayList<ExistingCreditDetailView>();
-                BigDecimal totalRelatedRLOSApp = new BigDecimal(0);
+                BigDecimal totalRelatedRLOSApp = BigDecimal.ZERO;
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
+                log.info("App In {}", appInProcessList);
                 for(AppInProcess appInProcess : appInProcessList){
                     List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
                     List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
@@ -171,16 +186,26 @@ public class ExistingCreditControl extends BusinessControl{
                     for(CustomerDetail customerDetail : customerDetailList) {
                         if(_borrowerPersonalID.contains(customerDetail.getCitizenId())){
                             isBorrower = true;
+
                         }
                     }
 
                     for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
                         if(isBorrower){
+                            existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
+
                             borrowerRLOSApp.add(existingCreditDetailView);
-                            totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
+
+                            log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
+                            totalBorrowerRLOSApp = totalBorrowerRLOSApp.add(existingCreditDetailView.getLimit());
+
+                            log.info("total borrower RLOS Limit {}", totalBorrowerRLOSApp);
                         } else {
                             relatedRLOSApp.add(existingCreditDetailView);
-                            totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
+                            existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
+                            log.info("Existing Credit : {} ", existingCreditDetailView.getLimit());
+                            totalRelatedRLOSApp = totalRelatedRLOSApp.add(existingCreditDetailView.getLimit());
+                            log.info("total related RLOS Limit {}", totalRelatedRLOSApp);
                         }
                     }
 
@@ -199,10 +224,24 @@ public class ExistingCreditControl extends BusinessControl{
 
     /**
      * To get the Existing Credit Facility from SE-LOS Database.
-     * @param customerInfoViewList
+     * @param workCasePrescreenId
      * @return
      */
-    public ExistingCreditView getExistingCredit(List<CustomerInfoView> customerInfoViewList){
-        return null;
+    public ExistingCreditView getExistingCredit(long workCasePrescreenId){
+        ExistingCreditSummary existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreenId);
+        ExistingCreditView existingCreditView = existingCreditTransform.getExistingCreditView(existingCreditSummary);
+        return existingCreditView;
+    }
+
+    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCasePrescreen workCasePrescreen){
+        ExistingCreditSummary existingCreditSummary = existingCreditTransform.getExistingCreditSummary(existingCreditView, getCurrentUser());
+        existingCreditSummary.setWorkCasePrescreen(workCasePrescreen);
+        existingCreditSummaryDAO.persist(existingCreditSummary);
+        //existingCreditDetailDAO.persist(existingCreditSummary.getExistingCreditDetailList());
+
+    }
+
+    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCase workCase){
+
     }
 }
