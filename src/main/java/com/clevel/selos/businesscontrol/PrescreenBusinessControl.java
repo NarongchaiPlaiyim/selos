@@ -442,8 +442,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Juristic juristic = juristicDAO.findByRegisterId(ncbView.getIdNumber());
-                        Customer customer = juristic.getCustomer();
+                        Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
@@ -605,9 +605,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
         for(Customer customer : customerList){
             customerDAO.persist(customer);
-            /*if(customer.getAddressesList() != null){
+            if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
-            }*/
+            }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();

@@ -499,6 +499,7 @@ public class CustomerTransform extends Transform {
                 if(item.getSpouse() == null){
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();
+                    spouse.setSpouse(null);
                     item.setSpouse(spouse);
                 }
                 customerInfoViewList.add(item);

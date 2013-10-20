@@ -83,6 +83,8 @@ public class PrescreenMaker implements Serializable {
     private List<District> districtSpouseList;
     private List<SubDistrict> subDistrictSpouseList;
 
+    private List<Province> businessLocationList;
+
     private List<Bank> refinanceList;
 
     private List<ReferredExperience> referredExperienceList;
@@ -424,6 +426,8 @@ public class PrescreenMaker implements Serializable {
 
         nationalityList = nationalityDAO.findAll();
         log.info("onLoadSelectList ::: nationalityList size : {}", nationalityList.size());
+
+        businessLocationList = provinceDAO.getListOrderByParameter("name");
 
         /*provinceList = provinceDAO.getListOrderByParameter("name");
         log.info("onLoadSelectList ::: provinceList size : {}", provinceList.size());*/
@@ -2370,5 +2374,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setCustomerEntity(CustomerEntity customerEntity) {
         this.customerEntity = customerEntity;
+    }
+
+    public List<Province> getBusinessLocationList() {
+        return businessLocationList;
+    }
+
+    public void setBusinessLocationList(List<Province> businessLocationList) {
+        this.businessLocationList = businessLocationList;
     }
 }

@@ -236,7 +236,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
         customer.setReviewFlag(customerInfoView.getReviewFlag());
         customer.setReason(customerInfoView.getReason());
         customer.setBusinessType(customerInfoView.getBusinessType());
-        customer.setSpouse(new CustomerInfoView(customerInfoView.getSpouse()));
+        if(customerInfoView.getSpouse() != null){
+            customer.setSpouse(new CustomerInfoView(customerInfoView.getSpouse()));
+        }
 
         //WarningCode csi;
     }
