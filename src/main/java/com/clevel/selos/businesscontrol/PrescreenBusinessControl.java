@@ -97,6 +97,8 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenCollateralDAO prescreenCollateralDAO;
     @Inject
     RelationDAO relationDAO;
+    @Inject
+    CustomerEntityDAO customerEntityDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -529,8 +531,13 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenCollateralViewList;
     }
 
-    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId, User user){
+    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, long workCasePreScreenId, int caseBorrowerTypeId, User user){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        log.info("savePreScreenInitial ::: caseBorrowerType : {}", caseBorrowerTypeId);
+        CustomerEntity customerEntity = customerEntityDAO.findById(caseBorrowerTypeId);
+        log.info("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
+        workCasePrescreen.setBorrowerType(customerEntity);
+        workCasePrescreenDAO.persist(workCasePrescreen);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
         prescreenDAO.persist(prescreen);

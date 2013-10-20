@@ -480,16 +480,15 @@
                                                 </p:selectOneRadio>
                                             </td>
                                             <td>
-                                                <p:panel id="refinanceBankPnl" rendered="#{prescreenMaker.prescreenView.refinance}" styleClass="panel">
-                                                    <p:selectOneMenu value="#{prescreenMaker.prescreenView.refinanceBank.code}"
-                                                                     size="1" style="width: 200px;">
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                        <f:selectItems value="#{prescreenMaker.refinanceList}"
-                                                                       var="refinanceBankItem"
-                                                                       itemLabel="#{refinanceBankItem.shortName}"
-                                                                       itemValue="#{refinanceBankItem.code}"/>
-                                                    </p:selectOneMenu>
-                                                </p:panel>
+                                                <p:selectOneMenu value="#{prescreenMaker.prescreenView.refinanceBank.code}"
+                                                                 disabled="#{not prescreenMaker.prescreenView.refinance}"
+                                                                 size="1" style="width: 200px;">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{prescreenMaker.refinanceList}"
+                                                                   var="refinanceBankItem"
+                                                                   itemLabel="#{refinanceBankItem.shortName}"
+                                                                   itemValue="#{refinanceBankItem.code}"/>
+                                                </p:selectOneMenu>
                                             </td>
                                         </tr>
                                     </table>
@@ -592,12 +591,13 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
+            <p:blockUI block=":frmMain" trigger="btnSave">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
     </p:panel>
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
                          header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >

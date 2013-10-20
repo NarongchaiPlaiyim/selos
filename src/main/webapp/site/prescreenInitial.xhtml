@@ -449,12 +449,14 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </div>
+        <p:blockUI block=":frmMain" trigger="btnSave" widgetVar="blockPrescreen">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </h:form>
 </p:panel>
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-    LOADING<br />
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
+
+
 <!--<p:panel id="waitingDialogPanel" widgetVar="waitingDlgPnl">
     <p:dialog id="waitingDialog" widgetVar="waitingDlg" modal="true" draggable="false" closeOnEscape="false" closable="false"
               header="#{prescreenMaker.messageHeader}">

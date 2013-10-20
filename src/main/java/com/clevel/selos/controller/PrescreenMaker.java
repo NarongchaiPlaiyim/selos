@@ -90,6 +90,7 @@ public class PrescreenMaker implements Serializable {
     private List<CustomerInfoView> customerInfoViewList;
     private List<CustomerInfoView> borrowerInfoViewList;
     private List<CustomerInfoView> guarantorInfoViewList;
+    private List<CustomerInfoView> deleteCustomerInfoViewList;
     private List<CustomerInfoView> relatedInfoViewList;
     private List<BizInfoDetailView> bizInfoViewList;
     private List<PrescreenCollateralView> proposePrescreenCollateralViewList;
@@ -128,6 +129,7 @@ public class PrescreenMaker implements Serializable {
 
 
     enum ModeForButton{ ADD, EDIT, DELETE }
+    enum ListCustomerName {BORROWER, GUARANTOR, RELATED, CUSTOMER}
     private ModeForButton modeForButton;
     private String messageHeader;
     private String message;
@@ -361,6 +363,7 @@ public class PrescreenMaker implements Serializable {
             guarantorInfoViewList = new ArrayList<CustomerInfoView>();
             relatedInfoViewList = new ArrayList<CustomerInfoView>();
         }
+        deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
     }
 
     public void onLoadSelectList() {
@@ -596,6 +599,8 @@ public class PrescreenMaker implements Serializable {
 
         log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
 
+        relationList = prescreenBusinessControl.getRelationByStepId(stepId);
+
         enableCustomerForm = false;
         enableDocumentType = true;
         /*enableCustomerEntity = true;*/
@@ -608,7 +613,18 @@ public class PrescreenMaker implements Serializable {
         borrowerInfo = selectCustomerInfoItem;
         modeForButton = ModeForButton.EDIT;
 
+        if(borrowerInfo.getRelation().getId() == 1){
+            relationList = prescreenBusinessControl.getRelationByStepId(1001);
+        } else {
+            relationList = prescreenBusinessControl.getRelationByStepId(1003);
+        }
+
         this.customerEntity = borrowerInfo.getCustomerEntity();
+        onChangeRelation();
+
+        //TODO Get district list, subDistrict
+
+        //TODO Get spouse district, subDistrict List
 
         enableCustomerForm = true;
     }
@@ -646,6 +662,7 @@ public class PrescreenMaker implements Serializable {
         }
 
         if(modeForButton.equals(ModeForButton.ADD)){
+            log.info("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
             if(borrowerInfo.getCustomerEntity().getId() != 0){
                 int customerListIndex = 0;
                 customerListIndex = customerInfoViewList.size();        //Index is already +1
@@ -739,7 +756,7 @@ public class PrescreenMaker implements Serializable {
 
                     boolean validateRegistration = true;
                     for(CustomerInfoView customerInfoView : customerInfoViewList ){
-                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                        if(borrowerInfo.getRegistrationId().equalsIgnoreCase(customerInfoView.getRegistrationId())){
                             validateRegistration = false;
                             messageHeader = "Save customer failed.";
                             message = "Duplicate registrationId.";
@@ -784,6 +801,7 @@ public class PrescreenMaker implements Serializable {
                 }
             }
         } else { // Edit
+            log.info("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
             if(borrowerInfo.getCustomerEntity().getId() != 0){
                 int customerListIndex = borrowerInfo.getListIndex();
                 int oldRelationId = 0;
@@ -828,6 +846,7 @@ public class PrescreenMaker implements Serializable {
                                 borrowerInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
                             } else {
                                 //Insert into new borrowerList;
+                                borrowerInfo.setSubIndex(borrowerInfoViewList.size());
                                 borrowerInfoViewList.add(borrowerInfo);
 
                                 //Remove from old list
@@ -835,35 +854,66 @@ public class PrescreenMaker implements Serializable {
                                     //Remove from guarantor list
                                     guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
                                     //Re index for guarantor list
-                                    List<CustomerInfoView> tmpGuarantorViewList = new ArrayList<CustomerInfoView>();
-                                    for(CustomerInfoView customerInfoView : guarantorInfoViewList){
-                                        tmpGuarantorViewList.add(customerInfoView);
-                                    }
-                                    int index = 0;
-                                    guarantorInfoViewList.removeAll(guarantorInfoViewList);
-                                    for(CustomerInfoView customerInfoView : tmpGuarantorViewList){
-                                        customerInfoView.setSubIndex(index);
-                                        guarantorInfoViewList.add(customerInfoView);
-                                        index = index + 1;
-                                    }
+                                    reIndexCustomerList(ListCustomerName.GUARANTOR);
                                 } else {
                                     //Remove from related list
                                     relatedInfoViewList.remove(borrowerInfo.getSubIndex());
                                     //Re index for related list
-                                    List<CustomerInfoView> tmpRelatedViewList = new ArrayList<CustomerInfoView>();
-                                    for(CustomerInfoView customerInfoView : relatedInfoViewList){
-                                        tmpRelatedViewList.add(customerInfoView);
-                                    }
-                                    int index = 0;
-                                    relatedInfoViewList.removeAll(relatedInfoViewList);
-                                    for(CustomerInfoView customerInfoView : tmpRelatedViewList){
-                                        customerInfoView.setSubIndex(index);
-                                        relatedInfoViewList.add(customerInfoView);
-                                        index = index + 1;
-                                    }
+                                    reIndexCustomerList(ListCustomerName.RELATED);
                                 }
                             }
-                            //TODO assign caseBorrowerType
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        } else if(borrowerInfo.getRelation().getId() == 2){
+                            borrowerInfo.setListName("GUARANTOR");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 2){
+                                //Update old guarantorList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                guarantorInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new guarantorList;
+                                borrowerInfo.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 1){
+                                    //Remove from guarantor list
+                                    borrowerInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    reIndexCustomerList(ListCustomerName.BORROWER);
+                                } else {
+                                    //Remove from related list
+                                    relatedInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    reIndexCustomerList(ListCustomerName.RELATED);
+                                }
+                            }
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        } else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
+                            borrowerInfo.setListName("RELATED");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 3 || oldRelationId == 4){
+                                //Update old relatedList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                relatedInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new relatedList;
+                                borrowerInfo.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 1){
+                                    //Remove from guarantor list
+                                    borrowerInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    reIndexCustomerList(ListCustomerName.BORROWER);
+                                } else {
+                                    //Remove from related list
+                                    guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    reIndexCustomerList(ListCustomerName.GUARANTOR);
+                                }
+                            }
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         }
                     } else {
@@ -908,35 +958,66 @@ public class PrescreenMaker implements Serializable {
                                     //Remove from guarantor list
                                     guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
                                     //Re index for guarantor list
-                                    List<CustomerInfoView> tmpGuarantorViewList = new ArrayList<CustomerInfoView>();
-                                    for(CustomerInfoView customerInfoView : guarantorInfoViewList){
-                                        tmpGuarantorViewList.add(customerInfoView);
-                                    }
-                                    int index = 0;
-                                    guarantorInfoViewList.removeAll(guarantorInfoViewList);
-                                    for(CustomerInfoView customerInfoView : tmpGuarantorViewList){
-                                        customerInfoView.setSubIndex(index);
-                                        guarantorInfoViewList.add(customerInfoView);
-                                        index = index + 1;
-                                    }
+                                    reIndexCustomerList(ListCustomerName.GUARANTOR);
                                 } else {
                                     //Remove from related list
                                     relatedInfoViewList.remove(borrowerInfo.getSubIndex());
                                     //Re index for related list
-                                    List<CustomerInfoView> tmpRelatedViewList = new ArrayList<CustomerInfoView>();
-                                    for(CustomerInfoView customerInfoView : relatedInfoViewList){
-                                        tmpRelatedViewList.add(customerInfoView);
-                                    }
-                                    int index = 0;
-                                    relatedInfoViewList.removeAll(relatedInfoViewList);
-                                    for(CustomerInfoView customerInfoView : tmpRelatedViewList){
-                                        customerInfoView.setSubIndex(index);
-                                        relatedInfoViewList.add(customerInfoView);
-                                        index = index + 1;
-                                    }
+                                    reIndexCustomerList(ListCustomerName.RELATED);
                                 }
                             }
-                            //TODO assign caseBorrowerType
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        } else if(borrowerInfo.getRelation().getId() == 2){
+                            borrowerInfo.setListName("GUARANTOR");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 2){
+                                //Update old guarantorList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                guarantorInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new guarantorList;
+                                borrowerInfo.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 1){
+                                    //Remove from guarantor list
+                                    borrowerInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    reIndexCustomerList(ListCustomerName.BORROWER);
+                                } else {
+                                    //Remove from related list
+                                    relatedInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    reIndexCustomerList(ListCustomerName.RELATED);
+                                }
+                            }
+                            customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        } else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
+                            borrowerInfo.setListName("RELATED");
+                            borrowerInfo.setIsSpouse(0);
+                            if(oldRelationId == 3 || oldRelationId == 4){
+                                //Update old relatedList;
+                                int subIndex = borrowerInfo.getSubIndex();
+                                relatedInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
+                            } else {
+                                //Insert into new relatedList;
+                                borrowerInfo.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(borrowerInfo);
+
+                                //Remove from old list
+                                if(oldRelationId == 1){
+                                    //Remove from guarantor list
+                                    borrowerInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for guarantor list
+                                    reIndexCustomerList(ListCustomerName.BORROWER);
+                                } else {
+                                    //Remove from related list
+                                    guarantorInfoViewList.remove(borrowerInfo.getSubIndex());
+                                    //Re index for related list
+                                    reIndexCustomerList(ListCustomerName.GUARANTOR);
+                                }
+                            }
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         }
                     } else {
@@ -959,9 +1040,97 @@ public class PrescreenMaker implements Serializable {
         }
     }
 
+    public void reIndexCustomerList(ListCustomerName listCustomerName){
+        if(listCustomerName == ListCustomerName.BORROWER){
+            List<CustomerInfoView> tmpBorrowerViewList = new ArrayList<CustomerInfoView>();
+            for(CustomerInfoView customerInfoView : borrowerInfoViewList){
+                tmpBorrowerViewList.add(customerInfoView);
+            }
+            int index = 0;
+            borrowerInfoViewList.removeAll(borrowerInfoViewList);
+            for(CustomerInfoView customerInfoView : tmpBorrowerViewList){
+                customerInfoView.setSubIndex(index);
+                borrowerInfoViewList.add(customerInfoView);
+                index = index + 1;
+            }
+        } else if(listCustomerName == ListCustomerName.GUARANTOR){
+            List<CustomerInfoView> tmpGuarantorViewList = new ArrayList<CustomerInfoView>();
+            for(CustomerInfoView customerInfoView : guarantorInfoViewList){
+                tmpGuarantorViewList.add(customerInfoView);
+            }
+            int index = 0;
+            guarantorInfoViewList.removeAll(guarantorInfoViewList);
+            for(CustomerInfoView customerInfoView : tmpGuarantorViewList){
+                customerInfoView.setSubIndex(index);
+                guarantorInfoViewList.add(customerInfoView);
+                index = index + 1;
+            }
+        } else if(listCustomerName == ListCustomerName.RELATED){
+            List<CustomerInfoView> tmpRelatedViewList = new ArrayList<CustomerInfoView>();
+            for(CustomerInfoView customerInfoView : relatedInfoViewList){
+                tmpRelatedViewList.add(customerInfoView);
+            }
+            int index = 0;
+            relatedInfoViewList.removeAll(relatedInfoViewList);
+            for(CustomerInfoView customerInfoView : tmpRelatedViewList){
+                customerInfoView.setSubIndex(index);
+                relatedInfoViewList.add(customerInfoView);
+                index = index + 1;
+            }
+        } else if(listCustomerName == ListCustomerName.CUSTOMER){
+            List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+            for(CustomerInfoView customerInfoView : customerInfoViewList){
+                tmpCustomerInfoViewList.add(customerInfoView);
+            }
+            int index = 0;
+            customerInfoViewList.removeAll(customerInfoViewList);
+            for(CustomerInfoView customerInfoView : tmpCustomerInfoViewList){
+                customerInfoView.setListIndex(index);
+                customerInfoViewList.add(customerInfoView);
+                index = index + 1;
+            }
+        }
+    }
+
     public void onDeleteCustomerInfo() {
         log.info("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        if(selectCustomerInfoItem.getRelation() != null){
+            if(selectCustomerInfoItem.getRelation().getId() == 1){
+                //Remove from borrower list
+                borrowerInfoViewList.remove(selectCustomerInfoItem);
+                //Re index borrower list
+                reIndexCustomerList(ListCustomerName.BORROWER);
+
+            } else if (selectCustomerInfoItem.getRelation().getId() == 2){
+                //Remove from guarantor list
+                guarantorInfoViewList.remove(selectCustomerInfoItem);
+                //Re index guarantor list
+                reIndexCustomerList(ListCustomerName.GUARANTOR);
+            } else if (selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
+                //Remove from related list
+                relatedInfoViewList.remove(selectCustomerInfoItem);
+                //Re index related list
+                reIndexCustomerList(ListCustomerName.RELATED);
+            }
+
+            if(selectCustomerInfoItem.getSpouse() != null){
+                if(selectCustomerInfoItem.getSpouse().getRelation() != null){
+                    if(selectCustomerInfoItem.getSpouse().getRelation().getId() == 1){
+                        borrowerInfoViewList.remove(selectCustomerInfoItem.getSpouse());
+                        reIndexCustomerList(ListCustomerName.BORROWER);
+                    } else if(selectCustomerInfoItem.getSpouse().getRegistrationCountry().getId() == 2){
+                        guarantorInfoViewList.remove(selectCustomerInfoItem.getSpouse());
+                        reIndexCustomerList(ListCustomerName.GUARANTOR);
+                    } else if(selectCustomerInfoItem.getSpouse().getRelation().getId() == 3 || selectCustomerInfoItem.getSpouse().getRelation().getId() == 4){
+                        relatedInfoViewList.remove(selectCustomerInfoItem.getSpouse());
+                        reIndexCustomerList(ListCustomerName.RELATED);
+                    }
+                }
+            }
+        }
+        deleteCustomerInfoViewList.add(selectCustomerInfoItem);
         customerInfoViewList.remove(selectCustomerInfoItem);
+        reIndexCustomerList(ListCustomerName.CUSTOMER);
     }
 
     public void onDeleteBorrower(){
@@ -1164,7 +1333,7 @@ public class PrescreenMaker implements Serializable {
         log.info("onCalAge ::: DateOfBirth:{}", age);
     }*/
 
-        // *** Function For BusinessInfoView *** //
+    // *** Function For BusinessInfoView *** //
     public void onAddBusinessInfo() {
         log.info("onAddBusinessInfo ::: reset form");
         /*** Reset Form ***/
@@ -1298,7 +1467,7 @@ public class PrescreenMaker implements Serializable {
             prescreenView.setBorrowingType(null);
             prescreenView.setReferredExperience(null);
             prescreenView.setRefinanceBank(null);
-            prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
+            prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, caseBorrowerTypeId, user);
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
