@@ -30,9 +30,7 @@ public class BaseController implements Serializable {
     private AppHeaderView appHeaderView;
     private long stepId;
 
-
     public BaseController(){
-
     }
 
     @PostConstruct

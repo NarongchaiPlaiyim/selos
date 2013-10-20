@@ -100,7 +100,6 @@ public class CustomerInfoView implements Serializable {
 
     private WarningCode csi;
 
-
     public CustomerInfoView(){
         //reset();
     }
@@ -135,6 +134,7 @@ public class CustomerInfoView implements Serializable {
         this.age = 0;
         this.origin = new Race();
         this.nationality = new Nationality();
+        this.sndNationality = new Nationality();
         this.education = new Education();
         this.occupation = new Occupation();
         this.maritalStatus = new MaritalStatus();
@@ -157,6 +157,7 @@ public class CustomerInfoView implements Serializable {
         this.reason = "";
         this.spouse = new CustomerInfoView();
         this.csi = new WarningCode();
+        this.businessType = new BusinessType();
     }
 
     public long getIndividualId() {
@@ -763,7 +764,7 @@ public class CustomerInfoView implements Serializable {
                 .append("reviewFlag", reviewFlag)
                 .append("reason", reason)
                 .append("businessType", businessType)
-                .append("spouse", spouse)
+                .append("spouse", spouse.id)
                 .append("csi", csi)
                 .toString();
     }

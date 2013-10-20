@@ -1,6 +1,9 @@
 package com.clevel.selos.model.db.ext.ncb;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -110,5 +113,19 @@ public class NCBResult implements Serializable {
 
     public void setRequestNo(String requestNo) {
         this.requestNo = requestNo;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("appNumber", appNumber)
+                .append("customerType", customerType)
+                .append("customerId", customerId)
+                .append("inquiryDate", inquiryDate)
+                .append("result", result)
+                .append("reason", reason)
+                .append("requestNo", requestNo)
+                .toString();
     }
 }

@@ -34,6 +34,7 @@
                     <div id="content_lastupdate">Last update by </div>
                 </div>
                 <div id="content_form">
+                    <p:panel styleClass="panel" id="interfaceInfoPanel">
                     <table class="content_table_form">
                         <tr>
                             <td class="title" style="width: 200px;"><h:outputText value="#{msg.get('app.prescreen.result.interfaceResult')}"/></td>
@@ -42,34 +43,53 @@
                                                  styleClass="largest"
                                                  process="@this"
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
-                                                 update="frmMain:resultBorrowerTableFacility, frmMain:resultRelatedTableFacility">
+                                                 update="frmMain:interfaceInfoPanel">
 
                             </p:commandButton></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupExposure')}"/></td>
-                            <td><p:inputText title="msg.get('app.prescreen.result.groupExposure')" styleClass="medium" value="#{prescreenResult.prescreenResultView.groupExposure}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
+                            <td><p:inputText title="msg.get('app.prescreen.result.groupExposure')" styleClass="medium right" readonly="true" value="#{prescreenResult.prescreenResultView.groupExposure}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
-                            <td><p:inputText title="msg.get('app.prescreen.result.groupIncome')" styleClass="medium" value="#{prescreenResult.prescreenResultView.groupIncome}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
+                            <td><p:inputText title="msg.get('app.prescreen.result.groupIncome')" styleClass="medium right" readonly="true" value="#{prescreenResult.prescreenResultView.groupIncome}"/><p:spacer width="5"/><h:outputText value="#{msg.get('app.moneyUnit.baht')}"/></td>
                         </tr>
                         <tr>
-                            <td class="title" colspan="2"><h:outputText value="#{msg.get('app.prescreen.result.existingCredit')}"/></td>
+                            <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td class="title" colspan="2"><h2><h:outputText value="#{msg.get('app.prescreen.result.existingCredit')}"/></h2></td>
                         </tr>
                         <tr>
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.borrower')}"/></td>
                             <td>
-                                <p:dataTable id="resultBorrowerTableFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.borrowerComExistingCredit}"
+                                <p:dataTable id="resultBorrowerCOMFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.borrowerComExistingCredit}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
-                                    <f:facet name="header"></f:facet>
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="7" headerText="#{msg.get('app.creditfact.table.header.commercial')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText="" style="width: 30px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.account')}" style="width: 250px; line-height: 15px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" style="width: 150px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.limit')}" style="width: 130px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" style="width:100px;"/>
+                                        </p:row>
+                                    </p:columnGroup>
                                     <p:column headerText="" styleClass="center" style="width:22px;">
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.account')}" styleClass="left" style="width: 250px; line-height: 15px;">
+                                    <p:column styleClass="left" style="width: 250px; line-height: 15px;">
                                         <h:outputText value="#{creditItem.accountName}"/><br/>
-                                        Acc No.: <h:outputText value="#{creditItem.accountNumber}"/> Suf.<h:outputText value="#{creditItem.accountSuf}"/><br/>
-                                        Acc Status: <h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.account.no')}"/><h:outputText value="#{creditItem.accountNumber}"/><h:outputText value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText value="#{creditItem.accountSuf}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center" style="width: 150px;">
                                         <h:outputText value="#{creditItem.productProgram}"/>
@@ -92,13 +112,23 @@
                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
                                         </h:outputText>
                                     </p:column>
-
-                                    <p:columnGroup type="footer" rendered="#{prescreenResult.prescreenResultView != null and prescreenResult.prescreenResultView.existingCreditView != null}">
+                                    <p:columnGroup type="footer">
                                         <p:row>
                                             <p:column style="background-color:#f4f8b6;" styleClass="left"></p:column>
-                                            <p:column colspan="3" footerText="#{msg.get('app.creditfact.table.total')}"
-                                                      style="background-color:#f4f8b6;text-align: left"/>
-                                            <p:column style="background-color:#f4f8b6;" styleClass="right" footerText="#{prescreenResult.prescreenResultView.existingCreditView.totalBorrowerComLimit}"/>
+                                            <p:column colspan="3" style="background-color:#f4f8b6;text-align: left">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{msg.get('app.creditfact.table.total')}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{prescreenResult.prescreenResultView.existingCreditView.totalBorrowerComLimit}" style="text-align: right">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
                                             <p:column colspan="2" style="background-color:#f4f8b6; text-align:left;"/>
                                         </p:row>
                                     </p:columnGroup>
@@ -106,20 +136,114 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="100%"><p:spacer width="5px;"/></td>
+                            <td colspan="100%"><p:spacer width="5px;" style="line-height: 10px;"/></td>
+                        </tr>
+                        <tr>
+                            <td class="title top"></td>
+                            <td>
+                                <p:dataTable id="resultBorrowerRLOSFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.borrowerAppInRLOSCredit}"
+                                             paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="7" headerText="#{msg.get('app.creditfact.table.header.RLOS')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText="" style="width: 30px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.account')}" style="width: 250px; line-height: 15px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" style="width: 150px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.limit')}" style="width: 130px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" style="width:100px;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                    <p:column styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column styleClass="left" style="width: 250px; line-height: 15px;">
+                                        <h:outputText value="#{creditItem.accountName}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText value="#{creditItem.accountNumber}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                    </p:column>
+                                    <p:column styleClass="center" style="width: 150px;">
+                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                    </p:column>
+                                    <p:column  styleClass="center" style="width: 120px;">
+                                        <h:outputText value="#{creditItem.creditType}"/>
+                                    </p:column>
+                                    <p:column  styleClass="right" style="width: 130px;">
+                                        <h:outputText value="#{creditItem.limit}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column  styleClass="right" style="width: 120px;">
+                                        <h:outputText value="#{creditItem.outstanding}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column  styleClass="right" style="width:100px;">
+                                        <h:outputText value="#{creditItem.tenor}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;" styleClass="left"></p:column>
+                                            <p:column colspan="3" style="background-color:#f4f8b6;text-align: left">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{msg.get('app.creditfact.table.total')}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{prescreenResult.prescreenResultView.existingCreditView.totalBorrowerAppInRLOSLimit}" style="text-align: right">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="2" style="background-color:#f4f8b6; text-align:left;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
                         </tr>
                         <tr>
                             <td class="title top"><h:outputText value="#{msg.get('app.prescreen.result.related')}"/></td>
                             <td>
-                                <p:dataTable id="resultRelatedTableFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.relatedComExistingCredit}"
+                                <p:dataTable id="resultRelatedCOMFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.relatedComExistingCredit}"
                                              paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="7" headerText="#{msg.get('app.creditfact.table.header.commercial')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText="" style="width: 30px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.account')}" style="width: 250px; line-height: 15px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" style="width: 150px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.limit')}" style="width: 130px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" style="width:100px;"/>
+                                        </p:row>
+                                    </p:columnGroup>
                                     <p:column headerText="" styleClass="center" style="width:22px;">
                                         <h:outputText value="#{rowIndex+1}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.creditfact.table.account')}" styleClass="left" style="width: 250px; line-height: 15px;">
+                                    <p:column styleClass="left" style="width: 250px; line-height: 15px;">
                                         <h:outputText value="#{creditItem.accountName}"/><br/>
-                                        Acc No.: <h:outputText value="#{creditItem.accountNumber}"/> Suf.<h:outputText value="#{creditItem.accountSuf}"/><br/>
-                                        Acc Status: <h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.account.no')}"/><h:outputText value="#{creditItem.accountNumber}"/><h:outputText value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText value="#{creditItem.accountSuf}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center" style="width: 150px;">
                                         <h:outputText value="#{creditItem.productProgram}"/>
@@ -142,13 +266,97 @@
                                             <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
                                         </h:outputText>
                                     </p:column>
-
-                                    <p:columnGroup type="footer" rendered="#{prescreenResult.prescreenResultView != null and prescreenResult.prescreenResultView.existingCreditView != null}">
+                                    <p:columnGroup type="footer">
                                         <p:row>
                                             <p:column style="background-color:#f4f8b6;" styleClass="left"></p:column>
-                                            <p:column colspan="3" footerText="#{msg.get('app.creditfact.table.total')}"
-                                                      style="background-color:#f4f8b6;text-align: left"/>
-                                            <p:column style="background-color:#f4f8b6;" styleClass="right" footerText="#{prescreenResult.prescreenResultView.existingCreditView.totalBorrowerComLimit}"/>
+                                            <p:column colspan="3" style="background-color:#f4f8b6;text-align: left">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{msg.get('app.creditfact.table.total')}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{prescreenResult.prescreenResultView.existingCreditView.totalRelatedComLimit}" style="text-align: right">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="2" style="background-color:#f4f8b6; text-align:left;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%" style="line-height: 10px;"><p:spacer width="5" /></td>
+                        </tr>
+                        <tr>
+                            <td class="title top"></td>
+                            <td>
+                                <p:dataTable id="resultRelatedRLOSFacility" var="creditItem" value="#{prescreenResult.prescreenResultView.existingCreditView.relatedAppInRLOSCredit}"
+                                             paginator="false" rowKey="#{creditItem.id}" rowIndexVar="rowIndex">
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="7" headerText="#{msg.get('app.creditfact.table.header.RLOS')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText="" style="width: 30px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.account')}" style="width: 250px; line-height: 15px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" style="width: 150px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.limit')}" style="width: 130px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" style="width: 120px;"/>
+                                            <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" style="width:100px;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                    <p:column headerText="" styleClass="center" style="width:22px;">
+                                        <h:outputText value="#{rowIndex+1}"/>
+                                    </p:column>
+                                    <p:column styleClass="left" style="width: 250px; line-height: 15px;">
+                                        <h:outputText value="#{creditItem.accountName}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText value="#{creditItem.accountNumber}"/><br/>
+                                        <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center" style="width: 150px;">
+                                        <h:outputText value="#{creditItem.productProgram}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.creditType')}" styleClass="center" style="width: 120px;">
+                                        <h:outputText value="#{creditItem.creditType}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.limit')}" styleClass="right" style="width: 130px;">
+                                        <h:outputText value="#{creditItem.limit}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.outstanding')}" styleClass="right" style="width: 120px;">
+                                        <h:outputText value="#{creditItem.outstanding}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="#{msg.get('app.creditfact.table.tenor')}" styleClass="right" style="width:100px;">
+                                        <h:outputText value="#{creditItem.tenor}">
+                                            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;" styleClass="left"></p:column>
+                                            <p:column colspan="3" style="background-color:#f4f8b6;text-align: left">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{msg.get('app.creditfact.table.total')}">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align: right">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="#{prescreenResult.prescreenResultView.existingCreditView.totalRelatedAppInRLOSLimit}" style="text-align: right">
+                                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
                                             <p:column colspan="2" style="background-color:#f4f8b6; text-align:left;"/>
                                         </p:row>
                                     </p:columnGroup>
@@ -159,6 +367,27 @@
                             <td></td>
                         </tr>
                     </table>
+                    </p:panel>
+                    <p:panel styleClass="panel" id="prescreenResultPanel">
+                        <table class="content_table_form">
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%"><p:separator/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="100%" style="line-height: 10px;"><p:spacer width="5px;"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="center">
+                                    <p:commandButton value="#{msg.get('app.button.save')}"
+                                                     action="#{prescreenResult.onSave()}"
+                                                     styleClass="medium"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </p:panel>
                 </div>
             </div>
             <div id="bottom_line"><!-- --></div>

@@ -1,14 +1,15 @@
 package com.clevel.selos.model.view;
 
-import java.math.BigDecimal;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.util.List;
 
-public class PrescreenResultView {
+public class PrescreenResultView extends PrescreenView {
     private String interfaceResult;
     private String interfaceReason;
-    private BigDecimal groupExposure;
-    private BigDecimal groupIncome;
     private ExistingCreditView existingCreditView;
+    private BankStmtSummaryView bankStmtSummaryView;
 
     private List<UWRuleResult> groupRuleResults;
     private List<UWRuleResult> customerRuleResults;
@@ -29,22 +30,6 @@ public class PrescreenResultView {
         this.interfaceReason = interfaceReason;
     }
 
-    public BigDecimal getGroupExposure() {
-        return groupExposure;
-    }
-
-    public void setGroupExposure(BigDecimal groupExposure) {
-        this.groupExposure = groupExposure;
-    }
-
-    public BigDecimal getGroupIncome() {
-        return groupIncome;
-    }
-
-    public void setGroupIncome(BigDecimal groupIncome) {
-        this.groupIncome = groupIncome;
-    }
-
     public ExistingCreditView getExistingCreditView() {
         return existingCreditView;
     }
@@ -57,6 +42,14 @@ public class PrescreenResultView {
         return groupRuleResults;
     }
 
+    public BankStmtSummaryView getBankStmtSummaryView() {
+        return bankStmtSummaryView;
+    }
+
+    public void setBankStmtSummaryView(BankStmtSummaryView bankStmtSummaryView) {
+        this.bankStmtSummaryView = bankStmtSummaryView;
+    }
+
     public void setGroupRuleResults(List<UWRuleResult> groupRuleResults) {
         this.groupRuleResults = groupRuleResults;
     }
@@ -67,5 +60,17 @@ public class PrescreenResultView {
 
     public void setCustomerRuleResults(List<UWRuleResult> customerRuleResults) {
         this.customerRuleResults = customerRuleResults;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("interfaceResult", interfaceResult)
+                .append("interfaceReason", interfaceReason)
+                .append("existingCreditView", existingCreditView)
+                .append("bankStmtSummaryView", bankStmtSummaryView)
+                .append("groupRuleResults", groupRuleResults)
+                .append("customerRuleResults", customerRuleResults)
+                .toString();
     }
 }

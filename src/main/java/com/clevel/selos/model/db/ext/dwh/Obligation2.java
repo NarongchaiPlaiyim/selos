@@ -1,6 +1,9 @@
 package com.clevel.selos.model.db.ext.dwh;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -265,6 +268,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getClaimAmount() {
+        if(claimAmount==null){
+            return BigDecimal.ZERO;
+        }
         return claimAmount;
     }
 
@@ -273,6 +279,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getComAmount() {
+        if(comAmount==null){
+            return BigDecimal.ZERO;
+        }
         return comAmount;
     }
 
@@ -281,6 +290,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getTmbPaidExpenseAmount() {
+        if(tmbPaidExpenseAmount==null){
+            return BigDecimal.ZERO;
+        }
         return tmbPaidExpenseAmount;
     }
 
@@ -289,6 +301,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getIntUnEarned() {
+        if(intUnEarned==null){
+            return BigDecimal.ZERO;
+        }
         return intUnEarned;
     }
 
@@ -297,6 +312,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getIntAccrued() {
+        if(intAccrued==null){
+            return BigDecimal.ZERO;
+        }
         return intAccrued;
     }
 
@@ -305,6 +323,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getLimit() {
+        if(limit==null){
+            return BigDecimal.ZERO;
+        }
         return limit;
     }
 
@@ -313,6 +334,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getOutstanding() {
+        if(outstanding==null){
+            return BigDecimal.ZERO;
+        }
         return outstanding;
     }
 
@@ -385,6 +409,9 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getNumMonthIntPastDue() {
+        if(numMonthIntPastDue==null){
+            return BigDecimal.ZERO;
+        }
         return numMonthIntPastDue;
     }
 
@@ -393,10 +420,54 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getNumMonthIntPastDueTDRAcc() {
+        if(numMonthIntPastDueTDRAcc==null){
+            return BigDecimal.ZERO;
+        }
         return numMonthIntPastDueTDRAcc;
     }
 
     public void setNumMonthIntPastDueTDRAcc(BigDecimal numMonthIntPastDueTDRAcc) {
         this.numMonthIntPastDueTDRAcc = numMonthIntPastDueTDRAcc;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("tmbCusId", tmbCusId)
+                .append("tmbBotCusId", tmbBotCusId)
+                .append("serviceSegment", serviceSegment)
+                .append("adjustClass", adjustClass)
+                .append("lastContractDate", lastContractDate)
+                .append("misProductGroup", misProductGroup)
+                .append("accountServiceSegment", accountServiceSegment)
+                .append("productCode", productCode)
+                .append("projectCode", projectCode)
+                .append("dataSource", dataSource)
+                .append("accountName", accountName)
+                .append("lastReviewDate", lastReviewDate)
+                .append("nextReviewDate", nextReviewDate)
+                .append("extendedReviewDate", extendedReviewDate)
+                .append("scfScoreFinalRate", scfScoreFinalRate)
+                .append("scfScoreMsFinal", scfScoreMsFinal)
+                .append("scfScoreModelTypeIbnr", scfScoreModelTypeIbnr)
+                .append("claimAmount", claimAmount)
+                .append("comAmount", comAmount)
+                .append("tmbPaidExpenseAmount", tmbPaidExpenseAmount)
+                .append("intUnEarned", intUnEarned)
+                .append("intAccrued", intAccrued)
+                .append("limit", limit)
+                .append("outstanding", outstanding)
+                .append("maturityDate", maturityDate)
+                .append("accountNumber", accountNumber)
+                .append("accountSuffix", accountSuffix)
+                .append("accountRef", accountRef)
+                .append("accountStatus", accountStatus)
+                .append("cardBlockCode", cardBlockCode)
+                .append("cusRelAccount", cusRelAccount)
+                .append("tdrFlag", tdrFlag)
+                .append("numMonthIntPastDue", numMonthIntPastDue)
+                .append("numMonthIntPastDueTDRAcc", numMonthIntPastDueTDRAcc)
+                .toString();
     }
 }

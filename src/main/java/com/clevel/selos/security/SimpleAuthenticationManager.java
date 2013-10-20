@@ -3,8 +3,10 @@ package com.clevel.selos.security;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
 import com.clevel.selos.model.RoleTypeName;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,6 +36,11 @@ public class SimpleAuthenticationManager implements AuthenticationManager {
     @Inject
     @Config(name = "interface.ldap.enable")
     String ldapEnable;
+    @Inject
+    EncryptionService encryptionService;
+    @Inject
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
 
     @Inject
     public SimpleAuthenticationManager() {
@@ -62,7 +69,13 @@ public class SimpleAuthenticationManager implements AuthenticationManager {
         if (userDetail.getRoleType().equalsIgnoreCase(RoleTypeName.BUSINESS.name())) {
             log.debug("business role. (continue BPM authentication)");
             if (Util.isTrue(ldapEnable)) {
-                bpmInterface.authenticate(userDetail.getUserName(), userDetail.getPassword());
+                String password;
+                if (Util.isTrue(encryptionEnable)) {
+                    password = encryptionService.decrypt(Base64.decodeBase64(userDetail.getPassword()));
+                } else {
+                    password = userDetail.getPassword();
+                }
+                bpmInterface.authenticate(userDetail.getUserName(), password);
             }
             log.debug("Authentication with BPM success.");
             return getAuthority(userDetail, authentication, authenticationDetails);
