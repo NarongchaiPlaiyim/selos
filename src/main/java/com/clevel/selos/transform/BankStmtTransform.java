@@ -146,7 +146,6 @@ public class BankStmtTransform extends Transform{
             }
 
             bankStatement.setBank(bankDAO.findById(bankStmtView.getBankView().getCode()));
-
             bankStatement.setBranch(bankStmtView.getBranchName());
             bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStatement.getBankAccountType().getId()));
             bankStatement.setAccountNo(bankStmtView.getAccountNumber());

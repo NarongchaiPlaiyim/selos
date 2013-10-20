@@ -14,11 +14,13 @@ import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Stateless
 public class BankStmtControl extends BusinessControl{
 
     @Inject
@@ -50,8 +52,8 @@ public class BankStmtControl extends BusinessControl{
             if(customerInfoView.getRelation().getId() == 1){
                 if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
                     log.info("Finding Account Number List for TMB Cus ID: {}", customerInfoView.getTmbCustomerId());
-                    //CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
-                    CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
+                    CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+                    //CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
                     if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
                         List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
                         log.info("Finding account {}", accountListModelList);
