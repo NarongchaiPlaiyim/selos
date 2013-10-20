@@ -1,7 +1,6 @@
 package com.clevel.selos.security.encryption;
 
 import com.clevel.selos.system.Config;
-import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 
@@ -28,9 +27,6 @@ public class EncryptionService {
     @Inject
     @Config(name = "system.encryption.keyFile")
     String keyFile;
-    @Inject
-    @Config(name = "system.encryption.enable")
-    String encryptionEnable;
 
     @Inject
     public EncryptionService() {
@@ -77,9 +73,6 @@ public class EncryptionService {
     }
 
     public byte[] encrypt(String plaintext) {
-        if (!Util.isTrue(encryptionEnable)) {
-            return plaintext.getBytes();
-        }
         if (plaintext==null) return "".getBytes();
 
         log.debug("encrypt.",plaintext);
@@ -113,13 +106,6 @@ public class EncryptionService {
     }
 
     public String decrypt(byte[] data) {
-        if (!Util.isTrue(encryptionEnable)) {
-            try {
-                return new String(data,"UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                log.error("",e);
-            }
-        }
         if (data==null) return "";
 
         log.debug("decrypt.");

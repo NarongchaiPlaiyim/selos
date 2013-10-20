@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.Bank;
+import com.clevel.selos.model.view.BankStmtView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -49,11 +50,14 @@ public class BankStatementDetail implements Serializable {
     @Inject
     BankDAO bankDAO;
 
-    //Passed variables from Bank Statement Summary
+    //Parameters from Bank statement summary
     private boolean isTmbBank;
     private int seasonal;
     private Date expectedSubmissionDate;
 
+    private BankStmtView bankStmtView;
+
+    //Select items list
     private List<Bank> bankList;
     private List<AccountStatus> accountStatusList;
 
@@ -62,32 +66,28 @@ public class BankStatementDetail implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        ExternalContext ec = FacesUtil.getExternalContext();
-        Flash flash = ec.getFlash();
-        Map<String, Object> bankStmtSumParameters = (Map<String, Object>) flash.get("bankStmtSumParameters");
-        //Passed parameters from Bank Statement Summary
-        if (bankStmtSumParameters != null) {
-            isTmbBank = (Boolean) bankStmtSumParameters.get("isTmbBank");
-            seasonal = (Integer) bankStmtSumParameters.get("seasonal");
-            expectedSubmissionDate = (Date) bankStmtSumParameters.get("expectedSubmissionDate");
+        Flash flash = FacesUtil.getFlash();
+        //Passed parameters from Bank statement summary page
+        Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParameters");
+        if (bankStmtSumParams != null) {
+            isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
+            seasonal = (Integer) bankStmtSumParams.get("seasonal");
+            expectedSubmissionDate = (Date) bankStmtSumParams.get("expectedSubmissionDate");
 
-            log.debug("onCreation() Flash{seasonal: {}, expectedSubmissionDate: {}, isTmbBank: {}}",
-                    seasonal, expectedSubmissionDate, isTmbBank);
+            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, seasonal: {}, expectedSubmissionDate: {}}",
+                    isTmbBank, seasonal, expectedSubmissionDate);
         } else {
-            try {
-                ec.redirect("bankStatementSummary.jsf");
-            } catch (IOException e) {
-                log.error("redirect: bankStatementSummary failed!");
-            }
+            //Return to Bank statement summary if parameter is null
+            FacesUtil.redirect("/site/bankStatementSummary.jsf");
+            return;
         }
 
-        //init select list
+        //init items list
         bankList = new ArrayList<Bank>();
-        if (isTmbBank) {
+        if (isTmbBank)
             bankList.add(bankDAO.getTMBBank());
-        } else {
+        else
             bankList = bankDAO.getListExcludeTMB();
-        }
 
         accountStatusList = accountStatusDAO.findAll();
 
@@ -99,6 +99,14 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
+    }
+
+    public BankStmtView getBankStmtView() {
+        return bankStmtView;
+    }
+
+    public void setBankStmtView(BankStmtView bankStmtView) {
+        this.bankStmtView = bankStmtView;
     }
 
     public List<AccountStatus> getAccountStatusList() {

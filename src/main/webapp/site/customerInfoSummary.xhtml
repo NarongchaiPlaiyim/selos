@@ -56,82 +56,87 @@
                                                          rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"/>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                        #{msg.get('app.custInfoSummary.content.borrower')}
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td colspan="2">
                                         <p:dataTable id="resultTableBorrower" var="item" value="#{custInfoSummary.customerInfoSummaryView.borrowerCustomerViewList}"
                                                      paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
                                             <p:columnGroup type="header">
                                                 <p:row>
-                                                    <p:column rowspan="2"/>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="20px;"/>
+                                                    <p:column rowspan="2" width="200px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2">
+                                                    <p:column rowspan="1" colspan="2" width="160px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2">
+                                                    <p:column rowspan="1" colspan="2" width="170px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2">
+                                                    <p:column rowspan="1" colspan="2" width="280px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="30px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="50px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="50px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="50px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2">
+                                                    <p:column rowspan="2" width="50px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2"/>
+                                                    <p:column rowspan="2" width="40px;"/>
                                                 </p:row>
-
                                                 <p:row>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="100px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="60px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="130px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="40px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="140px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1">
+                                                    <p:column colspan="1" width="140px;">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
                                                     </p:column>
                                                 </p:row>
                                             </p:columnGroup>
 
-                                            <p:column>
+                                            <p:column styleClass="center">
                                                 <h:outputText value="#{rowIndex+1}"/>
                                             </p:column>
 
-                                            <p:column>
+                                            <p:column styleClass="left">
                                                 <h:outputText value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}" />
                                             </p:column>
 
-                                            <p:column>
+                                            <p:column styleClass="center">
                                                 <h:outputText value="#{item.citizenId}"/>
                                             </p:column>
 
-                                            <p:column>
+                                            <p:column styleClass="left">
                                                 <h:outputText value="#{item.tmbCustomerId}"/>
                                             </p:column>
 
-                                            <p:column>
+                                            <p:column styleClass="left">
                                                 <h:outputText value="#{item.relation.description}"/>
                                             </p:column>
 
