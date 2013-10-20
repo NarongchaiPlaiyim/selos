@@ -4,24 +4,16 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 23/9/2556
- * Time: 9:57 น.
- * To change this template use File | Settings | File Templates.
- */
 @Entity
 @Table(name = "wrk_biz_product_detail")
 public class BizProductDetail implements Serializable {
-
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_PRODUCT_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", sequenceName = "SEQ_WRK_BIZ_PRODUCT_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BIZ_PRODUCT_DETAIL_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="biz_info_detail_id")
+    @JoinColumn(name = "biz_info_detail_id")
     private BizInfoDetail bizInfoDetail;
 
     @Column(name = "no")
