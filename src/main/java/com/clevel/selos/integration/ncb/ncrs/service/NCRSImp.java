@@ -19,7 +19,9 @@ import com.clevel.selos.integration.ncb.ncrs.models.response.*;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.message.ExceptionMapping;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
@@ -31,6 +33,8 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
+
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -71,6 +75,14 @@ public class NCRSImp implements NCRS, Serializable{
     private String timeOut;
 
     @Inject
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
+
+
+    @Inject
+    EncryptionService encryptionService;
+
+    @Inject
     UserAuditor userAuditor;
 
     @Inject
@@ -100,6 +112,7 @@ public class NCRSImp implements NCRS, Serializable{
     private String countryCode = null;
     private String firstName = null;
     private String lastName = null;
+    private String passwordEncrypt;
 
     private final String action= "NCRS";
     private final String ONLINE = "BB01001";
@@ -113,6 +126,16 @@ public class NCRSImp implements NCRS, Serializable{
 
     @Inject
     public NCRSImp() {
+    }
+
+    @PostConstruct
+    public void onCreate(){
+        encryptionService=new EncryptionService();
+            if(Util.isTrue(encryptionEnable)){
+              passwordEncrypt=encryptionService.decrypt(Base64.decodeBase64(pass));
+            }else{
+              passwordEncrypt=pass;
+            }
     }
 
     @Override
@@ -523,7 +546,7 @@ public class NCRSImp implements NCRS, Serializable{
 
 
         return new NCRSRequestModel(
-                new HeaderModel(id, pass, command),
+                new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         new TUEFEnquiryModel(
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount,consent),
@@ -535,14 +558,14 @@ public class NCRSImp implements NCRS, Serializable{
         log.debug("NCRS Call : createFindModel()");
         TUEFEnquiryIdModel listModel = idModelArrayList.get(0);
         return new NCRSRequestModel(
-                new HeaderModel(id, pass, command),
+                new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         new CriteriaModel(Util.createDateString(new Date(),"yyyyMMdd"), listModel.getIdtype(), listModel.getIdnumber(), id)));
     }
     private NCRSRequestModel createReadModel(String trackingId, String command){
         log.debug("NCRS Call : createReadModel()");
         return new NCRSRequestModel(
-                new HeaderModel(id, pass, command),
+                new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(trackingId));
     }
     private NCRSResponseModel request(NCRSModel ncrsModel, String command)throws Exception{

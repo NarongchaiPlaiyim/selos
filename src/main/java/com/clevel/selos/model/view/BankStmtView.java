@@ -13,7 +13,11 @@ public class BankStmtView implements Serializable {
     private BankView bankView;
     private String branchName;
     private AccountTypeView accountTypeView;
+<<<<<<< HEAD
     private int otherAccountType;
+=======
+    private AccountTypeView othAccountTypeView;
+>>>>>>> fd4f56faeb50c601ec3d9ef6a268cfef05c6d9f3
     private String accountNumber;
     private String accountName;
     private AccountStatusView accountStatusView;
@@ -42,6 +46,31 @@ public class BankStmtView implements Serializable {
     private BigDecimal averageOSBalanceAmount;
 
     public BankStmtView() {
+        reset();
+    }
+
+    public void reset() {
+        this.bankView = new BankView();
+        this.branchName = "";
+        this.accountTypeView = new AccountTypeView();
+        this.othAccountTypeView = new AccountTypeView();
+        this.accountNumber = "";
+        this.accountName = "";
+        this.accountStatusView = new AccountStatusView();
+        this.limit = BigDecimal.ZERO;
+        this.avgIncomeGross = BigDecimal.ZERO;
+        this.avgIncomeNetBDM = BigDecimal.ZERO;
+        this.avgIncomeNetUW = BigDecimal.ZERO;
+        this.avgDrawAmount = BigDecimal.ZERO;
+        this.swingPercent = BigDecimal.ZERO;
+        this.utilizationPercent = BigDecimal.ZERO;
+        this.avgGrossInflowPerLimit = BigDecimal.ZERO;
+        this.chequeReturn = BigDecimal.ZERO;
+        this.trdChequeReturnAmount = BigDecimal.ZERO;
+        this.trdChequeReturnPercent = BigDecimal.ZERO;
+        this.overLimitTimes = BigDecimal.ZERO;
+        this.overLimitDays = BigDecimal.ZERO;
+        this.remark = "";
     }
 
     public long getId() {
@@ -58,6 +87,14 @@ public class BankStmtView implements Serializable {
 
     public void setNotCountIncome(int notCountIncome) {
         isNotCountIncome = notCountIncome;
+    }
+
+    public boolean isNotCountIncome() {
+        return isNotCountIncome != 0;
+    }
+
+    public void setNotCountIncome(boolean notCountIncome) {
+        setNotCountIncome(notCountIncome ? 1 : 0);
     }
 
     public BankView getBankView() {
@@ -84,6 +121,17 @@ public class BankStmtView implements Serializable {
         this.accountTypeView = accountTypeView;
     }
 
+<<<<<<< HEAD
+=======
+    public AccountTypeView getOthAccountTypeView() {
+        return othAccountTypeView;
+    }
+
+    public void setOthAccountTypeView(AccountTypeView othAccountTypeView) {
+        this.othAccountTypeView = othAccountTypeView;
+    }
+
+>>>>>>> fd4f56faeb50c601ec3d9ef6a268cfef05c6d9f3
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -122,6 +170,14 @@ public class BankStmtView implements Serializable {
 
     public void setAccountCharacteristic(int accountCharacteristic) {
         this.accountCharacteristic = accountCharacteristic;
+    }
+
+    public BigDecimal getLimit() {
+        return limit;
+    }
+
+    public void setLimit(BigDecimal limit) {
+        this.limit = limit;
     }
 
     public BigDecimal getAvgIncomeGross() {
@@ -248,14 +304,6 @@ public class BankStmtView implements Serializable {
         this.bankStmtSrcCollateralProofList = bankStmtSrcCollateralProofList;
     }
 
-    public BigDecimal getLimit() {
-        return limit;
-    }
-
-    public void setLimit(BigDecimal limit) {
-        this.limit = limit;
-    }
-
     public BigDecimal getAverageOSBalanceAmount() {
         return averageOSBalanceAmount;
     }
@@ -272,7 +320,7 @@ public class BankStmtView implements Serializable {
                 .append("bankView", bankView)
                 .append("branchName", branchName)
                 .append("accountTypeView", accountTypeView)
-                .append("otherAccountType", otherAccountType)
+                .append("othAccountTypeView", othAccountTypeView)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("accountStatusView", accountStatusView)

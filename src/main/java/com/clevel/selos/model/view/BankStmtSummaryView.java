@@ -33,6 +33,7 @@ public class BankStmtSummaryView implements Serializable {
     private List<BankStmtView> bankStmtViewList;
 
     public BankStmtSummaryView() {
+        reset();
     }
 
     public void reset() {
