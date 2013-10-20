@@ -487,12 +487,21 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToBorrowerViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             log.info("transformToBorrowerViewList : CustomerInfoView : {}", item);
             if(item.getRelation() != null && item.getRelation().getId() == 1){
+                item.setListIndex(customerIndex);
+                item.setSubIndex(customerInfoViewList.size());
+                item.setListName("BORROWER");
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;
@@ -500,11 +509,20 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToGuarantorViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             if(item.getRelation() != null && item.getRelation().getId() == 2){
+                item.setListIndex(customerIndex);
+                item.setListName("GUARANTOR");
+                item.setSubIndex(customerInfoViewList.size());
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;
@@ -512,11 +530,20 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToRelatedViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             if(item.getRelation() != null && (item.getRelation().getId() == 3 || item.getRelation().getId() == 4)){
+                item.setListIndex(customerIndex);
+                item.setSubIndex(customerInfoViewList.size());
+                item.setListName("RELATED");
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;

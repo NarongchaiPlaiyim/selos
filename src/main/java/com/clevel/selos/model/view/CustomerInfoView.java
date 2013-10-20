@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CustomerInfoView implements Serializable {
+public class CustomerInfoView implements Serializable, Cloneable {
     //*** Var for transform ***//
     private long individualId;
     private long juristicId;
@@ -102,6 +102,143 @@ public class CustomerInfoView implements Serializable {
 
     public CustomerInfoView(){
         //reset();
+    }
+
+    public CustomerInfoView(CustomerInfoView customerInfoView){
+        CustomerInfoView customer = new CustomerInfoView();
+
+        customer.setIndividualId(customerInfoView.getIndividualId());
+        customer.setJuristicId(customerInfoView.getJuristicId());
+        customer.setListIndex(customerInfoView.getListIndex());
+        customer.setSubIndex(customerInfoView.getSubIndex());
+        customer.setListName(customerInfoView.getListName());
+        customer.setIsSpouse(customerInfoView.getIsSpouse());
+        customer.setSearchBy(customerInfoView.getSearchBy());
+        customer.setSearchId(customerInfoView.getSearchId());
+        customer.setInputId(customerInfoView.getInputId());
+        customer.setValidId(customerInfoView.getValidId());
+        customer.setNcbResult(customerInfoView.getNcbResult());
+        customer.setNcbReason(customerInfoView.getNcbReason());
+        customer.setId(customerInfoView.getId());
+        customer.setAge(customerInfoView.getAge());
+        customer.setDocumentExpiredDate(customerInfoView.getDocumentExpiredDate());
+        customer.setTitleTh(customerInfoView.getTitleTh());
+        customer.setTitleEn(customerInfoView.getTitleEn());
+        customer.setFirstNameTh(customerInfoView.getFirstNameTh());
+        customer.setLastNameTh(customerInfoView.getLastNameTh());
+        customer.setFirstNameEn(customerInfoView.getFirstNameEn());
+        customer.setLastNameEn(customerInfoView.getLastNameEn());
+        customer.setNcbFlag(customerInfoView.getNcbFlag());
+        customer.setCustomerEntity(customerInfoView.getCustomerEntity());
+        customer.setDocumentType(customerInfoView.getDocumentType());
+        customer.setRelation(customerInfoView.getRelation());
+        customer.setReference(customerInfoView.getReference());
+        customer.setDocumentAuthorizeBy(customerInfoView.getDocumentAuthorizeBy());
+        customer.setServiceSegment(customerInfoView.getServiceSegment());
+        customer.setTmbCustomerId(customerInfoView.getTmbCustomerId());
+        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
+        customer.setPercentShare(customerInfoView.getPercentShare());
+        customer.setApproxIncome(customerInfoView.getApproxIncome());
+        customer.setDateOfBirth(customerInfoView.getDateOfBirth());
+        customer.setCitizenId(customerInfoView.getCitizenId());
+        customer.setGender(customerInfoView.getGender());
+        customer.setNumberOfChild(customerInfoView.getNumberOfChild());
+        customer.setEducation(customerInfoView.getEducation());
+        customer.setMaritalStatus(customerInfoView.getMaritalStatus());
+        customer.setNationality(customerInfoView.getNationality());
+        customer.setSndNationality(customerInfoView.getSndNationality());
+        customer.setOrigin(customerInfoView.getOrigin());
+        customer.setOccupation(customerInfoView.getOccupation());
+        customer.setCapital(customerInfoView.getCapital());
+        customer.setFinancialYear(customerInfoView.getFinancialYear());
+        customer.setDateOfRegister(customerInfoView.getDateOfRegister());
+        customer.setPaidCapital(customerInfoView.getPaidCapital());
+        customer.setRegistrationId(customerInfoView.getRegistrationId());
+        customer.setSignCondition(customerInfoView.getSignCondition());
+        customer.setTotalShare(customerInfoView.getTotalShare());
+
+        AddressView addressView = new AddressView();
+        AddressView oldAddress = customerInfoView.getCurrentAddress();
+
+        addressView.setId(oldAddress.getId());
+        addressView.setAddressType(oldAddress.getAddressType());
+        addressView.setAddressNo(oldAddress.getAddressNo());
+        addressView.setMoo(oldAddress.getMoo());
+        addressView.setBuilding(oldAddress.getBuilding());
+        addressView.setRoad(oldAddress.getRoad());
+        addressView.setProvince(oldAddress.getProvince());
+        addressView.setDistrict(oldAddress.getDistrict());
+        oldAddress.setSubDistrict(oldAddress.getSubDistrict());
+        addressView.setPostalCode(oldAddress.getPostalCode());
+        addressView.setCountry(oldAddress.getCountry());
+        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
+        addressView.setExtension(oldAddress.getExtension());
+        addressView.setContactName(oldAddress.getContactName());
+        addressView.setContactPhone(oldAddress.getContactPhone());
+        addressView.setAddress(oldAddress.getAddress());
+
+        customer.setCurrentAddress(addressView);
+
+        addressView = new AddressView();
+        oldAddress = customerInfoView.getWorkAddress();
+
+        addressView.setId(oldAddress.getId());
+        addressView.setAddressType(oldAddress.getAddressType());
+        addressView.setAddressNo(oldAddress.getAddressNo());
+        addressView.setMoo(oldAddress.getMoo());
+        addressView.setBuilding(oldAddress.getBuilding());
+        addressView.setRoad(oldAddress.getRoad());
+        addressView.setProvince(oldAddress.getProvince());
+        addressView.setDistrict(oldAddress.getDistrict());
+        oldAddress.setSubDistrict(oldAddress.getSubDistrict());
+        addressView.setPostalCode(oldAddress.getPostalCode());
+        addressView.setCountry(oldAddress.getCountry());
+        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
+        addressView.setExtension(oldAddress.getExtension());
+        addressView.setContactName(oldAddress.getContactName());
+        addressView.setContactPhone(oldAddress.getContactPhone());
+        addressView.setAddress(oldAddress.getAddress());
+
+        customer.setWorkAddress(addressView);
+
+        addressView = new AddressView();
+        oldAddress = customerInfoView.getRegisterAddress();
+
+        addressView.setId(oldAddress.getId());
+        addressView.setAddressType(oldAddress.getAddressType());
+        addressView.setAddressNo(oldAddress.getAddressNo());
+        addressView.setMoo(oldAddress.getMoo());
+        addressView.setBuilding(oldAddress.getBuilding());
+        addressView.setRoad(oldAddress.getRoad());
+        addressView.setProvince(oldAddress.getProvince());
+        addressView.setDistrict(oldAddress.getDistrict());
+        oldAddress.setSubDistrict(oldAddress.getSubDistrict());
+        addressView.setPostalCode(oldAddress.getPostalCode());
+        addressView.setCountry(oldAddress.getCountry());
+        addressView.setPhoneNumber(oldAddress.getPhoneNumber());
+        addressView.setExtension(oldAddress.getExtension());
+        addressView.setContactName(oldAddress.getContactName());
+        addressView.setContactPhone(oldAddress.getContactPhone());
+        addressView.setAddress(oldAddress.getAddress());
+
+        customer.setRegisterAddress(addressView);
+        customer.setMailingAddressType(customerInfoView.getMailingAddressType());
+        customer.setCitizenCountry(customerInfoView.getCitizenCountry());
+        customer.setRegistrationCountry(customerInfoView.getRegistrationCountry());
+        customer.setMobileNumber(customerInfoView.getMobileNumber());
+        customer.setFaxNumber(customerInfoView.getFaxNumber());
+        customer.setEmail(customerInfoView.getEmail());
+
+        //KYCLevel kycLevel;
+
+        customer.setConvenantFlag(customerInfoView.getConvenantFlag());
+        customer.setEwsFlag(customerInfoView.getEwsFlag());
+        customer.setReviewFlag(customerInfoView.getReviewFlag());
+        customer.setReason(customerInfoView.getReason());
+        customer.setBusinessType(customerInfoView.getBusinessType());
+        customer.setSpouse(new CustomerInfoView(customerInfoView.getSpouse()));
+
+        //WarningCode csi;
     }
 
     public void reset(){

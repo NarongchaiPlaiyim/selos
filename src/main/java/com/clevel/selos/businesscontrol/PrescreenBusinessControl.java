@@ -331,11 +331,13 @@ public class PrescreenBusinessControl extends BusinessControl {
                 List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
                 log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
                 List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
+                log.info("getNCBFromNCB ::: ncbIndividualViewList : {}", ncbIndividualViewList);
                 if(ncbIndividualViewList != null){
                     for(NcbView item : ncbIndividualViewList){
                         ncbViewList.add(item);
                     }
                 }
+
 
                 //TODO Check CSI
                 for(NcbView ncbView : ncbIndividualViewList){
@@ -353,6 +355,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
                         Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                        //Customer customer = customerDAO.findById(new Long(151));
                         log.info("findByCitizenId customer : {}", customer);
 
                         if(customer == null ){
@@ -580,9 +583,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
         for(Customer customer : customerList){
             customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
+            /*if(customer.getAddressesList() != null){
                 addressDAO.persist(customer.getAddressesList());
-            }
+            }*/
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();

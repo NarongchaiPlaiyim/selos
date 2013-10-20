@@ -79,6 +79,10 @@ public class PrescreenMaker implements Serializable {
     private List<District> districtList;
     private List<SubDistrict> subDistrictList;
 
+    private List<Province> provinceSpouseList;
+    private List<District> districtSpouseList;
+    private List<SubDistrict> subDistrictSpouseList;
+
     private List<Bank> refinanceList;
 
     private List<ReferredExperience> referredExperienceList;
@@ -421,14 +425,14 @@ public class PrescreenMaker implements Serializable {
         nationalityList = nationalityDAO.findAll();
         log.info("onLoadSelectList ::: nationalityList size : {}", nationalityList.size());
 
-        provinceList = provinceDAO.getListOrderByParameter("name");
-        log.info("onLoadSelectList ::: provinceList size : {}", provinceList.size());
+        /*provinceList = provinceDAO.getListOrderByParameter("name");
+        log.info("onLoadSelectList ::: provinceList size : {}", provinceList.size());*/
 
-        districtList = districtDAO.findAll();
-        log.info("onLoadSelectList ::: districtList size : {}", districtList.size());
+        /*districtList = districtDAO.findAll();
+        log.info("onLoadSelectList ::: districtList size : {}", districtList.size());*/
 
-        subDistrictList = subDistrictDAO.findAll();
-        log.info("onLoadSelectList ::: subDistrictList size : {}", subDistrictList.size());
+        /*subDistrictList = subDistrictDAO.findAll();
+        log.info("onLoadSelectList ::: subDistrictList size : {}", subDistrictList.size());*/
     }
 
     public void onClearObject(){
@@ -594,7 +598,33 @@ public class PrescreenMaker implements Serializable {
             } else if (caseBorrowerTypeId == BorrowerType.JURISTIC.value()){
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
                 documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
+            } else { // if case borrower type = 0 check borrowerList
+                if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
+                    int borrowerType = 0;
+                    borrowerType = borrowerInfoViewList.get(0).getRelation().getId();
+                    if(borrowerType == BorrowerType.INDIVIDUAL.value()){
+                        borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
+                        documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+                    }else if(borrowerType == BorrowerType.INDIVIDUAL.value()){
+                        borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
+                        documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
+                    }
+                }
             }
+        }
+
+        if(caseBorrowerTypeId == 2){
+            provinceList = provinceDAO.findAll();
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+        } else {
+            provinceList = provinceDAO.findAll();
+            districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
+
+            provinceSpouseList = provinceDAO.findAll();
+            districtSpouseList = new ArrayList<District>();
+            subDistrictSpouseList = new ArrayList<SubDistrict>();
         }
 
         log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
@@ -610,7 +640,17 @@ public class PrescreenMaker implements Serializable {
 
     public void onEditCustomerInfo() {
         log.info("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
-        borrowerInfo = selectCustomerInfoItem;
+
+        //Clone object
+        borrowerInfo = new CustomerInfoView(selectCustomerInfoItem);
+       /* try{
+            log.info("Cloning object ");
+            borrowerInfo = (CustomerInfoView)selectCustomerInfoItem.clone();
+        } catch (CloneNotSupportedException ex){
+            log.info("error when clone : ", ex);
+        }*/
+        //borrowerInfo.setListName(selectCustomerInfoItem.getListName());
+
         modeForButton = ModeForButton.EDIT;
 
         if(borrowerInfo.getRelation().getId() == 1){
@@ -623,10 +663,55 @@ public class PrescreenMaker implements Serializable {
         onChangeRelation();
 
         //TODO Get district list, subDistrict
+        onChangeProvinceBorrower();
+        onChangeDistrictBorrower();
 
         //TODO Get spouse district, subDistrict List
+        if(borrowerInfo.getSpouse() != null){
+            onChangeProvinceSpouse();
+            onChangeDistrictSpouse();
+        }
 
         enableCustomerForm = true;
+    }
+
+    public void onChangeProvinceBorrower(){
+        if(borrowerInfo.getCurrentAddress().getProvince() != null && borrowerInfo.getCurrentAddress().getProvince().getCode() != 0){
+            districtList = districtDAO.getListByProvince(borrowerInfo.getCurrentAddress().getProvince());
+        } else {
+            districtList = new ArrayList<District>();
+        }
+
+    }
+
+    public void onChangeDistrictBorrower(){
+        if(borrowerInfo.getCurrentAddress().getDistrict() != null && borrowerInfo.getCurrentAddress().getDistrict().getId() != 0){
+            subDistrictList = subDistrictDAO.getListByDistrict(borrowerInfo.getCurrentAddress().getDistrict());
+        } else {
+            subDistrictList = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceSpouse(){
+        if(borrowerInfo.getSpouse() != null){
+            CustomerInfoView spouse = borrowerInfo.getSpouse();
+            if(spouse.getCurrentAddress().getProvince() != null && spouse.getCurrentAddress().getProvince().getCode() != 0){
+                districtSpouseList = districtDAO.getListByProvince(spouse.getCurrentAddress().getProvince());
+            } else {
+                districtSpouseList = new ArrayList<District>();
+            }
+        }
+    }
+
+    public void onChangeDistrictSpouse(){
+        if(borrowerInfo.getSpouse() != null){
+            CustomerInfoView spouse = borrowerInfo.getSpouse();
+            if(spouse.getCurrentAddress().getDistrict() != null && spouse.getCurrentAddress().getDistrict().getId() != 0){
+                subDistrictSpouseList = subDistrictDAO.getListByDistrict(spouse.getCurrentAddress().getDistrict());
+            } else {
+                subDistrictSpouseList = new ArrayList<SubDistrict>();
+            }
+        }
     }
 
     public void onSaveCustomerInfo() {
@@ -725,14 +810,17 @@ public class PrescreenMaker implements Serializable {
                                     if(spouseInfo.getRelation().getId() == 1) {
                                         //Spouse - Borrower
                                         spouseInfo.setListName("BORROWER");
+                                        spouseInfo.setSubIndex(borrowerInfoViewList.size());
                                         borrowerInfoViewList.add(spouseInfo);
                                     } else if(spouseInfo.getRelation().getId() == 2) {
                                         //Spouse - Guarantor
                                         spouseInfo.setListName("GUARANTOR");
+                                        spouseInfo.setSubIndex(guarantorInfoViewList.size());
                                         guarantorInfoViewList.add(spouseInfo);
                                     } else if(spouseInfo.getRelation().getId() == 3 || spouseInfo.getRelation().getId() == 4) {
                                         //Spouse - Relate Person
                                         spouseInfo.setListName("RELATED");
+                                        spouseInfo.setSubIndex(relatedInfoViewList.size());
                                         relatedInfoViewList.add(spouseInfo);
                                     } else {
                                         complete = false;
@@ -768,6 +856,7 @@ public class PrescreenMaker implements Serializable {
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
                             borrowerInfo.setListName("BORROWER");
+                            borrowerInfo.setSubIndex(borrowerInfoViewList.size());
                             //Borrower
                             borrowerInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
@@ -778,11 +867,13 @@ public class PrescreenMaker implements Serializable {
                             }
                         }else if(borrowerInfo.getRelation().getId() == 2){
                             borrowerInfo.setListName("GUARANTOR");
+                            borrowerInfo.setSubIndex(guarantorInfoViewList.size());
                             //Guarantor
                             guarantorInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
                             borrowerInfo.setListName("RELATED");
+                            borrowerInfo.setSubIndex(relatedInfoViewList.size());
                             //Relate Person
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
@@ -819,11 +910,47 @@ public class PrescreenMaker implements Serializable {
                             break;
                         }
 
+                        //Case when update customer add change citizen id (spouse) same another.
                         if(borrowerInfo.getSpouse() != null && customerInfoView.getSpouse() != null){
-                            if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId()) && borrowerInfo.getSpouse().getListIndex() != customerInfoView.getSpouse().getListIndex()){
-                                validateCitizen = false;
-                                messageHeader = "Save customer failed.";
-                                message = "Duplicate citizen id.";
+                            if(borrowerInfo.getSpouse().getListIndex() != 0){
+                                //Update old spouse check with out old index
+                                if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                                    //Check with other borrower
+                                    if(borrowerInfo.getSpouse().getListIndex() != customerInfoView.getListIndex()){
+                                        log.info("spouse fail 01");
+                                        validateCitizen = false;
+                                        messageHeader = "Save customer (Spouse) failed.";
+                                        message = "Duplicate citizen id (Spouse).";
+                                        break;
+                                    }
+                                }
+                                if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                                    //Check with other spouse
+                                    if(borrowerInfo.getSpouse().getListIndex() != customerInfoView.getSpouse().getListIndex()){
+                                        validateCitizen = false;
+                                        messageHeader = "Save customer (Spouse) failed.";
+                                        message = "Duplicate citizen id (Spouse).";
+                                        break;
+                                    }
+                                }
+                            } else if (borrowerInfo.getSpouse().getListIndex() == 0){
+                                //Insert new spouse check all in customerInfoViewList
+                                if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                                    //Check with other borrower
+                                    validateCitizen = false;
+                                    messageHeader = "Save customer (Spouse) failed.";
+                                    message = "Duplicate citizen id (Spouse).";
+                                    break;
+                                }
+                                if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                                    //Check with other spouse
+                                    if(borrowerInfo.getSpouse().getListIndex() != customerInfoView.getSpouse().getListIndex()){
+                                        validateCitizen = false;
+                                        messageHeader = "Save customer (Spouse) failed.";
+                                        message = "Duplicate citizen id (Spouse).";
+                                        break;
+                                    }
+                                }
                             }
                         }
 
@@ -835,6 +962,9 @@ public class PrescreenMaker implements Serializable {
 
                     if(validateCitizen){
                         log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        //--- Get old borrower by list index //
+                        CustomerInfoView oldCustomerInfoView = customerInfoViewList.get(borrowerInfo.getListIndex());
+
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
                             //Borrower
@@ -862,6 +992,7 @@ public class PrescreenMaker implements Serializable {
                                     reIndexCustomerList(ListCustomerName.RELATED);
                                 }
                             }
+
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         } else if(borrowerInfo.getRelation().getId() == 2){
                             borrowerInfo.setListName("GUARANTOR");
@@ -915,6 +1046,90 @@ public class PrescreenMaker implements Serializable {
                                 }
                             }
                             customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
+                        }
+
+                        //--- Spouse ---
+                        if(oldCustomerInfoView.getMaritalStatus() != null && oldCustomerInfoView.getMaritalStatus().getId() == 2){
+                            //Get old spouse
+                            CustomerInfoView oldSpouse = oldCustomerInfoView.getSpouse();
+                            CustomerInfoView newSpouse = borrowerInfo.getSpouse();
+                            //New spouse is Borrower
+                            if(newSpouse != null && newSpouse.getRelation() != null && newSpouse.getRelation().getId() == 1){
+                                //Check old spouse is borrower
+                                if(oldSpouse.getRelation() != null && oldSpouse.getRelation().getId() != 1){
+                                    //Add new to borrower
+                                    newSpouse.setSubIndex(borrowerInfoViewList.size());
+                                    newSpouse.setListName("BORROWER");
+                                    newSpouse.setIsSpouse(1);
+                                    borrowerInfoViewList.add(newSpouse);
+                                    //Remove old list and add spouse to borrower list
+                                    if(oldSpouse.getRelation().getId() == 2){
+                                        //Remove guarantor list
+                                        guarantorInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.GUARANTOR);
+                                    } else if (oldSpouse.getRelation().getId() == 3 || oldSpouse.getRelation().getId() == 4){
+                                        //Remove related list
+                                        relatedInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.RELATED);
+                                    }
+                                }
+                            } else if (newSpouse != null && newSpouse.getRelation() != null && newSpouse.getRelation().getId() == 2){
+                                //New spouse is guarantor
+                                if(oldSpouse.getRelation() != null && oldSpouse.getRelation().getId() != 2){
+                                    //Add new to guarantor
+                                    newSpouse.setSubIndex(guarantorInfoViewList.size());
+                                    newSpouse.setListName("GUARANTOR");
+                                    newSpouse.setIsSpouse(1);
+                                    guarantorInfoViewList.add(newSpouse);
+                                    //Remove old list
+                                    if(oldSpouse.getRelation().getId() == 1){
+                                        //Remove borrower list
+                                        borrowerInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.BORROWER);
+                                    } else if (oldSpouse.getRelation().getId() == 3 || oldSpouse.getRelation().getId() == 4){
+                                        //Remove related list
+                                        relatedInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.RELATED);
+                                    }
+                                }
+                            }  else if (newSpouse != null && newSpouse.getRelation() != null && (newSpouse.getRelation().getId() == 3 || newSpouse.getRelation().getId() == 4)){
+                                //New spouse is guarantor
+                                if(oldSpouse.getRelation() != null && (oldSpouse.getRelation().getId() != 3 || oldSpouse.getRelation().getId() != 4)){
+                                    //Add new to guarantor
+                                    newSpouse.setSubIndex(guarantorInfoViewList.size());
+                                    newSpouse.setListName("RELATED");
+                                    newSpouse.setIsSpouse(1);
+                                    relatedInfoViewList.add(newSpouse);
+                                    //Remove old list
+                                    if(oldSpouse.getRelation().getId() == 1){
+                                        //Remove borrower list
+                                        borrowerInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.BORROWER);
+                                    } else if (oldSpouse.getRelation().getId() == 2){
+                                        //Remove related list
+                                        guarantorInfoViewList.remove(oldSpouse.getSubIndex());
+                                        reIndexCustomerList(ListCustomerName.GUARANTOR);
+                                    }
+                                }
+                            }
+
+                        }else if(oldCustomerInfoView.getMaritalStatus() != null && oldCustomerInfoView.getMaritalStatus().getId() != 2){
+                            CustomerInfoView spouse = borrowerInfo.getSpouse();
+                            spouse.setListIndex(customerListIndex);
+                            spouse.setIsSpouse(1);
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                spouse.setSubIndex(borrowerInfoViewList.size());
+                                spouse.setListName("BORROWER");
+                                borrowerInfoViewList.add(spouse);
+                            } else if (spouse.getRelation() != null && spouse.getRelation().getId() == 2){
+                                spouse.setSubIndex(guarantorInfoViewList.size());
+                                spouse.setListName("GUARANTOR");
+                                guarantorInfoViewList.add(spouse);
+                            } else if (spouse.getRelation() != null && (spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4)){
+                                spouse.setSubIndex(relatedInfoViewList.size());
+                                spouse.setListName("RELATED");
+                                relatedInfoViewList.add(spouse);
+                            }
                         }
                     } else {
                         complete = false;
