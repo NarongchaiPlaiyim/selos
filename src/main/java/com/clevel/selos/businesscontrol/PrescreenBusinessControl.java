@@ -195,18 +195,17 @@ public class PrescreenBusinessControl extends BusinessControl {
      *     <li>DWH Obligation - Existing Credit</li>
      *     <li>DWH BankStatement</li>
      * </ul>
-     * @param workCaseId
-     * @return PrescreenResultView
+     * @param customerInfoViewList
+     * @param prescreenResultView
+     * @return
      */
-    public PrescreenResultView getInterfaceInfo(long workCaseId){
-        log.info("retreive interface for workcase: {}", workCaseId);
-        List<CustomerInfoView> customerInfoViewList = getCustomerListByWorkCasePreScreenId(workCaseId);
+    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView){
+        log.info("retreive interface for customer list: {}", customerInfoViewList);
 
         ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
 
-        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, new Date());
+        BankStmtSummaryView bankStmtSummaryView = bankStmtControl.retreiveBankStmtInterface(customerInfoViewList, prescreenResultView.getExpectedSubmitDate());
 
-        PrescreenResultView prescreenResultView = new PrescreenResultView();
         prescreenResultView.setExistingCreditView(existingCreditView);
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
         //Calculate for Group Income
@@ -214,17 +213,40 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(CustomerInfoView customerInfoView : customerInfoViewList){
             if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
                 if(customerInfoView.getApproxIncome() != null)
-                groupIncome.add(customerInfoView.getApproxIncome());
+                    groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
             }
         }
         prescreenResultView.setGroupIncome(groupIncome);
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
+        groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerComLimit());
+        groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerAppInRLOSLimit());
+        groupExposure = groupExposure.add(existingCreditView.getTotalRelatedComLimit());
+        groupExposure = groupExposure.add(existingCreditView.getTotalRelatedAppInRLOSLimit());
         prescreenResultView.setGroupExposure(groupExposure);
 
 
         return prescreenResultView;
+    }
+
+    public PrescreenResultView getPrescreenResult(long workCasePreScreenId){
+        Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
+        PrescreenResultView prescreenResultView = prescreenTransform.getPrescreenResultView(prescreen);
+        prescreenResultView.setExistingCreditView(existingCreditControl.getExistingCredit(workCasePreScreenId));
+        return prescreenResultView;
+    }
+
+    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId){
+        Prescreen prescreen = prescreenTransform.getPrescreen(prescreenResultView, getCurrentUser());
+        prescreenDAO.persist(prescreen);
+
+        try{
+            existingCreditControl.saveExistingCredit(prescreenResultView.getExistingCreditView(), getWorkCase(workCasePrescreenId));
+
+        } catch(Exception ex){
+            log.error("cannot get workcase prescreen id", ex);
+        }
     }
 
     // *** Function for BRMS (PreScreenRules) ***//

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -27,6 +28,12 @@ public class Prescreen implements Serializable {
     @Temporal(TemporalType.DATE)
     @Column(name="expected_submit_date")
     private Date expectedSubmitDate;
+
+    @Column(name="group_income")
+    private BigDecimal groupIncome;
+
+    @Column(name="group_exposure")
+    private BigDecimal groupExposure;
 
     @OneToOne
     @JoinColumn(name="business_location_id")
@@ -112,6 +119,22 @@ public class Prescreen implements Serializable {
 
     public void setExpectedSubmitDate(Date expectedSubmitDate) {
         this.expectedSubmitDate = expectedSubmitDate;
+    }
+
+    public BigDecimal getGroupExposure() {
+        return groupExposure;
+    }
+
+    public void setGroupExposure(BigDecimal groupExposure) {
+        this.groupExposure = groupExposure;
+    }
+
+    public BigDecimal getGroupIncome() {
+        return groupIncome;
+    }
+
+    public void setGroupIncome(BigDecimal groupIncome) {
+        this.groupIncome = groupIncome;
     }
 
     public Province getBusinessLocation() {
@@ -225,6 +248,8 @@ public class Prescreen implements Serializable {
                 .append("workCasePrescreen", workCasePrescreen)
                 .append("productGroup", productGroup)
                 .append("expectedSubmitDate", expectedSubmitDate)
+                .append("groupIncome", groupIncome)
+                .append("groupExposure", groupExposure)
                 .append("businessLocation", businessLocation)
                 .append("registerDate", registerDate)
                 .append("referredDate", referredDate)
@@ -232,6 +257,7 @@ public class Prescreen implements Serializable {
                 .append("tcg", tcg)
                 .append("refinance", refinance)
                 .append("refinanceBank", refinanceBank)
+                .append("borrowingType", borrowingType)
                 .append("bdmChecker", bdmChecker)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)

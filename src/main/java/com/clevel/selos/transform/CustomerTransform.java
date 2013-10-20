@@ -66,6 +66,7 @@ public class CustomerTransform extends Transform {
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
         customerInfoView.setRelation(customer.getRelation());
         customerInfoView.setReference(customer.getReference());
+        customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setDocumentType(customer.getDocumentType());
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setValidId(2);
@@ -248,6 +249,7 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setReference(null);
         }
+        customer.setApproxIncome(customerInfoView.getApproxIncome());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 

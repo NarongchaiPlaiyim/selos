@@ -11,10 +11,12 @@ import java.util.Date;
 
 public class PrescreenView implements Serializable{
     private long id;
-    private ProductGroup productGroup;
+    protected ProductGroup productGroup;
     private int searchBy;
     private String searchId;
     private Date expectedSubmitDate;
+    private BigDecimal groupExposure;
+    private BigDecimal groupIncome;
     private Province businessLocation;
     private Date registerDate;
     private Date referDate;
@@ -84,6 +86,22 @@ public class PrescreenView implements Serializable{
 
     public void setExpectedSubmitDate(Date expectedSubmitDate) {
         this.expectedSubmitDate = expectedSubmitDate;
+    }
+
+    public BigDecimal getGroupExposure() {
+        return groupExposure;
+    }
+
+    public void setGroupExposure(BigDecimal groupExposure) {
+        this.groupExposure = groupExposure;
+    }
+
+    public BigDecimal getGroupIncome() {
+        return groupIncome;
+    }
+
+    public void setGroupIncome(BigDecimal groupIncome) {
+        this.groupIncome = groupIncome;
     }
 
     public Province getBusinessLocation() {
