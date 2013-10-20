@@ -4,7 +4,6 @@ import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.BankStatement;
 import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenView;

@@ -1,12 +1,9 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.clevel.selos.model.db.master.CustomerEntity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CustomerInfoSummaryView implements Serializable {

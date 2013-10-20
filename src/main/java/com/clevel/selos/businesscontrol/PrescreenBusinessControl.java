@@ -28,14 +28,14 @@ import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
 import com.clevel.selos.util.Util;
-import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
