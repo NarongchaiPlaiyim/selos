@@ -154,7 +154,7 @@ public class ExistingCreditControl extends BusinessControl{
                 Reference reference = customerInfoView.getReference();
                 if(Util.isTrue(reference.getSll())){
                     personalIDList.add(customerInfoView.getCitizenId());
-                    log.info("get reference {}", reference);
+                    log.info("get reference for RLOS {}", reference);
                 }
 
                 if(customerInfoView.getRelation().getId() == 1){
@@ -162,6 +162,7 @@ public class ExistingCreditControl extends BusinessControl{
                 }
             }
         }
+        log.info("personal id in RLOS size {}", personalIDList);
 
         if(personalIDList.size() > 0){
             //Retrieve Obligation
