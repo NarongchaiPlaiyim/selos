@@ -42,7 +42,7 @@ public class BankStatement implements Serializable {
     private int otherAccountType;
 
     @OneToOne
-    @Column(name="account_status_id")
+    @JoinColumn(name="account_status_id")
     private AccountStatus accountStatus;
 
     @Column(name="main_account")
@@ -113,8 +113,7 @@ public class BankStatement implements Serializable {
     @JoinColumn(name="bank_stmt_summary_id")
     private BankStatementSummary bankStatementSummary;
 
-    @OneToMany
-    @Column(name="bankStatementDetail")
+    @OneToMany(mappedBy="bankStatement", cascade = CascadeType.ALL)
     private List<BankStatementDetail> bankStatementDetailList;
 
     public long getId() {

@@ -93,7 +93,7 @@ public class BankStatementDetail implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="bank_stmt_id")
-    private BankStatementDetail bankStatementDetail;
+    private BankStatement bankStatement;
 
     public long getId() {
         return id;
@@ -303,12 +303,12 @@ public class BankStatementDetail implements Serializable {
         this.asOfDate = asOfDate;
     }
 
-    public BankStatementDetail getBankStatementDetail() {
-        return bankStatementDetail;
+    public BankStatement getBankStatement() {
+        return bankStatement;
     }
 
-    public void setBankStatementDetail(BankStatementDetail bankStatementDetail) {
-        this.bankStatementDetail = bankStatementDetail;
+    public void setBankStatement(BankStatement bankStatement) {
+        this.bankStatement = bankStatement;
     }
 
     @Override
@@ -340,7 +340,7 @@ public class BankStatementDetail implements Serializable {
                 .append("grossInflowPerLimit", grossInflowPerLimit)
                 .append("totalTransaction", totalTransaction)
                 .append("asOfDate", asOfDate)
-                .append("bankStatementDetail", bankStatementDetail)
+                .append("bankStatement", bankStatement)
                 .toString();
     }
 }

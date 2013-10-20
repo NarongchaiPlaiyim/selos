@@ -86,7 +86,7 @@ public class BankStatementSummary implements Serializable {
     private WorkCasePrescreen workCasePrescreen;
 
     @OneToMany(mappedBy="bankStatementSummary", cascade = CascadeType.ALL)
-    private List<ExistingCreditDetail> bankStmtDetailList;
+    private List<BankStatement> bankStmtList;
 
     public long getId() {
         return id;
@@ -256,12 +256,12 @@ public class BankStatementSummary implements Serializable {
         this.workCasePrescreen = workCasePrescreen;
     }
 
-    public List<ExistingCreditDetail> getBankStmtDetailList() {
-        return bankStmtDetailList;
+    public List<BankStatement> getBankStmtList() {
+        return bankStmtList;
     }
 
-    public void setBankStmtDetailList(List<ExistingCreditDetail> bankStmtDetailList) {
-        this.bankStmtDetailList = bankStmtDetailList;
+    public void setBankStmtList(List<BankStatement> bankStmtList) {
+        this.bankStmtList = bankStmtList;
     }
 
     @Override
