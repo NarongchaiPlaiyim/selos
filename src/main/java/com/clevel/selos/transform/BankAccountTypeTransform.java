@@ -22,7 +22,7 @@ public class BankAccountTypeTransform extends Transform {
             BankAccountTypeView bankAccountTypeView = new BankAccountTypeView();
             bankAccountTypeView.setId(bankAccountType.getId());
             bankAccountTypeView.setName(bankAccountType.getName());
-            bankAccountTypeView.setShortname(bankAccountType.getShortname());
+            bankAccountTypeView.setShortname(bankAccountType.getShortName());
             bankAccountTypeView.setOpenAccountFlag(bankAccountType.getOpenAccountFlag());
             bankAccountTypeView.setBankStatementFlag(bankAccountType.getBankStatementFlag());
             return bankAccountTypeView;
@@ -35,7 +35,7 @@ public class BankAccountTypeTransform extends Transform {
             BankAccountType bankAccountType = new BankAccountType();
             bankAccountType.setId(bankAccountTypeView.getId());
             bankAccountType.setName(bankAccountTypeView.getName());
-            bankAccountType.setShortname(bankAccountTypeView.getShortname());
+            bankAccountType.setShortName(bankAccountTypeView.getShortname());
             bankAccountType.setBankStatementFlag(bankAccountTypeView.getBankStatementFlag());
             bankAccountType.setOpenAccountFlag(bankAccountTypeView.getOpenAccountFlag());
             bankAccountType.setActive(bankAccountTypeView.getActive());
