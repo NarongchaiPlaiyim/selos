@@ -141,111 +141,263 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <!-- Label table -->
-                                                    <table style="float:left">
-                                                        <thead style="height:28px;">
+                                                    <!-- Bank statement detail Table -->
+                                                    <table class="ui-datatable" style="float:left;">
+                                                        <thead>
                                                             <tr>
-                                                                <th></th>
+                                                                <th class="ui-state-default"></th>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item">
+                                                                    <th class="ui-state-default">
+                                                                        <h:outputText value="#{item.asOfDate}">
+                                                                            <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                                                        </h:outputText>
+                                                                    </th>
+                                                                </ui:repeat>
                                                             </tr>
                                                         </thead>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossCreditBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfCreditTxn')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListBDM')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListUW')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountBDM')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountUW')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditBDM')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditUW')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.debitAmount')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfDebitTxn')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.maxBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.minBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.monthBalance')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfChequeReturn')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.chequeReturnAmount')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.swingPercent')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.utilizationPercent')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossInflowPerLimit')}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td class="left">#{msg.get('app.bankStmtDetail.table.row.totalTransaction')}</td>
-                                                        </tr>
+                                                        <tbody class="ui-datatable-data ui-widget-content" style="background:none;">
+                                                            <tr>
+                                                                <td class="left" style="background:none;">#{msg.get('app.bankStmtDetail.table.row.overLimitAmount')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.overLimitAmount}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossCreditBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.grossCreditBalance}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfCreditTxn')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.numberOfCreditTxn}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="#{bankStatementDetail.numberOfPrevMonth + 1}" class="cell_spacer"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListBDM')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.excludeListBDM}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.excludeListUW')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.excludeListUW}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountBDM')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.creditAmountBDM}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.creditAmountUW')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.creditAmountUW}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditBDM')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.timesOfAvgCreditBDM}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.timesOfAvgCreditUW')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.timesOfAvgCreditUW}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="#{bankStatementDetail.numberOfPrevMonth + 1}" class="cell_spacer"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.debitAmount')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.debitAmount}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfDebitTxn')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.numberOfDebitTxn}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="#{bankStatementDetail.numberOfPrevMonth + 1}" class="cell_spacer"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:calendar value="#{item.highestBalanceDate}" pattern="dd/MM/yyyy" styleClass="calendar_right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.maxBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.highestBalance}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:calendar value="#{item.lowestBalanceDate}" pattern="dd/MM/yyyy" styleClass="calendar_right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.minBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.lowestBalance}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.monthBalance')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.monthBalance}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="#{bankStatementDetail.numberOfPrevMonth + 1}" class="cell_spacer"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.numberOfChequeReturn')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.numberOfChequeReturn}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.chequeReturnAmount')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.chequeReturnAmount}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitTimes')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.overLimitTimes}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.overLimitDays')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.overLimitDays}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.swingPercent')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.swingPercent}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.utilizationPercent')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.utilizationPercent}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="#{bankStatementDetail.numberOfPrevMonth + 1}" class="cell_spacer"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.grossInflowPerLimit')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.grossInflowPerLimit}" styleClass="right">
+                                                                            <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                                                                        </p:inputText>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="left">#{msg.get('app.bankStmtDetail.table.row.totalTransaction')}</td>
+                                                                <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
+                                                                    <td class="center" style="#{i.index + 1 le (bankStatementDetail.numberOfPrevMonth / 2) ? 'background-color:#cccccc' : ''}">
+                                                                        <p:inputText value="#{item.totalTransaction}" styleClass="right"/>
+                                                                    </td>
+                                                                </ui:repeat>
+                                                            </tr>
+                                                        </tbody>
                                                     </table>
-
-                                                    <p:dataTable paginator="false" style="float:left;">
-                                                        <p:column style="width:250px;"/>
-                                                        <p:column headerText="Apr 2556" />
-                                                        <p:column headerText="May 2556" />
-                                                        <p:column headerText="Jun 2556" />
-                                                        <p:column headerText="Jul 2556" />
-                                                        <p:column headerText="Aug 2556" />
-                                                        <p:column headerText="Sep 2556" />
-                                                    </p:dataTable>
+                                                    <!-- End Bank statement detail Table -->
                                                 </td>
                                             </tr>
                                         </table>
@@ -386,11 +538,13 @@
                                 <tr>
                                     <td colspan="2" class="center">
                                         <p:commandButton value="#{msg.get('app.button.save')}"
-                                                         action="#{bankStatementDetail.onSave()}"
+                                                         action="#{bankStatementDetail.onSave()}" process="@form"
+                                                         update=":frmMain"
                                                          styleClass="smaller"/>
                                         <p:spacer width="5" height="0"/>
                                         <p:commandButton value="#{msg.get('app.button.cancel')}"
-                                                         action="#{bankStatementDetail.onCancel()}"
+                                                         action="#{bankStatementDetail.onCancel()}" process="@form"
+                                                         update=":frmMain"
                                                          styleClass="smaller"/>
                                     </td>
                                 </tr>

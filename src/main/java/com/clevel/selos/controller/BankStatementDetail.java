@@ -79,7 +79,9 @@ public class BankStatementDetail implements Serializable {
     private int seasonal;
     private Date expectedSubmissionDate;
 
+    //View form
     private BankStmtView bankStmtView;
+    private int numberOfPrevMonth;
 
     //Select items list
     private List<BankView> bankViewList;
@@ -93,23 +95,10 @@ public class BankStatementDetail implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        Flash flash = FacesUtil.getFlash();
-        //Passed parameters from Bank statement summary page
-        Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParams");
-        if (bankStmtSumParams != null) {
-            isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
-            seasonal = (Integer) bankStmtSumParams.get("seasonal");
-            expectedSubmissionDate = (Date) bankStmtSumParams.get("expectedSubmissionDate");
-
-            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, seasonal: {}, expectedSubmissionDate: {}}",
-                    isTmbBank, seasonal, expectedSubmissionDate);
-        } else {
-            //Return to Bank statement summary if parameter is null
-            FacesUtil.redirect("/site/bankStatementSummary.jsf");
-            return;
-        }
+        preRender();
 
         bankStmtView = new BankStmtView();
+        bankStmtView.setBankStmtDetailViewList(initDetailList());
 
         //init items list
         bankViewList = new ArrayList<BankView>();
@@ -125,19 +114,75 @@ public class BankStatementDetail implements Serializable {
     }
 
     public void onSave() {
-        log.debug("onSave()");
+        log.debug("onSave() bankStmtView: {}", bankStmtView);
+        List<BankStmtDetailView> bankStmtDetailViewList = bankStmtView.getBankStmtDetailViewList();
+        for (BankStmtDetailView bStmtDetailView : bankStmtDetailViewList) {
+            log.debug("bStmtDetailView: {}", bStmtDetailView);
+        }
     }
 
     public void onCancel() {
         log.debug("onCancel()");
     }
 
+    //Private method
+    private void preRender() {
+        Flash flash = FacesUtil.getFlash();
+        //Passed parameters from Bank statement summary page
+        Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParams");
+        if (bankStmtSumParams != null) {
+            isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
+            seasonal = (Integer) bankStmtSumParams.get("seasonal");
+            expectedSubmissionDate = (Date) bankStmtSumParams.get("expectedSubmissionDate");
+
+            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, seasonal: {}, expectedSubmissionDate: {}}",
+                    isTmbBank, seasonal, expectedSubmissionDate);
+        } else {
+            //Return to Bank statement summary if parameter is null
+            FacesUtil.redirect("/site/bankStatementSummary.jsf");
+        }
+    }
+
+    private List<BankStmtDetailView> initDetailList() {
+        List<BankStmtDetailView> bankStmtDetailViewList;
+
+        Date startBankStmtDate = bankStmtControl.getStartBankStmtDate(expectedSubmissionDate);
+        numberOfPrevMonth = bankStmtControl.getRetrieveMonthBankStmt(seasonal);
+        bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfPrevMonth);
+        Date date;
+        for (int i=0; i<numberOfPrevMonth; i++) {
+            BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
+            date = DateTimeUtil.getOnlyDatePlusMonth(startBankStmtDate, -i);
+            bankStmtDetailView.setAsOfDate(date);
+            bankStmtDetailViewList.add(bankStmtDetailView);
+        }
+
+        //Sorting asOfDate
+        Collections.sort(bankStmtDetailViewList, new Comparator<BankStmtDetailView>() {
+            public int compare(BankStmtDetailView o1, BankStmtDetailView o2) {
+                if (o1.getAsOfDate() == null || o2.getAsOfDate() == null)
+                    return 0;
+                return o1.getAsOfDate().compareTo(o2.getAsOfDate());
+            }
+        });
+        return bankStmtDetailViewList;
+    }
+
+    //-------------------- Getter/Setter --------------------
     public BankStmtView getBankStmtView() {
         return bankStmtView;
     }
 
     public void setBankStmtView(BankStmtView bankStmtView) {
         this.bankStmtView = bankStmtView;
+    }
+
+    public int getNumberOfPrevMonth() {
+        return numberOfPrevMonth;
+    }
+
+    public void setNumberOfPrevMonth(int numberOfPrevMonth) {
+        this.numberOfPrevMonth = numberOfPrevMonth;
     }
 
     public List<BankView> getBankViewList() {

@@ -15,8 +15,8 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal excludeListUW;
     private BigDecimal creditAmountBDM;
     private BigDecimal creditAmountUW;
-    private BigDecimal timesOfAverageCreditBDM;
-    private BigDecimal timesOfAverageCreditUW;
+    private BigDecimal timesOfAvgCreditBDM;
+    private BigDecimal timesOfAvgCreditUW;
     private BigDecimal debitAmount;
     private int numberOfDebitTxn;
     private Date highestBalanceDate;
@@ -45,8 +45,8 @@ public class BankStmtDetailView implements Serializable{
         this.excludeListUW = BigDecimal.valueOf(0.0);
         this.creditAmountBDM = BigDecimal.valueOf(0.00);
         this.creditAmountUW = BigDecimal.valueOf(0.00);
-        this.timesOfAverageCreditBDM = BigDecimal.valueOf(0.00);
-        this.timesOfAverageCreditUW = BigDecimal.valueOf(0.00);
+        this.timesOfAvgCreditBDM = BigDecimal.valueOf(0.00);
+        this.timesOfAvgCreditUW = BigDecimal.valueOf(0.00);
         this.debitAmount = BigDecimal.valueOf(0.00);
         this.highestBalanceDate = new Date();
         this.highestBalance = BigDecimal.valueOf(0.00);
@@ -115,20 +115,20 @@ public class BankStmtDetailView implements Serializable{
         this.creditAmountUW = creditAmountUW;
     }
 
-    public BigDecimal getTimesOfAverageCreditBDM() {
-        return timesOfAverageCreditBDM;
+    public BigDecimal getTimesOfAvgCreditBDM() {
+        return timesOfAvgCreditBDM;
     }
 
-    public void setTimesOfAverageCreditBDM(BigDecimal timesOfAverageCreditBDM) {
-        this.timesOfAverageCreditBDM = timesOfAverageCreditBDM;
+    public void setTimesOfAvgCreditBDM(BigDecimal timesOfAvgCreditBDM) {
+        this.timesOfAvgCreditBDM = timesOfAvgCreditBDM;
     }
 
-    public BigDecimal getTimesOfAverageCreditUW() {
-        return timesOfAverageCreditUW;
+    public BigDecimal getTimesOfAvgCreditUW() {
+        return timesOfAvgCreditUW;
     }
 
-    public void setTimesOfAverageCreditUW(BigDecimal timesOfAverageCreditUW) {
-        this.timesOfAverageCreditUW = timesOfAverageCreditUW;
+    public void setTimesOfAvgCreditUW(BigDecimal timesOfAvgCreditUW) {
+        this.timesOfAvgCreditUW = timesOfAvgCreditUW;
     }
 
     public BigDecimal getDebitAmount() {
@@ -269,8 +269,8 @@ public class BankStmtDetailView implements Serializable{
                 .append("excludeListUW", excludeListUW)
                 .append("creditAmountBDM", creditAmountBDM)
                 .append("creditAmountUW", creditAmountUW)
-                .append("timesOfAverageCreditBDM", timesOfAverageCreditBDM)
-                .append("timesOfAverageCreditUW", timesOfAverageCreditUW)
+                .append("timesOfAvgCreditBDM", timesOfAvgCreditBDM)
+                .append("timesOfAvgCreditUW", timesOfAvgCreditUW)
                 .append("debitAmount", debitAmount)
                 .append("numberOfDebitTxn", numberOfDebitTxn)
                 .append("highestBalanceDate", highestBalanceDate)
@@ -286,7 +286,7 @@ public class BankStmtDetailView implements Serializable{
                 .append("utilizationPercent", utilizationPercent)
                 .append("grossInflowPerLimit", grossInflowPerLimit)
                 .append("totalTransaction", totalTransaction)
-                .append("asOfDate", totalTransaction)
+                .append("asOfDate", asOfDate)
                 .toString();
     }
 }
