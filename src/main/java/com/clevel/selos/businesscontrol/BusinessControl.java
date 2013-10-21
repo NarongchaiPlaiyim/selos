@@ -7,8 +7,9 @@ import org.slf4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 
-public abstract class BusinessControl {
+public abstract class BusinessControl implements Serializable{
 
     @Inject
     Logger log;

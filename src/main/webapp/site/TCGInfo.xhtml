@@ -14,41 +14,38 @@
 </h:head>
 
 <h:body>
-    <p:panel id="pnl_maincontainer" style="width:100%">
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
                 <!-- Start Header Logo -->
-                <ui:include src="include/header_logo.xhtml"/>
+                <ui:include src="include/header_logo.xhtml" />
                 <!-- End Header Logo -->
                 <!-- Start Header Detail -->
-                <ui:include src="include/header_detail.xhtml"/>
+                <ui:include src="include/header_detail.xhtml" />
                 <!-- End Header Detail -->
                 <!-- Start Menu -->
-                <ui:include src="include/menubar.xhtml"/>
+                <ui:include src="include/menubar.xhtml" />
                 <!-- End Menu -->
                 <div id="content_container">
-                    <div id="content_name">TCG Calculation</div>
+                    <div id="content_name">#{msg.get('app.tcg.label.header')}</div>
                     <div id="content">
-                        <div id="content_info">
-                            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
-                            </div>
-                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName"
-                                                                                      value="MR.BDM Maker"/>,
-                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
-                        </div>
+                    <div id="content_info">
+                        <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                        <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                    </div>
                         <div id="content_form">
                             <!-- start content -->
-                            <table id="content_form_cal" style="width:100%">
+                            <table  class="content_table_form">
 
                                 <tr>
-                                    <td colspan="2"><h2>GUARANTEE CHECKLIST COLLATERAL CALCULATION</h2></td>
+                                    <td colspan="2"><h2>#{msg.get('app.tcg.label.title')}</h2></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
                                         <table class="table_noborder" style="padding-left: 100px;">
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.isTCG')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
                                                     <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" >
@@ -59,7 +56,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title" style="width: 450px;">
-                                                    <h:outputText value="#{msg.get('app.requestLimitRequiredTCG')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')} :" />
                                                 </td>
                                                 <td>
                                                     <p:inputText styleClass="large right" id="requestLimitRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}" >
@@ -70,7 +67,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.requestLimitNotRequiredTCG')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')} :" />
                                                 </td>
                                                 <td>
                                                     <p:inputText styleClass="large right" id="requestLimitNotRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"  >
@@ -81,7 +78,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.existingLoanRatioUnderSameCollateral')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioUnderSameCollateral')} :" />
                                                 </td>
                                                 <td>
                                                     <p:inputText styleClass="large right" id="existingLoanRatioUnderSameCollateral"  value="#{tcgInfo.TCGView.existingLoanRatioUnderSameCollateral}"  >
@@ -92,7 +89,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.existingLoanRatioNotUnderSameCollateral')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.textBox.existingLoanRatioNotUnderSameCollateral')} :" />
                                                 </td>
                                                 <td>
                                                     <p:inputText styleClass="large right" id="existingLoanRatioNotUnderSameCollateral"  value="#{tcgInfo.TCGView.existingLoanRatioNotUnderSameCollateral}"  >
@@ -103,7 +100,7 @@
                                             </tr>
                                             <tr>
                                                 <td class="title" style="width: 200px;">
-                                                    <h:outputText value="#{msg.get('app.tcbFloodAmount')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.textBox.tcbFloodAmount')} :" />
                                                 </td>
                                                 <td>
                                                     <p:inputText styleClass="large right" id="tcbFloodAmount"  value="#{tcgInfo.TCGView.tcbFloodAmount}"  >
@@ -140,31 +137,31 @@
                                                     <p:dataTable id="resultCollateralDetail" var="item" value="#{tcgInfo.TCGDetailViewList}"
                                                                  paginator="false" rowKey="#{item.TCGDetailView}" rowIndexVar="rowIndex">
 
-                                                        <p:column headerText="No." styleClass="center" style="width:20px;">
+                                                        <p:column headerText="" styleClass="center" style="width:20px;">
                                                             <h:outputText value="#{rowIndex+1}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.potentialType')}"  styleClass="left" style="width: 200px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.potential')}"  styleClass="left" style="width: 200px;">
                                                             <h:outputText value="#{item.potentialCollateral.description}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.collateralCollateralType')}" styleClass="left" style="width:200px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.collateralCollateralType')}" styleClass="left" style="width:200px;">
                                                             <h:outputText value="#{item.tcgCollateralType.description}"/>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.appraisalAmount')}" styleClass="right" style="width: 150px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.appraisalAmount')}" styleClass="right" style="width: 150px;">
                                                             <h:outputText value="#{item.appraisalAmount}">
                                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.LTVvalue')}" styleClass="right" style="width: 150px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.LTVvalue')}" styleClass="right" style="width: 150px;">
                                                             <h:outputText value="#{item.ltvValue}">
                                                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                             </h:outputText>
                                                         </p:column>
 
-                                                        <p:column headerText="#{msg.get('app.isProposeInThisRequest')}" styleClass="center" style="width: 90px;">
+                                                        <p:column headerText="#{msg.get('app.tcg.collateral.label.isProposeInThisRequest')}" styleClass="center" style="width: 90px;">
                                                            <h:outputText value="#{item.proposeInThis}"/>
                                                         </p:column>
 
@@ -189,20 +186,58 @@
                                                         </p:column>
 
                                                       <p:columnGroup type="footer">
-                                                            <p:row>
+                                                          <p:row>
+                                                              <p:column/>
+                                                              <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}" style="text-align:left"/>
+                                                              <p:column  style="text-align:right">
+                                                                  <f:facet name="footer">
+                                                                      <h:outputText  id="sumAppraisalAmountId"  value="#{tcgInfo.TCGView.sumAppraisalAmount}"  style="text-align:right">
+                                                                          <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                      </h:outputText>
+                                                                  </f:facet>
+                                                              </p:column>
+                                                              <p:column  style="text-align:right">
+                                                                  <f:facet name="footer">
+                                                                      <h:outputText  id="sumLtvValueId"  value="#{tcgInfo.TCGView.sumLtvValue}"  style="text-align:right">
+                                                                          <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                      </h:outputText>
+                                                                  </f:facet>
+                                                              </p:column>
+                                                              <p:column colspan="2" />
+                                                          </p:row>
+                                                          <p:row>
+                                                              <p:column/>
+                                                              <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}" style="text-align:left"/>
+                                                              <p:column  style="text-align:right">
+                                                                  <f:facet name="footer">
+                                                                      <h:outputText  id="sumInThisAppraisalAmountId"  value="#{tcgInfo.TCGView.sumInThisAppraisalAmount}" >
+                                                                          <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                      </h:outputText>
+                                                                  </f:facet>
+                                                              </p:column>
+                                                              <p:column  style="text-align:right">
+                                                                  <f:facet name="footer">
+                                                                      <h:outputText  id="sumInThisLtvValueId"  value="#{tcgInfo.TCGView.sumInThisLtvValue}"  style="text-align:right">
+                                                                          <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                                                      </h:outputText>
+                                                                  </f:facet>
+                                                              </p:column>
+                                                              <p:column colspan="2" />
+                                                          </p:row>
+                                                            <!--<p:row>
                                                                 <p:column />
-                                                                <p:column colspan="2" footerText="Total มูลค่าหลักประกัน: " style="text-align:right"/>
+                                                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}" style="text-align:left"/>
                                                                 <p:column footerText="#{tcgInfo.TCGView.sumAppraisalAmtText}"  style="text-align:right" />
                                                                 <p:column footerText="#{tcgInfo.TCGView.sumLtvAmtText}"  style="text-align:right"/>
                                                                 <p:column colspan="2" />
                                                             </p:row>
                                                             <p:row>
                                                                 <p:column />
-                                                                <p:column colspan="2" footerText="Total มูลค่าหลักประกันเสนอครั้งนี้: " style="text-align:right"/>
+                                                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.totalInThis')}" style="text-align:left"/>
                                                                 <p:column footerText="#{tcgInfo.TCGView.sumThisAppraisalAmtText}" style="text-align:right" />
                                                                 <p:column footerText="#{tcgInfo.TCGView.sumThisLtvAmtText}" style="text-align:right"/>
                                                                 <p:column colspan="2" />
-                                                            </p:row>
+                                                            </p:row>-->
                                                         </p:columnGroup>
 
                                                     </p:dataTable>
@@ -218,7 +253,7 @@
                                         <table class="table_noborder" style="padding-left: 100px;">
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.collateralRuleResult')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}" /> :
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" /> %
@@ -227,7 +262,7 @@
                                             <tr>
                                                 <td class="title"
                                                     style="width: 300px;">
-                                                    <h:outputText value="#{msg.get('app.requestTCGAmount')}" />:
+                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.requestTCGAmount')}" /> :
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" id="requestTCGAmount"  value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
@@ -244,14 +279,15 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="center">
-                                        <p:commandButton id="btnSave"
-                                                         value="Save"
+                                        <p:commandButton value="#{msg.get('app.tcg.button.save')}"
+                                                         id="btnSave"
                                                          binding="#{addData}"
                                                          styleClass="medium"
                                                          process=":frmMain"
                                                          action="#{tcgInfo.onSaveTcgInfo()}"
                                                          update=":msgBoxSystemMessagePanel"/>
-                                        <p:commandButton value="Cancel"
+
+                                        <p:commandButton value="#{msg.get('app.tcg.button.Cancel')}"
                                                          id="btnCancel"
                                                          styleClass="medium"
                                                          process=":frmMain"
@@ -276,7 +312,7 @@
         </h:form>
     </p:panel>
 
-    <p:dialog id="tcgDialog" header="Collateral Information" widgetVar="tcgDlg"
+    <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
               modal="true" width="700" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>

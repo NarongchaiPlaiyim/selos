@@ -14,11 +14,13 @@ import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Stateless
 public class BankStmtControl extends BusinessControl{
 
     @Inject

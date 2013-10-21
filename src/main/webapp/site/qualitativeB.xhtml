@@ -12,7 +12,7 @@
 </h:head>
 
 <h:body>
-<p:panel id="pnl_maincontainer">
+<p:panel id="pnl_maincontainer" styleClass="panel">
 <h:form id="frmMain">
 <div id="main_container">
 <!-- Start Header Logo -->
@@ -25,485 +25,497 @@
 <ui:include src="include/menubar.xhtml"/>
 <!-- End Menu -->
 <div id="content_container">
-<div id="content_name">Qualitative B</div>
+<div id="content_name">#{msg.get('app.qualitativeB.label.title')}</div>
 <div id="content">
 <div id="content_info">
-    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
-    </div>
-    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName"
-                                                              value="MR.BDM Maker"/>,
-        <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
 </div>
-<div id="content_form" style="padding-left:1%;width:97%">
+
+<div id="content_form">
 <!-- start content -->
-<table class="table_content" style="width:95%">
+<table class="table_information">
+<tr>
+    <td>
+        <table class="table_content" style="width:100%">
 
-    <tr style="background-color: #3f3f3f">
-        <td style="width: 400px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นปกติ (P)"/>
-        </td>
-        <td style="width: 500px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นกล่าวถึงเป็นพิเศษ (SM)"/>
-        </td>
-    </tr>
-    <tr style="background-color: #868686">
-        <td class="title" colspan="4">
-            <h:outputLabel style="color: floralwhite" value="1) การดำเนินธุรกิจ"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีความสามารถในการดำเนินธุรกิจจากรายได้ปกติของกิจการ"/>
-        </td>
-        <td colspan="2">
-        </td>
-    </tr>
-    <tr style="background-color: #868686">
-        <td class="title" colspan="4">
-            <h:outputLabel style="color: floralwhite" value="2) ฐานะและผลประกอบการ"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p2}"/>
-        </td>
-        <td>
-            <h:outputText value="- ผลการดำเนินงานมีกำไร"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm1}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ปริมาณการเคลื่อนไหวของบัญชี O/D ที่ใช้เต็มวงเงินตลอดเวลา โดยบัญชีไม่เคลื่อนไหว หรือมีการเคลื่อนไหว ของบัญชีต่ำซึ่งไม่สอดคล้องกับธุรกิจ"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm2}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้ขาดเงินทุนหมุนเวียนจึงต้องพึ่งแหล่งเงินทุนอื่น ๆ เพื่อชำระหนี้"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm3}"/>
-        </td>
-        <td>
-            <h:outputText value="- จะครบกำหนดการชำระหนี้แบบ Step up payment 12 เดือนข้างหน้า"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm4}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีเหตุการณ์ใดเหตุการณ์หนึ่งเกิดขึ้น ซึ่งมีผลทำให้ยอดขายลดลงอย่างมีนัยสำคัญ"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm5}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีการเปลี่ยนแปลงกฎเกณฑ์ทางการใหม่ที่มีผลในทางลบ"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm6}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ไม่สามารถบริหารจัดการได้อย่างมีประสิทธิภาพเมื่อเกิดเหตุการณ์ที่ทำให้เกิดผลเสียกับกิจการ"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm7}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีข่าวร้ายอย่างมีนัยสำคัญ"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm8}"/>
-        </td>
-        <td>
-            <h:outputText value="- อยู่ระหว่างการตรวจสอบของหน่วยงานของรัฐหรือองค์กรที่มีอำนาจควบคุมดูแล"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm9}"/>
-        </td>
-        <td>
-            <h:outputText value="- เป็นอุตสาหกรรมที่ต้องเฝ้าระวังเป็นพิเศษ (Watch list)"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm10}"/>
-        </td>
-        <td>
-            <h:outputText value="- ไม่ปฏิบัติตามเงื่อนไขอย่างมีนัยสำคัญยกเว้นจะต้องได้รับการอนุมัติแล้ว"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm11}"/>
-        </td>
-        <td>
-            <h:outputText value="- ผู้ถือหุ้นหลักขอลดการถือหุ้น"/>
-        </td>
-    </tr>
-    <tr style="background-color: #868686">
-        <td class="title" colspan="4">
-            <h:outputLabel style="color: floralwhite" value="3) ลักษณะการชำระหนี้"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p3}"/>
-        </td>
-        <td>
-            <h:outputText value="- ชำระหนี้ได้ตามเงื่อนไข"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm12}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ปรับปรุงโครงสร้างหนี้อยู่ระหว่างการชำระหนี้ตามเงื่อนไข ซึ่งต้องติดตามดูแลอย่างใกล้ชิด"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm13}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีประวัติการชำระหนี้ล่าช้า แต่ยังไม่ผิดนัดชำระหนี้"/>
-        </td>
-    </tr>
-</table>
+            <tr style="background-color: #3f3f3f">
+                <td style="width: 400px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.p')}"/>
+                </td>
+                <td style="width: 500px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.sm')}"/>
+                </td>
+            </tr>
+            <tr style="background-color: #868686">
+                <td class="title" colspan="4">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p1}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.p1')}" />
+                </td>
+                <td colspan="2">
+                </td>
+            </tr>
+            <tr style="background-color: #868686">
+                <td class="title" colspan="4">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p2}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitativeB.label.p2')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm1}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitativeB.label.sm1')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm2}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitativeB.label.sm2')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm3}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm2')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm4}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm3')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm5}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.sm4')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm6}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.sm5')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm7}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm6')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm8}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.sm7')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm9}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm8')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm10}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm9')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm11}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.sm10')}" />
+                </td>
+            </tr>
+            <tr style="background-color: #868686">
+                <td class="title" colspan="4">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_p3}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.p3')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm12}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.sm11')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_sm13}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.sm12')}" />
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
 
-<p style="float:left; padding-bottom:5px;">
-    <b>การพิจารณาลูกหนี้ตามเกณฑ์ ธปท. ข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่ง ตามเกณฑ์ดังต่อไปนี้ ให้จัดชั้นตามเกณฑ์ดังกล่าว แต่หากลูกหนี้อยู่ในเกณฑ์ของการจัดชั้นที่ต่างกัน ให้จัดชั้นที่ด้อยที่สุด) </b>
-</p>
+<tr>
+    <td>
+        <p style="float:left; padding-bottom:5px;">
+            <b>#{msg.get('app.qualitative.description.group1')}</b>
+        </p>
+    </td>
+</tr>
+<tr>
+    <td>
+        <table class="table_content">
 
-<table class="table_content" style="width:95%">
-
-    <tr style="background-color: #3f3f3f">
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นต่ำกว่ามาตรฐาน (SS)"/>
-        </td>
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัย (D)"/>
-        </td>
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัยจะสูญ (DL)"/>
-        </td>
-    </tr>
-    <tr style="background-color: #868686">
-        <td class="title" colspan="6">
-            <h:outputLabel style="color: floralwhite" value="1. สถานภาพลูกหนี้"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss1}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีเหตุแสดงว่าลูกหนี้จะชำระคืนดอกเบี้ย และเงินต้นได้ครบ แต่ต้องใช้ระยะเวลานาน"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d1}"/>
-        </td>
-        <td>
-            <h:outputText value="- สินทรัพย์หรือสิทธิเรียกร้อง ที่คาดว่าจะเรียกให้ชำระคืนไม่ได้ครบถ้วน"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl1}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- มีเหตุแสดงว่าลูกหนี้จะไม่สามารถชำระคืนเงินต้น และดอกเบี้ยได้ทั้งจำนวนหรือเกือบทั้งจำนวน"/>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d2}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- มีเหตุประการอื่นที่แสดงว่า สินทรัพย์หรือสิทธิ เรียกร้องนั้น คาดว่าจะเรียกให้ชำระคืนไม่ได้ครบถ้วน"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d3}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้ที่ศาลมีคำสั่งพิทักษ์ทรัพย์แล้ว"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d4}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้ที่หยุดดำเนินกิจการหรือเลิกกิจการ หรือกิจการของลูกหนี้อยู่ระหว่างชำระบัญชี"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d5}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ประวิงเวลาชำระหนี้ หรือกระทำการใด ๆ เพื่อมิให้เจ้าหนี้ได้รับชำระหนี้ เช่น ออกไปเสียนอกราชาอาณาจักร หรือยักย้ายถ่ายเททรัพย์สิน"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d6}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ที่ธนาคารติดต่อไม่ได้ หรือตามตัวลูกหนี้ไม่พบ หรือลูกหนี้ไปเสียจากภูมิลำเนาที่ปรากฎตามสัญญา โดยไม่แจ้งให้ธนาคารพาณิชย์ทราบ"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d7}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ที่ไม่ปรากฏธุรกิจแน่ชัด หรือไม่ได้ประกอบธุรกิจจริงจัง หรือนำเงินไปใช้ผิดวัตถุประสงค์"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
-    <tr>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d8}"/>
-        </td>
-        <td>
-            <h:outputText value="- ธนาคารได้ยื่นคำขอเฉลี่ยทรัพย์ ในคดีที่ลูกหนี้ถูกเจ้าหนี้รายอื่นฟ้อง"/>
-        </td>
-        <td colspan="2"></td>
-    </tr>
+            <tr style="background-color: #3f3f3f">
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
+                </td>
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
+                </td>
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
+                </td>
+            </tr>
+            <tr style="background-color: #868686">
+                <td class="title" colspan="6">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss1}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.ss1')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d1}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.d1')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl1}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.dl1')}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d2}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d2')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d3}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.d3')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d4}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.qualitative.label.d4')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d5}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d5')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d6}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d6')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d7}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d7')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d8}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d8')}" />
+                </td>
+                <td colspan="2"></td>
+            </tr>
 
 
-</table>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td>
+        <p style="float:left; padding-bottom:5px;">
+            <b>#{msg.get('app.qualitative.description.group2')}</b>
+        </p>
+    </td>
+</tr>
 
-<p style="float:left; padding-bottom:5px;">
-    <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้(หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้นตามหลักเกณฑ์ท้ายแนวทางฯนี้)</b>
-</p>
-<table class="table_content" style="width:95%">
+<tr>
+    <td>
+        <table class="table_content">
+            <tr style="background-color: #3f3f3f">
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
+                </td>
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
+                </td>
+                <td style="width: 330px;text-align: center" class="title" colspan="2">
+                    <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
+                </td>
+            </tr>
+            <tr style="background-color: #868686">
+                <td class="title" colspan="6">
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss2}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.ss2')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d9}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d9')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl2}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.dl2')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss3}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss3')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d10}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d10')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl3}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.dl3')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss4}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss4')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d11}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.d11')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl4}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.dl4')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss5}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss5')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d12}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.d12')}" />
+                </td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl5}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.dl5')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss6}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss6')}" />
+                </td>
+                <td colspan="2"></td>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl6}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.dl6')}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss7}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss7')}" />
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss8}"/>
+                </td>
+                <td>
+                    <h:outputText   value="#{msg.get('app.qualitative.label.ss8')}" />
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss9}"/>
+                </td>
+                <td>
+                    <h:outputText  value="#{msg.get('app.qualitative.label.ss9')}" />
+                </td>
+                <td colspan="4"></td>
+            </tr>
+        </table>
+    </td>
+</tr>
 
-    <tr style="background-color: #3f3f3f">
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นต่ำกว่ามาตรฐาน (SS)"/>
-        </td>
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัย (D)"/>
-        </td>
-        <td style="width: 330px;text-align: center" class="title" colspan="2">
-            <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัยจะสูญ (DL)"/>
-        </td>
-    </tr>
-    <tr style="background-color: #868686">
-        <td class="title" colspan="6">
-            <h:outputLabel style="color: floralwhite" value="2. การดำเนินธุรกิจ"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss2}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ยังดำเนินธุรกิจอยู่ แต่มีปัญหาบางประการ อันเป็นเหตุให้ลูกหนี้ผิดนัดชำระหนี้ในเวลาต่อมา"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d9}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ลูกหนี้ยังดำเนินธุรกิจหลักอยู่ แต่กิจการไม่ดีและไม่มี แนวโน้มชัดเจนว่าธุรกิจหลักจะดีขึ้นอย่างมีนัยสำคัญ"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl2}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้หยุดดำเนินธุรกิจ หรือไม่ได้ดำเนินธุรกิจหลักแล้ว"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss3}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้หยุดดำเนินธุรกิจชั่วคราว หรือธุรกิจประสบปัญหาชั่วคราว"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d10}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ธุรกิจหลักมีปัจจัยเสี่ยงที่ชัดเจนหรือมีความไม่แน่นอนสูง ยากต่อการคาดคะเนสภาวะธุรกิจในอนาคต ไม่มีแนวโน้ม ฟื้นตัวที่ชัดเจน เป็นเหตุให้ผิดนัดชำระหนี้ และชำระหนี้ ได้ไม่ครบถ้วนตามสถานะเดิม"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl3}"/>
-        </td>
-        <td>
-            <h:outputText value="- ธุรกิจหลักมีแนวโน้มเสื่อมถอยอย่างต่อเนื่อง"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss4}"/>
-        </td>
-        <td>
-            <h:outputText value="- มีภาวะการแข่งขันอย่างรุนแรง จนอาจมีปัญหา"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d11}"/>
-        </td>
-        <td>
-            <h:outputText
-                    value="- ยอดขายไม่เป็นไปตามเป้าหมายที่วางไว้อย่างมาก ยอดขายลดลง อย่างต่อเนื่อง (กระทบต่อกระแสเงินสดในอนาคตอย่างมีนัยสำคัญ)"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl4}"/>
-        </td>
-        <td>
-            <h:outputText value="- ประสบปัญหาโครงการหยุดชะงัก"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss5}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้ไม่สามารถดำเนินธุรกิจได้ตามแผนที่กำหนด"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d12}"/>
-        </td>
-        <td>
-            <h:outputText value="- ลูกหนี้ได้ยื่นขอเข้ากระบวนการฟื้นฟูกิจการในศาลล้มละลาย"/>
-        </td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl5}"/>
-        </td>
-        <td>
-            <h:outputText value="- ขาดผู้บริหารหลักหรือผู้เชี่ยวชาญเฉพาะด้าน ซึ่งมีผลต่อธุรกิจ หลักอย่างมีนัยสำคัญ"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss6}"/>
-        </td>
-        <td>
-            <h:outputText value="- โครงการลงทุนของลูกหนี้ประสบปัญหา ทำให้ไม่สามารถใช้หนี้ตามกำหนด"/>
-        </td>
-        <td colspan="2"></td>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl6}"/>
-        </td>
-        <td>
-            <h:outputText value="- ธุรกิจประสบปัญหา ไม่มีความชัดเจนในการหาผู้ร่วมทุนใหม่ หรือขายกิจการ"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss7}"/>
-        </td>
-        <td>
-            <h:outputText value="- ธนาคารเตรียมดำเนินคดีกับลูกหนี้"/>
-        </td>
-        <td colspan="4"></td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss8}"/>
-        </td>
-        <td>
-            <h:outputText value="- อยู่ระหว่างการขายกิจการบางส่วนชำระหนี้"/>
-        </td>
-        <td colspan="4"></td>
-    </tr>
-    <tr>
-        <td>
-            <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss9}"/>
-        </td>
-        <td>
-            <h:outputText value="- ผิดนัดชำระหนี้เกินกว่า 60 วัน"/>
-        </td>
-        <td colspan="4"></td>
-    </tr>
-</table>
+<tr>
+    <td>
+        <p style="float:left; padding-bottom:5px;">
+            <b>#{msg.get('app.qualitative.description.group3')}</b>
+        </p>
+    </td>
+</tr>
 
-<p style="float:left; padding-bottom:5px;">
-    <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้น)</b>
-</p>
-
-<table class="table_content" style="width:95%">
+<tr>
+<td>
+<table class="table_content">
 
 <tr style="background-color: #3f3f3f">
     <td style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นต่ำกว่ามาตรฐาน (SS)"/>
+        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.ss')}"/>
     </td>
     <td style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัย (D)"/>
+        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.d')}"/>
     </td>
     <td style="width: 330px;text-align: center" class="title" colspan="2">
-        <h:outputText style="color: floralwhite" value="เกณฑ์การพิจารณาจัดชั้นสงสัยจะสูญ (DL)"/>
+        <h:outputText style="color: floralwhite" value="#{msg.get('app.qualitative.item.dl')}"/>
     </td>
 </tr>
 <tr style="background-color: #868686">
     <td class="title" colspan="6">
-        <h:outputLabel style="color: floralwhite" value="3. ฐานะและผลประกอบการ"/>
+        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}" />
     </td>
 </tr>
 <tr>
@@ -511,21 +523,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss10}"/>
     </td>
     <td>
-        <h:outputText value="- มีการเบิกใช้ O/D เกินวงเงินมากกว่า 2 ครั้งใน 6 เดือน ที่ผ่านมา"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.ss10')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d13}"/>
     </td>
     <td>
-        <h:outputText
-                value="- เบิกใช้ O/D เกินวงเงินอย่างน้อย 3 เดือนติดต่อกันโดยไม่มี รายได้ฝากบัญชีเพื่อการชำระหนี้มากกว่า 3 เดือนที่ผ่านมา"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.d13')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl7}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ลูกหนี้ใช้วงเงิน OD เกินวงเงินตลอดเวลา และไม่มีเม็ดเงินนำเข้าบัญชี เพื่อชำระในรอบ 6 เดือนที่ผ่านมา"/>
+        <h:outputText  value="#{msg.get('app.qualitativeB.label.dl7')}" />
     </td>
 </tr>
 <tr>
@@ -533,22 +543,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss11}"/>
     </td>
     <td>
-        <h:outputText
-                value="- มีประวัติการชำระหนี้ล่าช้าโดยผิดนัดชำระเงินกู้เกินกว่า 2 เดือน/60 วันในช่วง 6 เดือน ที่ผ่านมา"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.ss11')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d14}"/>
     </td>
     <td>
-        <h:outputText
-                value="- จำนวนเช็คคืนของลูกหนี้การค้ามากกว่า 20% ของรายได้ต่อเดือน(ในช่วง 6 เดือนที่ผ่านมา)"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.d14')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl8}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ปริมาณเช็คคืนของลูกหนี้การค้าเกินกว่า 40% ของรายได้ ต่อเดือนของกิจการ (6 เดือนย้อนหลัง)"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.d18')}" />
     </td>
 </tr>
 <tr>
@@ -556,19 +563,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss12}"/>
     </td>
     <td>
-        <h:outputText value="- เกิดการขาดทุนอย่างต่อเนื่อง / ผลการดำเนินงานต่ำกว่า ประมาณการ"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.ss12')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d15}"/>
     </td>
     <td>
-        <h:outputText value="- ไม่สามารถปฏิบัติตามเงื่อนไขการปรับปรุงโครงสร้างหนี้ที่ทำมาน้อยกว่า 3 ครั้ง"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.d16')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl9}"/>
     </td>
     <td>
-        <h:outputText value="- ไม่ให้ความร่วมมือหรือไม่มีความจริงใจในการแก้ปัญหา"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.dl9')}" />
     </td>
 </tr>
 <tr>
@@ -576,15 +583,14 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss13}"/>
     </td>
     <td>
-        <h:outputText
-                value="- สัญญาปรับปรุงโครงสร้างหนี้มีระยะเวลายาวนานและ ไม่มีความแน่นอนว่าจะชำระหนี้ได้ตามปกติเมื่อไร"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.ss13')}" />
     </td>
     <td colspan="2"></td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl10}"/>
     </td>
     <td>
-        <h:outputText value="- ไม่สามารถปฏิบัติตามเงื่อนไขการปรับปรุงโครงสร้างหนี้มากกว่า 5 ครั้ง"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.dl10')}" />
     </td>
 </tr>
 <tr>
@@ -592,7 +598,7 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss14}"/>
     </td>
     <td>
-        <h:outputText value="- ปริมาณเช็คคืนของลูกหนี้การค้าเกินกว่า 10% ของรายได้เฉลี่ยต่อเดือน ( 6 เดือนย้อนหลัง)"/>
+        <h:outputText  value="#{msg.get('app.qualitativeB.label.ss14')}" />
     </td>
     <td colspan="4"></td>
 </tr>
@@ -601,7 +607,7 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss15}"/>
     </td>
     <td>
-        <h:outputText value="- สัญญาปรับปรุงโครงสร้างหนี้มีระยะเวลายาวนาน ไม่มีความแน่นอนว่าจะชำระหนี้ได้ตามปกติ"/>
+        <h:outputText   value="#{msg.get('app.qualitativeB.label.ss15')}" />
     </td>
     <td colspan="4"></td>
 </tr>
@@ -610,8 +616,7 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss16}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ลูกหนี้ปรับปรุงโครงสร้างหนี้แต่ไม่สามารถปฏิบัติตามสัญญาได้ เพราะอยู่ระหว่างการปรับปรุงโครงสร้างใหม่"/>
+        <h:outputText  value="#{msg.get('app.qualitativeB.label.ss16')}" />
     </td>
     <td colspan="4"></td>
 </tr>
@@ -620,7 +625,7 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss17}"/>
     </td>
     <td>
-        <h:outputText value="- ลูกหนี้เข้าสู่กระบวนการฟื้นฟูฯ แต่ผลการดำเนินงานไม่เพียงพอชำระหนี้"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.ss15')}" />
     </td>
     <td colspan="4"></td>
 </tr>
@@ -629,7 +634,7 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss18}"/>
     </td>
     <td>
-        <h:outputText value="- มีการขยายระยะเวลาชำระหนี้ โดยไม่ได้ทำการปรับปรุงโครงสร้างหนี้"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.ss16')}" />
     </td>
     <td colspan="4"></td>
 </tr>
@@ -638,14 +643,13 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss19}"/>
     </td>
     <td>
-        <h:outputText
-                value="- การชำระคืนแบบ Step-up payment และ balloon payment คาดว่าไม่สามารถชำระหนี้ได้ มีผลให้ต้องปรับโครงสร้างหนี้"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.s17')}" />
     </td>
     <td colspan="4"></td>
 </tr>
 <tr style="background-color: #868686">
     <td class="title" colspan="6">
-        <h:outputLabel style="color: floralwhite" value="4. ลักษณะการชำระหนี้"/>
+        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
     </td>
 </tr>
 <tr>
@@ -653,21 +657,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss20}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ผ่อนชำระดอกเบี้ยได้ในอัตราตลาด หรือต่ำกว่าเล็กน้อย แต่มีการผ่อนชำระดอกเบี้ยหรือเงินต้นไม่สม่ำเสมอ"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.ss18')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d16}"/>
     </td>
     <td>
-        <h:outputText value="- ผ่อนชำระดอกเบี้ยได้ตามเงื่อนไข ซึ่งกำหนดอัตราไว้ต่ำกว่าต้นทุนเงินฝากรวมเงินกู้ยืม"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.d17')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl11}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ผ่อนชำระดอกเบี้ยได้จำนวนน้อยมาก ดอกเบี้ยส่วนตั้งพักไว้ หรือผ่อนชำระเงินต้นอย่างเดียว และตั้งดอกเบี้ยพักไว้ทั้งจำนวน โดยชำระดอกเบี้ยพักเมื่อครบกำหนดสัญญาหรือเมื่อลูกหนี้สามารถชำระได้"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.dl11')}" />
     </td>
 </tr>
 <tr>
@@ -675,20 +677,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss21}"/>
     </td>
     <td>
-        <h:outputText value="- มีแหล่งเงินจากภายนอกชำระหนี้แทนบางส่วน เช่น จากบริษัทแม่หรือผู้ประกอบการที่เกี่ยวข้อง"/>
+        <h:outputText   value="#{msg.get('app.qualitative.label.ss19')}"/>
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d17}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ผ่อนชำระดอกเบี้ยได้บางส่วน ซึ่งต่ำกว่าต้นทุนเงินฝากรวม เงินกู้ยืม ดอกเบี้ยส่วนที่เหลือตั้งพักไว้เพื่อชำระเมื่อครบกำหนดสัญญา หรือเมื่อลูกหนี้สามารถชำระได้โดยไม่มีแหล่งที่มาของการชำระหนี้ที่ชัดเจน"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.d18')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl12}"/>
     </td>
     <td>
-        <h:outputText value="- เงื่อนไขกำหนดให้ชำระเงินต้นจำนวนสูงมากในงวดปีสุดท้ายของสัญญา"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.dl12')}" />
     </td>
 </tr>
 <tr>
@@ -696,20 +697,19 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_ss22}"/>
     </td>
     <td>
-        <h:outputText
-                value="- ลูกหนี้ไม่สามารถชำระหนี้ได้ตามเงื่อนไขที่ธนาคารผ่อนปรน เช่น การชำระคืนเงินต้น การขยายระยะเวลาชำระหนี้ เป็นต้น"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.ss20')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d18}"/>
     </td>
     <td>
-        <h:outputText value="- ผ่อนชำระเงินต้น และดอกเบี้ยได้ แต่ต้องใช้ระยะเวลาผ่อนนาน และอาจได้รับชำระคืนไม่ครบ"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.d19')}" />
     </td>
     <td>
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_dl13}"/>
     </td>
     <td>
-        <h:outputText value="- มีความไม่แน่นอนของแหล่งเงินที่นำมาชำระหนี้ทั้งจำนวน หรือ เกือบทั้งจำนวน"/>
+        <h:outputText value="#{msg.get('app.qualitative.label.dl13')}" />
     </td>
 </tr>
 <tr>
@@ -718,140 +718,160 @@
         <h:selectBooleanCheckbox value="#{qualitative.qualitativeView.properties_d19}"/>
     </td>
     <td>
-        <h:outputText
-                value="- มีบุคคลอื่นซึ่งไม่ใช่ผู้ค้ำประกันตามกฎหมายชำระหนี้แทน บางส่วน ซึ่งมีความไม่แน่นอนในแหล่งเงินที่นำมาชำระหนี้"/>
+        <h:outputText  value="#{msg.get('app.qualitative.label.d20')}"/>
     </td>
     <td colspan="2"></td>
 </tr>
 
 </table>
+</td>
+</tr>
 
-<div>
-    <p><b>สรุปการจัดชั้นหนี้</b></p>
-</div>
+<tr>
+    <td>
+        <div>
+            <p><b>#{msg.get('app.qualitative.label.section.classificationResult')}</b></p>
+        </div>
+    </td>
+</tr>
 
-<table class="table_content" style="width:95%">
-    <tr>
-        <td style="width: 30%;text-align: left">
-            <h:outputLabel value="สรุปการจัดชั้นหนี้ : "/>
-            <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
-        </td>
-        <td style="width: 70%;text-align: left">
-            <table class="table_noborder">
+<tr>
+    <td>
+        <table class="table_content">
+            <tr>
+                <td style="width: 30%;text-align: left">
+                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
+                    <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
+                </td>
+                <td style="width: 70%;text-align: left">
+                    <table class="table_noborder">
+                        <tr>
+                            <td class="title" style="width: 25%;text-align: left">
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}"/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu id="dlgQualityLevelA"
+                                                 value="#{qualitative.qualitativeView.qualityLevel.id}"
+                                                 styleClass="largest"
+                                                 size="1"
+                                                 required="true">
+                                    <f:selectItem itemLabel="- please select -" itemValue="0"/>
+                                    <f:selectItems value="#{qualitative.qualityLevelList}"
+                                                   var="qualityItemsB"
+                                                   itemLabel="#{qualityItemsB.description}"
+                                                   itemValue="#{qualityItemsB.id}"/>
+                                </p:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="title">
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}"/>
+                            </td>
+                            <td>
+                                <h:inputTextarea cols="70" rows="3" name="remark"
+                                                 value="#{qualitative.qualitativeView.reason}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">
+                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')}"/>
+                    <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </td>
+                <td class="title">
+                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemarkNote')}"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <div>
+            <p><b>#{msg.get('app.qualitative.label.section.classificationDesc')}</b></p>
+        </div>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <table class="table_content">
+            <tr>
+                <td style="width: 50px;text-align: left">
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.pass')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
+                </td>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.sm')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
+                </td>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.ss')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.D')}"/>
+                </td>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.d')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h:outputLabel value="DL :"/>
+                </td>
+                <td>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.description.dl')}"/>
+                </td>
+            </tr>
+
+        </table>
+    </td>
+</tr>
+
+
+<tr>
+    <td>
+        <h:form id="form_button">
+            <table class="table_noborder" style="width:100%">
                 <tr>
-                    <td class="title" style="width: 25%;text-align: left">
-                        <h:outputLabel value="เหตุผลการจัดชั้นเชิงคุณภาพ :"/>
-                    </td>
-                    <td>
-                        <p:selectOneMenu id="dlgQualityLevelB"
-                                         value="#{qualitative.qualitativeView.qualityLevel.id}"
-                                         styleClass="largest"
-                                         size="1"
-                                         required="true">
-                            <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
-                            <f:selectItems value="#{qualitative.qualityLevelList}"
-                                           var="qualityItemsB"
-                                           itemLabel="#{qualityItemsB.description}"
-                                           itemValue="#{qualityItemsB.id}"/>
-                        </p:selectOneMenu>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title">
-                        <h:outputLabel value="เหตุผล :"/>
-                    </td>
-                    <td>
-                        <h:inputTextarea cols="70" rows="3" name="remark"
-                                         value="#{qualitative.qualitativeView.reason}"/>
+                    <td colspan="2" class="center">
+                        <p:commandButton id="btnSave"
+                                         value="#{msg.get('app.qualitative.button.saveButton')}"
+                                         styleClass="medium"
+                                         process=":frmMain"
+                                         action="#{qualitative.onSaveQualitativeB()}"
+                                         update=":msgBoxSystemMessagePanel"/>
+                        <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
+                                         id="btnCancel"
+                                         styleClass="medium"
+                                         process=":frmMain"
+                                         action="#{qualitative.onCancelQualitativeB}"
+                                         update=":frmMain"/>
                     </td>
                 </tr>
             </table>
-        </td>
-    </tr>
-    <tr>
-        <td class="title">
-            <h:outputLabel value="วันที่ :"/>
-            <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
-                <f:convertDateTime pattern="dd/MM/yyyy"/>
-            </h:outputText>
-        </td>
-        <td class="title">
-            <h:outputLabel
-                    value="หมายเหตุ :    1. ให้อธิบายเหตุผลให้ชัดเจนในกรณีที่การจัดชั้นลูกหนี้เชิงคุณภาพโดยที่ลูกหนี้มีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่งหรือหลายเกณฑ์ แต่การจัดชั้นหนี้ที่จะสะท้อนคุณภาพลูกหนี้โดยรวมมีความแตกต่างจากเกณฑ์ทั่วไปข้างต้น"/>
-        </td>
-    </tr>
+        </h:form>
+    </td>
+</tr>
 </table>
-
-<div>
-    <p><b>หลักเกณฑ์ในการจัดชั้นลูกหนี้</b></p>
-</div>
-
-<table class="table_content" style="width:95%">
-    <tr>
-        <td style="width: 50px;text-align: left">
-            <h:outputLabel value="Pass : "/>
-        </td>
-        <td style="text-align: left">
-            <h:outputLabel value="ผลการดำเนินงานและฐานะการเงิน สภาพคล่อง และมีความสามารถในการชำระหนี้ได้ครบถ้วน"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:outputLabel value="SM : "/>
-        </td>
-        <td>
-            <h:outputLabel value="ลูกหนี้ทั้งหมดที่มีผลการดำเนินงานด้อยลงอย่างมีนัยสำคัญอันมีผลให้มีความเสี่ยงสูงขึ้น"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:outputLabel value="SS : "/>
-        </td>
-        <td>
-            <h:outputLabel
-                    value="สินเชื่อที่มีโอกาสที่จะก่อให้เกิดส่วนสูญเสียที่ธนาคารต้องเร่งดำเนินการเปลี่ยนแปลงการชำระหนี้ / เงื่อนไข ตามสัญญาเดิม โดยการเจรจากำหนดระยะเวลา/เงื่อนไข การชำระหนี้และปรับโครงสร้างหนี้ หรือการปรับโครงสร้างทางการเงิน ลูกหนี้ผ่านการปรับโครงสร้างหนี้ซึ่งมีการขยายระยะเวลา หรือเปลี่ยนแปลงสัญญาโดยจัดไว้ในอัตราผ่อนปรนและอยู่ในช่วงการติดตามผลปฏิบัติตามการปรับปรุงโครงสร้างหนี้ให้จัดชั้นเป็น SS"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:outputLabel value="D :"/>
-        </td>
-        <td>
-            <h:outputLabel
-                    value="ลูกหนี้ที่มีโอกาสที่จะไม่สามารถจ่ายชำระหนี้เงินกู้ได้ครบจำนวน ไม่มีเงินชำระหนี้อยู่ในบัญชีและความอยู่รอดของกิจการมีโอกาสฟื้นตัวยาก ทางเลือกปรับโครงสร้างค่อนข้างยาก, ลูกหนี้ไม่ยินยอมชำระหนี้ หลักประกันมีแนวโน้มจะด้อยค่า เป็นต้น"/>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <h:outputLabel value="DL :"/>
-        </td>
-        <td>
-            <h:outputLabel
-                    value="มีความเป็นไปได้ว่าลูกหนี้จะไม่สามารถฟื้นตัวและอยู่รอดต่อไปและธนาคารมีโอกาสสูญเสียจำนวนมาก ซึ่งต้องมีการติดตามอย่างใกล้ชิด, การเรียกชำระหนี้คืน, การเร่งชำระหนี้เร็วขึ้นรวมทั้งกำหนดเงื่อนไขให้เข้มงวดขึ้น"/>
-        </td>
-    </tr>
-
-</table>
-
-<h:form id="form_button">
-    <table class="table_noborder" style="width:100%">
-        <tr>
-            <td colspan="2" class="center">
-                <p:commandButton id="btnSave" value="Save"
-                                 styleClass="medium"
-                                 process=":frmMain"
-                                 action="#{qualitative.onSaveQualitativeB()}"
-                                 update=":msgBoxSystemMessagePanel"/>
-                <p:commandButton value="Cancel"
-                                 id="btnCancel"
-                                 styleClass="medium"
-                                 process=":frmMain"
-                                 action="#{qualitative.onCancelQualitativeB}"
-                                 update=":frmMain"/>
-            </td>
-        </tr>
-    </table>
-</h:form>
 <!-- end content -->
 </div>
 </div>

@@ -13,6 +13,7 @@ import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
+import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditSummary;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -23,6 +24,7 @@ import com.clevel.selos.model.view.ExistingCreditView;
 import com.clevel.selos.transform.business.ExistingCreditTransform;
 import com.clevel.selos.util.Util;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Stateless
 public class ExistingCreditControl extends BusinessControl{
 
     @Inject
@@ -148,12 +151,13 @@ public class ExistingCreditControl extends BusinessControl{
         List<String> personalIDList = new ArrayList<String>();
         List<String> _borrowerPersonalID = new ArrayList<String>();
         for(CustomerInfoView customerInfoView : customerInfoViewList){
+
             if(!Util.isEmpty(customerInfoView.getCitizenId())){
                 log.info("get citizen {}", customerInfoView.getCitizenId());
                 Reference reference = customerInfoView.getReference();
                 if(Util.isTrue(reference.getSll())){
                     personalIDList.add(customerInfoView.getCitizenId());
-                    log.info("get reference {}", reference);
+                    log.info("get reference for RLOS {}", reference);
                 }
 
                 if(customerInfoView.getRelation().getId() == 1){
@@ -161,6 +165,7 @@ public class ExistingCreditControl extends BusinessControl{
                 }
             }
         }
+        log.info("personal id in RLOS size {}", personalIDList);
 
         if(personalIDList.size() > 0){
             //Retrieve Obligation
@@ -233,11 +238,29 @@ public class ExistingCreditControl extends BusinessControl{
     }
 
     public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCasePrescreen workCasePrescreen){
-        ExistingCreditSummary existingCreditSummary = existingCreditTransform.getExistingCreditSummary(existingCreditView, getCurrentUser());
+        ExistingCreditSummary existingCreditSummary = null;
+        if(workCasePrescreen != null && workCasePrescreen.getId() != 0){
+            existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreen.getId());
+            if(existingCreditSummary != null){
+                deleteExistingCreditDetail(existingCreditSummary);
+            }
+        }
+
+        existingCreditSummary = existingCreditTransform.getExistingCreditSummary(existingCreditView, existingCreditSummary, getCurrentUser());
         existingCreditSummary.setWorkCasePrescreen(workCasePrescreen);
         existingCreditSummaryDAO.persist(existingCreditSummary);
         //existingCreditDetailDAO.persist(existingCreditSummary.getExistingCreditDetailList());
+    }
 
+    public void deleteExistingCreditDetail(ExistingCreditSummary existingCreditSummary){
+        log.info("start delete {}", existingCreditSummary);
+        List<ExistingCreditDetail> existingCreditDetailList = existingCreditSummary.getExistingCreditDetailList();
+
+        log.info("list of existing detail {}", existingCreditDetailList);
+        existingCreditDetailDAO.delete(existingCreditDetailList);
+        existingCreditSummary.setExistingCreditDetailList(null);
+        existingCreditSummaryDAO.persist(existingCreditSummary);
+        log.info("end delete {}", existingCreditSummary);
     }
 
     public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCase workCase){

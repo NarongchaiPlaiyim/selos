@@ -60,6 +60,10 @@ public class PrescreenBusinessControl extends BusinessControl {
     NCBBizTransform ncbBizTransform;
     @Inject
     PrescreenCollateralTransform prescreenCollateralTransform;
+    @Inject
+    NCBTransform ncbTransform;
+    @Inject
+    NCBDetailTransform ncbDetailTransform;
 
     @Inject
     PrescreenDAO prescreenDAO;
@@ -99,6 +103,10 @@ public class PrescreenBusinessControl extends BusinessControl {
     PrescreenCollateralDAO prescreenCollateralDAO;
     @Inject
     RelationDAO relationDAO;
+    @Inject
+    NCBDetailDAO ncbDetailDAO;
+    @Inject
+    NCBDAO ncbDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -220,10 +228,15 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
-        groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerComLimit());
-        groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerAppInRLOSLimit());
-        groupExposure = groupExposure.add(existingCreditView.getTotalRelatedComLimit());
-        groupExposure = groupExposure.add(existingCreditView.getTotalRelatedAppInRLOSLimit());
+        if(existingCreditView.getTotalBorrowerComLimit() != null)
+            groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerComLimit());
+        if(existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
+            groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerAppInRLOSLimit());
+        if(existingCreditView.getTotalRelatedComLimit() != null)
+            groupExposure = groupExposure.add(existingCreditView.getTotalRelatedComLimit());
+        if(existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
+            groupExposure = groupExposure.add(existingCreditView.getTotalRelatedAppInRLOSLimit());
+
         prescreenResultView.setGroupExposure(groupExposure);
 
 
@@ -364,7 +377,26 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
+                    //need to save ncb if check NCB Success
                     if(ncbView.getResult() == ActionResult.SUCCESS){
+                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                        log.info("findByCitizenId customer : {}", customer);
+                        if(customer == null ){
+                            customer = new Customer();
+                        }
+                        NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
+                        List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
+
+                        //save NCB
+                        //transform NCB
+                        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+                        ncb.setCustomer(customer);
+                        //transform NCBDetail list
+                        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+
+                        ncbDAO.persist(ncb);
+                        ncbDetailDAO.persist(ncbDetailList);
+
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
@@ -373,13 +405,6 @@ public class PrescreenBusinessControl extends BusinessControl {
                         CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
-
-                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
-                        log.info("findByCitizenId customer : {}", customer);
-
-                        if(customer == null ){
-                            customer = new Customer();
-                        }
 
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
@@ -423,6 +448,24 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
                     if(ncbView.getResult() == ActionResult.SUCCESS){
+                        Juristic juristic = juristicDAO.findByRegisterId(ncbView.getIdNumber());
+                        Customer customer = juristic.getCustomer();
+                        if(customer == null ){
+                            customer = new Customer();
+                        }
+                        NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
+                        List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
+
+                        //save NCB
+                        //transform NCB
+                        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+                        ncb.setCustomer(customer);
+                        //transform NCBDetail list
+                        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+
+                        ncbDAO.persist(ncb);
+                        ncbDetailDAO.persist(ncbDetailList);
+
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
                         csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
@@ -431,9 +474,6 @@ public class PrescreenBusinessControl extends BusinessControl {
                         CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
-
-                        Juristic juristic = juristicDAO.findByRegisterId(ncbView.getIdNumber());
-                        Customer customer = juristic.getCustomer();
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
                         for(CSIData csiData : csiResult.getWarningCodeFullMatched()){

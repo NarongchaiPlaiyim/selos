@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -29,17 +30,14 @@ public class QualitativeControl extends BusinessControl {
     @Inject
     QualitativeTransform qualitativeTransform;
 
-
     @Inject
-    public QualitativeControl() {
+    public QualitativeControl() {}
 
-    }
-
-    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId) {
+    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId ,User user) {
         log.info("start saveQualitativeA ::: ");
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase);
+        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase ,user);
         qualitativeADAO.persist(qualitativeA);
 
     }
@@ -72,10 +70,10 @@ public class QualitativeControl extends BusinessControl {
     }
 
 
-    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId) {
+    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId,User user) {
         log.info("start saveQualitativeB ::: ");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase);
+        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase,user);
         qualitativeBDAO.persist(qualitativeB);
 
     }

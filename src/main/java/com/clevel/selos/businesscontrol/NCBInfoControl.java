@@ -58,7 +58,7 @@ public class NCBInfoControl extends BusinessControl {
 
 
     public NCBInfoView getNCBInfoView(long customerId){
-        log.info("getNCBInfoView :: customer id  :: {}", customerId);
+        log.info("getNcbInfoView :: customer id  :: {}", customerId);
         NCBInfoView ncbInfoView = null;
 
         try{
@@ -68,9 +68,9 @@ public class NCBInfoControl extends BusinessControl {
                 ncbInfoView  = ncbTransform.transformToView(ncb);
             }
         }catch (Exception e){
-            log.error( "getNCBInfoView error :: " + e.getMessage());
+            log.error( "getNcbInfoView error :: " + e.getMessage());
         }finally{
-            log.info( "getNCBInfoView end" );
+            log.info( "getNcbInfoView end" );
         }
 
         return ncbInfoView;

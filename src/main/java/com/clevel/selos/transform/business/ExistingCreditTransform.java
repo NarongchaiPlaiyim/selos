@@ -8,9 +8,12 @@ import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditSummary;
+import com.clevel.selos.model.db.working.WorkCasePrescreen;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditView;
 import com.clevel.selos.util.DateTimeUtil;
@@ -91,12 +94,10 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailViewList;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary(ExistingCreditView existingCreditView, User user){
+    public ExistingCreditSummary getExistingCreditSummary(ExistingCreditView existingCreditView, ExistingCreditSummary existingCreditSummary, User user){
         log.info("Transform ExistingCreditSummary with ExistingCreditView{}", existingCreditView);
-        ExistingCreditSummary existingCreditSummary = null;
         Date now = new Date();
-        if(existingCreditView.getId() != 0){
-            existingCreditSummary = existingCreditSummaryDAO.findById(existingCreditView.getId());
+        if(existingCreditSummary != null){
             existingCreditSummary.setModifyBy(user);
             existingCreditSummary.setModifyDate(now);
         } else {
