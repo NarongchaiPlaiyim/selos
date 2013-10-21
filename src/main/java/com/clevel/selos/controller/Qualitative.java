@@ -66,7 +66,6 @@ public class Qualitative {
     private boolean messageErr;
 
     public Qualitative(){
-
     }
 
     @PostConstruct
@@ -74,7 +73,7 @@ public class Qualitative {
         log.info("onCreation.");
 
         HttpSession session = FacesUtil.getSession(true);
-        user = userDAO.findById("10001");
+        user = (User)session.getAttribute("user");
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
@@ -129,11 +128,10 @@ public class Qualitative {
         try{
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
                 if(qualitativeView.getId() == 0){
-                    qualitativeView.setCreateDate(DateTime.now().toDate());
                     qualitativeView.setCreateBy(user);
+                    qualitativeView.setCreateDate(DateTime.now().toDate());
                 }
-
-                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
                 messageHeader = "Save QualitativeA Success.";
                 message = "Save QualitativeA success.";
@@ -141,7 +139,7 @@ public class Qualitative {
             }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 qualitativeView.setModifyBy(user);
                 qualitativeView.setModifyDate(DateTime.now().toDate());
-                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId);
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 messageHeader = "Edit QualitativeA Success.";
                 message = "Edit QualitativeA  success.";
             }
@@ -179,25 +177,14 @@ public class Qualitative {
 
         try{
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                HttpSession session = FacesUtil.getSession(true);
-                session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
-
-                if(qualitativeView.getId() == 0){
-                    qualitativeView.setCreateDate(DateTime.now().toDate());
-                    qualitativeView.setCreateBy(user);
-                }
-
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
-
                 messageHeader = "Save QualitativeB Success.";
                 message = "Save QualitativeB success.";
 
 
             }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                qualitativeView.setModifyBy(user);
-                qualitativeView.setModifyDate(DateTime.now().toDate());
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId);
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
                 messageHeader = "Edit QualitativeB Success.";
                 message = "Edit QualitativeB  success.";
             }

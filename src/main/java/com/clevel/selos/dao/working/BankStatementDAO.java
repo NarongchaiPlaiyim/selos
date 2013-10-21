@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class BankStatementDAO extends GenericDAO<BankStatement, Integer> {
+public class BankStatementDAO extends GenericDAO<BankStatement, Long> {
     @Inject
     private Logger log;
 
