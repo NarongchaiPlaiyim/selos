@@ -11,7 +11,7 @@ import java.util.List;
 public class BasicInfoAccountView implements Serializable {
     private long id;
     private String accountName;
-    private OpenAccountType accountType;
+    private BankAccountTypeView bankAccountTypeView;
     private OpenAccountProduct product;
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
     private String purposeForShow;
@@ -21,7 +21,7 @@ public class BasicInfoAccountView implements Serializable {
     }
 
     public void reset(){
-        this.accountType = new OpenAccountType();
+        this.bankAccountTypeView = new BankAccountTypeView();
         this.product = new OpenAccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();
     }
@@ -42,12 +42,12 @@ public class BasicInfoAccountView implements Serializable {
         this.accountName = accountName;
     }
 
-    public OpenAccountType getAccountType() {
-        return accountType;
+    public BankAccountTypeView getBankAccountTypeView() {
+        return bankAccountTypeView;
     }
 
-    public void setAccountType(OpenAccountType accountType) {
-        this.accountType = accountType;
+    public void setBankAccountTypeView(BankAccountTypeView bankAccountTypeView) {
+        this.bankAccountTypeView = bankAccountTypeView;
     }
 
     public OpenAccountProduct getProduct() {
