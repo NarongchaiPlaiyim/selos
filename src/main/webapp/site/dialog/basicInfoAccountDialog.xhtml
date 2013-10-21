@@ -21,9 +21,9 @@
                 </td>
                 <td>
                     <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoAccountView.accountType.id}">
+                                     value="#{basicInfo.basicInfoAccountView.bankAccountTypeView.id}">
                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                        <f:selectItems value="#{basicInfo.openAccountTypeList}"
+                        <f:selectItems value="#{basicInfo.bankAccountTypeList}"
                                        var="oepnAccountType"
                                        itemLabel="#{oepnAccountType.name}"
                                        itemValue="#{oepnAccountType.id}"/>
