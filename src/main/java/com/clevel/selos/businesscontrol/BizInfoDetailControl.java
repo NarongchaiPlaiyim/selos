@@ -141,9 +141,7 @@ public class BizInfoDetailControl {
 
             bizDescId = bizDescReq.getId();
             bizDescRes =  businessDescriptionDAO.findById(bizDescId);
-
             log.info( "onFindBizDescByID before return is   >> " + bizDescRes.toString());
-
 
             return bizDescRes;
         }catch (Exception e){
@@ -234,32 +232,18 @@ public class BizInfoDetailControl {
         try{
             log.info( "onDeleteBizInfoToDB begin" );
             log.info( "onDeleteBizInfoToDB id is " +bizInfoDetailView.getId());
-            // 1 . first way
-            //log.info( "1 way start" );
-            //bizInfoDetail = bizInfoDetailTransform.transformToModel(bizInfoDetailView);
-            //log.info( "1 way result is " +bizInfoDetail);
-            // 2 . first way
-            log.info( "2 way start" );
             bizInfoDetail = bizInfoDetailDAO.findById(bizInfoDetailView.getId());
-            log.info( "2 way result is " +bizInfoDetail);
 
             List<BizProductDetail>   bizProductDetailLisDelete = bizProductDetailDAO.findByBizInfoDetail(bizInfoDetail);
             bizProductDetailDAO.delete(bizProductDetailLisDelete);
-            log.info( "supplierDetailList delete end " +bizProductDetailLisDelete.size() );
 
             List<BizStakeHolderDetail> bizSupplierListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"1");
-
             bizStakeHolderDetailDAO.delete(bizSupplierListDelete);
-            log.info( "supplierDetailList delete end " +bizSupplierListDelete.size() );
-
 
             List<BizStakeHolderDetail> bizBuyerListDelete =bizStakeHolderDetailDAO.findByBizInfoDetail(bizInfoDetail,"2");
             bizStakeHolderDetailDAO.delete(bizBuyerListDelete);
-            log.info( "supplierDetailList delete end " +bizBuyerListDelete.size() );
 
             bizInfoDetailDAO.delete(bizInfoDetail);
-            log.info( "bizInfoDetailDAO delete end" );
-
 
         }catch (Exception e){
             log.error( "onDeleteBizInfoToDB error" + e);

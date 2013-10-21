@@ -58,30 +58,6 @@ public class BasicInfoControl extends BusinessControl {
 
         BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo,workCase);
 
-//        Comment This for use transform
-
-//        List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
-//        List<BasicInfoAccountView> basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
-//        for(OpenAccount oa : openAccountList){
-//            List<OpenAccPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
-//            List<BasicInfoAccountPurposeView> bia = basicInfoAccPurposeTransform.transformToViewList(openAccPurposeList);
-//            BasicInfoAccountView basicInfoAccountView = basicInfoAccountTransform.transformToView(oa);
-//            basicInfoAccountView.setBasicInfoAccountPurposeView(bia);
-//
-//            StringBuilder stringBuilder = new StringBuilder();
-//
-//            for(int i=0;i<bia.size();i++){
-//                if(i == 0){
-//                    stringBuilder.append(bia.get(i).getPurpose().getName());
-//                }else{
-//                    stringBuilder.append(", "+bia.get(i).getPurpose().getName());
-//                }
-//            }
-//            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-//            basicInfoAccountViews.add(basicInfoAccountView);
-//        }
-//        basicInfoView.setBasicInfoAccountViews(basicInfoAccountViews);
-
         log.info("getBasicInfo ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;
     }
@@ -113,7 +89,6 @@ public class BasicInfoControl extends BusinessControl {
 
         BasicInfo basicInfo = basicInfoTransform.transformToModel(basicInfoView, workCase, user);
         basicInfoDAO.persist(basicInfo);
-//        return basicInfo;
 
         List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
         for(OpenAccount oa : openAccountList){
@@ -137,32 +112,4 @@ public class BasicInfoControl extends BusinessControl {
         }
 
     }
-
-//    public void deleteOpenAccount(long basicInfoId){
-//        //for edit / delete - to open account
-////        List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
-//        List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfoId);
-//        for(OpenAccount oa : openAccountList){
-//            List<OpenAccPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
-//            openAccPurposeDAO.delete(openAccPurposeList);
-//        }
-//        openAccountDAO.delete(openAccountList);
-//    }
-//
-//    public void addOpenAccount(BasicInfoView basicInfoView,BasicInfo basicInfo){
-//        //for addNew Open Account
-//        if(basicInfoView.getBasicInfoAccountViews().size() != 0){
-//            for(BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()){
-//                OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav,basicInfo);
-//                openAccountDAO.save(openAccount);
-//
-//                for (BasicInfoAccountPurposeView biapv : biav.getBasicInfoAccountPurposeView()){
-//                    if(biapv.isSelected()){
-//                        OpenAccPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv,openAccount);
-//                        openAccPurposeDAO.save(openAccPurpose);
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

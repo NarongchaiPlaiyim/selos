@@ -55,11 +55,15 @@ public class CustomerTransform extends Transform {
         customerInfoView.setTitleTh(customer.getTitle());
         customerInfoView.setFirstNameTh(customer.getNameTh());
         customerInfoView.setLastNameTh(customer.getLastNameTh());
+        if(customerInfoView.getLastNameTh() == null){
+            customerInfoView.setLastNameTh("");
+        }
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
         customerInfoView.setAge(customer.getAge());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
         customerInfoView.setRelation(customer.getRelation());
         customerInfoView.setReference(customer.getReference());
+        customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setDocumentType(customer.getDocumentType());
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setValidId(2);
@@ -82,6 +86,7 @@ public class CustomerTransform extends Transform {
                 addressView.setExtension(address.getExtension());
                 addressView.setContactName(address.getContactName());
                 addressView.setContactPhone(address.getContactPhone());
+                addressView.setAddress(address.getAddress());
 
                 if(address.getAddressType().getId() == 1){
                     // Current address
@@ -230,6 +235,7 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setReference(null);
         }
+        customer.setApproxIncome(customerInfoView.getApproxIncome());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 
@@ -284,6 +290,7 @@ public class CustomerTransform extends Transform {
             address.setExtension(currentAddress.getExtension());
             address.setContactName(currentAddress.getContactName());
             address.setContactPhone(currentAddress.getContactPhone());
+            address.setAddress(currentAddress.getAddress());
 
             addressList.add(address);
         }
@@ -336,6 +343,7 @@ public class CustomerTransform extends Transform {
             address.setExtension(registerAddress.getExtension());
             address.setContactName(registerAddress.getContactName());
             address.setContactPhone(registerAddress.getContactPhone());
+            address.setAddress(registerAddress.getAddress());
 
             addressList.add(address);
         }
@@ -385,6 +393,7 @@ public class CustomerTransform extends Transform {
             address.setExtension(workAddress.getExtension());
             address.setContactName(workAddress.getContactName());
             address.setContactPhone(workAddress.getContactPhone());
+            address.setAddress(workAddress.getAddress());
 
             addressList.add(address);
         }

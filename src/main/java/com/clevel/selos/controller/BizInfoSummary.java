@@ -15,14 +15,19 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -45,9 +50,17 @@ public class BizInfoSummary implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private ReferredExperience  referredExperience;
-    public int provinceID;
-    public int districtID;
-    public int subDistrictID;
+    private BigDecimal sumIncomeAmount;
+    private BigDecimal sumIncomePercent;
+    private BigDecimal sumweightAdjustIncomeFactor;
+    private long sumweightAR;
+    private long sumweightAP;
+    private long sumweightINV;
+
+
+    private String messageHeader;
+    private String message;
+    private String redirect;
 
     @Inject
     Logger log;
@@ -65,7 +78,7 @@ public class BizInfoSummary implements Serializable {
     private SubDistrictDAO subDistrictDAO;
     @Inject
     private ReferredExperienceDAO referredExperienceDAO;
-
+    @Inject
     private BizInfoDetailControl bizInfoDetailControl;
     @Inject
     private BizInfoDetailTransform bizProductDetailTransform;
@@ -80,7 +93,6 @@ public class BizInfoSummary implements Serializable {
     @PostConstruct
     public void onCreation(){
         log.info("onCreation bizInfoSum");
-
         onSearchBizInfoSummaryByWorkCase();
 
 
@@ -137,47 +149,100 @@ public class BizInfoSummary implements Serializable {
     }
 
 
-    public List<BizInfoDetailView> getBusinessInfoListDB(){
+    public void getBusinessInfoListDB(){
+
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
-        return bizInfoDetailViewList;
+        if(bizInfoDetailViewList.size()==0){
+            bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
+        }else{
+            sumIncomeAmount = new BigDecimal(1000).setScale(2);
+            sumIncomePercent = new BigDecimal(1000).setScale(2);
+            double sumAdjust = -1;
+            for(int i=0;i<bizInfoDetailViewList.size();i++){
+                BizInfoDetailView temp = bizInfoDetailViewList.get(i);
+                sumAdjust =+ temp.getAdjustedIncomeFactor().doubleValue();
+                sumweightAR =+ temp.getBizDesc().getAr();
+                sumweightAP =+ temp.getBizDesc().getAp() ;
+                sumweightINV =+ temp.getBizDesc().getInv()  ;
+            }
+            sumweightAdjustIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
+        }
     }
 
 
     public void onSaveBizInfoSummary(){
-        log.info( "onSaveBizInfoView bizInfoDetailView is " + bizInfoSummaryView);
 
-        log.info( " Initial session ");
-        HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", 10001);
-        session.setAttribute("bizInfoDetailViewId", -1 );
+        try{
+            log.info("onSaveBizInfoSummary begin");
 
-        log.info( " get AT session workCaseId is " + session.getAttribute("workCaseId").toString());
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        log.info( " get FROM session workCaseId is " + workCaseId);
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("workCaseId", 10001);
+            session.setAttribute("bizInfoDetailViewId", -1 );
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
+            log.info("bizInfoSummaryControl end");
 
-        bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
 
-        session.setAttribute("bizInfoSummaryId",bizInfoSummaryView.getId() );
+            if(redirect!=null&&!redirect.equals("")){
+                log.info("have to redirect ");
+                if(redirect.equals("viewDetail")){
+                    log.info("view Detail ");
+                    onViewDetail();
+                }
 
+                String url = "bizInfoDetail.jsf";
+                FacesContext fc = FacesContext.getCurrentInstance();
+                ExternalContext ec = fc.getExternalContext();
+                log.info("redirect to new page");
+                ec.redirect(url);
+            }else{
+                log.info("not have to redirect ");
+            }
+
+            log.info("after redirect method");
+            messageHeader = "Save BizInfoSummary Success.";
+            message = "Save BizInfoSummary data success.";
+            log.info("after set message");
+            onCreation();
+            log.info("onCreation() after Save");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            log.info("onSaveBizInfoSummary Error");
+            messageHeader = "Save BizInfoSummary Failed.";
+            if(ex.getCause() != null){
+                log.info("ex.getCause().toString() is " + ex.getCause().toString());
+                message = "Save BizInfoSummary data failed. Cause : " + ex.getCause().toString();
+            } else {
+                log.info("ex.getCause().toString() is " + ex.getMessage());
+                message = "Save BizInfoSummary data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }finally {
+            log.info("onSaveBizInfoSummary end");
+        }
     }
 
     public void onViewDetail(){
         log.info(" onViewDetail begin !! {}");
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("bizInfoDetailViewId",selectBizInfoDetailView.getId() );
-        //log.info(" onViewDetail selectBizInfoDetailView onRow !! {}", selectBizInfoDetailView);
         log.info(" onViewDetail end !! {}");
-
-
     }
 
 
     public void onDeleteBizInfoToDB(){
 
-        bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
+        try{
+            log.info("onDeleteBizInfoToDB Controller begin " );
+            bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
+            getBusinessInfoListDB();
+        }catch (Exception e){
 
+        }finally {
+            log.info("onDeleteBizInfoToDB Controller end " );
+        }
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {
@@ -186,30 +251,6 @@ public class BizInfoSummary implements Serializable {
 
     public void setBizInfoDetailViewList(List<BizInfoDetailView> bizInfoDetailViewList) {
         this.bizInfoDetailViewList = bizInfoDetailViewList;
-    }
-
-    public int getProvinceID() {
-        return provinceID;
-    }
-
-    public void setProvinceID(int provinceID) {
-        this.provinceID = provinceID;
-    }
-
-    public int getDistrictID() {
-        return districtID;
-    }
-
-    public void setDistrictID(int districtID) {
-        this.districtID = districtID;
-    }
-
-    public int getSubDistrictID() {
-        return subDistrictID;
-    }
-
-    public void setSubDistrictID(int subDistrictID) {
-        this.subDistrictID = subDistrictID;
     }
 
     public List<Province> getProvinceList() {
@@ -266,5 +307,77 @@ public class BizInfoSummary implements Serializable {
 
     public void setReferredExperienceList(List<ReferredExperience> referredExperienceList) {
         this.referredExperienceList = referredExperienceList;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
+    public BigDecimal getSumIncomeAmount() {
+        return sumIncomeAmount;
+    }
+
+    public void setSumIncomeAmount(BigDecimal sumIncomeAmount) {
+        this.sumIncomeAmount = sumIncomeAmount;
+    }
+
+    public BigDecimal getSumIncomePercent() {
+        return sumIncomePercent;
+    }
+
+    public void setSumIncomePercent(BigDecimal sumIncomePercent) {
+        this.sumIncomePercent = sumIncomePercent;
+    }
+
+    public BigDecimal getSumweightAdjustIncomeFactor() {
+        return sumweightAdjustIncomeFactor;
+    }
+
+    public void setSumweightAdjustIncomeFactor(BigDecimal sumweightAdjustIncomeFactor) {
+        this.sumweightAdjustIncomeFactor = sumweightAdjustIncomeFactor;
+    }
+
+    public long getSumweightAR() {
+        return sumweightAR;
+    }
+
+    public void setSumweightAR(long sumweightAR) {
+        this.sumweightAR = sumweightAR;
+    }
+
+    public long getSumweightAP() {
+        return sumweightAP;
+    }
+
+    public void setSumweightAP(long sumweightAP) {
+        this.sumweightAP = sumweightAP;
+    }
+
+    public long getSumweightINV() {
+        return sumweightINV;
+    }
+
+    public void setSumweightINV(long sumweightINV) {
+        this.sumweightINV = sumweightINV;
     }
 }

@@ -48,9 +48,13 @@ public class BizInfoDetail implements Serializable {
     private BigDecimal buyerVolumeSum2;
     private BigDecimal buyerTermSum;
 
+    private String messageHeader;
+    private String message;
+
     private int rowIndex;
     private String modeForButton;
     private String dlgStakeName;
+    private String dlgStakeSaleType;
     private int bizGroupId;
     long bizInfoSummaryId;
     long bizInfoDetailViewId;
@@ -102,83 +106,97 @@ public class BizInfoDetail implements Serializable {
 
     @PostConstruct
     public void onCreation(){
-        log.info("onCreation ");
+        try{
+            log.info("onCreation ");
 
-        HttpSession session = FacesUtil.getSession(true);
+            HttpSession session = FacesUtil.getSession(true);
 
-        long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        log.info( " get FROM session workCaseId is " + workCaseId);
+            long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            log.info( " get FROM session workCaseId is " + workCaseId);
+            bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+            log.info( " get FROM session bizInfoDetailViewId is " + bizInfoDetailViewId);
 
-        bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
-        bizInfoSummaryId = bizInfoSummaryView.getId();
-        bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
+            bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
+            bizInfoSummaryId = bizInfoSummaryView.getId();
+            log.info( " get FROM session bizInfoSummaryId is " + bizInfoSummaryId);
 
-        descType = "";
-
-        businessActivityList = businessActivityDAO.findAll();
-        businessTypeList = businessTypeDAO.findAll();
-        businessGroupList = businessGroupDAO.findAll();
-
-        if(bizInfoDetailViewId == -1 ){
-
-            log.info( "bizInfoDetailView NEW RECORD");
-
-            bizInfoDetailView = new BizInfoDetailView();
-
-            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
-            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
-            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
-
-            bizStakeHolderDetailView = new BizStakeHolderDetailView();
-            bizProductDetailView = new BizProductDetailView();
-
-            bizGroup = new BusinessGroup();
-            bizDesc = new BusinessDescription();
-
-            bizType = new BusinessType();
-            bizActivity = new BusinessActivity();
-
-
-            bizInfoDetailView.setBizDesc(bizDesc);
-            bizInfoDetailView.setBizGroup(bizGroup);
-            bizInfoDetailView.setBizType(bizType);
-            bizInfoDetailView.setBizActivity(bizActivity);
-
-        }else{
-            //
-            log.info( "bizInfoDetailView FIND BY ID ");
-            bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
-
-            log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
-            if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
-                bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
-            }else {
-                bizProductDetailViewList =   new ArrayList<BizProductDetailView>();
-            }
-            log.info( "bizInfoDetailView getSupplierDetailList Size " +  bizInfoDetailView.getSupplierDetailList().size());
-            if(bizInfoDetailView.getSupplierDetailList().size()>0){
-                supplierDetailList =   bizInfoDetailView.getSupplierDetailList();
-            }else {
-                supplierDetailList =   new ArrayList<BizStakeHolderDetailView>();
-            }
-            log.info( "bizInfoDetailView getBuyerDetailList Size " +  bizInfoDetailView.getBuyerDetailList().size());
-            if(bizInfoDetailView.getBuyerDetailList().size()>0){
-                buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
-            }else {
-                buyerDetailList =   new ArrayList<BizStakeHolderDetailView>();
-            }
-            bizGroup =  bizInfoDetailView.getBizGroup();
-            bizDesc =  bizInfoDetailView.getBizDesc();
-
-            descType = "1";
-            onChangeBusinessGroup();
-            onChangeBusinessDesc();
             descType = "";
-        }
-        bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
-        bizInfoDetailView.setSupplierDetailList(supplierDetailList);
-        bizInfoDetailView.setBuyerDetailList(buyerDetailList);
 
+            businessActivityList = businessActivityDAO.findAll();
+            businessTypeList = businessTypeDAO.findAll();
+            businessGroupList = businessGroupDAO.findAll();
+
+            if(bizInfoDetailViewId == -1 ){
+
+                log.info( "bizInfoDetailView NEW RECORD");
+
+                bizInfoDetailView = new BizInfoDetailView();
+
+                bizProductDetailViewList = new ArrayList<BizProductDetailView>();
+                supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
+                buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+
+                bizStakeHolderDetailView = new BizStakeHolderDetailView();
+                bizProductDetailView = new BizProductDetailView();
+
+                bizGroup = new BusinessGroup();
+                bizDesc = new BusinessDescription();
+
+                bizType = new BusinessType();
+                bizActivity = new BusinessActivity();
+
+
+                bizInfoDetailView.setBizDesc(bizDesc);
+                bizInfoDetailView.setBizGroup(bizGroup);
+                bizInfoDetailView.setBizType(bizType);
+                bizInfoDetailView.setBizActivity(bizActivity);
+
+                log.info( "bizInfoDetailView NEW RECORD");
+
+            }else{
+                //
+                log.info( "bizInfoDetailView FIND BY ID ");
+                bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
+
+                log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
+                if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
+                    bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
+                }else {
+                    bizProductDetailViewList =   new ArrayList<BizProductDetailView>();
+                }
+                log.info( "bizInfoDetailView getSupplierDetailList Size " +  bizInfoDetailView.getSupplierDetailList().size());
+                if(bizInfoDetailView.getSupplierDetailList().size()>0){
+                    supplierDetailList =   bizInfoDetailView.getSupplierDetailList();
+                }else {
+                    supplierDetailList =   new ArrayList<BizStakeHolderDetailView>();
+                }
+                log.info( "bizInfoDetailView getBuyerDetailList Size " +  bizInfoDetailView.getBuyerDetailList().size());
+                if(bizInfoDetailView.getBuyerDetailList().size()>0){
+                    buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
+                }else {
+                    buyerDetailList =   new ArrayList<BizStakeHolderDetailView>();
+                }
+                bizGroup =  bizInfoDetailView.getBizGroup();
+                bizDesc =  bizInfoDetailView.getBizDesc();
+
+                descType = "1";
+                onChangeBusinessGroup();
+                onChangeBusinessDesc();
+                descType = "";
+            }
+            bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
+            bizInfoDetailView.setSupplierDetailList(supplierDetailList);
+            bizInfoDetailView.setBuyerDetailList(buyerDetailList);
+        }catch (Exception ex){
+            log.info("onCreation Exception ");
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+            }
+        }finally {
+            log.info("onCreation end ");
+        }
     }
 
     public void onChangeBusinessGroup(){
@@ -270,7 +288,7 @@ public class BizInfoDetail implements Serializable {
 
     public void onSaveBizProductDetailView(){
         boolean complete = false;
-        log.info( " modeForButton is " + modeForButton);
+        log.info(" modeForButton is " + modeForButton);
 
         log.info( "context.addCallbackParam " );
         RequestContext context = RequestContext.getCurrentInstance();
@@ -320,17 +338,16 @@ public class BizInfoDetail implements Serializable {
         bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,selectStakeHolder);
 
         log.info( " bizStakeHolderTemp at onRow is " + bizStakeHolderTemp);
-
     }
 
     private void onSetLabelStakeHolder(){
-
         if(stakeType.equalsIgnoreCase("1")){
-            dlgStakeName = msg.get("app.supplierName");
+            dlgStakeName = msg.get("app.bizInfoDetail.bizStakeHolder.label.supplierName");
+            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentBuysVolume");
         }else if(stakeType.equalsIgnoreCase("2")){
-            dlgStakeName =msg.get("app.buyerName");
+            dlgStakeName =msg.get("app.bizInfoDetail.bizStakeHolder.label.buyerName");
+            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentSalesVolume");
         }
-
     }
 
     public void onDeleteBizStakeHolderDetailView() {
@@ -486,7 +503,25 @@ public class BizInfoDetail implements Serializable {
         return validate;
     }
     public void onSaveBizInfoView(){
-        bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView,bizInfoSummaryId);
+
+        try{
+            log.info("onSaveBizInfoView begin");
+            bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
+            messageHeader = "Save Basic Info Success.";
+            message = "Save Basic Info data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Basic Info Failed.";
+            if(ex.getCause() != null){
+                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }finally {
+            log.info("onSaveBizInfoView end");
+        }
     }
 
     public void onDeleteBizInfoView(){
@@ -669,5 +704,27 @@ public class BizInfoDetail implements Serializable {
         this.businessActivityList = businessActivityList;
     }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getDlgStakeSaleType() {
+        return dlgStakeSaleType;
+    }
+
+    public void setDlgStakeSaleType(String dlgStakeSaleType) {
+        this.dlgStakeSaleType = dlgStakeSaleType;
+    }
 }

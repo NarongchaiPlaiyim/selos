@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -124,10 +125,12 @@ public class PrescreenChecker implements Serializable {
             citizenID = new String[row];
         }
 
+        log.info("customerinfoList : {}", customerInfoViewList);
 
     }
 
     public void onCheckCustomer(){
+        log.info("onCheckCustomer :::");
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
@@ -135,17 +138,33 @@ public class PrescreenChecker implements Serializable {
         boolean tmpValidate = false;
         int count = 0;
         for(CustomerInfoView customer : tmpCustomerInfoViewList){
-            if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
-                log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
-                customer.setValidId(1);
-                customer.setNcbReason("");
-                tmpValidate = true;
-            }else{
-                log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
-                customer.setValidId(0);
-                customer.setNcbReason("");
-                tmpValidate = false;
+            log.info("CustomerInfo : {}", customer);
+            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
+                    log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    tmpValidate = true;
+                }else{
+                    log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    tmpValidate = false;
+                }
+            } else {
+                if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
+                    log.info("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
+                    customer.setValidId(1);
+                    customer.setNcbReason("");
+                    tmpValidate = true;
+                }else{
+                    log.info("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
+                    customer.setValidId(0);
+                    customer.setNcbReason("");
+                    tmpValidate = false;
+                }
             }
+
             if(count == 0){
                 if(tmpValidate == true)
                     validate = true;
@@ -198,15 +217,16 @@ public class PrescreenChecker implements Serializable {
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
             log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+            log.info("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
             for(CustomerInfoView customerInfoView : customerInfoViewList){
                 if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
                     customerInfoView.setNcbReason("");
-                    customerInfoView.setNcbResult(ActionResult.SUCCEED.name());
+                    customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
                 }
             }
-            if(ncbViewList != null){
+            if(ncbViewList != null && ncbViewList.size() > 0){
                 for(NcbView item : ncbViewList){
                     index = 0;
                     for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -218,7 +238,7 @@ public class PrescreenChecker implements Serializable {
                                         log.info("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                        if(item.getResult().equals(ActionResult.SUCCESS)){
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;
@@ -229,7 +249,7 @@ public class PrescreenChecker implements Serializable {
                                         log.info("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCEED)){
+                                        if(item.getResult().equals(ActionResult.SUCCESS)){
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
                                         }else{
                                             failedCount = failedCount + 1;
@@ -248,10 +268,11 @@ public class PrescreenChecker implements Serializable {
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
                 if(failedCount != 0){
                     success = false;
+                } else {
+                    success = true;
                 }
             }
         } catch(Exception ex){
-            ex.printStackTrace();
             log.error("Exception : {}", ex);
             messageHeader = "Check NCB failed.";
             message = ex.getMessage();
@@ -263,6 +284,7 @@ public class PrescreenChecker implements Serializable {
         if(success){
             //TODO submit case
             try{
+                log.info("Submit case to Maker :::");
                 String actionCode = "1004";
                 prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
             }catch (Exception ex){

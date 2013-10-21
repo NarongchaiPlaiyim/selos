@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.working;
 
-
 import com.clevel.selos.model.db.master.BusinessActivity;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
@@ -14,185 +13,177 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 20/9/2556
- * Time: 15:13 น.
- * To change this template use File | Settings | File Templates.
- */
 @Entity
-@Table(name="wrk_biz_info_detail")
+@Table(name = "wrk_biz_info_detail")
 public class BizInfoDetail implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_INFO_DETAIL_ID", sequenceName="SEQ_WRK_BIZ_INFO_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BIZ_INFO_DETAIL_ID", sequenceName = "SEQ_WRK_BIZ_INFO_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BIZ_INFO_DETAIL_ID")
     private long id;
 
-    @Column(name="biz_info_text")
+    @Column(name = "biz_info_text")
     private String bizInfoText;
 
     @OneToOne
-    @JoinColumn(name="business_activity_id")
+    @JoinColumn(name = "business_activity_id")
     private BusinessActivity BusinessActivity;
 
     @OneToOne
-    @JoinColumn(name="business_type_id")
+    @JoinColumn(name = "business_type_id")
     private BusinessType businessType;
 
     @OneToOne
-    @JoinColumn(name="business_group_id")
+    @JoinColumn(name = "business_group_id")
     private BusinessGroup businessGroup;
 
     @OneToOne
-    @JoinColumn(name="business_desc_id")
+    @JoinColumn(name = "business_desc_id")
     private BusinessDescription businessDescription;
 
-    @Column(name="biz_code")
+    @Column(name = "biz_code")
     private String bizCode;
 
-    @Column(name="income_factor")
+    @Column(name = "income_factor")
     private BigDecimal incomeFactor;
 
-    @Column(name="adjusted_income_factor")
+    @Column(name = "adjusted_income_factor")
     private BigDecimal adjustedIncomeFactor;
 
-    @Column(name="biz_comment")
+    @Column(name = "biz_comment")
     private String bizComment;
 
-    @Column(name="percent_biz")
+    @Column(name = "percent_biz")
     private BigDecimal percentBiz;
 
-    @Column(name="biz_permission")
+    @Column(name = "biz_permission")
     private String bizPermission;
 
-    @Column(name="biz_doc_permission")
+    @Column(name = "biz_doc_permission")
     private String bizDocPermission;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name="biz_doc_expiry_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "biz_doc_expiry_date")
     private Date bizDocExpiryDate;
 
-    @Column(name="exp_ind_country_name")
+    @Column(name = "exp_ind_country_name")
     private String expIndCountryName;
 
-    @Column(name="percent_exp_ind_country_name")
+    @Column(name = "percent_exp_ind_country_name")
     private BigDecimal percentExpIndCountryName;
 
-    @Column(name="sup_sum_percent_buy_volume")
+    @Column(name = "sup_sum_percent_buy_volume")
     private BigDecimal supplierTotalPercentBuyVolume;
 
-    @Column(name="sup_sum_percent_credit")
+    @Column(name = "sup_sum_percent_credit")
     private BigDecimal supplierTotalPercentCredit;
 
-    @Column(name="sup_sum_credit_term")
+    @Column(name = "sup_sum_credit_term")
     private BigDecimal supplierTotalCreditTerm;
 
-    @Column(name="sup_uw_adjust_percent_credit")
+    @Column(name = "sup_uw_adjust_percent_credit")
     private BigDecimal supplierUWAdjustPercentCredit;
 
-    @Column(name="sup_uw_adjust_credit_term")
+    @Column(name = "sup_uw_adjust_credit_term")
     private BigDecimal supplierUWAdjustCreditTerm;
 
-    @Column(name="buyer_sum_percent_buy_volume")
+    @Column(name = "buyer_sum_percent_buy_volume")
     private BigDecimal buyerTotalPercentBuyVolume;
 
-    @Column(name="buyer_sum_percent_credit")
+    @Column(name = "buyer_sum_percent_credit")
     private BigDecimal buyerTotalPercentCredit;
 
-    @Column(name="buyer_sum_credit_term")
+    @Column(name = "buyer_sum_credit_term")
     private BigDecimal buyerTotalCreditTerm;
 
-    @Column(name="buyer_uw_adjust_percent_credit")
+    @Column(name = "buyer_uw_adjust_percent_credit")
     private BigDecimal buyerUWAdjustPercentCredit;
 
-    @Column(name="buyer_uw_adjust_credit_term")
+    @Column(name = "buyer_uw_adjust_credit_term")
     private BigDecimal buyerUWAdjustCreditTerm;
 
-    @Column(name="standard_account_receivable")
+    @Column(name = "standard_account_receivable")
     private BigDecimal standardAccountReceivable;
 
-    @Column(name="average_purchase_amount")
+    @Column(name = "average_purchase_amount")
     private BigDecimal averagePurchaseAmount;
 
-    @Column(name="purchase_percent_cash")
+    @Column(name = "purchase_percent_cash")
     private BigDecimal purchasePercentCash;
 
-    @Column(name="purchase_percent_credit")
+    @Column(name = "purchase_percent_credit")
     private BigDecimal purchasePercentCredit;
 
-    @Column(name="purchase_percent_local")
+    @Column(name = "purchase_percent_local")
     private BigDecimal purchasePercentLocal;
 
-    @Column(name="purchase_percent_foreign")
+    @Column(name = "purchase_percent_foreign")
     private BigDecimal purchasePercentForeign;
 
-    @Column(name="purchase_term")
+    @Column(name = "purchase_term")
     private BigDecimal purchaseTerm;
 
-    @Column(name="standard_account_payable")
+    @Column(name = "standard_account_payable")
     private BigDecimal standardAccountPayable;
 
-    @Column(name="average_payable_amount")
+    @Column(name = "average_payable_amount")
     private BigDecimal averagePayableAmount;
 
-    @Column(name="payable_percent_cash")
+    @Column(name = "payable_percent_cash")
     private BigDecimal payablePercentCash;
 
-    @Column(name="payable_percent_credit")
+    @Column(name = "payable_percent_credit")
     private BigDecimal payablePercentCredit;
 
-    @Column(name="payable_percent_local")
+    @Column(name = "payable_percent_local")
     private BigDecimal payablePercentLocal;
 
-    @Column(name="payable_percent_foreign")
+    @Column(name = "payable_percent_foreign")
     private BigDecimal payablePercentForeign;
 
-    @Column(name="payable_term")
+    @Column(name = "payable_term")
     private BigDecimal payableTerm;
 
-    @Column(name="standard_stock")
+    @Column(name = "standard_stock")
     private BigDecimal standardStock;
 
-    @Column(name="stock_duration_bdm")
+    @Column(name = "stock_duration_bdm")
     private BigDecimal stockDurationBDM;
 
-    @Column(name="stock_duration_uw")
+    @Column(name = "stock_duration_uw")
     private BigDecimal stockDurationUW;
 
-    @Column(name="stock_value_bdm")
+    @Column(name = "stock_value_bdm")
     private BigDecimal stockValueBDM;
 
-    @Column(name="stock_value_uw")
+    @Column(name = "stock_value_uw")
     private BigDecimal stockValueUW;
 
-    @Column(name="no")
+    @Column(name = "no")
     private long no;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy = "bizInfoDetail")
     private List<BizStakeHolderDetail> supplierList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy = "bizInfoDetail")
     private List<BizStakeHolderDetail> buyerList;
 
-    @OneToMany(mappedBy="bizInfoDetail")
+    @OneToMany(mappedBy = "bizInfoDetail")
     private List<BizProductDetail> bizProductDetailList;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
     @ManyToOne
-    @JoinColumn(name="biz_info_summary_id")
+    @JoinColumn(name = "biz_info_summary_id")
     private BizInfoSummary bizInfoSummary;
 
     public BizInfoDetail() {

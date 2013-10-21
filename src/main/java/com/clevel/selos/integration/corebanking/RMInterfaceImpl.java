@@ -84,7 +84,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
             individualModel = rmService.individualService(searchIndividual,userId);
             individualResult = new IndividualResult();
             individualResult.setCustomerId(customerId);
-            individualResult.setActionResult(ActionResult.SUCCEED);
+            individualResult.setActionResult(ActionResult.SUCCESS);
             individualResult.setIndividualModel(individualModel);
         } catch (ValidationException ex) {
             individualResult = new IndividualResult();
@@ -134,7 +134,7 @@ public class RMInterfaceImpl implements RMInterface ,Serializable{
         try{
             corporateModel = rmService.corporateService(searchIndividual, userId);
             corporateResult.setCustomerId(customerId);
-            corporateResult.setActionResult(ActionResult.SUCCEED);
+            corporateResult.setActionResult(ActionResult.SUCCESS);
             corporateResult.setCorporateModel(corporateModel);
         } catch (ValidationException ex) {
             corporateResult.setCustomerId(customerId);

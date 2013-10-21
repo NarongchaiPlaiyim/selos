@@ -28,4 +28,14 @@ public class SubDistrictDAO extends GenericDAO<SubDistrict,Integer> {
         log.info("getListByDistrict. (result size: {})",subDistricts.size());
         return subDistricts;
     }
+
+    public SubDistrict getByNameAndDistrict(String subDistrictName, District district) {
+        log.info("getByNameAndDistrict. (subDistrictName: {}, district: {})",subDistrictName,district);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("district", district));
+        criteria.add(Restrictions.eq("name", subDistrictName));
+        SubDistrict subDistrict = (SubDistrict)criteria.uniqueResult();
+        log.info("getByNameAndDistrict. (result : {})",subDistrict);
+        return subDistrict;
+    }
 }

@@ -6,8 +6,8 @@
     <div id="header_detail">
         <div id="header_collapse" class="close" onclick="collapseDetail();"><p:spacer width="2"/></div>
         <div id="header_button_bar">
-            <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
-            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" action="#{prescreenChecker.onCheckCustomer}" update=":frmMain:resultTableCustomer :msgBoxSystemMessagePanel" />
+            <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" oncomplete="testHandle()" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
+            <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onCheckCustomer}" process="@form" oncomplete="testHandle()" update=":frmMain :msgBoxSystemMessagePanel" />
             <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()" update=":assignCheckerDlgForm">
                 <p:resetInput target=":assignCheckerDlgForm" />
             </p:commandButton>
@@ -25,7 +25,7 @@
                 <p:commandButton value="No" type="button" onclick="confirmCancelCA.hide()" styleClass="ui-confirmdialog-no"/>
             </p:confirmDialog>
             <p:commandButton id="btnCloseSale" value="Closed Sales" styleClass="blueButton" rendered="#{baseController.manageButton.closeSaleButton}" type="button" onclick="confirmCloseSaleCA.show()"/>
-            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale CA?" styleClass="left" icon="ui-icon-alert"
+            <p:confirmDialog header="Confirmation" message="Are you sure to Close Sale?" styleClass="left" icon="ui-icon-alert"
                              widgetVar="confirmCloseSaleCA" global="false" showEffect="fade"
                              rendered="#{baseController.manageButton.closeSaleButton}">
                 <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"

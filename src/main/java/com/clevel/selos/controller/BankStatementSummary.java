@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.model.view.BankStmtSummaryView;
 import com.clevel.selos.model.view.BankStmtView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -36,226 +37,76 @@ public class BankStatementSummary {
     @ExceptionMessage
     Message exceptionMsg;
 
+    //Dialog
     enum ModeForButton{ADD, EDIT}
     private ModeForButton modeForButton;
 
-    private int seasonal;
-    private Date expectedSubmissionDate;
-
-    /*Abbreviation variables
-        - BSS : Bank Statement Summary
-        - TCR : Trade Cheque Return
-     */
-    private List<BankStmtView> tmbBankStmtSumList;
-    private BigDecimal totalTmbBSSIncomeGross;
-    private BigDecimal totalTmbBSSIncomeNetBDM;
-    private BigDecimal totalTmbBSSIncomeNetUW;
-
-    private List<BankStmtView> otherBankStmtSumList;
-    private BigDecimal totalOtherBSSIncomeGross;
-    private BigDecimal totalOtherBSSIncomeNetBDM;
-    private BigDecimal totalOtherBSSIncomeNetUW;
-
-    private BigDecimal grandTotalIncomeGross;
-    private BigDecimal grandTotalIncomeNetBDM;
-    private BigDecimal grandTotalIncomeNetUW;
-    private BigDecimal grandTotalTCRAmount;
-    private BigDecimal grandTotalTCRPercent;
-
-    private List<BankStmtView> srcOfCollateralProofList;
-    private BigDecimal grandTotalAverageAmount;
+    //View
+    private BankStmtSummaryView summaryView;
+    private List<BankStmtView> tmbBankStmtViewList;
+    private List<BankStmtView> otherBankStmtViewList;
 
     public BankStatementSummary(){
     }
 
     @PostConstruct
     public void onCreation() {
-        expectedSubmissionDate = new Date();
-
-        totalTmbBSSIncomeGross = BigDecimal.ZERO;
-        totalTmbBSSIncomeNetBDM = BigDecimal.ZERO;
-        totalTmbBSSIncomeNetUW = BigDecimal.ZERO;
-
-        totalOtherBSSIncomeGross = BigDecimal.ZERO;
-        totalOtherBSSIncomeNetBDM = BigDecimal.ZERO;
-        totalOtherBSSIncomeNetUW = BigDecimal.ZERO;
-
-        grandTotalIncomeGross = BigDecimal.ZERO;
-        grandTotalIncomeNetBDM = BigDecimal.ZERO;
-        grandTotalIncomeNetUW = BigDecimal.ZERO;
-        grandTotalTCRAmount = BigDecimal.ZERO;
-        grandTotalTCRPercent = BigDecimal.ZERO;
-
-        grandTotalAverageAmount = BigDecimal.ZERO;
+        onLoadSummary();
     }
 
     public void onLoadSummary() {
         log.debug("onLoadSummary()");
+        summaryView = new BankStmtSummaryView();
+        //todo: get TMB Bank statement list, Other Bank statement list and calculate total and grand total
     }
 
     public void onSaveSummary() {
-        log.debug("onSaveSummary() seasonal: {}, expectedSubmissionDate: {}", seasonal, expectedSubmissionDate);
+        log.debug("onSaveSummary()");
     }
 
     public String onLinkToAddTmbBankDetail() {
-        log.debug("Link to TMB Bank Statement Detail with params[isTmbBank: true, seasonal: {}, expectedSubmissionDate: {}]", seasonal, expectedSubmissionDate);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("isTmbBank", true);
-        map.put("seasonal", seasonal);
-        map.put("expectedSubmissionDate", expectedSubmissionDate);
-
-        FacesUtil.getExternalContext().getFlash().put("bankStmtSumParameters", map);
-
+        log.debug("Link to Bank statement detail with params{isTmbBank: true, seasonal: {}, expectedSubmissionDate: {}}",
+                summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
+        passParamsToBankStmtDetail(true, summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
         return "bankStatementDetail?faces-redirect=true";
     }
 
     public String onLinkToAddOtherBankDetail() {
-        log.debug("Link to TMB Bank Statement Detail with params[isTmbBank: false, seasonal: {}, expectedSubmissionDate: {}]", seasonal, expectedSubmissionDate);
-        return "bankStatementDetail";
+        log.debug("Link to Bank statement detail with params{isTmbBank: false, seasonal: {}, expectedSubmissionDate: {}}",
+                summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
+        passParamsToBankStmtDetail(false, summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
+        return "bankStatementDetail?faces-redirect=true";
     }
 
-    //---------- Getter/Setter ----------//
-    public int getSeasonal() {
-        return seasonal;
+    private void passParamsToBankStmtDetail(boolean isTmbBank, int seasonal, Date expectedSubmissionDate) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isTmbBank", isTmbBank);
+        map.put("seasonal", seasonal);
+        map.put("expectedSubmissionDate", expectedSubmissionDate);
+        FacesUtil.getFlash().put("bankStmtSumParams", map);
     }
 
-    public void setSeasonal(int seasonal) {
-        this.seasonal = seasonal;
+    public BankStmtSummaryView getSummaryView() {
+        return summaryView;
     }
 
-    public Date getExpectedSubmissionDate() {
-        return expectedSubmissionDate;
+    public void setSummaryView(BankStmtSummaryView summaryView) {
+        this.summaryView = summaryView;
     }
 
-    public void setExpectedSubmissionDate(Date expectedSubmissionDate) {
-        this.expectedSubmissionDate = expectedSubmissionDate;
+    public List<BankStmtView> getTmbBankStmtViewList() {
+        return tmbBankStmtViewList;
     }
 
-    public List<BankStmtView> getTmbBankStmtSumList() {
-        return tmbBankStmtSumList;
+    public void setTmbBankStmtViewList(List<BankStmtView> tmbBankStmtViewList) {
+        this.tmbBankStmtViewList = tmbBankStmtViewList;
     }
 
-    public void setTmbBankStmtSumList(List<BankStmtView> tmbBankStmtSumList) {
-        this.tmbBankStmtSumList = tmbBankStmtSumList;
+    public List<BankStmtView> getOtherBankStmtViewList() {
+        return otherBankStmtViewList;
     }
 
-    public List<BankStmtView> getOtherBankStmtSumList() {
-        return otherBankStmtSumList;
-    }
-
-    public void setOtherBankStmtSumList(List<BankStmtView> otherBankStmtSumList) {
-        this.otherBankStmtSumList = otherBankStmtSumList;
-    }
-
-    public ModeForButton getModeForButton() {
-        return modeForButton;
-    }
-
-    public void setModeForButton(ModeForButton modeForButton) {
-        this.modeForButton = modeForButton;
-    }
-
-    public BigDecimal getTotalTmbBSSIncomeGross() {
-        return totalTmbBSSIncomeGross;
-    }
-
-    public void setTotalTmbBSSIncomeGross(BigDecimal totalTmbBSSIncomeGross) {
-        this.totalTmbBSSIncomeGross = totalTmbBSSIncomeGross;
-    }
-
-    public BigDecimal getTotalTmbBSSIncomeNetBDM() {
-        return totalTmbBSSIncomeNetBDM;
-    }
-
-    public void setTotalTmbBSSIncomeNetBDM(BigDecimal totalTmbBSSIncomeNetBDM) {
-        this.totalTmbBSSIncomeNetBDM = totalTmbBSSIncomeNetBDM;
-    }
-
-    public BigDecimal getTotalTmbBSSIncomeNetUW() {
-        return totalTmbBSSIncomeNetUW;
-    }
-
-    public void setTotalTmbBSSIncomeNetUW(BigDecimal totalTmbBSSIncomeNetUW) {
-        this.totalTmbBSSIncomeNetUW = totalTmbBSSIncomeNetUW;
-    }
-
-    public BigDecimal getTotalOtherBSSIncomeGross() {
-        return totalOtherBSSIncomeGross;
-    }
-
-    public void setTotalOtherBSSIncomeGross(BigDecimal totalOtherBSSIncomeGross) {
-        this.totalOtherBSSIncomeGross = totalOtherBSSIncomeGross;
-    }
-
-    public BigDecimal getTotalOtherBSSIncomeNetBDM() {
-        return totalOtherBSSIncomeNetBDM;
-    }
-
-    public void setTotalOtherBSSIncomeNetBDM(BigDecimal totalOtherBSSIncomeNetBDM) {
-        this.totalOtherBSSIncomeNetBDM = totalOtherBSSIncomeNetBDM;
-    }
-
-    public BigDecimal getTotalOtherBSSIncomeNetUW() {
-        return totalOtherBSSIncomeNetUW;
-    }
-
-    public void setTotalOtherBSSIncomeNetUW(BigDecimal totalOtherBSSIncomeNetUW) {
-        this.totalOtherBSSIncomeNetUW = totalOtherBSSIncomeNetUW;
-    }
-
-    public BigDecimal getGrandTotalIncomeGross() {
-        return grandTotalIncomeGross;
-    }
-
-    public void setGrandTotalIncomeGross(BigDecimal grandTotalIncomeGross) {
-        this.grandTotalIncomeGross = grandTotalIncomeGross;
-    }
-
-    public BigDecimal getGrandTotalIncomeNetBDM() {
-        return grandTotalIncomeNetBDM;
-    }
-
-    public void setGrandTotalIncomeNetBDM(BigDecimal grandTotalIncomeNetBDM) {
-        this.grandTotalIncomeNetBDM = grandTotalIncomeNetBDM;
-    }
-
-    public BigDecimal getGrandTotalIncomeNetUW() {
-        return grandTotalIncomeNetUW;
-    }
-
-    public void setGrandTotalIncomeNetUW(BigDecimal grandTotalIncomeNetUW) {
-        this.grandTotalIncomeNetUW = grandTotalIncomeNetUW;
-    }
-
-    public BigDecimal getGrandTotalTCRAmount() {
-        return grandTotalTCRAmount;
-    }
-
-    public void setGrandTotalTCRAmount(BigDecimal grandTotalTCRAmount) {
-        this.grandTotalTCRAmount = grandTotalTCRAmount;
-    }
-
-    public BigDecimal getGrandTotalTCRPercent() {
-        return grandTotalTCRPercent;
-    }
-
-    public void setGrandTotalTCRPercent(BigDecimal grandTotalTCRPercent) {
-        this.grandTotalTCRPercent = grandTotalTCRPercent;
-    }
-
-    public List<BankStmtView> getSrcOfCollateralProofList() {
-        return srcOfCollateralProofList;
-    }
-
-    public void setSrcOfCollateralProofList(List<BankStmtView> srcOfCollateralProofList) {
-        this.srcOfCollateralProofList = srcOfCollateralProofList;
-    }
-
-    public BigDecimal getGrandTotalAverageAmount() {
-        return grandTotalAverageAmount;
-    }
-
-    public void setGrandTotalAverageAmount(BigDecimal grandTotalAverageAmount) {
-        this.grandTotalAverageAmount = grandTotalAverageAmount;
+    public void setOtherBankStmtViewList(List<BankStmtView> otherBankStmtViewList) {
+        this.otherBankStmtViewList = otherBankStmtViewList;
     }
 }

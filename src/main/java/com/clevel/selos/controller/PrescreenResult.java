@@ -2,8 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
+import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -19,8 +20,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -101,44 +100,21 @@ public class PrescreenResult implements Serializable {
             queueName = session.getAttribute("queueName").toString();
             user = (User)session.getAttribute("user");
 
-            modeForButton = ModeForButton.ADD;
+            prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
         }
-        prescreenResultView = new PrescreenResultView();
     }
 
     public void onRetrieveInterfaceInfo(){
-        if(workCasePreScreenId != 0){
-            PrescreenResultView _tmpPrescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
+        log.info("Start on Retrieve Interface Info");
 
-            prescreenResultView.setExistingCreditView(_tmpPrescreenResultView.getExistingCreditView());
+        List<CustomerInfoView> customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
 
-        }
     }
 
-    private List<ExistingCreditDetailView> getCreditFact(int num){
-
-        List<ExistingCreditDetailView> existingCreditViewList = new ArrayList<ExistingCreditDetailView>();
-        for(int i = 0; i < num; i++){
-            ExistingCreditDetailView existingCreditView = new ExistingCreditDetailView();
-            existingCreditView.setAccountName("Test 0" + (i+1));
-            existingCreditView.setAccountNumber("123456789" + i);
-            existingCreditView.setAccountSuf("00"+(i+1));
-            existingCreditView.setAccountStatusID(1);
-            existingCreditView.setAccountStatus("Normal");
-            existingCreditView.setCreditType("Loan");
-            existingCreditView.setId(1);
-            existingCreditView.setInstallment(new BigDecimal(10000 + ((i+1)*5000)));
-            existingCreditView.setIntFeePercent(new BigDecimal(1));
-            existingCreditView.setLimit(new BigDecimal(10000000 + ((i+1)*5000000)));
-            existingCreditView.setOutstanding(new BigDecimal(8000000 + ((i+1)*500000)));
-            existingCreditView.setProductCode("EAC1");
-            existingCreditView.setProjectCode("1000" + i);
-            existingCreditView.setProductProgram("SME Smart Biz");
-            existingCreditView.setTenor(24 + ((i+1)*12));
-
-            existingCreditViewList.add(existingCreditView);
-        }
-        return existingCreditViewList;
+    public void onSave(){
+        log.info("Start onSave {}", prescreenResultView);
+        prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId);
     }
 
     public void onCloseSale(){

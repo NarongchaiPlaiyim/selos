@@ -3,25 +3,19 @@ package com.clevel.selos.security;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.BPMInterface;
-import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.LDAPInterface;
-import com.clevel.selos.integration.RM;
-import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SecurityAuditor;
-import com.clevel.selos.system.audit.SystemAuditor;
-import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import com.filenet.api.exception.EngineRuntimeException;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.primefaces.context.RequestContext;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +25,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -40,7 +33,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
 @ManagedBean(name = "loginBean")
@@ -67,6 +59,11 @@ public class LoginBean {
     @Inject
     @Config(name = "interface.ldap.enable")
     String ldapEnable;
+    @Inject
+    EncryptionService encryptionService;
+    @Inject
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
 
     @Inject
     @ExceptionMessage
@@ -88,19 +85,27 @@ public class LoginBean {
             try {
                 ldapInterface.authenticate(userName,password);
             } catch (ApplicationRuntimeException e) {
-                log.debug("LDAP authentication failed! (user: {})", userName.trim());
-                securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
-                loginExceptionMessage=e.getMessage();
+                try{
+                    log.debug("LDAP authentication failed! (user: {})", userName.trim());
+                    securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
+                    loginExceptionMessage=e.getMessage();
+                }catch (Exception ex){
+                    loginExceptionMessage=ex.getCause().getMessage();
+                }
                 return "failed";
             }
-
         }
 
         // find user profile in database
         User user = userDAO.findById(userName.trim());
         UserDetail userDetail = null;
+        if (Util.isTrue(encryptionEnable)) {
+            password = Base64.encodeBase64String(encryptionService.encrypt(password.trim()));
+        } else {
+            password = password.trim();
+        }
         try {
-            userDetail = new UserDetail(user.getId(),password.trim(), user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+            userDetail = new UserDetail(user.getId(),password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {
             String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
             log.debug("{}",message);

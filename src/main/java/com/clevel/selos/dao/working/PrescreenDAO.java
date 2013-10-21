@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class PrescreenDAO extends GenericDAO<Prescreen, Integer> {
+public class PrescreenDAO extends GenericDAO<Prescreen, Long> {
     @Inject
     private Logger log;
 
