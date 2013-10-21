@@ -104,15 +104,11 @@
                      </td>
                     <td class="title">
                         <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"/>
-                        <h:outputText value="TMB :"></h:outputText>
+                        <h:outputText value="#{msg.get('app.isNPLwithTMB')}"></h:outputText>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
                             <f:selectItem itemLabel="January" itemValue="1"/>
                             <f:selectItem itemLabel="February" itemValue="2"/>
-                  <!--          <f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months"
-                                           itemLabel="#{months.Month}"
-                                           itemValue="#{months.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}">
@@ -120,22 +116,14 @@
                             <f:selectItem itemLabel="2011" itemValue="2011"/>
                             <f:selectItem itemLabel="2012" itemValue="2012"/>
                             <f:selectItem itemLabel="2013" itemValue="2013"/>
-                            <!--<f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months2"
-                                           itemLabel="#{months2.Month}"
-                                           itemValue="#{months2.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"/><h:outputText
-                            value="Other :"/>
+                            value="#{msg.get('app.isNPLwithOther')}"/>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}">
                             <f:selectItem itemLabel="January" itemValue="1"/>
                             <f:selectItem itemLabel="February" itemValue="2"/>
-                            <!--<f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months3"
-                                           itemLabel="#{months3.Month}"
-                                           itemValue="#{months3.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}">
@@ -143,10 +131,6 @@
                             <f:selectItem itemLabel="2011" itemValue="2011"/>
                             <f:selectItem itemLabel="2012" itemValue="2012"/>
                             <f:selectItem itemLabel="2013" itemValue="2013"/>
-                            <!--<f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months4"
-                                           itemLabel="#{months4.Month}"
-                                           itemValue="#{months4.value}"/>-->
                         </h:selectOneMenu>
                     </td>
                 </tr>
@@ -179,15 +163,11 @@
                     </td>
                     <td class="title">
                         <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"/>
-                        <h:outputText value="TMB :"></h:outputText>
+                        <h:outputText value="#{msg.get('app.isTDRwithTMB')}"></h:outputText>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}">
                             <f:selectItem itemLabel="January" itemValue="1"/>
                             <f:selectItem itemLabel="February" itemValue="2"/>
-                           <!-- <f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months"
-                                           itemLabel="#{months.Month}"
-                                           itemValue="#{months.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}">
@@ -195,22 +175,14 @@
                             <f:selectItem itemLabel="2011" itemValue="2011"/>
                             <f:selectItem itemLabel="2012" itemValue="2012"/>
                             <f:selectItem itemLabel="2013" itemValue="2013"/>
-                            <!--<f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months2"
-                                           itemLabel="#{months2.Month}"
-                                           itemValue="#{months2.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"/><h:outputText
-                            value="Other :"/>
+                            value="#{msg.get('app.isTDRwithOther')}"/>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}">
                             <f:selectItem itemLabel="January" itemValue="1"/>
                             <f:selectItem itemLabel="February" itemValue="2"/>
-                           <!-- <f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months3"
-                                           itemLabel="#{months3.Month}"
-                                           itemValue="#{months3.value}"/>-->
                         </h:selectOneMenu>
                         <p:spacer width="5px;"/>
                         <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}">
@@ -218,10 +190,6 @@
                             <f:selectItem itemLabel="2011" itemValue="2011"/>
                             <f:selectItem itemLabel="2012" itemValue="2012"/>
                             <f:selectItem itemLabel="2013" itemValue="2013"/>
-                            <!--<f:selectItems value="#{ncbInfo.ncbInfoView.monthsList}"
-                                           var="months4"
-                                           itemLabel="#{months4.Month}"
-                                           itemValue="#{months4.value}"/>-->
                         </h:selectOneMenu>
                     </td>
                 </tr>
@@ -234,7 +202,6 @@
         <h:outputText value="#{msg.get('app.TDRPaymentCondition')}"/>
     </td>
     <td>
-        <!-- <p:inputText   value="#{ncbInfo.ncbInfoView.tdrPaymentCondition}"   disabled="true"/>-->
         <h:selectOneListbox id="dlgSattlementStatus" styleClass="largest" size="1"
                             value="#{ncbInfo.ncbDetailView.tdrCondition.id}" disabled="true">
             <f:selectItems value="#{ncbInfo.tdrConditionList}"
@@ -283,16 +250,16 @@
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column>
-                                    <f:facet style="width:20px" name="header">No.</f:facet>
+                                    <f:facet style="width:20px" name="header">#{msg.get('app.ncbDetail.table.label.no')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:50px" name="header">ประเภทบัญชี</f:facet>
+                                    <f:facet style="width:50px" name="header">#{msg.get('app.ncbDetail.table.label.loanAccountType')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:50px" name="header">TMB</f:facet>
+                                    <f:facet style="width:50px" name="header">#{msg.get('app.ncbDetail.table.label.isTMBAccount')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:60px" name="header">สถานะบัญชี</f:facet>
+                                    <f:facet style="width:60px" name="header">#{msg.get('app.ncbDetail.table.label.loanAccountStatus')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:90px" name="header">ข้อมูล ณ วันที<br/>(วัน/เดือน/ปี)</f:facet>
@@ -301,7 +268,7 @@
                                     <f:facet style="width:90px" name="header">วันที่เปิดบัญชี<br/>(วัน/เดือน/ปี)</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:120px" name="header">วงเงิน(หน่วย:บาท)</f:facet>
+                                    <f:facet style="width:120px" name="header">#{msg.get('app.ncbDetail.table.label.limit')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:120px" name="header">ภาระคงค้าง/ยอดใช้<br/>(หน่วย:บาท)</f:facet>
@@ -328,44 +295,12 @@
                                     <f:facet style="width:50px" name="header">Refinance/<br/>ชำระปิดบัญชี</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:30px" name="header">W/C Flag</f:facet>
+                                    <f:facet style="width:30px" name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:40px" name="header"></f:facet>
                                 </p:column>
-                               <!--
-                                <p:column  headerText="" styleClass="center" style="width:22px;">No.</p:column>
-                                <p:column rowspan="2" headerText="#{msg.get('app.loanAccountType')}" styleClass="center"
-                                          style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.isTMBAccount')}" styleClass="center"
-                                          style="width: 25px;"/>
-                                <p:column headerText="#{msg.get('app.loanAccountStatus')}" styleClass="center"
-                                          style="width: 70px;"/>
-                                <p:column headerText="#{msg.get('app.dateOfInfo')}" styleClass="center"
-                                          style="width: 90px;"/>
-                                <p:column headerText="#{msg.get('app.accountOpenDate')}" styleClass="center"
-                                          style="width: 90px;"/>
-                                <p:column headerText="#{msg.get('app.limit')}" styleClass="center"
-                                          style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.outstanding')}" styleClass="center"
-                                          style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.installment')}" styleClass="center"
-                                          style="width: 80px;"/>
-                                <p:column headerText="#{msg.get('app.dateOfDebtRestructuring')}" styleClass="center"
-                                          style="width: 100px;"/>
-                                <p:column headerText="ลักษณะการชำระหนี้ ณ ปัจจุบัน" styleClass="center"
-                                          style="width: 50px;"/>
-                                <p:column headerText="ลักษณะการชำระหนี้ที่ผ่านมา" styleClass="center"
-                                          style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.noOfOutstandingPaymentIn12months')}"
-                                          styleClass="center" style="width: 120px;"/>
-                                <p:column headerText="#{msg.get('app.noOfOverLimit')}" styleClass="center"
-                                          style="width: 110px;"/>
-                                <p:column headerText="#{msg.get('app.refinanceFlag')}" styleClass="center"
-                                          style="width: 30px;"/>
-                                <p:column headerText="W/C Flag" styleClass="center"
-                                          style="width: 30px;"/>
-                                <p:column styleClass="center" style="width:60px;"/>-->
+
                             </p:row>
                         </p:columnGroup>
                          <p:subTable var="item1" value="#{ncbInfo.ncbDetailView}">
@@ -468,7 +403,7 @@
                             <p:columnGroup type="footer" rendered="#{item.monthsPaymentFlag}">
                                 <p:row>
                                     <p:column colspan="4" style="text-align: center"
-                                              footerText="จำนวนเดือนที่หาร : #{item.noOfmonthsPayment}"/>
+                                              footerText="#{msg.get('app.ncbDetail.table.label.noOfmonthsPayment')}  #{item.noOfmonthsPayment}"/>
                                     <p:column colspan="13" style="text-align: left"
                                               footerText="#{item.moneyTotal}"></p:column>
                                 </p:row>
@@ -486,7 +421,7 @@
 <tr>
     <td colspan="2" class="center">
         <p:commandButton id="btnSave"
-                         value="Save"
+                         value="#{msg.get('app.saveButton')}"
                          styleClass="medium"
                          process=":frmMain"
                          action="#{ncbInfo.onSaveNcb()}"
@@ -517,7 +452,7 @@
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" width="520" height="550">
+          modal="true" width="540" height="550">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 
