@@ -7,7 +7,6 @@ import com.clevel.selos.integration.rlos.csi.tool.DBContext;
 import com.clevel.selos.model.DocumentType;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
-import com.filenet.wcm.api.TransactionTimeoutException;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;

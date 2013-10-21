@@ -1,13 +1,11 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BankAccountTypeView;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
-import com.clevel.selos.model.view.BasicInfoView;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

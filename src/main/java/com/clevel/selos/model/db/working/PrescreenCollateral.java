@@ -4,7 +4,6 @@ import com.clevel.selos.model.db.master.CollateralType;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name="wrk_prescreen_collateral")

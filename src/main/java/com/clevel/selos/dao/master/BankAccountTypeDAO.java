@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.BAPaymentMethod;
 import com.clevel.selos.model.db.master.BankAccountType;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;

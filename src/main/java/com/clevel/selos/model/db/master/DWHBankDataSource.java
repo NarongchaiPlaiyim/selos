@@ -1,9 +1,5 @@
 package com.clevel.selos.model.db.master;
 
-import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.master.TCGCollateralType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

@@ -1,15 +1,9 @@
 package com.clevel.selos.integration.brms.model.request.data;
 
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.Province;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 
 public class BusinessLevel implements Serializable{
     private int businessSeqId;
