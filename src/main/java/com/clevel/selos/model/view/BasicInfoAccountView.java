@@ -1,8 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.OpenAccountProduct;
-import com.clevel.selos.model.db.master.OpenAccountPurpose;
-import com.clevel.selos.model.db.master.OpenAccountType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
