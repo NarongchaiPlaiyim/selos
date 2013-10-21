@@ -20,7 +20,7 @@ public class BankAccountType implements Serializable {
     private String name;
 
     @Column(name = "shortname")
-    private String shortname;
+    private String shortName;
 
     @Column(name = "description")
     private String description;
@@ -53,12 +53,12 @@ public class BankAccountType implements Serializable {
         this.name = name;
     }
 
-    public String getShortname() {
-        return shortname;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
+    public void setShortName(String shortname) {
+        this.shortName = shortname;
     }
 
     public String getDescription() {
@@ -98,7 +98,7 @@ public class BankAccountType implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
-                .append("shortname", shortname)
+                .append("shortName", shortName)
                 .append("description", description)
                 .append("active", active)
                 .append("openAccountFlag", openAccountFlag)
