@@ -764,7 +764,6 @@ public class CustomerInfoView implements Serializable {
                 .append("reviewFlag", reviewFlag)
                 .append("reason", reason)
                 .append("businessType", businessType)
-                .append("spouse", spouse.id)
                 .append("csi", csi)
                 .toString();
     }

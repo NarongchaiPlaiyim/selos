@@ -2,7 +2,6 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
-import com.clevel.selos.transform.Transform;
 
 public class BizInfoSummaryTransform extends Transform {
 

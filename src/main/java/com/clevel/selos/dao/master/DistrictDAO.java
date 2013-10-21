@@ -1,8 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
 import org.hibernate.Criteria;

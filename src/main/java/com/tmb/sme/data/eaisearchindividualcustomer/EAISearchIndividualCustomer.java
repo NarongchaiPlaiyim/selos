@@ -1,11 +1,15 @@
 
 package com.tmb.sme.data.eaisearchindividualcustomer;
 
-import javax.jws.*;
-import javax.xml.ws.RequestWrapper;
-import javax.xml.ws.ResponseWrapper;
 import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
 import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+import javax.xml.ws.RequestWrapper;
+import javax.xml.ws.ResponseWrapper;
 
 
 /**

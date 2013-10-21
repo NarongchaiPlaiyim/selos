@@ -2,7 +2,6 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
@@ -11,7 +10,6 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.AccountTypeTransform;
 import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;

@@ -3,9 +3,7 @@ package com.clevel.selos.integration.ncb.ncrs.ncrsmodel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class NCRSModel implements Serializable {
     private String firstName;

@@ -1,8 +1,8 @@
 package com.clevel.selos.dao.working;
 
-import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.working.BizInfoDetail;
+import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
