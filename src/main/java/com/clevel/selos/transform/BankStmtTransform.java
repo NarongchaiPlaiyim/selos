@@ -49,7 +49,9 @@ public class BankStmtTransform extends Transform{
         bankStmtView.setAccountStatusView(accountStatusView);
 
         AccountTypeView accountTypeView = new AccountTypeView();
-        accountTypeView.setAccountType(dwhBankStatement.getAccountType());
+        accountTypeView.setAccountType(dwhBankStatement.getDataSource()); //TODO: transform data source to account type
+
+
 
         BankView bankView = bankTransform.getBankView(bankDAO.getTMBBank());
         bankStmtView.setBankView(bankView);

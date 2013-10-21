@@ -922,7 +922,7 @@ public class NCBBizTransform extends BusinessTransform {
                                 }
 
                                 ncbView.setNCBDetailViews(ncbDetailViews);
-                                ncbView.setNCBInfoView(ncbInfoView);
+                                ncbView.setNcbInfoView(ncbInfoView);
                                 ncbView.setAccountInfoIdList(accountInfoIdList);
                                 ncbView.setAccountInfoNameList(accountInfoNameList);
                             }

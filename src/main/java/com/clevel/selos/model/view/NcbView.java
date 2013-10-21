@@ -13,7 +13,7 @@ public class NcbView implements Serializable {
     private String idNumber;
     private ActionResult result;
     private String reason;
-    private NCBInfoView NCBInfoView;
+    private NCBInfoView ncbInfoView;
     private List<NCBDetailView> NCBDetailViews;
     private List<AccountInfoId> accountInfoIdList; // use for csi
     private List<AccountInfoName> accountInfoNameList; // use for csi
@@ -42,12 +42,12 @@ public class NcbView implements Serializable {
         this.reason = reason;
     }
 
-    public NCBInfoView getNCBInfoView() {
-        return NCBInfoView;
+    public NCBInfoView getNcbInfoView() {
+        return ncbInfoView;
     }
 
-    public void setNCBInfoView(NCBInfoView NCBInfoView) {
-        this.NCBInfoView = NCBInfoView;
+    public void setNcbInfoView(NCBInfoView ncbInfoView) {
+        this.ncbInfoView = ncbInfoView;
     }
 
     public List<NCBDetailView> getNCBDetailViews() {
@@ -80,7 +80,7 @@ public class NcbView implements Serializable {
                 .append("idNumber", idNumber)
                 .append("result", result)
                 .append("reason", reason)
-                .append("NCBInfoView", NCBInfoView)
+                .append("ncbInfoView", ncbInfoView)
                 .append("NCBDetailViews", NCBDetailViews)
                 .append("accountInfoIdList", accountInfoIdList)
                 .append("accountInfoNameList", accountInfoNameList)
