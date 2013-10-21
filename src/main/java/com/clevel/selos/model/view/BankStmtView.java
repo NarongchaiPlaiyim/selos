@@ -13,7 +13,7 @@ public class BankStmtView implements Serializable {
     private BankView bankView;
     private String branchName;
     private BankAccountTypeView bankAccountTypeView;
-    private BankAccountTypeView othAccountTypeView;
+    private BankAccountTypeView othBankAccountTypeView;
     private String accountNumber;
     private String accountName;
     private BankAccountStatusView bankAccountStatusView;
@@ -49,7 +49,7 @@ public class BankStmtView implements Serializable {
         this.bankView = new BankView();
         this.branchName = "";
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.othAccountTypeView = new BankAccountTypeView();
+        this.othBankAccountTypeView = new BankAccountTypeView();
         this.accountNumber = "";
         this.accountName = "";
         this.bankAccountStatusView = new BankAccountStatusView();
@@ -117,12 +117,12 @@ public class BankStmtView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public BankAccountTypeView getOthAccountTypeView() {
-        return othAccountTypeView;
+    public BankAccountTypeView getOthBankAccountTypeView() {
+        return othBankAccountTypeView;
     }
 
-    public void setOthAccountTypeView(BankAccountTypeView othAccountTypeView) {
-        this.othAccountTypeView = othAccountTypeView;
+    public void setOthBankAccountTypeView(BankAccountTypeView othBankAccountTypeView) {
+        this.othBankAccountTypeView = othBankAccountTypeView;
     }
 
     public String getAccountNumber() {
@@ -309,7 +309,7 @@ public class BankStmtView implements Serializable {
                 .append("bankView", bankView)
                 .append("branchName", branchName)
                 .append("bankAccountTypeView", bankAccountTypeView)
-                .append("othAccountTypeView", othAccountTypeView)
+                .append("othBankAccountTypeView", othBankAccountTypeView)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("bankAccountStatusView", bankAccountStatusView)

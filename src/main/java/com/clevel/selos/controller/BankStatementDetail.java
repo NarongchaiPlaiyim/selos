@@ -1,19 +1,14 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
-import com.clevel.selos.dao.master.AccountStatusDAO;
-import com.clevel.selos.dao.master.AccountTypeDAO;
-import com.clevel.selos.dao.master.BankDAO;
-import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.transform.AccountStatusTransform;
-import com.clevel.selos.transform.AccountTypeTransform;
-import com.clevel.selos.transform.BankTransform;
-import com.clevel.selos.transform.RelationTransform;
+import com.clevel.selos.transform.*;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
@@ -23,10 +18,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementDetail")
@@ -54,9 +46,7 @@ public class BankStatementDetail implements Serializable {
     @Inject
     BankDAO bankDAO;
     @Inject
-    AccountStatusDAO accountStatusDAO;
-    @Inject
-    AccountTypeDAO accountTypeDAO;
+    BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
     RelationDAO relationDAO;
 
@@ -64,9 +54,9 @@ public class BankStatementDetail implements Serializable {
     @Inject
     BankTransform bankTransform;
     @Inject
-    AccountTypeTransform accountTypeTransform;
+    BankAccountTypeTransform bankAccTypeTransform;
     @Inject
-    AccountStatusTransform accountStatusTransform;
+    BankAccountStatusTransform bankAccStatusTransform;
     @Inject
     RelationTransform relationTransform;
 
@@ -81,8 +71,8 @@ public class BankStatementDetail implements Serializable {
 
     //Select items list
     private List<BankView> bankViewList;
-    private List<AccountTypeView> accTypeViewList;
-    private List<AccountTypeView> othAccTypeViewList;
+    private List<BankAccountTypeView> bankAccTypeViewList;
+    private List<BankAccountTypeView> othBankAccTypeViewList;
     private List<AccountStatusView> accStatusViewList;
     private List<RelationView> relationViewList;
 
@@ -103,9 +93,10 @@ public class BankStatementDetail implements Serializable {
         else
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
 
-        accTypeViewList = accountTypeTransform.transformToViewList(accountTypeDAO.findAll());
-        othAccTypeViewList = accountTypeTransform.transformToViewList(accountTypeDAO.findAll());
-        accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
+        bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        //todo: change accStatusViewList to bankAccountStatusViewList
+//        accStatusViewList = bankAccStatusTransform.transformToViewList(accountStatusDAO.findAll());
         relationViewList = relationTransform.transformToViewList(relationDAO.findAll());
     }
 
@@ -189,20 +180,20 @@ public class BankStatementDetail implements Serializable {
         this.bankViewList = bankViewList;
     }
 
-    public List<AccountTypeView> getAccTypeViewList() {
-        return accTypeViewList;
+    public List<BankAccountTypeView> getBankAccTypeViewList() {
+        return bankAccTypeViewList;
     }
 
-    public void setAccTypeViewList(List<AccountTypeView> accTypeViewList) {
-        this.accTypeViewList = accTypeViewList;
+    public void setBankAccTypeViewList(List<BankAccountTypeView> bankAccTypeViewList) {
+        this.bankAccTypeViewList = bankAccTypeViewList;
     }
 
-    public List<AccountTypeView> getOthAccTypeViewList() {
-        return othAccTypeViewList;
+    public List<BankAccountTypeView> getOthBankAccTypeViewList() {
+        return othBankAccTypeViewList;
     }
 
-    public void setOthAccTypeViewList(List<AccountTypeView> othAccTypeViewList) {
-        this.othAccTypeViewList = othAccTypeViewList;
+    public void setOthBankAccTypeViewList(List<BankAccountTypeView> othBankAccTypeViewList) {
+        this.othBankAccTypeViewList = othBankAccTypeViewList;
     }
 
     public List<AccountStatusView> getAccStatusViewList() {

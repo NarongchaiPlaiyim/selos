@@ -6,6 +6,8 @@ import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.view.BankAccountTypeView;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BankAccountTypeTransform extends Transform {
 
@@ -14,7 +16,6 @@ public class BankAccountTypeTransform extends Transform {
 
     @Inject
     public BankAccountTypeTransform(){
-
     }
 
     public BankAccountTypeView getBankAccountTypeView(BankAccountType bankAccountType){
@@ -22,7 +23,7 @@ public class BankAccountTypeTransform extends Transform {
             BankAccountTypeView bankAccountTypeView = new BankAccountTypeView();
             bankAccountTypeView.setId(bankAccountType.getId());
             bankAccountTypeView.setName(bankAccountType.getName());
-            bankAccountTypeView.setShortname(bankAccountType.getShortName());
+            bankAccountTypeView.setShortName(bankAccountType.getShortName());
             bankAccountTypeView.setOpenAccountFlag(bankAccountType.getOpenAccountFlag());
             bankAccountTypeView.setBankStatementFlag(bankAccountType.getBankStatementFlag());
             return bankAccountTypeView;
@@ -35,7 +36,7 @@ public class BankAccountTypeTransform extends Transform {
             BankAccountType bankAccountType = new BankAccountType();
             bankAccountType.setId(bankAccountTypeView.getId());
             bankAccountType.setName(bankAccountTypeView.getName());
-            bankAccountType.setShortName(bankAccountTypeView.getShortname());
+            bankAccountType.setShortName(bankAccountTypeView.getShortName());
             bankAccountType.setBankStatementFlag(bankAccountTypeView.getBankStatementFlag());
             bankAccountType.setOpenAccountFlag(bankAccountTypeView.getOpenAccountFlag());
             bankAccountType.setActive(bankAccountTypeView.getActive());
@@ -43,5 +44,18 @@ public class BankAccountTypeTransform extends Transform {
             return bankAccountType;
         }
         return null;
+    }
+
+    public List<BankAccountTypeView> getBankAccountTypeView(List<BankAccountType> bankAccountTypes){
+        List<BankAccountTypeView> bankAccountTypeViews = new ArrayList<BankAccountTypeView>();
+        if (bankAccountTypes == null) {
+            log.debug("getBankAccountTypeView() bankAccountTypes is null!");
+            return bankAccountTypeViews;
+        }
+
+        for (BankAccountType bankAccountType : bankAccountTypes) {
+            bankAccountTypeViews.add(getBankAccountTypeView(bankAccountType));
+        }
+        return bankAccountTypeViews;
     }
 }
