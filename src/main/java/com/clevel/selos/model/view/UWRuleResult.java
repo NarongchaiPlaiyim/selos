@@ -1,10 +1,8 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
-import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class UWRuleResult implements Serializable {
     private long id;

@@ -4,8 +4,6 @@ package com.clevel.selos.integration.ncb.vaildation;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryIdModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryNameModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.system.message.Message;

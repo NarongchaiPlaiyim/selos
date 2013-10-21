@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.BAPaymentMethod;
 import com.clevel.selos.model.db.master.BankAccountType;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -21,7 +20,7 @@ public class BankAccountTypeDAO extends GenericDAO<BankAccountType,Integer> {
     public List<BankAccountType> findOpenAccountType() {
         Criteria criteria = createCriteria()
                 .add(Restrictions.eq("active", 1))
-                .add(Restrictions.eq("open_account_flag",1));
+                .add(Restrictions.eq("openAccountFlag",1));
 
         List<BankAccountType> list = criteria.list();
         return list;

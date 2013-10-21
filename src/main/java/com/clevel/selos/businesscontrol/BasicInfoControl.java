@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -56,7 +55,7 @@ public class BasicInfoControl extends BusinessControl {
             basicInfo = new BasicInfo();
         }
 
-        BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo,workCase);
+        BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo, workCase);
 
         log.info("getBasicInfo ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;

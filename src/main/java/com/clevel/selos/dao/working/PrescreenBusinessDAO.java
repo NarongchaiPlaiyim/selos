@@ -3,7 +3,6 @@ package com.clevel.selos.dao.working;
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.PrescreenBusiness;
-import com.clevel.selos.model.db.working.PrescreenFacility;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;

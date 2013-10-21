@@ -1,17 +1,9 @@
 package com.clevel.selos.integration.test;
 
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.NCBInterface;
-import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
-import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
-import com.clevel.selos.integration.ncb.ncrs.models.response.NCRSResponseModel;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
-import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.Serializable;
 
 public class NCBInterfaceImpTest implements Serializable {

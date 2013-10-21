@@ -1,9 +1,5 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.CreditCategory;
-import com.clevel.selos.model.CreditRelationType;
-import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

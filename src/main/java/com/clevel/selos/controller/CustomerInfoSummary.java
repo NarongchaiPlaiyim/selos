@@ -1,11 +1,8 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.view.BasicInfoView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;

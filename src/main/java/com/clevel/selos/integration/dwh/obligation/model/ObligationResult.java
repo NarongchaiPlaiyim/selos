@@ -1,6 +1,5 @@
 package com.clevel.selos.integration.dwh.obligation.model;
 
-import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

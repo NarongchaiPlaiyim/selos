@@ -1,8 +1,6 @@
 package com.clevel.selos.model.db.relation;
 
 import com.clevel.selos.model.db.master.PotentialCollateral;
-import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 
 import javax.persistence.*;

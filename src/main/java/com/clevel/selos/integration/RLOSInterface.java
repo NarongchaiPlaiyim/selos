@@ -4,7 +4,6 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface RLOSInterface {

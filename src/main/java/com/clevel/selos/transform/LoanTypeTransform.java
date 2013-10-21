@@ -13,6 +13,11 @@ public class LoanTypeTransform{
     @Inject
     Logger log;
 
+    @Inject
+    public LoanTypeTransform(){
+
+    }
+
     public LoanTypeView getLoanTypeView(AccountType loanType){
         LoanTypeView loanTypeView = new LoanTypeView();
         if(loanType == null){

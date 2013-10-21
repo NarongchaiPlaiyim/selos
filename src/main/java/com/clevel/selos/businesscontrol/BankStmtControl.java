@@ -65,7 +65,6 @@ public class BankStmtControl extends BusinessControl{
                                 BankStmtView bankStmtView = null;
                                 List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
                                 for(DWHBankStatement dwhBankStatement : dwhBankStatementList){
-
                                     BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
                                     if(bankStmtView == null){
                                         bankStmtView = bankStmtTransform.getBankStmtView(dwhBankStatement);
@@ -80,7 +79,6 @@ public class BankStmtControl extends BusinessControl{
                         }
                     } else {
                         actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
-
                     }
                 }
             }
