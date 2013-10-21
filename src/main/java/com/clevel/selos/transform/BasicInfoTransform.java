@@ -6,10 +6,15 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
 public class BasicInfoTransform extends Transform {
+
+    @Inject
+    public BasicInfoTransform() {
+    }
 
     public BasicInfo transformToModel(BasicInfoView basicInfoView, WorkCase workCase, User user){
         BasicInfo basicInfo = new BasicInfo();

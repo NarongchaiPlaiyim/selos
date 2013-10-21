@@ -16,6 +16,7 @@ public class BasicInfoAccountTransform extends Transform {
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
 
+    @Inject
     public BasicInfoAccountTransform() {
     }
 
