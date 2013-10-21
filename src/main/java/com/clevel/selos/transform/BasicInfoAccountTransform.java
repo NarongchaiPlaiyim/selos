@@ -18,6 +18,11 @@ public class BasicInfoAccountTransform extends Transform {
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
 
+    @Inject
+    public BasicInfoAccountTransform(){
+
+    }
+
     public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo){
         OpenAccount openAccount = new OpenAccount();
 
@@ -67,7 +72,7 @@ public class BasicInfoAccountTransform extends Transform {
             if(i == 0){
                 stringBuilder.append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
             }else{
-                stringBuilder.append(", "+basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+                stringBuilder.append(", ").append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
             }
         }
         basicInfoAccountView.setPurposeForShow(stringBuilder.toString());

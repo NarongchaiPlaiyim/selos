@@ -52,8 +52,8 @@ public class BankStmtControl extends BusinessControl{
             if(customerInfoView.getRelation().getId() == 1){
                 if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
                     log.info("Finding Account Number List for TMB Cus ID: {}", customerInfoView.getTmbCustomerId());
-                    CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
-                    //CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
+                    //CustomerAccountResult customerAccountResult = rmInterface.getCustomerAccountInfo(getCurrentUserID(), customerInfoView.getTmbCustomerId());
+                    CustomerAccountResult customerAccountResult = getBankAccountList(customerInfoView.getTmbCustomerId());
                     if(customerAccountResult.getActionResult().equals(ActionResult.SUCCESS)){
                         List<CustomerAccountListModel> accountListModelList = customerAccountResult.getAccountListModels();
                         log.info("Finding account {}", accountListModelList);
@@ -65,7 +65,6 @@ public class BankStmtControl extends BusinessControl{
                                 BankStmtView bankStmtView = null;
                                 List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
                                 for(DWHBankStatement dwhBankStatement : dwhBankStatementList){
-
                                     BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
                                     if(bankStmtView == null){
                                         bankStmtView = bankStmtTransform.getBankStmtView(dwhBankStatement);
@@ -80,7 +79,6 @@ public class BankStmtControl extends BusinessControl{
                         }
                     } else {
                         actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
-
                     }
                 }
             }
