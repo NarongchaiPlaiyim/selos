@@ -44,10 +44,10 @@ public class Customer implements Serializable {
     private int collateralOwner;
 
     @Column(name="percent_share")
-    private BigDecimal percent_share;
+    private BigDecimal percentShare;
 
     @Column(name="approx_income")
-    private BigDecimal approx_income;
+    private BigDecimal approxIncome;
 
     @Column(name="id_number")
     private String idNumber;
@@ -173,20 +173,20 @@ public class Customer implements Serializable {
         this.collateralOwner = collateralOwner;
     }
 
-    public BigDecimal getPercent_share() {
-        return percent_share;
+    public BigDecimal getPercentShare() {
+        return percentShare;
     }
 
-    public void setPercent_share(BigDecimal percent_share) {
-        this.percent_share = percent_share;
+    public void setPercentShare(BigDecimal percentShare) {
+        this.percentShare = percentShare;
     }
 
-    public BigDecimal getApprox_income() {
-        return approx_income;
+    public BigDecimal getApproxIncome() {
+        return approxIncome;
     }
 
-    public void setApprox_income(BigDecimal approx_income) {
-        this.approx_income = approx_income;
+    public void setApproxIncome(BigDecimal approxIncome) {
+        this.approxIncome = approxIncome;
     }
 
     public String getIdNumber() {
@@ -336,8 +336,8 @@ public class Customer implements Serializable {
                 .append("documentAuthorizeBy", documentAuthorizeBy)
                 .append("serviceSegment", serviceSegment)
                 .append("collateralOwner", collateralOwner)
-                .append("percent_share", percent_share)
-                .append("approx_income", approx_income)
+                .append("percentShare", percentShare)
+                .append("approxIncome", approxIncome)
                 .append("idNumber", idNumber)
                 .append("expireDate", expireDate)
                 .append("title", title)

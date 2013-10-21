@@ -25,8 +25,8 @@ public class BankStatement11 implements Serializable {
     @Column(name="branch_code", length = 3)
     private String branchCode;
 
-    @Column(name="account_type", length = 2)
-    private String accountType;
+    @Column(name="data_source", length = 2)
+    private String dataSource;
 
     @Column(name="account_number", length = 10)
     private String accountNumber;
@@ -114,12 +114,12 @@ public class BankStatement11 implements Serializable {
         this.branchCode = branchCode;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getDataSource() {
+        return dataSource;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     public String getAccountNumber() {
@@ -139,6 +139,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getOdLimit() {
+        if(odLimit==null){
+            return BigDecimal.ZERO;
+        }
         return odLimit;
     }
 
@@ -147,6 +150,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getGrossCreditBalance() {
+        if(grossCreditBalance==null){
+            return BigDecimal.ZERO;
+        }
         return grossCreditBalance;
     }
 
@@ -166,6 +172,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getGrossDebitBalance() {
+        if(grossDebitBalance==null){
+            return BigDecimal.ZERO;
+        }
         return grossDebitBalance;
     }
 
@@ -193,6 +202,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getHighestBalance() {
+        if(highestBalance==null){
+            return BigDecimal.ZERO;
+        }
         return highestBalance;
     }
 
@@ -209,6 +221,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getLowestBalance() {
+        if(lowestBalance==null){
+            return BigDecimal.ZERO;
+        }
         return lowestBalance;
     }
 
@@ -217,6 +232,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getMonthEndBalance() {
+        if(monthEndBalance==null){
+            return BigDecimal.ZERO;
+        }
         return monthEndBalance;
     }
 
@@ -236,6 +254,9 @@ public class BankStatement11 implements Serializable {
     }
 
     public BigDecimal getCheckReturnAmount() {
+        if(checkReturnAmount==null){
+            return BigDecimal.ZERO;
+        }
         return checkReturnAmount;
     }
 
@@ -285,7 +306,7 @@ public class BankStatement11 implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("accountOpenDate", accountOpenDate)
                 .append("branchCode", branchCode)
-                .append("accountType", accountType)
+                .append("dataSource", dataSource)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("odLimit", odLimit)

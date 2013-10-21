@@ -47,9 +47,10 @@ public class NCBResultImp implements Serializable {
     }
 
     public String getRequestNo(String appRefNumber, String customerId){
+        log.debug("getRequestNo (appRefNumber: {}, customerId: {})",appRefNumber,customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         String result = model.getRequestNo();
-        log.debug("Call getRequestNo({}, {}) is {}", appRefNumber, customerId, result);
+        log.debug("getRequestNo result (result: {})", result);
         return result;
     }
 

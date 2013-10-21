@@ -1,6 +1,9 @@
 package com.clevel.selos.model.db.ext.rlos;
 
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -95,6 +98,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getInterestRate() {
+        if(interestRate==null){
+            return BigDecimal.ZERO;
+        }
         return interestRate;
     }
 
@@ -103,6 +109,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getRequestTenor() {
+        if(requestTenor==null){
+            return BigDecimal.ZERO;
+        }
         return requestTenor;
     }
 
@@ -111,6 +120,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getRequestLimit() {
+        if(requestLimit==null){
+            return BigDecimal.ZERO;
+        }
         return requestLimit;
     }
 
@@ -119,6 +131,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalTenors() {
+        if(finalTenors==null){
+            return BigDecimal.ZERO;
+        }
         return finalTenors;
     }
 
@@ -127,6 +142,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalLimit() {
+        if(finalLimit==null){
+            return BigDecimal.ZERO;
+        }
         return finalLimit;
     }
 
@@ -135,6 +153,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalInstallment() {
+        if(finalInstallment==null){
+            return BigDecimal.ZERO;
+        }
         return finalInstallment;
     }
 
@@ -159,6 +180,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getInterestRate2() {
+        if(interestRate2==null){
+            return BigDecimal.ZERO;
+        }
         return interestRate2;
     }
 
@@ -167,6 +191,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getRequestTenor2() {
+        if(requestTenor2==null){
+            return BigDecimal.ZERO;
+        }
         return requestTenor2;
     }
 
@@ -175,6 +202,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getRequestLimit2() {
+        if(requestLimit2==null){
+            return BigDecimal.ZERO;
+        }
         return requestLimit2;
     }
 
@@ -183,6 +213,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalTenors2() {
+        if(finalTenors2==null){
+            return BigDecimal.ZERO;
+        }
         return finalTenors2;
     }
 
@@ -191,6 +224,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalLimit2() {
+        if(finalLimit2==null){
+            return BigDecimal.ZERO;
+        }
         return finalLimit2;
     }
 
@@ -199,6 +235,9 @@ public class AppInProcess1 implements Serializable {
     }
 
     public BigDecimal getFinalInstallment2() {
+        if(finalInstallment2==null){
+            return BigDecimal.ZERO;
+        }
         return finalInstallment2;
     }
 
@@ -220,5 +259,30 @@ public class AppInProcess1 implements Serializable {
 
     public void setCustomerDetail1s(List<CustomerDetail1> customerDetail1s) {
         this.customerDetail1s = customerDetail1s;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("appRefNumber", appRefNumber)
+                .append("productCode", productCode)
+                .append("projectCode", projectCode)
+                .append("interestRate", interestRate)
+                .append("requestTenor", requestTenor)
+                .append("requestLimit", requestLimit)
+                .append("finalTenors", finalTenors)
+                .append("finalLimit", finalLimit)
+                .append("finalInstallment", finalInstallment)
+                .append("productCode2", productCode2)
+                .append("projectCode2", projectCode2)
+                .append("interestRate2", interestRate2)
+                .append("requestTenor2", requestTenor2)
+                .append("requestLimit2", requestLimit2)
+                .append("finalTenors2", finalTenors2)
+                .append("finalLimit2", finalLimit2)
+                .append("finalInstallment2", finalInstallment2)
+                .append("status", status)
+                .append("customerDetail1s", customerDetail1s)
+                .toString();
     }
 }

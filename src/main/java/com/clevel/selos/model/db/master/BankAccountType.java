@@ -15,12 +15,24 @@ public class BankAccountType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+
     @Column(name = "name")
     private String name;
+
+    @Column(name = "shortname")
+    private String shortname;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "active")
     private int active;
+
+    @Column(name = "open_account_flag")
+    private int openAccountFlag;
+
+    @Column(name = "bank_statement_flag")
+    private int bankStatementFlag;
 
     public BankAccountType() {
     }
@@ -41,6 +53,14 @@ public class BankAccountType implements Serializable {
         this.name = name;
     }
 
+    public String getShortname() {
+        return shortname;
+    }
+
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -57,13 +77,32 @@ public class BankAccountType implements Serializable {
         this.active = active;
     }
 
+    public int getOpenAccountFlag() {
+        return openAccountFlag;
+    }
+
+    public void setOpenAccountFlag(int openAccountFlag) {
+        this.openAccountFlag = openAccountFlag;
+    }
+
+    public int getBankStatementFlag() {
+        return bankStatementFlag;
+    }
+
+    public void setBankStatementFlag(int bankStatementFlag) {
+        this.bankStatementFlag = bankStatementFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("shortname", shortname)
+                .append("description", description)
+                .append("active", active)
+                .append("openAccountFlag", openAccountFlag)
+                .append("bankAccountFlag", bankStatementFlag)
+                .toString();
     }
 }

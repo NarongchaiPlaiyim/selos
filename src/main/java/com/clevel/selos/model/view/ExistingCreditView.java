@@ -3,12 +3,16 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ExistingCreditView {
+public class ExistingCreditView implements Serializable {
 
     private List<ActionStatusView> status;
+    private long id;
+    private long workcasePrescreenId;
+    private long getWorkcaseFullAppId;
     private BigDecimal totalBorrowerComLimit;
     private BigDecimal totalBorrowerRetailLimit;
     private BigDecimal totalBorrowerAppInRLOSLimit;
@@ -25,6 +29,30 @@ public class ExistingCreditView {
     private List<ExistingCreditDetailView> relatedComExistingCredit;
     private List<ExistingCreditDetailView> relatedRetailExistingCredit;
     private List<ExistingCreditDetailView> relatedAppInRLOSCredit;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getWorkcasePrescreenId() {
+        return workcasePrescreenId;
+    }
+
+    public void setWorkcasePrescreenId(long workcasePrescreenId) {
+        this.workcasePrescreenId = workcasePrescreenId;
+    }
+
+    public long getGetWorkcaseFullAppId() {
+        return getWorkcaseFullAppId;
+    }
+
+    public void setGetWorkcaseFullAppId(long getWorkcaseFullAppId) {
+        this.getWorkcaseFullAppId = getWorkcaseFullAppId;
+    }
 
     public BigDecimal getTotalBorrowerComLimit() {
         return totalBorrowerComLimit;

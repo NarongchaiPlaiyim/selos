@@ -1,7 +1,6 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -31,11 +30,6 @@ public class TCGView implements Serializable {
     private User modifyBy;
 
 
-    private String sumAppraisalAmtText;
-    private String sumLtvAmtText;
-    private String sumThisAppraisalAmtText;
-    private String sumThisLtvAmtText;
-
     public TCGView(){
         reset();
     }
@@ -54,10 +48,6 @@ public class TCGView implements Serializable {
         this.sumLtvValue = new BigDecimal(0);
         this.sumInThisAppraisalAmount = new BigDecimal(0);
         this.sumInThisLtvValue = new BigDecimal(0);
-        sumAppraisalAmtText="0.00";
-        sumLtvAmtText="0.00";
-        sumThisAppraisalAmtText = "0.00";
-        sumThisLtvAmtText="0.00";
     }
 
     public long getId() {
@@ -203,38 +193,6 @@ public class TCGView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
-    }
-
-    public String getSumAppraisalAmtText() {
-        return sumAppraisalAmtText = Util.formatNumber(sumAppraisalAmount.doubleValue());
-    }
-
-    public void setSumAppraisalAmtText(String sumAppraisalAmtText) {
-        this.sumAppraisalAmtText = sumAppraisalAmtText;
-    }
-
-    public String getSumLtvAmtText() {
-        return sumLtvAmtText = Util.formatNumber(sumLtvValue.doubleValue());
-    }
-
-    public void setSumLtvAmtText(String sumLtvAmtText) {
-        this.sumLtvAmtText = sumLtvAmtText;
-    }
-
-    public String getSumThisAppraisalAmtText() {
-        return sumThisAppraisalAmtText = Util.formatNumber(sumInThisAppraisalAmount.doubleValue());
-    }
-
-    public void setSumThisAppraisalAmtText(String sumThisAppraisalAmtText) {
-        this.sumThisAppraisalAmtText = sumThisAppraisalAmtText;
-    }
-
-    public String getSumThisLtvAmtText() {
-        return sumThisLtvAmtText = Util.formatNumber(sumInThisLtvValue.doubleValue());
-    }
-
-    public void setSumThisLtvAmtText(String sumThisLtvAmtText) {
-        this.sumThisLtvAmtText = sumThisLtvAmtText;
     }
 
     @Override

@@ -2,8 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.view.ExistingCreditDetailView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
+import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -19,8 +20,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
@@ -101,14 +100,21 @@ public class PrescreenResult implements Serializable {
             queueName = session.getAttribute("queueName").toString();
             user = (User)session.getAttribute("user");
 
-            modeForButton = ModeForButton.ADD;
+            prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
         }
     }
 
     public void onRetrieveInterfaceInfo(){
         log.info("Start on Retrieve Interface Info");
-        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(workCasePreScreenId);
 
+        List<CustomerInfoView> customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+        prescreenResultView = prescreenBusinessControl.getInterfaceInfo(customerInfoViewList, prescreenResultView);
+
+    }
+
+    public void onSave(){
+        log.info("Start onSave {}", prescreenResultView);
+        prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId);
     }
 
     public void onCloseSale(){
