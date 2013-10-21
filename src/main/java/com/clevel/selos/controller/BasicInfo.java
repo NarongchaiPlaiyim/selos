@@ -2,7 +2,6 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
@@ -11,6 +10,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.BankAccountTypeTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -55,7 +55,7 @@ public class BasicInfo implements Serializable {
     @Inject
     private SBFScoreDAO sbfScoreDAO;
     @Inject
-    private OpenAccountTypeDAO openAccountTypeDAO;
+    private BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
     private OpenAccountProductDAO openAccountProductDAO;
     @Inject
@@ -68,6 +68,8 @@ public class BasicInfo implements Serializable {
     private BorrowingTypeDAO borrowingTypeDAO;
     @Inject
     private BAPaymentMethodDAO baPaymentMethodDAO;
+    @Inject
+    private BankAccountTypeTransform bankAccountTypeTransform;
 
     //*** Drop down List ***//
     private List<ProductGroup> productGroupList;
@@ -77,7 +79,7 @@ public class BasicInfo implements Serializable {
     private List<SBFScore> sbfScoreList;
     private List<Bank> bankList;
 
-    private List<OpenAccountType> openAccountTypeList;
+    private List<BankAccountType> bankAccountTypeList;
     private List<OpenAccountProduct> openAccountProductList;
     private List<OpenAccountPurpose> openAccountPurposeList;
 
@@ -149,7 +151,7 @@ public class BasicInfo implements Serializable {
         sbfScoreList = sbfScoreDAO.findAll();
         bankList = bankDAO.getListRefinance();
 
-        openAccountTypeList = openAccountTypeDAO.findAll();
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
         openAccountProductList = openAccountProductDAO.findAll();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
@@ -215,10 +217,11 @@ public class BasicInfo implements Serializable {
     }
 
     public void addAccount(){
-        if(basicInfoAccountView.getAccountType().getId() != 0){
-            basicInfoAccountView.setAccountType(openAccountTypeDAO.findById(basicInfoAccountView.getAccountType().getId()));
+        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
+
+            basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
         }else{
-            basicInfoAccountView.getAccountType().setName("-");
+            basicInfoAccountView.getBankAccountTypeView().setName("-");
         }
 
         if(basicInfoAccountView.getProduct().getId() != 0){
@@ -274,6 +277,7 @@ public class BasicInfo implements Serializable {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         }
     }
 
@@ -350,12 +354,12 @@ public class BasicInfo implements Serializable {
         this.basicInfoAccountView = basicInfoAccountView;
     }
 
-    public List<OpenAccountType> getOpenAccountTypeList() {
-        return openAccountTypeList;
+    public List<BankAccountType> getBankAccountTypeList() {
+        return bankAccountTypeList;
     }
 
-    public void setOpenAccountTypeList(List<OpenAccountType> openAccountTypeList) {
-        this.openAccountTypeList = openAccountTypeList;
+    public void setBankAccountTypeList(List<BankAccountType> bankAccountTypeList) {
+        this.bankAccountTypeList = bankAccountTypeList;
     }
 
     public List<OpenAccountProduct> getOpenAccountProductList() {

@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.master.SpecialProgram;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;

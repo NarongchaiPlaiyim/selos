@@ -3,9 +3,11 @@ package com.clevel.selos.transform;
 import com.clevel.selos.controller.BankStatementDetail;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
+import com.clevel.selos.dao.master.DWHBankDataSourceDAO;
 import com.clevel.selos.dao.working.BankStatementDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
+import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BankStatement;
 import com.clevel.selos.model.db.working.BankStatementSummary;
@@ -34,6 +36,12 @@ public class BankStmtTransform extends Transform{
     BankAccountTypeDAO bankAccountTypeDAO;
 
     @Inject
+    DWHBankDataSourceDAO dwhBankDataSourceDAO;
+
+    @Inject
+    BankAccountTypeTransform bankAccountTypeTransform;
+
+    @Inject
     public BankStmtTransform(){
 
     }
@@ -44,9 +52,9 @@ public class BankStmtTransform extends Transform{
         bankStmtView.setAccountNumber(dwhBankStatement.getAccountNumber());
         bankStmtView.setAccountName(dwhBankStatement.getAccountName());
 
-        AccountStatusView accountStatusView = new AccountStatusView();
-        accountStatusView.setId(dwhBankStatement.getAccountStatus());
-        bankStmtView.setAccountStatusView(accountStatusView);
+        DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(dwhBankStatement.getDataSource());
+
+        bankStmtView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(dwhBankDataSource.getBankAccountType()));
 
         AccountTypeView accountTypeView = new AccountTypeView();
         accountTypeView.setAccountType(dwhBankStatement.getDataSource()); //TODO: transform data source to account type

@@ -1,7 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountType;
-import com.clevel.selos.model.db.working.DBRDetail;
 import com.clevel.selos.model.db.working.WorkCase;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

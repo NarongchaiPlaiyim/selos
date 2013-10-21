@@ -25,6 +25,7 @@ public class AccountTypeTransform extends Transform {
 
         accountTypeView.setId(accountType.getId());
         accountTypeView.setAccountType(accountType.getName());
+
         return accountTypeView;
     }
 

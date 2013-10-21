@@ -1,10 +1,6 @@
 package com.clevel.selos.integration.brms.model.response;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
-import com.clevel.selos.integration.brms.model.response.data.BorrowerResultData;
-import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
-
-import java.util.List;
 
 public class FullApplicationResponse extends PreScreenResponse{
     public FullApplicationResponse() {

@@ -12,11 +12,11 @@ public class BankStmtView implements Serializable {
     private int isNotCountIncome;
     private BankView bankView;
     private String branchName;
-    private AccountTypeView accountTypeView;
-    private AccountTypeView othAccountTypeView;
+    private BankAccountTypeView bankAccountTypeView;
+    private BankAccountTypeView othAccountTypeView;
     private String accountNumber;
     private String accountName;
-    private AccountStatusView accountStatusView;
+    private BankAccountStatusView bankAccountStatusView;
     private int isMainAccount;
     private int accountCharacteristic;
 
@@ -48,11 +48,11 @@ public class BankStmtView implements Serializable {
     public void reset() {
         this.bankView = new BankView();
         this.branchName = "";
-        this.accountTypeView = new AccountTypeView();
-        this.othAccountTypeView = new AccountTypeView();
+        this.bankAccountTypeView = new BankAccountTypeView();
+        this.othAccountTypeView = new BankAccountTypeView();
         this.accountNumber = "";
         this.accountName = "";
-        this.accountStatusView = new AccountStatusView();
+        this.bankAccountStatusView = new BankAccountStatusView();
         this.limit = BigDecimal.ZERO;
         this.avgIncomeGross = BigDecimal.ZERO;
         this.avgIncomeNetBDM = BigDecimal.ZERO;
@@ -109,19 +109,19 @@ public class BankStmtView implements Serializable {
         this.branchName = branchName;
     }
 
-    public AccountTypeView getAccountTypeView() {
-        return accountTypeView;
+    public BankAccountTypeView getBankAccountTypeView() {
+        return bankAccountTypeView;
     }
 
-    public void setAccountTypeView(AccountTypeView accountTypeView) {
-        this.accountTypeView = accountTypeView;
+    public void setBankAccountTypeView(BankAccountTypeView bankAccountTypeView) {
+        this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public AccountTypeView getOthAccountTypeView() {
+    public BankAccountTypeView getOthAccountTypeView() {
         return othAccountTypeView;
     }
 
-    public void setOthAccountTypeView(AccountTypeView othAccountTypeView) {
+    public void setOthAccountTypeView(BankAccountTypeView othAccountTypeView) {
         this.othAccountTypeView = othAccountTypeView;
     }
 
@@ -141,12 +141,12 @@ public class BankStmtView implements Serializable {
         this.accountName = accountName;
     }
 
-    public AccountStatusView getAccountStatusView() {
-        return accountStatusView;
+    public BankAccountStatusView getBankAccountStatusView() {
+        return bankAccountStatusView;
     }
 
-    public void setAccountStatusView(AccountStatusView accountStatusView) {
-        this.accountStatusView = accountStatusView;
+    public void setBankAccountStatusView(BankAccountStatusView bankAccountStatusView) {
+        this.bankAccountStatusView = bankAccountStatusView;
     }
 
     public int getMainAccount() {
@@ -308,11 +308,11 @@ public class BankStmtView implements Serializable {
                 .append("isNotCountIncome", isNotCountIncome)
                 .append("bankView", bankView)
                 .append("branchName", branchName)
-                .append("accountTypeView", accountTypeView)
+                .append("bankAccountTypeView", bankAccountTypeView)
                 .append("othAccountTypeView", othAccountTypeView)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
-                .append("accountStatusView", accountStatusView)
+                .append("bankAccountStatusView", bankAccountStatusView)
                 .append("isMainAccount", isMainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
                 .append("limit", limit)
