@@ -6,10 +6,17 @@ import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
 
+import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
 public class BasicInfoTransform extends Transform {
+    @Inject
+    BasicInfoAccountTransform basicInfoAccountTransform;
+
+    @Inject
+    public BasicInfoTransform() {
+    }
 
     public BasicInfo transformToModel(BasicInfoView basicInfoView, WorkCase workCase, User user){
         BasicInfo basicInfo = new BasicInfo();
@@ -192,7 +199,6 @@ public class BasicInfoTransform extends Transform {
         basicInfoView.setModifyDate(basicInfo.getModifyDate());
         basicInfoView.setModifyBy(basicInfo.getModifyBy());
 
-        BasicInfoAccountTransform basicInfoAccountTransform = new BasicInfoAccountTransform();
         List<BasicInfoAccountView> basicInfoAccountViewList = basicInfoAccountTransform.transformToViewList(basicInfo.getOpenAccountList());
 
         basicInfoView.setBasicInfoAccountViews(basicInfoAccountViewList);

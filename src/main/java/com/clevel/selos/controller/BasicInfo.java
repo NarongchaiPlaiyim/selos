@@ -279,6 +279,7 @@ public class BasicInfo implements Serializable {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         }
     }
 
