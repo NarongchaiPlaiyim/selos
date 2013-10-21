@@ -98,7 +98,7 @@ public class BankAccountType implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
-                .append("shortname", shortName)
+                .append("shortName", shortName)
                 .append("description", description)
                 .append("active", active)
                 .append("openAccountFlag", openAccountFlag)
