@@ -55,7 +55,7 @@ public class BasicInfoControl extends BusinessControl {
             basicInfo = new BasicInfo();
         }
 
-        BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo,workCase);
+        BasicInfoView basicInfoView = basicInfoTransform.transformToView(basicInfo, workCase);
 
         log.info("getBasicInfo ::: basicInfoView : {}", basicInfoView);
         return basicInfoView;

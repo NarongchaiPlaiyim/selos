@@ -72,9 +72,9 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }*/
+        }
 
-        log.info("CaseDTO : caseDTOList : {}", caseDTOList);
+        log.info("CaseDTO : caseDTOList : {}", caseDTOList);*/
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
 
         return inboxViewList;
