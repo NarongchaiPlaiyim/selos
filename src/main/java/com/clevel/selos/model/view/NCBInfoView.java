@@ -19,17 +19,17 @@ public class NCBInfoView implements Serializable {
     private String currentPaymentType;
     private String historyPaymentType;
     private int nplFlag;
-    private boolean nplTMBFlag;
+    private int nplTMBFlag;
     private int nplTMBMonth;
     private int nplTMBYear;
-    private boolean nplOtherFlag;
+    private int nplOtherFlag;
     private int nplOtherMonth;
     private int nplOtherYear;
     private int tdrFlag;
-    private boolean tdrTMBFlag;
+    private int tdrTMBFlag;
     private int tdrTMBMonth;
     private int tdrTMBYear;
-    private boolean tdrOtherFlag;
+    private int tdrOtherFlag;
     private int tdrOtherMonth;
     private int tdrOtherYear;
     private String remark;
@@ -57,17 +57,17 @@ public class NCBInfoView implements Serializable {
         this.currentPaymentType = "";
         this.historyPaymentType = "";
         this.nplFlag     = 0;
-        this.nplTMBFlag  = false;
+        this.nplTMBFlag  = 0;
         this.nplTMBMonth = 0;
         this.nplTMBYear  = 0;
-        this.nplOtherFlag = false;
+        this.nplOtherFlag = 0;
         this.nplOtherMonth = 0;
         this.nplOtherYear  = 0;
         this.tdrFlag = 0;
-        this.tdrTMBFlag = false;
+        this.tdrTMBFlag = 0;
         this.tdrTMBMonth = 0;
         this.tdrTMBYear = 0;
-        this.tdrOtherFlag = false;
+        this.tdrOtherFlag = 0;
         this.tdrOtherMonth = 0;
         this.tdrOtherYear = 0;
         this.remark = "";
@@ -317,37 +317,35 @@ public class NCBInfoView implements Serializable {
         this.tdrFlag = tdrFlag;
     }
 
-    public boolean isNplTMBFlag() {
+    public int getNplTMBFlag() {
         return nplTMBFlag;
     }
 
-    public void setNplTMBFlag(boolean nplTMBFlag) {
+    public void setNplTMBFlag(int nplTMBFlag) {
         this.nplTMBFlag = nplTMBFlag;
     }
 
-    public boolean isNplOtherFlag() {
+    public int getNplOtherFlag() {
         return nplOtherFlag;
     }
 
-    public void setNplOtherFlag(boolean nplOtherFlag) {
+    public void setNplOtherFlag(int nplOtherFlag) {
         this.nplOtherFlag = nplOtherFlag;
     }
 
-    public boolean isTdrTMBFlag() {
+    public int getTdrTMBFlag() {
         return tdrTMBFlag;
     }
 
-    public void setTdrTMBFlag(boolean tdrTMBFlag) {
+    public void setTdrTMBFlag(int tdrTMBFlag) {
         this.tdrTMBFlag = tdrTMBFlag;
     }
 
-    public boolean isTdrOtherFlag() {
+    public int getTdrOtherFlag() {
         return tdrOtherFlag;
     }
 
-    public void setTdrOtherFlag(boolean tdrOtherFlag) {
+    public void setTdrOtherFlag(int tdrOtherFlag) {
         this.tdrOtherFlag = tdrOtherFlag;
     }
-
-
 }
