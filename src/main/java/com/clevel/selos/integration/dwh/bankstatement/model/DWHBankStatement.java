@@ -11,7 +11,7 @@ public class DWHBankStatement implements Serializable {
     private String accountStatus;
     private Date accountOpenDate;
     private String branchCode;
-    private String accountType;
+    private String dataSource;
     private String accountNumber;
     private String accountName;
     private BigDecimal overLimitAmount;
@@ -55,12 +55,12 @@ public class DWHBankStatement implements Serializable {
         this.branchCode = branchCode;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getDataSource() {
+        return dataSource;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     public String getAccountNumber() {
@@ -225,7 +225,7 @@ public class DWHBankStatement implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("accountOpenDate", accountOpenDate)
                 .append("branchCode", branchCode)
-                .append("accountType", accountType)
+                .append("dataSource", dataSource)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("overLimitAmount", overLimitAmount)
