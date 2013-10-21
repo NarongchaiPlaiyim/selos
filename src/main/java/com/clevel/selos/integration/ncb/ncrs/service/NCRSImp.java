@@ -3,41 +3,37 @@ package com.clevel.selos.integration.ncb.ncrs.service;
 
 import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportImp;
 import com.clevel.selos.integration.ncb.exportncbi.NCBIExportModel;
 import com.clevel.selos.integration.ncb.httppost.Post;
+import com.clevel.selos.integration.ncb.ncbresult.NCBResultImp;
 import com.clevel.selos.integration.ncb.ncrs.models.request.*;
-import com.clevel.selos.integration.ncb.ncrs.models.request.BodyModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.HeaderModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryHeaderModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryIdModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryModel;
-import com.clevel.selos.integration.ncb.ncrs.models.request.TUEFEnquiryNameModel;
-import com.clevel.selos.integration.ncb.ncrs.models.response.*;
-
+import com.clevel.selos.integration.ncb.ncrs.models.response.ErrorModel;
+import com.clevel.selos.integration.ncb.ncrs.models.response.NCRSResponseModel;
+import com.clevel.selos.integration.ncb.ncrs.models.response.SubjectModel;
+import com.clevel.selos.integration.ncb.ncrs.models.response.TUEFErrorError;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
-import com.clevel.selos.system.message.ExceptionMapping;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.HttpHostConnectException;
 import com.clevel.selos.integration.ncb.vaildation.ValidationImp;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
+import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.protocol.HTTP;
+import org.slf4j.Logger;
+
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
-
-import org.apache.http.protocol.HTTP;
-import org.slf4j.Logger;
 
 public class NCRSImp implements NCRS, Serializable{
     @Inject

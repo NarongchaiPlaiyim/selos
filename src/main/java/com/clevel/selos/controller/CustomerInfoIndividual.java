@@ -2,9 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;

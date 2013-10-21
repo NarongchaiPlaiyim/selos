@@ -2,7 +2,6 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.dao.master.BorrowingTypeDAO;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;

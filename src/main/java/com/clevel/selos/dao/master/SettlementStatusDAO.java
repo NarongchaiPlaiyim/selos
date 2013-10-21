@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.SettlementStatus;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;

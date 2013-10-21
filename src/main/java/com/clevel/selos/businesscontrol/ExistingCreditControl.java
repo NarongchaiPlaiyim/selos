@@ -11,7 +11,6 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcess;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
 import com.clevel.selos.model.db.master.Reference;
 import com.clevel.selos.model.db.working.ExistingCreditSummary;

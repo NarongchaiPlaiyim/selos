@@ -5,8 +5,8 @@ import com.clevel.selos.integration.DWH;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.dwh.bankstatement.BankStatementService;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
-import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.ObligationService;
+import com.clevel.selos.integration.dwh.obligation.model.Obligation;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.message.ExceptionMapping;
@@ -18,7 +18,6 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
