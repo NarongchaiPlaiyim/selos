@@ -36,7 +36,7 @@
                         </div>
                         <div id="content_form">
                             <!-- start content -->
-                            <table class="content_table_form">
+                            <table class="content_table_form" id="contentTableForm">
                                 <tr>
                                     <td class="title">
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.docType')}"/>
@@ -273,10 +273,10 @@
                                         <h:outputText value="เพศ :"/>
                                     </td>
                                     <td>
-                                        <p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender.value}" style="width: 200px;">
-                                            <f:selectItem itemLabel="Male" itemValue="1"/>
-                                            <f:selectItem itemLabel="Female" itemValue="2"/>
-                                        </p:selectOneMenu>
+                                        <!--<p:selectOneMenu size="1" value="#{custInfoSumIndi.customerInfoView.gender.value}" style="width: 200px;">-->
+                                            <!--<f:selectItem itemLabel="Male" itemValue="1"/>-->
+                                            <!--<f:selectItem itemLabel="Female" itemValue="2"/>-->
+                                        <!--</p:selectOneMenu>-->
                                     </td>
                                 </tr>
                                 <tr>
@@ -565,7 +565,12 @@
                                         <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm2}">
                                             <f:selectItem itemLabel="ที่อยู่ปัจจุบัน" itemValue="1"/>
                                             <f:selectItem itemLabel="อื่นๆ" itemValue="3"/>
+                                            <p:ajax update=":frmMain"/>
                                         </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                     </td>
                                     <td colspan="3">
                                         <table>
@@ -574,19 +579,22 @@
                                                     <h:outputText value="เลขที่"/>
                                                 </td>
                                                 <td class="smallest left">
-                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.addressNo}"/>
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.addressNo}"
+                                                            disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                                 <td class="title right">
                                                     <h:outputText value="หมู่ที่"/>
                                                 </td>
                                                 <td class="smallest left">
-                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.moo}"/>
+                                                    <p:inputText styleClass="smallest" value="#{custInfoSumIndi.customerInfoView.registerAddress.moo}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                                 <td class="small title right">
                                                     <h:outputText value="อาคาร/หมู่บ้าน"/>
                                                 </td>
                                                 <td class="left">
-                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.building}"/>
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.building}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -594,7 +602,8 @@
                                                     <h:outputText value="ตรอก/ซอย/ถนน"/>
                                                 </td>
                                                 <td class="left" colspan="5">
-                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"/>
+                                                    <p:inputText style="width:400px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.road}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -604,7 +613,8 @@
                                                         <tr>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;"
-                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.province.code}">
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.province.code}"
+                                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{custInfoSumIndi.provinceForm2List}"
                                                                                    var="province"
@@ -616,7 +626,8 @@
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;" id="districtForm2"
-                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.district.id}">
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.district.id}"
+                                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{custInfoSumIndi.districtForm2List}"
                                                                                    var="district"
@@ -628,7 +639,8 @@
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;" id="subDistrictForm2"
-                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.subDistrict.code}">
+                                                                                 value="#{custInfoSumIndi.customerInfoView.registerAddress.subDistrict.code}"
+                                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}">
                                                                     <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                                     <f:selectItems value="#{custInfoSumIndi.subDistrictForm2List}"
                                                                                    var="subDistrict"
@@ -645,7 +657,8 @@
                                                     <h:outputText value="รหัสไปรษณีย์ :"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:inputMask mask="99999" styleClass="smaller" maxlength="5" value="#{custInfoSumIndi.customerInfoView.registerAddress.postalCode}"/>
+                                                    <p:inputMask mask="99999" styleClass="smaller" maxlength="5" value="#{custInfoSumIndi.customerInfoView.registerAddress.postalCode}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -654,7 +667,8 @@
                                                 </td>
                                                 <td colspan="5">
                                                     <p:selectOneMenu size="1" style="width: 200px;"
-                                                                     value="#{custInfoSumIndi.customerInfoView.registerAddress.country.id}">
+                                                                     value="#{custInfoSumIndi.customerInfoView.registerAddress.country.id}"
+                                                                     disabled="#{custInfoSumIndi.addressFlagForm2 != 3}">
                                                         <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                                         <f:selectItems value="#{custInfoSumIndi.countryList}"
                                                                        var="country"
@@ -668,7 +682,8 @@
                                                     <h:outputText value="Address :"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:inputText style="width: 500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.address}"/>
+                                                    <p:inputText style="width: 500px;" value="#{custInfoSumIndi.customerInfoView.registerAddress.address}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -676,9 +691,11 @@
                                                     <h:outputText value="โทรศัพท์ :"/>
                                                 </td>
                                                 <td colspan="5">
-                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.phoneNumber}"/>
+                                                    <p:inputText styleClass="large" value="#{custInfoSumIndi.customerInfoView.registerAddress.phoneNumber}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                     <h:outputText value=" ต่อ " styleClass="title"/>
-                                                    <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.registerAddress.extension}"/>
+                                                    <p:inputText styleClass="smaller" value="#{custInfoSumIndi.customerInfoView.registerAddress.extension}"
+                                                                 disabled="#{custInfoSumIndi.addressFlagForm2 != 3}"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -699,6 +716,9 @@
                                             <f:selectItem itemLabel="อื่นๆ" itemValue="3"/>
                                         </h:selectOneRadio>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
                                     <td colspan="3">
                                         <table>
                                             <tr>

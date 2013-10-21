@@ -20,7 +20,7 @@ public class BankAccountTypeDAO extends GenericDAO<BankAccountType,Integer> {
     public List<BankAccountType> findOpenAccountType() {
         Criteria criteria = createCriteria()
                 .add(Restrictions.eq("active", 1))
-                .add(Restrictions.eq("open_account_flag",1));
+                .add(Restrictions.eq("openAccountFlag",1));
 
         List<BankAccountType> list = criteria.list();
         return list;

@@ -332,6 +332,18 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
+    public void onSave(){
+        if(addressFlagForm2 == 1){ //dup address 1 to address 2
+            customerInfoView.setRegisterAddress(customerInfoView.getCurrentAddress());
+        }
+
+        if(addressFlagForm3 == 1){
+            customerInfoView.setWorkAddress(customerInfoView.getCurrentAddress());
+        }else if(addressFlagForm3 == 2){
+            customerInfoView.setWorkAddress(customerInfoView.getRegisterAddress());
+        }
+    }
+
     //Get Set
     public CustomerInfoView getCustomerInfoView() {
         return customerInfoView;

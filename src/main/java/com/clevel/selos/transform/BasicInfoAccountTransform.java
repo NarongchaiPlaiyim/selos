@@ -16,6 +16,10 @@ public class BasicInfoAccountTransform extends Transform {
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
 
+    @Inject
+    public BasicInfoAccountTransform() {
+    }
+
     public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo){
         OpenAccount openAccount = new OpenAccount();
 
@@ -33,6 +37,9 @@ public class BasicInfoAccountTransform extends Transform {
         }
 
         openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
+        if(openAccount.getBankAccountType().getId() == 0){
+            openAccount.setBankAccountType(null);
+        }
 
         return openAccount;
     }
