@@ -1160,6 +1160,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 if(!Util.isEmpty(creditType) && creditType.equals(ACCOUNT_TYPE_OD_JUR)){
                                                     if(isInMonthPeriodYYYYMM(creditHistModelList.get(0).getAsofdate(), TWELVE_MONTH)){
                                                         for(CreditHistModel creditHistModel : creditHistModelList){
+                                                            //TODO: how to get over limit
                                                             //cannot get number of over limit
                                                             /*if(isOverLimit(subjectAccountModel.getPaymt01())){
                                                                 numberOfOverLimit++;
