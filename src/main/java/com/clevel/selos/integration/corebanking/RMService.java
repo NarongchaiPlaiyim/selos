@@ -387,6 +387,8 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
             log.error("Exception while call RM Individual", e);
             //Audit Data
@@ -549,6 +551,8 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
             log.error("Exception while call service RM Corporate!", e);
             //Audit Data
@@ -714,6 +718,8 @@ public class RMService implements Serializable {
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
 
+        } catch (RMInterfaceException e) {
+            throw e;
         } catch (Exception e) {
 
             log.error("Exception while call service RM Search account!", e);
