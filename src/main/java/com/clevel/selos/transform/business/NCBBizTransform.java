@@ -910,20 +910,20 @@ public class NCBBizTransform extends BusinessTransform {
                                     if(isNPLTMB || isNPLOther){
                                         ncbInfoView.setNplFlag(1); //true
                                         if(isNPLTMB){
-                                            ncbInfoView.setNplTMBFlag(1);
+                                            ncbInfoView.setNplTMBFlag(true);
                                         }
                                         if(isNPLOther){
-                                            ncbInfoView.setNplOtherFlag(1);
+                                            ncbInfoView.setNplOtherFlag(true);
                                         }
                                     }
 
                                     if(isTDRTMB || isTDROther){
                                         ncbInfoView.setTdrFlag(1); //true
                                         if(isTDRTMB){
-                                            ncbInfoView.setTdrTMBFlag(1);
+                                            ncbInfoView.setTdrTMBFlag(true);
                                         }
                                         if(isTDROther){
-                                            ncbInfoView.setTdrOtherFlag(1);
+                                            ncbInfoView.setTdrOtherFlag(true);
                                         }
                                     }
                                 } else {
@@ -1457,20 +1457,20 @@ public class NCBBizTransform extends BusinessTransform {
                                     if(isNPLTMB || isNPLOther){
                                         ncbInfoView.setNplFlag(1); //true
                                         if(isNPLTMB){
-                                            ncbInfoView.setNplTMBFlag(1);
+                                            ncbInfoView.setNplTMBFlag(true);
                                         }
                                         if(isNPLOther){
-                                            ncbInfoView.setNplOtherFlag(1);
+                                            ncbInfoView.setNplOtherFlag(true);
                                         }
                                     }
 
                                     if(isTDRTMB || isTDROther){
                                         ncbInfoView.setTdrFlag(1); //true
                                         if(isTDRTMB){
-                                            ncbInfoView.setTdrTMBFlag(1);
+                                            ncbInfoView.setTdrTMBFlag(true);
                                         }
                                         if(isTDROther){
-                                            ncbInfoView.setTdrOtherFlag(1);
+                                            ncbInfoView.setTdrOtherFlag(true);
                                         }
                                     }
                                 } else {
