@@ -37,9 +37,9 @@ public class BankTransform extends Transform{
             return bankViews;
         }
 
-        for (Bank bank : banks) {
+        for (Bank bank : banks)
             bankViews.add(getBankView(bank));
-        }
+
         return bankViews;
     }
 }
