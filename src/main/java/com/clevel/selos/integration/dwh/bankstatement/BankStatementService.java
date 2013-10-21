@@ -1059,7 +1059,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1088,7 +1088,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1117,7 +1117,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1146,7 +1146,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1175,7 +1175,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1204,7 +1204,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1233,7 +1233,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1262,7 +1262,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1291,7 +1291,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1320,7 +1320,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1349,7 +1349,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1378,7 +1378,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1407,7 +1407,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
@@ -1436,7 +1436,7 @@ public class BankStatementService implements Serializable {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
-            bankStatementResult.setAccountType(bankStatement.getAccountType());
+            bankStatementResult.setDataSource(bankStatement.getDataSource());
             bankStatementResult.setAccountNumber(bankStatement.getAccountNumber());
             bankStatementResult.setAccountName(bankStatement.getAccountName());
             bankStatementResult.setOverLimitAmount(bankStatement.getOdLimit());
