@@ -744,8 +744,22 @@ public class PrescreenMaker implements Serializable {
             log.info("onEditCustomer ::: select spouse to edit ...");
             borrowerInfo = cloner.deepClone(customerInfoViewList.get(selectCustomerInfoItem.getListIndex()));
             log.info("onEditCustomer ::: get borrower from list to edit : {}", borrowerInfo);
+            if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(borrowerInfo.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    borrowerInfo.setSpouse(spouse);
+                }
+            }
         } else {
             borrowerInfo = cloner.deepClone(selectCustomerInfoItem);
+            if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(borrowerInfo.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    borrowerInfo.setSpouse(spouse);
+                }
+            }
         }
 
         modeForButton = ModeForButton.EDIT;
@@ -754,6 +768,11 @@ public class PrescreenMaker implements Serializable {
             relationList = prescreenBusinessControl.getRelationByStepId(1001);
         } else {
             relationList = prescreenBusinessControl.getRelationByStepId(1003);
+        }
+
+        if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            documentTypeList = documentTypeDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
+            titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
         }
 
         this.customerEntity = borrowerInfo.getCustomerEntity();

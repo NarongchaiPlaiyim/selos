@@ -64,12 +64,24 @@ public class CustomerTransform extends Transform {
             customerInfoView.setLastNameTh("");
         }
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
+        if(customerInfoView.getCustomerEntity() == null){
+            customerInfoView.setCustomerEntity(new CustomerEntity());
+        }
         customerInfoView.setAge(customer.getAge());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
         customerInfoView.setRelation(customer.getRelation());
+        if(customerInfoView.getRelation() == null){
+            customerInfoView.setRelation(new Relation());
+        }
         customerInfoView.setReference(customer.getReference());
+        if(customerInfoView.getReference() == null){
+            customerInfoView.setReference(new Reference());
+        }
         customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setDocumentType(customer.getDocumentType());
+        if(customerInfoView.getDocumentType() == null){
+            customerInfoView.setDocumentType(new DocumentType());
+        }
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setValidId(2);
 

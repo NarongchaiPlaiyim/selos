@@ -22,6 +22,7 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
@@ -47,7 +48,7 @@ public class NCRSImp implements NCRS, Serializable {
     Post post;
 
     @Inject
-    @ValidationMessage
+    @ExceptionMessage
     Message message;
 
     @Inject

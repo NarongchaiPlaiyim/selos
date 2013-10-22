@@ -818,7 +818,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(Customer customer : customerList){
             customerDAO.persist(customer);
             if(customer.getAddressesList() != null){
-                addressDAO.persist(customer.getAddressesList());
+                //addressDAO.persist(customer.getAddressesList());
             }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
