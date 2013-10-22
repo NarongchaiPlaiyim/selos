@@ -156,7 +156,6 @@ public class NCRSImp implements NCRS, Serializable {
             memberref = ncrsModel.getMemberref();
             firstName = ncrsModel.getFirstName();
             lastName = ncrsModel.getLastName();
-
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
             if ("07".equals(customerType)) {
                 idModel = new TUEFEnquiryIdModel(customerType, customerId, countryCode);
