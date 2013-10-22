@@ -1,6 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -20,7 +20,7 @@ public class PrescreenCollateralView implements Serializable {
     Message msg;
 
     private long id;
-    private CollateralType collateralType;
+    private PotentialCollateral potentialCollateral;
     private String     collateralTypeName;
     private BigDecimal collateralAmount;
 
@@ -29,7 +29,7 @@ public class PrescreenCollateralView implements Serializable {
 
     public void reset(){
         this.id = 0;
-        this.collateralType = new CollateralType();
+        this.potentialCollateral = new PotentialCollateral();
         this.collateralTypeName = "";
         this.collateralAmount = new BigDecimal(0);
     }
@@ -42,12 +42,12 @@ public class PrescreenCollateralView implements Serializable {
         this.id = id;
     }
 
-    public CollateralType getCollateralType() {
-        return collateralType;
+    public PotentialCollateral getPotentialCollateral() {
+        return potentialCollateral;
     }
 
-    public void setCollateralType(CollateralType collateralType) {
-        this.collateralType = collateralType;
+    public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
+        this.potentialCollateral = potentialCollateral;
     }
 
     public String getCollateralTypeName() {
@@ -71,7 +71,7 @@ public class PrescreenCollateralView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("msg", msg)
                 .append("id", id)
-                .append("collateralType", collateralType)
+                .append("potentialCollateral", potentialCollateral)
                 .append("collateralTypeName", collateralTypeName)
                 .append("collateralAmount", collateralAmount)
                 .toString();

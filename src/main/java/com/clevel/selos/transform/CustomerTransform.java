@@ -1,7 +1,9 @@
 package com.clevel.selos.transform;
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
@@ -10,6 +12,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomerTransform extends Transform {
@@ -46,6 +49,8 @@ public class CustomerTransform extends Transform {
     SubDistrictDAO subDistrictDAO;
     @Inject
     CountryDAO countryDAO;
+    @Inject
+    AddressDAO addressDAO;
 
     public CustomerInfoView transformToView(Customer customer){
 
@@ -68,10 +73,11 @@ public class CustomerTransform extends Transform {
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setValidId(2);
 
-        if(customer.getAddressesList() != null){
+        if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
             List<Address> addressList = customer.getAddressesList();
             for(Address address : addressList){
                 AddressView addressView = new AddressView();
+                addressView.setId(address.getId());
                 addressView.setAddressType(address.getAddressType());
                 addressView.setAddressNo(address.getAddressNo());
                 addressView.setMoo(address.getMoo());
@@ -91,12 +97,21 @@ public class CustomerTransform extends Transform {
                 if(address.getAddressType().getId() == 1){
                     // Current address
                     customerInfoView.setCurrentAddress(addressView);
+                    if(customerInfoView.getCurrentAddress() == null){
+                        customerInfoView.setCurrentAddress(new AddressView());
+                    }
                 } else if(address.getAddressType().getId() == 2){
                     // Register Address
                     customerInfoView.setRegisterAddress(addressView);
+                    if(customerInfoView.getRegisterAddress() == null){
+                        customerInfoView.setRegisterAddress(new AddressView());
+                    }
                 } else if(address.getAddressType().getId() == 3){
                     // Work Address
                     customerInfoView.setWorkAddress(addressView);
+                    if(customerInfoView.getWorkAddress() == null){
+                        customerInfoView.setWorkAddress(new AddressView());
+                    }
                 }
             }
         } else {
@@ -192,6 +207,7 @@ public class CustomerTransform extends Transform {
     }
 
     public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+        log.info("transformToModel ::: customerInfoView : {}", customerInfoView);
         Customer customer = new Customer();
         if(customerInfoView.getId() != 0){
             customer = customerDAO.findById(customerInfoView.getId());
@@ -245,11 +261,7 @@ public class CustomerTransform extends Transform {
             Address address = new Address();
             AddressView currentAddress = customerInfoView.getCurrentAddress();
             if(currentAddress.getId() != 0){
-                for(Address addressDb : customer.getAddressesList()){
-                    if(addressDb.getAddressType().getId() == 1){
-                        address = addressDb;
-                    }
-                }
+                address = addressDAO.findById(currentAddress.getId());
             }
 
             address.setCustomer(customer);
@@ -299,11 +311,7 @@ public class CustomerTransform extends Transform {
             Address address = new Address();
             AddressView registerAddress = customerInfoView.getRegisterAddress();
             if(registerAddress.getId() != 0){
-                for(Address addressDb : customer.getAddressesList()){
-                    if(addressDb.getAddressType().getId() == 2){
-                        address = addressDb;
-                    }
-                }
+                address = addressDAO.findById(registerAddress.getId());
             }
             address.setCustomer(customer);
 
@@ -350,11 +358,10 @@ public class CustomerTransform extends Transform {
 
         if(customerInfoView.getWorkAddress() != null){
             Address address = new Address();
-
             AddressView workAddress = customerInfoView.getWorkAddress();
-            /*if(workAddress.getId() != 0){
-                address.setId(workAddress.getId());
-            }*/
+            if(workAddress.getId() != 0){
+                address = addressDAO.findById(workAddress.getId());
+            }
             address.setCustomer(customer);
 
             //Get Address Type = Current//
@@ -397,7 +404,7 @@ public class CustomerTransform extends Transform {
 
             addressList.add(address);
         }
-
+        customer.setAddressesList(addressList);
         log.info("transformToModel : customer after adding address : {}", customer);
 
         if(customerInfoView.getCustomerEntity().getId() == 1){
@@ -484,12 +491,22 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToBorrowerViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             log.info("transformToBorrowerViewList : CustomerInfoView : {}", item);
             if(item.getRelation() != null && item.getRelation().getId() == 1){
+                item.setListIndex(customerIndex);
+                item.setSubIndex(customerInfoViewList.size());
+                item.setListName("BORROWER");
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    spouse.setSpouse(null);
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;
@@ -497,11 +514,20 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToGuarantorViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             if(item.getRelation() != null && item.getRelation().getId() == 2){
+                item.setListIndex(customerIndex);
+                item.setListName("GUARANTOR");
+                item.setSubIndex(customerInfoViewList.size());
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;
@@ -509,14 +535,53 @@ public class CustomerTransform extends Transform {
 
     public List<CustomerInfoView> transformToRelatedViewList(List<CustomerInfoView> customerInfoViews){
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
-
+        int customerIndex = 0;
         for(CustomerInfoView item : customerInfoViews){
             if(item.getRelation() != null && (item.getRelation().getId() == 3 || item.getRelation().getId() == 4)){
+                item.setListIndex(customerIndex);
+                item.setSubIndex(customerInfoViewList.size());
+                item.setListName("RELATED");
+                if(item.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    item.setSpouse(spouse);
+                }
                 customerInfoViewList.add(item);
             }
+            customerIndex = customerIndex + 1;
         }
 
         return customerInfoViewList;
+    }
+
+    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+        HashMap<String, Customer> customerHashMap = new HashMap<String, Customer>();
+        if(customerInfoViews != null){
+            for(CustomerInfoView item : customerInfoViews){
+                log.info("transformToModelList before item : {}", item);
+                Customer customer = transformToModel(item, workCasePrescreen, workCase);
+                log.info("transformToModelList after item : {}", customer);
+
+                if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    customerHashMap.put(customer.getIndividual().getCitizenId(), customer);
+                } else {
+                    customerHashMap.put(customer.getJuristic().getRegistrationId(), customer);
+                }
+
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                    if(item.getSpouse() != null){
+                        log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        log.debug("transformToModelList after item (spouse) : {}", spouse);
+
+                        spouse.setIsSpouse(1);
+                        customerHashMap.put(spouse.getIndividual().getCitizenId(), spouse);
+                    }
+                }
+
+            }
+        }
+        return customerHashMap;
     }
 
     public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
@@ -528,6 +593,16 @@ public class CustomerTransform extends Transform {
                 Customer customer = transformToModel(item, workCasePrescreen, workCase);
                 log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                    if(item.getSpouse() != null){
+                        log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        log.debug("transformToModelList after item (spouse) : {}", spouse);
+                        spouse.setIsSpouse(1);
+                        customerList.add(spouse);
+                    }
+                }
+
             }
         }
         return customerList;

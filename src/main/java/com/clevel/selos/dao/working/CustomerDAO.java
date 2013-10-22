@@ -39,6 +39,27 @@ public class CustomerDAO extends GenericDAO<Customer,Long> {
         return customerList;
     }
 
+    public List<Customer> findCustomerByWorkCasePreScreenId(long workCasePreScreenId){
+        log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
+        criteria.add(Restrictions.eq("isSpouse", 0));
+        criteria.addOrder(Order.asc("id"));
+        List<Customer> customerList = (List<Customer>)criteria.list();
+
+        return customerList;
+    }
+
+    public Customer findSpouseById(long spouseId){
+        log.debug("findSpouseById ::: spouseId : {}", spouseId);
+        Customer customer = new Customer();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("id", spouseId));
+        customer = (Customer)criteria.uniqueResult();
+
+        return customer;
+    }
+
 
     public Customer findByCitizenlId(String citizenId, long workCasePreScreenId){
         log.info("findByCitizenlId : {}", citizenId);

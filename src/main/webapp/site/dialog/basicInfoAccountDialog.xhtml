@@ -4,7 +4,6 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-
     <h:form id="basicInfoAccountDlgForm">
         <table class="content_form">
             <tr>
@@ -27,6 +26,9 @@
                                        var="oepnAccountType"
                                        itemLabel="#{oepnAccountType.name}"
                                        itemValue="#{oepnAccountType.id}"/>
+                        <p:ajax event="change" process="@form"
+                                listener="#{basicInfo.onChangeAccountType}"
+                                update=":basicInfoAccountDlgForm" />
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -35,9 +37,10 @@
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.product')}"/>
                 </td>
                 <td>
-                    <p:selectOneMenu styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoAccountView.product.id}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                    <p:selectOneMenu id="accountProduct" styleClass="largest" size="1"
+                                     value="#{basicInfo.basicInfoAccountView.product.id}"
+                                     required="#{basicInfo.basicInfoAccountView.bankAccountTypeView.id != 0}">
+                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                         <f:selectItems value="#{basicInfo.openAccountProductList}"
                                        var="oepnAccountProduct"
                                        itemLabel="#{oepnAccountProduct.name}"
@@ -60,16 +63,22 @@
             </tr>
             <tr>
                 <td class="center" colspan="2" style="margin-top: 20px;">
-                    <p:commandButton value="#{msg.get('app.button.ok')}"
+                    <p:commandButton id="dlgSaveBasicAccBtn"
+                            value="#{msg.get('app.button.ok')}"
                             styleClass="small"
-                            action="#{basicInfo.addAccount}"
+                            actionListener="#{basicInfo.addAccount}"
                             process="@form"
                             update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
-                            oncomplete="basicInfoAccountDlg.hide()"/>
+                            oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
+                            <!--oncomplete="basicInfoAccountDlg.hide()"/>-->
                     <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      onclick="basicInfoAccountDlg.hide()" update=":basicInfoAccountDlgForm"/>
                 </td>
             </tr>
         </table>
     </h:form>
+    <p:blockUI widgetVar="blockBasicInfoAccDlg" block="basicInfoAccountDlgForm" trigger=":basicInfoAccountDlgForm:dlgSaveBasicAccBtn">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

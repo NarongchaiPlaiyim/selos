@@ -136,7 +136,6 @@ public class BasicInfo implements Serializable {
         }
     }
 
-
     @PostConstruct
     public void onCreation() {
 
@@ -152,7 +151,8 @@ public class BasicInfo implements Serializable {
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        openAccountProductList = openAccountProductDAO.findAll();
+//        openAccountProductList = openAccountProductDAO.findAll();
+        openAccountProductList = new ArrayList<OpenAccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
@@ -256,6 +256,10 @@ public class BasicInfo implements Serializable {
         }else{
             basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
         }
+
+        boolean complete = true;        //Change only failed to save
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteAccount() {
@@ -303,6 +307,10 @@ public class BasicInfo implements Serializable {
                 basicInfoView.getBaPaymentMethod().setId(0);
             }
         }
+    }
+
+    public void onChangeAccountType(){
+        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
     }
 
     // Get Set

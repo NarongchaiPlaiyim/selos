@@ -12,10 +12,10 @@
                 <td class="title" style="width:145px;">Type Of Collateral :</td>
                 <td>
                     <p:selectOneMenu id="collateralTypeId" size="1" styleClass="largest"
-                                     value="#{prescreenMaker.proposeCollateral.collateralType.id}"
+                                     value="#{prescreenMaker.proposeCollateral.potentialCollateral.id}"
                                      required="true">
                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                    <f:selectItems value="#{prescreenMaker.collateralTypeList}" var="collateralTypeItem"
+                    <f:selectItems value="#{prescreenMaker.potentialCollateralList}" var="collateralTypeItem"
                                    itemLabel="#{collateralTypeItem.description}"
                                    itemValue="#{collateralTypeItem.id}"/>
                     </p:selectOneMenu>
