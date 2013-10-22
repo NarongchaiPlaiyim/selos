@@ -192,7 +192,7 @@ public class Util {
     }
 
     public static String convertCharset(String string)throws Exception{
-       return new String(string.getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+       return new String(string.getBytes("ISO-8859-1"), "UTF-8");
     }
 
     public static String setRequestNo(String appRefNumber, int count){

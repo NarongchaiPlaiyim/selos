@@ -224,20 +224,6 @@
                                                               </p:column>
                                                               <p:column colspan="2" />
                                                           </p:row>
-                                                            <!--<p:row>
-                                                                <p:column />
-                                                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.total')}" style="text-align:left"/>
-                                                                <p:column footerText="#{tcgInfo.TCGView.sumAppraisalAmtText}"  style="text-align:right" />
-                                                                <p:column footerText="#{tcgInfo.TCGView.sumLtvAmtText}"  style="text-align:right"/>
-                                                                <p:column colspan="2" />
-                                                            </p:row>
-                                                            <p:row>
-                                                                <p:column />
-                                                                <p:column colspan="2" footerText="#{msg.get('app.tcg.collateral.label.totalInThis')}" style="text-align:left"/>
-                                                                <p:column footerText="#{tcgInfo.TCGView.sumThisAppraisalAmtText}" style="text-align:right" />
-                                                                <p:column footerText="#{tcgInfo.TCGView.sumThisLtvAmtText}" style="text-align:right"/>
-                                                                <p:column colspan="2" />
-                                                            </p:row>-->
                                                         </p:columnGroup>
 
                                                     </p:dataTable>
@@ -253,7 +239,7 @@
                                         <table class="table_noborder" style="padding-left: 100px;">
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}" /> :
+                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.collateralRuleResult')}" />
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" value="#{tcgInfo.TCGView.collateralRuleResult}" /> %
@@ -262,7 +248,7 @@
                                             <tr>
                                                 <td class="title"
                                                     style="width: 300px;">
-                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.requestTCGAmount')}" /> :
+                                                    <h:outputText value="#{msg.get('app.tcg.collateral.label.requestTCGAmount')}" />
                                                 </td>
                                                 <td>
                                                     <h:outputText styleClass="large right" id="requestTCGAmount"  value="#{tcgInfo.TCGView.requestTCGAmount}" disabled="true">
