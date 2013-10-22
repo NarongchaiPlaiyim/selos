@@ -472,13 +472,13 @@ public class NCRSImp implements NCRS, Serializable {
                         ErrorModel errorModel = arrayList.get(i);
                         exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
                     }
-                    resultDesc = "NCRS NCB Exception TUEFERROR " + exception.toString();
+                    resultDesc = exception.toString();
                     log.error("NCRS NCB Exception TUEFERROR {}", null != exception ? exception.toString() : "");
                     throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
 //                    throw new Exception(null!=exception?exception.toString():"");
                 }
             } else {
-                resultDesc = "NCRS NCB Exception " + responseModel.getBodyModel().getErrormsg();
+                resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
 //                throw new Exception("NCRS NCB Exception "+responseModel.getBodyModel().getErrormsg());
@@ -497,7 +497,7 @@ public class NCRSImp implements NCRS, Serializable {
             if (!ERROR.equals(responseModel.getHeaderModel().getCommand())) {
                 return responseModel;
             } else {
-                String resultDesc = "NCRS NCB Exception " + responseModel.getBodyModel().getErrormsg();
+                String resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
 //                throw new Exception("NCRS NCB Exception {}"+responseModel.getBodyModel().getErrormsg());
@@ -557,16 +557,12 @@ public class NCRSImp implements NCRS, Serializable {
         String enqPurpose = ncrsModel.getEnqpurpose();
         String enqAmount = ncrsModel.getEnqamount();
         String consent = ncrsModel.getConsent();
-
-
         return new NCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         new TUEFEnquiryModel(
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount, consent),
                                 nameModelArrayList, idModelArrayList)));
-
-
     }
 
     private NCRSRequestModel createFindModel(NCRSModel ncrsModel, String command) {
@@ -612,7 +608,7 @@ public class NCRSImp implements NCRS, Serializable {
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
-            log.debug("cannot convert time out to integer");
+            log.debug("error can not convert time out to integer");
         }
 
         result = new String(post.sendPost(xml, url, nTimeOut).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
