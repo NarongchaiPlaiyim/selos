@@ -545,9 +545,9 @@ public class NCCRSImp implements NCCRS, Serializable {
 
         xStream = new XStream();
         xStream.processAnnotations(NCCRSRequestModel.class);
-        xml = new String(xStream.toXML(nccrsRequest).getBytes(HTTP.UTF_8));
+        xml = new String(xStream.toXML(nccrsRequest).getBytes("UTF-8"));
         log.debug("NCCRS Request : \n{}", xml);
-        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes("ISO-8859-1"), "UTF-8");
         String res = "<ncrsresponse>";
         int pointer = result.indexOf(res);
         result = result.replace(result.substring(0, pointer), "");
