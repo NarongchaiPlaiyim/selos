@@ -414,7 +414,7 @@ public class NCCRSImp implements NCCRS, Serializable {
 //                    throw new Exception(resultDesc);
                 }
             } else {
-                resultDesc = "NCCRS NCB Exception " + responseModel.getBody().getErrormsg();
+                resultDesc =responseModel.getBody().getErrormsg();
                 log.error("NCCRS NCB Exception {}", responseModel.getBody().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
 //                throw new Exception("NCCRS NCB Exception "+ responseModel.getBody().getErrormsg());
@@ -433,7 +433,7 @@ public class NCCRSImp implements NCCRS, Serializable {
             if (!ERROR.equals(responseModel.getHeader().getCommand())) {
                 return responseModel;
             } else {
-                String resultDesc = "NCCRS NCB Exception {}" + responseModel.getBody().getErrormsg();
+                String resultDesc = responseModel.getBody().getErrormsg();
                 log.error("NCCRS NCB Exception {}", responseModel.getBody().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
 //                throw new Exception("NCCRS NCB Exception {}"+responseModel.getBody().getErrormsg());
