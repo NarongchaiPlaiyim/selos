@@ -18,7 +18,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -71,12 +70,12 @@ public class Post implements Serializable {
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
-        post.setHeader(HTTP.USER_AGENT, "Mozilla/5.0");
-        post.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=" + HTTP.UTF_8);
+        post.setHeader("User-Agent", "Mozilla/5.0");
+        post.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
 
         urlParameters = new ArrayList<NameValuePair>();
         urlParameters.add(new BasicNameValuePair("q", xml));
-        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
+        post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {

@@ -30,7 +30,6 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -602,7 +601,7 @@ public class NCRSImp implements NCRS, Serializable {
 
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequestModel.class);
-        xml = new String(xStream.toXML(ncrsRequest).getBytes(HTTP.UTF_8));
+        xml = new String(xStream.toXML(ncrsRequest).getBytes("UTF-8"));
         log.debug("NCRS Request : \n{}", xml);
         int nTimeOut = 1; //minute
         try {
@@ -611,7 +610,7 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("error can not convert time out to integer");
         }
 
-        result = new String(post.sendPost(xml, url, nTimeOut).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+        result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");
         if (!"".equals(result)) {
             xStream.processAnnotations(NCRSResponseModel.class);
             ncrsResponse = (NCRSResponseModel) xStream.fromXML(result);
