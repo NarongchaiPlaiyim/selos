@@ -43,6 +43,8 @@ public class NCBTransform extends Transform {
         ncb.setTdrTMBYear(NCBInfoView.getTdrTMBYear());
         if(NCBInfoView.getTdrCondition()!=null && NCBInfoView.getTdrCondition().getId()!=0){
             ncb.setTdrCondition(NCBInfoView.getTdrCondition());
+        } else {
+            ncb.setTdrCondition(null);
         }
 
         return ncb;
