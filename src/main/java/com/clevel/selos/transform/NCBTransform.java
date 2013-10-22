@@ -41,7 +41,9 @@ public class NCBTransform extends Transform {
         ncb.setTdrTMBFlag(transFormBooleanToDb(NCBInfoView.isTdrTMBFlag()));
         ncb.setTdrTMBMonth(NCBInfoView.getTdrTMBMonth());
         ncb.setTdrTMBYear(NCBInfoView.getTdrTMBYear());
-        ncb.setTdrCondition(NCBInfoView.getTdrCondition());
+        if(NCBInfoView.getTdrCondition()!=null && NCBInfoView.getTdrCondition().getId()!=0){
+            ncb.setTdrCondition(NCBInfoView.getTdrCondition());
+        }
 
         return ncb;
     }
