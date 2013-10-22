@@ -140,7 +140,7 @@
         </td>
         <td class="title right">Percent Share :</td>
         <td>
-            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="5" styleClass="small"
+            <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" styleClass="small"
                          onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                          readonly="#{not prescreenMaker.enableCustomerForm}">
                 <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -196,7 +196,6 @@
         <td class="title">Nationality :</td>
         <td colspan="3">
             <p:selectOneMenu id="dlgSelBrNationality" value="#{prescreenMaker.borrowerInfo.nationality.id}"
-                             filter="true" filterMatchMode="startsWith"
                              size="1" style="width: 200px;"
                              disabled="#{not prescreenMaker.enableCustomerForm}">
                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -358,7 +357,7 @@
             </td>
             <td class="title">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.percentShare}" maxlength="5" styleClass="small"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.percentShare}" styleClass="small"
                              onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);">
                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                     <f:validateDoubleRange maximum="100"/>
@@ -539,7 +538,7 @@
             </td>
             <td class="title right">Percent Share :</td>
             <td>
-                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" maxlength="5" styleClass="small"
+                <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" styleClass="small"
                              onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
                              readonly="#{not prescreenMaker.enableCustomerForm}">
                     <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
@@ -580,6 +579,10 @@
                             disabled="#{not prescreenMaker.enableCustomerForm}"
                             pattern="dd/MM/yyyy">
                     <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    <p:ajax event="change"
+                            listener="#{prescreenMaker.onChangeDate('juristic')}"
+                            process="@form"
+                            update=":customerDlgForm"/>
                     <p:ajax event="dateSelect"
                             listener="#{prescreenMaker.onChangeDate('juristic')}"
                             process="@form"

@@ -241,7 +241,7 @@
                                         </p:column>
 
                                         <p:column headerText="Citizen ID/Registration ID" styleClass="center">
-                                            <h:outputText value="#{guarantorItem.citizenId}"/>
+                                            <h:outputText value="#{guarantorItem.citizenId}"/><h:outputText value="#{guarantorItem.registrationId}"/>
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
@@ -394,16 +394,16 @@
                                                              action="#{prescreenMaker.onEditBusinessInfo()}"
                                                              update=":businessDlgForm"
                                                              oncomplete="PF('businessDlg').show()">
-                                                <f:setPropertyActionListener value="#{item}"
-                                                                             target="#{prescreenMaker.selectBusinessInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{businessResultItem}"
+                                                                             target="#{prescreenMaker.selectBizInfoItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{prescreenMaker.rowIndex}"/>
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteBusinesssDlg.show()" >
-                                                <f:setPropertyActionListener value="#{item}"
-                                                                             target="#{prescreenMaker.selectBusinessInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{businessResultItem}"
+                                                                             target="#{prescreenMaker.selectBizInfoItem}"/>
                                             </p:commandButton>
                                         </p:column>
                                     </p:dataTable>
@@ -533,7 +533,7 @@
                                         </p:column>
 
                                         <p:column headerText="Collateral Type" styleClass="center" style="width: 110px;">
-                                            <h:outputText value="#{proposeCollateral.collateralType.description}"/>
+                                            <h:outputText value="#{proposeCollateral.potentialCollateral.description}"/>
                                         </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -635,7 +635,7 @@
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteDialog"/>
+        <ui:param name="id" value="confirmDeleteBusinessDialog"/>
         <ui:param name="name" value="confirmDeleteBusinessDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteBusiness"/>
         <ui:param name="controller" value="#{prescreenMaker}"/>

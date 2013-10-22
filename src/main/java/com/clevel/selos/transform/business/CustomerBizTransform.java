@@ -68,7 +68,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
-                    customerInfoView.setTmbCustomerId(individualModel.getDocumentType());
+                    customerInfoView.setTmbCustomerId(individualModel.getTmbCusID());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
                     if(customerInfoView.getDocumentType() == null){

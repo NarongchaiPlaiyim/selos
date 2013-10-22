@@ -38,7 +38,7 @@
                         <!-- start content -->
                         <table class="content_table_form">
                             <tr>
-                                <td class="title" style="min-width: 200px; width: 200px;"><h:outputText value="#{msg.get('app.label.productgroup')}"/> :</td>
+                                <td class="title" style="min-width: 200px; width: 200px;"><h:outputText value="#{msg.get('app.label.productgroup')}"/> <h:outputText value="*" styleClass="require-field"/>:</td>
                                 <td>
                                     <h:inputHidden value="#{prescreenMaker.previousProductGroupId}"/>
                                     <p:selectOneMenu id="selProdGroupId"
@@ -68,7 +68,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="title"><h:outputText value="#{msg.get('app.label.producgprogram')}"/> <h:outputText value="*" styleClass="require-field"/> :</td>
+                                <td class="title"><h:outputText value="#{msg.get('app.label.producgprogram')}"/> :</td>
                                 <td>
                                     <p:commandButton id="btnAddFacility" styleClass="smaller"
                                                      binding="#{btnAddFacility}"

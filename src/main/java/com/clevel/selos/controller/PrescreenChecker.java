@@ -82,31 +82,31 @@ public class PrescreenChecker implements Serializable {
 
     public void preRender(){
         HttpSession session = FacesUtil.getSession(true);
-        log.info("preRender ::: setSession ");
+        log.debug("preRender ::: setSession ");
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
         }else{
             //TODO return to inbox
-            log.info("onCreation ::: workCasePrescreenId is null.");
+            log.debug("onCreation ::: workCasePrescreenId is null.");
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.debug("Exception :: {}",ex);
             }
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation");
+        log.debug("onCreation");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
-            log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
+            log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             queueName = session.getAttribute("queueName").toString();
@@ -125,36 +125,36 @@ public class PrescreenChecker implements Serializable {
             citizenID = new String[row];
         }
 
-        log.info("customerinfoList : {}", customerInfoViewList);
+        log.debug("customerinfoList : {}", customerInfoViewList);
 
     }
 
     public void onCheckCustomer(){
-        log.info("onCheckCustomer :::");
+        log.debug("onCheckCustomer :::");
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
         int failCount = 0;
         for(CustomerInfoView customer : tmpCustomerInfoViewList){
-            log.info("CustomerInfo : {}", customer);
+            log.debug("CustomerInfo : {}", customer);
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
-                    log.info("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
+                    log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
                 }else{
-                    log.info("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
+                    log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
                     failCount = failCount + 1;
                 }
             } else {
                 if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
-                    log.info("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
+                    log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
                 }else{
-                    log.info("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
+                    log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
                     failCount = failCount + 1;
@@ -178,7 +178,7 @@ public class PrescreenChecker implements Serializable {
     }
 
     public void onSubmitReturnToMaker(){
-        log.info("onReturnToMaker :::");
+        log.debug("onReturnToMaker :::");
         //Only return to MAKER actionCode =
         String actionCode = "1005";
         prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
@@ -193,15 +193,15 @@ public class PrescreenChecker implements Serializable {
 
     public void onCheckNCB(){
         //To Get NCB Data and submit to MAKER
-        log.info("onCheckNCB :::");
+        log.debug("onCheckNCB :::");
         boolean success = false;
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
-            log.info("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
+            log.debug("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
-            log.info("onCheckNCB ::: ncbViewList : {}", ncbViewList);
+            log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
             for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -215,11 +215,11 @@ public class PrescreenChecker implements Serializable {
                     index = 0;
                     for(CustomerInfoView customerInfoView : customerInfoViewList){
                         if(item.getIdNumber() != null){
-                            log.info("onCheckNCB ::: index : {}", index);
+                            log.debug("onCheckNCB ::: index : {}", index);
                             if(customerInfoView.getCustomerEntity() != null){
                                 if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
                                     if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
-                                        log.info("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
+                                        log.debug("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
                                         if(item.getResult().equals(ActionResult.SUCCESS)){
@@ -230,7 +230,7 @@ public class PrescreenChecker implements Serializable {
                                     }
                                 }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
                                     if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
-                                        log.info("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
+                                        log.debug("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
                                         if(item.getResult().equals(ActionResult.SUCCESS)){
@@ -242,7 +242,7 @@ public class PrescreenChecker implements Serializable {
                                 }
                             }
                         }
-                        log.info("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
+                        log.debug("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
                         customerInfoViewList.set(index, customerInfoView);
                         index = index + 1;
                     }
@@ -268,7 +268,7 @@ public class PrescreenChecker implements Serializable {
         if(success){
             //TODO submit case
             try{
-                log.info("Submit case to Maker :::");
+                log.debug("Submit case to Maker :::");
                 String actionCode = "1004";
                 prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
             }catch (Exception ex){
@@ -284,7 +284,7 @@ public class PrescreenChecker implements Serializable {
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.debug("Exception :: {}",ex);
             }
         }
 

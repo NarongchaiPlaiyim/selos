@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.AddressDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomerTransform extends Transform {
@@ -302,7 +304,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(currentAddress.getContactPhone());
             address.setAddress(currentAddress.getAddress());
 
-            //addressList.add(address);
+            addressList.add(address);
         }
 
         if(customerInfoView.getRegisterAddress() != null){
@@ -351,7 +353,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(registerAddress.getContactPhone());
             address.setAddress(registerAddress.getAddress());
 
-            //addressList.add(address);
+            addressList.add(address);
         }
 
         if(customerInfoView.getWorkAddress() != null){
@@ -400,7 +402,7 @@ public class CustomerTransform extends Transform {
             address.setContactPhone(workAddress.getContactPhone());
             address.setAddress(workAddress.getAddress());
 
-            //addressList.add(address);
+            addressList.add(address);
         }
         customer.setAddressesList(addressList);
         log.info("transformToModel : customer after adding address : {}", customer);
@@ -552,6 +554,36 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
+    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+        HashMap<String, Customer> customerHashMap = new HashMap<String, Customer>();
+        if(customerInfoViews != null){
+            for(CustomerInfoView item : customerInfoViews){
+                log.info("transformToModelList before item : {}", item);
+                Customer customer = transformToModel(item, workCasePrescreen, workCase);
+                log.info("transformToModelList after item : {}", customer);
+
+                if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    customerHashMap.put(customer.getIndividual().getCitizenId(), customer);
+                } else {
+                    customerHashMap.put(customer.getJuristic().getRegistrationId(), customer);
+                }
+
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                    if(item.getSpouse() != null){
+                        log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        log.debug("transformToModelList after item (spouse) : {}", spouse);
+
+                        spouse.setIsSpouse(1);
+                        customerHashMap.put(spouse.getIndividual().getCitizenId(), spouse);
+                    }
+                }
+
+            }
+        }
+        return customerHashMap;
+    }
+
     public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
         List<Customer> customerList = new ArrayList<Customer>();
 
@@ -561,6 +593,16 @@ public class CustomerTransform extends Transform {
                 Customer customer = transformToModel(item, workCasePrescreen, workCase);
                 log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
+                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                    if(item.getSpouse() != null){
+                        log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
+                        Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
+                        log.debug("transformToModelList after item (spouse) : {}", spouse);
+                        spouse.setIsSpouse(1);
+                        customerList.add(spouse);
+                    }
+                }
+
             }
         }
         return customerList;
