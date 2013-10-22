@@ -5,7 +5,6 @@ import com.clevel.selos.model.view.DBRView;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.io.Serializable;
 
 public class DBRTransform extends Transform {
     @Inject

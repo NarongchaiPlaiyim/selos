@@ -1,8 +1,6 @@
 package com.clevel.selos.system;
 
 import com.clevel.selos.security.encryption.EncryptionService;
-import com.clevel.selos.util.Util;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;

@@ -9,8 +9,7 @@
         <table class="content_form" >
             <tr>
                 <td class="title" style="width: 220px;">
-                    <h:outputText value="#{msg.get('app.proposeCollateralType')}" />:
-                    <h:outputLabel value="*" styleClass="require-field"/>:
+                    <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}" /> :
                 </td>
                 <td style="width: 450px;">
                     <p:selectOneMenu id="potentialCollateralType"
@@ -18,7 +17,7 @@
                                      size="1"
                                      style="width: 200px;"
                                      required="true" >
-                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{tcgInfo.potentialCollateralList}"
                                        var="potentialCollateralList"
                                        itemLabel="#{potentialCollateralList.description}"
@@ -29,16 +28,16 @@
             </tr>
             <tr>
                 <td class="title" >
-                    <h:outputText value="#{msg.get('app.collateralType')}" />
-                    <h:outputLabel value="*" styleClass="require-field"/>:
+                    <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.collateralType')} :" />
                 </td>
                 <td>
                     <p:selectOneMenu id="potentialColToTCG"
                                      value="#{tcgInfo.TCGDetailView.tcgCollateralType.id}"
                                      styleClass="largest"
                                      size="1"
-                                     required="true">
-                        <f:selectItem itemLabel="- โปรดระบุ -" itemValue=""/>
+                                     required="true"
+                                     style="width: 400px;">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                         <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
                                        var="dlgPotentialColToTCGColList"
                                        itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
@@ -49,7 +48,7 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.appraisalAmount')}" />:
+                    <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :" />
                 </td>
                 <td>
                     <p:inputText styleClass="large" id="appraisalAmount"  value="#{tcgInfo.TCGDetailView.appraisalAmount}" >
@@ -60,7 +59,7 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="#{msg.get('app.LTVvalue')}" />:
+                    <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :" />
                 </td>
                 <td>
                     <p:inputText styleClass="large" id="LTVvalue"  value="#{tcgInfo.TCGDetailView.ltvValue}">
@@ -71,7 +70,7 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputText value="เสนอครั้งนี้"/>:
+                    <h:outputText value="#{msg.get('app.tcg.dlg.radio.isProposeInThisRequest')} :" />
                 </td>
                 <td>
                     <h:selectOneRadio id="proposeInThisRequestRadio" value="#{tcgInfo.TCGDetailView.proposeInThisRequest}">
@@ -84,7 +83,7 @@
                 <td colspan="2" class="center">
                     <p:commandButton
                             id="save"
-                            value="#{msg.get('app.saveButton')}"
+                            value="#{msg.get('app.tcg.dlg.button.ok')}"
                             binding="#{addRowData}"
                             styleClass="small"
                             actionListener="#{tcgInfo.onSaveCollateralDetail}"
@@ -92,7 +91,7 @@
                             update=":tcgDlgForm,:frmMain:resultCollateralDetail"
                             oncomplete="handletcgInfoRequest(xhr, status, args)"/>
 
-                    <p:commandButton value="#{msg.get('app.cancelButton')}" styleClass="small" onclick="tcgDlg.hide()" update=":tcgDlgForm"/>
+                    <p:commandButton value="#{msg.get('app.tcg.dlg.button.cancel')}" styleClass="small" onclick="tcgDlg.hide()" update=":tcgDlgForm"/>
                 </td>
             </tr>
         </table>

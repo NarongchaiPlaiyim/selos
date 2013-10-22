@@ -1,12 +1,6 @@
 package com.clevel.selos.integration.ncb.httppost;
 
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
@@ -28,6 +22,11 @@ import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Post implements Serializable {
     @Inject

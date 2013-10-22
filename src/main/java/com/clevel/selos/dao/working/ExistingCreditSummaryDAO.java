@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class ExistingCreditSummaryDAO extends GenericDAO<ExistingCreditSummary, Long> {
 

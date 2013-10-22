@@ -83,17 +83,18 @@ public class NCBTransform extends Transform {
     }
 
     // convert value for checkbox boolean
-    public int transFormBooleanToDb(boolean viewObj){
 
-         if(viewObj == true){
-             return 1;
-         }else{
-             return 0;
-         }
+    public int transFormBooleanToDb(boolean dbObject){
+
+        if(dbObject == true){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
-    public boolean transFormBooleanToView(int viewObj){
-        return (viewObj==1?true:false);
+    public boolean transFormBooleanToView(int viewObject){
+        return viewObject==1?true:false;
     }
 
 }

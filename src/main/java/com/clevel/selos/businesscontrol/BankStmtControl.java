@@ -14,11 +14,13 @@ import com.clevel.selos.transform.BankStmtTransform;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Stateless
 public class BankStmtControl extends BusinessControl{
 
     @Inject
@@ -63,7 +65,6 @@ public class BankStmtControl extends BusinessControl{
                                 BankStmtView bankStmtView = null;
                                 List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
                                 for(DWHBankStatement dwhBankStatement : dwhBankStatementList){
-
                                     BankStmtDetailView bankStmtDetailView = bankStmtTransform.getBankStmtDetailView(dwhBankStatement);
                                     if(bankStmtView == null){
                                         bankStmtView = bankStmtTransform.getBankStmtView(dwhBankStatement);
@@ -78,7 +79,6 @@ public class BankStmtControl extends BusinessControl{
                         }
                     } else {
                         actionStatusViewList.add(actionStatusTransform.getActionStatusView(customerAccountResult.getActionResult(), customerAccountResult.getReason()));
-
                     }
                 }
             }

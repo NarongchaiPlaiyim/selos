@@ -3,7 +3,9 @@ package com.clevel.selos.model.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class AccountTypeView {
+import java.io.Serializable;
+
+public class AccountTypeView implements Serializable {
 
     private int id;
     private String AccountType;

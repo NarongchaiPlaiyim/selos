@@ -1,11 +1,10 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:h="http://java.sun.com/jsf/html">
     <div id="footer">
-        <span style="color:white; font-size:11px; font-weight:bold;">TMB CA Web application version 0.0001Demo</span><br class="clear"/><br/><br/>
-        <table style="color:white; font-size:11px;">
+        <span style="color:white; font-size:11px; font-weight:bold;">TMB SE-LOS application version. <h:outputText value="#{msg.get('app.version')}"/></span><br class="clear"/><br/><br/>
+        <!--<table style="color:white; font-size:11px;">
             <tr>
                 <td style="width:130px; font-weight:bold;"><a href="/caweb/executeInbox.action" class="bottom_menu">Inbox</a></td>
                 <td style="width:130px; font-weight:bold;"><a href="/caweb/basicinfo.action" class="bottom_menu">Prescreen</a></td>
@@ -46,6 +45,6 @@
                 <td></td>
                 <td></td>
             </tr>
-        </table>
+        </table>-->
     </div>
 </ui:composition>

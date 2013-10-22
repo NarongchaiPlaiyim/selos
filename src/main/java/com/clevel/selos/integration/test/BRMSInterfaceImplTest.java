@@ -6,11 +6,9 @@ import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.response.*;
-import com.clevel.selos.integration.brms.model.response.data.GroupResultData;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;

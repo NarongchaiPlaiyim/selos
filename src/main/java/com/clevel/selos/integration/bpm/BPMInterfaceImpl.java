@@ -27,7 +27,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Default
 public class BPMInterfaceImpl implements BPMInterface, Serializable {

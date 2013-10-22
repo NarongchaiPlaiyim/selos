@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.integration.safewatchandrosc.personal.CalculateRiskLevel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;

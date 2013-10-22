@@ -1,6 +1,9 @@
 
 package com.tmb.common.data.eaicalrisknewpersonal;
 
+import com.tmb.common.data.requestcalrisknewpersonal.ReqCalRiskNewPersonal;
+import com.tmb.common.data.responsecalrisknewpersonal.ResCalRiskNewPersonal;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
@@ -8,8 +11,6 @@ import javax.jws.WebService;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
-import com.tmb.common.data.requestcalrisknewpersonal.ReqCalRiskNewPersonal;
-import com.tmb.common.data.responsecalrisknewpersonal.ResCalRiskNewPersonal;
 
 
 /**

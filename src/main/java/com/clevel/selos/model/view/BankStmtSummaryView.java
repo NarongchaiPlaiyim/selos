@@ -12,6 +12,7 @@ public class BankStmtSummaryView implements Serializable {
 
     private List<ActionStatusView> actionStatusViewList;
 
+    private long id;
     private int seasonal;
     private Date expectedSubmitDate;
     private BigDecimal TMBTotalIncomeGross;
@@ -32,6 +33,7 @@ public class BankStmtSummaryView implements Serializable {
     private List<BankStmtView> bankStmtViewList;
 
     public BankStmtSummaryView() {
+        reset();
     }
 
     public void reset() {
@@ -58,6 +60,14 @@ public class BankStmtSummaryView implements Serializable {
 
     public void setActionStatusViewList(List<ActionStatusView> actionStatusViewList) {
         this.actionStatusViewList = actionStatusViewList;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getSeasonal() {
@@ -184,6 +194,7 @@ public class BankStmtSummaryView implements Serializable {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("actionStatusViewList", actionStatusViewList)
+                .append("id", id)
                 .append("seasonal", seasonal)
                 .append("expectedSubmitDate", expectedSubmitDate)
                 .append("TMBTotalIncomeGross", TMBTotalIncomeGross)

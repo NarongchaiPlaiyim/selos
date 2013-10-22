@@ -2,8 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.CreditType;
 import com.clevel.selos.model.db.master.ProductProgram;
-import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
-import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

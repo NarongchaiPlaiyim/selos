@@ -2,8 +2,14 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
-import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.dao.master.BusinessActivityDAO;
+import com.clevel.selos.dao.master.BusinessDescriptionDAO;
+import com.clevel.selos.dao.master.BusinessGroupDAO;
+import com.clevel.selos.dao.master.BusinessTypeDAO;
+import com.clevel.selos.model.db.master.BusinessActivity;
+import com.clevel.selos.model.db.master.BusinessDescription;
+import com.clevel.selos.model.db.master.BusinessGroup;
+import com.clevel.selos.model.db.master.BusinessType;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.model.view.BizProductDetailView;

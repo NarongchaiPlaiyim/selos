@@ -18,7 +18,7 @@ public class PrescreenCollateralTransform extends Transform {
         PrescreenCollateral prescreenCollateral = new PrescreenCollateral();
 
         prescreenCollateral.setPrescreen(prescreen);
-        prescreenCollateral.setCollateralType(prescreenCollateralView.getCollateralType());
+        prescreenCollateral.setPotentialCollateral(prescreenCollateral.getPotentialCollateral());
 
         return prescreenCollateral;
     }
@@ -38,8 +38,7 @@ public class PrescreenCollateralTransform extends Transform {
     public PrescreenCollateralView transformToView(PrescreenCollateral prescreenCollateral){
         PrescreenCollateralView prescreenCollateralView = new PrescreenCollateralView();
         prescreenCollateralView.setId(prescreenCollateral.getId());
-        prescreenCollateralView.setCollateralType(prescreenCollateral.getCollateralType());
-        prescreenCollateralView.setCollateralTypeName(prescreenCollateral.getCollateralType().getDescription());
+        prescreenCollateralView.setPotentialCollateral(prescreenCollateral.getPotentialCollateral());
 
         return prescreenCollateralView;
     }

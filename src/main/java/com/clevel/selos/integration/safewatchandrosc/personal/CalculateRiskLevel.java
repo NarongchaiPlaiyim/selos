@@ -8,12 +8,8 @@ import com.tmb.common.data.requestcalrisknewpersonal.Body;
 import com.tmb.common.data.requestcalrisknewpersonal.Header;
 import com.tmb.common.data.requestcalrisknewpersonal.ReqCalRiskNewPersonal;
 import com.tmb.common.data.responsecalrisknewpersonal.ResCalRiskNewPersonal;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_Service;
 import org.slf4j.Logger;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;

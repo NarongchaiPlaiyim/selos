@@ -10,7 +10,6 @@ import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -47,6 +46,8 @@ public class NCCRSService implements Serializable {
 
     public ArrayList<NCCRSOutputModel> process(NCCRSInputModel inputModel)throws Exception{
         ArrayList<NCCRSOutputModel> responseModelArrayList = null;
+        NCCRSInputModel inputModelForNewCustomers = null;
+        ArrayList<NCCRSModel> ncrsModelArrayListForNewCustomers = null;
         try {
             log.debug("NCCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
@@ -58,17 +59,52 @@ public class NCCRSService implements Serializable {
                     nccrsModel = nccrsModelArrayList.get(i);
                     nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), i));
                     log.debug("NCRS MemberRef = {}", nccrsModel.getMemberRef());
+
                 }
                 responseModelArrayList = nccrsImp.requestOnline(inputModel);
                 return responseModelArrayList;
             } else {
-                responseModelArrayList = nccrsImp.requestOffline(inputModel);
-                return responseModelArrayList;
+                ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
+                NCCRSModel nccrsModel = null;
+                int resultOfSize = 0;
+                boolean result = false;
+                boolean flagCheckNewCustomer = false;
+                resultOfSize = resultImp.getSizeFromAppNumber(inputModel.getAppRefNumber());
+                ncrsModelArrayListForNewCustomers = new ArrayList<NCCRSModel>();
+                pointer : for(int i = 0; i<nccrsModelArrayList.size(); i++){
+                    nccrsModel = nccrsModelArrayList.get(i);
+                    result = resultImp.isOldCustomer(inputModel.getAppRefNumber(), nccrsModel.getRegistId());
+                    if (!result) {
+                        flagCheckNewCustomer = true;
+                        if (0!=resultOfSize){
+                            nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), resultOfSize));
+                            resultOfSize++;
+                            log.debug("NCRS MemberRef = {}", nccrsModel.getMemberRef());
+                            ncrsModelArrayListForNewCustomers.add(nccrsModel);
+                            nccrsModelArrayList.remove(i);
+                            i--;
+                        } else {
+                            continue pointer;
+                        }
+                    }
+                }
+
+                if (flagCheckNewCustomer) {
+                    log.debug("Request offline and online");
+                    inputModelForNewCustomers = new NCCRSInputModel(inputModel.getUserId(), inputModel.getAppRefNumber(), inputModel.getCANumber(), inputModel.getReferenceTel(), ncrsModelArrayListForNewCustomers);
+                    responseModelArrayList =  nccrsImp.requestOffline(inputModel);
+                    responseModelArrayList.addAll(nccrsImp.requestOnline(inputModelForNewCustomers));
+                    return responseModelArrayList;
+                } else {
+                    log.debug("Request offline");
+                    responseModelArrayList =  nccrsImp.requestOffline(inputModel);
+                    return responseModelArrayList;
+                }
             }
         } catch (Exception e) {
             String resultDesc = "NCCRS Exception : "+ e.getMessage();
-            log.error("NCCRS Exception : {}", e.getMessage());
-            throw new NCBInterfaceException(new Exception(resultDesc), exception,message.get(exception, resultDesc));
+            log.error("NCCRS Exception", e);
+            throw new NCBInterfaceException(e, exception,message.get(exception, resultDesc));
 //            throw new Exception("NCCRS Exception : "+e.getMessage());
         }
     }

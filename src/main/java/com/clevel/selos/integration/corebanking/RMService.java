@@ -4,16 +4,16 @@ import com.clevel.selos.exception.RMInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.corebanking.model.SearchIndividual;
-import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.RegistrationAddress;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
+import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.corebanking.model.customeraccount.SearchCustomerAccountModel;
 import com.clevel.selos.integration.corebanking.model.individualInfo.ContactDetails;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
 import com.clevel.selos.integration.corebanking.model.individualInfo.Spouse;
 import com.clevel.selos.integration.corebanking.model.individualInfo.Telephone;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.message.*;
@@ -387,8 +387,10 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call RM Individual", e);
             //Audit Data
             rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
@@ -549,8 +551,10 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call service RM Corporate!", e);
             //Audit Data
             rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
@@ -714,9 +718,11 @@ public class RMService implements Serializable {
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
 
+        } catch (RMInterfaceException e) {
+            throw e;
         } catch (Exception e) {
 
-            log.error("Exception :{}", e.getMessage());
+            log.error("Exception while call service RM Search account!", e);
             //Audit Data
             rmAuditor.add(userId, "customerAccountService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
             throw new RMInterfaceException(e,ExceptionMapping.RM_SERVICE_FAILED,exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));

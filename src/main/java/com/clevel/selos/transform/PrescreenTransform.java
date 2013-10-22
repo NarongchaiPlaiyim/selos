@@ -10,7 +10,6 @@ import com.clevel.selos.model.view.PrescreenView;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.Calendar;
 import java.util.Date;
 
 public class PrescreenTransform extends Transform {

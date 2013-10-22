@@ -39,6 +39,14 @@ public class NCBResultImp implements Serializable {
         return ncbResult.findByCriteria(Restrictions.eq("appNumber", appRefNumber));
     }
 
+    public int getSizeFromAppNumber(String appRefNumber){
+        log.debug("Call getSizeFromAppNumber({})", appRefNumber);
+        List<NCBResult> ncbResultList = ncbResult.findByCriteria(Restrictions.eq("appNumber", appRefNumber));
+        int result = ncbResultList.size();
+        log.debug("Resutl : {}", result);
+        return result;
+    }
+
     public boolean isSUCCEED(String appRefNumber, String customerId){
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         boolean result = ActionResult.SUCCESS.toString().equals(model.getResult())?true:false;
@@ -47,9 +55,10 @@ public class NCBResultImp implements Serializable {
     }
 
     public String getRequestNo(String appRefNumber, String customerId){
+        log.debug("getRequestNo (appRefNumber: {}, customerId: {})",appRefNumber,customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         String result = model.getRequestNo();
-        log.debug("Call getRequestNo({}, {}) is {}", appRefNumber, customerId, result);
+        log.debug("getRequestNo result (result: {})", result);
         return result;
     }
 
@@ -70,6 +79,12 @@ public class NCBResultImp implements Serializable {
     public boolean isChecked(String appRefNumber){
         boolean result = ncbResult.isExist(appRefNumber);
         log.debug("Call isChecked({}) is {}", appRefNumber, result);
+        return result;
+    }
+
+    public boolean isOldCustomer(String appRefNumber, String customerId){
+        boolean result = ncbResult.isCheckLlst(appRefNumber, customerId);
+        log.info("Call isOldCustomer(appRefNumber : {}, customerId : {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 

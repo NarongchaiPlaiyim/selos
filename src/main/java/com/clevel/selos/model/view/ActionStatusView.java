@@ -4,7 +4,9 @@ import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class ActionStatusView {
+import java.io.Serializable;
+
+public class ActionStatusView implements Serializable {
 
     private ActionResult statusCode;
     private String statusDesc;

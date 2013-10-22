@@ -2,7 +2,6 @@ package com.clevel.selos.dao.ext.dwh;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
-import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;

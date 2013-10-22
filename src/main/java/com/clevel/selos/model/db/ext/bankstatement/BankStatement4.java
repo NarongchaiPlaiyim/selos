@@ -25,8 +25,8 @@ public class BankStatement4 implements Serializable {
     @Column(name="branch_code", length = 3)
     private String branchCode;
 
-    @Column(name="account_type", length = 2)
-    private String accountType;
+    @Column(name="data_source", length = 2)
+    private String dataSource;
 
     @Column(name="account_number", length = 10)
     private String accountNumber;
@@ -114,12 +114,12 @@ public class BankStatement4 implements Serializable {
         this.branchCode = branchCode;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getDataSource() {
+        return dataSource;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     public String getAccountNumber() {
@@ -306,7 +306,7 @@ public class BankStatement4 implements Serializable {
                 .append("accountStatus", accountStatus)
                 .append("accountOpenDate", accountOpenDate)
                 .append("branchCode", branchCode)
-                .append("accountType", accountType)
+                .append("dataSource", dataSource)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("odLimit", odLimit)
