@@ -946,7 +946,7 @@ public class NCBBizTransform extends BusinessTransform {
                                 ncbInfoView.setCheckIn6Month(enquiryTime);
                             }
 
-                            //TODO: add more data (hidden field) for NCBInfoView (name, address, marital status, enquiry date, last as of date) here
+                            //TODO: add more data (hidden field) for NCBInfoView (name, address, marital status, enquiry date, last as of date, tracking id) here
                             //ncbInfoView
                         }
                     }
@@ -1498,7 +1498,7 @@ public class NCBBizTransform extends BusinessTransform {
                                 }
                             }
 
-                            //TODO: add more data (hidden field) for NCBInfoView (name, address, marital status, enquiry date, last as of date) here
+                            //TODO: add more data (hidden field) for NCBInfoView (name, address, marital status, enquiry date, last as of date, tracking id) here
                             //ncbInfoView
 
                         }

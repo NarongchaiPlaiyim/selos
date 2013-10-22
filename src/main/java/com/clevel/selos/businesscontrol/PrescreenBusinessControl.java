@@ -389,6 +389,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         if(customer == null ){
                             customer = new Customer();
                         }
+
+                        log.debug("ncbView before transform : {}",ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
@@ -396,11 +398,12 @@ public class PrescreenBusinessControl extends BusinessControl {
                         //transform NCB
                         NCB ncb = ncbTransform.transformToModel(ncbInfoView);
                         ncb.setCustomer(customer);
-                        //transform NCBDetail list
-                        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
-
                         ncbDAO.persist(ncb);
-                        ncbDetailDAO.persist(ncbDetailList);
+                        //transform NCBDetail list
+                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
+                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                            ncbDetailDAO.persist(ncbDetailList);
+                        }
 
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
@@ -472,6 +475,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         if(customer == null ){
                             customer = new Customer();
                         }
+
+                        log.debug("ncbView before transform : {}",ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
@@ -479,11 +484,12 @@ public class PrescreenBusinessControl extends BusinessControl {
                         //transform NCB
                         NCB ncb = ncbTransform.transformToModel(ncbInfoView);
                         ncb.setCustomer(customer);
-                        //transform NCBDetail list
-                        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
-
                         ncbDAO.persist(ncb);
-                        ncbDetailDAO.persist(ncbDetailList);
+                        //transform NCBDetail list
+                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
+                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                            ncbDetailDAO.persist(ncbDetailList);
+                        }
 
                         CSIInputData csiInputData = new CSIInputData();
                         csiInputData.setIdModelList(ncbView.getAccountInfoIdList());

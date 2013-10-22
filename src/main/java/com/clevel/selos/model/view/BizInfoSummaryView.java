@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.ReferredExperience;
-import com.clevel.selos.model.db.master.SubDistrict;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.WorkCase;
 
 import java.io.Serializable;
@@ -25,7 +22,7 @@ public class BizInfoSummaryView implements Serializable {
     private District district;
     private SubDistrict subDistrict;
     private String postCode;
-    private String country;
+    private Country country;
     private String addressEng;
     private String phoneNo;
     private String extension;
@@ -57,9 +54,12 @@ public class BizInfoSummaryView implements Serializable {
     private BigDecimal sumWeightInterviewedIncomeFactorPercent;
     private BigDecimal sumWeightAR;
     private BigDecimal sumWeightAP;
+    private BigDecimal sumWeightINV;
     private WorkCase workCase;
     private Date createDate;
     private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
     private List<BizInfoDetailView> bizInfoDetailViewList;
 
     public BizInfoSummaryView() {
@@ -169,11 +169,11 @@ public class BizInfoSummaryView implements Serializable {
         this.postCode = postCode;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 
@@ -425,6 +425,14 @@ public class BizInfoSummaryView implements Serializable {
         this.sumWeightAP = sumWeightAP;
     }
 
+    public BigDecimal getSumWeightINV() {
+        return sumWeightINV;
+    }
+
+    public void setSumWeightINV(BigDecimal sumWeightINV) {
+        this.sumWeightINV = sumWeightINV;
+    }
+
     public WorkCase getWorkCase() {
         return workCase;
     }
@@ -447,6 +455,22 @@ public class BizInfoSummaryView implements Serializable {
 
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public List<BizInfoDetailView> getBizInfoDetailViewList() {

@@ -1,6 +1,10 @@
 package com.clevel.selos.integration.rlos.csi.tool;
 
 import com.clevel.selos.integration.RLOS;
+import com.clevel.selos.security.encryption.EncryptionService;
+import com.clevel.selos.system.Config;
+import com.clevel.selos.util.Util;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -13,6 +17,12 @@ public class DBContext implements Serializable {
     @Inject
     @RLOS
     Logger log;
+
+    @Inject
+    EncryptionService encryptionService;
+    @Inject
+    @Config(name = "system.encryption.enable")
+    String encryptionEnable;
 
     @Inject
     public DBContext() {
@@ -29,9 +39,12 @@ public class DBContext implements Serializable {
 
     public Connection getConnection(String jdbcURL,String user,String password) {
         Connection conn = null;
-        log.debug("DB URL: {}, User: {}, Password: {}",jdbcURL,user,password);
+        log.debug("DB URL: {}, User: {}, Password: HIDDEN",jdbcURL,user);
 
         try {
+            if (Util.isTrue(encryptionEnable)) {
+                password = encryptionService.decrypt(Base64.decodeBase64(password));
+            }
             conn = DriverManager.getConnection(jdbcURL,user,password);
         } catch (SQLException e) {
             log.error("Exception while connect to database!",e);

@@ -1,10 +1,12 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class BizStakeHolderDetailView implements Serializable {
 
@@ -18,6 +20,11 @@ public class BizStakeHolderDetailView implements Serializable {
     private BigDecimal percentCash;
     private BigDecimal percentCredit;
     private BigDecimal creditTerm;
+
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
     public String getStakeHolderType() {
         return stakeHolderType;
@@ -97,6 +104,38 @@ public class BizStakeHolderDetailView implements Serializable {
 
     public void setCreditTerm(BigDecimal creditTerm) {
         this.creditTerm = creditTerm;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override
