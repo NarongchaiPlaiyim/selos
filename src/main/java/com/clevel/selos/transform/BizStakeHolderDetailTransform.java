@@ -3,6 +3,9 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizStakeHolderDetail;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
+import org.joda.time.DateTime;
+
+import java.security.Timestamp;
 
 public class BizStakeHolderDetailTransform extends Transform {
 
@@ -20,6 +23,13 @@ public class BizStakeHolderDetailTransform extends Transform {
         stakeHolderView.setPercentCredit(bizStakeHolderDetail.getPercentCredit());
         stakeHolderView.setPhoneNo(bizStakeHolderDetail.getPhoneNo());
         stakeHolderView.setCreditTerm(bizStakeHolderDetail.getCreditTerm());
+
+
+        stakeHolderView.setCreateBy(bizStakeHolderDetail.getCreateBy());
+        stakeHolderView.setCreateDate(bizStakeHolderDetail.getCreateDate());
+        stakeHolderView.setModifyBy(bizStakeHolderDetail.getModifyBy());
+        stakeHolderView.setModifyDate(bizStakeHolderDetail.getModifyDate());
+
 
         return stakeHolderView;
     }
@@ -39,6 +49,13 @@ public class BizStakeHolderDetailTransform extends Transform {
         bizStakeHolderDetail.setPhoneNo(stakeHolderView.getPhoneNo());
         bizStakeHolderDetail.setCreditTerm(stakeHolderView.getCreditTerm());
         bizStakeHolderDetail.setBizInfoDetail(bizInfoDetail);
+
+
+        bizStakeHolderDetail.setCreateBy(bizInfoDetail.getCreateBy());
+        bizStakeHolderDetail.setCreateDate(bizInfoDetail.getCreateDate());
+        bizStakeHolderDetail.setModifyBy(bizInfoDetail.getModifyBy());
+        bizStakeHolderDetail.setModifyDate(DateTime.now().toDate());
+
 
         return bizStakeHolderDetail;
     }

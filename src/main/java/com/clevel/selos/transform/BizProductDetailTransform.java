@@ -3,6 +3,9 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.view.BizProductDetailView;
+import org.joda.time.DateTime;
+
+import java.security.Timestamp;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +23,13 @@ public class BizProductDetailTransform extends Transform {
         bizProductDetailView.setProductType(bizProductDetail.getProductType());
         bizProductDetailView.setPercentEBIT(bizProductDetail.getPercentEBIT());
         bizProductDetailView.setPercentSalesVolume(bizProductDetail.getPercentSalesVolume());
+
+        bizProductDetailView.setCreateBy(bizProductDetail.getCreateBy());
+        bizProductDetailView.setCreateDate(bizProductDetail.getCreateDate());
+        bizProductDetailView.setModifyBy(bizProductDetail.getModifyBy());
+        bizProductDetailView.setModifyDate(bizProductDetail.getModifyDate());
+
+
         bizProductDetailView.setProductDetail(bizProductDetail.getProductDetail());
 
         return bizProductDetailView;
@@ -33,7 +43,15 @@ public class BizProductDetailTransform extends Transform {
         bizProductDetail.setPercentEBIT(bizProductDetailView.getPercentEBIT());
         bizProductDetail.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
         bizProductDetail.setProductDetail(bizProductDetailView.getProductDetail());
+
+        bizProductDetail.setCreateBy(bizInfoDetail.getCreateBy());
+        bizProductDetail.setCreateDate(bizInfoDetail.getCreateDate());
+        bizProductDetail.setModifyBy(bizInfoDetail.getModifyBy());
+        bizProductDetail.setModifyDate(DateTime.now().toDate());
+
         bizProductDetail.setBizInfoDetail(bizInfoDetail);
+
+
 
         return bizProductDetail;
     }
