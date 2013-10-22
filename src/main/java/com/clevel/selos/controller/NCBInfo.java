@@ -324,7 +324,7 @@ public class NCBInfo implements Serializable {
 
                     for(int i = 0 ; i<moneys.size() ; i ++){
                         if(i < ncbDetailView.getNoOfmonthsPayment()){
-                            moneyTotal += " เดือนที่ "+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + " บาท ";
+                            moneyTotal += msg.get("app.ncbDetail.table.monthNo")+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + msg.get("app.ncbDetail.table.bath");
                             ncbAdd.setMoneyTotal(moneyTotal);
                         }
                     }
@@ -386,7 +386,7 @@ public class NCBInfo implements Serializable {
                         for(int i = 0 ; i<moneys.size() ; i ++){
                             if(i < ncbDetailView.getNoOfmonthsPayment()){
 
-                                moneyTotal += " เดือนที่ "+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + " บาท ";
+                                moneyTotal +=  msg.get("app.ncbDetail.table.monthNo")+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + "  "+ msg.get("app.ncbDetail.table.bath");
                                 ncbDetailViewList.get(rowIndex).setMoneyTotal(moneyTotal);
                             }
                         }
@@ -469,25 +469,25 @@ public class NCBInfo implements Serializable {
 
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
 
-                messageHeader = "Save NCB Success.";
-                message = "Save NCB data success.";
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.ncb.response.save.success");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else{
-                messageHeader = "can not to save NCB .";
-                message = "please add NCB record information.";
+                messageHeader = msg.get("app.ncb.response.cannot.save");
+                message = msg.get("app.ncb.response.desc.cannot.save");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
 
          } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Save NCB failed.";
+            messageHeader = msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message = "Save NCB failed. Cause : " + ex.getCause().toString();
+                message = msg.get("app.header.save.failed") + " cause : "+ ex.getCause().toString();
             } else {
-                message = "Save NCB failed. Cause : " + ex.getMessage();
+                message = msg.get("app.header.save.failed") + ex.getMessage();
             }
 
             messageErr = true;

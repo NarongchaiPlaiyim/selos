@@ -1,17 +1,24 @@
 package com.clevel.selos.transform;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.OpenAccountProduct;
 import com.clevel.selos.model.db.working.BasicInfo;
 import com.clevel.selos.model.db.working.OpenAccount;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.BankAccountTypeView;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
-import com.clevel.selos.model.view.BasicInfoView;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BasicInfoAccountTransform extends Transform {
+
+    @Inject
+    BankAccountTypeTransform bankAccountTypeTransform;
+
+    @Inject
+    public BasicInfoAccountTransform() {
+    }
 
     public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo){
         OpenAccount openAccount = new OpenAccount();
@@ -29,9 +36,9 @@ public class BasicInfoAccountTransform extends Transform {
             openAccount.setAccountProduct(null);
         }
 
-        openAccount.setAccountType(basicInfoAccountView.getAccountType());
-        if(openAccount.getAccountType().getId() == 0){
-            openAccount.setAccountType(null);
+        openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
+        if(openAccount.getBankAccountType().getId() == 0){
+            openAccount.setBankAccountType(null);
         }
 
         return openAccount;
@@ -49,9 +56,9 @@ public class BasicInfoAccountTransform extends Transform {
             basicInfoAccountView.setProduct(new OpenAccountProduct());
         }
 
-        basicInfoAccountView.setAccountType(openAccount.getAccountType());
-        if(basicInfoAccountView.getAccountType() == null){
-            basicInfoAccountView.setAccountType(new OpenAccountType());
+        basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
+        if(basicInfoAccountView.getBankAccountTypeView() == null){
+            basicInfoAccountView.setBankAccountTypeView(new BankAccountTypeView());
         }
 
         BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();

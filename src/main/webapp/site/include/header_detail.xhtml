@@ -1,6 +1,5 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
@@ -10,7 +9,7 @@
             <p:commandButton id="btnReturnMaker" value="Return To Maker" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onReturnToMaker()}" oncomplete="testHandle()" update=":returnMakerDlgForm" onclick="returnMakerDlg.show()" />
             <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton" rendered="#{baseController.manageButton.checkNCBButton}" actionListener="#{prescreenChecker.onCheckCustomer}" process="@form" oncomplete="testHandle()" update=":frmMain :msgBoxSystemMessagePanel" />
             <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton" rendered="#{baseController.manageButton.assignToCheckerButton}" disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()" update=":assignCheckerDlgForm">
-                <p:resetInput target=":assignCheckerDlgForm" />
+                <p:resetInput target=":assignCheckerDlgPanel" />
             </p:commandButton>
             <p:commandButton id="btnMandateDoc" value="Check Mandate Doc" styleClass="blueButton" rendered="#{baseController.manageButton.checkMandateDocButton}" disabled="true" />
             <p:commandButton id="btnCheckPreScreen" value="Check Prescreen" styleClass="blueButton" rendered="#{baseController.manageButton.checkBRMSButton}" action="#{prescreenMaker.onCheckPreScreen}" disabled="true" />

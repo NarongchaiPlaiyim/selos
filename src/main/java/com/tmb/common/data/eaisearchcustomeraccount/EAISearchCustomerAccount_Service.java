@@ -1,15 +1,14 @@
 
 package com.tmb.common.data.eaisearchcustomeraccount;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.logging.Logger;
 import javax.inject.Inject;
-import javax.jws.HandlerChain;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.WebServiceClient;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Logger;
 
 
 /**

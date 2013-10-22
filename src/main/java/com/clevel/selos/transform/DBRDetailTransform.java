@@ -13,6 +13,9 @@ public class DBRDetailTransform extends Transform {
     @Inject
     Logger logger;
 
+    @Inject
+    LoanTypeTransform loanTypeTransform;
+
     public DBRDetailView getDBRDetailView(DBRDetail dbrDetail){
         DBRDetailView dbrDetailView = new DBRDetailView();
         if(dbrDetail == null){
@@ -23,7 +26,7 @@ public class DBRDetailTransform extends Transform {
         dbrDetailView.setDebtForCalculate(dbrDetail.getDebtForCalculate());
         dbrDetailView.setInstallment(dbrDetail.getInstallment());
         dbrDetailView.setLimit(dbrDetail.getLimit());
-        dbrDetailView.setLoanType(dbrDetail.getLoanType());
+        dbrDetailView.setLoanTypeView(loanTypeTransform.getLoanTypeView(dbrDetail.getLoanType()));
         return dbrDetailView;
     }
 

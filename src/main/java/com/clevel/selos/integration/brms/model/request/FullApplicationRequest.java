@@ -1,6 +1,7 @@
 package com.clevel.selos.integration.brms.model.request;
 
-import com.clevel.selos.integration.brms.model.request.data.*;
+import com.clevel.selos.integration.brms.model.request.data.ApplicationLevel;
+import com.clevel.selos.integration.brms.model.request.data.CustomerLevel;
 
 import java.util.List;
 

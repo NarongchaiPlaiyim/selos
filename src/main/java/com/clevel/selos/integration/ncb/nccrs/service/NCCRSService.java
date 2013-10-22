@@ -10,7 +10,6 @@ import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 

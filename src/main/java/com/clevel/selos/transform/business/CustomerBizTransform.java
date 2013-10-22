@@ -6,13 +6,16 @@ import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateRes
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualModel;
+import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.*;
+import com.clevel.selos.model.view.AddressView;
+import com.clevel.selos.model.view.CustomerAccountView;
+import com.clevel.selos.model.view.CustomerInfoResultView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
-import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -68,7 +71,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
-                    customerInfoView.setTmbCustomerId(individualModel.getDocumentType());
+                    customerInfoView.setTmbCustomerId(individualModel.getTmbCusID());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
                     if(customerInfoView.getDocumentType() == null){

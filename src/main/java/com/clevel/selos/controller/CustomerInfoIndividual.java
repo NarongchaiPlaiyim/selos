@@ -2,9 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
-import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -331,6 +329,18 @@ public class CustomerInfoIndividual implements Serializable {
         }else{
             onChangeProvinceForm6();
             subDistrictForm6List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onSave(){
+        if(addressFlagForm2 == 1){ //dup address 1 to address 2
+            customerInfoView.setRegisterAddress(customerInfoView.getCurrentAddress());
+        }
+
+        if(addressFlagForm3 == 1){
+            customerInfoView.setWorkAddress(customerInfoView.getCurrentAddress());
+        }else if(addressFlagForm3 == 2){
+            customerInfoView.setWorkAddress(customerInfoView.getRegisterAddress());
         }
     }
 

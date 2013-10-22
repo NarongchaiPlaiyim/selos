@@ -133,28 +133,28 @@ public class Qualitative {
                 }
                 qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
-                messageHeader = "Save QualitativeA Success.";
-                message = "Save QualitativeA success.";
+
 
             }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 qualitativeView.setModifyBy(user);
                 qualitativeView.setModifyDate(DateTime.now().toDate());
                 qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
-                messageHeader = "Edit QualitativeA Success.";
-                message = "Edit QualitativeA  success.";
+
             }
 
+            messageHeader = msg.get("app.header.save.success");
+            message =  msg.get("app.qualitativeA.response.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Save  QualitativeA failed.";
+            messageHeader =  msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message = "Save QualitativeA failed. Cause : " + ex.getCause().toString();
+                message =  msg.get("app.qualitativeA.response.save.failed")+ " cause : " + ex.getCause().toString();
             } else {
-                message = "Save QualitativeA failed. Cause : " + ex.getMessage();
+                message =  msg.get("app.qualitativeA.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;
@@ -179,27 +179,24 @@ public class Qualitative {
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
                 qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
-                messageHeader = "Save QualitativeB Success.";
-                message = "Save QualitativeB success.";
-
 
             }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
-                messageHeader = "Edit QualitativeB Success.";
-                message = "Edit QualitativeB  success.";
             }
 
+            messageHeader = msg.get("app.header.save.success");
+            message =  msg.get("app.qualitativeB.response.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
         }catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Save  QualitativeB failed.";
+            messageHeader =  msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message = "Save QualitativeB failed. Cause : " + ex.getCause().toString();
+                message =  msg.get("app.qualitativeB.response.save.failed")+ " cause : " + ex.getCause().toString();
             } else {
-                message = "Save QualitativeB failed. Cause : " + ex.getMessage();
+                message =  msg.get("app.qualitativeB.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;

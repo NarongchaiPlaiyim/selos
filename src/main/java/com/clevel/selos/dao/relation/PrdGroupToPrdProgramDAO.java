@@ -2,12 +2,11 @@ package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.model.db.master.ProductGroup;
-import com.clevel.selos.model.db.master.ProductProgram;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
-import org.hibernate.criterion.Order;
-import org.slf4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.List;

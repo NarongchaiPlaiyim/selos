@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.AccountType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,7 +12,7 @@ public class DBRDetailView implements Serializable {
     private BigDecimal limit;
     private BigDecimal installment;
     private BigDecimal debtForCalculate;
-    private AccountType loanType;
+    private LoanTypeView loanTypeView;
 
     public long getId() {
         return id;
@@ -55,12 +54,12 @@ public class DBRDetailView implements Serializable {
         this.debtForCalculate = debtForCalculate;
     }
 
-    public AccountType getLoanType() {
-        return loanType;
+    public LoanTypeView getLoanTypeView() {
+        return loanTypeView;
     }
 
-    public void setLoanType(AccountType loanType) {
-        this.loanType = loanType;
+    public void setLoanTypeView(LoanTypeView loanTypeView) {
+        this.loanTypeView = loanTypeView;
     }
 
     @Override
@@ -71,7 +70,7 @@ public class DBRDetailView implements Serializable {
                 .append("limit", limit)
                 .append("installment", installment)
                 .append("debtForCalculate", debtForCalculate)
-                .append("loanType", loanType)
+                .append("loanTypeView", loanTypeView)
                 .toString();
     }
 }

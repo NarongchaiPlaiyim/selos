@@ -4,8 +4,6 @@ import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.Status;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.master.User;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;

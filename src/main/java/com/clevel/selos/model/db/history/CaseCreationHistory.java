@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.history;
 
-import com.clevel.selos.integration.IntegrationStatus;
 import com.clevel.selos.model.ActionResult;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

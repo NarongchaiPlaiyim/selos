@@ -50,7 +50,7 @@
             </tr>
             <tr style="background-color: #868686">
                 <td class="title" colspan="4">
-                    <h:outputLabel style="color: floralwhite" value="1) การดำเนินธุรกิจ"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p1')}"/>
                 </td>
             </tr>
             <tr>
@@ -65,7 +65,7 @@
             </tr>
             <tr style="background-color: #868686">
                 <td class="title" colspan="4">
-                    <h:outputLabel style="color: floralwhite" value="2) ฐานะและผลประกอบการ"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p2')}"/>
                 </td>
             </tr>
             <tr>
@@ -184,7 +184,7 @@
             </tr>
             <tr style="background-color: #868686">
                 <td class="title" colspan="4">
-                    <h:outputLabel style="color: floralwhite" value="3) ลักษณะการชำระหนี้"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.p3')}"/>
                 </td>
             </tr>
             <tr>
@@ -218,7 +218,7 @@
 <tr>
     <td>
         <p style="float:left; padding-bottom:5px;">
-            <b>การพิจารณาลูกหนี้ตามเกณฑ์ ธปท. ข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์ข้อใดข้อหนึ่ง ตามเกณฑ์ดังต่อไปนี้ ให้จัดชั้นตามเกณฑ์ดังกล่าว แต่หากลูกหนี้อยู่ในเกณฑ์ของการจัดชั้นที่ต่างกัน ให้จัดชั้นที่ด้อยที่สุด) </b>
+            <b>#{msg.get('app.qualitative.description.group1')}</b>
         </p>
     </td>
 </tr>
@@ -239,7 +239,7 @@
             </tr>
             <tr style="background-color: #868686">
                 <td class="title" colspan="6">
-                    <h:outputLabel style="color: floralwhite" value="1. สถานภาพลูกหนี้"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s1')}" />
                 </td>
             </tr>
             <tr>
@@ -340,7 +340,7 @@
 <tr>
     <td>
         <p style="float:left; padding-bottom:5px;">
-            <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้(หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้นตามหลักเกณฑ์ท้ายแนวทางฯนี้)</b>
+            <b>#{msg.get('app.qualitative.description.group2')}</b>
         </p>
     </td>
 </tr>
@@ -361,7 +361,7 @@
             </tr>
             <tr style="background-color: #868686">
                 <td class="title" colspan="6">
-                    <h:outputLabel style="color: floralwhite" value="2. การดำเนินธุรกิจ"/>
+                    <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s2')}"/>
                 </td>
             </tr>
             <tr>
@@ -493,7 +493,7 @@
 <tr>
     <td>
         <p style="float:left; padding-bottom:5px;">
-            <b>การพิจารณาคุณภาพลูกหนี้ตามเกณฑ์ภายในธนาคารข้างล่างนี้ (หากลูกหนี้รายใดมีคุณสมบัติตามเกณฑ์บางข้อ RM-SME/LSP/CAMO ต้องพิจารณาอย่างถี่ถ้วน เพื่อพิจารณาการจัดชั้นหนี้ที่สะท้อนคุณภาพของลูกหนี้รายนั้น)</b>
+            <b>#{msg.get('app.qualitative.description.group3')}</b>
         </p>
     </td>
 </tr>
@@ -515,7 +515,7 @@
 </tr>
 <tr style="background-color: #868686">
     <td class="title" colspan="6">
-        <h:outputLabel style="color: floralwhite" value="3. ฐานะและผลประกอบการ"/>
+        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s3')}" />
     </td>
 </tr>
 <tr>
@@ -649,7 +649,7 @@
 </tr>
 <tr style="background-color: #868686">
     <td class="title" colspan="6">
-        <h:outputLabel style="color: floralwhite" value="4. ลักษณะการชำระหนี้"/>
+        <h:outputLabel style="color: floralwhite" value="#{msg.get('app.qualitative.group.label.s4')}"/>
     </td>
 </tr>
 <tr>
@@ -730,7 +730,7 @@
 <tr>
     <td>
         <div>
-            <p><b>สรุปการจัดชั้นหนี้</b></p>
+            <p><b>#{msg.get('app.qualitative.label.section.classificationResult')}</b></p>
         </div>
     </td>
 </tr>
@@ -740,14 +740,14 @@
         <table class="table_content">
             <tr>
                 <td style="width: 30%;text-align: left">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')} :"/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationResult')}   "/>
                     <h:outputText class="title" value="#{qualitative.qualitativeView.qualityResult}"/>
                 </td>
                 <td style="width: 70%;text-align: left">
                     <table class="table_noborder">
                         <tr>
                             <td class="title" style="width: 25%;text-align: left">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')} :"/>
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationQuality')}"/>
                             </td>
                             <td>
                                 <p:selectOneMenu id="dlgQualityLevelA"
@@ -765,7 +765,7 @@
                         </tr>
                         <tr>
                             <td class="title">
-                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')} :"/>
+                                <h:outputLabel value="#{msg.get('app.qualitative.label.classificationRemark')}"/>
                             </td>
                             <td>
                                 <h:inputTextarea cols="70" rows="3" name="remark"
@@ -777,7 +777,7 @@
             </tr>
             <tr>
                 <td class="title">
-                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')} :"/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.label.classificationDate')}"/>
                     <h:outputText value="#{qualitative.qualitativeView.createDate}" id="createDate">
                         <f:convertDateTime pattern="dd/MM/yyyy"/>
                     </h:outputText>
@@ -793,7 +793,7 @@
 <tr>
     <td>
         <div>
-            <p><b>หลักเกณฑ์ในการจัดชั้นลูกหนี้</b></p>
+            <p><b>#{msg.get('app.qualitative.label.section.classificationDesc')}</b></p>
         </div>
     </td>
 </tr>
@@ -803,7 +803,7 @@
         <table class="table_content">
             <tr>
                 <td style="width: 50px;text-align: left">
-                    <h:outputLabel value="Pass : "/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.Pass')}"/>
                 </td>
                 <td style="text-align: left">
                     <h:outputLabel value="#{msg.get('app.qualitative.level.description.pass')}"/>
@@ -811,7 +811,7 @@
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="SM : "/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SM')}"/>
                 </td>
                 <td>
                     <h:outputLabel value="#{msg.get('app.qualitative.level.description.sm')}"/>
@@ -819,7 +819,7 @@
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="SS : "/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.SS')}"/>
                 </td>
                 <td>
                     <h:outputLabel value="#{msg.get('app.qualitative.level.description.ss')}"/>
@@ -827,7 +827,7 @@
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="D :"/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.D')}"/>
                 </td>
                 <td>
                     <h:outputLabel value="#{msg.get('app.qualitative.level.description.d')}"/>

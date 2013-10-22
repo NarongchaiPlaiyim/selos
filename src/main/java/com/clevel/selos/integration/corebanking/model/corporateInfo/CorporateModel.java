@@ -1,5 +1,8 @@
 package com.clevel.selos.integration.corebanking.model.corporateInfo;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import java.io.Serializable;
 
 
@@ -151,5 +154,30 @@ public class CorporateModel implements Serializable{
 
     public void setDocumentType(String documentType) {
         this.documentType = documentType;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("reqId", reqId)
+                .append("resCode", resCode)
+                .append("resDesc", resDesc)
+                .append("searchResult", searchResult)
+                .append("tmbCusID", tmbCusID)
+                .append("titleTH", titleTH)
+                .append("companyNameTH", companyNameTH)
+                .append("companyNameEN", companyNameEN)
+                .append("documentType", documentType)
+                .append("registrationID", registrationID)
+                .append("registrationDate", registrationDate)
+                .append("registrationCountry", registrationCountry)
+                .append("subdistrict", subdistrict)
+                .append("district", district)
+                .append("province", province)
+                .append("postcode", postcode)
+                .append("country", country)
+                .append("countryCode", countryCode)
+                .append("registrationAddress", registrationAddress)
+                .toString();
     }
 }
