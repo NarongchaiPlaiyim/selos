@@ -327,34 +327,32 @@ public class TCGInfo implements Serializable {
                     }
 
                     tcgInfoControl.onSaveTCGToDB(TCGView,TCGDetailViewList,workCaseId);
-                    messageHeader = "Save TCG Success.";
-                    message = "Save TCG success.";
+
 
                 } else if(modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
                     TCGView.setModifyBy(user);
                     TCGView.setModifyDate(DateTime.now().toDate());
                     tcgInfoControl.onEditTCGToDB(TCGView,TCGDetailViewList,workCaseId);
-
-                    messageHeader = "Edit TCG Success.";
-                    message = "Edit TCG success.";
                 }
 
+                messageHeader = msg.get("app.header.save.success");
+                message = msg.get("app.tcg.response.save.success");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else{
-                messageHeader = "can not to save TCG .";
-                message = "please add collateral information.";
+                messageHeader = msg.get("app.tcg.response.cannot.save");
+                message = msg.get("app.tcg.response.desc.cannot.save");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
         } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = "Save TCG failed.";
+            messageHeader = msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message = "Save TCG failed. Cause : " + ex.getCause().toString();
+                message = msg.get("app.tcg.response.save.failed") + " cause : " + ex.getCause().toString();
             } else {
-                message = "Save TCG failed. Cause : " + ex.getMessage();
+                message = msg.get("app.tcg.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;

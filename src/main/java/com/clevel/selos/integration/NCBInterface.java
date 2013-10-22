@@ -1,11 +1,8 @@
 package com.clevel.selos.integration;
 
-import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
-import com.clevel.selos.integration.ncb.ncrs.models.response.NCRSResponseModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSInputModel;
-import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSModel;
 import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.NCRSOutputModel;
 
 import java.util.ArrayList;

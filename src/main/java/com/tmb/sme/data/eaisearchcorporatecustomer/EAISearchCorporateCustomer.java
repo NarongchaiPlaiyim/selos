@@ -1,14 +1,15 @@
 
 package com.tmb.sme.data.eaisearchcorporatecustomer;
 
+import com.tmb.sme.data.requestsearchcorporatecustomer.ReqSearchCorporateCustomer;
+import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
-import com.tmb.sme.data.requestsearchcorporatecustomer.ReqSearchCorporateCustomer;
-import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
 
 
 /**

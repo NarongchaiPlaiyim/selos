@@ -1,6 +1,5 @@
 package com.clevel.selos.integration.ncb.nccrs.service;
 
-import com.clevel.selos.integration.ncb.nccrs.models.response.NCCRSResponseModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSInputModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
 

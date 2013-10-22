@@ -2,7 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
-import com.clevel.selos.model.db.master.Relation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 

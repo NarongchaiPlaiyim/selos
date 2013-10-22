@@ -6,7 +6,6 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.enterprise.inject.Default;

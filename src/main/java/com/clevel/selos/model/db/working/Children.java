@@ -1,15 +1,9 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CustomerEntity;
-import com.clevel.selos.model.db.master.DocumentType;
-import com.clevel.selos.model.db.master.Relation;
 import com.clevel.selos.model.db.master.Title;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name="wrk_children")

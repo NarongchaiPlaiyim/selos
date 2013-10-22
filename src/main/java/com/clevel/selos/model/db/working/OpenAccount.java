@@ -1,7 +1,7 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.OpenAccountProduct;
-import com.clevel.selos.model.db.master.OpenAccountType;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -25,8 +25,8 @@ public class OpenAccount implements Serializable {
     private String accountName;
 
     @OneToOne
-    @JoinColumn(name="open_account_type_id")
-    private OpenAccountType accountType;
+    @JoinColumn(name="bank_account_type_id")
+    private BankAccountType bankAccountType;
 
     @OneToOne
     @JoinColumn(name="open_account_product_id")
@@ -59,12 +59,12 @@ public class OpenAccount implements Serializable {
         this.accountName = accountName;
     }
 
-    public OpenAccountType getAccountType() {
-        return accountType;
+    public BankAccountType getBankAccountType() {
+        return bankAccountType;
     }
 
-    public void setAccountType(OpenAccountType accountType) {
-        this.accountType = accountType;
+    public void setBankAccountType(BankAccountType bankAccountType) {
+        this.bankAccountType = bankAccountType;
     }
 
     public OpenAccountProduct getAccountProduct() {
@@ -85,13 +85,13 @@ public class OpenAccount implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("basicInfo", basicInfo).
-                append("accountName", accountName).
-                append("accountType", accountType).
-                append("accountProduct", accountProduct).
-                append("openAccPurposeList", openAccPurposeList).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("basicInfo", basicInfo)
+                .append("accountName", accountName)
+                .append("bankAccountType", bankAccountType)
+                .append("accountProduct", accountProduct)
+                .append("openAccPurposeList", openAccPurposeList)
+                .toString();
     }
 }

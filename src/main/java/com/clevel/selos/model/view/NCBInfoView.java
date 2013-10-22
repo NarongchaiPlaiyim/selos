@@ -348,6 +348,4 @@ public class NCBInfoView implements Serializable {
     public void setTdrOtherFlag(boolean tdrOtherFlag) {
         this.tdrOtherFlag = tdrOtherFlag;
     }
-
-
 }
