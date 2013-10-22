@@ -5,96 +5,107 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="tcgDlgForm">
-        <table class="content_form" >
-            <tr>
-                <td class="title" style="width: 220px;">
-                    <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}" /> :
-                </td>
-                <td style="width: 450px;">
-                    <p:selectOneMenu id="potentialCollateralType"
-                                     value="#{tcgInfo.TCGDetailView.potentialCollateral.id}"
-                                     size="1"
-                                     style="width: 200px;"
-                                     required="true" >
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{tcgInfo.potentialCollateralList}"
-                                       var="potentialCollateralList"
-                                       itemLabel="#{potentialCollateralList.description}"
-                                       itemValue="#{potentialCollateralList.id}"/>
-                        <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}" update=":tcgDlgForm"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-            <tr>
-                <td class="title" >
-                    <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.collateralType')} :" />
-                </td>
-                <td>
-                    <p:selectOneMenu id="potentialColToTCG"
-                                     value="#{tcgInfo.TCGDetailView.tcgCollateralType.id}"
-                                     styleClass="largest"
-                                     size="1"
-                                     required="true"
-                                     style="width: 400px;">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
-                                       var="dlgPotentialColToTCGColList"
-                                       itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
-                                       itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
+    <p:panel id="tcgDlgPanel" styleClass="panel-dialog">
+        <h:form id="tcgDlgForm">
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width: 220px;">
+                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.potential')}"/> :
+                    </td>
+                    <td style="width: 450px;">
+                        <p:selectOneMenu id="potentialCollateralType"
+                                         value="#{tcgInfo.TCGDetailView.potentialCollateral.id}"
+                                         size="1"
+                                         style="width: 200px;"
+                                         required="true">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{tcgInfo.potentialCollateralList}"
+                                           var="potentialCollateralList"
+                                           itemLabel="#{potentialCollateralList.description}"
+                                           itemValue="#{potentialCollateralList.id}"/>
+                            <p:ajax event="change" listener="#{tcgInfo.onChangePotentialCollateralType}"
+                                    update=":tcgDlgForm"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.tcg.dlg.dropDown.collateralType')} :"/>
+                    </td>
+                    <td>
+                        <p:selectOneMenu id="potentialColToTCG"
+                                         value="#{tcgInfo.TCGDetailView.tcgCollateralType.id}"
+                                         styleClass="largest"
+                                         size="1"
+                                         required="true"
+                                         style="width: 400px;">
+                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                            <f:selectItems value="#{tcgInfo.potentialColToTCGColList}"
+                                           var="dlgPotentialColToTCGColList"
+                                           itemLabel="#{dlgPotentialColToTCGColList.tcgCollateralType.description}"
+                                           itemValue="#{dlgPotentialColToTCGColList.tcgCollateralType.id}"/>
 
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :" />
-                </td>
-                <td>
-                    <p:inputText styleClass="large" id="appraisalAmount"  value="#{tcgInfo.TCGDetailView.appraisalAmount}" >
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :" />
-                </td>
-                <td>
-                    <p:inputText styleClass="large" id="LTVvalue"  value="#{tcgInfo.TCGDetailView.ltvValue}">
-                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="blur" update=":tcgDlgForm:LTVvalue"/>
-                    </p:inputText>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.tcg.dlg.radio.isProposeInThisRequest')} :" />
-                </td>
-                <td>
-                    <h:selectOneRadio id="proposeInThisRequestRadio" value="#{tcgInfo.TCGDetailView.proposeInThisRequest}">
-                        <f:selectItem itemLabel="No" itemValue="0"/>
-                        <f:selectItem itemLabel="Yes" itemValue="1"/>
-                    </h:selectOneRadio>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" class="center">
-                    <p:commandButton
-                            id="save"
-                            value="#{msg.get('app.tcg.dlg.button.ok')}"
-                            binding="#{addRowData}"
-                            styleClass="small"
-                            actionListener="#{tcgInfo.onSaveCollateralDetail}"
-                            process=":tcgDlgForm"
-                            update=":tcgDlgForm,:frmMain:resultCollateralDetail"
-                            oncomplete="handletcgInfoRequest(xhr, status, args)"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.appraisalAmount')} :"/>
+                    </td>
+                    <td>
+                        <p:inputText styleClass="large" id="appraisalAmount"
+                                     value="#{tcgInfo.TCGDetailView.appraisalAmount}">
+                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :"/>
+                    </td>
+                    <td>
+                        <p:inputText styleClass="large" id="LTVvalue" value="#{tcgInfo.TCGDetailView.ltvValue}">
+                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            <p:ajax event="blur" update=":tcgDlgForm:LTVvalue"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.tcg.dlg.radio.isProposeInThisRequest')} :"/>
+                    </td>
+                    <td>
+                        <h:selectOneRadio id="proposeInThisRequestRadio"
+                                          value="#{tcgInfo.TCGDetailView.proposeInThisRequest}">
+                            <f:selectItem itemLabel="No" itemValue="0"/>
+                            <f:selectItem itemLabel="Yes" itemValue="1"/>
+                        </h:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton
+                                id="save"
+                                value="#{msg.get('app.tcg.dlg.button.ok')}"
+                                binding="#{addRowData}"
+                                styleClass="small"
+                                actionListener="#{tcgInfo.onSaveCollateralDetail}"
+                                process=":tcgDlgForm"
+                                update=":tcgDlgForm,:frmMain:resultCollateralDetail"
+                                oncomplete="handletcgInfoRequest(xhr, status, args)"/>
 
-                    <p:commandButton value="#{msg.get('app.tcg.dlg.button.cancel')}" styleClass="small" onclick="tcgDlg.hide()" update=":tcgDlgForm"/>
-                </td>
-            </tr>
-        </table>
-    </h:form>
+                        <p:commandButton value="#{msg.get('app.tcg.dlg.button.cancel')}" styleClass="small"
+                                         onclick="tcgDlg.hide()" update=":tcgDlgForm"/>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:panel>
+
+    <p:blockUI widgetVar="blockTcgDlg" block="tcgDlgPanel" trigger=":tcgDlgForm:save">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI> ]
 
 </ui:composition>

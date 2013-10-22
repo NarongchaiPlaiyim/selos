@@ -142,16 +142,17 @@ function handleFullappBizStakeHolderRequest(xhr, status, args) {
     if(args.functionComplete){
         stakeholderViewDlg.hide();
     }
-
-    if(args.functionCalSum){
-        alert("ผลรวมผิดพลาด ระบบจะคืนค่าเดิม");
-        stakeholderViewDlg.hide();
-    }
 }
 
 function handletcgInfoRequest(xhr, status, args) {
     if(args.functionComplete){
         tcgDlg.hide();
+    }
+}
+
+function handleBasicInfoAccountRequest(xhr, status, args) {
+    if(args.functionComplete){
+        basicInfoAccountDlg.hide();
     }
 }
 

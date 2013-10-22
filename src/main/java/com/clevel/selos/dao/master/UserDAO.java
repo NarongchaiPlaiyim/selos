@@ -1,8 +1,10 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -35,4 +37,5 @@ public class UserDAO extends GenericDAO<User,String> {
 
         return userList;
     }
+
 }

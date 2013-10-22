@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
@@ -387,6 +388,8 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
             log.error("Exception while call RM Individual", e);
             //Audit Data
@@ -549,6 +552,8 @@ public class RMService implements Serializable {
                 rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseCorporateCustomer : Null", new Date(), linkKey);
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
+        } catch (RMInterfaceException e){
+            throw e;
         } catch (Exception e) {
             log.error("Exception while call service RM Corporate!", e);
             //Audit Data
@@ -617,8 +622,8 @@ public class RMService implements Serializable {
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
         //todo
-//        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl),String.class,customerServerUrl));
-//        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId),String.class,customerSessionId));
+        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl),String.class,customerServerUrl));
+        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId),String.class,customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();
@@ -714,6 +719,8 @@ public class RMService implements Serializable {
                 throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND,exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
             }
 
+        } catch (RMInterfaceException e) {
+            throw e;
         } catch (Exception e) {
 
             log.error("Exception while call service RM Search account!", e);

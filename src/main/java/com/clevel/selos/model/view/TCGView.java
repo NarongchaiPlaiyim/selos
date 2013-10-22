@@ -30,9 +30,7 @@ public class TCGView implements Serializable {
     private User modifyBy;
 
 
-    public TCGView(){
-        reset();
-    }
+    public TCGView(){}
 
     public void reset(){
 

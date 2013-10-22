@@ -1,7 +1,7 @@
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        >
+        xmlns:p="http://primefaces.org/ui">
 
     <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
     <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css" />
@@ -25,7 +25,9 @@
                 <a href="prescreen.jsf" title="Prescreen">Prescreen</a>
                 <ul>
                     <li id="submnuprescreen"><a href="prescreen.jsf" title="Prescreen">Prescreen</a></li>
-                    <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="Prescreen Result">Prescreen Result</a></li>
+                    <p:panel id="pnl_menu_prescreen_result" rendered="#{baseController.stepId == 1003}" styleClass="panel">
+                        <li id="submnuprescreenresult"><a href="prescreenResult.jsf" title="Prescreen Result">Prescreen Result</a></li>
+                    </p:panel>
                 </ul>
             </li>
             <!--<li id="mnubasicinfo"><a href="basicInfo.jsf" title="Basic Info.">Basic Info.</a></li>

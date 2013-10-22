@@ -106,6 +106,12 @@ public class Customer implements Serializable {
     @JoinColumn(name="warningcode_id")
     private WarningCode csi;
 
+    @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")
+    private int isSpouse;
+
+    @Column(name="spouse_id")
+    private long spouseId;
+
     public Customer() {
     }
 
@@ -325,6 +331,22 @@ public class Customer implements Serializable {
         this.csi = csi;
     }
 
+    public int getIsSpouse() {
+        return isSpouse;
+    }
+
+    public void setIsSpouse(int spouse) {
+        isSpouse = spouse;
+    }
+
+    public long getSpouseId() {
+        return spouseId;
+    }
+
+    public void setSpouseId(long spouseId) {
+        this.spouseId = spouseId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -355,6 +377,8 @@ public class Customer implements Serializable {
                 .append("reference", reference)
                 .append("ncb", ncb)
                 .append("csi", csi)
+                .append("isSpouse", isSpouse)
+                .append("spouseId", spouseId)
                 .toString();
     }
 }

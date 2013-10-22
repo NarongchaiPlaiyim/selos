@@ -76,7 +76,7 @@ public class TestNCRS implements Serializable {
         NCRSModel ncrsModel = null;
         ArrayList<NCRSModel> ncrsModelArrayList = new ArrayList<NCRSModel>();
 
-        ncrsModel = new NCRSModel();
+        /*ncrsModel = new NCRSModel();
         ncrsModel.setIdType(IdType.CITIZEN);
         ncrsModel.setCitizenId(idNumber);
         ncrsModel.setFirstName("พสุธร");
@@ -96,11 +96,11 @@ public class TestNCRS implements Serializable {
         ncrsModel.setEnqpurpose(enqpurpose);
         ncrsModel.setEnqamount(enqamount);
         ncrsModel.setConsent(consent);
-        ncrsModelArrayList.add(ncrsModel);
+        ncrsModelArrayList.add(ncrsModel);*/
 
         ncrsModel = new NCRSModel();
         ncrsModel.setIdType(IdType.CITIZEN);
-        ncrsModel.setCitizenId("3101403233750");
+        ncrsModel.setCitizenId("11111");
         ncrsModel.setFirstName("ประดิษฐ์");
         ncrsModel.setLastName("ภัทรประสิทธิ์");
         ncrsModel.setMemberref(memberref);
@@ -111,7 +111,7 @@ public class TestNCRS implements Serializable {
 
         ncrsModel = new NCRSModel();
         ncrsModel.setIdType(IdType.CITIZEN);
-        ncrsModel.setCitizenId("3149900124956");
+        ncrsModel.setCitizenId("22222");
         ncrsModel.setFirstName("วิลาวัณย ");
         ncrsModel.setLastName("อุปริกชาติพงษ์");
         ncrsModel.setMemberref(memberref);
@@ -120,7 +120,62 @@ public class TestNCRS implements Serializable {
         ncrsModel.setConsent(consent);
         ncrsModelArrayList.add(ncrsModel);
 
-        NCRSInputModel inputModel = new NCRSInputModel(userId, appRefNumber, CANumber, referenceTel, ncrsModelArrayList);
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdType(IdType.CITIZEN);
+        ncrsModel.setCitizenId("33333");
+        ncrsModel.setFirstName("ประดิษฐ์");
+        ncrsModel.setLastName("ภัทรประสิทธิ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
+
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdType(IdType.CITIZEN);
+        ncrsModel.setCitizenId("44444");
+        ncrsModel.setFirstName("วิลาวัณย ");
+        ncrsModel.setLastName("อุปริกชาติพงษ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
+
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdType(IdType.CITIZEN);
+        ncrsModel.setCitizenId("55555");
+        ncrsModel.setFirstName("น้องใหม่ ");
+        ncrsModel.setLastName("อุปริกชาติพงษ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
+
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdType(IdType.CITIZEN);
+        ncrsModel.setCitizenId("66666");
+        ncrsModel.setFirstName("น้องใหม6่ ");
+        ncrsModel.setLastName("อุปริกชาติพงษ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
+
+        ncrsModel = new NCRSModel();
+        ncrsModel.setIdType(IdType.CITIZEN);
+        ncrsModel.setCitizenId("77777");
+        ncrsModel.setFirstName("น้องใหม7่ ");
+        ncrsModel.setLastName("อุปริกชาติพงษ์");
+        ncrsModel.setMemberref(memberref);
+        ncrsModel.setEnqpurpose(enqpurpose);
+        ncrsModel.setEnqamount(enqamount);
+        ncrsModel.setConsent(consent);
+        ncrsModelArrayList.add(ncrsModel);
+
+        NCRSInputModel inputModel = new NCRSInputModel(userId, "1111", CANumber, referenceTel, ncrsModelArrayList);
         try {
             ArrayList<NCRSOutputModel> ncrsOutputModelArrayList = ncbInterface.request(inputModel);
             for(NCRSOutputModel ncrsOutputModel : ncrsOutputModelArrayList){

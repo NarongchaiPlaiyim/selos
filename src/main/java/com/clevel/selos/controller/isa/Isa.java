@@ -1,6 +1,6 @@
-package com.clevel.selos.controller;
+package com.clevel.selos.controller.isa;
 
-import com.clevel.selos.businesscontrol.IsaBusinessControl;
+import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
@@ -49,6 +49,7 @@ public class Isa implements Serializable {
     @Inject
     UserZoneDAO userZoneDAO;
 
+    @Inject
     IsaBusinessControl isaBusinessControl;
 
     public Isa(){
@@ -78,8 +79,7 @@ public class Isa implements Serializable {
 
     @PostConstruct
     public void onCreate(){
-
-             onSelectUser();
+         onSelectUser();
     }
 
     public void onCreateNewUser(){
@@ -88,13 +88,73 @@ public class Isa implements Serializable {
 
         isaBusinessControl.createUser(createUserView);
 
-        RequestContext.getCurrentInstance().closeDialog("createUserDialog");
+        onSelectUser();
     }
 
     public void onOpenNewUserForm(){
+        log.debug("onCreateNewUser()");
         createUserView=new IsaCreateUserView();
-        createUserView.setId("55");
+        createUserView.setRole(new Role());
+        createUserView.setUserDepartment(new UserDepartment());
+        createUserView.setUserDivision(new UserDivision());
+        createUserView.setUserRegion(new UserRegion());
+        createUserView.setUserTeam(new UserTeam());
+        createUserView.setUserTitle(new UserTitle());
+        createUserView.setUserZone(new UserZone());
 
+
+       getSelectUserDetailList();
+    }
+
+    public void onSelectUser(){
+        log.debug("onSelectUser()");
+        userDetail =new ArrayList<User>();
+        User user=new User();
+        userDetail=userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
+        testString=userDetail.size()+"";
+    }
+
+    public void onOpenEditForm(String id){
+        System.out.println("------------------ "+id);
+
+
+        createUserView = isaBusinessControl.editUser(id);
+        if(createUserView!=null){
+            if(createUserView.getUserDepartment()==null){
+                createUserView.setUserDepartment(new UserDepartment());
+            }
+            if(createUserView.getRole()==null){
+                createUserView.setRole(new Role());
+            }
+            if(createUserView.getUserDivision()==null){
+                createUserView.setUserDivision(new UserDivision());
+            }
+            if(createUserView.getUserRegion()==null){
+                createUserView.setUserRegion(new UserRegion());
+            }
+            if(createUserView.getUserTeam()==null){
+                createUserView.setUserTeam(new UserTeam());
+            }
+            if(createUserView.getUserTitle()==null){
+                createUserView.setUserTitle(new UserTitle());
+            }
+            if(createUserView.getUserZone()==null){
+                createUserView.setUserZone(new UserZone());
+            }
+            getSelectUserDetailList();
+            RequestContext.getCurrentInstance().execute("editUserDlg.show()");
+        }
+
+    }
+
+    public void onDelete(String id){
+        System.out.println("------------------ "+id);
+
+//        isaBusinessControl.deleteUser(id);
+    }
+
+
+    public void getSelectUserDetailList() {
         userRoleList=roleDAO.findAll();
         userDepartmentList=userDepartmentDAO.findAll();
         userDivisionList=userDivisionDAO.findAll();
@@ -102,14 +162,13 @@ public class Isa implements Serializable {
         userTeamList=userTeamDAO.findAll();
         userTitleList=userTitleDAO.findAll();
         userZoneList=userZoneDAO.findAll();
+
     }
 
-    public void onSelectUser(){
-        userDetail =new ArrayList<User>();
-        User user=new User();
-        userDetail=userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
-        testString=userDetail.size()+"";
-    }
+
+
+
+
 
 
     public List<User> getUserDetail() {

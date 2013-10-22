@@ -19,7 +19,7 @@ public class ROLSActivity implements Serializable {
     private String userId;
     @Column(name="action", nullable=false)
     private String action;
-    @Column(name="action_desc", length = 500)
+    @Column(name="action_desc", length = 600)
     private String actionDesc;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="action_date", nullable=false)
@@ -27,7 +27,7 @@ public class ROLSActivity implements Serializable {
     @Column(name="result", nullable=false)
     @Enumerated(EnumType.STRING)
     private ActionResult actionResult;
-    @Column(name="result_desc", length = 500)
+    @Column(name="result_desc", length = 600)
     private String resultDesc;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="result_date", nullable=false)
