@@ -1,5 +1,5 @@
 package com.clevel.selos.model;
 
 public enum ActionResult {
-    SUCCESS,FAILED,EXCEPTION,WAITING
+    SUCCESS,FAILED,EXCEPTION,WAITING,SUCCEED
 }

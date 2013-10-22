@@ -23,7 +23,7 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory,Long>
                 Restrictions.eq("caNumber", caNumber),
                 Restrictions.or(
                         Restrictions.eq("status", ActionResult.SUCCESS),
-                        Restrictions.eq("status", "SUCCEED"),
+                        Restrictions.eq("status", ActionResult.SUCCEED),
                         Restrictions.eq("status",ActionResult.WAITING)))
                 );
 
