@@ -389,6 +389,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         if(customer == null ){
                             customer = new Customer();
                         }
+
+                        log.debug("ncbView before transform : {}",ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
@@ -473,6 +475,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         if(customer == null ){
                             customer = new Customer();
                         }
+
+                        log.debug("ncbView before transform : {}",ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
