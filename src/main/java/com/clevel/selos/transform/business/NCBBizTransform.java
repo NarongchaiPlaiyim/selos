@@ -890,18 +890,19 @@ public class NCBBizTransform extends BusinessTransform {
                                         ncbDetailView.setNoOfOverLimit(numberOfOverLimit);
 
                                         //add ncbDetailView to ncbDetailViewList
+                                        log.debug("Add ncbDetailView to list : {}",ncbDetailView);
                                         ncbDetailViews.add(ncbDetailView);
                                     }
 
                                     //set NCBInfoView
                                     if(!Util.isEmpty(currentWorstPaymentStatus)){
-                                        SettlementStatus currentWorstSettlementStatus = settlementStatusDAO.getJuristicByCode(currentWorstPaymentStatus);
+                                        SettlementStatus currentWorstSettlementStatus = settlementStatusDAO.getIndividualByCode(currentWorstPaymentStatus);
                                         if(currentWorstSettlementStatus!=null){
                                             ncbInfoView.setCurrentPaymentType(currentWorstSettlementStatus.getName());
                                         }
                                     }
                                     if(!Util.isEmpty(worstPaymentStatus)){
-                                        SettlementStatus worstSettlementStatus = settlementStatusDAO.getJuristicByCode(worstPaymentStatus);
+                                        SettlementStatus worstSettlementStatus = settlementStatusDAO.getIndividualByCode(worstPaymentStatus);
                                         if(worstSettlementStatus!=null){
                                             ncbInfoView.setHistoryPaymentType(worstSettlementStatus.getName());
                                         }
@@ -1089,7 +1090,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     isTMBAccount = true;
                                                 }
                                                 //set account status
-                                                AccountStatus accountStatus = accountStatusDAO.getIndividualByCode(creditInfoModel.getAccountstatus());
+                                                AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
                                                 ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
@@ -1255,6 +1256,7 @@ public class NCBBizTransform extends BusinessTransform {
                                             ncbDetailView.setNoOfOverLimit(numberOfOverLimit); //todo: how to get number of OverLimit
 
                                             //add ncbDetailView to ncbDetailViewList
+                                            log.debug("Add ncbDetailView to list : {}",ncbDetailView);
                                             ncbDetailViews.add(ncbDetailView);
                                         }
                                     } else {
@@ -1273,7 +1275,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                     isTMBAccount = true;
                                                 }
                                                 //set account status
-                                                AccountStatus accountStatus = accountStatusDAO.getIndividualByCode(creditInfoModel.getAccountstatus());
+                                                AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
                                                 ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
