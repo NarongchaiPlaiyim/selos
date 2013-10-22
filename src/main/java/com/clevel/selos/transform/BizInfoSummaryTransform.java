@@ -2,6 +2,7 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.view.BizInfoSummaryView;
+import org.joda.time.DateTime;
 
 public class BizInfoSummaryTransform extends Transform {
 
@@ -12,7 +13,11 @@ public class BizInfoSummaryTransform extends Transform {
 
         if(bizInfoSummaryView.getId() != 0 ){
             bizInfoSummary.setId(bizInfoSummaryView.getId());
+        }else if(bizInfoSummaryView.getId() == 0 ){
+            bizInfoSummary.setCreateBy(bizInfoSummaryView.getCreateBy());
+            bizInfoSummary.setCreateDate(DateTime.now().toDate());
         }
+
         bizInfoSummary.setBizLocationName(bizInfoSummaryView.getBizLocationName());
         bizInfoSummary.setRental(bizInfoSummaryView.getRental());
         bizInfoSummary.setOwnerName(bizInfoSummaryView.getOwnerName());
@@ -26,6 +31,7 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setProvince(bizInfoSummaryView.getSubDistrict().getDistrict().getProvince());
         bizInfoSummary.setDistrict(bizInfoSummaryView.getSubDistrict().getDistrict());
         bizInfoSummary.setSubDistrict(bizInfoSummaryView.getSubDistrict());
+        bizInfoSummary.setCountry(bizInfoSummaryView.getCountry());
 
         bizInfoSummary.setPostCode(bizInfoSummaryView.getPostCode());
         bizInfoSummary.setPhoneNo(bizInfoSummaryView.getPhoneNo());
@@ -61,8 +67,21 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setNetMarginPercentage(bizInfoSummaryView.getNetMarginPercentage());
 
         bizInfoSummary.setNetFixAsset(bizInfoSummaryView.getNetFixAsset());
-
         bizInfoSummary.setNoOfEmployee(bizInfoSummaryView.getNoOfEmployee());
+
+        bizInfoSummary.setSumIncomeAmount(bizInfoSummaryView.getSumIncomeAmount());
+        bizInfoSummary.setSumIncomePercent(bizInfoSummaryView.getSumIncomePercent());
+        bizInfoSummary.setSumWeightAR(bizInfoSummaryView.getSumWeightAR());
+        bizInfoSummary.setSumWeightAP(bizInfoSummaryView.getSumWeightAP());
+        bizInfoSummary.setSumWeightINV(bizInfoSummaryView.getSumWeightINV());
+        bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
+
+
+
+        bizInfoSummary.setModifyBy(bizInfoSummaryView.getCreateBy());
+        bizInfoSummaryView.setModifyDate(DateTime.now().toDate());
+
+
 
         return bizInfoSummary;
     }
@@ -87,6 +106,7 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setProvince(bizInfoSummary.getSubDistrict().getDistrict().getProvince());
         bizInfoSummaryView.setDistrict(bizInfoSummary.getSubDistrict().getDistrict());
         bizInfoSummaryView.setSubDistrict(bizInfoSummary.getSubDistrict());
+        bizInfoSummaryView.setCountry(bizInfoSummary.getCountry());
 
         bizInfoSummaryView.setPostCode(bizInfoSummary.getPostCode());
         bizInfoSummaryView.setPhoneNo(bizInfoSummary.getPhoneNo());
@@ -120,6 +140,12 @@ public class BizInfoSummaryTransform extends Transform {
 
         bizInfoSummaryView.setNetMarginAmount(bizInfoSummary.getNetMarginAmount());
         bizInfoSummaryView.setNetMarginPercentage(bizInfoSummary.getNetMarginPercentage());
+
+        bizInfoSummaryView.setModifyBy(bizInfoSummary.getCreateBy());
+        bizInfoSummaryView.setModifyDate(bizInfoSummary.getModifyDate());
+
+        bizInfoSummaryView.setCreateBy(bizInfoSummary.getCreateBy());
+        bizInfoSummaryView.setCreateDate(bizInfoSummary.getCreateDate());
 
         bizInfoSummaryView.setNetFixAsset(bizInfoSummary.getNetFixAsset());
 

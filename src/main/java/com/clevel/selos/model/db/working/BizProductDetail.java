@@ -1,8 +1,11 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.User;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "wrk_biz_product_detail")
@@ -30,6 +33,22 @@ public class BizProductDetail implements Serializable {
 
     @Column(name = "product_detail")
     private String productDetail;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date")
+    private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_date")
+    private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
 
     public BizProductDetail() {
     }
@@ -88,5 +107,37 @@ public class BizProductDetail implements Serializable {
 
     public void setBizInfoDetail(BizInfoDetail bizInfoDetail) {
         this.bizInfoDetail = bizInfoDetail;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 }

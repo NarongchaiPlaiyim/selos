@@ -1,9 +1,6 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.BusinessActivity;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.master.BusinessType;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -58,6 +55,11 @@ public class BizInfoDetailView implements Serializable {
     private BigDecimal stockDurationUW;
     private BigDecimal stockValueBDM;
     private BigDecimal stockValueUW;
+
+    private Date createDate;
+    private Date modifyDate;
+    private User createBy;
+    private User modifyBy;
 
     private List<BizProductDetailView> bizProductDetailViewList;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -452,6 +454,38 @@ public class BizInfoDetailView implements Serializable {
 
     public void setSupplierDetailList(List<BizStakeHolderDetailView> supplierDetailList) {
         this.supplierDetailList = supplierDetailList;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifyDate() {
+        return modifyDate;
+    }
+
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     @Override
