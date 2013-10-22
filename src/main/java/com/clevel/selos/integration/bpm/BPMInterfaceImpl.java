@@ -108,7 +108,6 @@ public class BPMInterfaceImpl implements BPMInterface, Serializable {
             BPMServiceImpl bpmService = new BPMServiceImpl(getSystemUserDTO(),getConfigurationDTO());
             bpmService.launchCase(caseParameter);
             log.debug("[{}] BPM launch case successful.",linkKey);
-            caseCreationHistory.setStatus(ActionResult.SUCCESS);
             bpmAuditor.add(bpmUsername,"createCase","",now, ActionResult.SUCCESS,"",linkKey);
         } catch (SELOSBPMException e) {
             success = false;
