@@ -128,6 +128,7 @@ public class TCGInfo implements Serializable {
             log.error( "potentialCollateralDAO findAll error ::: {}" , e.getMessage());
         }
 
+        TCGDetailView.reset();
     }
 
 
