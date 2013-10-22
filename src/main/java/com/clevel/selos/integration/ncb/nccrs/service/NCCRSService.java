@@ -79,7 +79,7 @@ public class NCCRSService implements Serializable {
                         if (0!=resultOfSize){
                             nccrsModel.setMemberRef(Util.setRequestNo(inputModel.getAppRefNumber(), resultOfSize));
                             resultOfSize++;
-                            log.debug("NCRS MemberRef = {}", nccrsModel.getMemberRef());
+                            log.debug("NCCRS MemberRef = {}", nccrsModel.getMemberRef());
                             ncrsModelArrayListForNewCustomers.add(nccrsModel);
                             nccrsModelArrayList.remove(i);
                             i--;
