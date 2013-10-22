@@ -46,7 +46,7 @@ public class BizInfoDetailControl {
     @Inject
     BizInfoSummaryDAO bizInfoSummaryDAO;
 
-    public void onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView,long bizInfoSummaryId){
+    public BizInfoDetailView onSaveBizInfoToDB(BizInfoDetailView bizInfoDetailView,long bizInfoSummaryId){
 
         List<BizStakeHolderDetail> bizSupplierList;
         List<BizStakeHolderDetail> bizBuyerList;
@@ -71,7 +71,8 @@ public class BizInfoDetailControl {
             bizInfoDetail.setBizInfoSummary(bizInfoSummary);
 
             bizInfoDetailDAO.persist(bizInfoDetail);
-            log.info( "bizInfoDetailDAO persist end" );
+            log.info( "bizInfoDetailDAO persist end id is " + bizInfoDetail.getId() );
+
 
             supplierDetailList = bizInfoDetailView.getSupplierDetailList();
             buyerDetailList = bizInfoDetailView.getBuyerDetailList();
@@ -125,10 +126,13 @@ public class BizInfoDetailControl {
             bizStakeHolderDetailDAO.persist(bizBuyerList);
             log.info( "bizBuyerListDetailDAO persist end" );
 
+            bizInfoDetailView.setId(bizInfoDetail.getId());
+
+            return bizInfoDetailView;
         }catch (Exception e){
             log.error( "onSaveBizInfoToDB error" + e);
+            return bizInfoDetailView;
         }finally{
-
             log.info( "onSaveBizInfoToDB end" );
         }
     }
