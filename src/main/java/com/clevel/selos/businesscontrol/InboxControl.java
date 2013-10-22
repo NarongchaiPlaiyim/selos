@@ -75,7 +75,7 @@ public class InboxControl extends BusinessControl {
             caseDTOList.add(caseDTO);
         }
 
-        log.info("CaseDTO : caseDTOList : {}", caseDTOList);*/
+        log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
 
         return inboxViewList;
