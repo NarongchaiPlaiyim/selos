@@ -411,7 +411,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                        //Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
                         //Customer customer = customerDAO.findById(new Long(151));
                         log.info("findByCitizenId customer : {}", customer);
 
@@ -468,8 +468,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
                     if(ncbView.getResult() == ActionResult.SUCCESS){
-                        Juristic juristic = juristicDAO.findByRegisterId(ncbView.getIdNumber());
-                        Customer customer = juristic.getCustomer();
+                        Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
                         if(customer == null ){
                             customer = new Customer();
                         }
@@ -495,7 +494,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                         log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
                         log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
 
-                        Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+                        //Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
 
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
