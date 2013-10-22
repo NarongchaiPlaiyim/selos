@@ -3,7 +3,8 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <title>ManageUser</title>
         <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
@@ -86,14 +87,28 @@
                                 <h:outputText value="#{c.userStatus}"/>
                             </p:column>
                             <p:column headerText="Management">
-                                <p:commandButton icon="ui-icon-pencil" title="hh" actionListener="#{isa.onEdit(c.id)}"/>
-                                <p:commandButton icon="ui-icon-trash" title="hh" actionListener="#{isa.onDelete(c.id)}"/>
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 title="${c.id}"
+                                                 actionListener="#{isa.onOpenEditForm(c.id)}"
+                                                 update=":editUserformDlg"/>
+
+                                <p:commandButton icon="ui-icon-trash"
+                                                 title="Remove"
+                                                 oncomplete="confirmDeleteUserDlg.show()">
+                                        <f:setPropertyActionListener value="#{c}"
+                                                                     target="#{id}"  />
+
+                                        </p:commandButton>
+
+
                             </p:column>
                         </p:dataTable>
 
+
                         <p:commandButton value="Add New User" actionListener="#{isa.onOpenNewUserForm()}"
-                                         oncomplete="PF('newUserDialog').show()"
-                                         update=":createUserDialog"/>
+                                         oncomplete="PF('newUserDlg').show()"
+                                         update=":createUserformDlg"/>
+
 
                     </h:form>
                 </div>
@@ -102,9 +117,99 @@
 
         </p:panel>
 
-        <p:dialog  header="Create new User" width="650" height="400" modal="true" widgetVar="newUserDialog">
+
+        <p:dialog  header="Create new User" width="650" height="400" modal="true" widgetVar="newUserDlg">
             <!--<p:panel header="...">-->
-            <h:form id="createUserDialog">
+            <h:form id="createUserformDlg">
+                <h:panelGrid columns="2">
+
+                    <h:outputText value="Username :"/>
+                    <p:inputText value="#{isa.createUserView.username}"/>
+
+                    <h:outputText value="EmailAddress :"/>
+                    <p:inputText value="#{isa.createUserView.emailAddress}"/>
+
+                    <h:outputText value="BuCode :"/>
+                    <p:inputText value="#{isa.createUserView.buCode}"/>
+
+                    <h:outputText value="PhoneExt :"/>
+                    <p:inputText value="#{isa.createUserView.phoneExt}"/>
+
+                    <h:outputText value="PhoneNumber :"/>
+                    <p:inputText value="#{isa.createUserView.phoneNumber}"/>
+
+                    <h:outputText value="Role"/>
+                    <p:selectOneMenu value="#{isa.createUserView.role.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRoleList}"
+                                       var="roleItem"
+                                       itemLabel="#{roleItem.name}"
+                                       itemValue="#{roleItem.id}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputText value="Department"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userDepartment.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDepartmentList}"
+                                       var="departmentItem"
+                                       itemLabel="#{departmentItem.name}"
+                                       itemValue="#{departmentItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Division"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userDivision.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userDivisionList}"
+                                       var="divisionItem"
+                                       itemLabel="#{divisionItem.name}"
+                                       itemValue="#{divisionItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Region"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userRegion.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userRegionList}"
+                                       var="regionItem"
+                                       itemLabel="#{regionItem.name}"
+                                       itemValue="#{regionItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Team"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userTeam.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTeamList}"
+                                       var="teamItem"
+                                       itemLabel="#{teamItem.name}"
+                                       itemValue="#{teamItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Title"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userTitle.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userTitleList}"
+                                       var="titleItem"
+                                       itemLabel="#{titleItem.name}"
+                                       itemValue="#{titleItem.id}"/>
+                    </p:selectOneMenu>
+                    <h:outputText value="Zone"/>
+                    <p:selectOneMenu value="#{isa.createUserView.userZone.id}">
+                        <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                        <f:selectItems value="#{isa.userZoneList}"
+                                       var="zoneItem"
+                                       itemLabel="#{zoneItem.name}"
+                                       itemValue="#{zoneItem.code}"/>
+                    </p:selectOneMenu>
+
+
+                    <p:commandButton value="Create" actionListener="#{isa.onCreateNewUser()}" update=":userTableData" />
+                    <p:commandButton value="Cancel"
+                                     onclick="newUserDlg.hide()"
+                                     styleClass="small"
+                                     type="button"/>
+                </h:panelGrid>
+            </h:form>
+            <!--</p:panel>-->
+        </p:dialog>
+<!--===========================================================    EditFOrm -->
+        <p:dialog  header="Edit Form" width="650" height="400" modal="true" widgetVar="editUserDlg">
+            <!--<p:panel header="...">-->
+            <h:form id="editUserformDlg">
                 <h:panelGrid columns="2">
 
                     <h:outputText value="Username :"/>
@@ -182,13 +287,23 @@
 
                     <p:commandButton value="Create" actionListener="#{isa.onCreateNewUser()}" update=":userTableData" />
                     <p:commandButton value="Cancel"
-                                     onclick="newUserDialog.hide()"
+                                     onclick="newUserDlg.hide()"
                                      styleClass="small"
                                      type="button"/>
                 </h:panelGrid>
             </h:form>
             <!--</p:panel>-->
         </p:dialog>
+
+        <ui:include src="site/dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteUserDialog"/>
+            <ui:param name="name" value="confirmDeleteUserDlg"/>
+            <ui:param name="formId" value="frmConfirmDeleteUser"/>
+            <ui:param name="controller" value="#{isa}"/>
+            <ui:param name="action" value="onDelete"/>
+            <ui:param name="update" value=":userTableData"/>
+        </ui:include>
+
     </h:body>
 
 </f:view>

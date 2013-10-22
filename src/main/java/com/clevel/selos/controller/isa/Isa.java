@@ -1,6 +1,6 @@
-package com.clevel.selos.controller;
+package com.clevel.selos.controller.isa;
 
-import com.clevel.selos.businesscontrol.IsaBusinessControl;
+import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
@@ -103,13 +103,7 @@ public class Isa implements Serializable {
         createUserView.setUserZone(new UserZone());
 
 
-        userRoleList=roleDAO.findAll();
-        userDepartmentList=userDepartmentDAO.findAll();
-        userDivisionList=userDivisionDAO.findAll();
-        userRegionList=userRegionDAO.findAll();
-        userTeamList=userTeamDAO.findAll();
-        userTitleList=userTitleDAO.findAll();
-        userZoneList=userZoneDAO.findAll();
+       getSelectUserDetailList();
     }
 
     public void onSelectUser(){
@@ -120,15 +114,59 @@ public class Isa implements Serializable {
         testString=userDetail.size()+"";
     }
 
-    public void onEdit(String id){
+    public void onOpenEditForm(String id){
         System.out.println("------------------ "+id);
+
+
+        createUserView = isaBusinessControl.editUser(id);
+        if(createUserView!=null){
+            if(createUserView.getUserDepartment()==null){
+                createUserView.setUserDepartment(new UserDepartment());
+            }
+            if(createUserView.getRole()==null){
+                createUserView.setRole(new Role());
+            }
+            if(createUserView.getUserDivision()==null){
+                createUserView.setUserDivision(new UserDivision());
+            }
+            if(createUserView.getUserRegion()==null){
+                createUserView.setUserRegion(new UserRegion());
+            }
+            if(createUserView.getUserTeam()==null){
+                createUserView.setUserTeam(new UserTeam());
+            }
+            if(createUserView.getUserTitle()==null){
+                createUserView.setUserTitle(new UserTitle());
+            }
+            if(createUserView.getUserZone()==null){
+                createUserView.setUserZone(new UserZone());
+            }
+            getSelectUserDetailList();
+            RequestContext.getCurrentInstance().execute("editUserDlg.show()");
+        }
+
     }
 
     public void onDelete(String id){
         System.out.println("------------------ "+id);
 
-        isaBusinessControl.deleteUser(id);
+//        isaBusinessControl.deleteUser(id);
     }
+
+
+    public void getSelectUserDetailList() {
+        userRoleList=roleDAO.findAll();
+        userDepartmentList=userDepartmentDAO.findAll();
+        userDivisionList=userDivisionDAO.findAll();
+        userRegionList=userRegionDAO.findAll();
+        userTeamList=userTeamDAO.findAll();
+        userTitleList=userTitleDAO.findAll();
+        userZoneList=userZoneDAO.findAll();
+
+    }
+
+
+
 
 
 
