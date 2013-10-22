@@ -39,7 +39,7 @@
         </td>
         <td>
             <p:inputText id="dlgInputBrSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
-                         onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                         onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"
                          required="#{not empty param[searchButton.clientId]}" />
         </td>
         <td>

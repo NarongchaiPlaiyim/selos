@@ -36,7 +36,7 @@
                                      action="#{prescreenMaker.onAssignToChecker}"
                                      process="@form"
                                      update=":assignCheckerDlgForm"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" onclick="assignCheckerDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button" styleClass="small" onclick="assignCheckerDlg.hide()"/>
                 </td>
             </tr>
         </table>

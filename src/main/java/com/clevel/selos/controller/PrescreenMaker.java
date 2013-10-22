@@ -391,16 +391,18 @@ public class PrescreenMaker implements Serializable {
                     if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
                         CustomerInfoView spouse = new CustomerInfoView();
                         spouse = item.getSpouse();
-                        spouse.setIsSpouse(1);
-                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
-                            spouse.setSubIndex(borrowerInfoViewList.size());
-                            borrowerInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
-                            spouse.setSubIndex(guarantorInfoViewList.size());
-                            guarantorInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
-                            spouse.setSubIndex(relatedInfoViewList.size());
-                            relatedInfoViewList.add(spouse);
+                        if(spouse != null){
+                            spouse.setIsSpouse(1);
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                spouse.setSubIndex(borrowerInfoViewList.size());
+                                borrowerInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
+                                spouse.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
+                                spouse.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(spouse);
+                            }
                         }
                     }
                 }
@@ -928,6 +930,9 @@ public class PrescreenMaker implements Serializable {
                                     CustomerEntity spouseCustomerEntity = new CustomerEntity();
                                     spouseCustomerEntity = customerEntityDAO.findById(1);
                                     spouseInfo.setCustomerEntity(spouseCustomerEntity);
+                                    if(spouseInfo.getTitleTh().getId() != 0){
+                                        spouseInfo.setTitleTh(titleDAO.findById(spouseInfo.getTitleTh().getId()));
+                                    }
                                     log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
                                     if(spouseInfo.getRelation().getId() == 1) {
                                         //Spouse - Borrower
@@ -1187,6 +1192,9 @@ public class PrescreenMaker implements Serializable {
                             CustomerEntity spouseCustomerEntity = new CustomerEntity();
                             spouseCustomerEntity = customerEntityDAO.findById(1);
                             newSpouse.setCustomerEntity(spouseCustomerEntity);
+                            if(newSpouse.getTitleTh().getId() != 0){
+                                newSpouse.setTitleTh(titleDAO.findById(newSpouse.getTitleTh().getId()));
+                            }
                             log.info("onSaveCustomer ::: newSpouse : {}", newSpouse);
                             int oldSpouseRelation = 0;
                             if(oldSpouse != null){
@@ -1234,6 +1242,7 @@ public class PrescreenMaker implements Serializable {
                             } else {
                                 //Add new spouse to list
                                 newSpouse.setListIndex(customerListIndex);
+                                newSpouse.setIsSpouse(1);
                                 if(newSpouse.getRelation() != null && newSpouse.getRelation().getId() == 1){
                                     newSpouse.setListName("BORROWER");
                                     newSpouse.setSubIndex(borrowerInfoViewList.size());
