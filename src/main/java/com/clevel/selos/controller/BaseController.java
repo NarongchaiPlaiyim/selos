@@ -56,9 +56,10 @@ public class BaseController implements Serializable {
         }
 
         if(stepId == 1002){
+            manageButton.setCheckMandateDocButton(true);
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
-            manageButton.setCancelCAButton(true);
+            //manageButton.setCancelCAButton(true);
         }
 
         if(stepId == 1003){

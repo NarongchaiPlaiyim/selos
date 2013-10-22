@@ -155,6 +155,12 @@ function handletcgInfoRequest(xhr, status, args) {
     }
 }
 
+function handleBasicInfoAccountRequest(xhr, status, args) {
+    if(args.functionComplete){
+        basicInfoAccountDlg.hide();
+    }
+}
+
 function testHandle(){
     return true;
 }

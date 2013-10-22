@@ -72,8 +72,9 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.requestType.id}" >
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                     value="#{basicInfo.basicInfoView.requestType.id}"
+                                                                     required="true">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.requestTypeList}"
                                                                        var="requestType"
                                                                        itemLabel="#{requestType.name}"
@@ -87,8 +88,9 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.productGroup.id}" >
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                     value="#{basicInfo.basicInfoView.productGroup.id}"
+                                                                     required="true">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.productGroupList}"
                                                                        var="productGroup"
                                                                        itemLabel="#{productGroup.name}"
@@ -185,7 +187,8 @@
                                                     <table>
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}">
+                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
+                                                                                  required="true">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
@@ -194,8 +197,9 @@
                                                             <td>
                                                                 <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
                                                                                  value="#{basicInfo.basicInfoView.specialProgram.id}"
-                                                                                 disabled="#{basicInfo.basicInfoView.spProgram != 1}">
-                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                                 disabled="#{basicInfo.basicInfoView.spProgram != 1}"
+                                                                                 required="#{basicInfo.basicInfoView.spProgram == 1}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.specialProgramList}"
                                                                                    var="specialProgram"
                                                                                    itemLabel="#{specialProgram.code}"
@@ -214,16 +218,19 @@
                                                     <table>
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}">
+                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
+                                                                                  required="true">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refIn" styleClass="largest" disabled="#{basicInfo.basicInfoView.refIn != 1}"
-                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}">
-                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                <p:selectOneMenu id="refIn" styleClass="largest"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}"
+                                                                                 disabled="#{basicInfo.basicInfoView.refIn != 1}"
+                                                                                 required="#{basicInfo.basicInfoView.refIn == 1}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
                                                                                    var="bankList"
                                                                                    itemLabel="#{bankList.name}"
@@ -242,16 +249,19 @@
                                                     <table>
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}">
+                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
+                                                                                  required="true">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
                                                                 </h:selectOneRadio>
                                                             </td>
                                                             <td>
-                                                                <p:selectOneMenu id="refOut" styleClass="largest" disabled="#{basicInfo.basicInfoView.refOut != 1}"
-                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}">
-                                                                    <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                <p:selectOneMenu id="refOut" styleClass="largest"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}"
+                                                                                 disabled="#{basicInfo.basicInfoView.refOut != 1}"
+                                                                                 required="#{basicInfo.basicInfoView.refOut == 1}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                                     <f:selectItems value="#{basicInfo.bankList}"
                                                                                    var="bankList"
                                                                                    itemLabel="#{bankList.name}"
@@ -268,8 +278,9 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.riskType.id}">
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                     value="#{basicInfo.basicInfoView.riskType.id}"
+                                                                     required="true">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.riskTypeList}"
                                                                        var="riskType"
                                                                        itemLabel="#{riskType.description}"
@@ -283,6 +294,7 @@
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
+                                                                      <!--required="true">-->
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1" itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2" itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
                                                     </h:selectOneRadio>
@@ -296,6 +308,7 @@
                                                     <h:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <p:ajax update="since"/>
                                                     </h:selectOneRadio>
                                                 </td>
                                             </tr>
@@ -304,7 +317,8 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.since')}"/>
                                                 </td>
                                                 <td style="width: 200px;">
-                                                    <p:inputText value="#{basicInfo.basicInfoView.since}" styleClass="larger"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.since}" styleClass="larger" id="since"
+                                                                 required="#{basicInfo.basicInfoView.existingSME == 1}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -377,8 +391,9 @@
                                                 </td>
                                                 <td>
                                                     <p:selectOneMenu styleClass="largest" size="1"
-                                                                     value="#{basicInfo.basicInfoView.loanRequestPattern.id}">
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                                     value="#{basicInfo.basicInfoView.loanRequestPattern.id}"
+                                                                     required="true">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                         <f:selectItems value="#{basicInfo.borrowingTypeList}"
                                                                        var="borrowingType"
                                                                        itemLabel="#{borrowingType.name}"
@@ -524,10 +539,13 @@
 
                                 <tr>
                                     <td colspan="4" class="center">
-                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller" process="@form" update=":msgBoxSystemMessagePanel"
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                                         process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
                                                          actionListener="#{basicInfo.onSave}"/>
+                                                         <!--oncomplete="$('html, body').animate({scrollTop:0}, 'slow');"/>-->
                                         <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
                                                          actionListener="#{basicInfo.onCreation}"/>
+                                                         <!--oncomplete="$('html, body').animate({scrollTop:0}, 'slow');"/>-->
                                     </td>
                                 </tr>
                             </table>
@@ -540,8 +558,6 @@
                 <!-- Start Footer -->
                 <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
-                <h:inputHidden id="pagename" value="mnuprescreen"/>
-                <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
         </h:form>
 

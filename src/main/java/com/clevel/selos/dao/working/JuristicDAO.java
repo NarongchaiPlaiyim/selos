@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.Juristic;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -23,5 +24,14 @@ public class JuristicDAO extends GenericDAO<Juristic,Long> {
         Juristic juristic = (Juristic)criteria.uniqueResult();
 
         return juristic;
+    }
+
+    public Customer findByRegistrationId(String registrationId, long workCasePreScreenId){
+        log.info("findByCitizenId ::: registrationId : {}, workCasePreScreenId : {}", registrationId, workCasePreScreenId);
+        String query = "SELECT customer FROM Juristic juristic WHERE juristic.customer.workCasePrescreen.id = " + workCasePreScreenId + " AND juristic.registrationId = '" + registrationId + "'";
+        Customer customer = (Customer)getSession().createQuery(query).uniqueResult();
+
+        return customer;
+
     }
 }
