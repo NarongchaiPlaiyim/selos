@@ -309,7 +309,10 @@ public class CustomerTransform extends Transform {
             }
 
             address.setPostalCode(currentAddress.getPostalCode());
-            address.setCountry(currentAddress.getCountry());
+            if(currentAddress.getCountry() != null && currentAddress.getId() != 0){
+                Country country = countryDAO.findById(currentAddress.getCountry().getId());
+                address.setCountry(country);
+            }
             address.setPhoneNumber(currentAddress.getPhoneNumber());
             address.setExtension(currentAddress.getExtension());
             address.setContactName(currentAddress.getContactName());

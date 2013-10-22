@@ -709,6 +709,8 @@ public class PrescreenMaker implements Serializable {
                     }
                 }
             }
+        } else {
+            documentTypeList = documentTypeDAO.findAll();
         }
 
         if(caseBorrowerTypeId == 2){
