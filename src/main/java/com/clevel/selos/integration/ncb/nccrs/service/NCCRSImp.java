@@ -155,19 +155,19 @@ public class NCCRSImp implements NCCRS, Serializable {
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
-                log.error("NCCRS FAILED {}", reason);
+                log.error("NCCRS FAILED ", e);
                 resultImp.add(appRefNumber, registType, registId, inquiryDate, ActionResult.FAILED, reason, memberRef);
                 outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, registId, responseModel, nccrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
-                log.error("NCCRS FAILED {}", reason);
+                log.error("NCCRS FAILED ", e);
                 resultImp.add(appRefNumber, registType, registId, inquiryDate, ActionResult.FAILED, reason, memberRef);
                 outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, registId, responseModel, nccrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
                 inquiryDate = new Date();
-                log.error("NCCRS EXCEPTION {}", reason);
+                log.error("NCCRS EXCEPTION ", e);
                 resultImp.add(appRefNumber, registType, registId, inquiryDate, ActionResult.EXCEPTION, reason, memberRef);
                 outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, registId, responseModel, nccrsModel));
             }
@@ -218,15 +218,15 @@ public class NCCRSImp implements NCCRS, Serializable {
                     }
                 } catch (HttpHostConnectException e) {
                     reason = e.getMessage();
-                    log.error("NCCRS FAILED {}", reason);
+                    log.error("NCCRS FAILED ", e);
                     outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, registId, responseModel, nccrsModel));
                 } catch (ConnectTimeoutException e) {
                     reason = e.getMessage();
-                    log.error("NCCRS FAILED {}", reason);
+                    log.error("NCCRS FAILED ", e);
                     outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, registId, responseModel, nccrsModel));
                 } catch (Exception e) {
                     reason = e.getMessage();
-                    log.error("NCCRS EXCEPTION {}", reason);
+                    log.error("NCCRS EXCEPTION ", e);
                     outputModelArrayList.add(new NCCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, registId, responseModel, nccrsModel));
                 }
             } else {
@@ -514,7 +514,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         return new NCCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
-                        new CriteriaModel(Util.createDateString(new Date(), "YYYYMMdd"), nccrsModel.getRegistId(), id)));
+                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), nccrsModel.getRegistId(), id)));
     }
 
     private NCCRSRequestModel createReadModel(String trackingId, String command) {
@@ -545,9 +545,9 @@ public class NCCRSImp implements NCCRS, Serializable {
 
         xStream = new XStream();
         xStream.processAnnotations(NCCRSRequestModel.class);
-        xml = new String(xStream.toXML(nccrsRequest).getBytes(HTTP.UTF_8));
+        xml = new String(xStream.toXML(nccrsRequest).getBytes("UTF-8"));
         log.debug("NCCRS Request : \n{}", xml);
-        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes("ISO-8859-1"), "UTF-8");
         String res = "<ncrsresponse>";
         int pointer = result.indexOf(res);
         result = result.replace(result.substring(0, pointer), "");

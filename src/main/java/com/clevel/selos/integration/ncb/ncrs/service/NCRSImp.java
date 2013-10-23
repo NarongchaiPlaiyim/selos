@@ -156,7 +156,6 @@ public class NCRSImp implements NCRS, Serializable {
             memberref = ncrsModel.getMemberref();
             firstName = ncrsModel.getFirstName();
             lastName = ncrsModel.getLastName();
-
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
             if ("07".equals(customerType)) {
                 idModel = new TUEFEnquiryIdModel(customerType, customerId, countryCode);
@@ -256,15 +255,15 @@ public class NCRSImp implements NCRS, Serializable {
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
-                log.error("NCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
-                log.error("NCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
-                log.error("NCRS EXCEPTION {}", reason);
+                log.error("NCRS EXCEPTION {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel, ncrsModel));
             }
         }

@@ -22,9 +22,13 @@ public class NCBDetailTransform extends Transform{
             ncbDetail.setAccountTMBFlag(NCBDetailView.getTMBAccount());
             if(NCBDetailView.getCurrentPayment()!=null && NCBDetailView.getCurrentPayment().getId()!=0){
                 ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
+            } else {
+                ncbDetail.setCurrentPayment(null);
             }
             if(NCBDetailView.getHistoryPayment()!=null && NCBDetailView.getHistoryPayment().getId()!=0){
                 ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
+            } else {
+                ncbDetail.setHistoryPayment(null);
             }
             ncbDetail.setAsOfDate(NCBDetailView.getDateOfInfo());
             ncbDetail.setLastReStructureDate(NCBDetailView.getDateOfDebtRestructuring());

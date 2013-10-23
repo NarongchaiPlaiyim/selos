@@ -3,6 +3,8 @@ package com.clevel.selos.model.view;
 import com.clevel.selos.model.db.master.TDRCondition;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -347,5 +349,45 @@ public class NCBInfoView implements Serializable {
 
     public void setTdrOtherFlag(boolean tdrOtherFlag) {
         this.tdrOtherFlag = tdrOtherFlag;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("ncbCusMarriageStatus", ncbCusMarriageStatus)
+                .append("checkingDate", checkingDate)
+                .append("ncbLastInfoAsOfDate", ncbLastInfoAsOfDate)
+                .append("enquiry", enquiry)
+                .append("checkIn6Month", checkIn6Month)
+                .append("paymentClass", paymentClass)
+                .append("personalId", personalId)
+                .append("currentPaymentType", currentPaymentType)
+                .append("historyPaymentType", historyPaymentType)
+                .append("nplFlag", nplFlag)
+                .append("nplTMBFlag", nplTMBFlag)
+                .append("nplTMBMonth", nplTMBMonth)
+                .append("nplTMBYear", nplTMBYear)
+                .append("nplOtherFlag", nplOtherFlag)
+                .append("nplOtherMonth", nplOtherMonth)
+                .append("nplOtherYear", nplOtherYear)
+                .append("tdrFlag", tdrFlag)
+                .append("tdrTMBFlag", tdrTMBFlag)
+                .append("tdrTMBMonth", tdrTMBMonth)
+                .append("tdrTMBYear", tdrTMBYear)
+                .append("tdrOtherFlag", tdrOtherFlag)
+                .append("tdrOtherMonth", tdrOtherMonth)
+                .append("tdrOtherYear", tdrOtherYear)
+                .append("remark", remark)
+                .append("tdrCondition", tdrCondition)
+                .append("customer", customer)
+                .append("ncbCusName", ncbCusName)
+                .append("ncbCusAddress", ncbCusAddress)
+                .append("active", active)
+                .append("createDate", createDate)
+                .append("modifyDate", modifyDate)
+                .append("createBy", createBy)
+                .append("modifyBy", modifyBy)
+                .toString();
     }
 }
