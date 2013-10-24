@@ -316,9 +316,22 @@
                                                 <td class="title" style="width: 200px;">
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.since')}"/>
                                                 </td>
-                                                <td style="width: 200px;">
-                                                    <p:inputText value="#{basicInfo.basicInfoView.since}" styleClass="larger" id="since"
-                                                                 required="#{basicInfo.basicInfoView.existingSME == 1}"/>
+                                                <!--<td style="width: 200px;">-->
+                                                    <!--<p:inputMask mask="9999" maxlength="4" value="#{basicInfo.basicInfoView.since}" styleClass="larger" id="since"-->
+                                                                 <!--required="#{basicInfo.basicInfoView.existingSME == 1}"-->
+                                                                 <!--disabled="#{basicInfo.basicInfoView.existingSME != 1}"/>-->
+                                                <!--</td>-->
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1" id="since"
+                                                                     value="#{basicInfo.basicInfoView.since}"
+                                                                     required="#{basicInfo.basicInfoView.existingSME == 1}"
+                                                                     disabled="#{basicInfo.basicInfoView.existingSME != 1}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.yearList}"
+                                                                       var="yearList"
+                                                                       itemLabel="#{yearList}"
+                                                                       itemValue="#{yearList}"/>
+                                                    </p:selectOneMenu>
                                                 </td>
                                             </tr>
                                             <tr>
