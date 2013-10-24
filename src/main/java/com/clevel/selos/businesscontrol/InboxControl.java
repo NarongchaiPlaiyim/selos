@@ -53,9 +53,9 @@ public class InboxControl extends BusinessControl {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
-        List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
+        //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
-        /*List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
+        List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
 
 
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
@@ -73,12 +73,36 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }*/
+        }
+
+        List<WorkCase> workCaseList = getWorkCase();
+        log.debug("workCase List : {}", workCaseList);
+        for(WorkCase workCase : workCaseList){
+            CaseDTO caseDTO = new CaseDTO();
+            HashMap<String, String> caseData = new HashMap<String, String>();
+            caseData.put("F_WobNum", workCase.getWobNumber());
+            caseData.put("F_StepName", "PS1001");
+            caseData.put("Step_Code", Long.toString(workCase.getStep().getId()));
+            caseData.put("Lock_Status", "0");
+            caseData.put("Locked_User", "0");
+            caseData.put("QUEUE_NAME", "0");
+
+            caseDTO.setCaseData(caseData);
+
+            caseDTOList.add(caseDTO);
+        }
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);
 
         return inboxViewList;
+    }
+
+    //Tempory to remove
+    public List<WorkCase> getWorkCase(){
+        List<WorkCase> workCases = workCaseDAO.findAll();
+
+        return workCases;
     }
 
     //Tempory to remove

@@ -83,6 +83,7 @@ public class CustomerTransform extends Transform {
             customerInfoView.setDocumentType(new DocumentType());
         }
         customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setSearchFromRM(customer.getSearchFromRM());
         customerInfoView.setValidId(2);
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
@@ -264,6 +265,7 @@ public class CustomerTransform extends Transform {
             customer.setReference(null);
         }
         customer.setApproxIncome(customerInfoView.getApproxIncome());
+        customer.setSearchFromRM(customerInfoView.getSearchFromRM());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 
@@ -308,11 +310,15 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
-            address.setPostalCode(currentAddress.getPostalCode());
             if(currentAddress.getCountry() != null && currentAddress.getId() != 0){
                 Country country = countryDAO.findById(currentAddress.getCountry().getId());
                 address.setCountry(country);
+            } else {
+                address.setCountry(null);
             }
+
+            address.setPostalCode(currentAddress.getPostalCode());
+
             address.setPhoneNumber(currentAddress.getPhoneNumber());
             address.setExtension(currentAddress.getExtension());
             address.setContactName(currentAddress.getContactName());
@@ -360,8 +366,14 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
+            if(registerAddress.getCountry() != null && registerAddress.getId() != 0){
+                Country country = countryDAO.findById(registerAddress.getCountry().getId());
+                address.setCountry(country);
+            } else {
+                address.setCountry(null);
+            }
+
             address.setPostalCode(registerAddress.getPostalCode());
-            address.setCountry(registerAddress.getCountry());
             address.setPhoneNumber(registerAddress.getPhoneNumber());
             address.setExtension(registerAddress.getExtension());
             address.setContactName(registerAddress.getContactName());
@@ -409,8 +421,14 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
+            if(workAddress.getCountry() != null && workAddress.getId() != 0){
+                Country country = countryDAO.findById(workAddress.getCountry().getId());
+                address.setCountry(country);
+            } else {
+                address.setCountry(null);
+            }
+
             address.setPostalCode(workAddress.getPostalCode());
-            address.setCountry(workAddress.getCountry());
             address.setPhoneNumber(workAddress.getPhoneNumber());
             address.setExtension(workAddress.getExtension());
             address.setContactName(workAddress.getContactName());

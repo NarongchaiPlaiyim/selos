@@ -25,6 +25,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     //*** Var for search ***//
     private int searchBy;
     private String searchId;
+    private int searchFromRM;
 
     //*** Var for Check Citizen ***//
     private String inputId;
@@ -694,6 +695,14 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setSubIndex(int subIndex) {
         this.subIndex = subIndex;
+    }
+
+    public int getSearchFromRM() {
+        return searchFromRM;
+    }
+
+    public void setSearchFromRM(int searchFromRM) {
+        this.searchFromRM = searchFromRM;
     }
 
     @Override
