@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "DecisionServiceSE_Document_Appraisal_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "file:/G:/6/DocumentAppraisalRules/SE_Document_Appraisal_Flow.wsdl")
+@WebServiceClient(name = "DecisionServiceSE_Document_Appraisal_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "http://stmbrmsred1:9080/DecisionService/ws/SE_Document_Appraisal_RuleApp/1.0/SE_Document_Appraisal_Flow?WSDL")
 public class DecisionServiceSEDocumentAppraisalFlow_Service
     extends Service
 {
@@ -30,7 +30,7 @@ public class DecisionServiceSEDocumentAppraisalFlow_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/G:/6/DocumentAppraisalRules/SE_Document_Appraisal_Flow.wsdl");
+            url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Document_Appraisal_RuleApp/1.0/SE_Document_Appraisal_Flow?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -43,7 +43,7 @@ public class DecisionServiceSEDocumentAppraisalFlow_Service
     }
 
     public DecisionServiceSEDocumentAppraisalFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESEDOCUMENTAPPRAISALFLOW_QNAME, features);
+        super(__getWsdlLocation(), DECISIONSERVICESEDOCUMENTAPPRAISALFLOW_QNAME);
     }
 
     public DecisionServiceSEDocumentAppraisalFlow_Service(URL wsdlLocation) {
@@ -51,7 +51,7 @@ public class DecisionServiceSEDocumentAppraisalFlow_Service
     }
 
     public DecisionServiceSEDocumentAppraisalFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESEDOCUMENTAPPRAISALFLOW_QNAME, features);
+        super(wsdlLocation, DECISIONSERVICESEDOCUMENTAPPRAISALFLOW_QNAME);
     }
 
     public DecisionServiceSEDocumentAppraisalFlow_Service(URL wsdlLocation, QName serviceName) {
@@ -59,7 +59,7 @@ public class DecisionServiceSEDocumentAppraisalFlow_Service
     }
 
     public DecisionServiceSEDocumentAppraisalFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
+        super(wsdlLocation, serviceName);
     }
 
     /**

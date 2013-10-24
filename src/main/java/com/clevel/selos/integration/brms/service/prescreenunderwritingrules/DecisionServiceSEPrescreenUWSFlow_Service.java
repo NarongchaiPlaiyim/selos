@@ -17,7 +17,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "DecisionServiceSE_Prescreen_UWS_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "file:/G:/1/PrescreenUnderwritingRules/SE_Prescreen_UWS_Flow.wsdl")
+
+@WebServiceClient(name = "DecisionServiceSE_Prescreen_UWS_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?WSDL")
 public class DecisionServiceSEPrescreenUWSFlow_Service
     extends Service
 {
@@ -30,7 +31,7 @@ public class DecisionServiceSEPrescreenUWSFlow_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/G:/1/PrescreenUnderwritingRules/SE_Prescreen_UWS_Flow.wsdl");
+            url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Prescreen_UWS_RuleApp/1.0/SE_Prescreen_UWS_Flow?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -43,7 +44,7 @@ public class DecisionServiceSEPrescreenUWSFlow_Service
     }
 
     public DecisionServiceSEPrescreenUWSFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESEPRESCREENUWSFLOW_QNAME, features);
+        super(__getWsdlLocation(), DECISIONSERVICESEPRESCREENUWSFLOW_QNAME);
     }
 
     public DecisionServiceSEPrescreenUWSFlow_Service(URL wsdlLocation) {
@@ -51,7 +52,7 @@ public class DecisionServiceSEPrescreenUWSFlow_Service
     }
 
     public DecisionServiceSEPrescreenUWSFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESEPRESCREENUWSFLOW_QNAME, features);
+        super(wsdlLocation, DECISIONSERVICESEPRESCREENUWSFLOW_QNAME);
     }
 
     public DecisionServiceSEPrescreenUWSFlow_Service(URL wsdlLocation, QName serviceName) {
@@ -59,7 +60,7 @@ public class DecisionServiceSEPrescreenUWSFlow_Service
     }
 
     public DecisionServiceSEPrescreenUWSFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
+        super(wsdlLocation, serviceName);
     }
 
     /**

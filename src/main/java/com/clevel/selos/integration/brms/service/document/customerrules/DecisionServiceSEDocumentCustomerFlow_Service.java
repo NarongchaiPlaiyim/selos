@@ -17,7 +17,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "DecisionServiceSE_Document_Customer_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "file:/G:/5/DocumentCustomerRules/SE_Document_Customer_Flow.wsdl")
+
+@WebServiceClient(name = "DecisionServiceSE_Document_Customer_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "http://stmbrmsred1:9080/DecisionService/ws/SE_Document_Customer_RuleApp/1.0/SE_Document_Customer_Flow?WSDL")
 public class DecisionServiceSEDocumentCustomerFlow_Service
     extends Service
 {
@@ -30,7 +31,7 @@ public class DecisionServiceSEDocumentCustomerFlow_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/G:/5/DocumentCustomerRules/SE_Document_Customer_Flow.wsdl");
+            url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Document_Customer_RuleApp/1.0/SE_Document_Customer_Flow?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -42,24 +43,12 @@ public class DecisionServiceSEDocumentCustomerFlow_Service
         super(__getWsdlLocation(), DECISIONSERVICESEDOCUMENTCUSTOMERFLOW_QNAME);
     }
 
-    public DecisionServiceSEDocumentCustomerFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESEDOCUMENTCUSTOMERFLOW_QNAME, features);
-    }
-
     public DecisionServiceSEDocumentCustomerFlow_Service(URL wsdlLocation) {
         super(wsdlLocation, DECISIONSERVICESEDOCUMENTCUSTOMERFLOW_QNAME);
     }
 
-    public DecisionServiceSEDocumentCustomerFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESEDOCUMENTCUSTOMERFLOW_QNAME, features);
-    }
-
     public DecisionServiceSEDocumentCustomerFlow_Service(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
-    }
-
-    public DecisionServiceSEDocumentCustomerFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
     }
 
     /**

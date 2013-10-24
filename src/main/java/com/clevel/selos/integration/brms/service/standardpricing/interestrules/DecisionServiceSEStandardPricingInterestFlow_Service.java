@@ -17,7 +17,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "DecisionServiceSE_Standard_Pricing_Interest_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "file:/G:/3/StandardPricingInterestRules/SE_Standard_Pricing_Interest_Flow.wsdl")
+
+@WebServiceClient(name = "DecisionServiceSE_Standard_Pricing_Interest_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?WSDL")
 public class DecisionServiceSEStandardPricingInterestFlow_Service
     extends Service
 {
@@ -30,7 +31,7 @@ public class DecisionServiceSEStandardPricingInterestFlow_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/G:/3/StandardPricingInterestRules/SE_Standard_Pricing_Interest_Flow.wsdl");
+            url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Standard_Pricing_Interest_RuleApp/1.0/SE_Standard_Pricing_Interest_Flow?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -43,7 +44,7 @@ public class DecisionServiceSEStandardPricingInterestFlow_Service
     }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME, features);
+        super(__getWsdlLocation(), DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
     }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation) {
@@ -51,7 +52,7 @@ public class DecisionServiceSEStandardPricingInterestFlow_Service
     }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME, features);
+        super(wsdlLocation, DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
     }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName) {
@@ -59,7 +60,7 @@ public class DecisionServiceSEStandardPricingInterestFlow_Service
     }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
+        super(wsdlLocation, serviceName);
     }
 
     /**

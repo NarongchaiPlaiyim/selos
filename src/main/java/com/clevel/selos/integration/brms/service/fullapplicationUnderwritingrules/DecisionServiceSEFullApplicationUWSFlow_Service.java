@@ -17,7 +17,8 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.2
  * 
  */
-@WebServiceClient(name = "DecisionServiceSE_Full_Application_UWS_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "file:/G:/2/FullApplicationUnderwritingRules/SE_Full_Application_UWS_Flow.wsdl")
+
+@WebServiceClient(name = "DecisionServiceSE_Full_Application_UWS_Flow", targetNamespace = "http://www.ilog.com/rules/DecisionService", wsdlLocation = "http://stmbrmsred1:9080/DecisionService/ws/SE_Full_Application_UWS_RuleApp/1.0/SE_Full_Application_UWS_Flow?WSDL")
 public class DecisionServiceSEFullApplicationUWSFlow_Service
     extends Service
 {
@@ -30,7 +31,7 @@ public class DecisionServiceSEFullApplicationUWSFlow_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("file:/G:/2/FullApplicationUnderwritingRules/SE_Full_Application_UWS_Flow.wsdl");
+            url = new URL("http://stmbrmsred1:9080/DecisionService/ws/SE_Full_Application_UWS_RuleApp/1.0/SE_Full_Application_UWS_Flow?WSDL");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }
@@ -43,7 +44,7 @@ public class DecisionServiceSEFullApplicationUWSFlow_Service
     }
 
     public DecisionServiceSEFullApplicationUWSFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESEFULLAPPLICATIONUWSFLOW_QNAME, features);
+        super(__getWsdlLocation(), DECISIONSERVICESEFULLAPPLICATIONUWSFLOW_QNAME);
     }
 
     public DecisionServiceSEFullApplicationUWSFlow_Service(URL wsdlLocation) {
@@ -51,7 +52,7 @@ public class DecisionServiceSEFullApplicationUWSFlow_Service
     }
 
     public DecisionServiceSEFullApplicationUWSFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESEFULLAPPLICATIONUWSFLOW_QNAME, features);
+        super(wsdlLocation, DECISIONSERVICESEFULLAPPLICATIONUWSFLOW_QNAME);
     }
 
     public DecisionServiceSEFullApplicationUWSFlow_Service(URL wsdlLocation, QName serviceName) {
@@ -59,7 +60,7 @@ public class DecisionServiceSEFullApplicationUWSFlow_Service
     }
 
     public DecisionServiceSEFullApplicationUWSFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
+        super(wsdlLocation, serviceName);
     }
 
     /**
