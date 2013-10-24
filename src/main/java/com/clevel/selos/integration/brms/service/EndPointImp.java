@@ -13,15 +13,41 @@ import com.clevel.selos.integration.brms.service.standardpricing.feerules.Decisi
 import com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceSEStandardPricingFeeFlow_Service;
 import com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceSEStandardPricingInterestFlow;
 import com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceSEStandardPricingInterestFlow_Service;
+import com.clevel.selos.system.Config;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.net.URL;
 
 public class EndPointImp implements EndPoint, Serializable {
     @Inject
     @BRMS
     Logger log;
+
+    @Inject
+    @Config(name = "interface.brms.prescreen.address")
+    private String prescreenAddress;
+
+    @Inject
+    @Config(name = "interface.brms.fullapp.address")
+    private String fullAppAddress;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.interest.address")
+    private String interestAddress;
+
+    @Inject
+    @Config(name = "interface.brms.standard.paricing.fee.address")
+    private String feeAddress;
+
+    @Inject
+    @Config(name = "interface.brms.document.customer.address")
+    private String customerAddress;
+
+    @Inject
+    @Config(name = "interface.brms.document.appraisal.address")
+    private String appraisalAddress;
 
     @Inject
     public EndPointImp() {
@@ -34,7 +60,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEPrescreenUWSFlow port = null;
         com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEPrescreenUWSFlow_Service();
+            service = new DecisionServiceSEPrescreenUWSFlow_Service(new URL(prescreenAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callPrescreenUnderwritingRulesService() Calling...");
             response = port.executeDecisionService(request);
@@ -53,7 +79,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEFullApplicationUWSFlow port = null;
         com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEFullApplicationUWSFlow_Service();
+            service = new DecisionServiceSEFullApplicationUWSFlow_Service(new URL(fullAppAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callFullApplicationUnderwritingRulesService() Calling...");
             response = port.executeDecisionService(request);
@@ -72,7 +98,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEStandardPricingInterestFlow port = null;
         com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingInterestFlow_Service();
+            service = new DecisionServiceSEStandardPricingInterestFlow_Service(new URL(interestAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callStandardPricingInterestRulesService() Calling...");
             response = port.executeDecisionService(request);
@@ -91,7 +117,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEStandardPricingFeeFlow port = null;
         com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEStandardPricingFeeFlow_Service();
+            service = new DecisionServiceSEStandardPricingFeeFlow_Service(new URL(feeAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callStandardPricingFeeRulesService() Calling...");
             response = port.executeDecisionService(request);
@@ -110,7 +136,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEDocumentCustomerFlow port = null;
         com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentCustomerFlow_Service();
+            service = new DecisionServiceSEDocumentCustomerFlow_Service(new URL(customerAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callDocumentCustomerRulesService() Calling...");
             response = port.executeDecisionService(request);
@@ -129,7 +155,7 @@ public class EndPointImp implements EndPoint, Serializable {
         DecisionServiceSEDocumentAppraisalFlow port = null;
         com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceResponse response = null;
         try {
-            service = new DecisionServiceSEDocumentAppraisalFlow_Service();
+            service = new DecisionServiceSEDocumentAppraisalFlow_Service(new URL(appraisalAddress));
             port = service.getDecisionServiceSOAPstmbrmsred1();
             log.debug("callDocumentAppraisalRulesService() Calling...");
             response = port.executeDecisionService(request);

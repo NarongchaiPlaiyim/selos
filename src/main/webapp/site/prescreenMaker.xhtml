@@ -613,7 +613,7 @@
     </p:dialog>
     <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="800" height="500">
+              modal="true" width="850" height="550">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="businessDialog" widgetVar="businessDlg" header="Business Information"
@@ -636,10 +636,10 @@
     </ui:include>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
         <ui:param name="id" value="confirmDeleteBusinessDialog"/>
-        <ui:param name="name" value="confirmDeleteBusinessDlg"/>
+        <ui:param name="name" value="confirmDeleteBusinesssDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteBusiness"/>
         <ui:param name="controller" value="#{prescreenMaker}"/>
-        <ui:param name="action" value="onDeleteFacility"/>
+        <ui:param name="action" value="onDeleteBusinessInfo"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
