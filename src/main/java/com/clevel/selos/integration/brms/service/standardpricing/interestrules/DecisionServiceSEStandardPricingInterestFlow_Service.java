@@ -43,25 +43,25 @@ public class DecisionServiceSEStandardPricingInterestFlow_Service
         super(__getWsdlLocation(), DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
     }
 
-    public DecisionServiceSEStandardPricingInterestFlow_Service(WebServiceFeature... features) {
-        super(__getWsdlLocation(), DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
-    }
+//    public DecisionServiceSEStandardPricingInterestFlow_Service(WebServiceFeature... features) {
+//        super(__getWsdlLocation(), DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
+//    }
 
     public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation) {
         super(wsdlLocation, DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
     }
 
-    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
-    }
-
-    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName) {
-        super(wsdlLocation, serviceName);
-    }
-
-    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName);
-    }
+//    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, WebServiceFeature... features) {
+//        super(wsdlLocation, DECISIONSERVICESESTANDARDPRICINGINTERESTFLOW_QNAME);
+//    }
+//
+//    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName) {
+//        super(wsdlLocation, serviceName);
+//    }
+//
+//    public DecisionServiceSEStandardPricingInterestFlow_Service(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
+//        super(wsdlLocation, serviceName);
+//    }
 
     /**
      * 

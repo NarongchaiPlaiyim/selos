@@ -56,6 +56,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse callPrescreenUnderwritingRulesService(com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest request) throws Exception{
         log.debug("callPrescreenUnderwritingRulesService()");
+        log.debug("Address : {}",prescreenAddress);
         DecisionServiceSEPrescreenUWSFlow_Service service = null;
         DecisionServiceSEPrescreenUWSFlow port = null;
         com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceResponse response = null;
@@ -75,6 +76,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceResponse callFullApplicationUnderwritingRulesService(com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest request) throws Exception{
         log.debug("callFullApplicationUnderwritingRulesService()");
+        log.debug("Address : {}",fullAppAddress);
         DecisionServiceSEFullApplicationUWSFlow_Service service = null;
         DecisionServiceSEFullApplicationUWSFlow port = null;
         com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceResponse response = null;
@@ -94,6 +96,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse callStandardPricingInterestRulesService(com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceRequest request) throws Exception{
         log.debug("callStandardPricingInterestRulesService()");
+        log.debug("Address : {}",interestAddress);
         DecisionServiceSEStandardPricingInterestFlow_Service service = null;
         DecisionServiceSEStandardPricingInterestFlow port = null;
         com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = null;
@@ -113,6 +116,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse callStandardPricingFeeRulesService(com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest request) throws Exception{
         log.debug("callStandardPricingFeeRulesService()");
+        log.debug("Address : {}",feeAddress);
         DecisionServiceSEStandardPricingFeeFlow_Service service = null;
         DecisionServiceSEStandardPricingFeeFlow port = null;
         com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceResponse response = null;
@@ -132,6 +136,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceResponse callDocumentCustomerRulesService(com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceRequest request) throws Exception{
         log.debug("callDocumentCustomerRulesService()");
+        log.debug("Address : {}",customerAddress);
         DecisionServiceSEDocumentCustomerFlow_Service service = null;
         DecisionServiceSEDocumentCustomerFlow port = null;
         com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceResponse response = null;
@@ -151,6 +156,7 @@ public class EndPointImp implements EndPoint, Serializable {
     @Override
     public com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceResponse callDocumentAppraisalRulesService(com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceRequest request) throws Exception{
         log.debug("callDocumentAppraisalRulesService()");
+        log.debug("Address : {}",appraisalAddress);
         DecisionServiceSEDocumentAppraisalFlow_Service service = null;
         DecisionServiceSEDocumentAppraisalFlow port = null;
         com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceResponse response = null;

@@ -5,15 +5,16 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
+<p:panel id="ncbDlgPanel" styleClass="panel-dialog">
 <h:form id="ncbDlgForm">
 <table class="content_form">
 <tr>
     <td class="title" style="width: 230px;">
         <h:outputText value="#{msg.get('app.dlg.loanAccountType')}"/>
     </td>
-    <td>
+    <td >
         <p:selectOneMenu id="dlgType"
-                         value="#{ncbInfo.dlgAccountType.id}"
+                         value="#{ncbInfo.ncbDetailView.accountType.id}"
                          styleClass="largest"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
@@ -44,7 +45,7 @@
     </td>
     <td>
         <p:selectOneMenu id="dlgStatus"
-                         value="#{ncbInfo.dlgAccountStatus.id}"
+                         value="#{ncbInfo.ncbDetailView.accountStatus.id}"
                          styleClass="largest"
                          size="1"
                          required="#{not empty param[addRowData.clientId]}">
@@ -133,10 +134,10 @@
     </td>
     <td>
         <p:selectOneMenu id="currentPayment"
-                         value="#{ncbInfo.dlgCurrentPayment.id}"
+                         value="#{ncbInfo.ncbDetailView.currentPayment.id}"
                          style="width: 200px;"
                          size="1"
-                         required="#{not empty param[addRowData.clientId]}">
+                         required="true">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
             <f:selectItems value="#{ncbInfo.settlementStatusList}"
                            var="dlgtdrCurrentList"
@@ -152,10 +153,10 @@
     </td>
     <td>
         <p:selectOneMenu id="historyPayment"
-                         value="#{ncbInfo.dlgHistoryPayment.id}"
+                         value="#{ncbInfo.ncbDetailView.historyPayment.id}"
                          style="width: 200px;"
                          size="1"
-                         required="#{not empty param[addRowData.clientId]}">
+                         required="true">
             <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue=""/>
             <f:selectItems value="#{ncbInfo.settlementStatusList}"
                            var="dlgHistoryList"
@@ -184,13 +185,13 @@
     </td>
 </tr>
 <tr>
-    <p:panel style="border-width: 0;width: 500" rendered="#{ncbInfo.noOfmonthsPaymentFlag}">
+    <p:panel style="border-width: 0;"  id="panelNoOfmonthsPaymentFlag"  rendered="#{ncbInfo.ncbDetailView.monthFlagPage}">
         <td class="title" style="width: 230px;">
             <h:outputText value="#{msg.get('app.dlg.noOfmonthsPayment')}"/>
         </td>
         <td>
-            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: center">
-                <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue=""/>
+            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: right">
+                <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue="0"/>
                 <f:selectItem itemLabel="1" itemValue="1"/>
                 <f:selectItem itemLabel="2" itemValue="2"/>
                 <f:selectItem itemLabel="3" itemValue="3"/>
@@ -198,20 +199,21 @@
                 <f:selectItem itemLabel="5" itemValue="5"/>
                 <f:selectItem itemLabel="6" itemValue="6"/>
                 <p:ajax event="change"
-                        listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment}"
-                        process=":ncbDlgForm"
-                        update=":ncbDlgForm"/>
+                        listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment()}"
+                        process="@this"
+                        update=":ncbDlgForm:genTextBoxFlagPanel"/>
             </h:selectOneMenu>
         </td>
     </p:panel>
 </tr>
 <tr>
-    <td colspan="2" class="center">
-        <p:panel style="border-width: 0;width: 500" rendered="#{ncbInfo.genTextBoxFlag}">
-            <h:form  id="genTextBoxFlagForm">
+    <td></td>
+    <td  class="center">
+        <p:panel style="border-width: 0;" id="genTextBoxFlagPanel">
+            <p:panel style="border-width: 0;"  rendered="#{ncbInfo.genTextBoxFlag}">
                 <table class="content_form">
                     <tr>
-                        <td class="title" style="width: 220px;text-align: left;">
+                        <td class="title" style="width: 60px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo1')}"  rendered="#{ncbInfo.monthRender1}"/>
                         </td>
                         <td>
@@ -220,21 +222,17 @@
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="width: 220px;text-align: left;" >
+                        <td class="title" style="width: 60px;text-align: left;" >
                             <h:outputText value="#{msg.get('app.dlg.monthNo2')}" rendered="#{ncbInfo.monthRender2}"/>
                         </td>
                         <td>
                             <p:inputText id="month2"
                                          value="#{ncbInfo.ncbDetailView.month2}" style="text-align: right" rendered="#{ncbInfo.monthRender2}">
-                            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update="@this"/>
-                        </p:inputText>
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                <p:ajax event="blur" update="@this"/>
+                            </p:inputText>
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="width: 220px;text-align: left;">
+                        <td class="title" style="width: 60px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo3')}"  rendered="#{ncbInfo.monthRender3}"/>
                         </td>
                         <td>
@@ -246,7 +244,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 220px;text-align: left;">
+                        <td class="title" style="width: 60px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo4')}"  rendered="#{ncbInfo.monthRender4}"/>
                         </td>
                         <td>
@@ -256,9 +254,7 @@
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="width: 220px;text-align: left;">
+                        <td class="title" style="width: 50px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo5')}"  rendered="#{ncbInfo.monthRender5}"/>
                         </td>
                         <td>
@@ -268,9 +264,7 @@
                                 <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="width: 220px;text-align: left;">
+                        <td class="title" style="width: 50px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo6')}"  rendered="#{ncbInfo.monthRender6}"/>
                         </td>
                         <td>
@@ -282,7 +276,7 @@
                         </td>
                     </tr>
                 </table>
-            </h:form>
+            </p:panel>
         </p:panel>
     </td>
 </tr>
@@ -313,7 +307,7 @@
 <tr>
     <td colspan="2" class="center">
         <p:commandButton
-                id="save"
+                id="saveBtn"
                 binding="#{addRowData}"
                 value="#{msg.get('app.okButton')}"
                 styleClass="small"
@@ -322,10 +316,18 @@
                 update=":ncbDlgForm,:frmMain:resultNcbDetail"
                 oncomplete="handlencbInfoRequest(xhr, status, args)"/>
 
-        <p:commandButton value="#{msg.get('app.cancelButton')}" styleClass="small" onclick="ncbDlg.hide()"/>
+        <p:commandButton
+                id="cancelBtn"
+                value="#{msg.get('app.cancelButton')}"
+                styleClass="small"
+                onclick="ncbDlg.hide()"/>
     </td>
 </tr>
 </table>
 </h:form>
-
+ </p:panel>
+<p:blockUI widgetVar="blockNcbDlg" block="ncbDlgPanel" trigger=":ncbDlgForm:saveBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

@@ -1496,17 +1496,32 @@ public class PrescreenMaker implements Serializable {
     public void onDeleteCustomerInfo() {
         log.debug("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         if(selectCustomerInfoItem.getIsSpouse() == 1){
+            //remove spouse from old list
+            CustomerInfoView customerInfoView = customerInfoViewList.get(selectCustomerInfoItem.getListIndex());
+            CustomerInfoView blankCustomerInfo = new CustomerInfoView();
+            blankCustomerInfo.reset();
+            customerInfoView.setSpouse(blankCustomerInfo);
+            customerInfoViewList.set(customerInfoView.getListIndex(), customerInfoView);
+
             if(selectCustomerInfoItem.getRelation().getId() == 1){
                 borrowerInfoViewList.remove(selectCustomerInfoItem);
                 reIndexCustomerList(ListCustomerName.BORROWER);
             } else if(selectCustomerInfoItem.getRelation().getId() == 2){
                 guarantorInfoViewList.remove(selectCustomerInfoItem);
-
+                reIndexCustomerList(ListCustomerName.GUARANTOR);
             } else if(selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
                 relatedInfoViewList.remove(selectCustomerInfoItem);
+                reIndexCustomerList(ListCustomerName.RELATED);
             }
         } else {
+            CustomerInfoView customerInfoView = customerInfoViewList.get(selectCustomerInfoItem.getListIndex());
+            if(deleteCustomerInfoViewList == null){
+                deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+            }
 
+            deleteCustomerInfoViewList.add(customerInfoView);
+
+            //if(selectCustomerInfoItem.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL)
         }
 
 

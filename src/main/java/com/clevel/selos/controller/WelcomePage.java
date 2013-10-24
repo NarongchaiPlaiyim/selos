@@ -7,6 +7,7 @@ import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
+import com.clevel.selos.integration.brms.service.EndPointImp;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.integration.dwh.obligation.model.ObligationResult;
 import com.clevel.selos.integration.email.EmailService;
@@ -87,6 +88,9 @@ public class WelcomePage implements Serializable {
     RLOSInterface rlos;
     @Inject
     DWHInterface dwh;
+
+    @Inject
+    EndPointImp endPointImp;
 
     //user auditor
     @Inject
@@ -271,6 +275,12 @@ public class WelcomePage implements Serializable {
 
     public void onActionBRMS() {
         brmsLog.debug("test BRMS log. ({})",new Date());
+        try {
+            endPointImp.callStandardPricingInterestRulesService(null);
+        } catch (Exception e) {
+            brmsLog.error("Exception : {}",e);
+        }
+
     }
 
     public Date getNow() {
