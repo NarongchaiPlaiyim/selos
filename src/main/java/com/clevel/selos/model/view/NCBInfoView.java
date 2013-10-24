@@ -21,6 +21,7 @@ public class NCBInfoView implements Serializable {
     private String currentPaymentType;
     private String historyPaymentType;
     private int nplFlag;
+    private String nplFlagText;
     private boolean nplTMBFlag;
     private int nplTMBMonth;
     private int nplTMBYear;
@@ -28,6 +29,7 @@ public class NCBInfoView implements Serializable {
     private int nplOtherMonth;
     private int nplOtherYear;
     private int tdrFlag;
+    private String  tdrFlagText;
     private boolean tdrTMBFlag;
     private int tdrTMBMonth;
     private int tdrTMBYear;
@@ -48,7 +50,6 @@ public class NCBInfoView implements Serializable {
 
 
     public NCBInfoView(){
-        reset();
     }
 
     public void reset(){
@@ -389,5 +390,21 @@ public class NCBInfoView implements Serializable {
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .toString();
+    }
+
+    public String getNplFlagText() {
+        return (this.nplFlag==1)?"Y":"N";
+    }
+
+    public void setNplFlagText(String nplFlagText) {
+        this.nplFlagText = nplFlagText;
+    }
+
+    public String getTdrFlagText() {
+        return (this.tdrFlag==1)?"Y":"N";
+    }
+
+    public void setTdrFlagText(String tdrFlagText) {
+        this.tdrFlagText = tdrFlagText;
     }
 }

@@ -10,9 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 public class DateTimeUtil {
     private static Logger log = LoggerFactory.getLogger(DateTimeUtil.class);
@@ -39,6 +37,12 @@ public class DateTimeUtil {
     public static Date getOnlyDatePlusMonth(Date date, int monthAdd) {
         DateTime dt = new DateTime(date);
         dt = dt.plusMonths(monthAdd).dayOfMonth().roundFloorCopy();
+        return dt.toDate();
+    }
+
+    public static Date getOnlyDatePlusYear(Date date, int yearAdd) {
+        DateTime dt = new DateTime(date);
+        dt = dt.plusYears(yearAdd).dayOfMonth().roundFloorCopy();
         return dt.toDate();
     }
 
@@ -149,4 +153,16 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
+    public static List<String> getPreviousFiftyYearTH(){
+        Date now = new Date();
+        Calendar c = Calendar.getInstance(new Locale("th", "TH"));
+        List<String> stringList = new ArrayList<String>();
+        for (int i=0; i<50; i++) {
+            Date d = getOnlyDatePlusYear(now, -i);
+            c.setTime(d);
+            int year = c.get(Calendar.YEAR);
+            stringList.add(String.valueOf(year));
+        }
+        return stringList;
+    }
 }

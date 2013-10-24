@@ -46,6 +46,7 @@ public class NCBDetailTransform extends Transform{
             ncbDetail.setMonth6(NCBDetailView.getMonth6());
             ncbDetail.setWcFlag(NCBDetailView.getWcFlag());
             ncbDetail.setOverLimit(NCBDetailView.getNoOfOverLimit());
+            ncbDetail.setCanToEdit(NCBDetailView.isCanToEdit());
             NCBDetailList.add(ncbDetail);
         }
         return NCBDetailList;
@@ -78,6 +79,7 @@ public class NCBDetailTransform extends Transform{
             ncbDetailView.setMonth6(ncbDetail.getMonth6());
             ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
             ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
+            ncbDetailView.setCanToEdit(ncbDetail.isCanToEdit());
             ncbDetailViewList.add(ncbDetailView);
         }
 

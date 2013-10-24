@@ -49,9 +49,6 @@ public class IndividualModel implements Serializable {
     private ContactDetails currentAddress;
     private ContactDetails workAddress;
 
-    //personal list Section
-    private List<IndividualPersonalList> personalLists;
-
     public String getTmbCusID() {
         return tmbCusID;
     }
@@ -219,15 +216,6 @@ public class IndividualModel implements Serializable {
     public void setWorkAddress(ContactDetails workAddress) {
         this.workAddress = workAddress;
     }
-
-    public List<IndividualPersonalList> getPersonalLists() {
-        return personalLists;
-    }
-
-    public void setPersonalLists(List<IndividualPersonalList> personalLists) {
-        this.personalLists = personalLists;
-    }
-
     ////////////////
 
 
