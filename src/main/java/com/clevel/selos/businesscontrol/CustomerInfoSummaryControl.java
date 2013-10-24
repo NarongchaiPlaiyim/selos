@@ -3,8 +3,10 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.db.working.Individual;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -68,5 +70,22 @@ public class CustomerInfoSummaryControl extends BusinessControl {
         customerDAO.persist(customer);
         individualDAO.persist(customer.getIndividual());
 
+        if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+            if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2){
+                Customer spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), null, workCase);
+                spouse.setIsSpouse(1);
+                spouse.setSpouseId(0);
+                customerDAO.persist(spouse);
+                customer.setSpouseId(spouse.getId());
+                customerDAO.persist(customer);
+
+                if(spouse.getAddressesList() != null){
+                    //addressDAO.persist(customer.getAddressesList());
+                }
+
+                Individual individual = spouse.getIndividual();
+                individualDAO.persist(individual);
+            }
+        }
     }
 }

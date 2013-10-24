@@ -1187,6 +1187,22 @@
                             </tr>
                             <tr>
                                 <td class="title">
+                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
+                                </td>
+                                <td>
+                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
+                                </td>
+                                <td>
+                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}" pattern="dd/MM/yyyy" showOn="button"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.dob')}"/>
                                 </td>
                                 <td>
@@ -1204,22 +1220,6 @@
                                                        itemLabel="#{country.name}"
                                                        itemValue="#{country.id}"/>
                                     </p:selectOneMenu>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.docAutDate')}"/>
-                                </td>
-                                <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentAuthorizeDate}" pattern="dd/MM/yyyy" showOn="button"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.docExpDate')}"/>
-                                </td>
-                                <td>
-                                    <p:calendar value="#{custInfoSumIndi.customerInfoView.spouse.documentExpiredDate}" pattern="dd/MM/yyyy" showOn="button"/>
                                 </td>
                             </tr>
                             <tr>
@@ -1411,21 +1411,6 @@
                                                        itemValue="#{busType.id}"/>
                                     </p:selectOneMenu>
                                 </td>-->
-                            </tr>
-                            <tr>
-                                <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.maritalStatus')}"/>
-                                </td>
-                                <td>
-                                    <p:selectOneMenu size="1" style="width: 200px;"
-                                                     value="#{custInfoSumIndi.customerInfoView.spouse.maritalStatus.id}">
-                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                        <f:selectItems value="#{custInfoSumIndi.maritalStatusList}"
-                                                       var="maritalStatus"
-                                                       itemLabel="#{maritalStatus.name}"
-                                                       itemValue="#{maritalStatus.id}"/>
-                                    </p:selectOneMenu>
-                                </td>
                             </tr>
                             <tr>
                                 <td class="title">
@@ -1867,44 +1852,12 @@
                             <!-- ############################################################################################# -->
                             <tr>
                                 <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.mailAdd')}"/>
-                                </td>
-                                <td colspan="5">
-                                    <p:selectOneMenu size="1" style="width: 200px;"
-                                                     value="#{custInfoSumIndi.customerInfoView.spouse.mailingAddressType.id}">
-                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-                                        <f:selectItems value="#{custInfoSumIndi.addressTypeList}"
-                                                       var="addressType"
-                                                       itemLabel="#{addressType.name}"
-                                                       itemValue="#{addressType.id}"/>
-                                    </p:selectOneMenu>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="title">
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.mobile')}"/>
                                 </td>
                                 <td>
                                     <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.mobileNumber}"/>
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.fax')}"/>
-                                </td>
-                                <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.faxNumber}"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="title">
-                                    <h:outputText value="#{msg.get('app.custInfoIndi.content.email')}"/>
-                                </td>
-                                <td>
-                                    <p:inputText value="#{custInfoSumIndi.customerInfoView.spouse.email}"/>
-                                </td>
-                            </tr>
-
                             <tr>
                                 <td colspan="5">
                                     <div class="separate"><!-- --></div>

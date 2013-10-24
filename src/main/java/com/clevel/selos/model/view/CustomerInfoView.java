@@ -127,7 +127,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.tmbCustomerId = "";
         this.serviceSegment = "";
         this.collateralOwner = -1;
-        this.percentShare = new BigDecimal(0);
+        this.percentShare = BigDecimal.ZERO;
         this.titleTh = new Title();
         this.titleEn = new Title();
         this.firstNameTh = "";
@@ -152,7 +152,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.workAddress = new AddressView();
         this.registerAddress = new AddressView();
         this.mailingAddressType = new AddressType();
-        this.approxIncome = new BigDecimal(0);
+        this.approxIncome = BigDecimal.ZERO;
         this.mobileNumber = "";
         this.faxNumber = "";
         this.email = "";
@@ -164,6 +164,8 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.spouse = new CustomerInfoView();
         this.csi = new WarningCode();
         this.businessType = new BusinessType();
+        this.documentAuthorizeDate = new Date();
+        this.share = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
