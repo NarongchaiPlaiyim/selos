@@ -3,6 +3,7 @@ package com.clevel.selos.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class ValidationUtil {
@@ -93,5 +94,15 @@ public class ValidationUtil {
         return true;
     }
 
+    public static boolean isValueInRange(BigDecimal min,BigDecimal max,BigDecimal value) {
+        return value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
+    }
 
+    public static boolean isValueGreaterThanZero(BigDecimal value) {
+        return value.compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    public static boolean isValueLessThanZero(BigDecimal value) {
+        return value.compareTo(BigDecimal.ZERO) < 0;
+    }
 }

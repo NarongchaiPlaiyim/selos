@@ -10,14 +10,21 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.ValidationUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @ViewScoped
@@ -48,6 +55,8 @@ public class BankStatementDetail implements Serializable {
     @Inject
     BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
+    AccountStatusDAO accountStatusDAO;
+    @Inject
     RelationDAO relationDAO;
 
     //Transform
@@ -57,6 +66,8 @@ public class BankStatementDetail implements Serializable {
     BankAccountTypeTransform bankAccTypeTransform;
     @Inject
     BankAccountStatusTransform bankAccStatusTransform;
+    @Inject
+    AccountStatusTransform accountStatusTransform;
     @Inject
     RelationTransform relationTransform;
 
@@ -76,46 +87,45 @@ public class BankStatementDetail implements Serializable {
     private List<AccountStatusView> accStatusViewList;
     private List<RelationView> relationViewList;
 
+    //Messages Dialog
+    private String messageHeader;
+    private String message;
+
+    //Session
+    private long workCaseId;
+    private long stepId;
+    private String userId;
+
     public BankStatementDetail(){
     }
 
-    @PostConstruct
-    public void onCreation() {
-        preRender();
-
-        bankStmtView = new BankStmtView();
-        bankStmtView.setBankStmtDetailViewList(initDetailList());
-
-        //init items list
-        bankViewList = new ArrayList<BankView>();
-        if (isTmbBank)
-            bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
-        else
-            bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
-
-        bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
-        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
-        //todo: change accStatusViewList to bankAccountStatusViewList
-//        accStatusViewList = bankAccStatusTransform.transformToViewList(accountStatusDAO.findAll());
-        relationViewList = relationTransform.transformToViewList(relationDAO.findAll());
-    }
-
-    public void onSave() {
-        log.debug("onSave() bankStmtView: {}", bankStmtView);
-        List<BankStmtDetailView> bankStmtDetailViewList = bankStmtView.getBankStmtDetailViewList();
-        for (BankStmtDetailView bStmtDetailView : bankStmtDetailViewList) {
-            log.debug("bStmtDetailView: {}", bStmtDetailView);
-        }
-    }
-
-    public void onCancel() {
-        log.debug("onCancel()");
-    }
-
-    //Private method
     private void preRender() {
+        HttpSession session = FacesUtil.getSession(false);
+        session.setAttribute("workCaseId", 101);
+        session.setAttribute("stepId", 1006);
+        session.setAttribute("userId", 10001);
+
+        log.info("preRender ::: setSession ");
+
+        session = FacesUtil.getSession(true);
+
+        if(session.getAttribute("workCaseId") != null){
+            workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+            userId = session.getAttribute("userId").toString();
+        } else {
+            //TODO return to inbox
+            log.info("preRender ::: workCaseId is null.");
+            try{
+                FacesUtil.redirect("/site/inbox.jsf");
+                return;
+            } catch (Exception e){
+                log.info("Exception :: {}", e);
+            }
+        }
+
+        //Parameters passed from Bank statement summary page
         Flash flash = FacesUtil.getFlash();
-        //Passed parameters from Bank statement summary page
         Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParams");
         if (bankStmtSumParams != null) {
             isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
@@ -127,6 +137,7 @@ public class BankStatementDetail implements Serializable {
         } else {
             //Return to Bank statement summary if parameter is null
             FacesUtil.redirect("/site/bankStatementSummary.jsf");
+            return;
         }
     }
 
@@ -153,6 +164,211 @@ public class BankStatementDetail implements Serializable {
             }
         });
         return bankStmtDetailViewList;
+    }
+
+    @PostConstruct
+    public void onCreation() {
+        preRender();
+
+        bankStmtView = new BankStmtView();
+        bankStmtView.setBankStmtDetailViewList(initDetailList());
+
+        //init items list
+        bankViewList = new ArrayList<BankView>();
+        if (isTmbBank)
+            bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
+        else
+            bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
+
+        bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
+        relationViewList = relationTransform.transformToViewList(relationDAO.findAll());
+    }
+
+    public void onSave() {
+        log.debug("onSave() bankStmtView: {}", bankStmtView);
+
+        try {
+            bankStmtControl.saveBankStmt(null, bankStmtView, workCaseId, userId);
+            messageHeader = "Save Bank Statement Detail Success.";
+            message = "Save Bank Statement Detail data success.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
+        } catch (Exception e) {
+            messageHeader = "Save Bank Statement Detail Failed.";
+            if(e.getCause() != null) {
+                message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
+            } else {
+                message = "Save Bank Statement Detail data failed. Cause : " + e.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
+        }
+    }
+
+    public void onCancel() {
+        log.debug("onCancel()");
+        onCreation();
+    }
+
+    //Calculate method
+    public void calAvgIncomeGross() {
+        log.debug("calAvgIncomeGross()");
+        //avgIncomeGross = SUM(grossCreditBalance) / numberOfPrevMonth
+        BigDecimal sumGrossCreditBalance = BigDecimal.ZERO;
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            sumGrossCreditBalance = sumGrossCreditBalance.add(detailView.getGrossCreditBalance());
+        }
+        bankStmtView.setAvgIncomeGross(sumGrossCreditBalance.divide(BigDecimal.valueOf(numberOfPrevMonth), 2, RoundingMode.HALF_UP));
+        log.debug("avgIncomeGross: {} = sumGrossCreditBalance: {} / numberOfPrevMonth: {}",
+                bankStmtView.getAvgIncomeGross(), sumGrossCreditBalance, numberOfPrevMonth);
+        //todo: call affect calculate
+    }
+
+    public void calAvgIncomeNetBDM() {
+        log.debug("calAvgIncomeNetBDM()");
+        //creditAmountBDM = grossCreditBalance - excludeListBDM - chequeReturnAmount
+        //avgIncomeNetBDM = SUM(creditAmountBDM) / numberOfPrevMonth
+        BigDecimal sumCreditAmountBDM = BigDecimal.ZERO;
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            detailView.setCreditAmountBDM(
+                    detailView.getGrossCreditBalance().subtract(detailView.getExcludeListBDM()).subtract(detailView.getChequeReturnAmount())
+            );
+            log.debug("creditAmountBDM: {} = grossCreditBalance: {} - excludeListBDM: {} - chequeReturnAmount: {}",
+                    detailView.getCreditAmountBDM(), detailView.getGrossCreditBalance(), detailView.getExcludeListBDM(), detailView.getChequeReturnAmount());
+            sumCreditAmountBDM = sumCreditAmountBDM.add(detailView.getCreditAmountBDM());
+        }
+        bankStmtView.setAvgIncomeNetBDM(sumCreditAmountBDM.divide(BigDecimal.valueOf(numberOfPrevMonth), 2, RoundingMode.HALF_UP));
+        log.debug("avgIncomeNetBDM: {} = sumCreditAmountBDM: {} / numberOfPrevMonth: {}",
+                bankStmtView.getAvgIncomeNetBDM(), sumCreditAmountBDM, numberOfPrevMonth);
+
+        calTimesOfAvgCreditBDM();
+    }
+
+    public void calTimesOfAvgCreditBDM() {
+        log.debug("calTimesOfAvgCreditBDM()");
+        //timesOfAvgCreditBDM = creditAmountBDM / avgIncomeNetBDM
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            detailView.setTimesOfAvgCreditBDM(detailView.getCreditAmountBDM().divide(bankStmtView.getAvgIncomeNetBDM(), 2, RoundingMode.HALF_UP));
+            log.debug("timesOfAvgCreditBDM: {} = creditAmountBDM: {} / avgIncomeNetBDM: {}",
+                    detailView.getTimesOfAvgCreditBDM(), detailView.getCreditAmountBDM(), bankStmtView.getAvgIncomeNetBDM());
+        }
+    }
+
+    public void calAvgIncomeNetUW() {
+        log.debug("calAvgIncomeNetUW()");
+        //creditAmountUW = grossCreditBalance - excludeListUW - chequeReturnAmount
+        //avgIncomeNetUW = SUM(creditAmountUW) / numberOfPrevMonth
+        BigDecimal sumCreditAmountUW = BigDecimal.ZERO;
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            detailView.setCreditAmountUW(
+                    detailView.getGrossCreditBalance().subtract(detailView.getExcludeListUW()).subtract(detailView.getChequeReturnAmount())
+            );
+            log.debug("creditAmountUW: {} = grossCreditBalance: {} - excludeListUW: {} - chequeReturnAmount: {}",
+                    detailView.getCreditAmountUW(), detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount());
+            sumCreditAmountUW = sumCreditAmountUW.add(detailView.getCreditAmountUW());
+        }
+        bankStmtView.setAvgIncomeNetUW(sumCreditAmountUW.divide(BigDecimal.valueOf(numberOfPrevMonth), 2, RoundingMode.HALF_UP));
+        log.debug("avgIncomeNetUW: {} = sumCreditAmountUW: {} / numberOfPrevMonth: {}",
+                bankStmtView.getAvgIncomeNetUW(), sumCreditAmountUW, numberOfPrevMonth);
+
+        calTimesOfAvgCreditUW();
+    }
+
+    public void calTimesOfAvgCreditUW() {
+        log.debug("calTimesOfAvgCreditUW()");
+        //timesOfAvgCreditUW = creditAmountUW / avgIncomeNetUW
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            detailView.setTimesOfAvgCreditUW(detailView.getCreditAmountUW().divide(bankStmtView.getAvgIncomeNetUW(), 2, RoundingMode.HALF_UP));
+            log.debug("timesOfAvgCreditUW: {} = creditAmountUW: {} / avgIncomeNetUW: {}",
+                    detailView.getTimesOfAvgCreditUW(), detailView.getCreditAmountUW(), bankStmtView.getAvgIncomeNetUW());
+        }
+    }
+
+    public void calAvgWithdrawAmount() {
+        log.debug("calAvgWithdrawAmount()");
+        //avgWithDrawAmount = SUM(debitAmount) / numberOfPrevMonth
+        BigDecimal sumDebitAmount = BigDecimal.ZERO;
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            sumDebitAmount = sumDebitAmount.add(detailView.getDebitAmount());
+        }
+        bankStmtView.setAvgWithDrawAmount(sumDebitAmount.divide(BigDecimal.valueOf(numberOfPrevMonth), 2, RoundingMode.HALF_UP));
+        log.debug("avgWithDrawAmount: {} = sumDebitAmount: {} / numberOfPrevMonth: {}",
+                bankStmtView.getAvgWithDrawAmount(), sumDebitAmount, numberOfPrevMonth);
+        //todo: call affect calculate
+    }
+
+    public void calSwingPercentPerMonth() {
+        log.debug("calSwingPercentPerMonth()");
+        //swingPercent = Absolute(highestBalance - lowestBalance) / overLimitAmount
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            detailView.setSwingPercent(detailView.getHighestBalance().subtract(detailView.getLowestBalance()).abs()
+                    .divide(detailView.getOverLimitAmount(), 2, RoundingMode.HALF_UP));
+        }
+    }
+
+    public void calAvgSwingPercent() {
+        log.debug("calAvgSwingPercent()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calUtilizationPercentPerMonth() {
+        log.debug("calUtilizationPercentPerMonth()");
+        //utilizationPercent = (monthEndBalance * (-1)) / overLimitAmount
+        //if(monthEndBalance > 0) -> utilizationPercent = 0
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+            if (ValidationUtil.isValueGreaterThanZero(detailView.getMonthEndBalance())) {
+                detailView.setUtilizationPercent(BigDecimal.ZERO);
+            } else {
+                detailView.setUtilizationPercent(detailView.getMonthEndBalance().multiply(BigDecimal.valueOf(-1))
+                        .divide(detailView.getOverLimitAmount(), 2, RoundingMode.HALF_UP));
+            }
+        }
+    }
+
+    public void calAvgUtilizationPercent() {
+        log.debug("calAvgUtilizationPercent()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calAvgGrossInflowPerLimit() {
+        log.debug("calAvgGrossInflowPerLimit()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calChequeReturn() {
+        log.debug("calChequeReturn()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calTrdChequeReturnAmount() {
+        log.debug("calTrdChequeReturnAmount()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calOverLimitTimes() {
+        log.debug("calOverLimitTimes()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
+    }
+
+    public void calOverLimitDays() {
+        log.debug("calOverLimitDays()");
+        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+
+        }
     }
 
     //-------------------- Getter/Setter --------------------
@@ -210,5 +426,21 @@ public class BankStatementDetail implements Serializable {
 
     public void setRelationViewList(List<RelationView> relationViewList) {
         this.relationViewList = relationViewList;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

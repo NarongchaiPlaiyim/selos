@@ -16,7 +16,7 @@ public class BankStmtView implements Serializable {
     private BankAccountTypeView othBankAccountTypeView;
     private String accountNumber;
     private String accountName;
-    private BankAccountStatusView bankAccountStatusView;
+    private AccountStatusView accountStatusView;
     private int isMainAccount;
     private int accountCharacteristic;
 
@@ -52,7 +52,7 @@ public class BankStmtView implements Serializable {
         this.othBankAccountTypeView = new BankAccountTypeView();
         this.accountNumber = "";
         this.accountName = "";
-        this.bankAccountStatusView = new BankAccountStatusView();
+        this.accountStatusView = new AccountStatusView();
         this.limit = BigDecimal.ZERO;
         this.avgIncomeGross = BigDecimal.ZERO;
         this.avgIncomeNetBDM = BigDecimal.ZERO;
@@ -141,12 +141,12 @@ public class BankStmtView implements Serializable {
         this.accountName = accountName;
     }
 
-    public BankAccountStatusView getBankAccountStatusView() {
-        return bankAccountStatusView;
+    public AccountStatusView getAccountStatusView() {
+        return accountStatusView;
     }
 
-    public void setBankAccountStatusView(BankAccountStatusView bankAccountStatusView) {
-        this.bankAccountStatusView = bankAccountStatusView;
+    public void setAccountStatusView(AccountStatusView accountStatusView) {
+        this.accountStatusView = accountStatusView;
     }
 
     public int getMainAccount() {
@@ -312,7 +312,7 @@ public class BankStmtView implements Serializable {
                 .append("othBankAccountTypeView", othBankAccountTypeView)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
-                .append("bankAccountStatusView", bankAccountStatusView)
+                .append("accountStatusView", accountStatusView)
                 .append("isMainAccount", isMainAccount)
                 .append("accountCharacteristic", accountCharacteristic)
                 .append("limit", limit)

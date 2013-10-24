@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BankStmtDetailView implements Serializable{
+public class BankStmtDetailView implements Serializable {
+    private long id;
     private BigDecimal overLimitAmount;
     private BigDecimal grossCreditBalance;
     private int numberOfCreditTxn;
@@ -23,7 +24,7 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal highestBalance;
     private Date lowestBalanceDate;
     private BigDecimal lowestBalance;
-    private BigDecimal monthBalance;
+    private BigDecimal monthEndBalance;
     private int numberOfChequeReturn;
     private BigDecimal chequeReturnAmount;
     private int overLimitTimes;
@@ -52,11 +53,19 @@ public class BankStmtDetailView implements Serializable{
         this.highestBalance = BigDecimal.valueOf(0.00);
         this.lowestBalanceDate = new Date();
         this.lowestBalance = BigDecimal.valueOf(0.00);
-        this.monthBalance = BigDecimal.valueOf(0.00);
+        this.monthEndBalance = BigDecimal.valueOf(0.00);
         this.chequeReturnAmount = BigDecimal.valueOf(0.0);
         this.swingPercent = BigDecimal.valueOf(0.00);
         this.utilizationPercent = BigDecimal.valueOf(0.00);
         this.grossInflowPerLimit = BigDecimal.valueOf(0.00);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public BigDecimal getOverLimitAmount() {
@@ -179,12 +188,12 @@ public class BankStmtDetailView implements Serializable{
         this.lowestBalance = lowestBalance;
     }
 
-    public BigDecimal getMonthBalance() {
-        return monthBalance;
+    public BigDecimal getMonthEndBalance() {
+        return monthEndBalance;
     }
 
-    public void setMonthBalance(BigDecimal monthBalance) {
-        this.monthBalance = monthBalance;
+    public void setMonthEndBalance(BigDecimal monthEndBalance) {
+        this.monthEndBalance = monthEndBalance;
     }
 
     public int getNumberOfChequeReturn() {
@@ -262,6 +271,7 @@ public class BankStmtDetailView implements Serializable{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("overLimitAmount", overLimitAmount)
                 .append("grossCreditBalance", grossCreditBalance)
                 .append("numberOfCreditTxn", numberOfCreditTxn)
@@ -277,7 +287,7 @@ public class BankStmtDetailView implements Serializable{
                 .append("highestBalance", highestBalance)
                 .append("lowestBalanceDate", lowestBalanceDate)
                 .append("lowestBalance", lowestBalance)
-                .append("monthBalance", monthBalance)
+                .append("monthEndBalance", monthEndBalance)
                 .append("numberOfChequeReturn", numberOfChequeReturn)
                 .append("chequeReturnAmount", chequeReturnAmount)
                 .append("overLimitTimes", overLimitTimes)
