@@ -70,7 +70,6 @@ public class NCBInfo implements Serializable {
 
     private boolean genTextBoxFlag;
     private boolean noOfmonthsPaymentFlag;
-    private boolean genColumnEdit;
 
     private NCBDetailView ncbDetailView;
     private NCBDetailView selectNcbRecordItem;
@@ -110,7 +109,6 @@ public class NCBInfo implements Serializable {
         modeForButton = "add";
         genTextBoxFlag = false;
         noOfmonthsPaymentFlag = false;
-        genColumnEdit = false;
 
         HttpSession session = FacesUtil.getSession(true);
 
@@ -120,9 +118,20 @@ public class NCBInfo implements Serializable {
 
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
+            log.info("ncbCusMarriageStatus :: {}",ncbInfoView.getNcbCusMarriageStatus());
+            log.info("enquiry :: {}",ncbInfoView.getEnquiry());
+            log.info("ncbLastInfoAsOfDate :: {}",ncbInfoView.getNcbLastInfoAsOfDate());
+            log.info("ncbCusAddress :: {}",ncbInfoView.getNcbCusAddress());
+
             if(ncbInfoView != null){
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
+
+               /* if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
+                    for(int i = 0 ; i < ncbDetailViewList.size() ; i++){
+                        ncbDetailViewList.get(i).setCanToEdit(false);
+                    }
+                }*/
             }
         }
 
@@ -174,14 +183,12 @@ public class NCBInfo implements Serializable {
             tdrCondition = new TDRCondition();
         }
 
-        try{
-            accountStatusList = accountStatusDAO.findAll();
-            accountTypeList = accountTypeDAO.findAll();
-            settlementStatusList = settlementStatusDAO.findAll();
-            tdrConditionList = tdrConditionDAO.findAll();
-        }catch (Exception e){
-            log.error( " findAll  error ::: {}" , e.getMessage());
-        }
+
+        accountStatusList = accountStatusDAO.findAll();
+        accountTypeList = accountTypeDAO.findAll();
+        settlementStatusList = settlementStatusDAO.findAll();
+        tdrConditionList = tdrConditionDAO.findAll();
+
 
         monthRender1 = false;
         monthRender2 = false;
@@ -190,6 +197,7 @@ public class NCBInfo implements Serializable {
         monthRender5 = false;
         monthRender6 = false;
 
+        ncbDetailView.reset();
     }
 
 
@@ -207,7 +215,6 @@ public class NCBInfo implements Serializable {
         ncbDetailView.setWcFlag(0);
         modeForButton = "add";
         genTextBoxFlag = false;
-        genColumnEdit = true;
 
     }
 
@@ -271,19 +278,13 @@ public class NCBInfo implements Serializable {
         String moneyTotal = "";
         List<BigDecimal>  moneys;
 
-        log.info("  dlgAccountType : {}", dlgAccountType.getId());
-        log.info("  dlgAccountStatus :  {}", dlgAccountStatus.getId());
-        log.info("  dlgCurrentPayment :  {}", dlgCurrentPayment.getId());
-        log.info("  dlgHistoryPayment :  {}", dlgHistoryPayment.getId());
-
-
-        if (dlgAccountType.getId() != 0 && dlgAccountStatus.getId() != 0 && dlgCurrentPayment.getId() != 0 && dlgHistoryPayment.getId() != 0) {
+        if (ncbDetailView.getAccountType().getId() != 0 && ncbDetailView.getAccountStatus().getId() != 0 && ncbDetailView.getCurrentPayment().getId() != 0 && ncbDetailView.getHistoryPayment().getId() != 0) {
             if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
 
-                AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
-                AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
-                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(dlgCurrentPayment.getId());
-                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(dlgHistoryPayment.getId());
+                AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
+                AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
+                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
+                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId());
 
                 NCBDetailView ncbAdd = new NCBDetailView();
                 ncbAdd.setAccountType(accountType);
@@ -335,16 +336,18 @@ public class NCBInfo implements Serializable {
                 }
                 log.info("ncbAdd.isMonthsPaymentFlag   {} ", ncbAdd.isMonthsPaymentFlag());
 
+                ncbAdd.setCanToEdit(true);
                 ncbDetailViewList.add(ncbAdd);
+
                 log.info("add finish");
 
             } else if (modeForButton != null && modeForButton.equalsIgnoreCase("edit")) {
                 log.info("onSaveNcbRecord ::: mode : {}", modeForButton);
 
-                AccountType accountType = accountTypeDAO.findById(dlgAccountType.getId());
-                AccountStatus accountStatus = accountStatusDAO.findById(dlgAccountStatus.getId());
-                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(dlgCurrentPayment.getId());
-                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(dlgHistoryPayment.getId());
+                AccountType accountType = accountTypeDAO.findById(ncbDetailView.getAccountType().getId());
+                AccountStatus accountStatus = accountStatusDAO.findById(ncbDetailView.getAccountStatus().getId());
+                SettlementStatus tdrConditionCurrent = settlementStatusDAO.findById(ncbDetailView.getCurrentPayment().getId());
+                SettlementStatus tdrConditionHistory = settlementStatusDAO.findById(ncbDetailView.getHistoryPayment().getId());
 
                 ncbDetailViewList.get(rowIndex).setAccountType(accountType);
                 ncbDetailViewList.get(rowIndex).setAccountStatus(accountStatus);
@@ -395,12 +398,13 @@ public class NCBInfo implements Serializable {
                 } else {
                     ncbDetailViewList.get(rowIndex).setMonthsPaymentFlag(false);
                 }
-
+                ncbDetailViewList.get(rowIndex).setCanToEdit(true);
             } else {
                 log.info("onSaveNcbRecord ::: Undefined modeForbutton !!");
             }
 
             complete = true;
+
         } else {
 
             log.info("onSaveNcbRecord ::: validation failed.");
@@ -450,9 +454,7 @@ public class NCBInfo implements Serializable {
     //for rendered จำนวนเดือนที่หาร
     public void onChangeAccountType(){
         log.info("onChangeAccountType::");
-        log.info("dlgAccountType.getId() :: {}" ,dlgAccountType.getId());
-        noOfmonthsPaymentFlag = true;
-       // ต้องมีสูตรมาให้
+        log.info("ncbDetailView.getAccountType().getMonthFlag() :: {}" ,ncbDetailView.getAccountType().getMonthFlag());
 
     }
 
@@ -686,14 +688,6 @@ public class NCBInfo implements Serializable {
         this.noOfmonthsPaymentFlag = noOfmonthsPaymentFlag;
     }
 
-    public boolean isGenColumnEdit() {
-        return genColumnEdit;
-    }
-
-    public void setGenColumnEdit(boolean genColumnEdit) {
-        this.genColumnEdit = genColumnEdit;
-    }
-
     public String getMessageHeader() {
         return messageHeader;
     }
@@ -717,4 +711,5 @@ public class NCBInfo implements Serializable {
     public void setMessageErr(boolean messageErr) {
         this.messageErr = messageErr;
     }
+
 }

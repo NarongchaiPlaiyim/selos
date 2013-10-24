@@ -36,100 +36,71 @@
                             </div>
                             <div id="content_form">
                                 <!-- start content -->
-                                <table id="content_form_sum">
+                                <table class="content_table_form">
                                     <tr>
                                         <td colspan="2">
-                                            <!--<table class="table_content">
-                                                <tr>
-                                                    <td>
-                                                        <p:dataTable id="ncbSum" var="item" value="#{ncbSummary.ncbSumList}"
-                                                                     paginator="false" rowKey="#{item.NCBSummaryView}" rowIndexVar="rowIndex">
+                                            <p:dataTable id="ncbSum" var="item" value="#{ncbSummary.ncbSumViewList}"
+                                                         paginator="false" rowKey="#{item.NCBInfoView}"
+                                                         rowIndexVar="rowIndex">
 
-                                                            <p:column headerText="No." styleClass="center" style="width:22px;">
-                                                                <h:outputText value="#{rowIndex+1}"/>
-                                                            </p:column>
+                                                <p:column headerText="No." styleClass="center" style="width:22px;">
+                                                    <h:outputText value="#{rowIndex+1}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.cusName')}"  styleClass="center" style="width: 150px;">
-                                                                <h:outputText value="#{item.cusName}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.cusName')}" styleClass="center"
+                                                          style="width: 150px;">
+                                                    <h:outputText
+                                                            value="#{item.ncbCusName}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.personalId')}" styleClass="center" style="width: 70px;">
-                                                                <h:outputText value="#{item.personalID}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.personalId')}" styleClass="center"
+                                                          style="width: 70px;">
+                                                    <h:outputText value="#{item.personalId}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.noOfNCBCheckIn6months')}" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.noOfNCBCheckIn6months}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.noOfNCBCheckIn6months')}"
+                                                          styleClass="center" style="width: 50px;">
+                                                    <h:outputText value="#{item.checkIn6Month}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.typeOfCurrentPayment}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.typeOfCurrentPayment')}"
+                                                          styleClass="center" style="width: 50px;">
+                                                    <h:outputText value="#{item.currentPaymentType}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.typeOfHistoryPayment}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.typeOfHistoryPayment')}"
+                                                          styleClass="center" style="width: 50px;">
+                                                    <h:outputText value="#{item.historyPaymentType}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.NPLFlag')}" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.nplFlag}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.NPLFlag')}" styleClass="center"
+                                                          style="width: 50px;">
+                                                    <h:outputText value="#{item.nplFlagText}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="#{msg.get('app.TDRStatusFromNCB')}" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.tdrStatusFromNCB}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.TDRStatusFromNCB')}"
+                                                          styleClass="center" style="width: 50px;">
+                                                    <h:outputText value="#{item.tdrFlagText}"/>
+                                                </p:column>
 
 
-                                                            <p:column headerText="#{msg.get('app.TDRPaymentCondition')}" styleClass="center" style="width: 100px;">
-                                                                <h:outputText value="#{item.tdrPaymentCondition}"/>
-                                                            </p:column>
+                                                <p:column headerText="#{msg.get('app.TDRPaymentCondition')}"
+                                                          styleClass="center" style="width: 100px;">
+                                                    <h:outputText value="#{item.tdrCondition.description}"/>
+                                                </p:column>
 
-                                                            <p:column headerText="" styleClass="center" style="width:54px;">
-                                                                <p:commandButton icon="ui-icon-pencil"
-                                                                                 onclick="document.location.replace('NCBInfo.jsf');return;" />
-                                                            </p:column>
+                                                <p:column styleClass="center" style="width:54px;">
+                                                    <p:commandButton icon="ui-icon-pencil"
+                                                                     action="#{ncbSummary.onOpenNCBInfo()}"
+                                                                     process="@this" >
+                                                        <f:setPropertyActionListener value="#{item}"
+                                                                                     target="#{ncbSummary.ncbSummaryViewItem}"/>
+                                                    </p:commandButton>
+                                                </p:column>
 
-                                                        </p:dataTable>
-                                                    </td>
-                                                </tr>
-                                            </table>-->
-                                            <table class="table_content">
-                                                <tr>
-                                                    <td>
-                                                        <p:dataTable id="A" var="item" value="#{ncbSummary.customerViewTest}"
-                                                                     paginator="false" rowKey="#{item.customer}" rowIndexVar="rowIndex">
-
-                                                            <p:column headerText="No." styleClass="center" style="width:20px;">
-                                                                <h:outputText value="#{rowIndex+1}"/>
-                                                            </p:column>
-
-                                                            <p:column headerText="nameTh" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.nameTh}"/>
-                                                            </p:column>
-
-                                                            <p:column headerText="id" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.id}"/>
-                                                            </p:column>
-
-                                                            <p:column headerText="idNumber" styleClass="center" style="width: 50px;">
-                                                                <h:outputText value="#{item.idNumber}"/>
-                                                            </p:column>
-
-                                                            <p:column  styleClass="center" style="width:54px;">
-                                                                <p:commandButton  icon="ui-icon-pencil"
-                                                                                  action="#{ncbSummary.onEditNCBInfo()}"
-                                                                                  process="@this" >
-                                                                <f:setPropertyActionListener value="#{item}"
-                                                                                             target="#{ncbSummary.customerItem}"/>
-                                                                </p:commandButton>
-                                                            </p:column>
--->
-                                                        </p:dataTable>
-                                                    </td>
-                                                </tr>
-                                            </table>
+                                            </p:dataTable>
                                         </td>
                                     </tr>
-
-
                                 </table>
                                 <!-- end content -->
                             </div>

@@ -3,11 +3,12 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.view.NCBSummaryView;
+import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.FacesUtil;
 import org.slf4j.Logger;
 
@@ -43,17 +44,17 @@ public class NCBSummary implements Serializable {
 
     @Inject
     private CustomerDAO customerDAO;
+    @Inject
+    private NCBTransform ncbTransform;
 
-    private List<NCBSummaryView> ncbSumList;
-    private NCBSummaryView ncbSum;
     private long workCaseId;
+    private List<NCBInfoView> ncbSumViewList;
+    private NCBInfoView ncbView;
+    private List<Customer> customerView;
+    private NCBInfoView ncbSummaryViewItem;
 
-
-    //test show customer
-    private List<Customer> customerViewTest;
-    private Customer customerItem;
-
-    public NCBSummary(){}
+    public NCBSummary() {
+    }
 
     @PostConstruct
     public void onCreation() {
@@ -62,87 +63,97 @@ public class NCBSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
 
-        session.setAttribute("workCaseId", new Long(1)) ;    // ไว้เทส set workCaseId ส่งมาจาก NCB Summary
+        session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ",workCaseId);
+            log.info("workCaseId :: {} ", workCaseId);
         }
 
-        try{
-            customerViewTest = customerDAO.findByWorkCaseId(workCaseId);
-        }catch (Exception e){
-            log.error( "customerDAO.findAll  error ::: {}" , e.getMessage());
+        try {
+            customerView = customerDAO.findByWorkCaseId(workCaseId);
+        } catch (Exception e) {
+            log.error("customerDAO.findAll  error ::: {}", e.getMessage());
         }
 
-        if(customerViewTest == null){
-            customerViewTest = new ArrayList<Customer>();
+        if (customerView != null) {
+            log.error("customerView.size :: {}", customerView.size());
+            for (int i = 0; i < customerView.size(); i++) {
+
+                if (customerView.get(i).getNcb() != null) {
+                    ncbView = ncbTransform.transformToView(customerView.get(i).getNcb());
+                    log.info("ncbView :: {} ", ncbView.toString());
+
+                    if (ncbSumViewList == null) {
+                        ncbSumViewList = new ArrayList<NCBInfoView>();
+                    }
+
+                    ncbSumViewList.add(i, ncbView);
+
+                }
+            }
+
+            log.info("ncbSumViewList :: {}", ncbSumViewList.size());
         }
 
-
-        if(customerItem == null){
-            customerItem = new Customer();
+        if (customerView == null) {
+            customerView = new ArrayList<Customer>();
         }
 
-        if(ncbSumList == null){
-            ncbSumList = new ArrayList<NCBSummaryView>();
+        if (ncbSumViewList == null) {
+            ncbSumViewList = new ArrayList<NCBInfoView>();
         }
 
 
     }
 
-    public void onEditNCBInfo(){
+    public void onOpenNCBInfo() {
         log.info("openNCBInfo ::: ");
-        if(customerItem != null){
-            log.info("customerItem.id {} ",customerItem.getId());
-            try{
+
+        if (ncbSummaryViewItem != null) {
+            log.info("ncbSummaryViewItem.id {} ", ncbSummaryViewItem.getId());
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/NCBInfo.jsf");
                 HttpSession session = FacesUtil.getSession(true);
-                session.setAttribute("customerId", customerItem.getId()) ;    // set customerId to NCB information
+                session.setAttribute("customerId", ncbSummaryViewItem.getCustomer().getId());    // set customerId to NCB information
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }
 
-    // onclick edit button
-    public void onEdit(){
 
+    public NCBInfoView getNcbView() {
+        return ncbView;
     }
 
-    public NCBSummaryView getNcbSum() {
-        return ncbSum;
+    public void setNcbView(NCBInfoView ncbView) {
+        this.ncbView = ncbView;
     }
 
-    public void setNcbSum(NCBSummaryView ncbSum) {
-        this.ncbSum = ncbSum;
+    public List<NCBInfoView> getNcbSumViewList() {
+        return ncbSumViewList;
     }
 
-    public List<NCBSummaryView> getNcbSumList() {
-        return ncbSumList;
+    public void setNcbSumViewList(List<NCBInfoView> ncbSumViewList) {
+        this.ncbSumViewList = ncbSumViewList;
     }
 
-    public void setNcbSumList(List<NCBSummaryView> ncbSumList) {
-        this.ncbSumList = ncbSumList;
+    public List<Customer> getCustomerView() {
+        return customerView;
     }
 
-
-    //test
-    public List<Customer> getCustomerViewTest() {
-        return customerViewTest;
+    public void setCustomerView(List<Customer> customerView) {
+        this.customerView = customerView;
     }
 
-    public void setCustomerViewTest(List<Customer> customerViewTest) {
-        this.customerViewTest = customerViewTest;
+    public NCBInfoView getNcbSummaryViewItem() {
+        return ncbSummaryViewItem;
     }
 
-    public Customer getCustomerItem() {
-        return customerItem;
-    }
-
-    public void setCustomerItem(Customer customerItem) {
-        this.customerItem = customerItem;
+    public void setNcbSummaryViewItem(NCBInfoView ncbSummaryViewItem) {
+        this.ncbSummaryViewItem = ncbSummaryViewItem;
     }
 }

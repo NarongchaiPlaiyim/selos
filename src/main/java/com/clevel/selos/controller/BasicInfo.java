@@ -11,6 +11,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -87,6 +88,8 @@ public class BasicInfo implements Serializable {
 
     private List<BorrowingType> borrowingTypeList;
     private List<BAPaymentMethod> baPaymentMethodList;
+
+    private List<String> yearList;
 
     //*** View ***//
     private BasicInfoView basicInfoView;
@@ -185,6 +188,8 @@ public class BasicInfo implements Serializable {
         }
 
         basicInfoAccountView = new BasicInfoAccountView();
+
+        yearList = DateTimeUtil.getPreviousFiftyYearTH();
     }
 
     public void onAddAccount(){
@@ -456,5 +461,13 @@ public class BasicInfo implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public List<String> getYearList() {
+        return yearList;
+    }
+
+    public void setYearList(List<String> yearList) {
+        this.yearList = yearList;
     }
 }
