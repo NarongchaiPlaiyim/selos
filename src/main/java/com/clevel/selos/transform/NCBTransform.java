@@ -32,7 +32,7 @@ public class NCBTransform extends Transform {
         ncb.setNplTMBMonth(NCBInfoView.getNplTMBMonth());
         ncb.setNplTMBYear(NCBInfoView.getNplTMBYear());
         ncb.setPaymentClass(NCBInfoView.getPaymentClass());
-        ncb.setPersonalId("");
+        ncb.setPersonalId(NCBInfoView.getPersonalId());
         ncb.setRemark(NCBInfoView.getRemark());
         ncb.setTdrFlag(NCBInfoView.getTdrFlag());
         ncb.setTdrOhterFlag(transFormBooleanToDb(NCBInfoView.isTdrOtherFlag()));
@@ -41,6 +41,11 @@ public class NCBTransform extends Transform {
         ncb.setTdrTMBFlag(transFormBooleanToDb(NCBInfoView.isTdrTMBFlag()));
         ncb.setTdrTMBMonth(NCBInfoView.getTdrTMBMonth());
         ncb.setTdrTMBYear(NCBInfoView.getTdrTMBYear());
+        ncb.setNcbCusName(NCBInfoView.getNcbCusName());
+        ncb.setEnquiry(NCBInfoView.getEnquiry());
+        ncb.setNcbCusMarriageStatus(NCBInfoView.getNcbCusMarriageStatus());
+        ncb.setNcbCusAddress(NCBInfoView.getNcbCusAddress());
+
         if(NCBInfoView.getTdrCondition()!=null && NCBInfoView.getTdrCondition().getId()!=0){
             ncb.setTdrCondition(NCBInfoView.getTdrCondition());
         } else {
@@ -71,7 +76,7 @@ public class NCBTransform extends Transform {
         NCBInfoView.setNplTMBMonth(ncb.getNplTMBMonth());
         NCBInfoView.setNplTMBYear(ncb.getNplTMBYear());
         NCBInfoView.setPaymentClass(ncb.getPaymentClass());
-        NCBInfoView.setPersonalId("");
+        NCBInfoView.setPersonalId(ncb.getPersonalId());
         NCBInfoView.setRemark(ncb.getRemark());
         NCBInfoView.setTdrFlag(ncb.getTdrFlag());
         NCBInfoView.setTdrOtherFlag(transFormBooleanToView(ncb.getTdrOhterFlag()));
@@ -82,7 +87,10 @@ public class NCBTransform extends Transform {
         NCBInfoView.setTdrTMBYear(ncb.getTdrTMBYear());
         NCBInfoView.setTdrCondition(ncb.getTdrCondition());
         NCBInfoView.setCustomer(ncb.getCustomer());
-
+        NCBInfoView.setNcbCusName(ncb.getNcbCusName());
+        NCBInfoView.setEnquiry(ncb.getEnquiry());
+        NCBInfoView.setNcbCusMarriageStatus(ncb.getNcbCusMarriageStatus());
+        NCBInfoView.setNcbCusAddress(ncb.getNcbCusAddress());
         return NCBInfoView;
     }
 

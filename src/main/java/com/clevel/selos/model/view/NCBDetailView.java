@@ -42,13 +42,14 @@ public class NCBDetailView implements Serializable {
     private BigDecimal month4;
     private BigDecimal month5;
     private BigDecimal month6;
+    private boolean canToEdit;
+    private boolean monthFlagPage;
 
     private String TMB;
     private String refinance ;
     private String wc ;
 
     public NCBDetailView() {
-        reset();
     }
 
     public void reset() {
@@ -77,6 +78,8 @@ public class NCBDetailView implements Serializable {
         this.month5 = new BigDecimal(0);
         this.month6 = new BigDecimal(0);
         this.wcFlag = 0;
+        this.canToEdit = false;
+        this.monthFlagPage = false;
     }
 
     public long getId() {
@@ -359,7 +362,28 @@ public class NCBDetailView implements Serializable {
         this.monthsPaymentFlag = monthsPaymentFlag;
     }
 
+    public boolean isCanToEdit() {
+        return canToEdit;
+    }
 
+    public void setCanToEdit(boolean canToEdit) {
+        this.canToEdit = canToEdit;
+    }
+
+    public boolean isMonthFlagPage() {
+        if(this.accountType.getMonthFlag()==1){
+            this.monthFlagPage = true;
+        }
+        else{
+            this.monthFlagPage = false;
+        }
+
+        return monthFlagPage;
+    }
+
+    public void setMonthFlagPage(boolean monthFlagPage) {
+        this.monthFlagPage = monthFlagPage;
+    }
 
     @Override
     public String toString() {

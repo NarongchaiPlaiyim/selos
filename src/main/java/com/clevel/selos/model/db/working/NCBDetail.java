@@ -91,6 +91,9 @@ public class NCBDetail implements Serializable {
     @Column(name="wcFlag")
     private int wcFlag;
 
+    @Column(name="can_edit")
+    private boolean canToEdit;
+
     public long getId() {
         return id;
     }
@@ -281,5 +284,13 @@ public class NCBDetail implements Serializable {
 
     public void setAccountTMBFlag(int accountTMBFlag) {
         this.accountTMBFlag = accountTMBFlag;
+    }
+
+    public boolean isCanToEdit() {
+        return canToEdit;
+    }
+
+    public void setCanToEdit(boolean canToEdit) {
+        this.canToEdit = canToEdit;
     }
 }
