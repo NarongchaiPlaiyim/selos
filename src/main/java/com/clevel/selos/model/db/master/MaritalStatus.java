@@ -21,6 +21,8 @@ public class MaritalStatus implements Serializable {
     private int active;
     @Column(name = "code")
     private String code;
+    @Column(name = "spouse_flag" )
+    private int spouseFlag;
 
 
     public MaritalStatus() {
@@ -58,13 +60,22 @@ public class MaritalStatus implements Serializable {
         this.code = code;
     }
 
+    public int getSpouseFlag() {
+        return spouseFlag;
+    }
+
+    public void setSpouseFlag(int spouseFlag) {
+        this.spouseFlag = spouseFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("active", active).
-                append("code",code).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("active", active)
+                .append("code", code)
+                .append("spouseFlag", spouseFlag)
+                .toString();
     }
 }
