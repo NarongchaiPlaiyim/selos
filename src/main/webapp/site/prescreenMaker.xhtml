@@ -241,7 +241,7 @@
                                         </p:column>
 
                                         <p:column headerText="Citizen ID/Registration ID" styleClass="center">
-                                            <h:outputText value="#{guarantorItem.citizenId}"/>
+                                            <h:outputText value="#{guarantorItem.citizenId}"/><h:outputText value="#{guarantorItem.registrationId}"/>
                                         </p:column>
 
                                         <p:column headerText="Customer ID" styleClass="center">
@@ -394,16 +394,16 @@
                                                              action="#{prescreenMaker.onEditBusinessInfo()}"
                                                              update=":businessDlgForm"
                                                              oncomplete="PF('businessDlg').show()">
-                                                <f:setPropertyActionListener value="#{item}"
-                                                                             target="#{prescreenMaker.selectBusinessInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{businessResultItem}"
+                                                                             target="#{prescreenMaker.selectBizInfoItem}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{prescreenMaker.rowIndex}"/>
                                             </p:commandButton>
                                             <p:commandButton title="Remove"
                                                              icon="ui-icon-trash"
                                                              oncomplete="confirmDeleteBusinesssDlg.show()" >
-                                                <f:setPropertyActionListener value="#{item}"
-                                                                             target="#{prescreenMaker.selectBusinessInfoItem}"/>
+                                                <f:setPropertyActionListener value="#{businessResultItem}"
+                                                                             target="#{prescreenMaker.selectBizInfoItem}"/>
                                             </p:commandButton>
                                         </p:column>
                                     </p:dataTable>
@@ -415,7 +415,7 @@
                                     <p:selectOneMenu value="#{prescreenMaker.prescreenView.businessLocation.code}"
                                                      size="1" style="width: 200px;">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                        <f:selectItems value="#{prescreenMaker.provinceList}"
+                                        <f:selectItems value="#{prescreenMaker.businessLocationList}"
                                                        var="businessLocationItem"
                                                        itemLabel="#{businessLocationItem.name}"
                                                        itemValue="#{businessLocationItem.code}"/>
@@ -480,16 +480,15 @@
                                                 </p:selectOneRadio>
                                             </td>
                                             <td>
-                                                <p:panel id="refinanceBankPnl" rendered="#{prescreenMaker.prescreenView.refinance}" styleClass="panel">
-                                                    <p:selectOneMenu value="#{prescreenMaker.prescreenView.refinanceBank.code}"
-                                                                     size="1" style="width: 200px;">
-                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                                                        <f:selectItems value="#{prescreenMaker.refinanceList}"
-                                                                       var="refinanceBankItem"
-                                                                       itemLabel="#{refinanceBankItem.shortName}"
-                                                                       itemValue="#{refinanceBankItem.code}"/>
-                                                    </p:selectOneMenu>
-                                                </p:panel>
+                                                <p:selectOneMenu value="#{prescreenMaker.prescreenView.refinanceBank.code}"
+                                                                 disabled="#{not prescreenMaker.prescreenView.refinance}"
+                                                                 size="1" style="width: 200px;">
+                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                    <f:selectItems value="#{prescreenMaker.refinanceList}"
+                                                                   var="refinanceBankItem"
+                                                                   itemLabel="#{refinanceBankItem.shortName}"
+                                                                   itemValue="#{refinanceBankItem.code}"/>
+                                                </p:selectOneMenu>
                                             </td>
                                         </tr>
                                     </table>
@@ -534,7 +533,7 @@
                                         </p:column>
 
                                         <p:column headerText="Collateral Type" styleClass="center" style="width: 110px;">
-                                            <h:outputText value="#{proposeCollateral.collateralType.description}"/>
+                                            <h:outputText value="#{proposeCollateral.potentialCollateral.description}"/>
                                         </p:column>
 
                                         <p:column headerText="" styleClass="center" style="width:54px;">
@@ -592,12 +591,13 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
+            <p:blockUI block=":frmMain" trigger="btnSave">
+                LOADING<br />
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
         </h:form>
     </p:panel>
-    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-        LOADING<br />
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg" styleClass="messageDialog"
                          header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
@@ -613,7 +613,7 @@
     </p:dialog>
     <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
               onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-              modal="true" width="800" height="500">
+              modal="true" width="850" height="550">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="businessDialog" widgetVar="businessDlg" header="Business Information"
@@ -635,11 +635,11 @@
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">
-        <ui:param name="id" value="confirmDeleteDialog"/>
-        <ui:param name="name" value="confirmDeleteBusinessDlg"/>
+        <ui:param name="id" value="confirmDeleteBusinessDialog"/>
+        <ui:param name="name" value="confirmDeleteBusinesssDlg"/>
         <ui:param name="formId" value="frmConfirmDeleteBusiness"/>
         <ui:param name="controller" value="#{prescreenMaker}"/>
-        <ui:param name="action" value="onDeleteFacility"/>
+        <ui:param name="action" value="onDeleteBusinessInfo"/>
         <ui:param name="update" value=":frmMain"/>
     </ui:include>
     <ui:include src="dialog/confirmDeleteDlg.xhtml">

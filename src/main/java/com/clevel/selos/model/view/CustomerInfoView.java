@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CustomerInfoView implements Serializable {
+public class CustomerInfoView implements Serializable, Cloneable {
     //*** Var for transform ***//
     private long individualId;
     private long juristicId;
@@ -25,6 +25,7 @@ public class CustomerInfoView implements Serializable {
     //*** Var for search ***//
     private int searchBy;
     private String searchId;
+    private int searchFromRM;
 
     //*** Var for Check Citizen ***//
     private String inputId;
@@ -701,6 +702,13 @@ public class CustomerInfoView implements Serializable {
         this.subIndex = subIndex;
     }
 
+    public int getSearchFromRM() {
+        return searchFromRM;
+    }
+
+    public void setSearchFromRM(int searchFromRM) {
+        this.searchFromRM = searchFromRM;
+    }
     public BigDecimal getShare() {
         return share;
     }
@@ -731,82 +739,5 @@ public class CustomerInfoView implements Serializable {
 
     public void setWorthiness(int worthiness) {
         this.worthiness = worthiness;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("individualId", individualId).
-                append("juristicId", juristicId).
-                append("listIndex", listIndex).
-                append("subIndex", subIndex).
-                append("listName", listName).
-                append("isSpouse", isSpouse).
-                append("searchBy", searchBy).
-                append("searchId", searchId).
-                append("inputId", inputId).
-                append("validId", validId).
-                append("ncbResult", ncbResult).
-                append("ncbReason", ncbReason).
-                append("id", id).
-                append("age", age).
-                append("documentExpiredDate", documentExpiredDate).
-                append("titleTh", titleTh).
-                append("titleEn", titleEn).
-                append("firstNameTh", firstNameTh).
-                append("lastNameTh", lastNameTh).
-                append("firstNameEn", firstNameEn).
-                append("lastNameEn", lastNameEn).
-                append("ncbFlag", ncbFlag).
-                append("customerEntity", customerEntity).
-                append("documentType", documentType).
-                append("relation", relation).
-                append("reference", reference).
-                append("documentAuthorizeBy", documentAuthorizeBy).
-                append("serviceSegment", serviceSegment).
-                append("tmbCustomerId", tmbCustomerId).
-                append("collateralOwner", collateralOwner).
-                append("percentShare", percentShare).
-                append("approxIncome", approxIncome).
-                append("dateOfBirth", dateOfBirth).
-                append("citizenId", citizenId).
-                append("gender", gender).
-                append("numberOfChild", numberOfChild).
-                append("education", education).
-                append("maritalStatus", maritalStatus).
-                append("nationality", nationality).
-                append("sndNationality", sndNationality).
-                append("origin", origin).
-                append("occupation", occupation).
-                append("capital", capital).
-                append("financialYear", financialYear).
-                append("dateOfRegister", dateOfRegister).
-                append("paidCapital", paidCapital).
-                append("registrationId", registrationId).
-                append("signCondition", signCondition).
-                append("totalShare", totalShare).
-                append("currentAddress", currentAddress).
-                append("workAddress", workAddress).
-                append("registerAddress", registerAddress).
-                append("mailingAddressType", mailingAddressType).
-                append("childrenList", childrenList).
-                append("citizenCountry", citizenCountry).
-                append("registrationCountry", registrationCountry).
-                append("mobileNumber", mobileNumber).
-                append("faxNumber", faxNumber).
-                append("email", email).
-                append("kycLevel", kycLevel).
-                append("convenantFlag", convenantFlag).
-                append("ewsFlag", ewsFlag).
-                append("reviewFlag", reviewFlag).
-                append("reason", reason).
-                append("businessType", businessType).
-                append("spouse", spouse).
-                append("csi", csi).
-                append("share", share).
-                append("documentAuthorizeDate", documentAuthorizeDate).
-                append("kycReason", kycReason).
-                append("worthiness", worthiness).
-                toString();
     }
 }

@@ -7,6 +7,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 public class ContactDetails implements Serializable{
+    private String addressNo;
+    private String addressMoo;
+    private String addressBuilding;
+    private String addressStreet;
+    private String subdistrict;
+    private String district;
+    private String province;
+    private String postcode;
+    private String country;
+    private String countryCode;
 
     public ContactDetails(){
 
@@ -24,17 +34,6 @@ public class ContactDetails implements Serializable{
         this.country = country;
         this.countryCode = countryCode;
     }
-
-    private String addressNo;
-    private String addressMoo;
-    private String addressBuilding;
-    private String addressStreet;
-    private String subdistrict;
-    private String district;
-    private String province;
-    private String postcode;
-    private String country;
-    private String countryCode;
 
     public String getCountryCode() {
         return countryCode;

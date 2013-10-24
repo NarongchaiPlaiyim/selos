@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import java.io.Serializable;
@@ -519,6 +520,18 @@ public class RMService implements Serializable {
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
                     corporateModel.setDocumentType(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
+                    String addressPri[] = resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine1PRI().split(" ");
+                    int addressPriSize1 = addressPri.length;
+                    if (addressPriSize1 > 0) {
+                        corporateModel.setAddressNo(addressPri[0]);
+                    }
+                    if (addressPriSize1 > 1) {
+                        corporateModel.setAddressMoo(addressPri[1]);
+                    }
+                    if (addressPriSize1 > 2) {
+                        corporateModel.setAddressBuilding(addressPri[2]);
+                    }
+                    corporateModel.setAddressStreet(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine2PRI());
 
                     RegistrationAddress registrationAddress = new RegistrationAddress();
                     registrationAddress.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getComRegTumbon(),blank));
@@ -531,6 +544,18 @@ public class RMService implements Serializable {
                     registrationAddress.setExtension(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getExtension1());
                     registrationAddress.setContactName(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getContactPerson());
                     registrationAddress.setContactPhoneNo(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTelephoneNbr());
+                    String addressReg[] = resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine1REG().split(" ");
+                    int addressRegSize1 = addressReg.length;
+                    if (addressRegSize1 > 0) {
+                        registrationAddress.setAddressNo(addressPri[0]);
+                    }
+                    if (addressRegSize1 > 1) {
+                        registrationAddress.setAddressMoo(addressPri[1]);
+                    }
+                    if (addressRegSize1 > 2) {
+                        registrationAddress.setAddressBuilding(addressPri[2]);
+                    }
+                    registrationAddress.setAddressStreet(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine2REG());
 
 
                     corporateModel.setRegistrationAddress(registrationAddress);
@@ -621,8 +646,8 @@ public class RMService implements Serializable {
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
         //todo
-//        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl),String.class,customerServerUrl));
-//        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId),String.class,customerSessionId));
+        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl),String.class,customerServerUrl));
+        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId),String.class,customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();

@@ -1,9 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.ReferredExperience;
-import com.clevel.selos.model.db.master.SubDistrict;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -61,8 +58,9 @@ public class BizInfoSummary implements Serializable {
     @Column(name="post_code")
     private String postCode;
 
-    @Column(name="country")
-    private String country;
+    @OneToOne
+    @JoinColumn(name="country_id")
+    private Country country;
 
     @Column(name="address_eng")
     private String addressEng;
@@ -160,6 +158,9 @@ public class BizInfoSummary implements Serializable {
     @Column(name="sum_weight_ap")
     private BigDecimal sumWeightAP;
 
+    @Column(name="sum_weight_inv")
+    private BigDecimal sumWeightINV;
+
     @OneToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
@@ -171,6 +172,14 @@ public class BizInfoSummary implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="modify_date")
     private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
 
     @OneToMany(mappedBy="bizInfoSummary")
     private List<BizInfoDetail> bizInfoDetailList;
@@ -283,11 +292,11 @@ public class BizInfoSummary implements Serializable {
         this.postCode = postCode;
     }
 
-    public String getCountry() {
+    public Country getCountry() {
         return country;
     }
 
-    public void setCountry(String country) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 
@@ -539,6 +548,14 @@ public class BizInfoSummary implements Serializable {
         this.sumWeightAP = sumWeightAP;
     }
 
+    public BigDecimal getSumWeightINV() {
+        return sumWeightINV;
+    }
+
+    public void setSumWeightINV(BigDecimal sumWeightINV) {
+        this.sumWeightINV = sumWeightINV;
+    }
+
     public WorkCase getWorkCase() {
         return workCase;
     }
@@ -561,6 +578,22 @@ public class BizInfoSummary implements Serializable {
 
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public List<BizInfoDetail> getBizInfoDetailList() {

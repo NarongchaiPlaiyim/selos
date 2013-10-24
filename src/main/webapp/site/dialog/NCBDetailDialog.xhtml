@@ -189,7 +189,7 @@
             <h:outputText value="#{msg.get('app.dlg.noOfmonthsPayment')}"/>
         </td>
         <td>
-            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: right">
+            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: center">
                 <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue=""/>
                 <f:selectItem itemLabel="1" itemValue="1"/>
                 <f:selectItem itemLabel="2" itemValue="2"/>
@@ -208,77 +208,76 @@
 <tr>
     <td colspan="2" class="center">
         <p:panel style="border-width: 0;width: 500" rendered="#{ncbInfo.genTextBoxFlag}">
-
-            <h:form id="moneysForm">
+            <h:form  id="genTextBoxFlagForm">
                 <table class="content_form">
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;">
+                        <td class="title" style="width: 220px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo1')}"  rendered="#{ncbInfo.monthRender1}"/>
                         </td>
                         <td>
                             <p:inputText id="month1" value="#{ncbInfo.ncbDetailView.month1}" style="text-align: right" rendered="#{ncbInfo.monthRender1}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month1"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;" >
+                        <td class="title" style="width: 220px;text-align: left;" >
                             <h:outputText value="#{msg.get('app.dlg.monthNo2')}" rendered="#{ncbInfo.monthRender2}"/>
                         </td>
                         <td>
                             <p:inputText id="month2"
                                          value="#{ncbInfo.ncbDetailView.month2}" style="text-align: right" rendered="#{ncbInfo.monthRender2}">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month2"/>
+                            <p:ajax event="blur" update="@this"/>
                         </p:inputText>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;">
+                        <td class="title" style="width: 220px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo3')}"  rendered="#{ncbInfo.monthRender3}"/>
                         </td>
                         <td>
                             <p:inputText id="month3"
                                          value="#{ncbInfo.ncbDetailView.month3}"  style="text-align: right" rendered="#{ncbInfo.monthRender3}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month3"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;">
+                        <td class="title" style="width: 220px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo4')}"  rendered="#{ncbInfo.monthRender4}"/>
                         </td>
                         <td>
                             <p:inputText id="month4"
                                          value="#{ncbInfo.ncbDetailView.month4}" style="text-align: right" rendered="#{ncbInfo.monthRender4}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month4"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;">
+                        <td class="title" style="width: 220px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo5')}"  rendered="#{ncbInfo.monthRender5}"/>
                         </td>
                         <td>
                             <p:inputText id="month5"
                                          value="#{ncbInfo.ncbDetailView.month5}" style="text-align: right" rendered="#{ncbInfo.monthRender5}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month5"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
                     </tr>
                     <tr>
-                        <td class="title" style="width: 215px;text-align: left;">
+                        <td class="title" style="width: 220px;text-align: left;">
                             <h:outputText value="#{msg.get('app.dlg.monthNo6')}"  rendered="#{ncbInfo.monthRender6}"/>
                         </td>
                         <td>
                             <p:inputText id="month6"
                                          value="#{ncbInfo.ncbDetailView.month6}" style="text-align: right" rendered="#{ncbInfo.monthRender6}">
                                 <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                                <p:ajax event="blur" update=":ncbDlgForm:moneysForm:month6"/>
+                                <p:ajax event="blur" update="@this"/>
                             </p:inputText>
                         </td>
                     </tr>

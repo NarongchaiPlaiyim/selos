@@ -130,7 +130,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td>
-                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}"
+                                                        <p:selectOneMenu itemLabel="- Please Select -" itemValue="" size="1"  value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.province.code}" required="#{not empty param[saveButton.clientId]}"
                                                                          id="provinceCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.provinceList}"
@@ -142,7 +142,7 @@
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}"
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.district.id}" required="#{not empty param[saveButton.clientId]}"
                                                                          id="districtCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.districtList}"
@@ -153,7 +153,7 @@
                                                         </p:selectOneMenu>
                                                     </td>
                                                     <td>
-                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}"
+                                                        <p:selectOneMenu  size="1" value="#{bizInfoSummary.bizInfoSummaryView.subDistrict.code}" required="#{not empty param[saveButton.clientId]}"
                                                                          id="subDistrictCode">
                                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                                             <f:selectItems value="#{bizInfoSummary.subDistrictList}"
@@ -169,10 +169,14 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.country')}"/> :</td>
-                                                    <td>
-                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country}" id="country">
-                                                            <f:selectItem itemLabel="- THAI -" itemValue="TH"/>
-                                                            <f:selectItem itemLabel="- ETC -" itemValue="ETC"/>
+                                                    <td colspan="3">
+                                                        <p:selectOneMenu  value="#{bizInfoSummary.bizInfoSummaryView.country.id}" required="#{not empty param[saveButton.clientId]}"
+                                                                          id="countryId">
+                                                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                            <f:selectItems value="#{bizInfoSummary.countryList}"
+                                                                           var="country"
+                                                                           itemLabel="#{country.name}"
+                                                                           itemValue="#{country.id}"/>
                                                         </p:selectOneMenu>
                                                     </td>
                                                 </tr>
@@ -180,22 +184,27 @@
                                                     <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.AddressEN')}"/> :</td>
                                                     <td><p:inputText styleClass="medium" id="addressEng" value="#{bizInfoSummary.bizInfoSummaryView.addressEng}" /></td>
                                                 </tr>
-                                                <tr>
-                                                    <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> :</td>
-                                                    <td>
-                                                        <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" />
-                                                    </td>
-                                                    <td colspan="2">
-                                                        <p:spacer width="20px"></p:spacer>
-                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
-                                                        <p:spacer width="20px"></p:spacer>
-                                                        <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
-                                                    </td>
-                                                </tr>
                                             </table>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
+                                        <td>
+                                            <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" />
+                                        </td>
+                                        <td colspan="3">
+                                            <p:spacer width="10px"></p:spacer>
+                                            <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.extension')}"/>
+                                            <p:spacer width="20px"></p:spacer>
+                                            <p:inputText styleClass="smaller" id="extension" value="#{bizInfoSummary.bizInfoSummaryView.extension}"  />
+                                        </td>
+                                    </tr>
                                 </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <p:spacer  width="2px"/>
                             </td>
                         </tr>
                         <tr>
@@ -231,7 +240,7 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
                             </td>
                             <td>
-                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}"
+                                <p:selectOneMenu  size="1"  value="#{bizInfoSummary.bizInfoSummaryView.referredExperience.id}" required="#{not empty param[saveButton.clientId]}"
                                                  id="referExpId">
                                     <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                     <f:selectItems value="#{bizInfoSummary.referredExperienceList}"
@@ -240,6 +249,12 @@
                                                    itemValue="#{referExp.id}"/>
                                 </p:selectOneMenu>
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:separator/></td>
                         </tr>
                         <tr>
                             <td class="left" colspan="5">
@@ -400,6 +415,10 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+
+                        <tr>
                             <td class="left">
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
                             </td>
@@ -422,8 +441,17 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
                             <td colspan="5" class="left">
-                                <p:commandButton value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                <p:commandButton id="addBizInfoDetail" value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
                                     <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
                                 </p:commandButton>
                             </td>
@@ -459,7 +487,7 @@
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerTotalPercentBuyVolume}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="center" style="width: 100px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}"/>
@@ -517,7 +545,7 @@
                                             <p:column footerText="-"
                                                       style="background-color:#f8d0b6; text-align:right;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumweightAdjustIncomeFactor}"
+                                            <p:column footerText="#{bizInfoSummary.sumweightIntvIncomeFactor}"
                                                       style="background-color:#f8d0b6; text-align:right;"/>
 
                                             <p:column footerText="#{bizInfoSummary.sumweightAR}"
@@ -540,8 +568,18 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
                             <td colspan="5" class="center">
                                 <p:commandButton id="btnAddBizInfoSummary"
+                                                 binding="#{saveButton}"
                                                  value="#{msg.get('app.button.save')}"
                                                  process=":frmMain"
                                                  actionListener="#{bizInfoSummary.onSaveBizInfoSummary()}"
@@ -590,8 +628,14 @@
         <ui:param name="action" value="onSaveBizInfoSummary"/>
         <ui:param name="update" value=":msgBoxSystemMessagePanel,:frmMain"/>
     </ui:include>
-
-
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnAddBizInfoSummary">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+    <p:blockUI block=":frmMain" trigger=":frmMain:addBizInfoDetail">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 
     </h:body>
 </f:view>

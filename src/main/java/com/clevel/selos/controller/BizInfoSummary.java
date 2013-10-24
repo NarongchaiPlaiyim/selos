@@ -4,10 +4,7 @@ import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
-import com.clevel.selos.model.db.master.District;
-import com.clevel.selos.model.db.master.Province;
-import com.clevel.selos.model.db.master.ReferredExperience;
-import com.clevel.selos.model.db.master.SubDistrict;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -15,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -44,18 +42,22 @@ public class BizInfoSummary implements Serializable {
     private List<BizInfoDetail> bizInfoDetailList;
     private List<Province> provinceList;
     private List<District> districtList;
+    private List<Country> countryList;
     private List<SubDistrict> subDistrictList;
     private List<ReferredExperience> referredExperienceList;
     private Province province;
     private District district;
     private SubDistrict subDistrict;
+    private Country country;
+    private User user;
+
     private ReferredExperience  referredExperience;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
-    private BigDecimal sumweightAdjustIncomeFactor;
-    private long sumweightAR;
-    private long sumweightAP;
-    private long sumweightINV;
+    private BigDecimal sumweightIntvIncomeFactor;
+    private BigDecimal sumweightAR;
+    private BigDecimal sumweightAP;
+    private BigDecimal sumweightINV;
 
 
     private String messageHeader;
@@ -71,7 +73,7 @@ public class BizInfoSummary implements Serializable {
     @Inject
     private BizInfoDetailDAO bizInfoDetailDAO;
     @Inject
-    private ProvinceDAO provinceDAO;    // find credit type
+    private ProvinceDAO provinceDAO;
     @Inject
     private DistrictDAO districtDAO;
     @Inject
@@ -84,7 +86,10 @@ public class BizInfoSummary implements Serializable {
     private BizInfoDetailTransform bizProductDetailTransform;
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
-
+    @Inject
+    private UserDAO userDAO;
+    @Inject
+    private CountryDAO countryDAO;
 
     public BizInfoSummary(){
 
@@ -97,6 +102,7 @@ public class BizInfoSummary implements Serializable {
 
 
         provinceList = provinceDAO.getListOrderByParameter("name");
+        countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
 
         if(bizInfoSummaryView == null){
@@ -108,6 +114,7 @@ public class BizInfoSummary implements Serializable {
             province = new Province();
             district = new District();
             subDistrict = new SubDistrict();
+            country = new Country();
             referredExperience = new ReferredExperience();
 
             district.setProvince(province);
@@ -115,6 +122,15 @@ public class BizInfoSummary implements Serializable {
             subDistrict.setProvince(province);
             bizInfoSummaryView.setSubDistrict(subDistrict);
             bizInfoSummaryView.setReferredExperience(referredExperience);
+            bizInfoSummaryView.setCountry(country);
+
+            bizInfoSummaryView.setSumIncomeAmount(new BigDecimal(0));
+            bizInfoSummaryView.setSumIncomePercent(new BigDecimal(0));
+            bizInfoSummaryView.setSumWeightAR(new BigDecimal(0));
+            bizInfoSummaryView.setSumWeightAP(new BigDecimal(0));
+            bizInfoSummaryView.setSumWeightINV(new BigDecimal(0));
+            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
+
 
         }else{
             getBusinessInfoListDB();
@@ -154,20 +170,77 @@ public class BizInfoSummary implements Serializable {
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
+
+
         if(bizInfoDetailViewList.size()==0){
             bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         }else{
-            sumIncomeAmount = new BigDecimal(1000).setScale(2);
-            sumIncomePercent = new BigDecimal(1000).setScale(2);
-            double sumAdjust = -1;
+            double bankstatementAvg=0;
+            double incomeAmountCal= 0;
+            double sumIncomeAmountD = 0;
+
+            double sumIncomePercentD =0;
+            double incomePercentD =0;
+
+            double adjustIncome= 0;
+            double adjustIncomeCal= 0;
+            double sumAdjust = 0;
+
+            long ar= 0;
+            double arCal= 0;
+            double sumAR= 0;
+
+            long ap= 0;
+            double apCal= 0;
+            double sumAP= 0;
+
+            long inv= 0;
+            double invCal= 0;
+            double sumINV= 0;
+
             for(int i=0;i<bizInfoDetailViewList.size();i++){
+
                 BizInfoDetailView temp = bizInfoDetailViewList.get(i);
-                sumAdjust =+ temp.getAdjustedIncomeFactor().doubleValue();
-                sumweightAR =+ temp.getBizDesc().getAr();
-                sumweightAP =+ temp.getBizDesc().getAp() ;
-                sumweightINV =+ temp.getBizDesc().getInv()  ;
+
+                incomePercentD = temp.getPercentBiz().doubleValue();
+                sumIncomePercentD += incomePercentD;
+
+                bankstatementAvg = 12000;
+                incomeAmountCal = bankstatementAvg*12;
+                sumIncomeAmountD += incomeAmountCal;
+
+
+                adjustIncome = temp.getAdjustedIncomeFactor().doubleValue();
+                adjustIncomeCal = (adjustIncome*incomePercentD)/100;
+                sumAdjust += adjustIncomeCal;
+
+                ar = temp.getBizDesc().getAr();
+                arCal = (ar*incomePercentD)/100;
+                sumAR += arCal;
+
+                ap = temp.getBizDesc().getAp();
+                apCal = (ap*incomePercentD)/100;
+                sumAP += apCal;
+
+                inv = temp.getBizDesc().getInv();
+
+                invCal = (inv*incomePercentD)/100;
+                sumINV += invCal;
+
             }
-            sumweightAdjustIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
+            sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2);
+            sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2);
+            sumweightAR  = new BigDecimal(sumAR).setScale(2);
+            sumweightAP  = new BigDecimal(sumAP).setScale(2);
+            sumweightINV  = new BigDecimal(sumINV).setScale(2);
+            sumweightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
+
+            bizInfoSummaryView.setSumIncomeAmount(sumIncomeAmount);
+            bizInfoSummaryView.setSumIncomePercent(sumIncomePercent);
+            bizInfoSummaryView.setSumWeightAR(sumweightAR);
+            bizInfoSummaryView.setSumWeightAP(sumweightAP);
+            bizInfoSummaryView.setSumWeightINV(sumweightINV);
+            bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(sumweightIntvIncomeFactor);
         }
     }
 
@@ -176,7 +249,11 @@ public class BizInfoSummary implements Serializable {
 
         try{
             log.info("onSaveBizInfoSummary begin");
-
+            if(bizInfoSummaryView.getId() == 0){
+                bizInfoSummaryView.setCreateBy(user);
+                bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
+                bizInfoSummaryView.setModifyBy(user);
+            }
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1 );
@@ -349,35 +426,43 @@ public class BizInfoSummary implements Serializable {
         this.sumIncomePercent = sumIncomePercent;
     }
 
-    public BigDecimal getSumweightAdjustIncomeFactor() {
-        return sumweightAdjustIncomeFactor;
-    }
-
-    public void setSumweightAdjustIncomeFactor(BigDecimal sumweightAdjustIncomeFactor) {
-        this.sumweightAdjustIncomeFactor = sumweightAdjustIncomeFactor;
-    }
-
-    public long getSumweightAR() {
+    public BigDecimal getSumweightAR() {
         return sumweightAR;
     }
 
-    public void setSumweightAR(long sumweightAR) {
+    public void setSumweightAR(BigDecimal sumweightAR) {
         this.sumweightAR = sumweightAR;
     }
 
-    public long getSumweightAP() {
+    public BigDecimal getSumweightIntvIncomeFactor() {
+        return sumweightIntvIncomeFactor;
+    }
+
+    public void setSumweightIntvIncomeFactor(BigDecimal sumweightIntvIncomeFactor) {
+        this.sumweightIntvIncomeFactor = sumweightIntvIncomeFactor;
+    }
+
+    public BigDecimal getSumweightAP() {
         return sumweightAP;
     }
 
-    public void setSumweightAP(long sumweightAP) {
+    public void setSumweightAP(BigDecimal sumweightAP) {
         this.sumweightAP = sumweightAP;
     }
 
-    public long getSumweightINV() {
+    public BigDecimal getSumweightINV() {
         return sumweightINV;
     }
 
-    public void setSumweightINV(long sumweightINV) {
+    public void setSumweightINV(BigDecimal sumweightINV) {
         this.sumweightINV = sumweightINV;
+    }
+
+    public List<Country> getCountryList() {
+        return countryList;
+    }
+
+    public void setCountryList(List<Country> countryList) {
+        this.countryList = countryList;
     }
 }
