@@ -8,7 +8,9 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -68,6 +70,10 @@ public class CustomerInfoIndividual implements Serializable {
     private SubDistrictDAO subDistrictDAO;
     @Inject
     private CountryDAO countryDAO;
+    @Inject
+    private AddressTypeDAO addressTypeDAO;
+    @Inject
+    private KYCLevelDAO kycLevelDAO;
 
     @Inject
     private CustomerInfoSummaryControl customerInfoSummaryControl;
@@ -108,6 +114,8 @@ public class CustomerInfoIndividual implements Serializable {
     private List<SubDistrict> subDistrictForm6List;
 
     private List<Country> countryList;
+    private List<AddressType> addressTypeList;
+    private List<KYCLevel> kycLevelList;
 
     //*** View ***//
     private CustomerInfoView customerInfoView;
@@ -164,6 +172,7 @@ public class CustomerInfoIndividual implements Serializable {
         preRender();
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
+        customerInfoView.getSpouse().reset();
 
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
@@ -192,6 +201,14 @@ public class CustomerInfoIndividual implements Serializable {
         caseBorrowerTypeId = customerInfoSummaryControl.getCaseBorrowerTypeIdByWorkCase(workCaseId);
 
         referenceList = new ArrayList<Reference>();
+
+        addressFlagForm2 = 1;
+        addressFlagForm3 = 1;
+        addressFlagForm5 = 1;
+        addressFlagForm6 = 1;
+
+        addressTypeList = addressTypeDAO.findAll();
+        kycLevelList = kycLevelDAO.findAll();
 
 //        customerInfoView = customerInfoSummaryControl.getCustomerInfoSummary(workCaseId);
     }
@@ -333,6 +350,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSave(){
+
         if(addressFlagForm2 == 1){ //dup address 1 to address 2
             customerInfoView.setRegisterAddress(customerInfoView.getCurrentAddress());
         }
@@ -341,6 +359,35 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.setWorkAddress(customerInfoView.getCurrentAddress());
         }else if(addressFlagForm3 == 2){
             customerInfoView.setWorkAddress(customerInfoView.getRegisterAddress());
+        }
+
+        if(addressFlagForm5 == 1){ //dup address 1 to address 2
+            customerInfoView.getSpouse().setRegisterAddress(customerInfoView.getSpouse().getCurrentAddress());
+        }
+
+        if(addressFlagForm6 == 1){
+            customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getCurrentAddress());
+        }else if(addressFlagForm6 == 2){
+            customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getRegisterAddress());
+        }
+
+        customerInfoView.getCustomerEntity().setId(1); // for individual
+
+        try{
+            customerInfoSummaryControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
+            messageHeader = "Save Customer Info Individual Success.";
+            message = "Save Customer Info Individual data success.";
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Save Customer Info Individual Failed.";
+            if(ex.getCause() != null){
+                message = "Save Customer Info Individual failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Save Customer Info Individual failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            onCreation();
         }
     }
 
@@ -567,5 +614,109 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setAddressFlagForm6(int addressFlagForm6) {
         this.addressFlagForm6 = addressFlagForm6;
+    }
+
+    public List<AddressType> getAddressTypeList() {
+        return addressTypeList;
+    }
+
+    public void setAddressTypeList(List<AddressType> addressTypeList) {
+        this.addressTypeList = addressTypeList;
+    }
+
+    public List<KYCLevel> getKycLevelList() {
+        return kycLevelList;
+    }
+
+    public void setKycLevelList(List<KYCLevel> kycLevelList) {
+        this.kycLevelList = kycLevelList;
+    }
+
+    public List<Province> getProvinceForm4List() {
+        return provinceForm4List;
+    }
+
+    public void setProvinceForm4List(List<Province> provinceForm4List) {
+        this.provinceForm4List = provinceForm4List;
+    }
+
+    public List<District> getDistrictForm4List() {
+        return districtForm4List;
+    }
+
+    public void setDistrictForm4List(List<District> districtForm4List) {
+        this.districtForm4List = districtForm4List;
+    }
+
+    public List<SubDistrict> getSubDistrictForm4List() {
+        return subDistrictForm4List;
+    }
+
+    public void setSubDistrictForm4List(List<SubDistrict> subDistrictForm4List) {
+        this.subDistrictForm4List = subDistrictForm4List;
+    }
+
+    public List<Province> getProvinceForm5List() {
+        return provinceForm5List;
+    }
+
+    public void setProvinceForm5List(List<Province> provinceForm5List) {
+        this.provinceForm5List = provinceForm5List;
+    }
+
+    public List<District> getDistrictForm5List() {
+        return districtForm5List;
+    }
+
+    public void setDistrictForm5List(List<District> districtForm5List) {
+        this.districtForm5List = districtForm5List;
+    }
+
+    public List<SubDistrict> getSubDistrictForm5List() {
+        return subDistrictForm5List;
+    }
+
+    public void setSubDistrictForm5List(List<SubDistrict> subDistrictForm5List) {
+        this.subDistrictForm5List = subDistrictForm5List;
+    }
+
+    public List<Province> getProvinceForm6List() {
+        return provinceForm6List;
+    }
+
+    public void setProvinceForm6List(List<Province> provinceForm6List) {
+        this.provinceForm6List = provinceForm6List;
+    }
+
+    public List<District> getDistrictForm6List() {
+        return districtForm6List;
+    }
+
+    public void setDistrictForm6List(List<District> districtForm6List) {
+        this.districtForm6List = districtForm6List;
+    }
+
+    public List<SubDistrict> getSubDistrictForm6List() {
+        return subDistrictForm6List;
+    }
+
+    public void setSubDistrictForm6List(List<SubDistrict> subDistrictForm6List) {
+        this.subDistrictForm6List = subDistrictForm6List;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

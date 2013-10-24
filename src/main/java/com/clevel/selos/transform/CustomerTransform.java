@@ -472,6 +472,7 @@ public class CustomerTransform extends Transform {
             } else {
                 individual.setOccupation(null);
             }
+
             customer.setIndividual(individual);
         } else {
             //Juristic
@@ -501,6 +502,12 @@ public class CustomerTransform extends Transform {
         if(customer.getCsi().getId() == 0){
             customer.setCsi(null);
         }
+
+        //todo:
+//        private BigDecimal share;
+//        private Date documentAuthorizeDate;
+//        private String kycReason;
+//        private int worthiness;
 
         return customer;
     }
