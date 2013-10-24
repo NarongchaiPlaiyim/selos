@@ -64,6 +64,9 @@ public class WelcomePage implements Serializable {
     @Inject
     @BRMS
     Logger brmsLog;
+    @Inject
+    @COMS
+    Logger comsLog;
 
     @Inject
     @NormalMessage
@@ -271,6 +274,10 @@ public class WelcomePage implements Serializable {
 
     public void onActionBRMS() {
         brmsLog.debug("test BRMS log. ({})",new Date());
+    }
+
+    public void onActionCOMS() {
+        comsLog.debug("test COMS log. ({})",new Date());
     }
 
     public Date getNow() {
