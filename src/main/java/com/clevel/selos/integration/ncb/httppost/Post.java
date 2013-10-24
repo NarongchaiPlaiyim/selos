@@ -43,7 +43,7 @@ public class Post implements Serializable {
     }
 
     public String sendPost(String xml, String url, int timeOut) throws Exception {
-        log.debug("Call : sendPost() url {}, timeOut {}", url,timeOut);
+        log.debug("Call : sendPost(url : {}, timeOut : {})", url,timeOut);
         if(ValidationUtil.isNull(xml)){
             throw new ValidationException(required, message.get(required, "XML"));
         }
@@ -54,7 +54,6 @@ public class Post implements Serializable {
             throw new ValidationException(required, message.get(required, "Time Out"));
         }
 
-        log.debug("url : {}", url);
         DefaultHttpClient client = null;
         HttpPost post = null;
         List<NameValuePair> urlParameters = null;
@@ -91,6 +90,5 @@ public class Post implements Serializable {
             log.error("The request has failed, Error code is {}", resCode);
             throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
         }
-
     }
 }
