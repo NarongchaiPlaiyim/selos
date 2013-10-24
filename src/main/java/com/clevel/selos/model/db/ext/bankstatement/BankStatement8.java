@@ -12,8 +12,6 @@ import java.util.Date;
 @Table(name = "ext_dwh_bankstatement8")
 public class BankStatement8 implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_BANKSTATEMENT8", sequenceName="SEQ_EXT_BANKSTATEMENT8", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_BANKSTATEMENT8")
     private long id;
 
     @Column(name="account_status", length = 2)
