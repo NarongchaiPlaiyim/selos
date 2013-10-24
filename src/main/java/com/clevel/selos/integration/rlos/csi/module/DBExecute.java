@@ -67,8 +67,7 @@ public class DBExecute implements Serializable{
                 break;
         }
 
-        /*String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+*/
-        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE "+
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
                 "FROM "+tableName+" WHERE "+clause+" = ?";
 
         try {
@@ -90,7 +89,7 @@ public class DBExecute implements Serializable{
                 csiData.setWarningCode(rs.getString(6));
                 csiData.setSource(rs.getString(7));
                 csiData.setDataDate(rs.getString(8));
-                //csiData.setDateWarningCode(rs.getString(9));
+                csiData.setDateWarningCode(rs.getString(9));
                 log.debug("csi data : {}",csiData.toString());
                 warningCodeMap.put(csiData.getWarningCode(),csiData);
             }
@@ -110,8 +109,7 @@ public class DBExecute implements Serializable{
         log.debug("getWarningCodeListPartialMatched nameTh: {}, nameEn: {}",nameTh,nameEn);
         Map<String,CSIData> warningCodeMap = null;
 
-        /*String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+*/
-        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE "+
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
                 "FROM "+tableName+" WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
 
         try {
@@ -145,7 +143,7 @@ public class DBExecute implements Serializable{
                 csiData.setWarningCode(rs.getString(6));
                 csiData.setSource(rs.getString(7));
                 csiData.setDataDate(rs.getString(8));
-                //csiData.setDateWarningCode(rs.getString(9));
+                csiData.setDateWarningCode(rs.getString(9));
                 log.debug("csi data : {}",csiData.toString());
                 warningCodeMap.put(csiData.getWarningCode(),csiData);
             }

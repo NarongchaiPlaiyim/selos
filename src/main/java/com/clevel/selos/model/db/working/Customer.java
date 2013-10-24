@@ -112,6 +112,9 @@ public class Customer implements Serializable {
     @Column(name="spouse_id")
     private long spouseId;
 
+    @Column(name="is_search_rm", nullable=false, columnDefinition = "int default 0")
+    private int searchFromRM;
+
     public Customer() {
     }
 
@@ -345,6 +348,14 @@ public class Customer implements Serializable {
 
     public void setSpouseId(long spouseId) {
         this.spouseId = spouseId;
+    }
+
+    public int getSearchFromRM() {
+        return searchFromRM;
+    }
+
+    public void setSearchFromRM(int searchFromRM) {
+        this.searchFromRM = searchFromRM;
     }
 
     @Override

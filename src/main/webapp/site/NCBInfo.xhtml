@@ -50,7 +50,7 @@
         <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;"/>
     </td>
 </tr>
 
@@ -59,7 +59,7 @@
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: right"/>
     </td>
 </tr>
 <tr>
@@ -67,7 +67,7 @@
         <h:outputText value="#{msg.get('app.paymentClass')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;"/>
     </td>
 </tr>
 <tr>
@@ -75,7 +75,7 @@
         <h:outputText value="#{msg.get('app.typeOfCurrentPayment')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.currentPaymentType}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.currentPaymentType}" disabled="true" style="width:200px;"/>
     </td>
 </tr>
 <tr>
@@ -83,66 +83,64 @@
         <h:outputText value="#{msg.get('app.typeOfHistoryPayment')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.historyPaymentType}" disabled="true"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.historyPaymentType}" disabled="true" style="width:200px;"/>
     </td>
 </tr>
-<!--<tr>
+<tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.NPLFlag')}"/>
     </td>
     <td>
-        <h:form id="nplFlagForm">
-            <table class="content_form">
-                <tr>
-                    <td class="title" style="width: 160px;">
-                        <h:selectOneRadio id="NPLFlag" value="#{ncbInfo.ncbInfoView.nplFlag}">
-                            <f:selectItem itemLabel="Yes" itemValue="1"/>
-                            <f:selectItem itemLabel="No" itemValue="0"/>
-                        </h:selectOneRadio>
-                    </td>
-                    <td class="title">
-                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"/>
-                        <h:outputText value="#{msg.get('app.isNPLwithTMB')}"></h:outputText>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
-                            <f:selectItem itemLabel="January" itemValue="1"/>
-                            <f:selectItem itemLabel="February" itemValue="2"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}">
-                            <f:selectItem itemLabel="2010" itemValue="2010"/>
-                            <f:selectItem itemLabel="2011" itemValue="2011"/>
-                            <f:selectItem itemLabel="2012" itemValue="2012"/>
-                            <f:selectItem itemLabel="2013" itemValue="2013"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"/><h:outputText
-                            value="#{msg.get('app.isNPLwithOther')}"/>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}">
-                            <f:selectItem itemLabel="January" itemValue="1"/>
-                            <f:selectItem itemLabel="February" itemValue="2"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}">
-                            <f:selectItem itemLabel="2010" itemValue="2010"/>
-                            <f:selectItem itemLabel="2011" itemValue="2011"/>
-                            <f:selectItem itemLabel="2012" itemValue="2012"/>
-                            <f:selectItem itemLabel="2013" itemValue="2013"/>
-                        </h:selectOneMenu>
-                    </td>
-                </tr>
-                &lt;!&ndash;                <tr>
-                                    <td colspan="2">
-                                        <h:inputHidden   value="#{ncbInfo.ncbInfoView.ncbCusMarriageStatus}" />
-                                        <h:inputHidden   value="#{ncbInfo.ncbInfoView.enquiry}" />
-                                        <h:inputHidden   value="#{ncbInfo.ncbInfoView.ncbLastInfoAsOfDate}" />
-                                        <h:inputHidden   value="#{ncbInfo.ncbInfoView.ncbCusName}" />
-                                        <h:inputHidden   value="#{ncbInfo.ncbInfoView.ncbCusAddress}" />
-                                    </td>
-                                </tr>&ndash;&gt;
-            </table>
-        </h:form>
+        <table class="table_noborder">
+            <tr>
+                <td class="title" style="width: 160px;">
+                    <h:selectOneRadio id="NPLFlag" value="#{ncbInfo.ncbInfoView.nplFlag}">
+                        <f:selectItem itemLabel="Yes" itemValue="1"/>
+                        <f:selectItem itemLabel="No" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+                <td class="title">
+                    <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"/>
+                    <h:outputText value="#{msg.get('app.isNPLwithTMB')}"></h:outputText>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
+                        <f:selectItem itemLabel="January" itemValue="1"/>
+                        <f:selectItem itemLabel="February" itemValue="2"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}">
+                        <f:selectItem itemLabel="2010" itemValue="2010"/>
+                        <f:selectItem itemLabel="2011" itemValue="2011"/>
+                        <f:selectItem itemLabel="2012" itemValue="2012"/>
+                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"/><h:outputText
+                        value="#{msg.get('app.isNPLwithOther')}"/>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}">
+                        <f:selectItem itemLabel="January" itemValue="1"/>
+                        <f:selectItem itemLabel="February" itemValue="2"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}">
+                        <f:selectItem itemLabel="2010" itemValue="2010"/>
+                        <f:selectItem itemLabel="2011" itemValue="2011"/>
+                        <f:selectItem itemLabel="2012" itemValue="2012"/>
+                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                    </h:selectOneMenu>
+                </td>
+            </tr>
+             <tr style="display: none">
+                <td colspan="2">
+                    <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusMarriageStatus}"/>
+                    <h:outputText value="#{ncbInfo.ncbInfoView.enquiry}"/>
+                    <h:outputText value="#{ncbInfo.ncbInfoView.ncbLastInfoAsOfDate}"/>
+                    <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusName}"/>
+                    <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusAddress}"/>
+                </td>
+            </tr>
+        </table>
     </td>
 </tr>
 <tr>
@@ -150,51 +148,50 @@
         <h:outputText value="#{msg.get('app.TDRFlag')}"/>
     </td>
     <td>
-        <h:form id="tdrFlagForm">
-            <table class="content_form">
-                <tr>
-                    <td class="title" style="width: 160px;">
-                        <h:selectOneRadio id="tdrFlag" value="#{ncbInfo.ncbInfoView.tdrFlag}">
-                            <f:selectItem itemLabel="Yes" itemValue="1"/>
-                            <f:selectItem itemLabel="No" itemValue="0"/>
-                        </h:selectOneRadio>
-                    </td>
-                    <td class="title">
-                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"/>
-                        <h:outputText value="#{msg.get('app.isTDRwithTMB')}"></h:outputText>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}">
-                            <f:selectItem itemLabel="January" itemValue="1"/>
-                            <f:selectItem itemLabel="February" itemValue="2"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}">
-                            <f:selectItem itemLabel="2010" itemValue="2010"/>
-                            <f:selectItem itemLabel="2011" itemValue="2011"/>
-                            <f:selectItem itemLabel="2012" itemValue="2012"/>
-                            <f:selectItem itemLabel="2013" itemValue="2013"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"/><h:outputText
-                            value="#{msg.get('app.isTDRwithOther')}"/>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}">
-                            <f:selectItem itemLabel="January" itemValue="1"/>
-                            <f:selectItem itemLabel="February" itemValue="2"/>
-                        </h:selectOneMenu>
-                        <p:spacer width="5px;"/>
-                        <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}">
-                            <f:selectItem itemLabel="2010" itemValue="2010"/>
-                            <f:selectItem itemLabel="2011" itemValue="2011"/>
-                            <f:selectItem itemLabel="2012" itemValue="2012"/>
-                            <f:selectItem itemLabel="2013" itemValue="2013"/>
-                        </h:selectOneMenu>
-                    </td>
-                </tr>
-            </table>
-        </h:form>
+        <table class="table_noborder">
+            <tr>
+                <td class="title" style="width: 160px;">
+                    <h:selectOneRadio id="tdrFlag" value="#{ncbInfo.ncbInfoView.tdrFlag}">
+                        <f:selectItem itemLabel="Yes" itemValue="1"/>
+                        <f:selectItem itemLabel="No" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+                <td class="title">
+                    <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrTMBFlag}"/>
+                    <h:outputText value="#{msg.get('app.isTDRwithTMB')}"></h:outputText>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}">
+                        <f:selectItem itemLabel="January" itemValue="1"/>
+                        <f:selectItem itemLabel="February" itemValue="2"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}">
+                        <f:selectItem itemLabel="2010" itemValue="2010"/>
+                        <f:selectItem itemLabel="2011" itemValue="2011"/>
+                        <f:selectItem itemLabel="2012" itemValue="2012"/>
+                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"/><h:outputText
+                        value="#{msg.get('app.isTDRwithOther')}"/>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}">
+                        <f:selectItem itemLabel="January" itemValue="1"/>
+                        <f:selectItem itemLabel="February" itemValue="2"/>
+                    </h:selectOneMenu>
+                    <p:spacer width="5px;"/>
+                    <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}">
+                        <f:selectItem itemLabel="2010" itemValue="2010"/>
+                        <f:selectItem itemLabel="2011" itemValue="2011"/>
+                        <f:selectItem itemLabel="2012" itemValue="2012"/>
+                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                    </h:selectOneMenu>
+                </td>
+            </tr>
+        </table>
+
     </td>
-</tr>-->
+</tr>
 <tr>
     <td class="title">
         <h:outputText value="#{msg.get('app.TDRPaymentCondition')}"/>
@@ -307,7 +304,7 @@
                                              name="header">#{msg.get('app.ncbDetail.table.label.wcFlag')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:40px" name="header"></f:facet>
+                                    <f:facet style="width:60px" name="header"></f:facet>
                                 </p:column>
 
                             </p:row>
@@ -375,11 +372,11 @@
                                 <h:outputText value="#{item.historyPayment.name}"/>
                             </p:column>
 
-                            <p:column styleClass="left">
+                            <p:column styleClass="center">
                                 <h:outputText value="#{item.noOfOutstandingPaymentIn12months}"/>
                             </p:column>
 
-                            <p:column styleClass="left">
+                            <p:column styleClass="center">
                                 <h:outputText value="#{item.noOfOverLimit}"/>
                             </p:column>
 
@@ -391,11 +388,13 @@
                                 <h:outputText value="#{item.wc}"/>
                             </p:column>
 
-                            <p:column>
+                            <p:column style="width:60px;">
                                 <p:commandButton icon="ui-icon-pencil"
                                                  action="#{ncbInfo.onEditNcbDetail()}"
+                                                 process=":frmMain"
                                                  update=":ncbDlgForm"
-                                                 oncomplete="ncbDlg.show();">
+                                                 oncomplete="ncbDlg.show();"
+                                                 rendered="#{item.canToEdit}">
                                     <f:setPropertyActionListener value="#{item}"
                                                                  target="#{ncbInfo.selectNcbRecordItem}"/>
                                     <f:setPropertyActionListener value="#{rowIndex}"
@@ -403,7 +402,8 @@
                                 </p:commandButton>
                                 <p:commandButton title="Remove"
                                                  icon="ui-icon-trash"
-                                                 oncomplete="confirmDeleteNcbRecordDlg.show()">
+                                                 oncomplete="confirmDeleteNcbRecordDlg.show()"
+                                                 rendered="#{item.canToEdit}" >
                                     <f:setPropertyActionListener value="#{item}"
                                                                  target="#{ncbInfo.selectNcbRecordItem}"/>
                                 </p:commandButton>
@@ -461,7 +461,7 @@
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" width="540" height="550">
+          modal="true"  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"   height="500">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 

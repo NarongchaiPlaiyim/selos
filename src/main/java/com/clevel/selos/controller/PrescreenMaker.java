@@ -33,6 +33,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,6 +70,7 @@ public class PrescreenMaker implements Serializable {
     private List<CustomerEntity> customerEntityList;
     private List<Relation> relationList;
     private List<Reference> referenceList;
+    private List<Relation> spouseRelationList;
     private List<Reference> spouseReferenceList;
     private List<Title> titleList;
     private List<Nationality> nationalityList;
@@ -217,7 +219,7 @@ public class PrescreenMaker implements Serializable {
 
     public void preRender(){
         HttpSession session = FacesUtil.getSession(true);
-        log.info("preRender ::: setSession ");
+        log.debug("preRender ::: setSession ");
 
         if(session.getAttribute("workCasePreScreenId") != null){
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
@@ -251,25 +253,25 @@ public class PrescreenMaker implements Serializable {
                         return;
                     }
                 }catch (Exception ex){
-                    log.info("Exception :: {}",ex);
+                    log.debug("Exception :: {}",ex);
                 }
             }
         }else{
             //TODO return to inbox
-            log.info("preRender ::: workCasePrescreenId is null.");
+            log.debug("preRender ::: workCasePrescreenId is null.");
             try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
             }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+                log.debug("Exception :: {}",ex);
             }
         }
     }
 
     @PostConstruct
     public void onCreation() {
-        log.info("onCreation :::");
+        log.debug("onCreation :::");
         HttpSession session = FacesUtil.getSession(true);
 
         if(session.getAttribute("workCasePreScreenId") != null){
@@ -391,16 +393,18 @@ public class PrescreenMaker implements Serializable {
                     if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
                         CustomerInfoView spouse = new CustomerInfoView();
                         spouse = item.getSpouse();
-                        spouse.setIsSpouse(1);
-                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
-                            spouse.setSubIndex(borrowerInfoViewList.size());
-                            borrowerInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
-                            spouse.setSubIndex(guarantorInfoViewList.size());
-                            guarantorInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
-                            spouse.setSubIndex(relatedInfoViewList.size());
-                            relatedInfoViewList.add(spouse);
+                        if(spouse != null){
+                            spouse.setIsSpouse(1);
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                spouse.setSubIndex(borrowerInfoViewList.size());
+                                borrowerInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
+                                spouse.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
+                                spouse.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(spouse);
+                            }
                         }
                     }
                 }
@@ -449,10 +453,10 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onLoadSelectList() {
-        log.info("onLoadSelectList :::");
+        log.debug("onLoadSelectList :::");
 
         productGroupList = productGroupDAO.findAll();
-        log.info("onLoadSelectList ::: productGroupList size : {}", productGroupList.size());
+        log.debug("onLoadSelectList ::: productGroupList size : {}", productGroupList.size());
 
         if(prescreenView.getProductGroup() != null){
             getProductProgramList();
@@ -460,64 +464,67 @@ public class PrescreenMaker implements Serializable {
 
         if(stepId == 1001){
             bdmCheckerList = userDAO.findBDMChecker(user);
-            log.info("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
+            log.debug("onLoadSelectList ::: bdmCheckerList size : {}", bdmCheckerList.size());
         }
 
         if(stepId == 1003){
             businessGroupList = businessGroupDAO.findAll();
-            log.info("onLoadSelectList ::: businessGroupList size : {}", businessGroupList.size());
+            log.debug("onLoadSelectList ::: businessGroupList size : {}", businessGroupList.size());
 
             potentialCollateralList = potentialCollateralDAO.findAll();
-            log.info("onLoadSelectList ::: potentialCollateralList size : {}", potentialCollateralList.size());
+            log.debug("onLoadSelectList ::: potentialCollateralList size : {}", potentialCollateralList.size());
 
             refinanceList = bankDAO.getListRefinance();
-            log.info("onLoadSelectList ::: refinanceList size : {}", refinanceList.size());
+            log.debug("onLoadSelectList ::: refinanceList size : {}", refinanceList.size());
 
             referredExperienceList = referredExperienceDAO.findAll();
-            log.info("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
+            log.debug("onLoadSelectList ::: referredExperienceList size : {}", referredExperienceList.size());
 
             borrowingTypeList = borrowingTypeDAO.findAll();
-            log.info("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
+            log.debug("onLoadSelectList ::: borrowingTypeList size : {}", borrowingTypeList.size());
         }
 
         //*** List for Customer ***//
         documentTypeList = documentTypeDAO.findAll();
-        log.info("onLoadSelectList ::: documentTypeList size : {}", documentTypeList.size());
+        log.debug("onLoadSelectList ::: documentTypeList size : {}", documentTypeList.size());
 
         customerEntityList = customerEntityDAO.findAll();
-        log.info("onLoadSelectList ::: borrowerTypeList size : {}", customerEntityList.size());
+        log.debug("onLoadSelectList ::: borrowerTypeList size : {}", customerEntityList.size());
 
         relationList = prescreenBusinessControl.getRelationByStepId(stepId);
-        log.info("onLoadSelectList ::: relationList size : {}", relationList.size());
+        log.debug("onLoadSelectList ::: relationList size : {}", relationList.size());
 
         referenceList = new ArrayList<Reference>();
 
-        log.info("onLoadSelectList ::: referenceList size : {}", referenceList.size());
+        log.debug("onLoadSelectList ::: referenceList size : {}", referenceList.size());
 
         maritalStatusList = maritalStatusDAO.findAll();
-        log.info("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
+        log.debug("onLoadSelectList ::: maritalStatusList size : {}", maritalStatusList.size());
 
         titleList = titleDAO.findAll();
-        log.info("onLoadSelectList ::: titleList size : {}", titleList.size());
+        log.debug("onLoadSelectList ::: titleList size : {}", titleList.size());
 
         nationalityList = nationalityDAO.findAll();
-        log.info("onLoadSelectList ::: nationalityList size : {}", nationalityList.size());
+        log.debug("onLoadSelectList ::: nationalityList size : {}", nationalityList.size());
 
         businessLocationList = provinceDAO.getListOrderByParameter("name");
 
-        /*provinceList = provinceDAO.getListOrderByParameter("name");
-        log.info("onLoadSelectList ::: provinceList size : {}", provinceList.size());*/
+        provinceList = provinceDAO.getListOrderByParameter("name");
+        log.debug("onLoadSelectList ::: provinceList size : {}", provinceList.size());
+
+        provinceSpouseList = provinceDAO.getListOrderByParameter("name");
+        log.debug("onLoadSelectList ::: provinceSpouseList size : {}", provinceSpouseList.size());
 
         /*districtList = districtDAO.findAll();
-        log.info("onLoadSelectList ::: districtList size : {}", districtList.size());*/
+        log.debug("onLoadSelectList ::: districtList size : {}", districtList.size());*/
 
         /*subDistrictList = subDistrictDAO.findAll();
-        log.info("onLoadSelectList ::: subDistrictList size : {}", subDistrictList.size());*/
+        log.debug("onLoadSelectList ::: subDistrictList size : {}", subDistrictList.size());*/
     }
 
     public void onClearObject(){
         // *** Clear Variable for Dialog *** //
-        log.info("onClearObject :::");
+        log.debug("onClearObject :::");
 
         if(facility == null){ facility = new FacilityView(); }
         if(bizInfoView == null){ bizInfoView = new BizInfoDetailView(); }
@@ -566,7 +573,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onCloseSale(){
-        log.info("onCloseSale ::: queueName : {}", queueName);
+        log.debug("onCloseSale ::: queueName : {}", queueName);
         //TODO get nextStep
         String actionCode = "1008";
         prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
@@ -587,12 +594,12 @@ public class PrescreenMaker implements Serializable {
 
     // *** Function For Facility *** //
     public void onAddFacility() {
-        log.info("onAddFacility ::: ");
-        log.info("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
+        log.debug("onAddFacility ::: ");
+        log.debug("onAddFacility ::: prescreenView.productGroup : {}", prescreenView.getProductGroup());
 
         if(prescreenView.getProductGroup() != null){
             //*** Reset form ***//
-            log.info("onAddFacility ::: Reset Form");
+            log.debug("onAddFacility ::: Reset Form");
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
             facility = new FacilityView();
             facility.setProductProgram(new ProductProgram());
@@ -606,7 +613,7 @@ public class PrescreenMaker implements Serializable {
 
     public void onEditFacility() {
         modeForButton = ModeForButton.EDIT;
-        log.info("onEditFacility ::: selecteFacilityItem : {}", selectFacilityItem);
+        log.debug("onEditFacility ::: selecteFacilityItem : {}", selectFacilityItem);
 
         facility = new FacilityView();
         ProductProgram productProgram = selectFacilityItem.getProductProgram();
@@ -620,16 +627,16 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSaveFacility() {
-        log.info("onSaveFacility ::: mode : {}", modeForButton);
+        log.debug("onSaveFacility ::: mode : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
 
-        log.info("onSaveFacility ::: prescreen.productgroup.getId() : {} ", prescreenView.getProductGroup().getId());
-        log.info("onSaveFacility ::: facility.getProductProgram().getId() : {} ", facility.getProductProgram().getId());
-        log.info("onSaveFacility ::: facility.getCreditType().getId() : {} ", facility.getCreditType().getId());
-        log.info("onSaveFacility ::: facility.getRequestAmount : {}", facility.getRequestAmount());
-        log.info("onSaveFacility ::: facilityViewList : {}", facilityViewList);
+        log.debug("onSaveFacility ::: prescreen.productgroup.getId() : {} ", prescreenView.getProductGroup().getId());
+        log.debug("onSaveFacility ::: facility.getProductProgram().getId() : {} ", facility.getProductProgram().getId());
+        log.debug("onSaveFacility ::: facility.getCreditType().getId() : {} ", facility.getCreditType().getId());
+        log.debug("onSaveFacility ::: facility.getRequestAmount : {}", facility.getRequestAmount());
+        log.debug("onSaveFacility ::: facilityViewList : {}", facilityViewList);
 
         if( facility.getProductProgram().getId() != 0 && facility.getCreditType().getId() != 0 && facility.getRequestAmount() != null ) {
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
@@ -641,33 +648,33 @@ public class PrescreenMaker implements Serializable {
                 facilityItem.setCreditType(creditType);
                 facilityItem.setRequestAmount(facility.getRequestAmount());
                 facilityViewList.add(facilityItem);
-                log.info("onSaveFacility ::: modeForButton : {}, Completed.", modeForButton);
+                log.debug("onSaveFacility ::: modeForButton : {}, Completed.", modeForButton);
             } else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 ProductProgram productProgram = productProgramDAO.findById(facility.getProductProgram().getId());
                 CreditType creditType = creditTypeDao.findById(facility.getCreditType().getId());
                 facilityViewList.get(rowIndex).setProductProgram(productProgram);
                 facilityViewList.get(rowIndex).setCreditType(creditType);
                 facilityViewList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
-                log.info("onSaveFacility ::: modeForButton : {}, rowIndex : {}, Completed.", modeForButton, rowIndex);
+                log.debug("onSaveFacility ::: modeForButton : {}, rowIndex : {}, Completed.", modeForButton, rowIndex);
             } else {
-                log.info("onSaveFacility ::: Undefined modeForbutton !!");
+                log.debug("onSaveFacility ::: Undefined modeForbutton !!");
             }
             complete = true;
         } else {
-            log.info("onSaveFacility ::: validation failed.");
+            log.debug("onSaveFacility ::: validation failed.");
             complete = false;
         }
         context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteFacility() {
-        log.info("onDeleteFacility ::: selectFacilityItem : {}");
+        log.debug("onDeleteFacility ::: selectFacilityItem : {}");
         facilityViewList.remove(selectFacilityItem);
     }
 
     // *** Function For Customer *** //
     public void onAddCustomerInfo() {
-        log.info("onAddCustomerInfo ::: reset form");
+        log.debug("onAddCustomerInfo ::: reset form");
         // *** Reset Form *** //
         modeForButton = ModeForButton.ADD;
 
@@ -707,6 +714,8 @@ public class PrescreenMaker implements Serializable {
                     }
                 }
             }
+        } else {
+            documentTypeList = documentTypeDAO.findAll();
         }
 
         if(caseBorrowerTypeId == 2){
@@ -723,7 +732,7 @@ public class PrescreenMaker implements Serializable {
             subDistrictSpouseList = new ArrayList<SubDistrict>();
         }
 
-        log.info("onAddCustomerInfo : borrower : {}", borrowerInfo);
+        log.debug("onAddCustomerInfo : borrower : {}", borrowerInfo);
 
         relationList = prescreenBusinessControl.getRelationByStepId(stepId);
 
@@ -735,17 +744,31 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onEditCustomerInfo() {
-        log.info("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
+        log.debug("onEditCustomer ::: selectCustomerItem : {}", selectCustomerInfoItem);
 
         //Clone object
         Cloner cloner = new Cloner();
         if(selectCustomerInfoItem.getIsSpouse() == 1){
             //if select spouse to edit...
-            log.info("onEditCustomer ::: select spouse to edit ...");
+            log.debug("onEditCustomer ::: select spouse to edit ...");
             borrowerInfo = cloner.deepClone(customerInfoViewList.get(selectCustomerInfoItem.getListIndex()));
-            log.info("onEditCustomer ::: get borrower from list to edit : {}", borrowerInfo);
+            log.debug("onEditCustomer ::: get borrower from list to edit : {}", borrowerInfo);
+            if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(borrowerInfo.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    borrowerInfo.setSpouse(spouse);
+                }
+            }
         } else {
             borrowerInfo = cloner.deepClone(selectCustomerInfoItem);
+            if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if(borrowerInfo.getSpouse() == null){
+                    CustomerInfoView spouse = new CustomerInfoView();
+                    spouse.reset();
+                    borrowerInfo.setSpouse(spouse);
+                }
+            }
         }
 
         modeForButton = ModeForButton.EDIT;
@@ -755,6 +778,24 @@ public class PrescreenMaker implements Serializable {
         } else {
             relationList = prescreenBusinessControl.getRelationByStepId(1003);
         }
+
+        if(stepId == 1001){
+            spouseRelationList = prescreenBusinessControl.getRelationByStepId(1001);
+        } else {
+            if(borrowerInfo.getSpouse() != null){
+                if(borrowerInfo.getSpouse().getId() != 0){
+                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(1001);
+                }else{
+                    spouseRelationList = prescreenBusinessControl.getRelationByStepId(1003);
+                }
+            } else {
+                spouseRelationList = prescreenBusinessControl.getRelationByStepId(1003);
+            }
+        }
+
+
+        documentTypeList = documentTypeDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
+        titleList = titleDAO.getListByCustomerEntityId(borrowerInfo.getCustomerEntity().getId());
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
         onChangeRelation();
@@ -772,13 +813,30 @@ public class PrescreenMaker implements Serializable {
         }
 
         enableCustomerForm = true;
+        if(Util.isTrue(borrowerInfo.getSearchFromRM())){
+            enableDocumentType = false;
+            enableCitizenId = false;
+            enableTMBCustomerId = false;
+        } else {
+            if(stepId == 1003 && borrowerInfo.getRelation().getId() == 1){
+                enableDocumentType = false;
+                enableCitizenId = false;
+                enableTMBCustomerId = false;
+            } else {
+                enableDocumentType = true;
+                enableCitizenId = true;
+                enableTMBCustomerId = true;
+            }
+        }
     }
 
     public void onChangeProvinceBorrower(){
         if(borrowerInfo.getCurrentAddress().getProvince() != null && borrowerInfo.getCurrentAddress().getProvince().getCode() != 0){
             districtList = districtDAO.getListByProvince(borrowerInfo.getCurrentAddress().getProvince());
+            subDistrictList = new ArrayList<SubDistrict>();
         } else {
             districtList = new ArrayList<District>();
+            subDistrictList = new ArrayList<SubDistrict>();
         }
 
     }
@@ -796,8 +854,10 @@ public class PrescreenMaker implements Serializable {
             CustomerInfoView spouse = borrowerInfo.getSpouse();
             if(spouse.getCurrentAddress().getProvince() != null && spouse.getCurrentAddress().getProvince().getCode() != 0){
                 districtSpouseList = districtDAO.getListByProvince(spouse.getCurrentAddress().getProvince());
+                subDistrictSpouseList = new ArrayList<SubDistrict>();
             } else {
                 districtSpouseList = new ArrayList<District>();
+                subDistrictSpouseList = new ArrayList<SubDistrict>();
             }
         }
     }
@@ -814,8 +874,8 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSaveCustomerInfo() {
-        log.info("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
-        log.info("onSaveCustomerInfo ::: customerInfoViewList : {}", customerInfoViewList);
+        log.debug("onSaveCustomerInfo ::: modeForButton : {}", modeForButton);
+        log.debug("onSaveCustomerInfo ::: customerInfoViewList : {}", customerInfoViewList);
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = true;        //Change only failed to save
@@ -835,8 +895,8 @@ public class PrescreenMaker implements Serializable {
         }
 
         //** TODO dynamic validation for ncb checking
-        log.info("onSaveCustomerInfo ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
-        log.info("onSaveCustomerInfo ::: relation : {}", borrowerInfo.getRelation());
+        log.debug("onSaveCustomerInfo ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
+        log.debug("onSaveCustomerInfo ::: relation : {}", borrowerInfo.getRelation());
 
         if(borrowerInfo.getCustomerEntity().getId() != 0){
             borrowerInfo.setCustomerEntity(customerEntityDAO.findById(borrowerInfo.getCustomerEntity().getId()));
@@ -847,7 +907,7 @@ public class PrescreenMaker implements Serializable {
         }
 
         if(modeForButton.equals(ModeForButton.ADD)){
-            log.info("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
+            log.debug("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
             if(borrowerInfo.getCustomerEntity().getId() != 0){
                 int customerListIndex = 0;
                 customerListIndex = customerInfoViewList.size();        //Index is already +1
@@ -859,13 +919,13 @@ public class PrescreenMaker implements Serializable {
                         if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
                             validateCitizen = false;
                             messageHeader = "Save customer failed.";
-                            message = "Duplicate citizenId.";
+                            message = "Duplicate citizen id.";
                             break;
                         }
                     }
 
                     if(validateCitizen){
-                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        log.debug("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
                         //--- Borrower ---
                         borrowerInfo.setListIndex(customerListIndex);
                         if(borrowerInfo.getRelation().getId() == 1){
@@ -882,12 +942,14 @@ public class PrescreenMaker implements Serializable {
                         }else if(borrowerInfo.getRelation().getId() == 2){
                             //Guarantor
                             borrowerInfo.setListName("GUARANTOR");
+                            borrowerInfo.setSubIndex(guarantorInfoViewList.size());
                             borrowerInfo.setIsSpouse(0);
                             guarantorInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
                         }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
                             //Relate Person
                             borrowerInfo.setListName("RELATED");
+                            borrowerInfo.setSubIndex(relatedInfoViewList.size());
                             borrowerInfo.setIsSpouse(0);
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
@@ -900,7 +962,7 @@ public class PrescreenMaker implements Serializable {
 
                         if(complete){
                             //--- Spouse ---
-                            log.info("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
+                            log.debug("onSaveCustomerInfo ::: SpouseInfo : {}", borrowerInfo.getSpouse());
                             if(borrowerInfo.getMaritalStatus().getId() != 1 && borrowerInfo.getMaritalStatus().getId() != 4 && borrowerInfo.getMaritalStatus().getId() != 5){
                                 if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
                                     CustomerInfoView spouseInfo = borrowerInfo.getSpouse();
@@ -909,7 +971,10 @@ public class PrescreenMaker implements Serializable {
                                     CustomerEntity spouseCustomerEntity = new CustomerEntity();
                                     spouseCustomerEntity = customerEntityDAO.findById(1);
                                     spouseInfo.setCustomerEntity(spouseCustomerEntity);
-                                    log.info("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
+                                    if(spouseInfo.getTitleTh().getId() != 0){
+                                        spouseInfo.setTitleTh(titleDAO.findById(spouseInfo.getTitleTh().getId()));
+                                    }
+                                    log.debug("onSaveCustomerInfo ::: Spouse - relation : {}", spouseInfo.getRelation());
                                     if(spouseInfo.getRelation().getId() == 1) {
                                         //Spouse - Borrower
                                         spouseInfo.setListName("BORROWER");
@@ -950,7 +1015,7 @@ public class PrescreenMaker implements Serializable {
                         if(borrowerInfo.getRegistrationId().equalsIgnoreCase(customerInfoView.getRegistrationId())){
                             validateRegistration = false;
                             messageHeader = "Save customer failed.";
-                            message = "Duplicate registrationId.";
+                            message = "Duplicate registration id.";
                             break;
                         }
                     }
@@ -995,8 +1060,8 @@ public class PrescreenMaker implements Serializable {
                 }
             }
         } else { // Edit
-            log.info("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
-            log.info("onSaveCustomerInfo ::: customerInfoList : {}", customerInfoViewList);
+            log.debug("onSaveCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
+            log.debug("onSaveCustomerInfo ::: customerInfoList : {}", customerInfoViewList);
             if(borrowerInfo.getCustomerEntity().getId() != 0){
                 int customerListIndex = borrowerInfo.getListIndex();
                 int oldRelationId = 0;
@@ -1022,7 +1087,7 @@ public class PrescreenMaker implements Serializable {
                                     if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
                                         //Check with other borrower
                                         if(borrowerInfo.getSpouse().getListIndex() != customerInfoView.getListIndex()){
-                                            log.info("spouse fail 01");
+                                            log.debug("spouse fail 01");
                                             validateCitizen = false;
                                             messageHeader = "Save customer (Spouse) failed.";
                                             message = "Duplicate citizen id (Spouse).";
@@ -1067,7 +1132,7 @@ public class PrescreenMaker implements Serializable {
                     }
 
                     if(validateCitizen){
-                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        log.debug("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
                         //--- Get old borrower by list index //
                         //CustomerInfoView oldCustomerInfoView = prescreenBusinessControl.cloneCustomer(customerInfoViewList.get(borrowerInfo.getListIndex()));
                         Cloner cloner = new Cloner();
@@ -1076,6 +1141,7 @@ public class PrescreenMaker implements Serializable {
                         if(oldCustomerInfoView.getSpouse() != null){
                             oldSpouse = oldCustomerInfoView.getSpouse();
                         }
+                        int oldSubIndex = borrowerInfo.getSubIndex();
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
                             //Borrower
@@ -1086,10 +1152,6 @@ public class PrescreenMaker implements Serializable {
                                 int subIndex = borrowerInfo.getSubIndex();
                                 borrowerInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
                             } else {
-                                //Insert into new borrowerList;
-                                borrowerInfo.setSubIndex(borrowerInfoViewList.size());
-                                borrowerInfoViewList.add(borrowerInfo);
-
                                 //Remove from old list
                                 if(oldRelationId == 2){
                                     //Remove from guarantor list
@@ -1102,6 +1164,10 @@ public class PrescreenMaker implements Serializable {
                                     //Re index for related list
                                     reIndexCustomerList(ListCustomerName.RELATED);
                                 }
+
+                                //Insert into new borrowerList;
+                                borrowerInfo.setSubIndex(borrowerInfoViewList.size());
+                                borrowerInfoViewList.add(borrowerInfo);
                             }
 
                             //customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
@@ -1113,10 +1179,6 @@ public class PrescreenMaker implements Serializable {
                                 int subIndex = borrowerInfo.getSubIndex();
                                 guarantorInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
                             } else {
-                                //Insert into new guarantorList;
-                                borrowerInfo.setSubIndex(guarantorInfoViewList.size());
-                                guarantorInfoViewList.add(borrowerInfo);
-
                                 //Remove from old list
                                 if(oldRelationId == 1){
                                     //Remove from guarantor list
@@ -1129,6 +1191,10 @@ public class PrescreenMaker implements Serializable {
                                     //Re index for related list
                                     reIndexCustomerList(ListCustomerName.RELATED);
                                 }
+
+                                //Insert into new guarantorList;
+                                borrowerInfo.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(borrowerInfo);
                             }
                             //customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         } else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
@@ -1139,10 +1205,6 @@ public class PrescreenMaker implements Serializable {
                                 int subIndex = borrowerInfo.getSubIndex();
                                 relatedInfoViewList.set(subIndex, borrowerInfo);       //replace new value for old object list;
                             } else {
-                                //Insert into new relatedList;
-                                borrowerInfo.setSubIndex(relatedInfoViewList.size());
-                                relatedInfoViewList.add(borrowerInfo);
-
                                 //Remove from old list
                                 if(oldRelationId == 1){
                                     //Remove from guarantor list
@@ -1155,20 +1217,27 @@ public class PrescreenMaker implements Serializable {
                                     //Re index for related list
                                     reIndexCustomerList(ListCustomerName.GUARANTOR);
                                 }
+
+                                //Insert into new relatedList;
+                                borrowerInfo.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(borrowerInfo);
                             }
                             //customerInfoViewList.set(borrowerInfo.getListIndex(), borrowerInfo);
                         }
-                        log.info("onSaveCustomer ::: checkSpouse ------");
+                        log.debug("onSaveCustomer ::: checkSpouse ------");
                         //--- TODO add spouse to list
                         if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
-                            log.info("onSaveCustomer ::: borrowerInfo.getMaritalStatus() : {}", borrowerInfo.getMaritalStatus());
+                            log.debug("onSaveCustomer ::: borrowerInfo.getMaritalStatus() : {}", borrowerInfo.getMaritalStatus());
                             //TODO check old spouse and new spouse
-                            log.info("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
+                            log.debug("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
                             CustomerInfoView newSpouse = borrowerInfo.getSpouse();
                             CustomerEntity spouseCustomerEntity = new CustomerEntity();
                             spouseCustomerEntity = customerEntityDAO.findById(1);
                             newSpouse.setCustomerEntity(spouseCustomerEntity);
-                            log.info("onSaveCustomer ::: newSpouse : {}", newSpouse);
+                            if(newSpouse.getTitleTh().getId() != 0){
+                                newSpouse.setTitleTh(titleDAO.findById(newSpouse.getTitleTh().getId()));
+                            }
+                            log.debug("onSaveCustomer ::: newSpouse : {}", newSpouse);
                             int oldSpouseRelation = 0;
                             if(oldSpouse != null){
                                 //Update old spouse
@@ -1215,6 +1284,7 @@ public class PrescreenMaker implements Serializable {
                             } else {
                                 //Add new spouse to list
                                 newSpouse.setListIndex(customerListIndex);
+                                newSpouse.setIsSpouse(1);
                                 if(newSpouse.getRelation() != null && newSpouse.getRelation().getId() == 1){
                                     newSpouse.setListName("BORROWER");
                                     newSpouse.setSubIndex(borrowerInfoViewList.size());
@@ -1231,8 +1301,8 @@ public class PrescreenMaker implements Serializable {
                             }
                         } else if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() != 2) {
                             //TODO check old spouse and remove from list
-                            log.info("onSaveCustomer ::: remove spouse from list");
-                            log.info("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
+                            log.debug("onSaveCustomer ::: remove spouse from list");
+                            log.debug("onSaveCustomer ::: oldSpouse : {}", oldSpouse);
                             if(oldSpouse != null){
                                 if(oldSpouse.getRelation() != null && oldSpouse.getRelation().getId() == 1){
                                     borrowerInfoViewList.remove(oldSpouse.getSubIndex());
@@ -1264,13 +1334,13 @@ public class PrescreenMaker implements Serializable {
                         if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
                             validateRegistration = false;
                             messageHeader = "Save customer failed.";
-                            message = "Duplicate registrationId.";
+                            message = "Duplicate registration id.";
                             break;
                         }
                     }
 
                     if(validateRegistration){
-                        log.info("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
+                        log.debug("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
                         //--- Borrower ---
                         if(borrowerInfo.getRelation().getId() == 1){
                             //Borrower
@@ -1366,7 +1436,7 @@ public class PrescreenMaker implements Serializable {
         context.addCallbackParam("functionComplete", complete);
 
         if(!complete){
-            log.info("onSaveCustomerInfo ::: duplicate personal id : {}", complete);
+            log.debug("onSaveCustomerInfo ::: duplicate personal id : {}", complete);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
@@ -1424,7 +1494,38 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDeleteCustomerInfo() {
-        log.info("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.debug("onDeleteCustomerInfo ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        if(selectCustomerInfoItem.getIsSpouse() == 1){
+            //remove spouse from old list
+            CustomerInfoView customerInfoView = customerInfoViewList.get(selectCustomerInfoItem.getListIndex());
+            CustomerInfoView blankCustomerInfo = new CustomerInfoView();
+            blankCustomerInfo.reset();
+            customerInfoView.setSpouse(blankCustomerInfo);
+            customerInfoViewList.set(customerInfoView.getListIndex(), customerInfoView);
+
+            if(selectCustomerInfoItem.getRelation().getId() == 1){
+                borrowerInfoViewList.remove(selectCustomerInfoItem);
+                reIndexCustomerList(ListCustomerName.BORROWER);
+            } else if(selectCustomerInfoItem.getRelation().getId() == 2){
+                guarantorInfoViewList.remove(selectCustomerInfoItem);
+                reIndexCustomerList(ListCustomerName.GUARANTOR);
+            } else if(selectCustomerInfoItem.getRelation().getId() == 3 || selectCustomerInfoItem.getRelation().getId() == 4){
+                relatedInfoViewList.remove(selectCustomerInfoItem);
+                reIndexCustomerList(ListCustomerName.RELATED);
+            }
+        } else {
+            CustomerInfoView customerInfoView = customerInfoViewList.get(selectCustomerInfoItem.getListIndex());
+            if(deleteCustomerInfoViewList == null){
+                deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
+            }
+
+            deleteCustomerInfoViewList.add(customerInfoView);
+
+            //if(selectCustomerInfoItem.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL)
+        }
+
+
+
         if(selectCustomerInfoItem.getRelation() != null){
             if(selectCustomerInfoItem.getRelation().getId() == 1){
                 //Remove from borrower list
@@ -1465,32 +1566,32 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDeleteBorrower(){
-        log.info("onDeleteBorrower ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.debug("onDeleteBorrower ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         borrowerInfoViewList.remove(selectCustomerInfoItem);
     }
 
     public void onDeleteGuarantor(){
-        log.info("onDeleteGuarantor ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.debug("onDeleteGuarantor ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         guarantorInfoViewList.remove(selectCustomerInfoItem);
     }
 
     public void onDeleteRelatedPerson(){
-        log.info("onDeleteRelatedPerson ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
+        log.debug("onDeleteRelatedPerson ::: selectCustomerInfoItem : {}", selectCustomerInfoItem);
         relatedInfoViewList.remove(selectCustomerInfoItem);
     }
 
     public void onChangeDate(String borrowerType){
         log.debug("onChangeDate :::");
         if(borrowerType.equalsIgnoreCase("borrower")){
-            log.info("onChangeDate : borrowerInfo.dateOfBirth : {}", borrowerInfo.getDateOfBirth());
+            log.debug("onChangeDate : borrowerInfo.dateOfBirth : {}", borrowerInfo.getDateOfBirth());
             int age = Util.calAge(borrowerInfo.getDateOfBirth());
             borrowerInfo.setAge(age);
         } else if(borrowerType.equalsIgnoreCase("spouse")){
-            log.info("onChangeDate : spouseInfo.dateOfBirth : {}", borrowerInfo.getSpouse().getDateOfBirth());
+            log.debug("onChangeDate : spouseInfo.dateOfBirth : {}", borrowerInfo.getSpouse().getDateOfBirth());
             int age = Util.calAge(borrowerInfo.getSpouse().getDateOfBirth());
             borrowerInfo.getSpouse().setAge(age);
         } else if(borrowerType.equalsIgnoreCase("juristic")){
-            log.info("onChangeDate : juristicInfo.dateOfRegister : {}", borrowerInfo.getDateOfRegister());
+            log.debug("onChangeDate : juristicInfo.dateOfRegister : {}", borrowerInfo.getDateOfRegister());
             int age = Util.calAge(borrowerInfo.getDateOfRegister());
             borrowerInfo.setAge(age);
         }
@@ -1519,25 +1620,23 @@ public class PrescreenMaker implements Serializable {
     }*/
 
     public void onSearchCustomerInfo() {
-        log.info("onSearchCustomerInfo :::");
-        log.info("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
+        log.debug("onSearchCustomerInfo :::");
+        log.debug("onSearchCustomerInfo ::: borrowerInfo : {}", borrowerInfo);
         CustomerInfoResultView customerInfoResultView = new CustomerInfoResultView();
         messageHeader = "Please wait...";
         message = "Waiting for search customer from RM";
         try{
             customerInfoResultView = prescreenBusinessControl.getCustomerInfoFromRM(borrowerInfo, user);
-            log.info("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                log.info("onSearchCustomerInfo ActionResult.SUCCESS");
+                log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
+                    log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                     borrowerInfo = customerInfoResultView.getCustomerInfoView();
-                    /*if(borrowerInfo.getMaritalStatus().getId() == 2){
-                        if(borrowerInfo.getSpouse() != null){
-                            borrowerInfo.getSpouse() = borrowerInfo.getSpouse();
-                        }
-                    }*/
+
                     enableCustomerForm = true;
                     enableDocumentType = false;
+
                     enableCustomerEntity = false;
                     enableTMBCustomerId = false;
                     enableCitizenId = false;
@@ -1545,7 +1644,7 @@ public class PrescreenMaker implements Serializable {
                     messageHeader = "Customer search complete.";
                     message = "Customer found.";
                 }else{
-                    log.info("else borrowerInfo = null, can not find customer.");
+                    log.debug("onSearchCustomerInfo ::: customer not found.");
                     if(borrowerInfo.getSearchBy() == 2){
                         enableDocumentType = true;
                     }else{
@@ -1560,10 +1659,10 @@ public class PrescreenMaker implements Serializable {
                     CustomerEntity customerEntity = new CustomerEntity();
                     customerEntity.setId(0);
                     borrowerInfo.setCustomerEntity(customerEntity);
+
                     messageHeader = customerInfoResultView.getActionResult().toString();
                     message = "Search customer not found.";
                 }
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             } else {
                 enableDocumentType = true;
                 enableCustomerForm = true;
@@ -1572,45 +1671,48 @@ public class PrescreenMaker implements Serializable {
                 enableCitizenId = true;
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
             }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             enableDocumentType = true;
             enableCustomerForm = true;
             enableCustomerEntity = true;
             enableTMBCustomerId = true;
             enableCitizenId = true;
-            log.info("onSearchCustomerInfo Exception : {}", ex);
+            log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
-            //TODO Show message box
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
     }
 
     public void onChangeRelation(){
-        log.info("onChangeRelation ::: ");
+        log.debug("onChangeRelation ::: ");
         if(caseBorrowerTypeId == 0){
             referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getRelation().getId());
-            if(borrowerInfo.getSpouse() != null){
-                if(borrowerInfo.getSpouse().getRelation() != null && borrowerInfo.getSpouse().getRelation().getId() != 0){
-                    spouseReferenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getSpouse().getRelation().getId());
-                }
-            }
-        } else{
+         } else{
             referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getRelation().getId());
         }
+    }
 
+    public void onChangeSpouseRelation(){
+        log.debug("onChangeSpouseRelation ::: ");
+        if(caseBorrowerTypeId == 0){
+            spouseReferenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getSpouse().getRelation().getId());
+        } else{
+            spouseReferenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), caseBorrowerTypeId, borrowerInfo.getSpouse().getRelation().getId());
+        }
     }
 
     public void onChangeMaritalStatus(){
-        log.info("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
+        log.debug("onChangeMaritalStatus ::: Marriage Status : {}", borrowerInfo.getMaritalStatus().getId());
     }
 
     public void onChangeDocType(){
-        log.info("onDisableDocType ::: searchBy : {}", borrowerInfo.getSearchBy());
-        log.info("onDisableDocType ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
+        log.debug("onDisableDocType ::: searchBy : {}", borrowerInfo.getSearchBy());
+        log.debug("onDisableDocType ::: customerEntity : {}", borrowerInfo.getCustomerEntity());
 
         //*** Fixed Customer Entity BY DocumentType ***//
         CustomerEntity customerEntity = new CustomerEntity();
@@ -1651,7 +1753,7 @@ public class PrescreenMaker implements Serializable {
 
     /*// *** Calculate Age And Year In Business ***//*/
     public void onCalAge(String type){
-        log.info("onCalAge ::: DateOfBirth:{} ", borrowerInfo.getDateOfBirth());
+        log.debug("onCalAge ::: DateOfBirth:{} ", borrowerInfo.getDateOfBirth());
         int age = 0;
         if(type.trim().toUpperCase().equals("AGE")){
             if(borrowerInfo.getDateOfBirth() != null){
@@ -1666,12 +1768,12 @@ public class PrescreenMaker implements Serializable {
                 borrowerInfo.setAge(age);
             }
         }
-        log.info("onCalAge ::: DateOfBirth:{}", age);
+        log.debug("onCalAge ::: DateOfBirth:{}", age);
     }*/
 
     // *** Function For BusinessInfoView *** //
     public void onAddBusinessInfo() {
-        log.info("onAddBusinessInfo ::: reset form");
+        log.debug("onAddBusinessInfo ::: reset form");
         /*** Reset Form ***/
         modeForButton = ModeForButton.ADD;
 
@@ -1680,7 +1782,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onEditBusinessInfo() {
-        log.info("onEditBusinessInfo ::: selectBusinessInfo : {}", selectBizInfoItem);
+        log.debug("onEditBusinessInfo ::: selectBusinessInfo : {}", selectBizInfoItem);
         modeForButton = ModeForButton.EDIT;
 
         bizInfoView = new BizInfoDetailView();
@@ -1691,7 +1793,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSaveBusinessInfo() {
-        log.info("onSaveBusinessInfo ::: modeForButton : {}", modeForButton);
+        log.debug("onSaveBusinessInfo ::: modeForButton : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
@@ -1700,8 +1802,8 @@ public class PrescreenMaker implements Serializable {
         if(bizInfoView.getBizDesc().getId() != 0 && bizInfoView.getBizGroup().getId() != 0){
             if(modeForButton.equals(ModeForButton.ADD)) {
                 BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
-                log.info("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", bizInfoView.getBizDesc().getId());
-                log.info("onSaveBusinessInformation ::: selectBusinessGroupID : {}", bizInfoView.getBizGroup().getId());
+                log.debug("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", bizInfoView.getBizDesc().getId());
+                log.debug("onSaveBusinessInformation ::: selectBusinessGroupID : {}", bizInfoView.getBizGroup().getId());
 
                 BusinessGroup businessGroup = businessGroupDAO.findById(bizInfoView.getBizGroup().getId());
                 BusinessDescription businessDesc = businessDescriptionDAO.findById(bizInfoView.getBizDesc().getId());
@@ -1712,10 +1814,10 @@ public class PrescreenMaker implements Serializable {
                 bizInfoViewList.add(bizInfoDetailView);
                 complete = true;
             } else if(modeForButton.equals(ModeForButton.EDIT)) {
-                log.info("onSaveBusinessInfo ::: rowIndex : {}", rowIndex);
+                log.debug("onSaveBusinessInfo ::: rowIndex : {}", rowIndex);
                 BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
-                log.info("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", bizInfoView.getBizDesc().getId());
-                log.info("onSaveBusinessInformation ::: selectBusinessGroupID : {}", bizInfoView.getBizGroup().getId());
+                log.debug("onSaveBusinessInformation ::: selectBusinessDescriptionID : {}", bizInfoView.getBizDesc().getId());
+                log.debug("onSaveBusinessInformation ::: selectBusinessGroupID : {}", bizInfoView.getBizGroup().getId());
 
                 BusinessGroup businessGroup = businessGroupDAO.findById(bizInfoView.getBizGroup().getId());
                 BusinessDescription businessDesc = businessDescriptionDAO.findById(bizInfoView.getBizDesc().getId());
@@ -1732,15 +1834,15 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onDeleteBusinessInfo() {
-        log.info("onDeleteBusinessInformation ::: selectBizInfoItem : {}", selectBizInfoItem);
+        log.debug("onDeleteBusinessInformation ::: selectBizInfoItem : {}", selectBizInfoItem);
         bizInfoViewList.remove(selectBizInfoItem);
     }
 
     // *** Function For ProposeCollateral ***//
     public void onAddProposeCollateral() {
-        log.info("onAddProposeCollateral :::");
+        log.debug("onAddProposeCollateral :::");
         //*** Reset form ***//
-        log.info("onAddProposeCollateral ::: Reset Form");
+        log.debug("onAddProposeCollateral ::: Reset Form");
         modeForButton = ModeForButton.ADD;
         proposeCollateral = new PrescreenCollateralView();
         proposeCollateral.setPotentialCollateral(new PotentialCollateral());
@@ -1748,7 +1850,7 @@ public class PrescreenMaker implements Serializable {
 
     public void onEditProposeCollateral(){
         modeForButton = ModeForButton.EDIT;
-        log.info("onEditProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
+        log.debug("onEditProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
 
         proposeCollateral = new PrescreenCollateralView();
         PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(selectProposeCollateralItem.getPotentialCollateral().getId());
@@ -1758,13 +1860,13 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onSaveProposeCollateral(){
-        log.info("onSaveProposeCollateral ::: modeForButton : {}", modeForButton);
+        log.debug("onSaveProposeCollateral ::: modeForButton : {}", modeForButton);
 
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
 
-        log.info("onSaveProposeCollateral ::: proposeCollateral.getPotentialCollateral.getId() : {} ", proposeCollateral.getPotentialCollateral().getId());
-        log.info("onSaveProposeCollateral ::: proposeCollateral.getCollateralAmount : {} ", proposeCollateral.getCollateralAmount());
+        log.debug("onSaveProposeCollateral ::: proposeCollateral.getPotentialCollateral.getId() : {} ", proposeCollateral.getPotentialCollateral().getId());
+        log.debug("onSaveProposeCollateral ::: proposeCollateral.getCollateralAmount : {} ", proposeCollateral.getCollateralAmount());
 
         if(proposeCollateral.getPotentialCollateral().getId() != 0 && proposeCollateral.getCollateralAmount() != null) {
             if(modeForButton.equals(ModeForButton.ADD)){
@@ -1774,34 +1876,34 @@ public class PrescreenMaker implements Serializable {
                 collateral.setCollateralAmount(proposeCollateral.getCollateralAmount());
 
                 proposePrescreenCollateralViewList.add(collateral);
-                log.info("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
+                log.debug("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
             } else if(modeForButton.equals(ModeForButton.EDIT)){
                 PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(proposeCollateral.getPotentialCollateral().getId());
 
                 proposePrescreenCollateralViewList.get(rowIndex).setPotentialCollateral(potentialCollateral);
                 proposePrescreenCollateralViewList.get(rowIndex).setCollateralAmount(proposeCollateral.getCollateralAmount());
-                log.info("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
+                log.debug("onSaveProposeCollateral ::: modeForButton : {}, Completed.", modeForButton);
             } else {
-                log.info("onSaveProposeCollateral ::: Undefined modeForbutton !!");
+                log.debug("onSaveProposeCollateral ::: Undefined modeForbutton !!");
             }
             complete = true;
         } else {
             complete = false;
-            log.info("onSaveProposeCollateral ::: validation failed.");
+            log.debug("onSaveProposeCollateral ::: validation failed.");
         }
         context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteProposeCollateral() {
-        log.info("onDeleteProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
+        log.debug("onDeleteProposeCollateral ::: selectProposeCollateralItem : {}", selectProposeCollateralItem);
         proposePrescreenCollateralViewList.remove(selectProposeCollateralItem);
 
     }
 
     // *** Function for Prescreen Initial *** //
     public void onSavePrescreenInitial(){
-        log.info("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
-        log.info("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
+        log.debug("onSavePrescreenInitial ::: prescreenView : {}", prescreenView);
+        log.debug("onSavePrescreenInitial ::: facilityViewList : {}", facilityViewList);
 
         try{
             //TODO set Business Location
@@ -1830,8 +1932,8 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onAssignToChecker(){
-        log.info("onAssignToChecker ::: bdmChecker : {}", prescreenView.getCheckerId());
-        log.info("onAssignToChecker ::: queueName : {}", queueName);
+        log.debug("onAssignToChecker ::: bdmChecker : {}", prescreenView.getCheckerId());
+        log.debug("onAssignToChecker ::: queueName : {}", queueName);
         //TODO get nextStep
         String actionCode = "1001";
         String checkerId = prescreenView.getCheckerId();
@@ -1847,7 +1949,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onCancelCA(){
-        log.info("onCancelCA ::: queueName : {}", queueName);
+        log.debug("onCancelCA ::: queueName : {}", queueName);
         //TODO get nextStep
         String actionCode = "1003";
         prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
@@ -1895,7 +1997,7 @@ public class PrescreenMaker implements Serializable {
 
     // *** Event for DropDown *** //
     public void checkOnChangeProductGroup(){
-        log.info("checkOnChangeProductGroup ::: productGroup : {}", prescreenView.getProductGroup().getId());
+        log.debug("checkOnChangeProductGroup ::: productGroup : {}", prescreenView.getProductGroup().getId());
         if(facilityViewList != null && facilityViewList.size() > 0){
             RequestContext.getCurrentInstance().execute("msgBoxFacilityDlg.show()");
         }else{
@@ -1906,7 +2008,7 @@ public class PrescreenMaker implements Serializable {
     public void onChangeProductGroup(){
         getProductProgramList();
         //*** Check if Facility added system must be remove all ***//
-        log.info("onChangeProductGroup :::: facilityViewList.size :::::::::::" + facilityViewList.size());
+        log.debug("onChangeProductGroup :::: facilityViewList.size :::::::::::" + facilityViewList.size());
         if(Integer.toString(prescreenView.getProductGroup().getId()) != null){
             previousProductGroupId = prescreenView.getProductGroup().getId();
         }else{
@@ -1918,12 +2020,12 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onCancelChangeProductGroup(){
-        log.info("onCancelChangeProductGroup ::: previousValue : {}", previousProductGroupId);
+        log.debug("onCancelChangeProductGroup ::: previousValue : {}", previousProductGroupId);
         prescreenView.getProductGroup().setId(previousProductGroupId);
     }
 
     public void getProductProgramList(){
-        log.info("getProductProgramList ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
+        log.debug("getProductProgramList ::: prescreenView.productgroup : {}", prescreenView.getProductGroup());
         ProductGroup productGroup = new ProductGroup();
         if(prescreenView.getProductGroup().getId() != 0){
             productGroup = productGroupDAO.findById(prescreenView.getProductGroup().getId());
@@ -1934,26 +2036,26 @@ public class PrescreenMaker implements Serializable {
         if(prdGroupToPrdProgramList == null){
             prdGroupToPrdProgramList = new ArrayList<PrdGroupToPrdProgram>();
         }
-        log.info("getProductProgramList ::: prdGroupToPrdProgramList size : {}", prdGroupToPrdProgramList.size());
+        log.debug("getProductProgramList ::: prdGroupToPrdProgramList size : {}", prdGroupToPrdProgramList.size());
     }
 
     public void onChangeProductProgram(){
         ProductProgram productProgram = productProgramDAO.findById(facility.getProductProgram().getId());
-        log.info("onChangeProductProgram :::: productProgram : {}", productProgram);
+        log.debug("onChangeProductProgram :::: productProgram : {}", productProgram);
 
         prdProgramToCreditTypeList = prdProgramToCreditTypeDAO.getListPrdProByPrdprogram(productProgram);
         if(prdProgramToCreditTypeList == null){
             prdProgramToCreditTypeList = new ArrayList<PrdProgramToCreditType>();
         }
-        log.info("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
+        log.debug("onChangeProductProgram :::: prdProgramToCreditTypeList.size ::: " +prdProgramToCreditTypeList.size());
     }
 
     public void onChangeBusinessGroup() {
-        log.info("onChangeBusinessGroup :::");
-        log.info("onChangeBusinessGroup ::: businessGroup.getId() : {}", bizInfoView.getBizGroup().getId());
+        log.debug("onChangeBusinessGroup :::");
+        log.debug("onChangeBusinessGroup ::: businessGroup.getId() : {}", bizInfoView.getBizGroup().getId());
         if(String.valueOf(bizInfoView.getBizGroup().getId()) != null && bizInfoView.getBizGroup().getId() != 0){
             BusinessGroup businessGroup = businessGroupDAO.findById(bizInfoView.getBizGroup().getId());
-            log.info("onChangeBusinessGroup :: businessGroup : {}", businessGroup);
+            log.debug("onChangeBusinessGroup :: businessGroup : {}", businessGroup);
             businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(businessGroup);
             bizInfoView.setBizDesc(new BusinessDescription());
             bizInfoView.setBizGroup(businessGroup);
@@ -1962,17 +2064,17 @@ public class PrescreenMaker implements Serializable {
             bizInfoView.setBizDesc(new BusinessDescription());
             bizInfoView.setBizGroup(new BusinessGroup());
         }
-        log.info("onChangeBusinessGroupName ::: size is : {}", businessDescriptionList.size());
+        log.debug("onChangeBusinessGroupName ::: size is : {}", businessDescriptionList.size());
     }
 
     public void onChangeBusinessDesc(){
-        log.info("onChangeBusinessDesc :::");
-        log.info("onChangeBusinessDesc ::: businessDesc.getId() : {}", bizInfoView.getBizDesc().getId());
+        log.debug("onChangeBusinessDesc :::");
+        log.debug("onChangeBusinessDesc ::: businessDesc.getId() : {}", bizInfoView.getBizDesc().getId());
         if(String.valueOf(bizInfoView.getBizDesc().getId()) != null){
             BusinessDescription businessDescription = businessDescriptionDAO.findById(bizInfoView.getBizDesc().getId());
             bizInfoView.setBizDesc(businessDescription);
         }
-        log.info("onChangeBusinessDesc ::: businessDesc : {}", bizInfoView.getBizDesc());
+        log.debug("onChangeBusinessDesc ::: businessDesc : {}", bizInfoView.getBizDesc());
 
     }
 
@@ -1987,11 +2089,11 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onAddExistCollateral() {
-        log.info("onAddExistCollateral {}");
+        log.debug("onAddExistCollateral {}");
         PrescreenCollateralView collExist = null;
 
-        log.info("dCollateralTypeName is ", existCollateralTypeName);
-        log.info("dCollateralAmount is ", existCollateralAmount);
+        log.debug("dCollateralTypeName is ", existCollateralTypeName);
+        log.debug("dCollateralAmount is ", existCollateralAmount);
         collExist = new PrescreenCollateralView();
         collExist.setCollateralTypeName(existCollateralTypeName);
         collExist.setCollateralAmount(existCollateralAmount);
@@ -2023,21 +2125,21 @@ public class PrescreenMaker implements Serializable {
 
 
     public void onChangeCreditType(){
-        log.info("onChangeCreditType ::: selectCreditType.Id() >>> " + selectCreditType.getId());
+        log.debug("onChangeCreditType ::: selectCreditType.Id() >>> " + selectCreditType.getId());
 //        CreditType creditType  = creditTypeDao.findById(selectCreditType.getId());
-//        log.info("onChangeCreditType ::: selectCreditType.Name() >>> " + creditType.getName());
+//        log.debug("onChangeCreditType ::: selectCreditType.Name() >>> " + creditType.getName());
     }*/
 
     // open dialog
  /*   public void onSelectedFacility(int rowNumber) {
         modeForButton = "edit";
         rowIndex = rowNumber;
-        log.info("onSelectedFacility :::  rowNumber  :: " + rowNumber);
-        log.info("onSelectedFacility ::: facilityViewList.get(rowNumber).getFacilityName :: " + rowNumber + "  "
+        log.debug("onSelectedFacility :::  rowNumber  :: " + rowNumber);
+        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getFacilityName :: " + rowNumber + "  "
                 + facilityViewList.get(rowNumber).getCreditType().getId());
-        log.info("onSelectedFacility ::: facilityViewList.get(rowNumber).getProductProgramName :: " + rowNumber + "  "
+        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getProductProgramName :: " + rowNumber + "  "
                 + facilityViewList.get(rowNumber).getProductProgram().getId());
-        log.info("onSelectedFacility ::: facilityViewList.get(rowNumber).getRequestAmount :: " + rowNumber + "  "
+        log.debug("onSelectedFacility ::: facilityViewList.get(rowNumber).getRequestAmount :: " + rowNumber + "  "
                 + facilityViewList.get(rowNumber).getRequestAmount());
 
         selectProductProgram = facilityViewList.get(rowNumber).getProductProgram();
@@ -2053,8 +2155,8 @@ public class PrescreenMaker implements Serializable {
     /*public void onEditFacility() {
         ProductProgram productProgram = productProgramDAO.findById(selectProductProgram.getId());
         CreditType creditType         = creditTypeDao.findById(selectCreditType.getId());
-        log.info("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
-        log.info("onEditFacility :::::: selectCreditType ::: "+selectCreditType.getName());
+        log.debug("onEditFacility :::::: selectProductProgram ::: "+selectProductProgram.getName());
+        log.debug("onEditFacility :::::: selectCreditType ::: "+selectCreditType.getName());
         facilityViewList.get(rowIndex).setProductProgram(productProgram);
         facilityViewList.get(rowIndex).setCreditType(creditType);
         facilityViewList.get(rowIndex).setRequestAmount(facility.getRequestAmount());
@@ -2514,5 +2616,37 @@ public class PrescreenMaker implements Serializable {
 
     public void setPotentialCollateralList(List<PotentialCollateral> potentialCollateralList) {
         this.potentialCollateralList = potentialCollateralList;
+    }
+
+    public List<Province> getProvinceSpouseList() {
+        return provinceSpouseList;
+    }
+
+    public void setProvinceSpouseList(List<Province> provinceSpouseList) {
+        this.provinceSpouseList = provinceSpouseList;
+    }
+
+    public List<District> getDistrictSpouseList() {
+        return districtSpouseList;
+    }
+
+    public void setDistrictSpouseList(List<District> districtSpouseList) {
+        this.districtSpouseList = districtSpouseList;
+    }
+
+    public List<SubDistrict> getSubDistrictSpouseList() {
+        return subDistrictSpouseList;
+    }
+
+    public void setSubDistrictSpouseList(List<SubDistrict> subDistrictSpouseList) {
+        this.subDistrictSpouseList = subDistrictSpouseList;
+    }
+
+    public List<Relation> getSpouseRelationList() {
+        return spouseRelationList;
+    }
+
+    public void setSpouseRelationList(List<Relation> spouseRelationList) {
+        this.spouseRelationList = spouseRelationList;
     }
 }
