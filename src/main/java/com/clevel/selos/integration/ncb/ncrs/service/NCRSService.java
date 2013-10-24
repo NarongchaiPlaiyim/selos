@@ -110,8 +110,6 @@ public class NCRSService implements Serializable {
             String resultDesc = "NCCRS Exception : "+ e.getMessage();
             log.error("NCRS Exception", e);
             throw new NCBInterfaceException(e, exception,message.get(exception, resultDesc));
-//            throw new Exception("NCRS Exception : "+e.getMessage());
-            // Test test test test test
         }
     }
 
