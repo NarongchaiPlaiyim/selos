@@ -25,6 +25,8 @@ public class AccountType implements Serializable {
     private int active;
     @Column(name = "ncb_code",length = 10)
     private String ncbCode;
+    @Column(name = "month_flag")
+    private int monthFlag;
 
     public AccountType() {
     }
@@ -83,6 +85,14 @@ public class AccountType implements Serializable {
 
     public void setNcbCode(String ncbCode) {
         this.ncbCode = ncbCode;
+    }
+
+    public int getMonthFlag() {
+        return monthFlag;
+    }
+
+    public void setMonthFlag(int monthFlag) {
+        this.monthFlag = monthFlag;
     }
 
     @Override
