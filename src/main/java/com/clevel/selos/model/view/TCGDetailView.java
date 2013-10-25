@@ -23,9 +23,7 @@ public class TCGDetailView implements Serializable {
     private PotentialColToTCGCol potentialColToTCGCol;
 
 
-    public TCGDetailView(){
-        reset();
-    }
+    public TCGDetailView(){}
 
     public void reset(){
        this.appraisalAmount = new BigDecimal(0);
