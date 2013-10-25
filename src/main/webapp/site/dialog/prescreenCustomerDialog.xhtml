@@ -187,6 +187,10 @@
                                     value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
                                     disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            <p:ajax event="change"
+                                    listener="#{prescreenMaker.onChangeDate('borrower')}"
+                                    process="@form"
+                                    update=":customerDlgForm"/>
                             <p:ajax event="dateSelect"
                                     listener="#{prescreenMaker.onChangeDate('borrower')}"
                                     process="@form"
@@ -202,7 +206,7 @@
                     <td class="title">Nationality :</td>
                     <td colspan="3">
                         <p:selectOneMenu id="dlgSelBrNationality" value="#{prescreenMaker.borrowerInfo.nationality.id}"
-                                         size="1" style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableCustomerForm}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.nationalityList}"
@@ -450,10 +454,15 @@
                                     value="#{prescreenMaker.borrowerInfo.spouse.dateOfBirth}"
                                     pattern="dd/MM/yyyy">
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            <p:ajax event="change"
+                                    listener="#{prescreenMaker.onChangeDate('spouse')}"
+                                    process="@form"
+                                    update=":customerDlgForm"/>
                             <p:ajax event="dateSelect"
                                     listener="#{prescreenMaker.onChangeDate('spouse')}"
                                     process="@form"
                                     update=":customerDlgForm"/>
+
                         </p:calendar>
                     </td>
                     <td class="title">Age :</td>

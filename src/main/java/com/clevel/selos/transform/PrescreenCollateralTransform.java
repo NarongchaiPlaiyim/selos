@@ -1,5 +1,7 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.PotentialCollateralDAO;
+import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.working.Prescreen;
 import com.clevel.selos.model.db.working.PrescreenCollateral;
 import com.clevel.selos.model.view.PrescreenCollateralView;
@@ -10,6 +12,9 @@ import java.util.List;
 
 public class PrescreenCollateralTransform extends Transform {
     @Inject
+    PotentialCollateralDAO potentialCollateralDAO;
+
+    @Inject
     public PrescreenCollateralTransform(){
 
     }
@@ -18,7 +23,8 @@ public class PrescreenCollateralTransform extends Transform {
         PrescreenCollateral prescreenCollateral = new PrescreenCollateral();
 
         prescreenCollateral.setPrescreen(prescreen);
-        prescreenCollateral.setPotentialCollateral(prescreenCollateral.getPotentialCollateral());
+        PotentialCollateral potentialCollateral = potentialCollateralDAO.findById(prescreenCollateralView.getPotentialCollateral().getId());
+        prescreenCollateral.setPotentialCollateral(potentialCollateral);
 
         return prescreenCollateral;
     }

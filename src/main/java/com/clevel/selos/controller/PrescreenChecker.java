@@ -117,7 +117,8 @@ public class PrescreenChecker implements Serializable {
         //TODO Generate row for textBox to check Citizen id
         List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         if(customerInfoViews != null){
-            customerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViews);
+            //customerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViews);
+            customerInfoViewList = generateCustomerInfoList(customerInfoViews);
         }
 
         if(customerInfoViewList != null){
@@ -127,6 +128,27 @@ public class PrescreenChecker implements Serializable {
 
         log.debug("customerinfoList : {}", customerInfoViewList);
 
+    }
+
+    public List<CustomerInfoView> generateCustomerInfoList(List<CustomerInfoView> customerInfoViews){
+        List<CustomerInfoView> customerInfoList = new ArrayList<CustomerInfoView>();
+        for(CustomerInfoView item : customerInfoViews){
+            if(item.getRelation().getId() == 1){
+                customerInfoList.add(item);
+                if(item.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
+                        CustomerInfoView spouse = new CustomerInfoView();
+                        spouse = item.getSpouse();
+                        if(spouse != null){
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                customerInfoList.add(spouse);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return customerInfoList;
     }
 
     public void onCheckCustomer(){
