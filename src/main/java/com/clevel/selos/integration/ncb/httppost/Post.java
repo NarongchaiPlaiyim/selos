@@ -63,7 +63,7 @@ public class Post implements Serializable {
         BufferedReader rd = null;
         StringBuilder builder = null;
 
-        try {
+//        try {
             params = new BasicHttpParams();
             int minute = 60000;
             HttpConnectionParams.setSoTimeout(params, minute*timeOut);
@@ -93,15 +93,15 @@ public class Post implements Serializable {
                 log.error("The request has failed, Error code is {}", resCode);
                 throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
             }
-        } catch (Exception e) {
-            throw new NCBInterfaceException(new Exception("sendPost Error Exception : {}"+e.getMessage()), exception,message.get(exception, "sendPost Error Exception : {}"+e.getMessage()));
-        } finally {
-            if (null != response) {
-                HttpClientUtils.closeQuietly(response);
-            }
-            if (null != client) {
-                HttpClientUtils.closeQuietly(client);
-            }
-        }
+//        } catch (Exception e) {
+//            throw new NCBInterfaceException(new Exception("sendPost Error Exception : {}"+e.getMessage()), exception,message.get(exception, "sendPost Error Exception : {}"+e.getMessage()));
+//        } finally {
+//            if (null != response) {
+//                HttpClientUtils.closeQuietly(response);
+//            }
+//            if (null != client) {
+//                HttpClientUtils.closeQuietly(client);
+//            }
+//        }
     }
 }

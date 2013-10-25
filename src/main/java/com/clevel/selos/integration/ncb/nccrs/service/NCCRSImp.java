@@ -549,7 +549,6 @@ public class NCCRSImp implements NCCRS, Serializable {
             String resultDesc = "NCCRS XML response error : " + result;
             log.error("NCCRS XML response error : {}", result);
             throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
-//            throw new Exception("XML response error");
         }
     }
 }
