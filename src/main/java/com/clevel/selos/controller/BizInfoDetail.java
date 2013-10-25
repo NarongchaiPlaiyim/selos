@@ -42,7 +42,7 @@ public class BizInfoDetail implements Serializable {
     double sumBizPercent = 0;
     private BigDecimal sumSalePercentB ;
     private BigDecimal sumCreditPercentB ;
-    private BigDecimal sumcreditTermB ;
+    private BigDecimal sumCreditTermB ;
 
     private String messageHeader;
     private String message;
@@ -449,7 +449,7 @@ public class BizInfoDetail implements Serializable {
     private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeHolder){
         double sumSalePercent = 0;
         double sumCreditPercent = 0;
-        double sumcreditTerm = 0;
+        double sumCreditTerm = 0;
         double salePercent;
         double creditPercent;
         double creditPercentCal;
@@ -465,27 +465,31 @@ public class BizInfoDetail implements Serializable {
             sumCreditPercent += creditPercentCal ;
             creditTerm = stakeHoldersCal.getCreditTerm().doubleValue();
             creditTermCal = (creditTerm*salePercent)/100;
-            sumcreditTerm += creditTermCal;
+            sumCreditTerm += creditTermCal;
         }
-        log.info(" sumSalePercent is " + sumSalePercent);
+        log.info(" sumSalePercent   is " + sumSalePercent);
+        log.info(" sumCreditPercent is " + sumCreditPercent);
+        log.info(" sumCreditTerm    is " + sumCreditTerm);
+
         if(sumSalePercent>100.001 ){
             return false;
         }
+
         sumSalePercentB = new BigDecimal(sumSalePercent).setScale(2);
         sumCreditPercentB = new BigDecimal(sumCreditPercent).setScale(2);
-        sumcreditTermB = new BigDecimal(sumcreditTerm).setScale(2);
+        sumCreditTermB = new BigDecimal(sumCreditTerm).setScale(2);
         if(stakeType.equals("1")){
             bizInfoDetailView.setSupplierTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setSupplierTotalCreditTerm(sumcreditTermB);
+            bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
             bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumcreditTermB);
+            bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
         }else if(stakeType.equals("2")){
             bizInfoDetailView.setBuyerTotalPercentBuyVolume(sumSalePercentB);
             bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setBuyerTotalCreditTerm(sumcreditTermB);
+            bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
             bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
-            bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumcreditTermB);
+            bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
         }
         return true;
     }

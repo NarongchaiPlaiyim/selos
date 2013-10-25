@@ -212,9 +212,10 @@
                         <tr>
                             <td class="left" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizProductDetail')}"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton id="btnAddBizProduct"
                                                  value="#{msg.get('app.button.add')}"
-                                                 styleClass="smaller"
+                                                 styleClass="medium"
                                                  process="@this"
                                                  actionListener="#{bizInfoDetail.onAddBizProductDetailView()}"
                                                  update=":bizProductViewDlgForm"
@@ -273,20 +274,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6"><p:spacer width="5px"/></td>
+                            <td colspan="6"><p:spacer width="10px"/></td>
                         </tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
                         </tr>
                         <tr>
-                            <td colspan="6"><p:spacer width="5px"/></td>
+                            <td colspan="6"><p:spacer width="10px"/></td>
                         </tr>
                         <tr>
                             <td class="title" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.supplierDetail')}"/>
-                                <p:spacer width="5px"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton value="#{msg.get('app.button.add')}"
-                                                 styleClass="small"
+                                                 styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
@@ -300,6 +301,7 @@
                                 <p:dataTable style="width: 100%;"
                                              id="supplierTable"
                                              var="supplierItem"
+                                             styleClass="medium"
                                              value="#{bizInfoDetail.bizInfoDetailView.supplierDetailList}"
                                              paginator="false"
                                              rowKey="#{supplierItem.no}"
@@ -443,9 +445,10 @@
                         <tr>
                             <td class="title" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.buyerDetail')}"/>
-                                <p:spacer width="5px"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton value="#{msg.get('app.button.add')}"
                                                  process="@this"
+                                                 styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
                                     <f:setPropertyActionListener value="2"
