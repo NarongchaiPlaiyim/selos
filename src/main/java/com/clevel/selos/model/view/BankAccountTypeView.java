@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class BankAccountTypeView implements Serializable {
     private int id;
     private String name;
-    private String shortname;
+    private String shortName;
     private int openAccountFlag;
     private int bankStatementFlag;
     private int active;
@@ -29,12 +29,12 @@ public class BankAccountTypeView implements Serializable {
         this.name = name;
     }
 
-    public String getShortname() {
-        return shortname;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setShortname(String shortname) {
-        this.shortname = shortname;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public int getOpenAccountFlag() {
@@ -66,7 +66,7 @@ public class BankAccountTypeView implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("name", name)
-                .append("shortname", shortname)
+                .append("shortName", shortName)
                 .append("openAccountFlag", openAccountFlag)
                 .append("bankStatementFlag", bankStatementFlag)
                 .append("active", active)

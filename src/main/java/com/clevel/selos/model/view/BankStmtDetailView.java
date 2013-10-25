@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BankStmtDetailView implements Serializable{
+public class BankStmtDetailView implements Serializable {
+    private long id;
     private BigDecimal overLimitAmount;
     private BigDecimal grossCreditBalance;
     private int numberOfCreditTxn;
@@ -15,15 +16,15 @@ public class BankStmtDetailView implements Serializable{
     private BigDecimal excludeListUW;
     private BigDecimal creditAmountBDM;
     private BigDecimal creditAmountUW;
-    private BigDecimal timesOfAverageCreditBDM;
-    private BigDecimal timesOfAverageCreditUW;
+    private BigDecimal timesOfAvgCreditBDM;
+    private BigDecimal timesOfAvgCreditUW;
     private BigDecimal debitAmount;
     private int numberOfDebitTxn;
     private Date highestBalanceDate;
     private BigDecimal highestBalance;
     private Date lowestBalanceDate;
     private BigDecimal lowestBalance;
-    private BigDecimal monthBalance;
+    private BigDecimal monthEndBalance;
     private int numberOfChequeReturn;
     private BigDecimal chequeReturnAmount;
     private int overLimitTimes;
@@ -45,18 +46,26 @@ public class BankStmtDetailView implements Serializable{
         this.excludeListUW = BigDecimal.valueOf(0.0);
         this.creditAmountBDM = BigDecimal.valueOf(0.00);
         this.creditAmountUW = BigDecimal.valueOf(0.00);
-        this.timesOfAverageCreditBDM = BigDecimal.valueOf(0.00);
-        this.timesOfAverageCreditUW = BigDecimal.valueOf(0.00);
+        this.timesOfAvgCreditBDM = BigDecimal.valueOf(0.00);
+        this.timesOfAvgCreditUW = BigDecimal.valueOf(0.00);
         this.debitAmount = BigDecimal.valueOf(0.00);
         this.highestBalanceDate = new Date();
         this.highestBalance = BigDecimal.valueOf(0.00);
         this.lowestBalanceDate = new Date();
         this.lowestBalance = BigDecimal.valueOf(0.00);
-        this.monthBalance = BigDecimal.valueOf(0.00);
+        this.monthEndBalance = BigDecimal.valueOf(0.00);
         this.chequeReturnAmount = BigDecimal.valueOf(0.0);
         this.swingPercent = BigDecimal.valueOf(0.00);
         this.utilizationPercent = BigDecimal.valueOf(0.00);
         this.grossInflowPerLimit = BigDecimal.valueOf(0.00);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public BigDecimal getOverLimitAmount() {
@@ -115,20 +124,20 @@ public class BankStmtDetailView implements Serializable{
         this.creditAmountUW = creditAmountUW;
     }
 
-    public BigDecimal getTimesOfAverageCreditBDM() {
-        return timesOfAverageCreditBDM;
+    public BigDecimal getTimesOfAvgCreditBDM() {
+        return timesOfAvgCreditBDM;
     }
 
-    public void setTimesOfAverageCreditBDM(BigDecimal timesOfAverageCreditBDM) {
-        this.timesOfAverageCreditBDM = timesOfAverageCreditBDM;
+    public void setTimesOfAvgCreditBDM(BigDecimal timesOfAvgCreditBDM) {
+        this.timesOfAvgCreditBDM = timesOfAvgCreditBDM;
     }
 
-    public BigDecimal getTimesOfAverageCreditUW() {
-        return timesOfAverageCreditUW;
+    public BigDecimal getTimesOfAvgCreditUW() {
+        return timesOfAvgCreditUW;
     }
 
-    public void setTimesOfAverageCreditUW(BigDecimal timesOfAverageCreditUW) {
-        this.timesOfAverageCreditUW = timesOfAverageCreditUW;
+    public void setTimesOfAvgCreditUW(BigDecimal timesOfAvgCreditUW) {
+        this.timesOfAvgCreditUW = timesOfAvgCreditUW;
     }
 
     public BigDecimal getDebitAmount() {
@@ -179,12 +188,12 @@ public class BankStmtDetailView implements Serializable{
         this.lowestBalance = lowestBalance;
     }
 
-    public BigDecimal getMonthBalance() {
-        return monthBalance;
+    public BigDecimal getMonthEndBalance() {
+        return monthEndBalance;
     }
 
-    public void setMonthBalance(BigDecimal monthBalance) {
-        this.monthBalance = monthBalance;
+    public void setMonthEndBalance(BigDecimal monthEndBalance) {
+        this.monthEndBalance = monthEndBalance;
     }
 
     public int getNumberOfChequeReturn() {
@@ -262,6 +271,7 @@ public class BankStmtDetailView implements Serializable{
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
                 .append("overLimitAmount", overLimitAmount)
                 .append("grossCreditBalance", grossCreditBalance)
                 .append("numberOfCreditTxn", numberOfCreditTxn)
@@ -269,15 +279,15 @@ public class BankStmtDetailView implements Serializable{
                 .append("excludeListUW", excludeListUW)
                 .append("creditAmountBDM", creditAmountBDM)
                 .append("creditAmountUW", creditAmountUW)
-                .append("timesOfAverageCreditBDM", timesOfAverageCreditBDM)
-                .append("timesOfAverageCreditUW", timesOfAverageCreditUW)
+                .append("timesOfAvgCreditBDM", timesOfAvgCreditBDM)
+                .append("timesOfAvgCreditUW", timesOfAvgCreditUW)
                 .append("debitAmount", debitAmount)
                 .append("numberOfDebitTxn", numberOfDebitTxn)
                 .append("highestBalanceDate", highestBalanceDate)
                 .append("highestBalance", highestBalance)
                 .append("lowestBalanceDate", lowestBalanceDate)
                 .append("lowestBalance", lowestBalance)
-                .append("monthBalance", monthBalance)
+                .append("monthEndBalance", monthEndBalance)
                 .append("numberOfChequeReturn", numberOfChequeReturn)
                 .append("chequeReturnAmount", chequeReturnAmount)
                 .append("overLimitTimes", overLimitTimes)
@@ -286,7 +296,7 @@ public class BankStmtDetailView implements Serializable{
                 .append("utilizationPercent", utilizationPercent)
                 .append("grossInflowPerLimit", grossInflowPerLimit)
                 .append("totalTransaction", totalTransaction)
-                .append("asOfDate", totalTransaction)
+                .append("asOfDate", asOfDate)
                 .toString();
     }
 }
