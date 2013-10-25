@@ -175,6 +175,12 @@ function handleBasicInfoAccountRequest(xhr, status, args) {
     }
 }
 
+function handleContactRecordRequest(xhr, status, args) {
+    if(args.functionComplete){
+        contactRecordDetailViewDlg.hide();
+    }
+}
+
 function testHandle(){
     return true;
 }
