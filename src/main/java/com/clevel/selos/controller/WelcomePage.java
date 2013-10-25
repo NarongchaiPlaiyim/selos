@@ -279,7 +279,20 @@ public class WelcomePage implements Serializable {
     public void onActionBRMS() {
         brmsLog.debug("test BRMS log. ({})",new Date());
         try {
+            com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = endPointImp.callStandardPricingInterestRulesService(null);
+            if (null!=response){
+                brmsLog.debug("Response in not null");
+            } else {
+                brmsLog.debug("Response in null");
+            }
+
+            endPointImp.callDocumentAppraisalRulesService(null);
+            endPointImp.callDocumentCustomerRulesService(null);
+            endPointImp.callFullApplicationUnderwritingRulesService(null);
+            endPointImp.callPrescreenUnderwritingRulesService(null);
+            endPointImp.callStandardPricingFeeRulesService(null);
             endPointImp.callStandardPricingInterestRulesService(null);
+
         } catch (Exception e) {
             brmsLog.error("Exception : {}",e);
         }
