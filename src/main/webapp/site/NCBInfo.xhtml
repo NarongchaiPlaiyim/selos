@@ -36,7 +36,7 @@
 </div>
 <div id="content_form">
 <!-- start content -->
-<table class="content_table_form">
+<table class="content_table_form" >
 
 <tr>
     <td style="width: 50px" class="title">
@@ -236,12 +236,12 @@
 </tr>
 <tr>
     <td colspan="2">
-        <table>
+        <table class="content_table_form"  style="width:90%">
             <tr>
                 <td>
-
-                    <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
-                                 rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex">
+                    <!-- <div class="div_highlighter">-->
+                        <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
+                                 rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex"  >
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column>
@@ -309,6 +309,8 @@
 
                             </p:row>
                         </p:columnGroup>
+
+
                         <p:subTable var="item1" value="#{ncbInfo.ncbDetailView}">
                             <f:facet name="header">
                             </f:facet>
@@ -321,7 +323,7 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <h:outputText value="#{item.TMB}"/>
+                                <h:selectBooleanCheckbox value="#{item.TMB}"/>
                             </p:column>
 
                             <p:column styleClass="left">
@@ -381,11 +383,13 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <h:outputText value="#{item.refinance}"/>
+                                <!--<h:outputText value="#{item.refinance}"/>-->
+                                <h:selectBooleanCheckbox value="#{item.refinance}"/>
                             </p:column>
 
                             <p:column styleClass="center">
-                                <h:outputText value="#{item.wc}"/>
+                               <!-- <h:outputText value="#{item.wc}"/>-->
+                                <h:selectBooleanCheckbox value="#{item.wc}"/>
                             </p:column>
 
                             <p:column style="width:60px;">
@@ -420,6 +424,7 @@
 
                         </p:subTable>
                     </p:dataTable>
+                     <!--</div>-->
                 </td>
             </tr>
 

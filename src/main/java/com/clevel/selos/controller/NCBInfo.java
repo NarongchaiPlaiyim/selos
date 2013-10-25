@@ -127,11 +127,6 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
 
-               /* if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
-                    for(int i = 0 ; i < ncbDetailViewList.size() ; i++){
-                        ncbDetailViewList.get(i).setCanToEdit(false);
-                    }
-                }*/
             }
         }
 
@@ -206,13 +201,7 @@ public class NCBInfo implements Serializable {
         //*** Reset form ***//
         log.info("onAddNcbRecord ::: Reset Form");
         ncbDetailView = new NCBDetailView();
-        ncbDetailView.setAccountStatus(new AccountStatus());
-        ncbDetailView.setAccountType(new AccountType());
-        ncbDetailView.setCurrentPayment(new SettlementStatus());
-        ncbDetailView.setHistoryPayment(new SettlementStatus());
-        ncbDetailView.setTMBAccount(0);
-        ncbDetailView.setRefinanceFlag(0);
-        ncbDetailView.setWcFlag(0);
+        ncbDetailView.reset();
         modeForButton = "add";
         genTextBoxFlag = false;
 
@@ -232,11 +221,15 @@ public class NCBInfo implements Serializable {
             SettlementStatus conditionCurrentEdit = selectNcbRecordItem.getCurrentPayment();
             SettlementStatus conditionHistoryEdit = selectNcbRecordItem.getHistoryPayment();
 
+            //checkbox
+            ncbDetailView.setTMB(selectNcbRecordItem.isTMB());
+            ncbDetailView.setRefinance(selectNcbRecordItem.isRefinance());
+            ncbDetailView.setWc(selectNcbRecordItem.isWc());
+
             ncbDetailView.setAccountType(accountTypeEdit);
             ncbDetailView.setAccountStatus(accountStatusEdit);
             ncbDetailView.setCurrentPayment(conditionCurrentEdit);
             ncbDetailView.setHistoryPayment(conditionHistoryEdit);
-            ncbDetailView.setTMBAccount(selectNcbRecordItem.getTMBAccount());
             ncbDetailView.setDateOfInfo(selectNcbRecordItem.getDateOfInfo());
             ncbDetailView.setAccountOpenDate(selectNcbRecordItem.getAccountOpenDate());
             ncbDetailView.setLimit(selectNcbRecordItem.getLimit());
@@ -245,15 +238,32 @@ public class NCBInfo implements Serializable {
             ncbDetailView.setDateOfDebtRestructuring(selectNcbRecordItem.getDateOfDebtRestructuring());
             ncbDetailView.setNoOfOutstandingPaymentIn12months(selectNcbRecordItem.getNoOfOutstandingPaymentIn12months());
             ncbDetailView.setNoOfOverLimit(selectNcbRecordItem.getNoOfOverLimit());
-            ncbDetailView.setRefinanceFlag(selectNcbRecordItem.getRefinanceFlag());
             ncbDetailView.setNoOfmonthsPayment(selectNcbRecordItem.getNoOfmonthsPayment());
-            ncbDetailView.setWcFlag(selectNcbRecordItem.getWcFlag());
             ncbDetailView.setMonth1(selectNcbRecordItem.getMonth1());
             ncbDetailView.setMonth2(selectNcbRecordItem.getMonth2());
             ncbDetailView.setMonth3(selectNcbRecordItem.getMonth3());
             ncbDetailView.setMonth4(selectNcbRecordItem.getMonth4());
             ncbDetailView.setMonth5(selectNcbRecordItem.getMonth5());
             ncbDetailView.setMonth6(selectNcbRecordItem.getMonth6());
+
+            if(selectNcbRecordItem.isRefinance() == true){
+                ncbDetailView.setRefinanceFlag(1);
+            }else{
+                ncbDetailView.setRefinanceFlag(0);
+            }
+
+            if(selectNcbRecordItem.isTMB() == true){
+                ncbDetailView.setTMBAccount(1);
+            }else{
+                ncbDetailView.setTMBAccount(0);
+            }
+
+            if(selectNcbRecordItem.isWc() == true){
+                ncbDetailView.setWcFlag(1);
+            }else{
+                ncbDetailView.setWcFlag(0);
+            }
+
 
             if (selectNcbRecordItem.getNoOfmonthsPayment() > 0) {
                 genTextBoxFlag = true;
@@ -289,7 +299,6 @@ public class NCBInfo implements Serializable {
                 NCBDetailView ncbAdd = new NCBDetailView();
                 ncbAdd.setAccountType(accountType);
                 ncbAdd.setAccountStatus(accountStatus);
-                ncbAdd.setTMBAccount(ncbDetailView.getTMBAccount());
                 ncbAdd.setDateOfInfo(ncbDetailView.getDateOfInfo());
                 ncbAdd.setAccountOpenDate(ncbDetailView.getAccountOpenDate());
                 ncbAdd.setLimit(ncbDetailView.getLimit());
@@ -300,8 +309,6 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setHistoryPayment(tdrConditionHistory);
                 ncbAdd.setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbAdd.setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
-                ncbAdd.setRefinanceFlag(ncbDetailView.getRefinanceFlag());
-                ncbAdd.setWcFlag(ncbDetailView.getWcFlag());
                 ncbAdd.setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
                 ncbAdd.setMonth1(ncbDetailView.getMonth1());
                 ncbAdd.setMonth2(ncbDetailView.getMonth2());
@@ -309,6 +316,28 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setMonth4(ncbDetailView.getMonth4());
                 ncbAdd.setMonth5(ncbDetailView.getMonth5());
                 ncbAdd.setMonth6(ncbDetailView.getMonth6());
+                //checkbox
+                ncbAdd.setTMB(ncbDetailView.isTMB());
+                ncbAdd.setRefinance(ncbDetailView.isRefinance());
+                ncbAdd.setWc(ncbDetailView.isWc());
+
+                if(ncbDetailView.isTMB() == true){
+                    ncbAdd.setTMBAccount(1);
+                }else{
+                    ncbAdd.setTMBAccount(0);
+                }
+
+                if(ncbDetailView.isWc() == true){
+                    ncbAdd.setWcFlag(1);
+                }else{
+                    ncbAdd.setWcFlag(0);
+                }
+
+                if(ncbDetailView.isRefinance() == true){
+                    ncbAdd.setRefinanceFlag(1);
+                }else{
+                    ncbAdd.setRefinanceFlag(0);
+                }
 
                 moneys = new ArrayList<BigDecimal>();
                 moneys.add(ncbDetailView.getMonth1());
@@ -353,7 +382,6 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList.get(rowIndex).setAccountStatus(accountStatus);
                 ncbDetailViewList.get(rowIndex).setCurrentPayment(tdrConditionCurrent);
                 ncbDetailViewList.get(rowIndex).setHistoryPayment(tdrConditionHistory);
-                ncbDetailViewList.get(rowIndex).setTMBAccount(ncbDetailView.getTMBAccount());
                 ncbDetailViewList.get(rowIndex).setDateOfInfo(ncbDetailView.getDateOfInfo());
                 ncbDetailViewList.get(rowIndex).setAccountOpenDate(ncbDetailView.getAccountOpenDate());
                 ncbDetailViewList.get(rowIndex).setLimit(ncbDetailView.getLimit());
@@ -362,7 +390,6 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList.get(rowIndex).setDateOfDebtRestructuring(ncbDetailView.getDateOfDebtRestructuring());
                 ncbDetailViewList.get(rowIndex).setNoOfOutstandingPaymentIn12months(ncbDetailView.getNoOfOutstandingPaymentIn12months());
                 ncbDetailViewList.get(rowIndex).setNoOfOverLimit(ncbDetailView.getNoOfOverLimit());
-                ncbDetailViewList.get(rowIndex).setRefinanceFlag(ncbDetailView.getRefinanceFlag());
                 ncbDetailViewList.get(rowIndex).setNoOfmonthsPayment(ncbDetailView.getNoOfmonthsPayment());
                 ncbDetailViewList.get(rowIndex).setMonth1(ncbDetailView.getMonth1());
                 ncbDetailViewList.get(rowIndex).setMonth2(ncbDetailView.getMonth2());
@@ -370,7 +397,14 @@ public class NCBInfo implements Serializable {
                 ncbDetailViewList.get(rowIndex).setMonth4(ncbDetailView.getMonth4());
                 ncbDetailViewList.get(rowIndex).setMonth5(ncbDetailView.getMonth5());
                 ncbDetailViewList.get(rowIndex).setMonth6(ncbDetailView.getMonth6());
+                //checkbox
+                ncbDetailViewList.get(rowIndex).setTMB(ncbDetailView.isTMB());
+                ncbDetailViewList.get(rowIndex).setRefinance(ncbDetailView.isRefinance());
+                ncbDetailViewList.get(rowIndex).setWc(ncbDetailView.isWc());
+
+                ncbDetailViewList.get(rowIndex).setTMBAccount(ncbDetailView.getTMBAccount());
                 ncbDetailViewList.get(rowIndex).setWcFlag(ncbDetailView.getWcFlag());
+                ncbDetailViewList.get(rowIndex).setRefinanceFlag(ncbDetailView.getRefinanceFlag());
 
                 moneys = new ArrayList<BigDecimal>();
                 moneys.add(ncbDetailViewList.get(rowIndex).getMonth1());
