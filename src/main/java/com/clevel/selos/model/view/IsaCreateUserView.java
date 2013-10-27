@@ -26,7 +26,23 @@ public class IsaCreateUserView implements Serializable {
 
     private ManageUserAction flag;
 
-
+    public void reset() {
+        this.id = "";
+        this.username = "";
+        this.emailAddress = "";
+        this.phoneExt = "";
+        this.phoneNumber = "";
+        this.buCode = "";
+        this.userDepartment = new UserDepartment();
+        this.role = new Role();
+        this.userDivision = new UserDivision();
+        this.userRegion = new UserRegion();
+        this.userTeam = new UserTeam();
+        this.userTitle = new UserTitle();
+        this.userZone = new UserZone();
+        this.active = 1;
+//        this.flag = ManageUserAction.ADD;
+    }
 
     public String getId() {
         return id;

@@ -56,7 +56,7 @@ public class Isa implements Serializable {
     IsaBusinessControl isaBusinessControl;
 
     public Isa() {
-
+         complete=true;
     }
 
     private List<User> userDetail;
@@ -96,7 +96,7 @@ public class Isa implements Serializable {
                 User user = userDAO.findByUserName(createUserView.getUsername());
                 if (user != null) {
                     complete = false;
-                    message = "Add new User failed. Cause : Duplicate User found in system!";
+                    message = "Add new User failed. Cause : Duplicate UserId found in system!";
 
                 } else {
                     isaBusinessControl.createUser(createUserView);
@@ -107,6 +107,7 @@ public class Isa implements Serializable {
             } else if (createUserView.getFlag() == ManageUserAction.EDIT) {
                 messageHeader = "Edit User!";
                 isaBusinessControl.editUser(createUserView);
+                onSelectUser();
                 message="Edit User Success.";
 
             }
@@ -140,6 +141,7 @@ public class Isa implements Serializable {
     }
 
     public void getSelectUserDetailList() {
+        try{
         userRoleList = roleDAO.findAll();
         userDepartmentList = userDepartmentDAO.findAll();
         userDivisionList = userDivisionDAO.findAll();
@@ -147,6 +149,9 @@ public class Isa implements Serializable {
         userTeamList = userTeamDAO.findAll();
         userTitleList = userTitleDAO.findAll();
         userZoneList = userZoneDAO.findAll();
+        }catch (Exception e){
+
+        }
 
     }
 
@@ -154,16 +159,8 @@ public class Isa implements Serializable {
     public void onOpenNewUserForm() {
         log.debug("onCreateNewUser()");
         createUserView = new IsaCreateUserView();
-        createUserView.setRole(new Role());
-        createUserView.setUserDepartment(new UserDepartment());
-        createUserView.setUserDivision(new UserDivision());
-        createUserView.setUserRegion(new UserRegion());
-        createUserView.setUserTeam(new UserTeam());
-        createUserView.setUserTitle(new UserTitle());
-        createUserView.setUserZone(new UserZone());
-
+        createUserView.reset();
         createUserView.setFlag(ManageUserAction.ADD);
-
 
         getSelectUserDetailList();
     }
@@ -177,29 +174,10 @@ public class Isa implements Serializable {
 
             createUserView = isaBusinessControl.SelectUserById(id);
             if (createUserView != null) {
-                if (createUserView.getUserDepartment() == null) {
-                    createUserView.setUserDepartment(new UserDepartment());
-                }
-                if (createUserView.getRole() == null) {
-                    createUserView.setRole(new Role());
-                }
-                if (createUserView.getUserDivision() == null) {
-                    createUserView.setUserDivision(new UserDivision());
-                }
-                if (createUserView.getUserRegion() == null) {
-                    createUserView.setUserRegion(new UserRegion());
-                }
-                if (createUserView.getUserTeam() == null) {
-                    createUserView.setUserTeam(new UserTeam());
-                }
-                if (createUserView.getUserTitle() == null) {
-                    createUserView.setUserTitle(new UserTitle());
-                }
-                if (createUserView.getUserZone() == null) {
-                    createUserView.setUserZone(new UserZone());
-                }
+
                 createUserView.setFlag(ManageUserAction.EDIT);
                 getSelectUserDetailList();
+
             } else {
                 messageHeader = "Edit Form";
                 message = "Open edit form failed. Cause : User is not found!";

@@ -7,6 +7,9 @@
         <h:form id="manageDialogForm">
             <h:panelGrid columns="2">
 
+                <h:outputText value="Id :"/>
+                <p:inputText value="#{isa.createUserView.id}"/>
+
                 <h:outputText value="Username :"/>
                 <p:inputText value="#{isa.createUserView.username}"/>
 
@@ -76,7 +79,7 @@
                     <f:selectItems value="#{isa.userZoneList}"
                                    var="zoneItem"
                                    itemLabel="#{zoneItem.name}"
-                                   itemValue="#{zoneItem.code}"/>
+                                   itemValue="#{zoneItem.id}"/>
                 </p:selectOneMenu>
 
                 <h:outputText value="Active"/>
