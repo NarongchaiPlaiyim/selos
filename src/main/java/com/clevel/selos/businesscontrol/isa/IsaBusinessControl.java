@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.sql.SQLException;
 
 @Stateless
-public class IsaBusinessControl implements Serializable{
+public class IsaBusinessControl implements Serializable {
 
     @Inject
     Logger log;
@@ -23,20 +25,48 @@ public class IsaBusinessControl implements Serializable{
     UserDAO userDAO;
 
     @Inject
-    public IsaBusinessControl(){
+    public IsaBusinessControl() {
 
     }
 
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
 
     }
 
-    public void createUser(IsaCreateUserView isaCreateUserView){
+    boolean complete = true;
+
+    public void createUser(IsaCreateUserView isaCreateUserView) throws Exception{
 
         log.debug("createUser()");
 
-        User user=new User();
+        User user = new User();
+        user.setId(isaCreateUserView.getUsername());
+        user.setUserName(isaCreateUserView.getUsername());
+        user.setBuCode(isaCreateUserView.getBuCode());
+        user.setPhoneExt(isaCreateUserView.getPhoneExt());
+        user.setPhoneNumber(isaCreateUserView.getPhoneNumber());
+        user.setEmailAddress(isaCreateUserView.getEmailAddress());
+        user.setRole(isaCreateUserView.getRole());
+        user.setDepartment(isaCreateUserView.getUserDepartment());
+        user.setDivision(isaCreateUserView.getUserDivision());
+        user.setRegion(isaCreateUserView.getUserRegion());
+        user.setTeam(isaCreateUserView.getUserTeam());
+        user.setTitle(isaCreateUserView.getUserTitle());
+        user.setZone(isaCreateUserView.getUserZone());
+        user.setUserStatus(UserStatus.NORMAL);
+        user.setActive(isaCreateUserView.getActive());
+
+            userDAO.persist(user);
+
+    }
+
+
+    public void editUser(IsaCreateUserView isaCreateUserView) throws ConstraintViolationException,Exception {
+
+        log.debug("editUser()");
+        RequestContext context=RequestContext.getCurrentInstance();
+        User user = new User();
         user.setId(isaCreateUserView.getUsername());
         user.setUserName(isaCreateUserView.getUsername());
         user.setBuCode(isaCreateUserView.getBuCode());
@@ -50,24 +80,21 @@ public class IsaBusinessControl implements Serializable{
         user.setTeam(isaCreateUserView.getUserTeam());
         user.setTitle(isaCreateUserView.getUserTitle());
 
-        if(isaCreateUserView.getUserZone().getId()==0){
         user.setZone(isaCreateUserView.getUserZone());
-        }
+
         user.setUserStatus(UserStatus.NORMAL);
 
-        userDAO.save(user);
+            userDAO.persist(user);
 
-        RequestContext.getCurrentInstance().execute("newUserDlg.hide()");
-
-        System.out.println(isaCreateUserView.toString());
     }
 
-    public IsaCreateUserView editUser(String id){
-        log.debug("editUser()");
 
-        User user=userDAO.findById(id);
+    public IsaCreateUserView SelectUserById(String id) {
+        log.debug("SelectUserById()");
+        System.out.println("SelectUserById : "+id);
+        User user = userDAO.findById(id);
 
-        IsaCreateUserView isaCreateUserView=new IsaCreateUserView();
+        IsaCreateUserView isaCreateUserView = new IsaCreateUserView();
         isaCreateUserView.setId(user.getId());
         isaCreateUserView.setUsername(user.getUserName());
         isaCreateUserView.setPhoneExt(user.getPhoneExt());
@@ -86,16 +113,26 @@ public class IsaBusinessControl implements Serializable{
     }
 
 
-    public void deleteUser(String id){
+
+
+    public void deleteUser(String id) {
         log.debug("deleteUser()");
 
-        User user=userDAO.findById(id);
-        user.setUserStatus(UserStatus.MARK_AS_DELETED);
-        userDAO.persist(user);
         RequestContext context=RequestContext.getCurrentInstance();
+        User user = userDAO.findById(id);
+        user.setUserStatus(UserStatus.MARK_AS_DELETED);
 
-        context.update(":userTableData");
-        context.execute("confirmDlg.hide()");
+        try {
+            userDAO.persist(user);
+        } catch (ConstraintViolationException ex) {
+            complete = false;
+            throw ex;
+        } catch (Exception e) {
+            complete = false;
+        }
+
+        context.addCallbackParam("functionComplete", complete);
+
     }
 
 }

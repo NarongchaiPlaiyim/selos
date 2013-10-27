@@ -29,7 +29,7 @@
             <div id="content_container">
                 <div id="content_name"><p:outputLabel value="#{msg.get('app.bizInfoSummary.header')}"/></div>
                 <div id="content">
-                    <table id="content_form" class="content_table_form" style="width:100%">
+                    <table id="content_form" class="content_table_form" >
                         <colgroup>
                             <col style="width: 150px"/>
                             <col style="width: 150px"/>
@@ -451,7 +451,7 @@
                         </tr>
                         <tr>
                             <td colspan="5" class="left">
-                                <p:commandButton id="addBizInfoDetail" value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
+                                <p:commandButton id="addBizInfoDetail" styleClass="medium" value="#{msg.get('app.button.add')}" oncomplete="confirmAddBizInfoDetailDlg.show()" >
                                     <f:setPropertyActionListener value="addDetail" target="#{bizInfoSummary.redirect}"/>
                                 </p:commandButton>
                             </td>
@@ -460,11 +460,10 @@
                             <td colspan="100%"><p:spacer width="2"/></td>
                         </tr>
                         <tr>
-                            <td colspan="5" >
+                            <td colspan="5" align="center">
                                 <p:dataTable id="businessInfoTable"
                                              var="bizInfoDetailx"
                                              value="#{bizInfoSummary.bizInfoDetailViewList}"
-                                             paginator="false"
                                              rowKey="#{bizInfoDetail.bizComment}"
                                              rowIndexVar="rowIndex">
 
@@ -484,25 +483,39 @@
                                         <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="center" style="width: 140px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="center" style="width: 100px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="center" style="width: 50px;">
-                                        <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}"/>
+                                        <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="center" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="center" style="width: 50px;">
-                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}"/>
+                                        <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </h:outputText>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
                                         <h:outputText value="#{bizInfoDetailx.bizComment}"/>
@@ -530,7 +543,7 @@
                                             <p:column colspan="5" footerText="#{msg.get('app.bizInfoSummary.table.footer.sumIncomeAmount')}"
                                                       style="background-color:#f4f8b6; text-align:left;"/>
 
-                                            <p:column footerText="#{bizInfoSummary.sumIncomeAmount}"
+                                            <p:column footerText="#{bizInfoSummary.sumIncomeAmountDis}"
                                                       style="background-color:#f4f8b6; text-align:right;"/>
 
                                             <p:column footerText="#{bizInfoSummary.sumIncomePercent}"
@@ -546,7 +559,8 @@
                                                       style="background-color:#f8d0b6; text-align:right;"/>
 
                                             <p:column footerText="#{bizInfoSummary.sumweightIntvIncomeFactor}"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                                      style="background-color:#f8d0b6; text-align:right;">
+                                            </p:column>
 
                                             <p:column footerText="#{bizInfoSummary.sumweightAR}"
                                                       style="background-color:#f8d0b6; text-align:right;"/>

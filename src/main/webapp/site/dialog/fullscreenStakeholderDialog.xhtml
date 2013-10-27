@@ -90,5 +90,8 @@
             </tr>
         </table>
     </h:form>
-
+    <p:blockUI block=":stakeholderViewDlgForm" trigger=":stakeholderViewDlgForm:btnSaveStakeholderView">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

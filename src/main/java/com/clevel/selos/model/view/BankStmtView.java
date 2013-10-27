@@ -13,7 +13,7 @@ public class BankStmtView implements Serializable {
     private BankView bankView;
     private String branchName;
     private BankAccountTypeView bankAccountTypeView;
-    private BankAccountTypeView othBankAccountTypeView;
+    private int otherAccountType;
     private String accountNumber;
     private String accountName;
     private AccountStatusView accountStatusView;
@@ -49,7 +49,6 @@ public class BankStmtView implements Serializable {
         this.bankView = new BankView();
         this.branchName = "";
         this.bankAccountTypeView = new BankAccountTypeView();
-        this.othBankAccountTypeView = new BankAccountTypeView();
         this.accountNumber = "";
         this.accountName = "";
         this.accountStatusView = new AccountStatusView();
@@ -117,12 +116,12 @@ public class BankStmtView implements Serializable {
         this.bankAccountTypeView = bankAccountTypeView;
     }
 
-    public BankAccountTypeView getOthBankAccountTypeView() {
-        return othBankAccountTypeView;
+    public int getOtherAccountType() {
+        return otherAccountType;
     }
 
-    public void setOthBankAccountTypeView(BankAccountTypeView othBankAccountTypeView) {
-        this.othBankAccountTypeView = othBankAccountTypeView;
+    public void setOtherAccountType(int otherAccountType) {
+        this.otherAccountType = otherAccountType;
     }
 
     public String getAccountNumber() {
@@ -309,7 +308,7 @@ public class BankStmtView implements Serializable {
                 .append("bankView", bankView)
                 .append("branchName", branchName)
                 .append("bankAccountTypeView", bankAccountTypeView)
-                .append("othBankAccountTypeView", othBankAccountTypeView)
+                .append("otherAccountType", otherAccountType)
                 .append("accountNumber", accountNumber)
                 .append("accountName", accountName)
                 .append("accountStatusView", accountStatusView)

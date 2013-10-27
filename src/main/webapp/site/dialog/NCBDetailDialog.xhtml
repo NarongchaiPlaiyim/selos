@@ -23,7 +23,7 @@
                            var="dlgAccountTypeList"
                            itemLabel="#{dlgAccountTypeList.name}"
                            itemValue="#{dlgAccountTypeList.id}"/>
-            <p:ajax event="change" listener="#{ncbInfo.onChangeAccountType}" update=":ncbDlgForm"/>
+            <p:ajax event="change" listener="#{ncbInfo.onChangeAccountType}" update=":ncbDlgForm,:ncbDlgForm:panelNoOfmonthsPaymentFlag"/>
         </p:selectOneMenu>
     </td>
 </tr>

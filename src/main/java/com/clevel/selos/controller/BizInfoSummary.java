@@ -12,6 +12,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.transform.BizInfoDetailTransform;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class BizInfoSummary implements Serializable {
     private User user;
 
     private ReferredExperience  referredExperience;
+    private String  sumIncomeAmountDis;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal sumweightIntvIncomeFactor;
@@ -90,6 +92,9 @@ public class BizInfoSummary implements Serializable {
     private UserDAO userDAO;
     @Inject
     private CountryDAO countryDAO;
+
+    @Inject
+    private Util util;
 
     public BizInfoSummary(){
 
@@ -228,12 +233,21 @@ public class BizInfoSummary implements Serializable {
                 sumINV += invCal;
 
             }
+
+            log.info("sumIncomeAmountX 1111.00 is " + util.formatNumber(1111.00));
+            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(1234.55));
+            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(1234567.55));
+            log.info("sumIncomeAmountX 1111.55 is " + util.formatNumber(12345678910.55));
+
+            sumIncomeAmountDis = util.formatNumber(sumIncomeAmountD);
+
             sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2);
             sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2);
             sumweightAR  = new BigDecimal(sumAR).setScale(2);
             sumweightAP  = new BigDecimal(sumAP).setScale(2);
             sumweightINV  = new BigDecimal(sumINV).setScale(2);
             sumweightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
+
 
             bizInfoSummaryView.setSumIncomeAmount(sumIncomeAmount);
             bizInfoSummaryView.setSumIncomePercent(sumIncomePercent);
@@ -464,5 +478,13 @@ public class BizInfoSummary implements Serializable {
 
     public void setCountryList(List<Country> countryList) {
         this.countryList = countryList;
+    }
+
+    public String getSumIncomeAmountDis() {
+        return sumIncomeAmountDis;
+    }
+
+    public void setSumIncomeAmountDis(String sumIncomeAmountDis) {
+        this.sumIncomeAmountDis = sumIncomeAmountDis;
     }
 }
