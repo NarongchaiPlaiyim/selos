@@ -40,24 +40,24 @@ public class BankStmtDetailView implements Serializable {
     }
 
     public void reset() {
-        this.overLimitAmount = BigDecimal.valueOf(0.00);
-        this.grossCreditBalance = BigDecimal.valueOf(0.00);
-        this.excludeListBDM = BigDecimal.valueOf(0.0);
-        this.excludeListUW = BigDecimal.valueOf(0.0);
-        this.creditAmountBDM = BigDecimal.valueOf(0.00);
-        this.creditAmountUW = BigDecimal.valueOf(0.00);
-        this.timesOfAvgCreditBDM = BigDecimal.valueOf(0.00);
-        this.timesOfAvgCreditUW = BigDecimal.valueOf(0.00);
-        this.debitAmount = BigDecimal.valueOf(0.00);
+        this.overLimitAmount = BigDecimal.ZERO;
+        this.grossCreditBalance = BigDecimal.ZERO;
+        this.excludeListBDM = BigDecimal.ZERO;
+        this.excludeListUW = BigDecimal.ZERO;
+        this.creditAmountBDM = BigDecimal.ZERO;
+        this.creditAmountUW = BigDecimal.ZERO;
+        this.timesOfAvgCreditBDM = BigDecimal.ZERO;
+        this.timesOfAvgCreditUW = BigDecimal.ZERO;
+        this.debitAmount = BigDecimal.ZERO;
         this.highestBalanceDate = new Date();
-        this.highestBalance = BigDecimal.valueOf(0.00);
+        this.highestBalance = BigDecimal.ZERO;
         this.lowestBalanceDate = new Date();
-        this.lowestBalance = BigDecimal.valueOf(0.00);
-        this.monthEndBalance = BigDecimal.valueOf(0.00);
-        this.chequeReturnAmount = BigDecimal.valueOf(0.0);
-        this.swingPercent = BigDecimal.valueOf(0.00);
-        this.utilizationPercent = BigDecimal.valueOf(0.00);
-        this.grossInflowPerLimit = BigDecimal.valueOf(0.00);
+        this.lowestBalance = BigDecimal.ZERO;
+        this.monthEndBalance = BigDecimal.ZERO;
+        this.chequeReturnAmount = BigDecimal.ZERO;
+        this.swingPercent = BigDecimal.ZERO;
+        this.utilizationPercent = BigDecimal.ZERO;
+        this.grossInflowPerLimit = BigDecimal.ZERO;
     }
 
     public long getId() {
