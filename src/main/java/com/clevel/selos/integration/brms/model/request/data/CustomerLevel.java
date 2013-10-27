@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class CustomerLevel implements Serializable {
@@ -31,6 +32,12 @@ public class CustomerLevel implements Serializable {
     private WarningCode warningCodeSomeMatched;
     private int dayOverdueAnnualReview;
 
+    private String creditWorthiness;
+    private int kyc;
+    private BigDecimal dayAnnualReviewOverdue;
+    private String sPouseId;
+    private String sPouseRelationshipType;
+    private String marriageStatus;
 
     public CustomerLevel() {
     }
@@ -58,6 +65,30 @@ public class CustomerLevel implements Serializable {
         this.warningCodeFullyMatched = warningCodeFullyMatched;
         this.warningCodeSomeMatched = warningCodeSomeMatched;
         this.dayOverdueAnnualReview = dayOverdueAnnualReview;
+    }
+
+    public String getMarriageStatus() {
+        return marriageStatus;
+    }
+
+    public void setMarriageStatus(String marriageStatus) {
+        this.marriageStatus = marriageStatus;
+    }
+
+    public String getsPouseId() {
+        return sPouseId;
+    }
+
+    public void setsPouseId(String sPouseId) {
+        this.sPouseId = sPouseId;
+    }
+
+    public String getsPouseRelationshipType() {
+        return sPouseRelationshipType;
+    }
+
+    public void setsPouseRelationshipType(String sPouseRelationshipType) {
+        this.sPouseRelationshipType = sPouseRelationshipType;
     }
 
     public CustomerEntity getCustomerEntity() {
@@ -234,6 +265,30 @@ public class CustomerLevel implements Serializable {
 
     public void setDayOverdueAnnualReview(int dayOverdueAnnualReview) {
         this.dayOverdueAnnualReview = dayOverdueAnnualReview;
+    }
+
+    public String getCreditWorthiness() {
+        return creditWorthiness;
+    }
+
+    public void setCreditWorthiness(String creditWorthiness) {
+        this.creditWorthiness = creditWorthiness;
+    }
+
+    public int getKyc() {
+        return kyc;
+    }
+
+    public void setKyc(int kyc) {
+        this.kyc = kyc;
+    }
+
+    public BigDecimal getDayAnnualReviewOverdue() {
+        return dayAnnualReviewOverdue;
+    }
+
+    public void setDayAnnualReviewOverdue(BigDecimal dayAnnualReviewOverdue) {
+        this.dayAnnualReviewOverdue = dayAnnualReviewOverdue;
     }
 
     @Override

@@ -63,45 +63,34 @@ public class Post implements Serializable {
         BufferedReader rd = null;
         StringBuilder builder = null;
 
-//        try {
-            params = new BasicHttpParams();
-            int minute = 60000;
-            HttpConnectionParams.setSoTimeout(params, minute*timeOut);
-            HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
+        params = new BasicHttpParams();
+        int minute = 60000;
+        HttpConnectionParams.setSoTimeout(params, minute*timeOut);
+        HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
 
-            client = new DefaultHttpClient(params);
-            post = new HttpPost(url);
-            post.setHeader("User-Agent", "Mozilla/5.0");
-            post.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
+        client = new DefaultHttpClient(params);
+        post = new HttpPost(url);
+        post.setHeader("User-Agent", "Mozilla/5.0");
+        post.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
 
-            urlParameters = new ArrayList<NameValuePair>();
-            urlParameters.add(new BasicNameValuePair("q", xml));
-            post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
+        urlParameters = new ArrayList<NameValuePair>();
+        urlParameters.add(new BasicNameValuePair("q", xml));
+        post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
 
-            response = client.execute(post);
-            int resCode = response.getStatusLine().getStatusCode();
-            if (resCode==200) {
-                log.debug("The request has succeeded");
-                rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                builder = new StringBuilder();
-                String line = "";
-                while ((line = rd.readLine()) != null) {
-                    builder.append(line);
-                }
-                return builder!=null?builder.toString():"";
-            }else{
-                log.error("The request has failed, Error code is {}", resCode);
-                throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
+        response = client.execute(post);
+        int resCode = response.getStatusLine().getStatusCode();
+        if (resCode==200) {
+            log.debug("The request has succeeded");
+            rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            builder = new StringBuilder();
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                builder.append(line);
             }
-//        } catch (Exception e) {
-//            throw new NCBInterfaceException(new Exception("sendPost Error Exception : {}"+e.getMessage()), exception,message.get(exception, "sendPost Error Exception : {}"+e.getMessage()));
-//        } finally {
-//            if (null != response) {
-//                HttpClientUtils.closeQuietly(response);
-//            }
-//            if (null != client) {
-//                HttpClientUtils.closeQuietly(client);
-//            }
-//        }
+            return builder!=null?builder.toString():"";
+        }else{
+             log.error("The request has failed, Error code is {}", resCode);
+             throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
+        }
     }
 }
