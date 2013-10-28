@@ -21,13 +21,11 @@ import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -290,7 +288,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             throw new NCBInterfaceException(e, exception, resultDesc);
-        }catch (Exception e) {
+        } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
@@ -381,7 +379,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             throw new NCBInterfaceException(e, exception, resultDesc);
-        }catch (Exception e) {
+        } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
@@ -407,7 +405,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                     throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
                 }
             } else {
-                resultDesc =responseModel.getBody().getErrormsg();
+                resultDesc = responseModel.getBody().getErrormsg();
                 log.error("NCCRS NCB Exception {}", responseModel.getBody().getErrormsg());
                 throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
             }

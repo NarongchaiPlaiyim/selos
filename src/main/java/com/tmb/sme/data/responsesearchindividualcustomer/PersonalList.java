@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for personalList complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="personalList">
  *   &lt;complexContent>
@@ -127,24 +127,22 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "personalList", propOrder = {
-    "custNbr1",
-    "title1",
-    "name1",
-    "custId1",
-    "citizenId1",
-    "ctl11",
-    "ctl21",
-    "ctl31",
-    "ctl4",
-    "address1",
-    "type1",
-    "telephoneNumber1",
-    "dateOfBirth1"
+        "custNbr1",
+        "title1",
+        "name1",
+        "custId1",
+        "citizenId1",
+        "ctl11",
+        "ctl21",
+        "ctl31",
+        "ctl4",
+        "address1",
+        "type1",
+        "telephoneNumber1",
+        "dateOfBirth1"
 })
 public class PersonalList {
 
@@ -174,11 +172,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the custNbr1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustNbr1() {
         return custNbr1;
@@ -186,11 +182,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the custNbr1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustNbr1(String value) {
         this.custNbr1 = value;
@@ -198,11 +192,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the title1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTitle1() {
         return title1;
@@ -210,11 +202,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the title1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTitle1(String value) {
         this.title1 = value;
@@ -222,11 +212,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the name1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getName1() {
         return name1;
@@ -234,11 +222,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the name1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName1(String value) {
         this.name1 = value;
@@ -246,11 +232,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the custId1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustId1() {
         return custId1;
@@ -258,11 +242,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the custId1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustId1(String value) {
         this.custId1 = value;
@@ -270,11 +252,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the citizenId1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCitizenId1() {
         return citizenId1;
@@ -282,11 +262,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the citizenId1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCitizenId1(String value) {
         this.citizenId1 = value;
@@ -294,11 +272,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the ctl11 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl11() {
         return ctl11;
@@ -306,11 +282,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the ctl11 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl11(String value) {
         this.ctl11 = value;
@@ -318,11 +292,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the ctl21 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl21() {
         return ctl21;
@@ -330,11 +302,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the ctl21 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl21(String value) {
         this.ctl21 = value;
@@ -342,11 +312,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the ctl31 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl31() {
         return ctl31;
@@ -354,11 +322,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the ctl31 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl31(String value) {
         this.ctl31 = value;
@@ -366,11 +332,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the ctl4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl4() {
         return ctl4;
@@ -378,11 +342,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the ctl4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl4(String value) {
         this.ctl4 = value;
@@ -390,11 +352,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the address1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddress1() {
         return address1;
@@ -402,11 +362,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the address1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddress1(String value) {
         this.address1 = value;
@@ -414,11 +372,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the type1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getType1() {
         return type1;
@@ -426,11 +382,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the type1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setType1(String value) {
         this.type1 = value;
@@ -438,11 +392,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the telephoneNumber1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber1() {
         return telephoneNumber1;
@@ -450,11 +402,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the telephoneNumber1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber1(String value) {
         this.telephoneNumber1 = value;
@@ -462,11 +412,9 @@ public class PersonalList {
 
     /**
      * Gets the value of the dateOfBirth1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDateOfBirth1() {
         return dateOfBirth1;
@@ -474,11 +422,9 @@ public class PersonalList {
 
     /**
      * Sets the value of the dateOfBirth1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDateOfBirth1(String value) {
         this.dateOfBirth1 = value;

@@ -11,7 +11,7 @@ public class CustomerCSIDAO extends GenericDAO<CustomerCSI, Long> {
     private Logger log;
 
     @Inject
-    public CustomerCSIDAO(){
+    public CustomerCSIDAO() {
 
     }
 }

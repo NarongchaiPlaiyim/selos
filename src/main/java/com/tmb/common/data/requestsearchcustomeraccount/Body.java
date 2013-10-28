@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -41,13 +41,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "custNbr",
-    "radSelectSearch"
+        "custNbr",
+        "radSelectSearch"
 })
 public class Body {
 
@@ -57,11 +55,9 @@ public class Body {
 
     /**
      * Gets the value of the custNbr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustNbr() {
         return custNbr;
@@ -69,11 +65,9 @@ public class Body {
 
     /**
      * Sets the value of the custNbr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustNbr(String value) {
         this.custNbr = value;
@@ -81,11 +75,9 @@ public class Body {
 
     /**
      * Gets the value of the radSelectSearch property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRadSelectSearch() {
         return radSelectSearch;
@@ -93,11 +85,9 @@ public class Body {
 
     /**
      * Sets the value of the radSelectSearch property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRadSelectSearch(String value) {
         this.radSelectSearch = value;

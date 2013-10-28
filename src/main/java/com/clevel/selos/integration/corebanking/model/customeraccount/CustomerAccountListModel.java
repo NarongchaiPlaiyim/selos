@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 
-public class CustomerAccountListModel implements Serializable{
+public class CustomerAccountListModel implements Serializable {
 
     private String rel;
     private String cd;
@@ -148,6 +148,7 @@ public class CustomerAccountListModel implements Serializable{
     public void setRel(String rel) {
         this.rel = rel;
     }
+
     public String getCurr() {
         return curr;
     }

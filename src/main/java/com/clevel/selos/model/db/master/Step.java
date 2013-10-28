@@ -12,15 +12,15 @@ public class Step implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
-    @Column(name = "name",length = 10)
+    @Column(name = "name", length = 10)
     private String name;
-    @Column(name = "description",length = 100)
+    @Column(name = "description", length = 100)
     private String description;
     @OneToOne
     @JoinColumn(name = "stage_id")
     private Stage stage;
     @ManyToOne
-    @JoinColumn(name="role_id")
+    @JoinColumn(name = "role_id")
     private Role role;
     @Column(name = "active")
     private int active;

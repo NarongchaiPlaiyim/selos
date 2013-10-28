@@ -40,7 +40,7 @@ public class ConfigurationProducer {
         log.debug("===== selos.properties begin =====");
         while (keys.hasMoreElements()) {
             String key = (String) keys.nextElement();
-            log.debug("key: {}, value: {}",key,config.getProperty(key));
+            log.debug("key: {}, value: {}", key, config.getProperty(key));
         }
         log.debug("===== selos.properties end =====");
         log.debug("load configuration properties done. (size: {})", config.size());
@@ -56,7 +56,7 @@ public class ConfigurationProducer {
 
     private static Properties getFromResource(String resourceName) {
         Properties p = new Properties();
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceName,new Locale("th","TH"));
+        ResourceBundle bundle = ResourceBundle.getBundle(resourceName, new Locale("th", "TH"));
         Enumeration e = bundle.getKeys();
         while (e.hasMoreElements()) {
             String key = (String) e.nextElement();

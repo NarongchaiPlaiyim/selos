@@ -48,7 +48,7 @@ public class InboxControl extends BusinessControl {
     @Inject
     CustomerTransform customerTransform;
 
-    public List<InboxView> getInboxFromBPM(UserDetail userDetail){
+    public List<InboxView> getInboxFromBPM(UserDetail userDetail) {
 
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
@@ -60,7 +60,7 @@ public class InboxControl extends BusinessControl {
 
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
 
-        for(WorkCasePrescreen workCasePrescreen : workCasePrescreenList){
+        for (WorkCasePrescreen workCasePrescreen : workCasePrescreenList) {
             CaseDTO caseDTO = new CaseDTO();
             HashMap<String, String> caseData = new HashMap<String, String>();
             caseData.put("F_WobNum", workCasePrescreen.getWobNumber());
@@ -77,7 +77,7 @@ public class InboxControl extends BusinessControl {
 
         List<WorkCase> workCaseList = getWorkCase();
         log.debug("workCase List : {}", workCaseList);
-        for(WorkCase workCase : workCaseList){
+        for (WorkCase workCase : workCaseList) {
             CaseDTO caseDTO = new CaseDTO();
             HashMap<String, String> caseData = new HashMap<String, String>();
             caseData.put("F_WobNum", workCase.getWobNumber());
@@ -99,26 +99,26 @@ public class InboxControl extends BusinessControl {
     }
 
     //Tempory to remove
-    public List<WorkCase> getWorkCase(){
+    public List<WorkCase> getWorkCase() {
         List<WorkCase> workCases = workCaseDAO.findAll();
 
         return workCases;
     }
 
     //Tempory to remove
-    public List<WorkCasePrescreen> getWorkCasePreScreen(){
+    public List<WorkCasePrescreen> getWorkCasePreScreen() {
         List<WorkCasePrescreen> workCasePrescreenList = workCasePrescreenDAO.findAll();
 
         return workCasePrescreenList;
     }
 
-    public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId){
+    public AppHeaderView getHeaderInformation(long workCasePreScreenId, long workCaseId) {
         log.info("getHeaderInformation ::: workCasePreScreenId : {}, workCaseId : {}", workCasePreScreenId, workCaseId);
         AppHeaderView appHeaderView = new AppHeaderView();
         appHeaderView.setBorrowerHeaderViewList(new ArrayList<AppBorrowerHeaderView>());
         String bdmUserId;
         String uwUserId = "";
-        if(Long.toString(workCaseId) != null && workCaseId != 0){
+        if (Long.toString(workCaseId) != null && workCaseId != 0) {
             WorkCase workCase = workCaseDAO.findById(workCaseId);
             bdmUserId = workCase.getCreateBy().getId();
 
@@ -144,18 +144,18 @@ public class InboxControl extends BusinessControl {
             log.info("getHeaderInformation ::: customerList : {}", customerList);
             List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
             log.info("getHeaderInformation ::: customerInfoViewList : {}", customerInfoViewList);
-            if(customerInfoViewList != null){
+            if (customerInfoViewList != null) {
                 List<AppBorrowerHeaderView> appBorrowerHeaderViewList = new ArrayList<AppBorrowerHeaderView>();
-                for(CustomerInfoView item : customerInfoViewList){
+                for (CustomerInfoView item : customerInfoViewList) {
                     AppBorrowerHeaderView appBorrowerHeaderView = new AppBorrowerHeaderView();
-                    if(item.getTitleTh() != null){
+                    if (item.getTitleTh() != null) {
                         appBorrowerHeaderView.setBorrowerName(item.getTitleTh().getTitleTh() + "" + item.getFirstNameTh() + " " + item.getLastNameTh());
-                    } else{
+                    } else {
                         appBorrowerHeaderView.setBorrowerName(item.getFirstNameTh() + " " + item.getLastNameTh());
                     }
-                    if(item.getCustomerEntity().getId() == 1){
+                    if (item.getCustomerEntity().getId() == 1) {
                         appBorrowerHeaderView.setPersonalId(item.getCitizenId());
-                    }else if(item.getCustomerEntity().getId() == 2){
+                    } else if (item.getCustomerEntity().getId() == 2) {
                         appBorrowerHeaderView.setPersonalId(item.getRegistrationId());
                     }
                     appBorrowerHeaderViewList.add(appBorrowerHeaderView);
@@ -165,12 +165,12 @@ public class InboxControl extends BusinessControl {
 
             //Find product program from WorkCasePreScreenId
             Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
-            if(prescreen != null){
+            if (prescreen != null) {
                 List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreen.getId());
                 log.info("getHeaderInformation ::: prescreenFacilityList : {}", prescreenFacilityList);
-                if(prescreenFacilityList != null){
+                if (prescreenFacilityList != null) {
                     List<String> productProgram = new ArrayList<String>();
-                    for(PrescreenFacility item : prescreenFacilityList){
+                    for (PrescreenFacility item : prescreenFacilityList) {
                         String prdPrg = item.getProductProgram().getDescription();
                         productProgram.add(prdPrg);
                     }
@@ -180,24 +180,24 @@ public class InboxControl extends BusinessControl {
 
         }
 
-        if(!Util.isEmpty(bdmUserId)){
+        if (!Util.isEmpty(bdmUserId)) {
             User bdmUser = userDAO.findById(bdmUserId);
-            if(bdmUser != null){
+            if (bdmUser != null) {
                 appHeaderView.setBdmName(bdmUser.getUserName());
                 appHeaderView.setBdmPhoneNumber(bdmUser.getPhoneNumber());
                 appHeaderView.setBdmPhoneExtNumber(bdmUser.getPhoneExt());
-                if(bdmUser.getZone() != null){
+                if (bdmUser.getZone() != null) {
                     appHeaderView.setBdmZoneName(bdmUser.getZone().getName());
                 }
-                if(bdmUser.getRegion() != null){
+                if (bdmUser.getRegion() != null) {
                     appHeaderView.setBdmRegionName(bdmUser.getRegion().getName());
                 }
             }
         }
 
-        if(!Util.isEmpty(uwUserId)){
+        if (!Util.isEmpty(uwUserId)) {
             User uwUser = userDAO.findById(uwUserId);
-            if(uwUser != null){
+            if (uwUser != null) {
                 appHeaderView.setUwName(uwUser.getUserName());
                 appHeaderView.setUwPhoneNumber(uwUser.getPhoneExt());
                 appHeaderView.setUwTeamName(uwUser.getTeam().getName());

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 @Stateless
-public class ExistingCreditControl extends BusinessControl{
+public class ExistingCreditControl extends BusinessControl {
 
     @Inject
     DWHInterface dwhInterface;
@@ -55,10 +55,11 @@ public class ExistingCreditControl extends BusinessControl{
 
     /**
      * To refresh/retrieve the Existing Credit Information from DWH Obligation Database.
+     *
      * @param customerInfoViewList
      * @return
      */
-    public ExistingCreditView refreshExistingCredit(List<CustomerInfoView> customerInfoViewList){
+    public ExistingCreditView refreshExistingCredit(List<CustomerInfoView> customerInfoViewList) {
         log.info("Start refreshExistingCredit with customerInfo{}", customerInfoViewList);
 
         ExistingCreditView existingCreditView = getExistingCreditObligation(customerInfoViewList);
@@ -78,31 +79,31 @@ public class ExistingCreditControl extends BusinessControl{
         return existingCreditView;
     }
 
-    private ExistingCreditView getExistingCreditObligation(List<CustomerInfoView> customerInfoViewList){
+    private ExistingCreditView getExistingCreditObligation(List<CustomerInfoView> customerInfoViewList) {
         List<String> tmbCusIDList = new ArrayList<String>();
         List<String> _borrowerTMBCusID = new ArrayList<String>();
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
-            if(!Util.isEmpty(customerInfoView.getTmbCustomerId())){
+        for (CustomerInfoView customerInfoView : customerInfoViewList) {
+            if (!Util.isEmpty(customerInfoView.getTmbCustomerId())) {
                 log.info("get tmbCusId {}", customerInfoView.getTmbCustomerId());
                 Reference reference = customerInfoView.getReference();
-                if(Util.isTrue(reference.getSll())){
+                if (Util.isTrue(reference.getSll())) {
                     tmbCusIDList.add(customerInfoView.getTmbCustomerId());
                     log.info("get reference {}", reference);
                 }
 
-                if(customerInfoView.getRelation().getId() == 1){
+                if (customerInfoView.getRelation().getId() == 1) {
                     _borrowerTMBCusID.add(customerInfoView.getTmbCustomerId());
                 }
             }
         }
 
         ExistingCreditView existingCreditView = new ExistingCreditView();
-        if(tmbCusIDList.size() > 0) {
+        if (tmbCusIDList.size() > 0) {
 
             //Retrieve Obligation
             log.info("retrieve interface");
             ObligationResult obligationResult = dwhInterface.getObligationData(getCurrentUserID(), tmbCusIDList);
-            if(obligationResult.getActionResult().equals(ActionResult.SUCCESS)){
+            if (obligationResult.getActionResult().equals(ActionResult.SUCCESS)) {
 
                 Map<String, ExistingCreditDetailView> borrowerComCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
                 Map<String, ExistingCreditDetailView> borrowerRetailCreditDetailHashMap = new HashMap<String, ExistingCreditDetailView>();
@@ -113,9 +114,9 @@ public class ExistingCreditControl extends BusinessControl{
                 BigDecimal _totalBorrowerComLimit = new BigDecimal(0);
                 BigDecimal _totalRelatedComLimit = new BigDecimal(0);
                 List<Obligation> obligationList = obligationResult.getObligationList();
-                for(Obligation obligation : obligationList){
+                for (Obligation obligation : obligationList) {
                     ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(obligation);
-                    if(_borrowerTMBCusID.contains(obligation.getTmbCusId())){
+                    if (_borrowerTMBCusID.contains(obligation.getTmbCusId())) {
                         log.info("add obligation into borrower");
                         existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
                         borrowerComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
@@ -144,35 +145,35 @@ public class ExistingCreditControl extends BusinessControl{
         return existingCreditView;
     }
 
-    private ExistingCreditView getRLOSAppInProcess(List<CustomerInfoView> customerInfoViewList){
+    private ExistingCreditView getRLOSAppInProcess(List<CustomerInfoView> customerInfoViewList) {
 
         ExistingCreditView existingCreditView = new ExistingCreditView();
 
         List<String> personalIDList = new ArrayList<String>();
         List<String> _borrowerPersonalID = new ArrayList<String>();
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
+        for (CustomerInfoView customerInfoView : customerInfoViewList) {
 
-            if(!Util.isEmpty(customerInfoView.getCitizenId())){
+            if (!Util.isEmpty(customerInfoView.getCitizenId())) {
                 log.info("get citizen {}", customerInfoView.getCitizenId());
                 Reference reference = customerInfoView.getReference();
-                if(Util.isTrue(reference.getSll())){
+                if (Util.isTrue(reference.getSll())) {
                     personalIDList.add(customerInfoView.getCitizenId());
                     log.info("get reference for RLOS {}", reference);
                 }
 
-                if(customerInfoView.getRelation().getId() == 1){
+                if (customerInfoView.getRelation().getId() == 1) {
                     _borrowerPersonalID.add(customerInfoView.getCitizenId());
                 }
             }
         }
         log.info("personal id in RLOS size {}", personalIDList);
 
-        if(personalIDList.size() > 0){
+        if (personalIDList.size() > 0) {
             //Retrieve Obligation
             log.info("retrieve RLOS interface");
             AppInProcessResult appInProcessResult = rlosInterface.getAppInProcessData(getCurrentUserID(), personalIDList);
             log.info("Result from RLOSInterface, {} from personalID {}", appInProcessResult, personalIDList);
-            if(appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)){
+            if (appInProcessResult.getActionResult().equals(ActionResult.SUCCESS)) {
 
                 log.info("Start Transform Result");
                 List<ExistingCreditDetailView> borrowerRLOSApp = new ArrayList<ExistingCreditDetailView>();
@@ -183,19 +184,19 @@ public class ExistingCreditControl extends BusinessControl{
 
                 List<AppInProcess> appInProcessList = appInProcessResult.getAppInProcessList();
                 log.info("App In {}", appInProcessList);
-                for(AppInProcess appInProcess : appInProcessList){
+                for (AppInProcess appInProcess : appInProcessList) {
                     List<ExistingCreditDetailView> existingCreditDetailViews = existingCreditTransform.getExistingCredit(appInProcess);
                     List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
                     boolean isBorrower = false;
-                    for(CustomerDetail customerDetail : customerDetailList) {
-                        if(_borrowerPersonalID.contains(customerDetail.getCitizenId())){
+                    for (CustomerDetail customerDetail : customerDetailList) {
+                        if (_borrowerPersonalID.contains(customerDetail.getCitizenId())) {
                             isBorrower = true;
 
                         }
                     }
 
-                    for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews){
-                        if(isBorrower){
+                    for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViews) {
+                        if (isBorrower) {
                             existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
 
                             borrowerRLOSApp.add(existingCreditDetailView);
@@ -228,20 +229,21 @@ public class ExistingCreditControl extends BusinessControl{
 
     /**
      * To get the Existing Credit Facility from SE-LOS Database.
+     *
      * @param workCasePrescreenId
      * @return
      */
-    public ExistingCreditView getExistingCredit(long workCasePrescreenId){
+    public ExistingCreditView getExistingCredit(long workCasePrescreenId) {
         ExistingCreditSummary existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreenId);
         ExistingCreditView existingCreditView = existingCreditTransform.getExistingCreditView(existingCreditSummary);
         return existingCreditView;
     }
 
-    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCasePrescreen workCasePrescreen){
+    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCasePrescreen workCasePrescreen) {
         ExistingCreditSummary existingCreditSummary = null;
-        if(workCasePrescreen != null && workCasePrescreen.getId() != 0){
+        if (workCasePrescreen != null && workCasePrescreen.getId() != 0) {
             existingCreditSummary = existingCreditSummaryDAO.findByWorkCasePreScreenId(workCasePrescreen.getId());
-            if(existingCreditSummary != null){
+            if (existingCreditSummary != null) {
                 deleteExistingCreditDetail(existingCreditSummary);
             }
         }
@@ -252,7 +254,7 @@ public class ExistingCreditControl extends BusinessControl{
         //existingCreditDetailDAO.persist(existingCreditSummary.getExistingCreditDetailList());
     }
 
-    public void deleteExistingCreditDetail(ExistingCreditSummary existingCreditSummary){
+    public void deleteExistingCreditDetail(ExistingCreditSummary existingCreditSummary) {
         log.info("start delete {}", existingCreditSummary);
         List<ExistingCreditDetail> existingCreditDetailList = existingCreditSummary.getExistingCreditDetailList();
 
@@ -263,7 +265,7 @@ public class ExistingCreditControl extends BusinessControl{
         log.info("end delete {}", existingCreditSummary);
     }
 
-    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCase workCase){
+    public void saveExistingCredit(ExistingCreditView existingCreditView, WorkCase workCase) {
 
     }
 }

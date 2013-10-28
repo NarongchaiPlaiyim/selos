@@ -13,61 +13,61 @@ import java.util.List;
 @Table(name = "ext_rlos_appin2")
 public class AppInProcess2 implements Serializable {
     @Id
-    @Column(name="app_ref_number", length=14)
+    @Column(name = "app_ref_number", length = 14)
     private String appRefNumber;
 
-    @Column(name="product_code", length=4)
+    @Column(name = "product_code", length = 4)
     private String productCode;
 
-    @Column(name="project_code", length=5)
+    @Column(name = "project_code", length = 5)
     private String projectCode;
 
-    @Column(name="interest_rate")
+    @Column(name = "interest_rate")
     private BigDecimal interestRate;
 
-    @Column(name="request_tenor")
+    @Column(name = "request_tenor")
     private BigDecimal requestTenor;
 
-    @Column(name="request_limit")
+    @Column(name = "request_limit")
     private BigDecimal requestLimit;
 
-    @Column(name="final_tenors")
+    @Column(name = "final_tenors")
     private BigDecimal finalTenors;
 
-    @Column(name="final_limit")
+    @Column(name = "final_limit")
     private BigDecimal finalLimit;
 
-    @Column(name="final_installment")
+    @Column(name = "final_installment")
     private BigDecimal finalInstallment;
 
-    @Column(name="product_code2", length=4)
+    @Column(name = "product_code2", length = 4)
     private String productCode2;
 
-    @Column(name="project_code2", length=5)
+    @Column(name = "project_code2", length = 5)
     private String projectCode2;
 
-    @Column(name="interest_rate2")
+    @Column(name = "interest_rate2")
     private BigDecimal interestRate2;
 
-    @Column(name="request_tenor2")
+    @Column(name = "request_tenor2")
     private BigDecimal requestTenor2;
 
-    @Column(name="request_limit2")
+    @Column(name = "request_limit2")
     private BigDecimal requestLimit2;
 
-    @Column(name="final_tenors2")
+    @Column(name = "final_tenors2")
     private BigDecimal finalTenors2;
 
-    @Column(name="final_limit2")
+    @Column(name = "final_limit2")
     private BigDecimal finalLimit2;
 
-    @Column(name="final_installment2")
+    @Column(name = "final_installment2")
     private BigDecimal finalInstallment2;
 
-    @Column(name="status")
+    @Column(name = "status")
     private String status;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="appInProcess2")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "appInProcess2")
     private List<CustomerDetail2> customerDetail2s;
 
     public AppInProcess2() {
@@ -98,7 +98,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getInterestRate() {
-        if(interestRate==null){
+        if (interestRate == null) {
             return BigDecimal.ZERO;
         }
         return interestRate;
@@ -109,7 +109,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getRequestTenor() {
-        if(requestTenor==null){
+        if (requestTenor == null) {
             return BigDecimal.ZERO;
         }
         return requestTenor;
@@ -120,7 +120,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getRequestLimit() {
-        if(requestLimit==null){
+        if (requestLimit == null) {
             return BigDecimal.ZERO;
         }
         return requestLimit;
@@ -131,7 +131,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalTenors() {
-        if(finalTenors==null){
+        if (finalTenors == null) {
             return BigDecimal.ZERO;
         }
         return finalTenors;
@@ -142,7 +142,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalLimit() {
-        if(finalLimit==null){
+        if (finalLimit == null) {
             return BigDecimal.ZERO;
         }
         return finalLimit;
@@ -153,7 +153,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalInstallment() {
-        if(finalInstallment==null){
+        if (finalInstallment == null) {
             return BigDecimal.ZERO;
         }
         return finalInstallment;
@@ -180,7 +180,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getInterestRate2() {
-        if(interestRate2==null){
+        if (interestRate2 == null) {
             return BigDecimal.ZERO;
         }
         return interestRate2;
@@ -191,7 +191,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getRequestTenor2() {
-        if(requestTenor2==null){
+        if (requestTenor2 == null) {
             return BigDecimal.ZERO;
         }
         return requestTenor2;
@@ -202,7 +202,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getRequestLimit2() {
-        if(requestLimit2==null){
+        if (requestLimit2 == null) {
             return BigDecimal.ZERO;
         }
         return requestLimit2;
@@ -213,7 +213,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalTenors2() {
-        if(finalTenors2==null){
+        if (finalTenors2 == null) {
             return BigDecimal.ZERO;
         }
         return finalTenors2;
@@ -224,7 +224,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalLimit2() {
-        if(finalLimit2==null){
+        if (finalLimit2 == null) {
             return BigDecimal.ZERO;
         }
         return finalLimit2;
@@ -235,7 +235,7 @@ public class AppInProcess2 implements Serializable {
     }
 
     public BigDecimal getFinalInstallment2() {
-        if(finalInstallment2==null){
+        if (finalInstallment2 == null) {
             return BigDecimal.ZERO;
         }
         return finalInstallment2;

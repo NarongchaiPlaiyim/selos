@@ -1,24 +1,22 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name="wrk_customer_acceptance")
+@Table(name = "wrk_customer_acceptance")
 public class CustomerAcceptance implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CUST_ACCEPT_ID", sequenceName="SEQ_WRK_CUST_ACCEPT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUST_ACCEPT_ID")
+    @SequenceGenerator(name = "SEQ_WRK_CUST_ACCEPT_ID", sequenceName = "SEQ_WRK_CUST_ACCEPT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CUST_ACCEPT_ID")
     private long id;
 
-    @Column(name="approve_result")
+    @Column(name = "approve_result")
     private int approveResult;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -30,15 +28,15 @@ public class CustomerAcceptance implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     public long getId() {

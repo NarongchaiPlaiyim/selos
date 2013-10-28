@@ -2,7 +2,7 @@ package com.clevel.selos.integration.brms.model.response;
 
 import com.clevel.selos.integration.brms.model.RuleColorResult;
 
-public class FullApplicationResponse extends PreScreenResponse{
+public class FullApplicationResponse extends PreScreenResponse {
     public FullApplicationResponse() {
         super();
     }

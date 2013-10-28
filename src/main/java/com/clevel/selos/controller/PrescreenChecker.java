@@ -76,26 +76,26 @@ public class PrescreenChecker implements Serializable {
     private String bdmMakerName;
     private String remark;
 
-    public PrescreenChecker(){
+    public PrescreenChecker() {
 
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(true);
         log.debug("preRender ::: setSession ");
 
-        if(session.getAttribute("workCasePreScreenId") != null){
+        if (session.getAttribute("workCasePreScreenId") != null) {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
-        }else{
+        } else {
             //TODO return to inbox
             log.debug("onCreation ::: workCasePrescreenId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
                 return;
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.debug("Exception :: {}", ex);
             }
         }
     }
@@ -105,7 +105,7 @@ public class PrescreenChecker implements Serializable {
         log.debug("onCreation");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCasePreScreenId") != null){
+        if (session.getAttribute("workCasePreScreenId") != null) {
             log.debug("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
@@ -116,11 +116,11 @@ public class PrescreenChecker implements Serializable {
 
         //TODO Generate row for textBox to check Citizen id
         List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
-        if(customerInfoViews != null){
+        if (customerInfoViews != null) {
             customerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViews);
         }
 
-        if(customerInfoViewList != null){
+        if (customerInfoViewList != null) {
             int row = customerInfoViewList.size();
             citizenID = new String[row];
         }
@@ -129,31 +129,31 @@ public class PrescreenChecker implements Serializable {
 
     }
 
-    public void onCheckCustomer(){
+    public void onCheckCustomer() {
         log.debug("onCheckCustomer :::");
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
         int failCount = 0;
-        for(CustomerInfoView customer : tmpCustomerInfoViewList){
+        for (CustomerInfoView customer : tmpCustomerInfoViewList) {
             log.debug("CustomerInfo : {}", customer);
-            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(customer.getCitizenId().trim().equals(customer.getInputId().trim())){
+            if (customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
+                if (customer.getCitizenId().trim().equals(customer.getInputId().trim())) {
                     log.debug("Check CitizenID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
-                }else{
+                } else {
                     log.debug("Check CitizenID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
                     failCount = failCount + 1;
                 }
             } else {
-                if(customer.getRegistrationId().trim().equals(customer.getInputId().trim())){
+                if (customer.getRegistrationId().trim().equals(customer.getInputId().trim())) {
                     log.debug("Check RegistrationID Customer : {}, Match", customer.getFirstNameTh());
                     customer.setValidId(1);
                     customer.setNcbReason("");
-                }else{
+                } else {
                     log.debug("Check RegistrationID Customer : {}, Not Match", customer.getFirstNameTh());
                     customer.setValidId(0);
                     customer.setNcbReason("");
@@ -163,13 +163,13 @@ public class PrescreenChecker implements Serializable {
             customerInfoViewList.add(customer);
         }
 
-        if(failCount == 0){
+        if (failCount == 0) {
             //TODO Check ncb
             onCheckNCB();
         }
     }
 
-    public void onReturnToMaker(){
+    public void onReturnToMaker() {
         returnReason = new Reason();
         reasonList = new ArrayList<Reason>();
         reasonList = reasonDAO.getCancleList();
@@ -177,7 +177,7 @@ public class PrescreenChecker implements Serializable {
         bdmMakerName = prescreenBusinessControl.getBDMMakerName(workCasePreScreenId);
     }
 
-    public void onSubmitReturnToMaker(){
+    public void onSubmitReturnToMaker() {
         log.debug("onReturnToMaker :::");
         //Only return to MAKER actionCode =
         String actionCode = "1005";
@@ -191,11 +191,11 @@ public class PrescreenChecker implements Serializable {
         }
     }
 
-    public void onCheckNCB(){
+    public void onCheckNCB() {
         //To Get NCB Data and submit to MAKER
         log.debug("onCheckNCB :::");
         boolean success = false;
-        try{
+        try {
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
@@ -204,38 +204,38 @@ public class PrescreenChecker implements Serializable {
             log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
-            for(CustomerInfoView customerInfoView : customerInfoViewList){
-                if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
+            for (CustomerInfoView customerInfoView : customerInfoViewList) {
+                if (customerInfoView.getNcbFlag() == RadioValue.YES.value()) {
                     customerInfoView.setNcbReason("");
                     customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
                 }
             }
-            if(ncbViewList != null && ncbViewList.size() > 0){
-                for(NcbView item : ncbViewList){
+            if (ncbViewList != null && ncbViewList.size() > 0) {
+                for (NcbView item : ncbViewList) {
                     index = 0;
-                    for(CustomerInfoView customerInfoView : customerInfoViewList){
-                        if(item.getIdNumber() != null){
+                    for (CustomerInfoView customerInfoView : customerInfoViewList) {
+                        if (item.getIdNumber() != null) {
                             log.debug("onCheckNCB ::: index : {}", index);
-                            if(customerInfoView.getCustomerEntity() != null){
-                                if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
-                                    if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
+                            if (customerInfoView.getCustomerEntity() != null) {
+                                if (customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null) {
+                                    if (item.getIdNumber().equals(customerInfoView.getCitizenId())) {
                                         log.debug("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCESS)){
+                                        if (item.getResult().equals(ActionResult.SUCCESS)) {
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
-                                        }else{
+                                        } else {
                                             failedCount = failedCount + 1;
                                         }
                                     }
-                                }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
-                                    if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
+                                } else if (customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null) {
+                                    if (item.getIdNumber().equals(customerInfoView.getRegistrationId())) {
                                         log.debug("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
                                         customerInfoView.setNcbReason(item.getReason());
                                         customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCESS)){
+                                        if (item.getResult().equals(ActionResult.SUCCESS)) {
                                             customerInfoView.setNcbFlag(RadioValue.YES.value());
-                                        }else{
+                                        } else {
                                             failedCount = failedCount + 1;
                                         }
                                     }
@@ -250,13 +250,13 @@ public class PrescreenChecker implements Serializable {
                 //TODO update customer to database
                 log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
-                if(failedCount != 0){
+                if (failedCount != 0) {
                     success = false;
                 } else {
                     success = true;
                 }
             }
-        } catch(Exception ex){
+        } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = "Check NCB failed.";
             message = ex.getMessage();
@@ -265,13 +265,13 @@ public class PrescreenChecker implements Serializable {
         }
 
         //TODO Show message box
-        if(success){
+        if (success) {
             //TODO submit case
-            try{
+            try {
                 log.debug("Submit case to Maker :::");
                 String actionCode = "1004";
                 prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 messageHeader = "Check NCB failed.";
                 message = ex.getMessage();
                 messageErr = true;
@@ -279,18 +279,18 @@ public class PrescreenChecker implements Serializable {
             }
             //TODO Redirect to inbox
             log.debug("onCheckNCB ::: success without failed. redirect to inbox!");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.debug("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.debug("Exception :: {}", ex);
             }
         }
 
     }
 
-    public void onCompleteCheckNCB(){
+    public void onCompleteCheckNCB() {
         try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");

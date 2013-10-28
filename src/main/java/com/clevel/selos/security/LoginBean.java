@@ -71,26 +71,26 @@ public class LoginBean {
 
     @Inject
     private SimpleAuthenticationManager authenticationManager;
-    @ManagedProperty(value="#{sessionRegistry}")
+    @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
 
     public String login() {
-        log.debug("SessionRegistry principle size: {}",sessionRegistry.getAllPrincipals().size());
+        log.debug("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
 
-        loginExceptionMessage="";
+        loginExceptionMessage = "";
 
         // make authentication with AD first
         if (Util.isTrue(ldapEnable)) {
             log.debug("LDAP authentication enabled.");
             try {
-                ldapInterface.authenticate(userName,password);
+                ldapInterface.authenticate(userName, password);
             } catch (ApplicationRuntimeException e) {
-                try{
+                try {
                     log.debug("LDAP authentication failed! (user: {})", userName.trim());
                     securityAuditor.addFailed(userName.trim(), "Login", "", e.getMessage());
-                    loginExceptionMessage=e.getMessage();
-                }catch (Exception ex){
-                    loginExceptionMessage=ex.getCause().getMessage();
+                    loginExceptionMessage = e.getMessage();
+                } catch (Exception ex) {
+                    loginExceptionMessage = ex.getCause().getMessage();
                 }
                 return "failed";
             }
@@ -105,37 +105,37 @@ public class LoginBean {
             password = password.trim();
         }
         try {
-            userDetail = new UserDetail(user.getId(),password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
+            userDetail = new UserDetail(user.getId(), password, user.getRole().getSystemName(), user.getRole().getRoleType().getRoleTypeName().name());
         } catch (EntityNotFoundException e) {
-            String message = msg.get(ExceptionMapping.USER_NOT_FOUND,userName.trim());
-            log.debug("{}",message);
+            String message = msg.get(ExceptionMapping.USER_NOT_FOUND, userName.trim());
+            log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
-            loginExceptionMessage=message;
+            loginExceptionMessage = message;
             return "failed";
         }
 
 
-        if (user.getActive()!=1) {
-            String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE,userName.trim());
-            log.debug("{}",message);
+        if (user.getActive() != 1) {
+            String message = msg.get(ExceptionMapping.USER_NOT_ACTIVE, userName.trim());
+            log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
-            loginExceptionMessage=message;
+            loginExceptionMessage = message;
             return "failed";
         }
 
         // handle user status here
         UserStatus userStatus = user.getUserStatus();
-        if (UserStatus.DISABLED==userStatus) {
-            String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED,userName.trim());
-            log.debug("{}",message);
+        if (UserStatus.DISABLED == userStatus) {
+            String message = msg.get(ExceptionMapping.USER_STATUS_DISABLED, userName.trim());
+            log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
-            loginExceptionMessage=message;
+            loginExceptionMessage = message;
             return "failed";
-        } else if (UserStatus.MARK_AS_DELETED==userStatus) {
-            String message = msg.get(ExceptionMapping.USER_STATUS_DELETED,userName.trim());
-            log.debug("{}",message);
+        } else if (UserStatus.MARK_AS_DELETED == userStatus) {
+            String message = msg.get(ExceptionMapping.USER_STATUS_DELETED, userName.trim());
+            log.debug("{}", message);
             securityAuditor.addFailed(userName.trim(), "Login", "", message);
-            loginExceptionMessage=message;
+            loginExceptionMessage = message;
             return "failed";
         }
 
@@ -155,17 +155,17 @@ public class LoginBean {
             HttpSession httpSession = FacesUtil.getSession(false);
             httpSession.setAttribute("language", Language.EN);
 
-            securityAuditor.addSucceed(userDetail.getUserName(), "Login", "",new Date());
+            securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());
 
             return user.getRole().getRoleType().getRoleTypeName().name();
         } catch (ApplicationRuntimeException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
-            loginExceptionMessage=e.getMessage();
+            loginExceptionMessage = e.getMessage();
         } catch (AuthenticationException e) {
             securityAuditor.addException(userName.trim(), "Login", "", e.getMessage());
             log.debug("login failed!. ({})", e.getMessage());
-            loginExceptionMessage=e.getMessage();
+            loginExceptionMessage = e.getMessage();
         }
 //        securityAuditor.addFailed(userName.trim(), "Login", "", "Authentication failed!");
         return "failed";
@@ -181,8 +181,8 @@ public class LoginBean {
         httpSession.setAttribute("user", null);
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         SecurityContextHolder.clearContext();
-        securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "",new Date());
-        loginExceptionMessage="";
+        securityAuditor.addSucceed(userDetail.getUserName(), "Logout", "", new Date());
+        loginExceptionMessage = "";
         return "loggedOut";
     }
 

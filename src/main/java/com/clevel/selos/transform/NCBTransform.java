@@ -7,10 +7,10 @@ import org.joda.time.DateTime;
 
 public class NCBTransform extends Transform {
 
-    public NCB transformToModel(NCBInfoView NCBInfoView ){
+    public NCB transformToModel(NCBInfoView NCBInfoView) {
         NCB ncb = new NCB();
 
-        if(NCBInfoView.getId() != 0){
+        if (NCBInfoView.getId() != 0) {
             ncb.setId(NCBInfoView.getId());
         }
 
@@ -46,7 +46,7 @@ public class NCBTransform extends Transform {
         ncb.setNcbCusMarriageStatus(NCBInfoView.getNcbCusMarriageStatus());
         ncb.setNcbCusAddress(NCBInfoView.getNcbCusAddress());
 
-        if(NCBInfoView.getTdrCondition()!=null && NCBInfoView.getTdrCondition().getId()!=0){
+        if (NCBInfoView.getTdrCondition() != null && NCBInfoView.getTdrCondition().getId() != 0) {
             ncb.setTdrCondition(NCBInfoView.getTdrCondition());
         } else {
             ncb.setTdrCondition(null);
@@ -55,7 +55,7 @@ public class NCBTransform extends Transform {
         return ncb;
     }
 
-    public NCBInfoView transformToView(NCB ncb){
+    public NCBInfoView transformToView(NCB ncb) {
         NCBInfoView NCBInfoView = new NCBInfoView();
 
         NCBInfoView.setId(ncb.getId());
@@ -96,17 +96,17 @@ public class NCBTransform extends Transform {
 
     // convert value for checkbox boolean
 
-    public int transFormBooleanToDb(boolean dbObject){
+    public int transFormBooleanToDb(boolean dbObject) {
 
-        if(dbObject == true){
+        if (dbObject == true) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }
 
-    public boolean transFormBooleanToView(int viewObject){
-        return viewObject==1?true:false;
+    public boolean transFormBooleanToView(int viewObject) {
+        return viewObject == 1 ? true : false;
     }
 
 }

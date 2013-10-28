@@ -14,10 +14,10 @@ public class OpenAccPurposeDAO extends GenericDAO<OpenAccPurpose, Long> {
     private Logger log;
 
     @Inject
-    public OpenAccPurposeDAO(){
+    public OpenAccPurposeDAO() {
     }
 
-    public List<OpenAccPurpose> findByOpenAccountId(long openAccountId){
+    public List<OpenAccPurpose> findByOpenAccountId(long openAccountId) {
         log.info("findByOpenAccountId : {}", openAccountId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("openAccount.id", openAccountId));

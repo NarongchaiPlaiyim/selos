@@ -6,10 +6,10 @@ import java.io.Serializable;
 
 @XStreamAlias("body")
 public class BodyModel implements Serializable {
-    
+
     @XStreamAlias("h2hrequest")
     private H2HRequestModel h2hrequest;
-    
+
     @XStreamAlias("h2hrequest")
     private AttributeModel attribute;
 

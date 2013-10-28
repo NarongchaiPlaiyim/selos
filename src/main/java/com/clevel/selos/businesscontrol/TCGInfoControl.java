@@ -26,7 +26,7 @@ import java.util.List;
 
 
 @Stateless
-public class  TCGInfoControl extends BusinessControl {
+public class TCGInfoControl extends BusinessControl {
     @Inject
     Logger log;
     @Inject
@@ -38,73 +38,72 @@ public class  TCGInfoControl extends BusinessControl {
     @Inject
     TCGDetailDAO tcgDetailDAO;
     @Inject
-    WorkCaseDAO workCaseDAO ;
+    WorkCaseDAO workCaseDAO;
 
     @Inject
-    public void TCGInfoControl(){
+    public void TCGInfoControl() {
 
     }
 
-    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
-            log.info("onSaveTCGToDB begin");
-            log.info("workCaseId {} ",workCaseId);
-            log.info("tcgView  {} ",tcgView.toString() );
-            WorkCase workCase  = workCaseDAO.findById(workCaseId);
-            TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
-            log.info("transform comeback {} ",tcg.toString() );
-            tcgDAO.persist(tcg);
-            log.info("persist tcg");
-            List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
-            tcgDetailDAO.persist(tcgDetailList);
+    public void onSaveTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
+        log.info("onSaveTCGToDB begin");
+        log.info("workCaseId {} ", workCaseId);
+        log.info("tcgView  {} ", tcgView.toString());
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase);
+        log.info("transform comeback {} ", tcg.toString());
+        tcgDAO.persist(tcg);
+        log.info("persist tcg");
+        List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
+        tcgDetailDAO.persist(tcgDetailList);
     }
 
-    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList , Long workCaseId){
+    public void onEditTCGToDB(TCGView tcgView, List<TCGDetailView> tcgDetailViewList, Long workCaseId) {
 
-            log.info("onEditTCGToDB begin");
-            log.info("workCaseId {} ",workCaseId);
-            WorkCase workCase  = workCaseDAO.findById(workCaseId);
-            TCG tcg = tcgTransform.transformTCGViewToModel(tcgView ,workCase);
-            tcgDAO.persist(tcg);
-            log.info("persist tcg");
+        log.info("onEditTCGToDB begin");
+        log.info("workCaseId {} ", workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        TCG tcg = tcgTransform.transformTCGViewToModel(tcgView, workCase);
+        tcgDAO.persist(tcg);
+        log.info("persist tcg");
 
-            List<TCGDetail> tcgDetailListToDelete =  tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
-            log.info("tcgDetailListToDelete :: {}",tcgDetailListToDelete.size());
-            tcgDetailDAO.delete(tcgDetailListToDelete);
-            log.info("delete tcgDetailListToDelete");
+        List<TCGDetail> tcgDetailListToDelete = tcgDetailDAO.findTCGDetailByTcgId(tcg.getId());
+        log.info("tcgDetailListToDelete :: {}", tcgDetailListToDelete.size());
+        tcgDetailDAO.delete(tcgDetailListToDelete);
+        log.info("delete tcgDetailListToDelete");
 
-            List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList,tcg) ;
-            tcgDetailDAO.persist(tcgDetailList);
-            log.info("persist tcgDetailList");
+        List<TCGDetail> tcgDetailList = tcgDetailTransform.transformTCGDetailViewToModel(tcgDetailViewList, tcg);
+        tcgDetailDAO.persist(tcgDetailList);
+        log.info("persist tcgDetailList");
 
     }
 
-    public TCGView getTcgView(long workCaseId){
+    public TCGView getTcgView(long workCaseId) {
         log.info("getTcgView :: workCaseId  :: {}", workCaseId);
         TCGView tcgView = null;
 
-        WorkCase workCase  = workCaseDAO.findById(workCaseId);
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
         log.info("getTcgView :: workCase AppNumber :: {}", workCase.getAppNumber());
-        if(workCase != null)
-        {
-           TCG tcg =  tcgDAO.findByWorkCase(workCase);
+        if (workCase != null) {
+            TCG tcg = tcgDAO.findByWorkCase(workCase);
 
-           if(tcg != null){
-               log.info("tcg :: {} ",tcg.getId());
-               tcgView  = tcgTransform.transformTCGToTcgView(tcg);
-           }
+            if (tcg != null) {
+                log.info("tcg :: {} ", tcg.getId());
+                tcgView = tcgTransform.transformTCGToTcgView(tcg);
+            }
         }
 
         return tcgView;
     }
 
-    public List<TCGDetailView> getTcgDetailListView(TCGView tcgView){
+    public List<TCGDetailView> getTcgDetailListView(TCGView tcgView) {
         log.info("getTcgDetailListView :: tcgId  :: {}", tcgView.getId());
         List<TCGDetailView> tcgDetailViewList = null;
 
-        List<TCGDetail> TCGDetailList =  tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
+        List<TCGDetail> TCGDetailList = tcgDetailDAO.findTCGDetailByTcgId(tcgView.getId());
 
-        if(TCGDetailList.size() > 0){
-            tcgDetailViewList  = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
+        if (TCGDetailList.size() > 0) {
+            tcgDetailViewList = tcgDetailTransform.transformTCGDetailModelToView(TCGDetailList);
         }
 
         return tcgDetailViewList;

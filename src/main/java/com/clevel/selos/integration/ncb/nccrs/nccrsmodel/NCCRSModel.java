@@ -107,9 +107,9 @@ public class NCCRSModel implements Serializable {
     }
 
     public String getJuristicType() {
-        if("1140001".equals(registType)){
+        if ("1140001".equals(registType)) {
             return juristicType = "01";
-        } else if("1140002".equals(registType)){
+        } else if ("1140002".equals(registType)) {
             return juristicType = "02";
         } else if ("1140003".equals(registType)) {
             return juristicType = "03";

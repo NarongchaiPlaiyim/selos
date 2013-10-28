@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property name="LOG_HOME" value="/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1" />
+    <property name="LOG_HOME" value="/usr/IBM/WebSphere/AppServer/profiles/SLOSDEV/logs/server1"/>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_HOME}/slos.log</file>

@@ -9,90 +9,90 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name="wrk_bankstatement_detail")
+@Table(name = "wrk_bankstatement_detail")
 public class BankStatementDetail implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BANKSTMT_DETAIL_ID", sequenceName="SEQ_WRK_BANKSTMT_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BANKSTMT_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BANKSTMT_DETAIL_ID", sequenceName = "SEQ_WRK_BANKSTMT_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BANKSTMT_DETAIL_ID")
     private long id;
 
-    @Column(name="over_limit_amount")
+    @Column(name = "over_limit_amount")
     private BigDecimal overLimitAmount;
 
-    @Column(name="gross_credit_balance")
+    @Column(name = "gross_credit_balance")
     private BigDecimal grossCreditBalance;
 
-    @Column(name="number_of_credit_txn")
+    @Column(name = "number_of_credit_txn")
     private int numberOfCreditTxn;
 
-    @Column(name="exclude_list_bdm")
+    @Column(name = "exclude_list_bdm")
     private BigDecimal excludeListBDM;
 
-    @Column(name="exclude_list_uw")
+    @Column(name = "exclude_list_uw")
     private BigDecimal excludeListUW;
 
-    @Column(name="credit_amount_bdm")
+    @Column(name = "credit_amount_bdm")
     private BigDecimal creditAmountBDM;
 
-    @Column(name="credit_amount_uw")
+    @Column(name = "credit_amount_uw")
     private BigDecimal creditAmountUW;
 
-    @Column(name="times_of_avg_credit_bdm")
+    @Column(name = "times_of_avg_credit_bdm")
     private BigDecimal timesOfAverageCreditBDM;
 
-    @Column(name="times_of_avg_credit_uw")
+    @Column(name = "times_of_avg_credit_uw")
     private BigDecimal timesOfAverageCreditUW;
 
-    @Column(name="debit_amount")
+    @Column(name = "debit_amount")
     private BigDecimal debitAmount;
 
-    @Column(name="number_of_debit_txn")
+    @Column(name = "number_of_debit_txn")
     private int numberOfDebitTxn;
 
-    @Column(name="highest_balance_date")
+    @Column(name = "highest_balance_date")
     private Date highestBalanceDate;
 
-    @Column(name="highest_balance")
+    @Column(name = "highest_balance")
     private BigDecimal highestBalance;
 
-    @Column(name="lowest_balance_date")
+    @Column(name = "lowest_balance_date")
     private Date lowestBalanceDate;
 
-    @Column(name="lowest_balance")
+    @Column(name = "lowest_balance")
     private BigDecimal lowestBalance;
 
-    @Column(name="month_end_balance")
+    @Column(name = "month_end_balance")
     private BigDecimal monthEndBalance;
 
-    @Column(name="number_of_chq_return")
+    @Column(name = "number_of_chq_return")
     private int numberOfChequeReturn;
 
-    @Column(name="cheque_return_amount")
+    @Column(name = "cheque_return_amount")
     private BigDecimal chequeReturnAmount;
 
-    @Column(name="over_limit_times")
+    @Column(name = "over_limit_times")
     private int overLimitTimes;
 
-    @Column(name="over_limit_days")
+    @Column(name = "over_limit_days")
     private int overLimitDays;
 
-    @Column(name="swing_percent")
+    @Column(name = "swing_percent")
     private BigDecimal swingPercent;
 
-    @Column(name="utilization_percent")
+    @Column(name = "utilization_percent")
     private BigDecimal utilizationPercent;
 
-    @Column(name="gross_inflow_per_limit")
+    @Column(name = "gross_inflow_per_limit")
     private BigDecimal grossInflowPerLimit;
 
-    @Column(name="total_transaction")
+    @Column(name = "total_transaction")
     private int totalTransaction;
 
-    @Column(name="as_of_date")
+    @Column(name = "as_of_date")
     private Date asOfDate;
 
     @ManyToOne
-    @JoinColumn(name="bank_stmt_id")
+    @JoinColumn(name = "bank_stmt_id")
     private BankStatement bankStatement;
 
     public long getId() {

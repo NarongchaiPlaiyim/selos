@@ -5,11 +5,9 @@ import com.clevel.selos.model.db.working.BizStakeHolderDetail;
 import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import org.joda.time.DateTime;
 
-import java.security.Timestamp;
-
 public class BizStakeHolderDetailTransform extends Transform {
 
-    public BizStakeHolderDetailView transformToView(BizStakeHolderDetail bizStakeHolderDetail){
+    public BizStakeHolderDetailView transformToView(BizStakeHolderDetail bizStakeHolderDetail) {
 
         BizStakeHolderDetailView stakeHolderView = new BizStakeHolderDetailView();
 
@@ -34,7 +32,7 @@ public class BizStakeHolderDetailTransform extends Transform {
         return stakeHolderView;
     }
 
-    public BizStakeHolderDetail transformToModel(BizStakeHolderDetailView stakeHolderView,BizInfoDetail bizInfoDetail){
+    public BizStakeHolderDetail transformToModel(BizStakeHolderDetailView stakeHolderView, BizInfoDetail bizInfoDetail) {
 
         BizStakeHolderDetail bizStakeHolderDetail = new BizStakeHolderDetail();
 

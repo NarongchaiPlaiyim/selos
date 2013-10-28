@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PrescreenBusinessTransform extends Transform {
 
-    public PrescreenBusiness transformToModel(BizInfoDetailView bizInfoDetailView, Prescreen prescreen){
+    public PrescreenBusiness transformToModel(BizInfoDetailView bizInfoDetailView, Prescreen prescreen) {
         PrescreenBusiness prescreenBusiness = new PrescreenBusiness();
 
         prescreenBusiness.setBusinessDescription(bizInfoDetailView.getBizDesc());
@@ -18,10 +18,10 @@ public class PrescreenBusinessTransform extends Transform {
         return prescreenBusiness;
     }
 
-    public List<PrescreenBusiness> transformToModelList(List<BizInfoDetailView> bizInfoDetailViews, Prescreen prescreen){
+    public List<PrescreenBusiness> transformToModelList(List<BizInfoDetailView> bizInfoDetailViews, Prescreen prescreen) {
         List<PrescreenBusiness> prescreenBusinessList = new ArrayList<PrescreenBusiness>();
 
-        for(BizInfoDetailView bizInfoDetailView : bizInfoDetailViews){
+        for (BizInfoDetailView bizInfoDetailView : bizInfoDetailViews) {
             PrescreenBusiness prescreenBusiness = new PrescreenBusiness();
             prescreenBusiness = transformToModel(bizInfoDetailView, prescreen);
             prescreenBusinessList.add(prescreenBusiness);
@@ -30,7 +30,7 @@ public class PrescreenBusinessTransform extends Transform {
         return prescreenBusinessList;
     }
 
-    public BizInfoDetailView transformToView(PrescreenBusiness prescreenBusiness){
+    public BizInfoDetailView transformToView(PrescreenBusiness prescreenBusiness) {
         BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
         bizInfoDetailView.reset();
         bizInfoDetailView.setBizDesc(prescreenBusiness.getBusinessDescription());
@@ -39,10 +39,10 @@ public class PrescreenBusinessTransform extends Transform {
         return bizInfoDetailView;
     }
 
-    public List<BizInfoDetailView> transformToViewList(List<PrescreenBusiness> prescreenBusinesses){
+    public List<BizInfoDetailView> transformToViewList(List<PrescreenBusiness> prescreenBusinesses) {
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
 
-        for(PrescreenBusiness prescreenBusiness : prescreenBusinesses){
+        for (PrescreenBusiness prescreenBusiness : prescreenBusinesses) {
             BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
             bizInfoDetailView = transformToView(prescreenBusiness);
             bizInfoDetailViewList.add(bizInfoDetailView);

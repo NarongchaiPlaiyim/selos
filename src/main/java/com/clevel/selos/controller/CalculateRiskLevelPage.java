@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.io.Serializable;
 
 @ViewScoped
-@ManagedBean(name="calculateRiskLevelPage")
+@ManagedBean(name = "calculateRiskLevelPage")
 
 public class CalculateRiskLevelPage implements Serializable {
     private String reqId;
@@ -32,7 +32,7 @@ public class CalculateRiskLevelPage implements Serializable {
     public CalculateRiskLevelPage() {
     }
 
-    public void onSubmit(){
+    public void onSubmit() {
         log.info("========================================= onSubmit()");
         result = "asdfasdfasdfasfd";
         calculateRiskLevel.process(this);

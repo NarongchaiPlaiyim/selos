@@ -11,7 +11,7 @@ public class BRMSResultDAO extends GenericDAO<BRMSResult, Long> {
     private Logger log;
 
     @Inject
-    public BRMSResultDAO(){
+    public BRMSResultDAO() {
 
     }
 }

@@ -2,8 +2,6 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -106,11 +104,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String kycReason;
     private int worthiness;
 
-    public CustomerInfoView(){
+    public CustomerInfoView() {
         //reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.id = new Long(0);
         this.individualId = new Long(0);
         this.juristicId = new Long(0);
@@ -690,7 +688,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         isSpouse = spouse;
     }
 
-    public int getIsSpouse(){
+    public int getIsSpouse() {
         return isSpouse;
     }
 
@@ -709,6 +707,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setSearchFromRM(int searchFromRM) {
         this.searchFromRM = searchFromRM;
     }
+
     public BigDecimal getShare() {
         return share;
     }

@@ -27,8 +27,8 @@ import java.util.List;
 
 
 @ViewScoped
-@ManagedBean(name="testrm")
-public class TestService implements Serializable{
+@ManagedBean(name = "testrm")
+public class TestService implements Serializable {
     @Inject
     @RM
     Logger log;
@@ -46,30 +46,30 @@ public class TestService implements Serializable{
     SearchIndividual searchIndividual;
     CorporateModel corporateModel;
 
-    List<CardTypeView>listhardcode;
+    List<CardTypeView> listhardcode;
 
     private String printDetail;
 
-    public TestService(){
+    public TestService() {
 
     }
 
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
         log.info("TEST RM SERVICE START  ");
 
 //        list = dao.findAll();
-        listhardcode=new ArrayList<CardTypeView>();
-        listhardcode.add(new CardTypeView("Citizen ID","CI"));
-        listhardcode.add(new CardTypeView("Tax Identification Number","TN"));
-        listhardcode.add(new CardTypeView("Passport","PP"));
-        listhardcode.add(new CardTypeView("Driver License","DL"));
-        listhardcode.add(new CardTypeView("Swift Code","SW"));
-        listhardcode.add(new CardTypeView("FI Code","FI"));
-        listhardcode.add(new CardTypeView("Work Permit","WP"));
-        listhardcode.add(new CardTypeView("Alien ID","AI"));
-        listhardcode.add(new CardTypeView("Temporary Card","TC"));
-        listhardcode.add(new CardTypeView("Other","OT"));
+        listhardcode = new ArrayList<CardTypeView>();
+        listhardcode.add(new CardTypeView("Citizen ID", "CI"));
+        listhardcode.add(new CardTypeView("Tax Identification Number", "TN"));
+        listhardcode.add(new CardTypeView("Passport", "PP"));
+        listhardcode.add(new CardTypeView("Driver License", "DL"));
+        listhardcode.add(new CardTypeView("Swift Code", "SW"));
+        listhardcode.add(new CardTypeView("FI Code", "FI"));
+        listhardcode.add(new CardTypeView("Work Permit", "WP"));
+        listhardcode.add(new CardTypeView("Alien ID", "AI"));
+        listhardcode.add(new CardTypeView("Temporary Card", "TC"));
+        listhardcode.add(new CardTypeView("Other", "OT"));
 
         searchIndividual = new SearchIndividual();
     }
@@ -78,28 +78,27 @@ public class TestService implements Serializable{
 
     public void individual() throws Exception {
 
-        IndividualResult individualResult = rmInterfaceImpl.getIndividualInfo("win",searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID,RMInterface.SearchBy.CUSTOMER_ID);
-
+        IndividualResult individualResult = rmInterfaceImpl.getIndividualInfo("win", searchIndividual.getCustId(), RMInterface.DocumentType.CITIZEN_ID, RMInterface.SearchBy.CUSTOMER_ID);
 
 
 //        printDetail=customerInfoView.toString();
 //        printDetail+=customerInfoView.getWorkAddress().toString();
 //        printDetail+=customerInfoView.getCurrentAddress().toString();
 
-        CustomerInfoResultView customerInfoResultView =  customerBizTransform.tranformIndividual(individualResult);
+        CustomerInfoResultView customerInfoResultView = customerBizTransform.tranformIndividual(individualResult);
 
-        if(customerInfoResultView.getCustomerInfoView()!=null){
+        if (customerInfoResultView.getCustomerInfoView() != null) {
             CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
-            printDetail=customerInfoView.getWorkAddress().getProvince().getName();
-            printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getCode();
-            printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getActive();
-            printDetail+=" "+customerInfoView.getWorkAddress().getProvince().getRegion();
+            printDetail = customerInfoView.getWorkAddress().getProvince().getName();
+            printDetail += " " + customerInfoView.getWorkAddress().getProvince().getCode();
+            printDetail += " " + customerInfoView.getWorkAddress().getProvince().getActive();
+            printDetail += " " + customerInfoView.getWorkAddress().getProvince().getRegion();
 
-            printDetail+="\n"+customerInfoView.getRegisterAddress().getSubDistrict().toString();
-            printDetail+=" "+customerInfoView.getRegisterAddress().getDistrict().toString();
-            printDetail+="\n\n\n\n\n"+customerInfoView.getWorkAddress().getAddressType().toString();
-            printDetail+="\n"+customerInfoView.getCurrentAddress().getAddressType().toString();
-            printDetail+="\n"+customerInfoView.getRegisterAddress().getAddressType().toString();
+            printDetail += "\n" + customerInfoView.getRegisterAddress().getSubDistrict().toString();
+            printDetail += " " + customerInfoView.getRegisterAddress().getDistrict().toString();
+            printDetail += "\n\n\n\n\n" + customerInfoView.getWorkAddress().getAddressType().toString();
+            printDetail += "\n" + customerInfoView.getCurrentAddress().getAddressType().toString();
+            printDetail += "\n" + customerInfoView.getRegisterAddress().getAddressType().toString();
 //
 //            printDetail+=customerInfoView.toString();
         }
@@ -108,56 +107,56 @@ public class TestService implements Serializable{
 
 
     public void corporate() {
-           try{
-        CorporateResult corporateResult = rmInterfaceImpl.getCorporateInfo("win",searchIndividual.getCustId(), RMInterface.DocumentType.CORPORATE_ID,RMInterface.SearchBy.CUSTOMER_ID);
+        try {
+            CorporateResult corporateResult = rmInterfaceImpl.getCorporateInfo("win", searchIndividual.getCustId(), RMInterface.DocumentType.CORPORATE_ID, RMInterface.SearchBy.CUSTOMER_ID);
 
-        CustomerInfoResultView customerInfoResultView = customerBizTransform.tranformJuristic(corporateResult);
-        if(customerInfoResultView.getCustomerInfoView()!=null){
-            CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
-            printDetail=customerInfoView.toString();
-            printDetail+="Result "+customerInfoResultView.getActionResult();
-            printDetail+="\n\n\n"+customerInfoView.toString();
-            printDetail+="\n\n\n"+customerInfoView.getCurrentAddress().toString();
-            printDetail+="\n\n\n"+customerInfoView.getRegisterAddress().toString();
-        }else{
-            printDetail="NULL";
+            CustomerInfoResultView customerInfoResultView = customerBizTransform.tranformJuristic(corporateResult);
+            if (customerInfoResultView.getCustomerInfoView() != null) {
+                CustomerInfoView customerInfoView = customerInfoResultView.getCustomerInfoView();
+                printDetail = customerInfoView.toString();
+                printDetail += "Result " + customerInfoResultView.getActionResult();
+                printDetail += "\n\n\n" + customerInfoView.toString();
+                printDetail += "\n\n\n" + customerInfoView.getCurrentAddress().toString();
+                printDetail += "\n\n\n" + customerInfoView.getRegisterAddress().toString();
+            } else {
+                printDetail = "NULL";
+            }
+        } catch (ApplicationRuntimeException e) {
+
         }
-           }catch (ApplicationRuntimeException e){
-
-           }
     }
 
     public void customerAccount() throws Exception {
 
-        CustomerAccountResult customerAccountResult =new CustomerAccountResult();
+        CustomerAccountResult customerAccountResult = new CustomerAccountResult();
         //callservice
-        System.out.println("sssssssssssssss "+searchIndividual.getCustNbr());
-        customerAccountResult = rmInterfaceImpl.getCustomerAccountInfo("win",searchIndividual.getCustNbr());
+        System.out.println("sssssssssssssss " + searchIndividual.getCustNbr());
+        customerAccountResult = rmInterfaceImpl.getCustomerAccountInfo("win", searchIndividual.getCustNbr());
 
 
-       CustomerAccountView customerAccountView= customerBizTransform.transformCustomerAccount(customerAccountResult);
+        CustomerAccountView customerAccountView = customerBizTransform.transformCustomerAccount(customerAccountResult);
         //showData
-        StringBuffer result=new StringBuffer();
+        StringBuffer result = new StringBuffer();
         result.append("==================== CustomerAccountList Data Demo ===================");
-        result.append("\n result : "+ customerAccountView.getActionResult().toString());
-        if(customerAccountView.getActionResult() == ActionResult.FAILED){
-            result.append("\n reason : "+ customerAccountView.getReason());
+        result.append("\n result : " + customerAccountView.getActionResult().toString());
+        if (customerAccountView.getActionResult() == ActionResult.FAILED) {
+            result.append("\n reason : " + customerAccountView.getReason());
         }
 
 
-        if(customerAccountView.getAccountList()!=null&& customerAccountView.getAccountList().size()>0 ){
-            result.append("\n cusAccountListSize : "+ customerAccountView.getAccountList().size());
-            for(int i=0;i< customerAccountView.getAccountList().size();i++){
-                result.append("\n AccountNumber : "+ customerAccountView.getAccountList().get(i));
+        if (customerAccountView.getAccountList() != null && customerAccountView.getAccountList().size() > 0) {
+            result.append("\n cusAccountListSize : " + customerAccountView.getAccountList().size());
+            for (int i = 0; i < customerAccountView.getAccountList().size(); i++) {
+                result.append("\n AccountNumber : " + customerAccountView.getAccountList().get(i));
 
                 result.append("\n =========================================================== T");
 
             }
-        }else{
+        } else {
             result.append("\n accountListSize : 0");
         }
 
-        printDetail=result.toString();
+        printDetail = result.toString();
         System.out.println(printDetail);
     }
 
@@ -165,12 +164,11 @@ public class TestService implements Serializable{
     //////////////////////////////////////////////////////////////////////
 
 
-    public void changeListener(){
-        String value=searchIndividual.getType();
+    public void changeListener() {
+        String value = searchIndividual.getType();
 
         searchIndividual.setCustSurname(value);
     }
-
 
 
     public SearchIndividual getSearchIndividual() {

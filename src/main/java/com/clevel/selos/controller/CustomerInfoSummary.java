@@ -66,10 +66,10 @@ public class CustomerInfoSummary implements Serializable {
     private long stepId;
     private String userId;
 
-    public CustomerInfoSummary(){
+    public CustomerInfoSummary() {
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
@@ -79,19 +79,19 @@ public class CustomerInfoSummary implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
-        }else{
+        } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }

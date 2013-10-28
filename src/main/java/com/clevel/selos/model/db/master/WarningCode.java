@@ -13,22 +13,22 @@ import java.io.Serializable;
 @Table(name = "mst_warning_code")
 public class WarningCode implements Serializable {
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
 
-    @Column(name="code",length = 4)
+    @Column(name = "code", length = 4)
     private String code;
 
-    @Column(name="warning_group",length = 50)
+    @Column(name = "warning_group", length = 50)
     private String warningGroup;
 
-    @Column(name="definition_en",length = 150)
+    @Column(name = "definition_en", length = 150)
     private String definitionEn;
 
-    @Column(name="definition_th",length = 150)
+    @Column(name = "definition_th", length = 150)
     private String definitionTh;
 
-    @Column(name="active")
+    @Column(name = "active")
     private int active;
 
     public int getId() {

@@ -11,7 +11,7 @@ public class DBRDetailDAO extends GenericDAO<DBRDetail, Long> {
     private Logger log;
 
     @Inject
-    public DBRDetailDAO(){
+    public DBRDetailDAO() {
 
     }
 }

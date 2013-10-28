@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class InboxConfigDAO extends GenericDAO<InboxConfig,Integer> {
+public class InboxConfigDAO extends GenericDAO<InboxConfig, Integer> {
     @Inject
     private Logger log;
 

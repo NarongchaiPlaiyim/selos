@@ -15,28 +15,29 @@
             <div id="main_container">
                 <!--Start Head Logo-->
                 <!--<ui:include src="site/include/header_logo.xhtml">-->
-            <div id="header_logo">
-                <div id="header_logo_image">
-                    <img src="resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application" />
-                    <!--<h:graphicImage library="images" name="shared/header_logo.jpg" />-->
+                <div id="header_logo">
+                    <div id="header_logo_image">
+                        <img src="resources/images/shared/header_logo.jpg" alt="" title="TMB SE-LOS Application"/>
+                        <!--<h:graphicImage library="images" name="shared/header_logo.jpg" />-->
+                    </div>
                 </div>
-            </div>
 
                 <div id="content_container">
-            <h:form>
-                <p:panel header="login">
-                <h:panelGrid columns="2">
-                    <h:outputText value="username: "/>
-                    <p:inputText value="#{loginBean.userName}" />
-                    <h:outputText value="password: "/>
-                    <p:password value="#{loginBean.password}"/>
+                    <h:form>
+                        <p:panel header="login">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="username: "/>
+                                <p:inputText value="#{loginBean.userName}"/>
+                                <h:outputText value="password: "/>
+                                <p:password value="#{loginBean.password}"/>
 
-                </h:panelGrid>
-                <p:commandButton value="Login" action="#{loginBean.login}" ajax="false" style="width: 150px;"/>
-                <h:outputText value="#{loginBean.loginExceptionMessage}"/>
-                </p:panel>
+                            </h:panelGrid>
+                            <p:commandButton value="Login" action="#{loginBean.login}" ajax="false"
+                                             style="width: 150px;"/>
+                            <h:outputText value="#{loginBean.loginExceptionMessage}"/>
+                        </p:panel>
 
-            </h:form>
+                    </h:form>
                 </div>
             </div>
         </p:panel>

@@ -2,12 +2,13 @@ package com.clevel.selos.integration.corebanking.model;
 
 import java.io.Serializable;
 
-public class CardTypeView implements Serializable{
+public class CardTypeView implements Serializable {
 
-    public CardTypeView(String name, String value){
-        this.name=name;
-        this.value=value;
+    public CardTypeView(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
+
     public String getName() {
         return name;
     }

@@ -96,7 +96,9 @@ public class BasicInfo implements Serializable {
 
     //Dialog
     private BasicInfoAccountView basicInfoAccountView;
-    enum ModeForButton{ ADD, EDIT }
+
+    enum ModeForButton {ADD, EDIT}
+
     private ModeForButton modeForButton;
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
@@ -109,10 +111,10 @@ public class BasicInfo implements Serializable {
     private long stepId;
     private String userId;
 
-    public BasicInfo(){
+    public BasicInfo() {
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
@@ -122,19 +124,19 @@ public class BasicInfo implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
-        }else{
+        } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }
@@ -159,7 +161,7 @@ public class BasicInfo implements Serializable {
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
+        for (OpenAccountPurpose oap : openAccountPurposeList) {
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -171,19 +173,19 @@ public class BasicInfo implements Serializable {
 
         baPaymentMethodList = baPaymentMethodDAO.findAll();
 
-        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+        if (baPaymentMethodList != null && baPaymentMethodList.size() > 0) {
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
 
         basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 
-        if(basicInfoView.getId() == 0){
+        if (basicInfoView.getId() == 0) {
             basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
         }
 
-        if(customerEntity.isChangeQualtiEnable()){
+        if (customerEntity.isChangeQualtiEnable()) {
             basicInfoView.setIndividual(1);
-        }else{
+        } else {
             basicInfoView.setIndividual(0);
         }
 
@@ -192,12 +194,12 @@ public class BasicInfo implements Serializable {
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
     }
 
-    public void onAddAccount(){
+    public void onAddAccount() {
         basicInfoAccountView = new BasicInfoAccountView();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for(OpenAccountPurpose oap : openAccountPurposeList){
+        for (OpenAccountPurpose oap : openAccountPurposeList) {
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -206,13 +208,13 @@ public class BasicInfo implements Serializable {
         modeForButton = ModeForButton.ADD;
     }
 
-    public void onEditAccount(){
+    public void onEditAccount() {
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
-        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
-            if(biapv.isSelected()){
-                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
-                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
+        for (BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()) {
+            if (biapv.isSelected()) {
+                for (BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList) {
+                    if (biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())) {
                         purposeView.setSelected(true);
                     }
                 }
@@ -221,45 +223,45 @@ public class BasicInfo implements Serializable {
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void addAccount(){
-        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
+    public void addAccount() {
+        if (basicInfoAccountView.getBankAccountTypeView().getId() != 0) {
 
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
-        }else{
+        } else {
             basicInfoAccountView.getBankAccountTypeView().setName("-");
         }
 
-        if(basicInfoAccountView.getProduct().getId() != 0){
+        if (basicInfoAccountView.getProduct().getId() != 0) {
             basicInfoAccountView.setProduct(openAccountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
-        }else{
+        } else {
             basicInfoAccountView.getProduct().setName("-");
         }
 
         StringBuilder stringBuilder = new StringBuilder();
 
         basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
-        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
-            if(bia.isSelected()){
-                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
+        for (BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList) {
+            if (bia.isSelected()) {
+                if (basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0) {
                     basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
                     stringBuilder.append(bia.getPurpose().getName());
-                }else{
+                } else {
                     basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(", "+bia.getPurpose().getName());
+                    stringBuilder.append(", " + bia.getPurpose().getName());
                 }
             }
         }
 
-        if(!stringBuilder.toString().isEmpty()){
+        if (!stringBuilder.toString().isEmpty()) {
             basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-        }else{
+        } else {
             basicInfoAccountView.setPurposeForShow("-");
         }
 
-        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+        if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
-        }else{
-            basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
+        } else {
+            basicInfoView.getBasicInfoAccountViews().set(rowIndex, basicInfoAccountView);
         }
 
         boolean complete = true;        //Change only failed to save
@@ -271,16 +273,16 @@ public class BasicInfo implements Serializable {
         basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
-    public void onSave(){
-        try{
+    public void onSave() {
+        try {
             basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             messageHeader = "Save Basic Info Failed.";
-            if(ex.getCause() != null){
+            if (ex.getCause() != null) {
                 message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
@@ -290,31 +292,31 @@ public class BasicInfo implements Serializable {
         }
     }
 
-    public void onChangeSpecialProgram(){
+    public void onChangeSpecialProgram() {
         basicInfoView.getSpecialProgram().setId(0);
     }
 
-    public void onChangeRefIn(){
+    public void onChangeRefIn() {
         basicInfoView.getRefinanceIn().setCode(0);
     }
 
-    public void onChangeRefOut(){
+    public void onChangeRefOut() {
         basicInfoView.getRefinanceOut().setCode(0);
     }
 
-    public void onChangeBA(){
-        if(basicInfoView.getApplyBA() == 0){
+    public void onChangeBA() {
+        if (basicInfoView.getApplyBA() == 0) {
             basicInfoView.getBaPaymentMethod().setId(0);
-        }else{
-            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+        } else {
+            if (baPaymentMethodList != null && baPaymentMethodList.size() > 0) {
                 basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
-            }else{
+            } else {
                 basicInfoView.getBaPaymentMethod().setId(0);
             }
         }
     }
 
-    public void onChangeAccountType(){
+    public void onChangeAccountType() {
         openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
     }
 

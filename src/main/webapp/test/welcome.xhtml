@@ -45,17 +45,20 @@
                 <p:commandButton value="test RM" action="#{welcomePage.testRM}" update=":welcomePanel"/>
                 <p:commandButton value="test BRMS" action="#{welcomePage.testBRMS}" update=":welcomePanel"/>
                 <p:commandButton value="test RLOS CSI" action="#{welcomePage.testRLOSCSI}" update=":welcomePanel"/>
-                <p:commandButton value="test DWH Obligation" action="#{welcomePage.testDWHObligation()}" update=":welcomePanel"/>
-                <p:commandButton value="test RLOS AppIn" action="#{welcomePage.testRLOSAppIn()}" update=":welcomePanel"/>
-                <p:commandButton value="test DWH Bankstatement" action="#{welcomePage.testBankStatement()}" update=":welcomePanel"/>
+                <p:commandButton value="test DWH Obligation" action="#{welcomePage.testDWHObligation()}"
+                                 update=":welcomePanel"/>
+                <p:commandButton value="test RLOS AppIn" action="#{welcomePage.testRLOSAppIn()}"
+                                 update=":welcomePanel"/>
+                <p:commandButton value="test DWH Bankstatement" action="#{welcomePage.testBankStatement()}"
+                                 update=":welcomePanel"/>
                 <p:separator/>
                 <p:commandButton value="001" action="#{welcomePage.on001}" update=":welcomePanel"/>
                 <p:commandButton value="002" action="#{welcomePage.on002}" update=":welcomePanel"/>
                 <p:commandButton value="test SP" action="#{welcomePage.testStoredProcedure()}" update=":welcomePanel"/>
                 <p:commandButton value="test BPM" action="#{welcomePage.testBPM}" update=":welcomePanel"/>
-                <p:commandButton value="test Exception" action="#{welcomePage.testException}" />
-                <p:commandButton value="test Email" action="#{welcomePage.testEmail}" />
-                <p:commandButton value="load discription" action="#{welcomePage.onLoadDescription()}" />
+                <p:commandButton value="test Exception" action="#{welcomePage.testException}"/>
+                <p:commandButton value="test Email" action="#{welcomePage.testEmail}"/>
+                <p:commandButton value="load discription" action="#{welcomePage.onLoadDescription()}"/>
 
             </h:form>
         </p:panel>
@@ -63,20 +66,20 @@
         <p:panel id="testPanel">
             <h:form>
                 <!--<h:panelGrid columns="2">-->
-                    <!--<h:outputText value="Business Group"/>-->
-                    <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessGroup.id}" size="1" style="width: 200px">-->
-                        <!--<f:selectItems value="#{welcomePage.businessGroups}" var="bg" itemLabel="#{bg.name}"-->
-                                       <!--itemValue="#{bg.id}" />-->
-                        <!--<p:ajax event="change" listener="#{welcomePage.onChangeGroup}" update=":testPanel" />-->
-                    <!--</h:selectOneListbox>-->
-                    <!--<h:outputText value="Business Description"/>-->
-                    <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessDescription.id}" size="1" style="width: 200px">-->
-                        <!--<f:selectItems value="#{welcomePage.businessDescriptions}" var="bd" itemLabel="#{bd.name}"-->
-                                       <!--itemValue="#{bd.id}"/>-->
-                        <!--<p:ajax event="change" listener="#{welcomePage.onChangeDescription}" update=":testPanel"/>-->
-                    <!--</h:selectOneListbox>-->
-                    <!--<h:outputText value="Text: "/>-->
-                    <!--<h:outputText value="#{welcomePage.selectedText}"/>-->
+                <!--<h:outputText value="Business Group"/>-->
+                <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessGroup.id}" size="1" style="width: 200px">-->
+                <!--<f:selectItems value="#{welcomePage.businessGroups}" var="bg" itemLabel="#{bg.name}"-->
+                <!--itemValue="#{bg.id}" />-->
+                <!--<p:ajax event="change" listener="#{welcomePage.onChangeGroup}" update=":testPanel" />-->
+                <!--</h:selectOneListbox>-->
+                <!--<h:outputText value="Business Description"/>-->
+                <!--<h:selectOneListbox value="#{welcomePage.selectedBusinessDescription.id}" size="1" style="width: 200px">-->
+                <!--<f:selectItems value="#{welcomePage.businessDescriptions}" var="bd" itemLabel="#{bd.name}"-->
+                <!--itemValue="#{bd.id}"/>-->
+                <!--<p:ajax event="change" listener="#{welcomePage.onChangeDescription}" update=":testPanel"/>-->
+                <!--</h:selectOneListbox>-->
+                <!--<h:outputText value="Text: "/>-->
+                <!--<h:outputText value="#{welcomePage.selectedText}"/>-->
                 <!--</h:panelGrid>-->
 
             </h:form>

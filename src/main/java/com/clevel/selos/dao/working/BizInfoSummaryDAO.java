@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class BizInfoSummaryDAO extends GenericDAO<BizInfoSummary,Long> {
+public class BizInfoSummaryDAO extends GenericDAO<BizInfoSummary, Long> {
     @Inject
     private Logger log;
 
@@ -17,15 +17,15 @@ public class BizInfoSummaryDAO extends GenericDAO<BizInfoSummary,Long> {
     public BizInfoSummaryDAO() {
     }
 
-    public BizInfoSummary onSearchByWorkCase( WorkCase workCase){
+    public BizInfoSummary onSearchByWorkCase(WorkCase workCase) {
         BizInfoSummary bizInfoSummary;
-        log.info("getListByBusinessGroup. (district: {})",workCase);
+        log.info("getListByBusinessGroup. (district: {})", workCase);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
 
-        bizInfoSummary = (BizInfoSummary)criteria.uniqueResult();
+        bizInfoSummary = (BizInfoSummary) criteria.uniqueResult();
 
-        log.info("getListByDistrict. (result size: {})",bizInfoSummary);
+        log.info("getListByDistrict. (result size: {})", bizInfoSummary);
         return bizInfoSummary;
     }
 

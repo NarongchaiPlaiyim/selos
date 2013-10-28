@@ -20,7 +20,7 @@ public class CustomerRelation implements Serializable {
     @Column(name = "active")
     private int active;
 
-    public CustomerRelation(){
+    public CustomerRelation() {
     }
 
     public int getId() {

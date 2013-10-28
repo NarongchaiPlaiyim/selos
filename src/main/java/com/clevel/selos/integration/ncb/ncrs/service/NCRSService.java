@@ -46,11 +46,12 @@ public class NCRSService implements Serializable {
     NCBResultImp resultImp;
 
     private final String exception = ExceptionMapping.NCB_EXCEPTION;
+
     @Inject
     public NCRSService() {
     }
 
-    public ArrayList<NCRSOutputModel> process(NCRSInputModel inputModel) throws Exception{
+    public ArrayList<NCRSOutputModel> process(NCRSInputModel inputModel) throws Exception {
         ArrayList<NCRSOutputModel> responseModelArrayList = null;
         NCRSInputModel inputModelForNewCustomers = null;
         ArrayList<NCRSModel> ncrsModelArrayListForNewCustomers = null;
@@ -58,10 +59,10 @@ public class NCRSService implements Serializable {
             log.debug("NCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
             log.debug("NCRS flag is {}", flag);
-            if (!flag){
+            if (!flag) {
                 ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
                 NCRSModel ncrsModel = null;
-                for(int i = 0; i<ncrsModelArrayList.size(); i++){
+                for (int i = 0; i < ncrsModelArrayList.size(); i++) {
                     ncrsModel = ncrsModelArrayList.get(i);
                     ncrsModel.setMemberref(Util.setRequestNo(inputModel.getAppRefNumber(), i));
                     log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
@@ -76,12 +77,13 @@ public class NCRSService implements Serializable {
                 boolean flagCheckNewCustomer = false;
                 resultOfSize = resultImp.getSizeFromAppNumber(inputModel.getAppRefNumber());
                 ncrsModelArrayListForNewCustomers = new ArrayList<NCRSModel>();
-                pointer : for(int i = 0; i<ncrsModelArrayList.size(); i++){
+                pointer:
+                for (int i = 0; i < ncrsModelArrayList.size(); i++) {
                     ncrsModel = ncrsModelArrayList.get(i);
                     result = resultImp.isOldCustomer(inputModel.getAppRefNumber(), ncrsModel.getCitizenId());
                     if (!result) {
                         flagCheckNewCustomer = true;
-                        if (0!=resultOfSize){
+                        if (0 != resultOfSize) {
                             ncrsModel.setMemberref(Util.setRequestNo(inputModel.getAppRefNumber(), resultOfSize));
                             resultOfSize++;
                             log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
@@ -97,19 +99,19 @@ public class NCRSService implements Serializable {
                 if (flagCheckNewCustomer) {
                     log.debug("Request offline and online");
                     inputModelForNewCustomers = new NCRSInputModel(inputModel.getUserId(), inputModel.getAppRefNumber(), inputModel.getCANumber(), inputModel.getReferenceTel(), ncrsModelArrayListForNewCustomers);
-                    responseModelArrayList =  ncrsImp.requestOffline(inputModel);
+                    responseModelArrayList = ncrsImp.requestOffline(inputModel);
                     responseModelArrayList.addAll(ncrsImp.requestOnline(inputModelForNewCustomers));
                     return responseModelArrayList;
                 } else {
                     log.debug("Request offline");
-                    responseModelArrayList =  ncrsImp.requestOffline(inputModel);
+                    responseModelArrayList = ncrsImp.requestOffline(inputModel);
                     return responseModelArrayList;
                 }
             }
         } catch (Exception e) {
-            String resultDesc = "NCCRS Exception : "+ e.getMessage();
+            String resultDesc = "NCCRS Exception : " + e.getMessage();
             log.error("NCRS Exception", e);
-            throw new NCBInterfaceException(e, exception,message.get(exception, resultDesc));
+            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
         }
     }
 

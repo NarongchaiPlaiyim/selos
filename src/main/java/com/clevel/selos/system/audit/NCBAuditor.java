@@ -24,11 +24,11 @@ public class NCBAuditor implements SystemAuditor {
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
-        ncbActivityDAO.persist(new NCBActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
+        ncbActivityDAO.persist(new NCBActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, resultDate, linkKey));
     }
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
-        ncbActivityDAO.persist(new NCBActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+        ncbActivityDAO.persist(new NCBActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, new Date(), linkKey));
     }
 }

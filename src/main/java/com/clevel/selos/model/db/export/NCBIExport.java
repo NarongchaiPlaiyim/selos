@@ -10,48 +10,48 @@ import java.io.Serializable;
 @Table(name = "ext_ncbi_export")
 public class NCBIExport implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_NCBI_ID", sequenceName="SEQ_EXT_NCBI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCBI_ID")
+    @SequenceGenerator(name = "SEQ_EXT_NCBI_ID", sequenceName = "SEQ_EXT_NCBI_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_EXT_NCBI_ID")
     private long id;
-    @Column(name="staff_id", length = 10)
+    @Column(name = "staff_id", length = 10)
     private String staffId;
-    @Column(name="request_no", length = 20)
+    @Column(name = "request_no", length = 20)
     private String requestNo;
-    @Column(name="inquiry_type", length = 2)
+    @Column(name = "inquiry_type", length = 2)
     private String inquiryType;
-    @Column(name="customer_type", length = 2)
+    @Column(name = "customer_type", length = 2)
     private String customerType;
-    @Column(name="customer_document_type", length = 2)
+    @Column(name = "customer_document_type", length = 2)
     private String customerDocumentType;
-    @Column(name="juristic_type", length = 2)
+    @Column(name = "juristic_type", length = 2)
     private String juristicType;
-    @Column(name="customer_id", length = 13)
+    @Column(name = "customer_id", length = 13)
     private String customerId;
-    @Column(name="country_code", length = 2)
+    @Column(name = "country_code", length = 2)
     private String countryCode;
-    @Column(name="title_code", length = 2)
+    @Column(name = "title_code", length = 2)
     private String titleCode;
-    @Column(name="first_name", length = 500)
+    @Column(name = "first_name", length = 500)
     private String firstName;
-    @Column(name="last_name", length = 100)
+    @Column(name = "last_name", length = 100)
     private String lastName;
-    @Column(name="juristic_name", length = 500)
+    @Column(name = "juristic_name", length = 500)
     private String juristicName;
-    @Column(name="ca_number", length = 20)
+    @Column(name = "ca_number", length = 20)
     private String caNumber;
-    @Column(name="caution", length = 100)
+    @Column(name = "caution", length = 100)
     private String caution;
-    @Column(name="reference_tel", length = 20)
+    @Column(name = "reference_tel", length = 20)
     private String referenceTel;
-    @Column(name="inquiry_status", length = 2)
+    @Column(name = "inquiry_status", length = 2)
     private String inquiryStatus;
-    @Column(name="inquiry_date", length = 10)
+    @Column(name = "inquiry_date", length = 10)
     private String inquiryDate;
-    @Column(name="inquiry_time", length = 8)
+    @Column(name = "inquiry_time", length = 8)
     private String inquiryTime;
-    @Column(name="office_code", length = 3)
+    @Column(name = "office_code", length = 3)
     private String officeCode;
-    @Column(name="status", length = 10)
+    @Column(name = "status", length = 10)
     private String status;
 
 

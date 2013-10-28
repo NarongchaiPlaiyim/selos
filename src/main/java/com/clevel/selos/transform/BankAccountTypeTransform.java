@@ -15,11 +15,11 @@ public class BankAccountTypeTransform extends Transform {
     BankAccountTypeDAO bankAccountTypeDAO;
 
     @Inject
-    public BankAccountTypeTransform(){
+    public BankAccountTypeTransform() {
     }
 
-    public BankAccountTypeView getBankAccountTypeView(BankAccountType bankAccountType){
-        if(bankAccountType != null){
+    public BankAccountTypeView getBankAccountTypeView(BankAccountType bankAccountType) {
+        if (bankAccountType != null) {
             BankAccountTypeView bankAccountTypeView = new BankAccountTypeView();
             bankAccountTypeView.setId(bankAccountType.getId());
             bankAccountTypeView.setName(bankAccountType.getName());
@@ -31,8 +31,8 @@ public class BankAccountTypeTransform extends Transform {
         return null;
     }
 
-    public BankAccountType getBankAccountType(BankAccountTypeView bankAccountTypeView){
-        if(bankAccountTypeView != null){
+    public BankAccountType getBankAccountType(BankAccountTypeView bankAccountTypeView) {
+        if (bankAccountTypeView != null) {
             BankAccountType bankAccountType = new BankAccountType();
             bankAccountType.setId(bankAccountTypeView.getId());
             bankAccountType.setName(bankAccountTypeView.getName());
@@ -46,7 +46,7 @@ public class BankAccountTypeTransform extends Transform {
         return null;
     }
 
-    public List<BankAccountTypeView> getBankAccountTypeView(List<BankAccountType> bankAccountTypes){
+    public List<BankAccountTypeView> getBankAccountTypeView(List<BankAccountType> bankAccountTypes) {
         List<BankAccountTypeView> bankAccountTypeViews = new ArrayList<BankAccountTypeView>();
         if (bankAccountTypes == null) {
             log.debug("getBankAccountTypeView() bankAccountTypes is null!");

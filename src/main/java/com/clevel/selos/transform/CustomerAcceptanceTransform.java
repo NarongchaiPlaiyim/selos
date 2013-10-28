@@ -6,11 +6,11 @@ import org.joda.time.DateTime;
 
 public class CustomerAcceptanceTransform extends Transform {
 
-    public CustomerAcceptance transformToModel( CustomerAcceptanceView customerAcceptanceView){
+    public CustomerAcceptance transformToModel(CustomerAcceptanceView customerAcceptanceView) {
         CustomerAcceptance customerAcceptance = new CustomerAcceptance();
-        if(customerAcceptanceView.getId()!= 0){
+        if (customerAcceptanceView.getId() != 0) {
             customerAcceptance.setId(customerAcceptanceView.getId());
-        }else if(customerAcceptanceView.getId()== 0){
+        } else if (customerAcceptanceView.getId() == 0) {
             customerAcceptance.setCreateBy(customerAcceptanceView.getCreateBy());
             customerAcceptance.setCreateDate(DateTime.now().toDate());
         }
@@ -21,7 +21,7 @@ public class CustomerAcceptanceTransform extends Transform {
         return customerAcceptance;
     }
 
-    public CustomerAcceptanceView transformToView( CustomerAcceptance customerAcceptance){
+    public CustomerAcceptanceView transformToView(CustomerAcceptance customerAcceptance) {
         CustomerAcceptanceView customerAcceptanceView = new CustomerAcceptanceView();
         customerAcceptanceView.setId(customerAcceptance.getId());
         customerAcceptanceView.setApproveResult(customerAcceptance.getApproveResult());

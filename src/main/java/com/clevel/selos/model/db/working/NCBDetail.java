@@ -13,85 +13,85 @@ import java.util.Date;
 @Table(name = "wrk_ncb_detail")
 public class NCBDetail implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_NCB_DETAIL_ID", sequenceName="SEQ_WRK_NCB_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_NCB_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NCB_DETAIL_ID", sequenceName = "SEQ_WRK_NCB_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NCB_DETAIL_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="ncb_id")
+    @JoinColumn(name = "ncb_id")
     private NCB ncb;
 
     @OneToOne
-    @JoinColumn(name="account_type_id")
+    @JoinColumn(name = "account_type_id")
     private AccountType accountType;
 
-    @Column(name="account_tmb_flag")
+    @Column(name = "account_tmb_flag")
     private int accountTMBFlag;
 
     @OneToOne
-    @JoinColumn(name="account_status_id")
+    @JoinColumn(name = "account_status_id")
     private AccountStatus accountStatus;
 
-    @Column(name="as_of_date")
+    @Column(name = "as_of_date")
     private Date asOfDate;
 
-    @Column(name="account_open_date")
+    @Column(name = "account_open_date")
     private Date accountOpenDate;
 
-    @Column(name="limit")
+    @Column(name = "limit")
     private BigDecimal limit;
 
-    @Column(name="outstanding")
+    @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name="installment")
+    @Column(name = "installment")
     private BigDecimal installment;
 
-    @Column(name="last_restructure_date")
+    @Column(name = "last_restructure_date")
     private Date lastReStructureDate;
 
     @OneToOne
-    @JoinColumn(name="current_payment_id")
+    @JoinColumn(name = "current_payment_id")
     private SettlementStatus currentPayment;
 
     @OneToOne
-    @JoinColumn(name="history_payment_id")
+    @JoinColumn(name = "history_payment_id")
     private SettlementStatus historyPayment;
 
-    @Column(name="outstanding_in_12_month")
+    @Column(name = "outstanding_in_12_month")
     private BigDecimal outstandingIn12Month;
 
-    @Column(name="over_limit")
+    @Column(name = "over_limit")
     private int overLimit;
 
-    @Column(name="refinance_flag")
+    @Column(name = "refinance_flag")
     private int refinanceFlag;
 
-    @Column(name="no_of_months_payment")
+    @Column(name = "no_of_months_payment")
     private int noOfMonthPayment;
 
-    @Column(name="month1")
+    @Column(name = "month1")
     private BigDecimal month1;
 
-    @Column(name="month2")
+    @Column(name = "month2")
     private BigDecimal month2;
 
-    @Column(name="month3")
+    @Column(name = "month3")
     private BigDecimal month3;
 
-    @Column(name="month4")
+    @Column(name = "month4")
     private BigDecimal month4;
 
-    @Column(name="month5")
+    @Column(name = "month5")
     private BigDecimal month5;
 
-    @Column(name="month6")
+    @Column(name = "month6")
     private BigDecimal month6;
 
-    @Column(name="wcFlag")
+    @Column(name = "wcFlag")
     private int wcFlag;
 
-    @Column(name="can_edit")
+    @Column(name = "can_edit")
     private boolean canToEdit;
 
     public long getId() {

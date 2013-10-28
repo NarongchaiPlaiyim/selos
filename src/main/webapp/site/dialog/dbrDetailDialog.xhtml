@@ -4,32 +4,32 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-<h:form id="dbrDetailDlgForm">
-    <p:panel id="dbrDetailDlgPanel" styleClass="panel-dialog">
+    <h:form id="dbrDetailDlgForm">
+        <p:panel id="dbrDetailDlgPanel" styleClass="panel-dialog">
 
             <table class="content_form" border="0" style="width:650px;">
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
-                    <td >
+                    <td>
                         <p:inputText value="#{dbrInfo.selectedItem.accountName}" required="true"/>
                     </td>
                 </tr>
-               <tr>
-                   <td class="title">
-                       <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
-                   </td>
-                   <td>
-                       <p:selectOneMenu value="#{dbrInfo.selectedItem.loanTypeView.id}" required="true">
-                           <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                           <f:selectItems value="#{dbrInfo.loanTypes}"
-                                          var="loanType"
-                                          itemLabel="#{loanType.name}"
-                                          itemValue="#{loanType.id}"/>
-                       </p:selectOneMenu>
-                   </td>
-               </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
+                    </td>
+                    <td>
+                        <p:selectOneMenu value="#{dbrInfo.selectedItem.loanTypeView.id}" required="true">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{dbrInfo.loanTypes}"
+                                           var="loanType"
+                                           itemLabel="#{loanType.name}"
+                                           itemValue="#{loanType.id}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
                 <tr>
                     <td class="title">
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.limit')}"/>
@@ -37,8 +37,9 @@
                     <td>
                         <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
                         <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true">
-                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                            <p:ajax event="change" update=":dbrDetailDlgForm:limit" />
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:limit"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -48,8 +49,9 @@
                     </td>
                     <td>
                         <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true">
-                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                            <p:ajax event="change" update=":dbrDetailDlgForm:installment"  />
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:installment"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -58,17 +60,19 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
                     </td>
                     <td>
-                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}" required="true">
-                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                            <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate" />
+                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"
+                                     required="true">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate"/>
                         </p:inputText>
                     </td>
                 </tr>
-                <tr >
+                <tr>
                     <td>
-                        <h:outputText />
+                        <h:outputText/>
                     </td>
-                    <td >
+                    <td>
                         <p:commandButton value="#{msg.get('app.button.save')}"
                                          styleClass="small"
                                          process="@form"
@@ -88,6 +92,6 @@
                 </tr>
             </table>
 
-    </p:panel>
-</h:form>
+        </p:panel>
+    </h:form>
 </ui:composition>

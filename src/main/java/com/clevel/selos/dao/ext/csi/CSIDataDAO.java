@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CSIDataDAO extends GenericDAO<CSIData,Long> {
+public class CSIDataDAO extends GenericDAO<CSIData, Long> {
     @Inject
     private Logger log;
 

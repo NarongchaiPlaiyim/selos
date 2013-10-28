@@ -30,9 +30,10 @@ public class TCGView implements Serializable {
     private User modifyBy;
 
 
-    public TCGView(){}
+    public TCGView() {
+    }
 
-    public void reset(){
+    public void reset() {
 
         this.isTCG = 0;
         this.requestLimitRequiredTCG = new BigDecimal(0);

@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for resSearchCorporateCustomer complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="resSearchCorporateCustomer">
  *   &lt;complexContent>
@@ -24,13 +24,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "resSearchCorporateCustomer", propOrder = {
-    "header",
-    "body"
+        "header",
+        "body"
 })
 public class ResSearchCorporateCustomer {
 
@@ -41,11 +39,9 @@ public class ResSearchCorporateCustomer {
 
     /**
      * Gets the value of the header property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Header }
-     *     
+     *
+     * @return possible object is
+     *         {@link Header }
      */
     public Header getHeader() {
         return header;
@@ -53,11 +49,9 @@ public class ResSearchCorporateCustomer {
 
     /**
      * Sets the value of the header property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Header }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Header }
      */
     public void setHeader(Header value) {
         this.header = value;
@@ -65,11 +59,9 @@ public class ResSearchCorporateCustomer {
 
     /**
      * Gets the value of the body property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Body }
-     *     
+     *
+     * @return possible object is
+     *         {@link Body }
      */
     public Body getBody() {
         return body;
@@ -77,11 +69,9 @@ public class ResSearchCorporateCustomer {
 
     /**
      * Sets the value of the body property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Body }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Body }
      */
     public void setBody(Body value) {
         this.body = value;

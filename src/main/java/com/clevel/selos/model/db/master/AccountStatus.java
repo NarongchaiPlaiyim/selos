@@ -15,15 +15,15 @@ public class AccountStatus implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
     @Column(name = "dbr_flag")
     private int dbrFlag;
     @Column(name = "active")
     private int active;
-    @Column(name = "ncb_code_ind",length = 5)
+    @Column(name = "ncb_code_ind", length = 5)
     private String ncbCodeInd;
-    @Column(name = "ncb_code_jur",length = 5)
+    @Column(name = "ncb_code_jur", length = 5)
     private String ncbCodeJur;
 
     public AccountStatus() {

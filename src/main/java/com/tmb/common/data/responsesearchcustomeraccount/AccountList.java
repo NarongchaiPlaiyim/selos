@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 
 /**
  * <p>Java class for accountList complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="accountList">
  *   &lt;complexContent>
@@ -167,29 +167,27 @@ import java.math.BigDecimal;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "accountList", propOrder = {
-    "rel",
-    "cd",
-    "pso",
-    "appl",
-    "accountNo",
-    "trlr",
-    "balance",
-    "dir",
-    "prod",
-    "ctl1",
-    "ctl2",
-    "ctl3",
-    "ctl4",
-    "status",
-    "date",
-    "name",
-    "citizenId",
-    "curr"
+        "rel",
+        "cd",
+        "pso",
+        "appl",
+        "accountNo",
+        "trlr",
+        "balance",
+        "dir",
+        "prod",
+        "ctl1",
+        "ctl2",
+        "ctl3",
+        "ctl4",
+        "status",
+        "date",
+        "name",
+        "citizenId",
+        "curr"
 })
 public class AccountList {
 
@@ -226,11 +224,9 @@ public class AccountList {
 
     /**
      * Gets the value of the rel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRel() {
         return rel;
@@ -238,11 +234,9 @@ public class AccountList {
 
     /**
      * Sets the value of the rel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRel(String value) {
         this.rel = value;
@@ -250,11 +244,9 @@ public class AccountList {
 
     /**
      * Gets the value of the cd property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCd() {
         return cd;
@@ -262,11 +254,9 @@ public class AccountList {
 
     /**
      * Sets the value of the cd property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCd(String value) {
         this.cd = value;
@@ -274,11 +264,9 @@ public class AccountList {
 
     /**
      * Gets the value of the pso property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPSO() {
         return pso;
@@ -286,11 +274,9 @@ public class AccountList {
 
     /**
      * Sets the value of the pso property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPSO(String value) {
         this.pso = value;
@@ -298,11 +284,9 @@ public class AccountList {
 
     /**
      * Gets the value of the appl property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAppl() {
         return appl;
@@ -310,11 +294,9 @@ public class AccountList {
 
     /**
      * Sets the value of the appl property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAppl(String value) {
         this.appl = value;
@@ -322,11 +304,9 @@ public class AccountList {
 
     /**
      * Gets the value of the accountNo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAccountNo() {
         return accountNo;
@@ -334,11 +314,9 @@ public class AccountList {
 
     /**
      * Sets the value of the accountNo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAccountNo(String value) {
         this.accountNo = value;
@@ -346,11 +324,9 @@ public class AccountList {
 
     /**
      * Gets the value of the trlr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTrlr() {
         return trlr;
@@ -358,11 +334,9 @@ public class AccountList {
 
     /**
      * Sets the value of the trlr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTrlr(String value) {
         this.trlr = value;
@@ -370,11 +344,9 @@ public class AccountList {
 
     /**
      * Gets the value of the balance property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link BigDecimal }
      */
     public BigDecimal getBalance() {
         return balance;
@@ -382,11 +354,9 @@ public class AccountList {
 
     /**
      * Sets the value of the balance property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BigDecimal }
      */
     public void setBalance(BigDecimal value) {
         this.balance = value;
@@ -394,11 +364,9 @@ public class AccountList {
 
     /**
      * Gets the value of the dir property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDir() {
         return dir;
@@ -406,11 +374,9 @@ public class AccountList {
 
     /**
      * Sets the value of the dir property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDir(String value) {
         this.dir = value;
@@ -418,11 +384,9 @@ public class AccountList {
 
     /**
      * Gets the value of the prod property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getProd() {
         return prod;
@@ -430,11 +394,9 @@ public class AccountList {
 
     /**
      * Sets the value of the prod property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProd(String value) {
         this.prod = value;
@@ -442,11 +404,9 @@ public class AccountList {
 
     /**
      * Gets the value of the ctl1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl1() {
         return ctl1;
@@ -454,11 +414,9 @@ public class AccountList {
 
     /**
      * Sets the value of the ctl1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl1(String value) {
         this.ctl1 = value;
@@ -466,11 +424,9 @@ public class AccountList {
 
     /**
      * Gets the value of the ctl2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl2() {
         return ctl2;
@@ -478,11 +434,9 @@ public class AccountList {
 
     /**
      * Sets the value of the ctl2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl2(String value) {
         this.ctl2 = value;
@@ -490,11 +444,9 @@ public class AccountList {
 
     /**
      * Gets the value of the ctl3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl3() {
         return ctl3;
@@ -502,11 +454,9 @@ public class AccountList {
 
     /**
      * Sets the value of the ctl3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl3(String value) {
         this.ctl3 = value;
@@ -514,11 +464,9 @@ public class AccountList {
 
     /**
      * Gets the value of the ctl4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtl4() {
         return ctl4;
@@ -526,11 +474,9 @@ public class AccountList {
 
     /**
      * Sets the value of the ctl4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtl4(String value) {
         this.ctl4 = value;
@@ -538,11 +484,9 @@ public class AccountList {
 
     /**
      * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getStatus() {
         return status;
@@ -550,11 +494,9 @@ public class AccountList {
 
     /**
      * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStatus(String value) {
         this.status = value;
@@ -562,11 +504,9 @@ public class AccountList {
 
     /**
      * Gets the value of the date property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDate() {
         return date;
@@ -574,11 +514,9 @@ public class AccountList {
 
     /**
      * Sets the value of the date property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDate(String value) {
         this.date = value;
@@ -586,11 +524,9 @@ public class AccountList {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getName() {
         return name;
@@ -598,11 +534,9 @@ public class AccountList {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -610,11 +544,9 @@ public class AccountList {
 
     /**
      * Gets the value of the citizenId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCitizenId() {
         return citizenId;
@@ -622,11 +554,9 @@ public class AccountList {
 
     /**
      * Sets the value of the citizenId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCitizenId(String value) {
         this.citizenId = value;
@@ -634,11 +564,9 @@ public class AccountList {
 
     /**
      * Gets the value of the curr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCurr() {
         return curr;
@@ -646,11 +574,9 @@ public class AccountList {
 
     /**
      * Sets the value of the curr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCurr(String value) {
         this.curr = value;

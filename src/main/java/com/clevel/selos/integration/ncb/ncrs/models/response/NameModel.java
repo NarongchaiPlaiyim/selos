@@ -30,6 +30,6 @@ public class NameModel implements Serializable {
     public String getDateofbirth() {
         return dateofbirth;
     }
-    
-    
+
+
 }

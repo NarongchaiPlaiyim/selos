@@ -1,4 +1,5 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
+
 public class OverDraftsHistBalanceModel {
     private String asofdate;
     private String daypastdue;

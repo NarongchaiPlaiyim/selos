@@ -24,11 +24,11 @@ public class ECMAuditor implements SystemAuditor {
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
-        ecmActivityDAO.persist(new ECMActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
+        ecmActivityDAO.persist(new ECMActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, resultDate, linkKey));
     }
 
     @Override
-    public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc,String linkKey) {
-        ecmActivityDAO.persist(new ECMActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+    public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
+        ecmActivityDAO.persist(new ECMActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, new Date(), linkKey));
     }
 }

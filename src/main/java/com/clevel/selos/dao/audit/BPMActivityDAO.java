@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class BPMActivityDAO extends GenericDAO<BPMActivity,Long> {
+public class BPMActivityDAO extends GenericDAO<BPMActivity, Long> {
     @Inject
     private Logger log;
 

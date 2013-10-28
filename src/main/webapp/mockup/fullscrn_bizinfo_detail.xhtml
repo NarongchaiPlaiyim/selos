@@ -5,427 +5,439 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title>biz Info Mockup.</title>
-        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-        <script type="text/javascript" src="../resources/js/superfish.js"></script>
-    </h:head>
-    <h:body>
-        <div id="main_container">
+<h:head>
+    <title>biz Info Mockup.</title>
+    <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <script type="text/javascript" src="../resources/js/superfish.js"></script>
+</h:head>
+<h:body>
+<div id="main_container">
 
-            <div id="content_container">
-                <div id="content_name">Business Info. Detail</div>
-                <div id="content">
-                    <table id="content_form">
-                        <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
-                            <a style="cursor: pointer;" href="#">[View Track Change]</a></td></tr>
-                        <tr>
-                            <td colspan="100%"><div class="separate"><!-- --></div></td>
-                        </tr>
+<div id="content_container">
+<div id="content_name">Business Info. Detail</div>
+<div id="content">
+<table id="content_form">
+<tr>
+    <td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+        <a style="cursor: pointer;" href="#">[View Track Change]</a></td>
+</tr>
+<tr>
+    <td colspan="100%">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
 
-                        <tr>
-                            <td class="title" style="width: 250px">รายละเอียดประเภทธุรกิจ : </td>
-                            <td colspan="5"><input type="text" style="width: 400px;" value=""/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">ประเภทการค้าขาย : </td>
-                            <td colspan="5"><select style="width: 400px">
-                                <option>01 - Domestic ค้าขายภายในประเทศเท่านั้น</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Business Type: : </td>
-                            <td colspan="5"><select style="width: 400px">
-                                <option>- โปรดระบุ -</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Business Group : </td>
-                            <td colspan="5"><select style="width: 400px">
-                                <option>- โปรดระบุ -</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="line-height: 15px;">หมวดธุรกิจ ธปท (Business Description) : </td>
-                            <td colspan="5"><select style="width: 600px">
-                                <option>- โปรดระบุ -</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">รหัสประเภทธุรกิจ (Business Code) : </td>
-                            <td style="width: 200px"><input type="text" class="large" value=""/></td>
-                            <td class="title" style="width: 100px;">Income Factor :</td>
-                            <td><input type="text" class="medium" value=""/></td>
-                            <td class="title" style="width: 220px;">Adjust Income Factor (BDM) (%) :</td>
-                            <td><input type="text" class="medium" value=""/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Comment : </td>
-                            <td colspan="5"><input type="text" style="width: 400px;" value=""/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">สัดส่วนธุรกิจ (%) : </td>
-                            <td colspan="5"><input type="text" class="small" value="##.00"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Business Permission : </td>
-                            <td colspan="5" class="title"><input type="radio" value="N" name="bizPermission" checked="true"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes</td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
-                            <td colspan="3"><input type="text" style="width: 310px;" value=""/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
-                            <td colspan="3"><input type="text" class="medium right" value="##"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td class="left" colspan="6">
-                                <p:commandButton value="Add" styleClass="small"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:150px;">ประเภทผลิตภัณฑ์/บริการ</th>
-                                        <th style="width:130px;">% ยอดขาย</th>
-                                        <th style="width:130px;">% EBIT</th>
-                                        <th style="width:250px;">รายละเอียดผลิตภัณฑ์/บริการ</th>
-                                        <th style="width:50px;"></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="center">1</td>
-                                        <td><input type="text" class="largest" value="จำหน่ายสินค้าเบ็ดเตล็ด"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
+<tr>
+    <td class="title" style="width: 250px">รายละเอียดประเภทธุรกิจ :</td>
+    <td colspan="5"><input type="text" style="width: 400px;" value=""/></td>
+</tr>
+<tr>
+    <td class="title">ประเภทการค้าขาย :</td>
+    <td colspan="5"><select style="width: 400px">
+        <option>01 - Domestic ค้าขายภายในประเทศเท่านั้น</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">Business Type: :</td>
+    <td colspan="5"><select style="width: 400px">
+        <option>- โปรดระบุ -</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">Business Group :</td>
+    <td colspan="5"><select style="width: 400px">
+        <option>- โปรดระบุ -</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title" style="line-height: 15px;">หมวดธุรกิจ ธปท (Business Description) :</td>
+    <td colspan="5"><select style="width: 600px">
+        <option>- โปรดระบุ -</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">รหัสประเภทธุรกิจ (Business Code) :</td>
+    <td style="width: 200px"><input type="text" class="large" value=""/></td>
+    <td class="title" style="width: 100px;">Income Factor :</td>
+    <td><input type="text" class="medium" value=""/></td>
+    <td class="title" style="width: 220px;">Adjust Income Factor (BDM) (%) :</td>
+    <td><input type="text" class="medium" value=""/></td>
+</tr>
+<tr>
+    <td class="title">Comment :</td>
+    <td colspan="5"><input type="text" style="width: 400px;" value=""/></td>
+</tr>
+<tr>
+    <td class="title">สัดส่วนธุรกิจ (%) :</td>
+    <td colspan="5"><input type="text" class="small" value="##.00"/></td>
+</tr>
+<tr>
+    <td class="title">Business Permission :</td>
+    <td colspan="5" class="title"><input type="radio" value="N" name="bizPermission" checked="true"/> No<p:spacer
+            width="5px"/><input type="radio" value="Y" name="bizPermission"/> Yes
+    </td>
+</tr>
+<tr>
+    <td class="title" style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
+    <td colspan="3"><input type="text" style="width: 310px;" value=""/></td>
+</tr>
+<tr>
+    <td class="title" style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
+    <td colspan="3"><input type="text" class="medium right" value="##"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td class="left" colspan="6">
+        <p:commandButton value="Add" styleClass="small"/>
+    </td>
+</tr>
+<tr>
+    <td colspan="6">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width:30px;"></th>
+                <th style="width:150px;">ประเภทผลิตภัณฑ์/บริการ</th>
+                <th style="width:130px;">% ยอดขาย</th>
+                <th style="width:130px;">% EBIT</th>
+                <th style="width:250px;">รายละเอียดผลิตภัณฑ์/บริการ</th>
+                <th style="width:50px;"></th>
+            </tr>
+            <tr>
+                <td class="center">1</td>
+                <td><input type="text" class="largest" value="จำหน่ายสินค้าเบ็ดเตล็ด"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
 
-                                        <td class="center"><input type="text" class="largest" name="detail" value="จำหน่ายสินค้าเบ็ดเตล็ด , สินค้าอุปโภค - บริโภค"/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #e6e6e6">
-                                        <td class="center">2</td>
-                                        <td><input type="text" class="largest" value=""/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="largest" name="detail"
+                                          value="จำหน่ายสินค้าเบ็ดเตล็ด , สินค้าอุปโภค - บริโภค"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center">2</td>
+                <td><input type="text" class="largest" value=""/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
 
-                                        <td class="center"><input type="text" class="largest" name="detail" value=""/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" colspan="6">รายละเอียด Supplier : <p:spacer width="5px"/><p:commandButton value="Add" styleClass="small"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:200px;">รายชื่อ Supplier หลักของผู้กู้</th>
-                                        <th style="width:150px;">ชื่อผู้ติดต่อ</th>
-                                        <th style="width:140px;">โทรศัพท์</th>
-                                        <th style="width:100px;">ติดต่อ(ปี)</th>
-                                        <th style="width:100px;">%ยอดซื้อ</th>
-                                        <th style="width:100px;">%เงินสด</th>
-                                        <th style="width:100px;">%เครดิต</th>
-                                        <th style="width:90px;">เทอม(วัน)</th>
-                                        <th style="width:50px;"></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="center">1</td>
-                                        <td><input type="text" class="large" value="บจก. ตัวอย่าง Supplier 1"/></td>
-                                        <td class="center"><input type="text" class="medium" value=""/></td>
-                                        <td class="center"><input type="text" class="small" value=""/></td>
-                                        <td class="center"><input type="text" class="small right" value="##"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="smaller right" value="##"/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #e6e6e6">
-                                        <td class="center">2</td>
-                                        <td><input type="text" class="large" value="บจก. ตัวอย่าง Supplier 2"/></td>
-                                        <td class="center"><input type="text" class="medium" value=""/></td>
-                                        <td class="center"><input type="text" class="small" value=""/></td>
-                                        <td class="center"><input type="text" class="small right" value="##"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="smaller right" value="##"/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color:#f4f8b6;">
-                                        <td colspan="5">Total</td>
-                                        <td><input type="text" class="small right" value="##"/></td>
-                                        <td colspan="2" class="right"><input type="text" class="small right" value="##.00"/></td>
-                                        <td><input type="text" class="smaller right" value="##.00"/></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr style="background-color:#f8d0b6;">
-                                        <td colspan="7">Adjust Term By UW</td>
-                                        <td class="right"><input type="text" class="small right" value=""/></td>
-                                        <td><input type="text" class="smaller right" value=""/></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" colspan="6">รายละเอียด Buyer : <p:spacer width="5px"/><p:commandButton value="Add" styleClass="small"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th style="width:30px;"></th>
-                                        <th style="width:200px;">รายชื่อ Buyer</th>
-                                        <th style="width:150px;">ชื่อผู้ติดต่อ</th>
-                                        <th style="width:140px;">โทรศัพท์</th>
-                                        <th style="width:100px;">ติดต่อ(ปี)</th>
-                                        <th style="width:100px;">% ยอดขาย</th>
-                                        <th style="width:100px;">% เงินสด</th>
-                                        <th style="width:100px;">% เครดิต</th>
-                                        <th style="width:90px;">เทอม(วัน)</th>
-                                        <th style="width:50px;"></th>
-                                    </tr>
-                                    <tr>
-                                        <td class="center">1</td>
-                                        <td><input type="text" class="large" value="บจก. ตัวอย่าง Buyer 1"/></td>
-                                        <td class="center"><input type="text" class="medium" value=""/></td>
-                                        <td class="center"><input type="text" class="small" value=""/></td>
-                                        <td class="center"><input type="text" class="small right" value="##"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="smaller right" value="##"/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #e6e6e6">
-                                        <td class="center">2</td>
-                                        <td><input type="text" class="large" value="บจก. ตัวอย่าง Buyer 2"/></td>
-                                        <td class="center"><input type="text" class="medium" value=""/></td>
-                                        <td class="center"><input type="text" class="small" value=""/></td>
-                                        <td class="center"><input type="text" class="small right" value="##"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="small right" value="##.00"/></td>
-                                        <td class="center"><input type="text" class="smaller right" value="##"/></td>
-                                        <td class="option">
-                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color:#f4f8b6;">
-                                        <td colspan="5">Total</td>
-                                        <td><input type="text" class="small right" value="##"/></td>
-                                        <td colspan="2" class="right"><input type="text" class="small right" value="##.00"/></td>
-                                        <td><input type="text" class="smaller right" value="##.00"/></td>
-                                        <td></td>
-                                    </tr>
-                                    <tr style="background-color:#f8d0b6;">
-                                        <td colspan="7">Adjust Term By UW</td>
-                                        <td class="right"><input type="text" class="small right" value=""/></td>
-                                        <td><input type="text" class="smaller right" value=""/></td>
-                                        <td></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <th colspan="2" style="width:380px;">การจัดซื้อ</th>
-                                        <th colspan="2" style="width:380px;">การขาย</th>
-                                        <th colspan="2" style="width:380px;">Stock</th>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีลูกหนี้ (วัน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีเจ้าหนี้ (วัน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) สต๊อค (วัน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อเฉลี่ย (ล้านบาท/เดือน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการขายเฉลี่ย (ล้านบาท/เดือน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-BDM</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเงินสด (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการขายที่เป็นเงินสด (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-UW</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเครดิต (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">ปริมาณการจัดขายที่เป็นเครดิต (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-BDM</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อภายในประเทศ (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายภายในประเทศ (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-UW</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อจากต่างประเทศ (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายจากต่างประเทศ (%)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td colspan="2" style="width: 250px;line-height: 15px"></td>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">เทอม T/R (วัน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td style="width: 250px;line-height: 15px">เทอม Export (วัน)</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td colspan="2" style="width: 250px;line-height: 15px"></td>
-                                    </tr>
-                                    <!--tr style="background-color: #efefef">
-                                        <td colspan="2" ></td>
-                                        <td style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
-                                        <td colspan="3"><input type="text" style="width: 510px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #FAFAFA">
-                                        <td colspan="2" ></td>
-                                        <td style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
-                                        <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
-                                        <td colspan="2" ></td>
-                                    </tr-->
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <!--tr>
-                            <td colspan="6" class="title">กรณีมี Trade Finance กับ TMB โปรดระบุ</td>
-                        </tr>
-                        <tr>
-                            <td colspan="6">
-                                <table class="table_content" cellpadding="0" cellspacing="0" style="width: 1140px">
-                                    <tr style="background-color: #FAFAFA">
-                                        <td style="width: 250px;line-height: 15px">ชื่อผู้ติดต่อ :</td>
-                                        <td style="width: 970px"><input type="text" class="right" style="width: 250px;" value=""/>
-                                            <p:spacer width="2px"/>โทรศัพท์ : <input type="text" class="small right" value=""/>
-                                            <p:spacer width="2px"/>ศูนย์ต่างประเทศใช้บริการ : <input type="text" class="small right" value=""/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">Current Address :</td>
-                                        <td><input type="text" class="right" style="width: 600px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #fafafa">
-                                        <td style="width: 250px;line-height: 15px">Register Address :</td>
-                                        <td><input type="text" class="right" style="width: 600px;" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">E-Mail Address :</td>
-                                        <td><p:spacer width="2px"/>Import : <input type="text" class="largest" value=""/>
-                                            <p:spacer width="2px"/>Export : <input type="text" class="largest" value=""/>
-                                        </td>
-                                    </tr>
-                                    <tr style="background-color: #fafafa">
-                                        <td style="width: 250px;line-height: 15px">รหัสสาขาที่ลูกค้าใช้บัญชีอื่นฝาก: :</td>
-                                        <td><input type="text" class="small" value=""/></td>
-                                    </tr>
-                                    <tr style="background-color: #efefef">
-                                        <td style="width: 250px;line-height: 15px">รหัสหน่วยงานที่ดูแลสาขา :</td>
-                                        <td><input type="text" class="small" value=""/></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
-                        </tr-->
-                        <tr>
-                            <td colspan="6" class="center">
-                                <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-                                <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="bottom_line"></div>
-            </div>
-            <div class="clear"></div>
-        </div>
-    </h:body>
+                <td class="center"><input type="text" class="largest" name="detail" value=""/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td class="title" colspan="6">รายละเอียด Supplier : <p:spacer width="5px"/><p:commandButton value="Add"
+                                                                                                styleClass="small"/>
+    </td>
+</tr>
+<tr>
+    <td colspan="6">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width:30px;"></th>
+                <th style="width:200px;">รายชื่อ Supplier หลักของผู้กู้</th>
+                <th style="width:150px;">ชื่อผู้ติดต่อ</th>
+                <th style="width:140px;">โทรศัพท์</th>
+                <th style="width:100px;">ติดต่อ(ปี)</th>
+                <th style="width:100px;">%ยอดซื้อ</th>
+                <th style="width:100px;">%เงินสด</th>
+                <th style="width:100px;">%เครดิต</th>
+                <th style="width:90px;">เทอม(วัน)</th>
+                <th style="width:50px;"></th>
+            </tr>
+            <tr>
+                <td class="center">1</td>
+                <td><input type="text" class="large" value="บจก. ตัวอย่าง Supplier 1"/></td>
+                <td class="center"><input type="text" class="medium" value=""/></td>
+                <td class="center"><input type="text" class="small" value=""/></td>
+                <td class="center"><input type="text" class="small right" value="##"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="smaller right" value="##"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center">2</td>
+                <td><input type="text" class="large" value="บจก. ตัวอย่าง Supplier 2"/></td>
+                <td class="center"><input type="text" class="medium" value=""/></td>
+                <td class="center"><input type="text" class="small" value=""/></td>
+                <td class="center"><input type="text" class="small right" value="##"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="smaller right" value="##"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color:#f4f8b6;">
+                <td colspan="5">Total</td>
+                <td><input type="text" class="small right" value="##"/></td>
+                <td colspan="2" class="right"><input type="text" class="small right" value="##.00"/></td>
+                <td><input type="text" class="smaller right" value="##.00"/></td>
+                <td></td>
+            </tr>
+            <tr style="background-color:#f8d0b6;">
+                <td colspan="7">Adjust Term By UW</td>
+                <td class="right"><input type="text" class="small right" value=""/></td>
+                <td><input type="text" class="smaller right" value=""/></td>
+                <td></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td class="title" colspan="6">รายละเอียด Buyer : <p:spacer width="5px"/><p:commandButton value="Add"
+                                                                                             styleClass="small"/></td>
+</tr>
+<tr>
+    <td colspan="6">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th style="width:30px;"></th>
+                <th style="width:200px;">รายชื่อ Buyer</th>
+                <th style="width:150px;">ชื่อผู้ติดต่อ</th>
+                <th style="width:140px;">โทรศัพท์</th>
+                <th style="width:100px;">ติดต่อ(ปี)</th>
+                <th style="width:100px;">% ยอดขาย</th>
+                <th style="width:100px;">% เงินสด</th>
+                <th style="width:100px;">% เครดิต</th>
+                <th style="width:90px;">เทอม(วัน)</th>
+                <th style="width:50px;"></th>
+            </tr>
+            <tr>
+                <td class="center">1</td>
+                <td><input type="text" class="large" value="บจก. ตัวอย่าง Buyer 1"/></td>
+                <td class="center"><input type="text" class="medium" value=""/></td>
+                <td class="center"><input type="text" class="small" value=""/></td>
+                <td class="center"><input type="text" class="small right" value="##"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="smaller right" value="##"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color: #e6e6e6">
+                <td class="center">2</td>
+                <td><input type="text" class="large" value="บจก. ตัวอย่าง Buyer 2"/></td>
+                <td class="center"><input type="text" class="medium" value=""/></td>
+                <td class="center"><input type="text" class="small" value=""/></td>
+                <td class="center"><input type="text" class="small right" value="##"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="small right" value="##.00"/></td>
+                <td class="center"><input type="text" class="smaller right" value="##"/></td>
+                <td class="option">
+                    <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                </td>
+            </tr>
+            <tr style="background-color:#f4f8b6;">
+                <td colspan="5">Total</td>
+                <td><input type="text" class="small right" value="##"/></td>
+                <td colspan="2" class="right"><input type="text" class="small right" value="##.00"/></td>
+                <td><input type="text" class="smaller right" value="##.00"/></td>
+                <td></td>
+            </tr>
+            <tr style="background-color:#f8d0b6;">
+                <td colspan="7">Adjust Term By UW</td>
+                <td class="right"><input type="text" class="small right" value=""/></td>
+                <td><input type="text" class="smaller right" value=""/></td>
+                <td></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="6">
+        <table class="table_content" cellpadding="0" cellspacing="0">
+            <tr>
+                <th colspan="2" style="width:380px;">การจัดซื้อ</th>
+                <th colspan="2" style="width:380px;">การขาย</th>
+                <th colspan="2" style="width:380px;">Stock</th>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีลูกหนี้ (วัน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) บัญชีเจ้าหนี้ (วัน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">จำนวนวันมาตรฐาน (Standard) สต๊อค (วัน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อเฉลี่ย (ล้านบาท/เดือน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">ปริมาณการขายเฉลี่ย (ล้านบาท/เดือน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-BDM</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเงินสด (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">ปริมาณการขายที่เป็นเงินสด (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">ระยะเวลาในการ Stock (วัน)-UW</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">ปริมาณการจัดซื้อที่เป็นเครดิต (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">ปริมาณการจัดขายที่เป็นเครดิต (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-BDM</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อภายในประเทศ (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายภายในประเทศ (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">มูลค่าสต็อคสินค้า (ล้านบาท)-UW</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">สัดส่วนการจัดซื้อจากต่างประเทศ (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">สัดส่วนการจัดขายจากต่างประเทศ (%)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td colspan="2" style="width: 250px;line-height: 15px"></td>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td style="width: 250px;line-height: 15px">เทอม T/R (วัน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td style="width: 250px;line-height: 15px">เทอม Export (วัน)</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td colspan="2" style="width: 250px;line-height: 15px"></td>
+            </tr>
+            <!--tr style="background-color: #efefef">
+                <td colspan="2" ></td>
+                <td style="width: 250px;line-height: 15px">Export Indirect Country Name</td>
+                <td colspan="3"><input type="text" style="width: 510px;" value=""/></td>
+            </tr>
+            <tr style="background-color: #FAFAFA">
+                <td colspan="2" ></td>
+                <td style="width: 250px;line-height: 15px">% Export Indirect Country Name</td>
+                <td><input type="text" class="right" style="width: 110px;" value="##"/></td>
+                <td colspan="2" ></td>
+            </tr-->
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<!--tr>
+    <td colspan="6" class="title">กรณีมี Trade Finance กับ TMB โปรดระบุ</td>
+</tr>
+<tr>
+    <td colspan="6">
+        <table class="table_content" cellpadding="0" cellspacing="0" style="width: 1140px">
+            <tr style="background-color: #FAFAFA">
+                <td style="width: 250px;line-height: 15px">ชื่อผู้ติดต่อ :</td>
+                <td style="width: 970px"><input type="text" class="right" style="width: 250px;" value=""/>
+                    <p:spacer width="2px"/>โทรศัพท์ : <input type="text" class="small right" value=""/>
+                    <p:spacer width="2px"/>ศูนย์ต่างประเทศใช้บริการ : <input type="text" class="small right" value=""/>
+                </td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">Current Address :</td>
+                <td><input type="text" class="right" style="width: 600px;" value=""/></td>
+            </tr>
+            <tr style="background-color: #fafafa">
+                <td style="width: 250px;line-height: 15px">Register Address :</td>
+                <td><input type="text" class="right" style="width: 600px;" value=""/></td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">E-Mail Address :</td>
+                <td><p:spacer width="2px"/>Import : <input type="text" class="largest" value=""/>
+                    <p:spacer width="2px"/>Export : <input type="text" class="largest" value=""/>
+                </td>
+            </tr>
+            <tr style="background-color: #fafafa">
+                <td style="width: 250px;line-height: 15px">รหัสสาขาที่ลูกค้าใช้บัญชีอื่นฝาก: :</td>
+                <td><input type="text" class="small" value=""/></td>
+            </tr>
+            <tr style="background-color: #efefef">
+                <td style="width: 250px;line-height: 15px">รหัสหน่วยงานที่ดูแลสาขา :</td>
+                <td><input type="text" class="small" value=""/></td>
+            </tr>
+        </table>
+    </td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="100%" style="line-height: 15px;"><p:spacer width="5"/></td>
+</tr-->
+<tr>
+    <td colspan="6" class="center">
+        <p:commandButton value="Save" styleClass="small"
+                         onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+        <p:commandButton value="Cancel" styleClass="small"
+                         onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+    </td>
+</tr>
+</table>
+</div>
+<div class="bottom_line"></div>
+</div>
+<div class="clear"></div>
+</div>
+</h:body>
 </f:view>
 </html>

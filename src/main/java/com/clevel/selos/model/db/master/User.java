@@ -12,47 +12,47 @@ import java.util.Date;
 @Table(name = "mst_user")
 public class User implements Serializable {
     @Id
-    @Column(name = "id", nullable = false,unique = true,length = 10)
+    @Column(name = "id", nullable = false, unique = true, length = 10)
     private String id;
-    @Column(name = "username",length = 50)
+    @Column(name = "username", length = 50)
     private String userName;
     @OneToOne
-    @JoinColumn(name="role_id")
+    @JoinColumn(name = "role_id")
     private Role role;
-    @Column(name = "bu_code",length = 20)
+    @Column(name = "bu_code", length = 20)
     private String buCode;
     @Column(name = "email_address")
     private String emailAddress;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="last_logon")
+    @Column(name = "last_logon")
     private Date lastLogon;
-    @Column(name="last_ip")
+    @Column(name = "last_ip")
     private String lastIP;
     @OneToOne
-    @JoinColumn(name="team_id")
+    @JoinColumn(name = "team_id")
     private UserTeam team;
     @OneToOne
-    @JoinColumn(name="zone_id")
+    @JoinColumn(name = "zone_id")
     private UserZone zone;
     @OneToOne
-    @JoinColumn(name="region_id")
+    @JoinColumn(name = "region_id")
     private UserRegion region;
     @OneToOne
-    @JoinColumn(name="title_id")
+    @JoinColumn(name = "title_id")
     private UserTitle title;
-    @Column(name="phone_number",length = 20)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
-    @Column(name="phone_ext",length = 20)
+    @Column(name = "phone_ext", length = 20)
     private String phoneExt;
     @OneToOne
-    @JoinColumn(name="department_id")
+    @JoinColumn(name = "department_id")
     private UserDepartment department;
     @OneToOne
-    @JoinColumn(name="division_id")
+    @JoinColumn(name = "division_id")
     private UserDivision division;
-    @Column(name="active")
+    @Column(name = "active")
     private int active;
-    @Column(name="status",nullable = false)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 

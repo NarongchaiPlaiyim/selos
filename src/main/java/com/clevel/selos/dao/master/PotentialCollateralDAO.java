@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class PotentialCollateralDAO extends GenericDAO<PotentialCollateral,Integer> {
+public class PotentialCollateralDAO extends GenericDAO<PotentialCollateral, Integer> {
     @Inject
     private Logger log;
 
     @Inject
-    PotentialCollateralDAO(){
+    PotentialCollateralDAO() {
 
     }
 }

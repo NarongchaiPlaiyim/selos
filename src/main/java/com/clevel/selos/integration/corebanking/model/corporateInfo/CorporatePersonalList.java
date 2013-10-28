@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Time: 20:22 น.
  * To change this template use File | Settings | File Templates.
  */
-public class CorporatePersonalList implements Serializable{
+public class CorporatePersonalList implements Serializable {
 
     private String custNbr1;
     private String cId1;

@@ -11,15 +11,15 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_inbox_config")
-public class InboxConfig  implements Serializable {
+public class InboxConfig implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 50)
+    @Column(name = "name", length = 50)
     private String name;
-    @Column(name = "queue_name",length = 50)
+    @Column(name = "queue_name", length = 50)
     private String queueName;
-    @Column(name = "type",length = 50)
+    @Column(name = "type", length = 50)
     private String type;
     @Column(name = "active")
     private int active;

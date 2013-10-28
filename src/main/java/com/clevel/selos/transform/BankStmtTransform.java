@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class BankStmtTransform extends Transform{
+public class BankStmtTransform extends Transform {
     //DAO
     @Inject
     BankDAO bankDAO;
@@ -45,10 +45,10 @@ public class BankStmtTransform extends Transform{
     BankAccountTypeTransform bankAccountTypeTransform;
 
     @Inject
-    public BankStmtTransform(){
+    public BankStmtTransform() {
     }
 
-    public BankStmtView getBankStmtView(DWHBankStatement dwhBankStatement){
+    public BankStmtView getBankStmtView(DWHBankStatement dwhBankStatement) {
         log.info("Transform BankStmtView with DWHBankStatement : {}", dwhBankStatement);
         BankStmtView bankStmtView = new BankStmtView();
         bankStmtView.setAccountNumber(dwhBankStatement.getAccountNumber());
@@ -69,7 +69,7 @@ public class BankStmtTransform extends Transform{
         return bankStmtView;
     }
 
-    public BankStmtDetailView getBankStmtDetailView(DWHBankStatement dwhBankStatement){
+    public BankStmtDetailView getBankStmtDetailView(DWHBankStatement dwhBankStatement) {
         log.info("Transform BankStmtDetailView with DWHBankStatement : {}", dwhBankStatement);
         BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
         bankStmtDetailView.setOverLimitAmount(dwhBankStatement.getOverLimitAmount());
@@ -93,11 +93,11 @@ public class BankStmtTransform extends Transform{
 
     }
 
-    public BankStatementSummary getBankStatementSummary(BankStmtSummaryView bankStmtSummaryView, User user){
+    public BankStatementSummary getBankStatementSummary(BankStmtSummaryView bankStmtSummaryView, User user) {
         BankStatementSummary bankStatementSummary = null;
         Date now = new Date();
-        if(bankStmtSummaryView != null){
-            if(bankStmtSummaryView.getId() != 0){
+        if (bankStmtSummaryView != null) {
+            if (bankStmtSummaryView.getId() != 0) {
                 bankStatementSummary = bankStatementSummaryDAO.findById(bankStmtSummaryView.getId());
             } else {
                 bankStatementSummary = new BankStatementSummary();
@@ -128,7 +128,7 @@ public class BankStmtTransform extends Transform{
 
             List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
             List<BankStmtView> bankStmtViewList = bankStmtSummaryView.getBankStmtViewList();
-            for(BankStmtView bankStmtView : bankStmtViewList){
+            for (BankStmtView bankStmtView : bankStmtViewList) {
                 bankStatementList.add(getBankStatement(bankStmtView, bankStatementSummary, user));
             }
             bankStatementSummary.setBankStmtList(bankStatementList);
@@ -139,11 +139,11 @@ public class BankStmtTransform extends Transform{
         return null;
     }
 
-    public BankStatement getBankStatement(BankStmtView bankStmtView, BankStatementSummary bankStatementSummary, User user){
+    public BankStatement getBankStatement(BankStmtView bankStmtView, BankStatementSummary bankStatementSummary, User user) {
         BankStatement bankStatement = null;
-        if(bankStmtView != null) {
+        if (bankStmtView != null) {
             Date now = new Date();
-            if(bankStmtView.getId() != 0) {
+            if (bankStmtView.getId() != 0) {
                 bankStatement = bankStatementDAO.findById(bankStmtView.getId());
             } else {
                 bankStatement = new BankStatement();
@@ -180,7 +180,7 @@ public class BankStmtTransform extends Transform{
         return bankStatement;
     }
 
-    public BankStatementDetail getBankStatementDetail(BankStmtDetailView bankStmtDetailView, BankStatement bankStatement){
+    public BankStatementDetail getBankStatementDetail(BankStmtDetailView bankStmtDetailView, BankStatement bankStatement) {
         BankStatementDetail bankStatementDetail = null;
         if (bankStmtDetailView != null) {
             if (bankStmtDetailView.getId() != 0) {

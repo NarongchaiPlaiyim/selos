@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @XStreamAlias("body")
 public class BodyModel {
-    
+
     @XStreamAlias("transaction")
     private TransactionModel transaction;
 

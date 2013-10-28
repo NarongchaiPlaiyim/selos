@@ -15,10 +15,10 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Inte
     private Logger log;
 
     @Inject
-    public ContactRecordDetailDAO(){
+    public ContactRecordDetailDAO() {
     }
 
-    public List<ContactRecordDetail> findRecordCallingByCustomerAcceptance(long customerAcceptanceId){
+    public List<ContactRecordDetail> findRecordCallingByCustomerAcceptance(long customerAcceptanceId) {
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerAcceptance.id", customerAcceptanceId));

@@ -13,62 +13,62 @@ import java.util.List;
 @Table(name = "wrk_existing_credit_summary")
 public class ExistingCreditSummary {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_EXISTING_CREDIT_SUM_ID", sequenceName="SEQ_WRK_EXISTING_CREDIT_SUM_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_EXISTING_CREDIT_SUM_ID")
+    @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_SUM_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXISTING_CREDIT_SUM_ID")
     private long id;
 
-    @Column(name="total_brw_com_limit")
+    @Column(name = "total_brw_com_limit")
     private BigDecimal totalBorrowerComLimit;
 
-    @Column(name="total_brw_ret_limit")
+    @Column(name = "total_brw_ret_limit")
     private BigDecimal totalBorrowerRetailLimit;
 
-    @Column(name="total_brw_rlos_limit")
+    @Column(name = "total_brw_rlos_limit")
     private BigDecimal totalBorrowerAppInRLOSLimit;
 
-    @Column(name="total_related_com_limit")
+    @Column(name = "total_related_com_limit")
     private BigDecimal totalRelatedComLimit;
 
-    @Column(name="total_related_ret_limit")
+    @Column(name = "total_related_ret_limit")
     private BigDecimal totalRelatedRetailLimit;
 
-    @Column(name="total_related_rlos_limit")
+    @Column(name = "total_related_rlos_limit")
     private BigDecimal totalRelatedAppInRLOSLimit;
 
-    @Column(name="total_group_com_limit")
+    @Column(name = "total_group_com_limit")
     private BigDecimal totalGroupCom;
 
-    @Column(name="total_group_com_obod_limit")
+    @Column(name = "total_group_com_obod_limit")
     private BigDecimal totalGroupComOBOD;
 
-    @Column(name="total_group_ret_limit")
+    @Column(name = "total_group_ret_limit")
     private BigDecimal totalGroupExposure;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @OneToMany(mappedBy="existingCreditSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "existingCreditSummary", cascade = CascadeType.ALL)
     private List<ExistingCreditDetail> existingCreditDetailList;
 
     public long getId() {

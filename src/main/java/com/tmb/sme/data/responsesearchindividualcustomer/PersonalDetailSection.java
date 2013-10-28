@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for personalDetailSection complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="personalDetailSection">
  *   &lt;complexContent>
@@ -23,12 +23,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "personalDetailSection", propOrder = {
-    "personalDetail"
+        "personalDetail"
 })
 public class PersonalDetailSection {
 
@@ -37,11 +35,9 @@ public class PersonalDetailSection {
 
     /**
      * Gets the value of the personalDetail property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PersonalDetail }
-     *     
+     *
+     * @return possible object is
+     *         {@link PersonalDetail }
      */
     public PersonalDetail getPersonalDetail() {
         return personalDetail;
@@ -49,11 +45,9 @@ public class PersonalDetailSection {
 
     /**
      * Sets the value of the personalDetail property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PersonalDetail }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link PersonalDetail }
      */
     public void setPersonalDetail(PersonalDetail value) {
         this.personalDetail = value;

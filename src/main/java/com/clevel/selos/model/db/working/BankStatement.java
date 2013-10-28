@@ -14,106 +14,106 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_bankstatement")
+@Table(name = "wrk_bankstatement")
 public class BankStatement implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BANKSTMT_ID", sequenceName="SEQ_WRK_BANKSTMT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BANKSTMT_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BANKSTMT_ID", sequenceName = "SEQ_WRK_BANKSTMT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BANKSTMT_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name="bank_id")
+    @JoinColumn(name = "bank_id")
     private Bank bank;
 
-    @Column(name="branch_name")
+    @Column(name = "branch_name")
     private String branch;
 
     @OneToOne
-    @JoinColumn(name="bank_account_type_id")
+    @JoinColumn(name = "bank_account_type_id")
     private BankAccountType bankAccountType;
 
-    @Column(name="account_number")
+    @Column(name = "account_number")
     private String accountNo;
 
-    @Column(name="account_name")
+    @Column(name = "account_name")
     private String accountName;
 
-    @Column(name="other_account_type")
+    @Column(name = "other_account_type")
     private int otherAccountType;
 
     @OneToOne
-    @JoinColumn(name="account_status_id")
+    @JoinColumn(name = "account_status_id")
     private AccountStatus accountStatus;
 
-    @Column(name="main_account")
+    @Column(name = "main_account")
     private int mainAccount;
 
-    @Column(name="account_character")
+    @Column(name = "account_character")
     private int accountCharacteristic;
 
-    @Column(name="limit")
+    @Column(name = "limit")
     private BigDecimal limit;
 
-    @Column(name="avg_income_gross")
+    @Column(name = "avg_income_gross")
     private BigDecimal avgIncomeGross;
 
-    @Column(name="avg_income_bdm")
+    @Column(name = "avg_income_bdm")
     private BigDecimal avgIncomeNetBDM;
 
-    @Column(name="avg_income_uw")
+    @Column(name = "avg_income_uw")
     private BigDecimal avgIncomeNetUW;
 
-    @Column(name="avg_withdraw_amount")
+    @Column(name = "avg_withdraw_amount")
     private BigDecimal avgDrawAmount;
 
-    @Column(name="avg_swing_percent")
+    @Column(name = "avg_swing_percent")
     private BigDecimal swingPercent;
 
-    @Column(name="avg_utilization_percent")
+    @Column(name = "avg_utilization_percent")
     private BigDecimal utilizationPercent;
 
-    @Column(name="avg_gross_inflow_per_limit")
+    @Column(name = "avg_gross_inflow_per_limit")
     private BigDecimal avgGrossInflowPerLimit;
 
-    @Column(name="td_chq_return_times")
+    @Column(name = "td_chq_return_times")
     private BigDecimal chequeReturn;
 
-    @Column(name="td_chq_return_amount")
+    @Column(name = "td_chq_return_amount")
     private BigDecimal tdChequeReturnAmount;
 
-    @Column(name="td_chq_return_percent")
+    @Column(name = "td_chq_return_percent")
     private BigDecimal tdChequeReturnPercent;
 
-    @Column(name="over_limit_times")
+    @Column(name = "over_limit_times")
     private BigDecimal overLimitTimes;
 
-    @Column(name="over_limit_days")
+    @Column(name = "over_limit_days")
     private BigDecimal overLimitDays;
 
-    @Column(name="remark")
+    @Column(name = "remark")
     private String remark;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @ManyToOne
-    @JoinColumn(name="bank_stmt_summary_id")
+    @JoinColumn(name = "bank_stmt_summary_id")
     private BankStatementSummary bankStatementSummary;
 
-    @OneToMany(mappedBy="bankStatement", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bankStatement", cascade = CascadeType.ALL)
     private List<BankStatementDetail> bankStatementDetailList;
 
     public long getId() {

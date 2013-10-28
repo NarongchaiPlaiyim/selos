@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class AuthorizationDOADAO extends GenericDAO<AuthorizationDOA,Integer> {
+public class AuthorizationDOADAO extends GenericDAO<AuthorizationDOA, Integer> {
     @Inject
     private Logger log;
 

@@ -8,46 +8,46 @@ import java.util.ArrayList;
 
 @XStreamAlias("address")
 public class SubjectAddressModel implements Serializable {
-    
+
     @XStreamAlias("line1")
     private String line1;
-    
+
     @XStreamAlias("line2")
     private String line2;
-    
+
     @XStreamAlias("line3")
     private String line3;
-    
+
     @XStreamAlias("subdistrict")
     private String subdistrict;
-    
+
     @XStreamAlias("district")
     private String district;
-    
+
     @XStreamAlias("province")
     private String province;
-    
+
     @XStreamAlias("country")
     private String country;
-    
+
     @XStreamAlias("postalcode")
     private String postalcode;
-    
+
     @XStreamAlias("telephone")
     private String telephone;
-    
+
     @XStreamAlias("telephonetype")
     private String telephonetype;
-    
+
     @XStreamAlias("addresstype")
     private String addresstype;
-    
+
     @XStreamAlias("residential")
     private String residential;
-    
+
     @XStreamAlias("reporteddate")
     private String reporteddate;
-    
+
     @XStreamImplicit(itemFieldName = "dispute")
     private ArrayList<SubjectAddressDisputeModel> dispute = new ArrayList<SubjectAddressDisputeModel>();
 
@@ -123,5 +123,5 @@ public class SubjectAddressModel implements Serializable {
     public ArrayList<SubjectAddressDisputeModel> getDispute() {
         return dispute;
     }
-    
+
 }

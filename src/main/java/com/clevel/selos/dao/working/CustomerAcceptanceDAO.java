@@ -14,17 +14,17 @@ public class CustomerAcceptanceDAO extends GenericDAO<CustomerAcceptance, Intege
     private Logger log;
 
     @Inject
-    public CustomerAcceptanceDAO(){
+    public CustomerAcceptanceDAO() {
     }
 
 
-    public CustomerAcceptance findCustomerAcceptanceByWorkCase(WorkCase workCase){
+    public CustomerAcceptance findCustomerAcceptanceByWorkCase(WorkCase workCase) {
         CustomerAcceptance customerAcceptance;
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
-        customerAcceptance = (CustomerAcceptance)criteria.uniqueResult();
-        log.info("getListByDistrict. (result size: {})",customerAcceptance);
+        customerAcceptance = (CustomerAcceptance) criteria.uniqueResult();
+        log.info("getListByDistrict. (result size: {})", customerAcceptance);
 
         return customerAcceptance;
     }

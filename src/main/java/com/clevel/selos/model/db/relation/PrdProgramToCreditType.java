@@ -15,12 +15,12 @@ public class PrdProgramToCreditType implements Serializable {
     @Column(name = "id")
     private int id;
     @OneToOne
-    @JoinColumn(name="productprogram_id")
+    @JoinColumn(name = "productprogram_id")
     private ProductProgram productProgram;
     @OneToOne
-    @JoinColumn(name="credittype_id")
+    @JoinColumn(name = "credittype_id")
     private CreditType creditType;
-    @Column(name="active")
+    @Column(name = "active")
     private int active;
 
     public PrdProgramToCreditType() {

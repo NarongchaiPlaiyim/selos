@@ -1,22 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.interestrules;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for BusinessType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="BusinessType">
  *   &lt;complexContent>
@@ -43,27 +39,25 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BusinessType", propOrder = {
-    "id",
-    "nameOfBusiness",
-    "startDate",
-    "endDate",
-    "timeInBusiness",
-    "borrowerRelationship",
-    "partnershipPercentage",
-    "businessType",
-    "businessTypeRiskLevel",
-    "countryOfBusiness",
-    "locationInThai",
-    "monthlyRevenue",
-    "annualRevenue",
-    "salesTurnover",
-    "atLeast1YrFinStmtFlag",
-    "attribute"
+        "id",
+        "nameOfBusiness",
+        "startDate",
+        "endDate",
+        "timeInBusiness",
+        "borrowerRelationship",
+        "partnershipPercentage",
+        "businessType",
+        "businessTypeRiskLevel",
+        "countryOfBusiness",
+        "locationInThai",
+        "monthlyRevenue",
+        "annualRevenue",
+        "salesTurnover",
+        "atLeast1YrFinStmtFlag",
+        "attribute"
 })
 public class BusinessType {
 
@@ -90,11 +84,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -102,11 +94,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -114,11 +104,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the nameOfBusiness property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNameOfBusiness() {
         return nameOfBusiness;
@@ -126,11 +114,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the nameOfBusiness property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNameOfBusiness(String value) {
         this.nameOfBusiness = value;
@@ -138,11 +124,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the startDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getStartDate() {
         return startDate;
@@ -150,11 +134,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the startDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setStartDate(XMLGregorianCalendar value) {
         this.startDate = value;
@@ -162,11 +144,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the endDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getEndDate() {
         return endDate;
@@ -174,11 +154,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the endDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setEndDate(XMLGregorianCalendar value) {
         this.endDate = value;
@@ -186,11 +164,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the timeInBusiness property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Double }
-     *     
+     *
+     * @return possible object is
+     *         {@link Double }
      */
     public Double getTimeInBusiness() {
         return timeInBusiness;
@@ -198,11 +174,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the timeInBusiness property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Double }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Double }
      */
     public void setTimeInBusiness(Double value) {
         this.timeInBusiness = value;
@@ -210,11 +184,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the borrowerRelationship property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBorrowerRelationship() {
         return borrowerRelationship;
@@ -222,11 +194,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the borrowerRelationship property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBorrowerRelationship(String value) {
         this.borrowerRelationship = value;
@@ -234,11 +204,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the partnershipPercentage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getPartnershipPercentage() {
         return partnershipPercentage;
@@ -246,11 +214,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the partnershipPercentage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setPartnershipPercentage(BigDecimal value) {
         this.partnershipPercentage = value;
@@ -258,11 +224,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the businessType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusinessType() {
         return businessType;
@@ -270,11 +234,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the businessType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusinessType(String value) {
         this.businessType = value;
@@ -282,11 +244,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the businessTypeRiskLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusinessTypeRiskLevel() {
         return businessTypeRiskLevel;
@@ -294,11 +254,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the businessTypeRiskLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusinessTypeRiskLevel(String value) {
         this.businessTypeRiskLevel = value;
@@ -306,11 +264,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the countryOfBusiness property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCountryOfBusiness() {
         return countryOfBusiness;
@@ -318,11 +274,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the countryOfBusiness property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCountryOfBusiness(String value) {
         this.countryOfBusiness = value;
@@ -330,11 +284,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the locationInThai property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocationInThai() {
         return locationInThai;
@@ -342,11 +294,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the locationInThai property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLocationInThai(String value) {
         this.locationInThai = value;
@@ -354,11 +304,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the monthlyRevenue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getMonthlyRevenue() {
         return monthlyRevenue;
@@ -366,11 +314,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the monthlyRevenue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setMonthlyRevenue(BigDecimal value) {
         this.monthlyRevenue = value;
@@ -378,11 +324,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the annualRevenue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getAnnualRevenue() {
         return annualRevenue;
@@ -390,11 +334,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the annualRevenue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setAnnualRevenue(BigDecimal value) {
         this.annualRevenue = value;
@@ -402,11 +344,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the salesTurnover property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSalesTurnover() {
         return salesTurnover;
@@ -414,11 +354,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the salesTurnover property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSalesTurnover(BigDecimal value) {
         this.salesTurnover = value;
@@ -426,11 +364,9 @@ public class BusinessType {
 
     /**
      * Gets the value of the atLeast1YrFinStmtFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isAtLeast1YrFinStmtFlag() {
         return atLeast1YrFinStmtFlag;
@@ -438,11 +374,9 @@ public class BusinessType {
 
     /**
      * Sets the value of the atLeast1YrFinStmtFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setAtLeast1YrFinStmtFlag(Boolean value) {
         this.atLeast1YrFinStmtFlag = value;
@@ -450,25 +384,23 @@ public class BusinessType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

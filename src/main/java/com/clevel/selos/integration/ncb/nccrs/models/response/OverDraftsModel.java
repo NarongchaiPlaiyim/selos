@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 @XStreamAlias("overdrafts")
 public class OverDraftsModel {
-    
+
     @XStreamImplicit(itemFieldName = "histbalance")
-    private ArrayList<OverDraftsHistBalanceModel> histbalance = new ArrayList<OverDraftsHistBalanceModel>(); 
+    private ArrayList<OverDraftsHistBalanceModel> histbalance = new ArrayList<OverDraftsHistBalanceModel>();
 
     public ArrayList<OverDraftsHistBalanceModel> getHistbalance() {
         return histbalance;

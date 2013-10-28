@@ -12,13 +12,13 @@ public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")
     private int code;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
     @OneToOne
-    @JoinColumn(name="district_id")
+    @JoinColumn(name = "district_id")
     private District district;
     @OneToOne
-    @JoinColumn(name="province_id")
+    @JoinColumn(name = "province_id")
     private Province province;
     @Column(name = "active")
     private int active;

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Default
-public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
+public class BRMSInterfaceImpl implements BRMSInterface, Serializable {
     @Inject
     @BRMS
     Logger log;
@@ -25,9 +25,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<PreScreenResponse> checkPreScreenRule(PreScreenRequest preScreenRequest) throws ValidationException{
-        log.debug("checkPreScreenRule : preScreenRequest {}",preScreenRequest);
-        if(preScreenRequest==null){
+    public List<PreScreenResponse> checkPreScreenRule(PreScreenRequest preScreenRequest) throws ValidationException {
+        log.debug("checkPreScreenRule : preScreenRequest {}", preScreenRequest);
+        if (preScreenRequest == null) {
             log.error("preScreenRequest is null for request");
             throw new ValidationException("002");
         }
@@ -58,9 +58,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<FullApplicationResponse> checkFullApplicationRule(FullApplicationRequest fullApplicationRequest) throws ValidationException{
-        log.debug("checkFullApplicationRule : fullApplicationRequest {}",fullApplicationRequest);
-        if(fullApplicationRequest==null){
+    public List<FullApplicationResponse> checkFullApplicationRule(FullApplicationRequest fullApplicationRequest) throws ValidationException {
+        log.debug("checkFullApplicationRule : fullApplicationRequest {}", fullApplicationRequest);
+        if (fullApplicationRequest == null) {
             log.error("fullApplicationRequest is null for request");
             throw new ValidationException("002");
         }
@@ -69,9 +69,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<StandardPricingIntResponse> checkStandardPricingIntRule(StandardPricingIntRequest standardPricingIntRequest) throws ValidationException{
-        log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}",standardPricingIntRequest);
-        if(standardPricingIntRequest==null){
+    public List<StandardPricingIntResponse> checkStandardPricingIntRule(StandardPricingIntRequest standardPricingIntRequest) throws ValidationException {
+        log.debug("checkStandardPricingIntRule : standardPricingIntRequest {}", standardPricingIntRequest);
+        if (standardPricingIntRequest == null) {
             log.error("standardPricingIntRequest is null for request");
             throw new ValidationException("002");
         }
@@ -80,9 +80,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(StandardPricingFeeRequest standardPricingFeeRequest) throws ValidationException{
-        log.debug("checkStandardPricingFeeRule : standardPricingFeeRequest {}",standardPricingFeeRequest);
-        if(standardPricingFeeRequest==null){
+    public List<StandardPricingFeeResponse> checkStandardPricingFeeRule(StandardPricingFeeRequest standardPricingFeeRequest) throws ValidationException {
+        log.debug("checkStandardPricingFeeRule : standardPricingFeeRequest {}", standardPricingFeeRequest);
+        if (standardPricingFeeRequest == null) {
             log.error("standardPricingFeeRequest is null for request");
             throw new ValidationException("002");
         }
@@ -91,9 +91,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<DocCustomerResponse> checkDocCustomerRule(DocCustomerRequest docCustomerRequest) throws ValidationException{
-        log.debug("checkDocCustomerRule : docCustomerRequest {}",docCustomerRequest);
-        if(docCustomerRequest==null){
+    public List<DocCustomerResponse> checkDocCustomerRule(DocCustomerRequest docCustomerRequest) throws ValidationException {
+        log.debug("checkDocCustomerRule : docCustomerRequest {}", docCustomerRequest);
+        if (docCustomerRequest == null) {
             log.error("docCustomerRequest is null for request");
             throw new ValidationException("002");
         }
@@ -102,9 +102,9 @@ public class BRMSInterfaceImpl implements BRMSInterface,Serializable{
     }
 
     @Override
-    public List<DocAppraisalResponse> checkDocAppraisalRule(DocAppraisalRequest docAppraisalRequest) throws ValidationException{
-        log.debug("checkDocAppraisalRule : docAppraisalRequest {}",docAppraisalRequest);
-        if(docAppraisalRequest==null){
+    public List<DocAppraisalResponse> checkDocAppraisalRule(DocAppraisalRequest docAppraisalRequest) throws ValidationException {
+        log.debug("checkDocAppraisalRule : docAppraisalRequest {}", docAppraisalRequest);
+        if (docAppraisalRequest == null) {
             log.error("docAppraisalRequest is null for request");
             throw new ValidationException("002");
         }

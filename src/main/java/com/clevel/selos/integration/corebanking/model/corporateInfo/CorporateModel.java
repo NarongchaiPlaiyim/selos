@@ -6,8 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 
 
-
-public class CorporateModel implements Serializable{
+public class CorporateModel implements Serializable {
 
     private String reqId;
     private String resCode;

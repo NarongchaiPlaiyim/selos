@@ -15,11 +15,11 @@ public class SettlementStatus implements Serializable {
     @Column(name = "name")
     private String name;
     @OneToOne
-    @JoinColumn(name="customerentity_id")
+    @JoinColumn(name = "customerentity_id")
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;
-    @Column(name = "ncb_code",length = 5)
+    @Column(name = "ncb_code", length = 5)
     private String ncbCode;
 
     public SettlementStatus() {

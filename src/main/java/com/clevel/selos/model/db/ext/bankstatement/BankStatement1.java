@@ -3,7 +3,10 @@ package com.clevel.selos.model.db.ext.bankstatement;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,70 +17,70 @@ public class BankStatement1 implements Serializable {
     @Id
     private long id;
 
-    @Column(name="account_status", length = 2)
+    @Column(name = "account_status", length = 2)
     private String accountStatus;
 
-    @Column(name="account_open_date")
+    @Column(name = "account_open_date")
     private Date accountOpenDate;
 
-    @Column(name="branch_code", length = 3)
+    @Column(name = "branch_code", length = 3)
     private String branchCode;
 
-    @Column(name="data_source", length = 2)
+    @Column(name = "data_source", length = 2)
     private String dataSource;
 
-    @Column(name="account_number", length = 10)
+    @Column(name = "account_number", length = 10)
     private String accountNumber;
 
-    @Column(name="account_name", length = 50)
+    @Column(name = "account_name", length = 50)
     private String accountName;
 
-    @Column(name="od_limit", length = 16, scale = 2)
+    @Column(name = "od_limit", length = 16, scale = 2)
     private BigDecimal odLimit;
 
-    @Column(name="gross_credit_balance", length = 14, scale = 2)
+    @Column(name = "gross_credit_balance", length = 14, scale = 2)
     private BigDecimal grossCreditBalance;
 
-    @Column(name="credit_txn_number", length = 5)
+    @Column(name = "credit_txn_number", length = 5)
     private Integer creditTXNNumber;
 
-    @Column(name="gross_debit_balance", length = 14, scale = 2)
+    @Column(name = "gross_debit_balance", length = 14, scale = 2)
     private BigDecimal grossDebitBalance;
 
-    @Column(name="debit_txn_number", length = 14, scale = 2)
+    @Column(name = "debit_txn_number", length = 14, scale = 2)
     private Integer debitTXNNumber;
 
-    @Column(name="highest_balance_date")
+    @Column(name = "highest_balance_date")
     private Date highestBalanceDate;
 
-    @Column(name="highest_balance", length = 14, scale = 2)
+    @Column(name = "highest_balance", length = 14, scale = 2)
     private BigDecimal highestBalance;
 
-    @Column(name="lowest_balance_date")
+    @Column(name = "lowest_balance_date")
     private Date lowestBalanceDate;
 
-    @Column(name="lowest_balance", length = 14, scale = 2)
+    @Column(name = "lowest_balance", length = 14, scale = 2)
     private BigDecimal lowestBalance;
 
-    @Column(name="month_end_balance", length = 14, scale = 2)
+    @Column(name = "month_end_balance", length = 14, scale = 2)
     private BigDecimal monthEndBalance;
 
-    @Column(name="check_return_number", length = 5)
+    @Column(name = "check_return_number", length = 5)
     private Integer checkReturnNumber;
 
-    @Column(name="check_return_amount", length = 14, scale = 2)
+    @Column(name = "check_return_amount", length = 14, scale = 2)
     private BigDecimal checkReturnAmount;
 
-    @Column(name="od_limit_number", length = 5)
+    @Column(name = "od_limit_number", length = 5)
     private Integer odLimitNumber;
 
-    @Column(name="start_od_date")
+    @Column(name = "start_od_date")
     private Date startOdDate;
 
-    @Column(name="end_od_date")
+    @Column(name = "end_od_date")
     private Date endOdDate;
 
-    @Column(name="as_of_date")
+    @Column(name = "as_of_date")
     private Date asOfDate;
 
     public long getId() {
@@ -137,7 +140,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getOdLimit() {
-        if(odLimit==null){
+        if (odLimit == null) {
             return BigDecimal.ZERO;
         }
         return odLimit;
@@ -148,7 +151,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getGrossCreditBalance() {
-        if(grossCreditBalance==null){
+        if (grossCreditBalance == null) {
             return BigDecimal.ZERO;
         }
         return grossCreditBalance;
@@ -159,7 +162,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getCreditTXNNumber() {
-        if(creditTXNNumber==null){
+        if (creditTXNNumber == null) {
             return 0;
         }
         return creditTXNNumber;
@@ -170,7 +173,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getGrossDebitBalance() {
-        if(grossDebitBalance==null){
+        if (grossDebitBalance == null) {
             return BigDecimal.ZERO;
         }
         return grossDebitBalance;
@@ -181,7 +184,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getDebitTXNNumber() {
-        if(debitTXNNumber==null){
+        if (debitTXNNumber == null) {
             return 0;
         }
         return debitTXNNumber;
@@ -200,7 +203,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getHighestBalance() {
-        if(highestBalance==null){
+        if (highestBalance == null) {
             return BigDecimal.ZERO;
         }
         return highestBalance;
@@ -219,7 +222,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getLowestBalance() {
-        if(lowestBalance==null){
+        if (lowestBalance == null) {
             return BigDecimal.ZERO;
         }
         return lowestBalance;
@@ -230,7 +233,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getMonthEndBalance() {
-        if(monthEndBalance==null){
+        if (monthEndBalance == null) {
             return BigDecimal.ZERO;
         }
         return monthEndBalance;
@@ -241,7 +244,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getCheckReturnNumber() {
-        if(checkReturnNumber==null){
+        if (checkReturnNumber == null) {
             return 0;
         }
         return checkReturnNumber;
@@ -252,7 +255,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public BigDecimal getCheckReturnAmount() {
-        if(checkReturnAmount==null){
+        if (checkReturnAmount == null) {
             return BigDecimal.ZERO;
         }
         return checkReturnAmount;
@@ -263,7 +266,7 @@ public class BankStatement1 implements Serializable {
     }
 
     public Integer getOdLimitNumber() {
-        if(odLimitNumber==null){
+        if (odLimitNumber == null) {
             return 0;
         }
         return odLimitNumber;

@@ -1,19 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
-import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigDecimal;
 
 
 /**
  * <p>Java class for AttributeType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="AttributeType">
  *   &lt;complexContent>
@@ -29,16 +29,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AttributeType", propOrder = {
-    "name",
-    "stringValue",
-    "numericValue",
-    "dateTimeValue",
-    "booleanValue"
+        "name",
+        "stringValue",
+        "numericValue",
+        "dateTimeValue",
+        "booleanValue"
 })
 public class AttributeType {
 
@@ -51,11 +49,9 @@ public class AttributeType {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getName() {
         return name;
@@ -63,11 +59,9 @@ public class AttributeType {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;
@@ -75,11 +69,9 @@ public class AttributeType {
 
     /**
      * Gets the value of the stringValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getStringValue() {
         return stringValue;
@@ -87,11 +79,9 @@ public class AttributeType {
 
     /**
      * Sets the value of the stringValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStringValue(String value) {
         this.stringValue = value;
@@ -99,11 +89,9 @@ public class AttributeType {
 
     /**
      * Gets the value of the numericValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getNumericValue() {
         return numericValue;
@@ -111,11 +99,9 @@ public class AttributeType {
 
     /**
      * Sets the value of the numericValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setNumericValue(BigDecimal value) {
         this.numericValue = value;
@@ -123,11 +109,9 @@ public class AttributeType {
 
     /**
      * Gets the value of the dateTimeValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getDateTimeValue() {
         return dateTimeValue;
@@ -135,11 +119,9 @@ public class AttributeType {
 
     /**
      * Sets the value of the dateTimeValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setDateTimeValue(XMLGregorianCalendar value) {
         this.dateTimeValue = value;
@@ -147,11 +129,9 @@ public class AttributeType {
 
     /**
      * Gets the value of the booleanValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isBooleanValue() {
         return booleanValue;
@@ -159,11 +139,9 @@ public class AttributeType {
 
     /**
      * Sets the value of the booleanValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setBooleanValue(Boolean value) {
         this.booleanValue = value;

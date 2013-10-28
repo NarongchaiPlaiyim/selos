@@ -1,23 +1,23 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
 public class TransactionModel {
-    private String trackingid; 
-    private String user; 
-    private String transactiondate; 
-    private String mediacode; 
-    private String inquirypurpose; 
-    private String inquirystatus; 
-    private String confirmconsent; 
+    private String trackingid;
+    private String user;
+    private String transactiondate;
+    private String mediacode;
+    private String inquirypurpose;
+    private String inquirystatus;
+    private String confirmconsent;
     private String language;
-    private String producttype; 
-    private String memberref; 
-    private String requestdate; 
+    private String producttype;
+    private String memberref;
+    private String requestdate;
     private String responsedate;
     private H2HRequestModel h2hrequest;
     private AttributeModel attribute;
     private H2HResponseModel h2hresponse;
     private H2HErrorModel h2herror;
-    
+
     public String getTrackingid() {
         return trackingid;
     }

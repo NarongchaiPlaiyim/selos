@@ -14,11 +14,11 @@ public class PotentialColToTCGCol implements Serializable {
     private int id;
 
     @OneToOne
-    @JoinColumn(name="potential_id")
+    @JoinColumn(name = "potential_id")
     private PotentialCollateral potentialCollateral;
 
     @OneToOne
-    @JoinColumn(name="tcgcollateral_id")
+    @JoinColumn(name = "tcgcollateral_id")
     private TCGCollateralType tcgCollateralType;
 
     @Column(name = "active")

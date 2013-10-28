@@ -13,10 +13,10 @@ public class RoleType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 20)
+    @Column(name = "name", length = 20)
     @Enumerated(EnumType.STRING)
     private RoleTypeName roleTypeName;
-    @Column(name = "description",length = 50)
+    @Column(name = "description", length = 50)
     private String description;
     @Column(name = "active")
     private int active;

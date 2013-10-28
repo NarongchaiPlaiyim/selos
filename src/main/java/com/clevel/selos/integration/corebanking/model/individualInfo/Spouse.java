@@ -10,7 +10,7 @@ public class Spouse implements Serializable {
     private String citizenID;
     private String dateOfBirth;
 
-    public Spouse(){
+    public Spouse() {
 
     }
 
@@ -52,7 +52,6 @@ public class Spouse implements Serializable {
     public void setCitizenID(String citizenID) {
         this.citizenID = citizenID;
     }
-
 
 
 }

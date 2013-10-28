@@ -39,7 +39,7 @@ public class Reference implements Serializable {
     @Column(name = "active")
     private int active;
 
-    public Reference(){
+    public Reference() {
     }
 
     public int getId() {

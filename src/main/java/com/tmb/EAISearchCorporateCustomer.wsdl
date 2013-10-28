@@ -1,52 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://data.sme.tmb.com/EAISearchCorporateCustomer/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EAISearchCorporateCustomer" targetNamespace="http://data.sme.tmb.com/EAISearchCorporateCustomer/">
-  <wsdl:types>
-    <xsd:schema targetNamespace="http://data.sme.tmb.com/EAISearchCorporateCustomer/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:Q1="http://data.sme.tmb.com/requestSearchCorporateCustomer" xmlns:Q2="http://data.sme.tmb.com/responseSearchCorporateCustomer">
-            <xsd:import schemaLocation="res_searchCorporateCustomer.xsd" namespace="http://data.sme.tmb.com/responseSearchCorporateCustomer"></xsd:import>
-            <xsd:import schemaLocation="req_searchCorporateCustomer.xsd" namespace="http://data.sme.tmb.com/requestSearchCorporateCustomer"></xsd:import>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://data.sme.tmb.com/EAISearchCorporateCustomer/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EAISearchCorporateCustomer"
+                  targetNamespace="http://data.sme.tmb.com/EAISearchCorporateCustomer/">
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://data.sme.tmb.com/EAISearchCorporateCustomer/"
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    xmlns:Q1="http://data.sme.tmb.com/requestSearchCorporateCustomer"
+                    xmlns:Q2="http://data.sme.tmb.com/responseSearchCorporateCustomer">
+            <xsd:import schemaLocation="res_searchCorporateCustomer.xsd"
+                        namespace="http://data.sme.tmb.com/responseSearchCorporateCustomer"></xsd:import>
+            <xsd:import schemaLocation="req_searchCorporateCustomer.xsd"
+                        namespace="http://data.sme.tmb.com/requestSearchCorporateCustomer"></xsd:import>
             <xsd:element name="searchCorporateCustomer">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="requestData" type="Q1:reqSearchCorporateCustomer"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-      <xsd:element name="searchCorporateCustomerResponse">
-        <xsd:complexType>
-          <xsd:sequence>
-            <xsd:element name="responseData" type="Q2:resSearchCorporateCustomer"/>
-          </xsd:sequence>
-        </xsd:complexType>
-      </xsd:element>
-    </xsd:schema>
-  </wsdl:types>
-  <wsdl:message name="searchCorporateCustomerRequest">
-    <wsdl:part element="tns:searchCorporateCustomer" name="parameters"/>
-  </wsdl:message>
-  <wsdl:message name="searchCorporateCustomerResponse">
-    <wsdl:part element="tns:searchCorporateCustomerResponse" name="parameters"/>
-  </wsdl:message>
-  <wsdl:portType name="EAISearchCorporateCustomer">
-    <wsdl:operation name="searchCorporateCustomer">
-      <wsdl:input message="tns:searchCorporateCustomerRequest"/>
-      <wsdl:output message="tns:searchCorporateCustomerResponse"/>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="EAISearchCorporateCustomer" type="tns:EAISearchCorporateCustomer">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="searchCorporateCustomer">
-      <soap:operation soapAction="searchCorporateCustomer"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="EAISearchCorporateCustomer">
-    <wsdl:port binding="tns:EAISearchCorporateCustomer" name="EAISearchCorporateCustomer">
-      <soap:address location="http://localhost:7800/EAISearchCorporateCustomer"/>
-    </wsdl:port>
-  </wsdl:service>
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="requestData" type="Q1:reqSearchCorporateCustomer"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="searchCorporateCustomerResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="responseData" type="Q2:resSearchCorporateCustomer"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="searchCorporateCustomerRequest">
+        <wsdl:part element="tns:searchCorporateCustomer" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="searchCorporateCustomerResponse">
+        <wsdl:part element="tns:searchCorporateCustomerResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="EAISearchCorporateCustomer">
+        <wsdl:operation name="searchCorporateCustomer">
+            <wsdl:input message="tns:searchCorporateCustomerRequest"/>
+            <wsdl:output message="tns:searchCorporateCustomerResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="EAISearchCorporateCustomer" type="tns:EAISearchCorporateCustomer">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="searchCorporateCustomer">
+            <soap:operation soapAction="searchCorporateCustomer"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="EAISearchCorporateCustomer">
+        <wsdl:port binding="tns:EAISearchCorporateCustomer" name="EAISearchCorporateCustomer">
+            <soap:address location="http://localhost:7800/EAISearchCorporateCustomer"/>
+        </wsdl:port>
+    </wsdl:service>
 </wsdl:definitions>

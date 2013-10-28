@@ -15,9 +15,9 @@ public class Action implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
-    @Column(name = "name",length = 50)
+    @Column(name = "name", length = 50)
     private String name;
-    @Column(name = "description",length = 100)
+    @Column(name = "description", length = 100)
     private String description;
     @Column(name = "submit_bpm")
     private int submitBPM;

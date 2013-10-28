@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory,Long> {
+public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory, Long> {
     @Inject
     private Logger log;
 
@@ -17,15 +17,15 @@ public class CaseCreationHistoryDAO extends GenericDAO<CaseCreationHistory,Long>
     }
 
     public boolean isExist(String caNumber) {
-        log.debug("isExist. (caNumber: {})",caNumber);
+        log.debug("isExist. (caNumber: {})", caNumber);
 
         boolean exist = isRecordExist(Restrictions.and(
                 Restrictions.eq("caNumber", caNumber),
                 Restrictions.or(
                         Restrictions.eq("status", ActionResult.SUCCESS),
                         Restrictions.eq("status", ActionResult.SUCCEED),
-                        Restrictions.eq("status",ActionResult.WAITING)))
-                );
+                        Restrictions.eq("status", ActionResult.WAITING)))
+        );
 
         log.debug("isExist. (result: {})", exist);
         return exist;

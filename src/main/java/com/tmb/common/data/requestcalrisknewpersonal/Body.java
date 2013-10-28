@@ -7,9 +7,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -251,40 +251,38 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "firstName",
-    "lastName",
-    "firstNameEng",
-    "lastNameEng",
-    "dateOfBirth",
-    "cardId",
-    "nationalCode",
-    "nationalCode2",
-    "address",
-    "city",
-    "countryCode",
-    "occupationCode",
-    "businessCode",
-    "isoCountryOfBirth",
-    "isoCountryIncomeSource",
-    "branchCode",
-    "branchName",
-    "referenceNo",
-    "tellerId",
-    "reserve1",
-    "reserve2",
-    "reserve3",
-    "reserve4",
-    "reserve5",
-    "reserve6",
-    "reserve7",
-    "reserve8",
-    "reserve9",
-    "reserve10"
+        "firstName",
+        "lastName",
+        "firstNameEng",
+        "lastNameEng",
+        "dateOfBirth",
+        "cardId",
+        "nationalCode",
+        "nationalCode2",
+        "address",
+        "city",
+        "countryCode",
+        "occupationCode",
+        "businessCode",
+        "isoCountryOfBirth",
+        "isoCountryIncomeSource",
+        "branchCode",
+        "branchName",
+        "referenceNo",
+        "tellerId",
+        "reserve1",
+        "reserve2",
+        "reserve3",
+        "reserve4",
+        "reserve5",
+        "reserve6",
+        "reserve7",
+        "reserve8",
+        "reserve9",
+        "reserve10"
 })
 public class Body {
 
@@ -349,11 +347,9 @@ public class Body {
 
     /**
      * Gets the value of the firstName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFirstName() {
         return firstName;
@@ -361,11 +357,9 @@ public class Body {
 
     /**
      * Sets the value of the firstName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setFirstName(String value) {
         this.firstName = value;
@@ -373,11 +367,9 @@ public class Body {
 
     /**
      * Gets the value of the lastName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLastName() {
         return lastName;
@@ -385,11 +377,9 @@ public class Body {
 
     /**
      * Sets the value of the lastName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLastName(String value) {
         this.lastName = value;
@@ -397,11 +387,9 @@ public class Body {
 
     /**
      * Gets the value of the firstNameEng property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getFirstNameEng() {
         return firstNameEng;
@@ -409,23 +397,19 @@ public class Body {
 
     /**
      * Sets the value of the firstNameEng property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setFirstNameEng(JAXBElement<String> value) {
-        this.firstNameEng = ((JAXBElement<String> ) value);
+        this.firstNameEng = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the lastNameEng property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getLastNameEng() {
         return lastNameEng;
@@ -433,23 +417,19 @@ public class Body {
 
     /**
      * Sets the value of the lastNameEng property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setLastNameEng(JAXBElement<String> value) {
-        this.lastNameEng = ((JAXBElement<String> ) value);
+        this.lastNameEng = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the dateOfBirth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getDateOfBirth() {
         return dateOfBirth;
@@ -457,23 +437,19 @@ public class Body {
 
     /**
      * Sets the value of the dateOfBirth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setDateOfBirth(JAXBElement<String> value) {
-        this.dateOfBirth = ((JAXBElement<String> ) value);
+        this.dateOfBirth = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the cardId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCardId() {
         return cardId;
@@ -481,11 +457,9 @@ public class Body {
 
     /**
      * Sets the value of the cardId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCardId(String value) {
         this.cardId = value;
@@ -493,11 +467,9 @@ public class Body {
 
     /**
      * Gets the value of the nationalCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getNationalCode() {
         return nationalCode;
@@ -505,23 +477,19 @@ public class Body {
 
     /**
      * Sets the value of the nationalCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setNationalCode(JAXBElement<String> value) {
-        this.nationalCode = ((JAXBElement<String> ) value);
+        this.nationalCode = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the nationalCode2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getNationalCode2() {
         return nationalCode2;
@@ -529,23 +497,19 @@ public class Body {
 
     /**
      * Sets the value of the nationalCode2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setNationalCode2(JAXBElement<String> value) {
-        this.nationalCode2 = ((JAXBElement<String> ) value);
+        this.nationalCode2 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the address property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getAddress() {
         return address;
@@ -553,23 +517,19 @@ public class Body {
 
     /**
      * Sets the value of the address property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setAddress(JAXBElement<String> value) {
-        this.address = ((JAXBElement<String> ) value);
+        this.address = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the city property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getCity() {
         return city;
@@ -577,23 +537,19 @@ public class Body {
 
     /**
      * Sets the value of the city property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setCity(JAXBElement<String> value) {
-        this.city = ((JAXBElement<String> ) value);
+        this.city = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the countryCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getCountryCode() {
         return countryCode;
@@ -601,23 +557,19 @@ public class Body {
 
     /**
      * Sets the value of the countryCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setCountryCode(JAXBElement<String> value) {
-        this.countryCode = ((JAXBElement<String> ) value);
+        this.countryCode = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the occupationCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getOccupationCode() {
         return occupationCode;
@@ -625,23 +577,19 @@ public class Body {
 
     /**
      * Sets the value of the occupationCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setOccupationCode(JAXBElement<String> value) {
-        this.occupationCode = ((JAXBElement<String> ) value);
+        this.occupationCode = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the businessCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getBusinessCode() {
         return businessCode;
@@ -649,23 +597,19 @@ public class Body {
 
     /**
      * Sets the value of the businessCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setBusinessCode(JAXBElement<String> value) {
-        this.businessCode = ((JAXBElement<String> ) value);
+        this.businessCode = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the isoCountryOfBirth property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getIsoCountryOfBirth() {
         return isoCountryOfBirth;
@@ -673,23 +617,19 @@ public class Body {
 
     /**
      * Sets the value of the isoCountryOfBirth property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setIsoCountryOfBirth(JAXBElement<String> value) {
-        this.isoCountryOfBirth = ((JAXBElement<String> ) value);
+        this.isoCountryOfBirth = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the isoCountryIncomeSource property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getIsoCountryIncomeSource() {
         return isoCountryIncomeSource;
@@ -697,23 +637,19 @@ public class Body {
 
     /**
      * Sets the value of the isoCountryIncomeSource property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setIsoCountryIncomeSource(JAXBElement<String> value) {
-        this.isoCountryIncomeSource = ((JAXBElement<String> ) value);
+        this.isoCountryIncomeSource = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the branchCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getBranchCode() {
         return branchCode;
@@ -721,23 +657,19 @@ public class Body {
 
     /**
      * Sets the value of the branchCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setBranchCode(JAXBElement<String> value) {
-        this.branchCode = ((JAXBElement<String> ) value);
+        this.branchCode = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the branchName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getBranchName() {
         return branchName;
@@ -745,23 +677,19 @@ public class Body {
 
     /**
      * Sets the value of the branchName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setBranchName(JAXBElement<String> value) {
-        this.branchName = ((JAXBElement<String> ) value);
+        this.branchName = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the referenceNo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReferenceNo() {
         return referenceNo;
@@ -769,23 +697,19 @@ public class Body {
 
     /**
      * Sets the value of the referenceNo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReferenceNo(JAXBElement<String> value) {
-        this.referenceNo = ((JAXBElement<String> ) value);
+        this.referenceNo = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the tellerId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getTellerId() {
         return tellerId;
@@ -793,23 +717,19 @@ public class Body {
 
     /**
      * Sets the value of the tellerId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setTellerId(JAXBElement<String> value) {
-        this.tellerId = ((JAXBElement<String> ) value);
+        this.tellerId = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve1() {
         return reserve1;
@@ -817,23 +737,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve1(JAXBElement<String> value) {
-        this.reserve1 = ((JAXBElement<String> ) value);
+        this.reserve1 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve2() {
         return reserve2;
@@ -841,23 +757,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve2(JAXBElement<String> value) {
-        this.reserve2 = ((JAXBElement<String> ) value);
+        this.reserve2 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve3() {
         return reserve3;
@@ -865,23 +777,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve3(JAXBElement<String> value) {
-        this.reserve3 = ((JAXBElement<String> ) value);
+        this.reserve3 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve4() {
         return reserve4;
@@ -889,23 +797,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve4(JAXBElement<String> value) {
-        this.reserve4 = ((JAXBElement<String> ) value);
+        this.reserve4 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve5 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve5() {
         return reserve5;
@@ -913,23 +817,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve5 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve5(JAXBElement<String> value) {
-        this.reserve5 = ((JAXBElement<String> ) value);
+        this.reserve5 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve6 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve6() {
         return reserve6;
@@ -937,23 +837,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve6 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve6(JAXBElement<String> value) {
-        this.reserve6 = ((JAXBElement<String> ) value);
+        this.reserve6 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve7 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve7() {
         return reserve7;
@@ -961,23 +857,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve7 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve7(JAXBElement<String> value) {
-        this.reserve7 = ((JAXBElement<String> ) value);
+        this.reserve7 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve8 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve8() {
         return reserve8;
@@ -985,23 +877,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve8 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve8(JAXBElement<String> value) {
-        this.reserve8 = ((JAXBElement<String> ) value);
+        this.reserve8 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve9 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve9() {
         return reserve9;
@@ -1009,23 +897,19 @@ public class Body {
 
     /**
      * Sets the value of the reserve9 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve9(JAXBElement<String> value) {
-        this.reserve9 = ((JAXBElement<String> ) value);
+        this.reserve9 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the reserve10 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getReserve10() {
         return reserve10;
@@ -1033,14 +917,12 @@ public class Body {
 
     /**
      * Sets the value of the reserve10 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setReserve10(JAXBElement<String> value) {
-        this.reserve10 = ((JAXBElement<String> ) value);
+        this.reserve10 = ((JAXBElement<String>) value);
     }
 
 }

@@ -36,7 +36,7 @@ public class BizInfoSummaryControl {
     @Inject
     WorkCaseDAO workCaseDAO;
 
-    public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView,long workCaseId){
+    public void onSaveBizSummaryToDB(BizInfoSummaryView bizInfoSummaryView, long workCaseId) {
         BizInfoSummary bizInfoSummary;
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -48,7 +48,7 @@ public class BizInfoSummaryControl {
     }
 
 
-    public BizInfoSummaryView onGetBizInfoSummaryByWorkCase(long workCaseId){
+    public BizInfoSummaryView onGetBizInfoSummaryByWorkCase(long workCaseId) {
         log.info("onGetBizInfoSummaryByWorkCase ");
 
         BizInfoSummary bizInfoSummary;
@@ -56,19 +56,19 @@ public class BizInfoSummaryControl {
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        log.info("workCase after findById " + workCase );
+        log.info("workCase after findById " + workCase);
 
-        bizInfoSummary  = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+        bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
 
-        if( bizInfoSummary != null){
+        if (bizInfoSummary != null) {
             bizInfoSummaryView = bizInfoSummaryTransform.transformToView(bizInfoSummary);
-        }else{
+        } else {
             bizInfoSummaryView = null;
         }
         return bizInfoSummaryView;
     }
 
-    public List<BizInfoDetailView> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID){
+    public List<BizInfoDetailView> onGetBizInfoDetailByBizInfoSummary(long bizInfoSummaryID) {
         log.info("onGetBizInfoSummaryByWorkCase ");
 
         List<BizInfoDetail> bizInfoDetailList;
@@ -79,17 +79,17 @@ public class BizInfoSummaryControl {
 
         BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.findById(bizInfoSummaryID);
 
-        log.info("workCase after findById " + bizInfoSummary );
+        log.info("workCase after findById " + bizInfoSummary);
 
-        bizInfoDetailList  = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
+        bizInfoDetailList = bizInfoDetailDAO.findByBizInfoSummaryId(bizInfoSummary);
 
-        if( bizInfoDetailList.size() != 0){
-            for(int i =0 ; i<bizInfoDetailList.size();i++){
-                bizInfoDetailTemp =  bizInfoDetailList.get(i);
+        if (bizInfoDetailList.size() != 0) {
+            for (int i = 0; i < bizInfoDetailList.size(); i++) {
+                bizInfoDetailTemp = bizInfoDetailList.get(i);
                 bizInfoDetailViewTemp = bizInfoDetailTransform.transformToView(bizInfoDetailTemp);
                 bizInfoDetailViewList.add(bizInfoDetailViewTemp);
             }
-        }else{
+        } else {
             //bizInfoSummaryView = null;
         }
         return bizInfoDetailViewList;

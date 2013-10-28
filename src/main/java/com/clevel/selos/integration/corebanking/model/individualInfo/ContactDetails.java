@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class ContactDetails implements Serializable{
+public class ContactDetails implements Serializable {
     private String addressNo;
     private String addressMoo;
     private String addressBuilding;
@@ -18,7 +18,7 @@ public class ContactDetails implements Serializable{
     private String country;
     private String countryCode;
 
-    public ContactDetails(){
+    public ContactDetails() {
 
     }
 

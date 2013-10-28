@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 
-public class NCBDetailDAO extends GenericDAO<NCBDetail,Long> {
+public class NCBDetailDAO extends GenericDAO<NCBDetail, Long> {
     @Inject
     private Logger log;
 
@@ -20,13 +20,12 @@ public class NCBDetailDAO extends GenericDAO<NCBDetail,Long> {
     }
 
 
-
-    public List<NCBDetail> findNCBDetailByNcbId(long ncbId){
-        log.info("findNCBDetailByTcgId ::: {}", ncbId );
+    public List<NCBDetail> findNCBDetailByNcbId(long ncbId) {
+        log.info("findNCBDetailByTcgId ::: {}", ncbId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("ncb.id", ncbId));
         criteria.addOrder(Order.asc("id"));
-        List<NCBDetail> ncbDetailList = (List<NCBDetail>)criteria.list();
+        List<NCBDetail> ncbDetailList = (List<NCBDetail>) criteria.list();
         log.info("ncbDetailList ::: size : {}", ncbDetailList.size());
         return ncbDetailList;
     }

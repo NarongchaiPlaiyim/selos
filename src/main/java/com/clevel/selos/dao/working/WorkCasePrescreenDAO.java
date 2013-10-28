@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen,Long> {
+public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen, Long> {
     @Inject
     private Logger log;
 
@@ -16,25 +16,25 @@ public class WorkCasePrescreenDAO extends GenericDAO<WorkCasePrescreen,Long> {
     public WorkCasePrescreenDAO() {
     }
 
-    public long findIdByWobNumber(String wobNumber){
+    public long findIdByWobNumber(String wobNumber) {
         log.info("findIdByWobNum : {}", wobNumber);
         long workCasePreScreenId = 0;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
-        WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen)criteria.uniqueResult();
-        if(workCasePrescreen != null){
+        WorkCasePrescreen workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
+        if (workCasePrescreen != null) {
             workCasePreScreenId = workCasePrescreen.getId();
         }
 
         return workCasePreScreenId;
     }
 
-    public WorkCasePrescreen findByWobNumber(String wobNumber){
+    public WorkCasePrescreen findByWobNumber(String wobNumber) {
         log.info("findByWobNumber : {}", wobNumber);
         WorkCasePrescreen workCasePrescreen;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
-        workCasePrescreen = (WorkCasePrescreen)criteria.uniqueResult();
+        workCasePrescreen = (WorkCasePrescreen) criteria.uniqueResult();
         return workCasePrescreen;
     }
 }

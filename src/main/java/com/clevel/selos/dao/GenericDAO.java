@@ -11,9 +11,9 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO<T,ID>,Serializable {
+public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<T, ID>, Serializable {
     private Class<T> entityClass;
-//    @Inject
+    //    @Inject
 //    private Logger log;
     private Session session;
     @PersistenceContext
@@ -22,11 +22,11 @@ public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO
     @PostConstruct
     @SuppressWarnings("unchecked")
     public void onCreation() {
-        this.entityClass = (Class<T>) ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.entityClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     protected Session getSession() {
-        return (em==null)?session:(Session) em.getDelegate();
+        return (em == null) ? session : (Session) em.getDelegate();
     }
 
     public void setSession(Session session) {
@@ -71,7 +71,7 @@ public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO
     }
 
     public void persist(List<T> entities) {
-        for (T entity: entities) {
+        for (T entity : entities) {
             getSession().saveOrUpdate(entity);
         }
     }
@@ -81,7 +81,7 @@ public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO
     }
 
     public void delete(List<T> entities) {
-        for (T entity: entities) {
+        for (T entity : entities) {
             getSession().delete(entity);
         }
     }
@@ -92,7 +92,7 @@ public abstract class  GenericDAO<T, ID extends Serializable> implements BaseDAO
 
     public boolean isRecordExist(Criterion... criterion) {
         List<T> list = findByCriteria(criterion);
-        return list.size()>0;
+        return list.size() > 0;
     }
 
     public Criteria createCriteria() {

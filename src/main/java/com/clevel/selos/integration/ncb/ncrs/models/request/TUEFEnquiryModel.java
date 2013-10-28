@@ -8,18 +8,18 @@ import java.util.ArrayList;
 
 @XStreamAlias("tuefenquiry")
 public class TUEFEnquiryModel implements Serializable {
-    
-    
+
+
     @XStreamAlias("header")
     private TUEFEnquiryHeaderModel header;
-    
+
     @XStreamImplicit(itemFieldName = "name")
     private ArrayList<TUEFEnquiryNameModel> name = new ArrayList<TUEFEnquiryNameModel>();
-    
+
     @XStreamImplicit(itemFieldName = "id")
     private ArrayList<TUEFEnquiryIdModel> id = new ArrayList<TUEFEnquiryIdModel>();
 
-    
+
     public TUEFEnquiryModel(TUEFEnquiryHeaderModel header, ArrayList<TUEFEnquiryNameModel> name, ArrayList<TUEFEnquiryIdModel> id) {
         this.header = header;
         this.name = name;
@@ -37,6 +37,6 @@ public class TUEFEnquiryModel implements Serializable {
     public void setId(ArrayList<TUEFEnquiryIdModel> id) {
         this.id = id;
     }*/
-    
-    
+
+
 }

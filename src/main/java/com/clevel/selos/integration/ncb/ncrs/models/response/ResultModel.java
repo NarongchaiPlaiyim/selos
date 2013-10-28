@@ -5,8 +5,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.io.Serializable;
 
 @XStreamAlias("result")
-public class ResultModel  implements Serializable {
-    
+public class ResultModel implements Serializable {
+
     @XStreamAlias("result")
     private String result;
 
@@ -17,6 +17,6 @@ public class ResultModel  implements Serializable {
     public String getResult() {
         return result;
     }
-    
-    
+
+
 }

@@ -12,10 +12,10 @@ public class Province implements Serializable {
     @Id
     @Column(name = "code")
     private int code;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
     @OneToOne
-    @JoinColumn(name="region_id")
+    @JoinColumn(name = "region_id")
     private Region region;
     @Column(name = "active")
     private int active;

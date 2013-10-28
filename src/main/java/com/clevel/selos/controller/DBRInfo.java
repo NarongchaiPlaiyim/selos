@@ -2,8 +2,6 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.LoanTypeControl;
-import com.clevel.selos.dao.working.DBRDAO;
-import com.clevel.selos.dao.working.DBRDetailDAO;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.LoanTypeView;
@@ -52,7 +50,7 @@ public class DBRInfo implements Serializable {
     LoanTypeControl loanTypeControl;
 
     // message //
-    private String messageHeader ;
+    private String messageHeader;
     private String message;
 
     // *** Content ***///
@@ -75,11 +73,11 @@ public class DBRInfo implements Serializable {
     private boolean isComplete;
 
 
-    public DBRInfo(){
+    public DBRInfo() {
 
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
@@ -88,19 +86,19 @@ public class DBRInfo implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
-        }else{
+        } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }
@@ -112,7 +110,7 @@ public class DBRInfo implements Serializable {
         dbr = new DBRView();
         dbr = dbrControl.getDBRByWorkCase(workCaseId);
         dbrDetails = new ArrayList<DBRDetailView>();
-        if(dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()){
+        if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
             dbrDetails = dbr.getDbrDetailViews();
         }
         loanTypes = new ArrayList<LoanTypeView>();
@@ -120,32 +118,32 @@ public class DBRInfo implements Serializable {
         ncbViews = new ArrayList<NcbView>(); // HardCode
     }
 
-    public void initAddDBRDetail(){
+    public void initAddDBRDetail() {
         isComplete = false;
         selectedItem = new DBRDetailView();
 
 
     }
 
-    public void onAddDBRDetail(){
+    public void onAddDBRDetail() {
         log.debug("onAdd DBR Detail :{}", selectedItem);
         RequestContext context = RequestContext.getCurrentInstance();
-        if(selectedItem == null || loanTypes.isEmpty()){
+        if (selectedItem == null || loanTypes.isEmpty()) {
             return;
         }
-        for(LoanTypeView loanTypeView : loanTypes){
-             if(loanTypeView.getId() == selectedItem.getLoanTypeView().getId()){
-                 LoanTypeView loanType = new LoanTypeView();
-                 loanType.setId(selectedItem.getLoanTypeView().getId());
-                 loanType.setName(loanTypeView.getName());
-                 selectedItem.setLoanTypeView(loanType);
-                 break;
-             }
-         }
+        for (LoanTypeView loanTypeView : loanTypes) {
+            if (loanTypeView.getId() == selectedItem.getLoanTypeView().getId()) {
+                LoanTypeView loanType = new LoanTypeView();
+                loanType.setId(selectedItem.getLoanTypeView().getId());
+                loanType.setName(loanTypeView.getName());
+                selectedItem.setLoanTypeView(loanType);
+                break;
+            }
+        }
 
-        if(isUpdate){
+        if (isUpdate) {
             dbrDetails.set(rowIndex, selectedItem);
-        }else{
+        } else {
             dbrDetails.add(selectedItem);
         }
 
@@ -155,25 +153,25 @@ public class DBRInfo implements Serializable {
     }
 
 
-    public void initEditDBRDetail(){
+    public void initEditDBRDetail() {
         isComplete = false;
         log.debug("initEditDBRDetail :{}", selectedItem);
         log.debug("initEditDBRDetail rowIndex:{}", rowIndex);
     }
 
-    public void onEditDBRDetail(){
+    public void onEditDBRDetail() {
         log.debug("initEditDBRDetail :{}", selectedItem);
         log.debug("initEditDBRDetail rowIndex:{}", rowIndex);
         dbrDetails.set(rowIndex, selectedItem);
     }
 
-    public void onDeletedDBRDetail(){
+    public void onDeletedDBRDetail() {
         dbrDetails.remove(rowIndex);
 
     }
 
-    public void onSaveDBRInfo(){
-        try{
+    public void onSaveDBRInfo() {
+        try {
             dbr.setDbrDetailViews(dbrDetails);
             dbrControl.saveDBRInfo(dbr, workCaseId, userId);
             messageHeader = "Save Basic Info Success.";
@@ -184,11 +182,11 @@ public class DBRInfo implements Serializable {
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
             dbrDetails = new ArrayList<DBRDetailView>();
-            if(dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()){
+            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
             }
-        }catch (Exception e){
-            if(e.getCause() != null){
+        } catch (Exception e) {
+            if (e.getCause() != null) {
                 message = "Save Basic Info data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Basic Info data failed. Cause : " + e.getMessage();

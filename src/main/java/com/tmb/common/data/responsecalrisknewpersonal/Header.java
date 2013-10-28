@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for header complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="header">
  *   &lt;complexContent>
@@ -62,16 +62,14 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "header", propOrder = {
-    "reqId",
-    "resCode",
-    "resDesc",
-    "productCode",
-    "acronym"
+        "reqId",
+        "resCode",
+        "resDesc",
+        "productCode",
+        "acronym"
 })
 public class Header {
 
@@ -88,11 +86,9 @@ public class Header {
 
     /**
      * Gets the value of the reqId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getReqId() {
         return reqId;
@@ -100,11 +96,9 @@ public class Header {
 
     /**
      * Sets the value of the reqId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setReqId(String value) {
         this.reqId = value;
@@ -112,11 +106,9 @@ public class Header {
 
     /**
      * Gets the value of the resCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getResCode() {
         return resCode;
@@ -124,11 +116,9 @@ public class Header {
 
     /**
      * Sets the value of the resCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setResCode(String value) {
         this.resCode = value;
@@ -136,11 +126,9 @@ public class Header {
 
     /**
      * Gets the value of the resDesc property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getResDesc() {
         return resDesc;
@@ -148,11 +136,9 @@ public class Header {
 
     /**
      * Sets the value of the resDesc property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setResDesc(String value) {
         this.resDesc = value;
@@ -160,11 +146,9 @@ public class Header {
 
     /**
      * Gets the value of the productCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getProductCode() {
         return productCode;
@@ -172,11 +156,9 @@ public class Header {
 
     /**
      * Sets the value of the productCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductCode(String value) {
         this.productCode = value;
@@ -184,11 +166,9 @@ public class Header {
 
     /**
      * Gets the value of the acronym property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAcronym() {
         return acronym;
@@ -196,11 +176,9 @@ public class Header {
 
     /**
      * Sets the value of the acronym property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAcronym(String value) {
         this.acronym = value;

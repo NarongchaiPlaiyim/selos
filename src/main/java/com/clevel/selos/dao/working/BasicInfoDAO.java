@@ -13,15 +13,15 @@ public class BasicInfoDAO extends GenericDAO<BasicInfo, Long> {
     private Logger log;
 
     @Inject
-    public BasicInfoDAO(){
+    public BasicInfoDAO() {
     }
 
-    public BasicInfo findByWorkCaseId(long workCaseId){
+    public BasicInfo findByWorkCaseId(long workCaseId) {
         log.info("findByWorkCaseId : {}", workCaseId);
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
-        BasicInfo basicInfo = (BasicInfo)criteria.uniqueResult();
+        BasicInfo basicInfo = (BasicInfo) criteria.uniqueResult();
 
         return basicInfo;
     }

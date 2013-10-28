@@ -14,15 +14,15 @@ public class QualitativeBDAO extends GenericDAO<QualitativeB, Integer> {
     private Logger log;
 
     @Inject
-    public QualitativeBDAO(){
+    public QualitativeBDAO() {
 
     }
 
-    public QualitativeB findByWorkCase(WorkCase workCase){
+    public QualitativeB findByWorkCase(WorkCase workCase) {
         log.info("findByWorkCaseId ::: workCase : {}", workCase);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase", workCase));
-        QualitativeB qualitativeB = (QualitativeB)criteria.uniqueResult();
+        QualitativeB qualitativeB = (QualitativeB) criteria.uniqueResult();
 
         return qualitativeB;
     }

@@ -6,19 +6,19 @@ import java.io.Serializable;
 
 @XStreamAlias("dispute")
 public class SubjectDisputeModel implements Serializable {
-    
+
     @XStreamAlias("disputedate")
     private String disputedate;
-    
+
     @XStreamAlias("disputetime")
     private String disputetime;
-    
+
     @XStreamAlias("disputecode")
     private String disputecode;
-    
+
     @XStreamAlias("disputecodedesc")
     private String disputecodedesc;
-    
+
     @XStreamAlias("disputecoderemark")
     private String disputecoderemark;
 
@@ -49,7 +49,7 @@ public class SubjectDisputeModel implements Serializable {
     public String getDisputecoderemark() {
         return disputecoderemark;
     }
-    
-    
+
+
 }
 

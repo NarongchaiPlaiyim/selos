@@ -3,7 +3,7 @@ package com.clevel.selos.integration.ncb.ncrs.models.response;
 import java.io.Serializable;
 
 public class EnquiryModel implements Serializable {
-    
+
     private String enqdate;
     private String enqtime;
     private String membercode;
@@ -49,6 +49,6 @@ public class EnquiryModel implements Serializable {
     public String getCurrencycode() {
         return currencycode;
     }
-    
-    
+
+
 }

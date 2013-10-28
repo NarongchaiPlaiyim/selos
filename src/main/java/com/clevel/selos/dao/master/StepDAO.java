@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class StepDAO extends GenericDAO<Step,Long> {
+public class StepDAO extends GenericDAO<Step, Long> {
     @Inject
     private Logger log;
 
@@ -16,11 +16,11 @@ public class StepDAO extends GenericDAO<Step,Long> {
     public StepDAO() {
     }
 
-    public long findIdByStepCode(String stepCode){
+    public long findIdByStepCode(String stepCode) {
         log.info("findIdByStepCode : {}", stepCode);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("stepCode", stepCode));
-        long stepId = Long.parseLong((String)criteria.uniqueResult());
+        long stepId = Long.parseLong((String) criteria.uniqueResult());
 
         return stepId;
     }

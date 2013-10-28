@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram,Integer> {
+public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram, Integer> {
     @Inject
     private Logger log;
 
@@ -20,7 +20,7 @@ public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram,Int
     }
 
     @SuppressWarnings("unchecked")
-    public List<PrdGroupToPrdProgram> getListPrdProByPrdGroup(ProductGroup productGroup ){
+    public List<PrdGroupToPrdProgram> getListPrdProByPrdGroup(ProductGroup productGroup) {
         log.info("getListPrdProByPrdGroup. (ProductGroup: {})", productGroup);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("productGroup", productGroup));

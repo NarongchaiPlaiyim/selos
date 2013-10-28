@@ -92,8 +92,7 @@ public class QualitativeView implements Serializable {
     private User modifyBy;
 
 
-    public  QualitativeView()
-    {
+    public QualitativeView() {
         qualityLevel = new QualityLevel();
         this.qualityResult = "P";        // test
     }
