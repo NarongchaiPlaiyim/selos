@@ -1,7 +1,6 @@
 package com.clevel.selos.integration.coms.tool;
 
 import com.clevel.selos.integration.COMS;
-import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
