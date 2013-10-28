@@ -2,7 +2,6 @@ package com.clevel.selos.transform;
 
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
-import org.joda.time.DateTime;
 
 
 public class NCBTransform extends Transform {
@@ -21,7 +20,7 @@ public class NCBTransform extends Transform {
         ncb.setModifyDate(NCBInfoView.getModifyDate());
         ncb.setCustomer(NCBInfoView.getCustomer());
         ncb.setCheckIn6Month(NCBInfoView.getCheckIn6Month());
-        ncb.setCheckingDate(DateTime.now().toDate());
+        ncb.setCheckingDate(NCBInfoView.getCheckingDate());
         ncb.setCurrentPaymentType(NCBInfoView.getCurrentPaymentType());
         ncb.setHistoryPaymentType(NCBInfoView.getHistoryPaymentType());
         ncb.setNplFlag(NCBInfoView.getNplFlag());
@@ -65,7 +64,7 @@ public class NCBTransform extends Transform {
         NCBInfoView.setCreateDate(ncb.getCreateDate());
         NCBInfoView.setModifyDate(ncb.getModifyDate());
         NCBInfoView.setCheckIn6Month(ncb.getCheckIn6Month());
-        NCBInfoView.setCheckingDate(DateTime.now().toDate());
+        NCBInfoView.setCheckingDate(ncb.getCheckingDate());
         NCBInfoView.setCurrentPaymentType(ncb.getCurrentPaymentType());
         NCBInfoView.setHistoryPaymentType(ncb.getHistoryPaymentType());
         NCBInfoView.setNplFlag(ncb.getNplFlag());

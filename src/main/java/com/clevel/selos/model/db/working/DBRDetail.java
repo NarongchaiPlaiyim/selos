@@ -22,9 +22,6 @@ public class DBRDetail implements Serializable {
     @JoinColumn(name="dbr_id")
     private DBR dbr;
 
-    @Column(name = "active")
-    private boolean active;
-
     @Column(name = "account_name" , length = 100)
     private String accountName;
 
@@ -42,7 +39,7 @@ public class DBRDetail implements Serializable {
     private BigDecimal debtForCalculate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name="create_date", updatable = false)
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,7 +47,7 @@ public class DBRDetail implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name="create_user_id", updatable = false)
     private User createBy;
 
     @OneToOne
@@ -141,14 +138,6 @@ public class DBRDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public AccountType getLoanType() {
         return loanType;
     }
@@ -162,7 +151,6 @@ public class DBRDetail implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("dbr", dbr)
-                .append("active", active)
                 .append("accountName", accountName)
                 .append("loanType", loanType)
                 .append("limit", limit)

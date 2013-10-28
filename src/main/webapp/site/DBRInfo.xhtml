@@ -39,88 +39,88 @@
                                         <table id="dbr_table" >
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.incomeFactor')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}"  style="text-align: right" >
-                                                        <f:convertNumber type="number" integerOnly="true" maxIntegerDigits="3"/>
+                                                    <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}"  style="text-align: right" required="true">
+                                                        <f:convertNumber type="number" integerOnly="true" maxIntegerDigits="3" />
                                                         <p:ajax event="change" update=":frmMain:incomeFactor"/>
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}"   style="text-align: right" >
-                                                        <f:convertNumber type="percent" />
+                                                    <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}"   style="text-align: right" >
+                                                        <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2" />
                                                         <p:ajax event="change" update=":frmMain:dbrInterest"/>
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}"  style="text-align: right" >
-                                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                                    <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}"  style="text-align: right" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" />
                                                         <p:ajax event="change" update=":frmMain:monthlyIncome" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}"  style="text-align: right" >
-                                                        <f:convertNumber minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}"  style="text-align: right" >
+                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:monthlyIncomeAdjust" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomePerMonth')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}" style="text-align: right" >
+                                                    <p:inputText id="monthlyIncomePerMonth" value="#{dbrInfo.dbr.monthlyIncomePerMonth}" style="text-align: right" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:monthlyIncomePerMonth" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.netMonthlyIncome')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"  style="text-align: right" >
+                                                    <p:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"  style="text-align: right" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:netMonthlyIncome" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}"  style="text-align: right">
-                                                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
+                                                    <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}"  style="text-align: right">
+                                                        <f:convertNumber  pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:currentDBR" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td class="title">
-                                                    <h:outputText value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.label.dbrBeforeRequest')}" styleClass="center"/>
                                                 </td>
                                                 <td>
-                                                    <h:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}"  style="text-align: right" >
+                                                    <p:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}"  style="text-align: right" >
                                                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                                                         <p:ajax event="change" update=":frmMain:dbrBeforeRequest" />
-                                                    </h:inputText>
+                                                    </p:inputText>
                                                 </td>
                                             </tr>
                                         </table>
@@ -136,7 +136,7 @@
                                         <table >
                                             <tr>
                                                 <td class="title top">
-                                                    <h:outputText value="#{msg.get('app.dbr.debtOfConfederate')}"/>
+                                                    <p:outputLabel value="#{msg.get('app.dbr.debtOfConfederate')}"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -185,7 +185,7 @@
                                                                      styleClass="smaller" action="#{dbrInfo.initAddDBRDetail()}"
                                                                      update=":dbrDetailDlgForm"
                                                                      oncomplete="dbrDetailDialog.show()">
-
+                                                        <f:setPropertyActionListener value="false" target="#{dbrInfo.update}" />
                                                     </p:commandButton>
                                                 </td>
                                             </tr>
@@ -200,7 +200,6 @@
                                                         </p:column>
                                                         <p:column headerText="#{msg.get('app.dbr.table.column.loanTypes')}">
                                                             <h:outputText value="#{item.loanTypeView.name}" />
-                                                            <h:inputHidden value="#{item.loanTypeView.id}" />
                                                         </p:column>
                                                         <p:column headerText="#{msg.get('app.dbr.table.column.limit')}">
                                                             <h:outputText value="#{item.limit}" />
@@ -215,14 +214,20 @@
                                                             <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                              icon="ui-icon-pencil"
                                                                              action="#{dbrInfo.initEditDBRDetail()}"
-                                                                             oncomplete="dbrDetailDialog.show() ">
-                                                                <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}" />
-                                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}" />
+                                                                             oncomplete="dbrDetailDialog.show()"
+                                                                             process="@form"
+                                                                             update=":dbrDetailDlgForm">
+                                                                <f:setPropertyActionListener value="#{item}" target="#{dbrInfo.selectedItem}"/>
+                                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
+                                                                <f:setPropertyActionListener value="true" target="#{dbrInfo.update}" />
+                                                                <p:resetInput target=":dbrDetailDlgForm"/>
                                                             </p:commandButton>
                                                             <p:commandButton title="#{msg.get('app.button.delete')}"
                                                                              icon="ui-icon-trash"
-                                                                             action="#{dbrInfo.onDeletedDBRDetail()}" update=":frmMain">
-                                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}" />
+                                                                             action="#{dbrInfo.onDeletedDBRDetail()}"
+                                                                             update=":frmMain:dbrDetailDT">
+                                                                <f:setPropertyActionListener value="#{rowIndex}" target="#{dbrInfo.rowIndex}"/>
+
                                                             </p:commandButton>
                                                         </p:column>
                                                     </p:dataTable>
@@ -239,7 +244,12 @@
                                 </tr>
                                 <tr>
                                     <td class="center">
-                                        <p:commandButton value="#{msg.get('app.button.save')}"></p:commandButton>
+                                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                         styleClass="medium"
+                                                         action="#{dbrInfo.onSaveDBRInfo}"
+                                                         update=":pnl_maincontainer :msgBoxSystemMessagePanel">
+
+                                        </p:commandButton>
                                     </td>
                                 </tr>
                             </table>
@@ -255,11 +265,15 @@
             <h:inputHidden id="pagename" value="mnuprescreen"/>
             <h:inputHidden id="subpagename" value="submnuprescreen"/>
         </h:form>
+        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
     </p:panel>
 
     <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
         <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}" >
+                         header="#{dbrInfo.messageHeader}" message="#{dbrInfo.message}" >
             <p:commandButton value="OK"
                              process="@this"
                              update="frmMain"
@@ -273,6 +287,8 @@
     <ui:include src="dialog/dbrDetailDialog.xhtml" />
 
 </p:dialog>
+
+
 
 </h:body>
 </f:view>
