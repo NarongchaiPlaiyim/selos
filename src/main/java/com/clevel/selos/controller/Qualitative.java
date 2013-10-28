@@ -23,6 +23,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -53,21 +54,19 @@ public class Qualitative {
     UserDAO userDAO;
 
     @Inject
-    WorkCaseDAO workCaseDAO;
+    WorkCaseDAO workCaseDAO ;
 
     private QualitativeView qualitativeView;
     private List<QualityLevel> qualityLevelList;
     private long workCaseId;
     private User user;
-
-    enum ModeForButton {ADD, EDIT, CANCEL}
-
+    enum ModeForButton{ ADD, EDIT, CANCEL }
     private ModeForButton modeForButton;
     private String messageHeader;
     private String message;
     private boolean messageErr;
-
-    public Qualitative() {
+    private Date date;
+    public Qualitative(){
     }
 
     @PostConstruct
@@ -75,88 +74,88 @@ public class Qualitative {
         log.info("onCreation.");
 
         HttpSession session = FacesUtil.getSession(true);
-        user = (User) session.getAttribute("user");
+        user = (User)session.getAttribute("user");
 
         String page = Util.getCurrentPage();
-        log.info("this page :: {} ", page);
-        if (page.equals("qualitativeA.jsf")) {
-            session.setAttribute("workCaseId", new Long(3));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        log.info("this page :: {} ",page);
+        if(page.equals("qualitativeA.jsf")){
+            session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-            if (session.getAttribute("workCaseId") != null) {
+            if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-                log.info("workCaseId :: {} ", workCaseId);
+                log.info("workCaseId :: {} ",workCaseId);
             }
 
             qualitativeView = qualitativeControl.getQualitativeA(workCaseId);
 
-        } else if (page.equals("qualitativeB.jsf")) {
-            session.setAttribute("workCaseId", new Long(4));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        } else if(page.equals("qualitativeB.jsf")){
+            session.setAttribute("workCaseId", new Long(4)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
-            if (session.getAttribute("workCaseId") != null) {
+            if(session.getAttribute("workCaseId") != null){
                 workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-                log.info("workCaseId :: {} ", workCaseId);
+                log.info("workCaseId :: {} ",workCaseId);
             }
 
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
         }
 
-        if (qualitativeView == null) {
+        if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
-        } else {
+        } else{
             modeForButton = ModeForButton.EDIT;
         }
 
         onLoadSelectList();
     }
 
-    public void onLoadSelectList() {
+    public void onLoadSelectList(){
 
-        if (qualityLevelList == null) {
+        if(qualityLevelList == null){
             qualityLevelList = new ArrayList<QualityLevel>();
         }
 
-        try {
+        try{
             qualityLevelList = qualityLevelDAO.findAll();
-        } catch (Exception e) {
-            log.error("qualityLevelDAO.findAll  error ::: {}", e.getMessage());
+        }catch (Exception e){
+            log.error( "qualityLevelDAO.findAll  error ::: {}" , e.getMessage());
         }
     }
 
-    public void onSaveQualitativeA() {
+    public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
-        log.info("modeForButton :: {} ", modeForButton);
+        log.info("modeForButton :: {} ",modeForButton);
 
-        try {
-            if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                if (qualitativeView.getId() == 0) {
+        try{
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+                if(qualitativeView.getId() == 0){
                     qualitativeView.setCreateBy(user);
                     qualitativeView.setCreateDate(DateTime.now().toDate());
                 }
-                qualitativeControl.saveQualitativeA(qualitativeView, workCaseId, user);
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
 
 
-            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
                 qualitativeView.setModifyBy(user);
                 qualitativeView.setModifyDate(DateTime.now().toDate());
-                qualitativeControl.saveQualitativeA(qualitativeView, workCaseId, user);
+                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
 
             }
 
             messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.qualitativeA.response.save.success");
+            message =  msg.get("app.qualitativeA.response.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        } catch (Exception ex) {
+        } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
+            messageHeader =  msg.get("app.header.save.failed");
 
-            if (ex.getCause() != null) {
-                message = msg.get("app.qualitativeA.response.save.failed") + " cause : " + ex.getCause().toString();
+            if(ex.getCause() != null){
+                message =  msg.get("app.qualitativeA.response.save.failed")+ " cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("app.qualitativeA.response.save.failed") + ex.getMessage();
+                message =  msg.get("app.qualitativeA.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;
@@ -165,39 +164,40 @@ public class Qualitative {
         }
     }
 
-    public void onCancelQualitativeA() {
+    public void onCancelQualitativeA(){
         modeForButton = ModeForButton.CANCEL;
-        log.info("modeForButton :: {} ", modeForButton);
+        log.info("modeForButton :: {} ",modeForButton);
         onCreation();
     }
 
 
-    public void onSaveQualitativeB() {
-        log.info(" onSaveQualitativeB :::");
-        log.info("modeForButton :: {} ", modeForButton);
 
-        try {
-            if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId, user);
+    public void onSaveQualitativeB(){
+        log.info(" onSaveQualitativeB :::");
+        log.info("modeForButton :: {} ",modeForButton);
+
+        try{
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
 
-            } else if (modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId, user);
+            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
+                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
             }
 
             messageHeader = msg.get("app.header.save.success");
-            message = msg.get("app.qualitativeB.response.save.success");
+            message =  msg.get("app.qualitativeB.response.save.success");
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
-        } catch (Exception ex) {
+        }catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.header.save.failed");
+            messageHeader =  msg.get("app.header.save.failed");
 
-            if (ex.getCause() != null) {
-                message = msg.get("app.qualitativeB.response.save.failed") + " cause : " + ex.getCause().toString();
+            if(ex.getCause() != null){
+                message =  msg.get("app.qualitativeB.response.save.failed")+ " cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("app.qualitativeB.response.save.failed") + ex.getMessage();
+                message =  msg.get("app.qualitativeB.response.save.failed") + ex.getMessage();
             }
 
             messageErr = true;
@@ -208,9 +208,9 @@ public class Qualitative {
     }
 
 
-    public void onCancelQualitativeB() {
+    public void onCancelQualitativeB(){
         modeForButton = ModeForButton.CANCEL;
-        log.info("modeForButton :: {} ", modeForButton);
+        log.info("modeForButton :: {} ",modeForButton);
         onCreation();
     }
 

@@ -15,6 +15,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 
+
 @Stateless
 public class QualitativeControl extends BusinessControl {
 
@@ -30,36 +31,38 @@ public class QualitativeControl extends BusinessControl {
     QualitativeTransform qualitativeTransform;
 
     @Inject
-    public QualitativeControl() {
-    }
+    public QualitativeControl() {}
 
-    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId, User user) {
+
+    public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId ,User user) {
         log.info("start saveQualitativeA ::: ");
 
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase, user);
+        QualitativeA qualitativeA = qualitativeTransform.transformQualitativeAToModel(qualitativeAView, workCase ,user);
         qualitativeADAO.persist(qualitativeA);
 
     }
 
-    public QualitativeView getQualitativeA(long workCaseId) {
+    public QualitativeView getQualitativeA(long workCaseId){
         log.info("getQualitativeA ::: workCaseId : {}", workCaseId);
-        QualitativeView qualitativeView = null;
+        QualitativeView  qualitativeView = null;
 
-        try {
+        try{
             WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-            if (workCase != null) {
-                QualitativeA qualitativeA = qualitativeADAO.findByWorkCase(workCase);
+            if(workCase != null)
+            {
+                QualitativeA  qualitativeA = qualitativeADAO.findByWorkCase(workCase);
 
-                if (qualitativeA != null) {
+                if(qualitativeA != null)
+                {
                     log.info("get QualitativeA ::: QualitativeA : {}", qualitativeA.getId());
                     qualitativeView = qualitativeTransform.transformQualitativeAToView(qualitativeA);
                 }
             }
-        } catch (Exception e) {
-            log.error("find workCase error ::: {}", e.getMessage());
-        } finally {
+        }catch (Exception e){
+            log.error( "find workCase error ::: {}" , e.getMessage());
+        }finally {
             log.info("getQualitativeA end");
         }
 
@@ -68,24 +71,26 @@ public class QualitativeControl extends BusinessControl {
     }
 
 
-    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId, User user) {
+    public void saveQualitativeB(QualitativeView qualitativeBView, long workCaseId,User user) {
         log.info("start saveQualitativeB ::: ");
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase, user);
+        QualitativeB qualitativeB = qualitativeTransform.transformQualitativeBToModel(qualitativeBView, workCase,user);
         qualitativeBDAO.persist(qualitativeB);
 
     }
 
-    public QualitativeView getQualitativeB(long workCaseId) {
+    public QualitativeView getQualitativeB(long workCaseId){
         log.info("getQualitativeB ::: workCaseId : {}", workCaseId);
-        QualitativeView qualitativeView = null;
-        try {
+        QualitativeView  qualitativeView = null;
+        try{
             WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-            if (workCase != null) {
-                QualitativeB qualitativeB = qualitativeBDAO.findByWorkCase(workCase);
+            if(workCase != null)
+            {
+                QualitativeB  qualitativeB = qualitativeBDAO.findByWorkCase(workCase);
 
-                if (qualitativeB != null) {
+                if(qualitativeB != null)
+                {
                     log.info("get QualitativeB ::: QualitativeB : {}", qualitativeB);
                     qualitativeView = qualitativeTransform.transformQualitativeBToView(qualitativeB);
                 }
