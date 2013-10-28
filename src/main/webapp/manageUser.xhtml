@@ -34,6 +34,9 @@
                         <p:dataTable id="dataTable" var="c" value="#{isa.userDetail}" styleClass="center"
                                      rowIndexVar="rowIndex" rows="20" paginator="true">
                             <!--scrollable="true" scrollHeight="400">-->
+                            <p:column headerText="">
+                                <h:selectBooleanCheckbox />
+                            </p:column>
                             <p:column headerText="rowNumber">
                                 <h:outputText value="#{rowIndex +1}"/>
                             </p:column>
@@ -123,7 +126,7 @@
 
         <p:dialog id="manageUserDialog" widgetVar="manageUserDlg" header="Manage User !"
                                    onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
-                                   modal="true" width="600" height="400">
+                                   modal="true" width="600" height="500">
         <ui:include src="site/dialog/isaManageDialog.xhtml"/>
     </p:dialog>
 

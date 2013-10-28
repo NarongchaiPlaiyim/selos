@@ -386,11 +386,11 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthFlagPage() {
-        if(this.accountType.getMonthFlag()==1){
-            this.monthFlagPage = true;
+        if(accountType.getMonthFlag()==1){
+            monthFlagPage = true;
         }
         else{
-            this.monthFlagPage = false;
+            monthFlagPage = false;
         }
 
         return monthFlagPage;
