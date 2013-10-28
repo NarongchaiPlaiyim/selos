@@ -49,16 +49,20 @@ public class Customer implements Serializable {
     @Column(name="approx_income")
     private BigDecimal approxIncome;
 
-    @Column(name="id_number")
-    private String idNumber;
+    @Column(name="tmb_customer_id")
+    private String tmbCustomerId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="expire_date")
-    private Date expireDate;
+    @Column(name="document_expire_date")
+    private Date documentExpiredDate;
 
     @OneToOne
-    @JoinColumn(name="title_id")
-    private Title title;
+    @JoinColumn(name="title_th_id")
+    private Title titleTh;
+
+    @OneToOne
+    @JoinColumn(name="title_en_id")
+    private Title titleEn;
 
     @Column(name="name_en")
     private String nameEn;
@@ -234,28 +238,28 @@ public class Customer implements Serializable {
         this.approxIncome = approxIncome;
     }
 
-    public String getIdNumber() {
-        return idNumber;
+    public String getTmbCustomerId() {
+        return tmbCustomerId;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setTmbCustomerId(String idNumber) {
+        this.tmbCustomerId = idNumber;
     }
 
-    public Date getExpireDate() {
-        return expireDate;
+    public Date getDocumentExpiredDate() {
+        return documentExpiredDate;
     }
 
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
+    public void setDocumentExpiredDate(Date expireDate) {
+        this.documentExpiredDate = expireDate;
     }
 
-    public Title getTitle() {
-        return title;
+    public Title getTitleTh() {
+        return titleTh;
     }
 
-    public void setTitle(Title title) {
-        this.title = title;
+    public void setTitleTh(Title title) {
+        this.titleTh = title;
     }
 
     public String getNameEn() {
@@ -490,6 +494,14 @@ public class Customer implements Serializable {
         this.mailingAddressType = mailingAddressType;
     }
 
+    public Title getTitleEn() {
+        return titleEn;
+    }
+
+    public void setTitleEn(Title titleEn) {
+        this.titleEn = titleEn;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -503,9 +515,9 @@ public class Customer implements Serializable {
                 append("collateralOwner", collateralOwner).
                 append("percentShare", percentShare).
                 append("approxIncome", approxIncome).
-                append("idNumber", idNumber).
-                append("expireDate", expireDate).
-                append("title", title).
+                append("idNumber", tmbCustomerId).
+                append("expireDate", documentExpiredDate).
+                append("title", titleTh).
                 append("nameEn", nameEn).
                 append("nameTh", nameTh).
                 append("lastNameTh", lastNameTh).

@@ -67,6 +67,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String kycReason;
     private int worthiness;
     private AddressType mailingAddressType;
+    private long spouseId;
 
     //*** Var for Individual ***//
     private Date dateOfBirth;
@@ -718,5 +719,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setWorthiness(int worthiness) {
         this.worthiness = worthiness;
+    }
+
+    public long getSpouseId() {
+        return spouseId;
+    }
+
+    public void setSpouseId(long spouseId) {
+        this.spouseId = spouseId;
     }
 }
