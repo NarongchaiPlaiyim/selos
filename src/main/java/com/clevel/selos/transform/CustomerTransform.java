@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CustomerTransform extends Transform {
-    @Inject
-    Logger log;
 
     @Inject
     CustomerDAO customerDAO;

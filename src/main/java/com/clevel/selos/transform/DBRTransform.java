@@ -7,8 +7,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 
 public class DBRTransform extends Transform {
-    @Inject
-    Logger log;
+
     @Inject
     DBRDetailTransform dbrDetailTransform;
 

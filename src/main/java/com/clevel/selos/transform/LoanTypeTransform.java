@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoanTypeTransform{
-    @Inject
-    Logger log;
 
     @Inject
     public LoanTypeTransform(){

@@ -18,6 +18,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.PrescreenTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import com.rits.cloning.Cloner;
@@ -67,6 +68,7 @@ public class PrescreenMaker implements Serializable {
     private List<PotentialCollateral> potentialCollateralList;
 
     private List<DocumentType> documentTypeList;
+    private List<DocumentType> spouseDocumentTypeList;
     private List<CustomerEntity> customerEntityList;
     private List<Relation> relationList;
     private List<Reference> referenceList;
@@ -490,6 +492,9 @@ public class PrescreenMaker implements Serializable {
         documentTypeList = documentTypeDAO.findAll();
         log.debug("onLoadSelectList ::: documentTypeList size : {}", documentTypeList.size());
 
+        spouseDocumentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+        log.debug("onLoadSelectList ::: spouseDocumentTypeList size : {}", documentTypeList.size());
+
         customerEntityList = customerEntityDAO.findAll();
         log.debug("onLoadSelectList ::: borrowerTypeList size : {}", customerEntityList.size());
 
@@ -710,7 +715,7 @@ public class PrescreenMaker implements Serializable {
                     if(borrowerType == BorrowerType.INDIVIDUAL.value()){
                         borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
                         documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
-                    }else if(borrowerType == BorrowerType.INDIVIDUAL.value()){
+                    }else if(borrowerType == BorrowerType.JURISTIC.value()){
                         borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
                         documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
                     }
@@ -1348,10 +1353,16 @@ public class PrescreenMaker implements Serializable {
                     boolean validateRegistration = true;
                     for(CustomerInfoView customerInfoView : customerInfoViewList ){
                         if(borrowerInfo.getRegistrationId().equalsIgnoreCase(customerInfoView.getRegistrationId())){
-                            validateRegistration = false;
-                            messageHeader = "Save customer failed.";
-                            message = "Duplicate registration id.";
-                            break;
+                            if(borrowerInfo.getListIndex() != customerInfoView.getListIndex()){
+                                validateRegistration = false;
+                                messageHeader = "Save customer failed.";
+                                message = "Duplicate registration id.";
+                                break;
+                            }
+                        }
+
+                        if(customerInfoView.getListIndex() == borrowerInfo.getListIndex()){
+                            oldRelationId = customerInfoView.getRelation().getId();
                         }
                     }
 
@@ -1558,6 +1569,7 @@ public class PrescreenMaker implements Serializable {
             }
 
             customerInfoViewList.remove(customerInfoView);
+            reIndexCustomerList(ListCustomerName.CUSTOMER);
 
             if(selectCustomerInfoItem.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
 
@@ -1587,6 +1599,10 @@ public class PrescreenMaker implements Serializable {
                     }
                 }
             }
+        }
+
+        if(customerInfoViewList.size() == 0){
+            caseBorrowerTypeId = 0;
         }
     }
 
@@ -2521,7 +2537,8 @@ public class PrescreenMaker implements Serializable {
     }
 
     public Date getCurrentDate() {
-        return DateTime.now().toDate();
+        log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDate());
+        return DateTimeUtil.getCurrentDate();
     }
 
     public void setCurrentDate(Date currentDate) {
@@ -2678,5 +2695,13 @@ public class PrescreenMaker implements Serializable {
 
     public void setSpouseRelationList(List<Relation> spouseRelationList) {
         this.spouseRelationList = spouseRelationList;
+    }
+
+    public List<DocumentType> getSpouseDocumentTypeList() {
+        return spouseDocumentTypeList;
+    }
+
+    public void setSpouseDocumentTypeList(List<DocumentType> spouseDocumentTypeList) {
+        this.spouseDocumentTypeList = spouseDocumentTypeList;
     }
 }

@@ -25,7 +25,7 @@ public class UserDAO extends GenericDAO<User,String> {
         return findOneByCriteria(Restrictions.eq("userName",userName));
     }
     public List<User> findBDMChecker(User user){
-        log.debug("findBDMChecker. BDM Maker : {}", user);
+        //log.debug("findBDMChecker. BDM Maker : {}", user);
 
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.ne("id", user.getId()));

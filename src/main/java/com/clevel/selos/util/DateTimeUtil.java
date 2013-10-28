@@ -63,6 +63,27 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
+    public static Date getCurrentDate(){
+        Date date = new Date();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
+                .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
+        DateTime dt = new DateTime(date);
+        log.debug("dt : {}", dt);
+        String dtStr = dt.toString(formatter);
+
+        return new DateTime(dtStr).toDate();
+
+        /*String strDate = getDateTimeStr(date);
+        log.debug("strDate : {}", strDate);
+        String strDate2 = getDateStr(date);
+        log.debug("strDate2 : {}", strDate2);
+        Locale lc = new Locale("th", "TH");
+        Date dt = parseToDate(strDate2, defaultDateFormat, lc);
+        log.debug("dt : {}", dt);
+        dt = getOnlyDate(dt);
+        return dt;*/
+    }
+
     public static int daysBetween2Dates(Date date1, Date date2) {
         return Days.daysBetween(new DateTime(date1), new DateTime(date2)).getDays();
     }
@@ -132,6 +153,13 @@ public class DateTimeUtil {
 
     public static String getDateTimeStr(Date date) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")
+                .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
+        DateTime dt = new DateTime(date);
+        return dt.toString(formatter);
+    }
+
+    public static String getDateStr(Date date) {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
                 .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
         DateTime dt = new DateTime(date);
         return dt.toString(formatter);

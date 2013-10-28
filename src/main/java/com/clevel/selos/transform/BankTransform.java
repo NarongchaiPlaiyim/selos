@@ -11,9 +11,6 @@ import java.util.List;
 public class BankTransform extends Transform{
 
     @Inject
-    Logger log;
-
-    @Inject
     public BankTransform(){
     }
 

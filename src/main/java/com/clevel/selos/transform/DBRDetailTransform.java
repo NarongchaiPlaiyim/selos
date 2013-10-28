@@ -11,9 +11,6 @@ import java.util.List;
 public class DBRDetailTransform extends Transform {
 
     @Inject
-    Logger logger;
-
-    @Inject
     LoanTypeTransform loanTypeTransform;
 
     public DBRDetailView getDBRDetailView(DBRDetail dbrDetail){

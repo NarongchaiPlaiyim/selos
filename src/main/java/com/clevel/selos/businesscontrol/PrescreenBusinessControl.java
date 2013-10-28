@@ -625,8 +625,11 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.debug("savePreScreenInitial ::: Starting ... ");
         log.debug("savePreScreenInitial ::: caseBorrowerType : {}", caseBorrowerTypeId);
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        CustomerEntity customerEntity = customerEntityDAO.findById(caseBorrowerTypeId);
-        log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
+        CustomerEntity customerEntity = null;
+        if(caseBorrowerTypeId != 0){
+            customerEntity = customerEntityDAO.findById(caseBorrowerTypeId);
+            log.debug("savePreScreenInitial ::: caseBorrowerEntity : {}", customerEntity);
+        }
         workCasePrescreen.setBorrowerType(customerEntity);
         workCasePrescreenDAO.persist(workCasePrescreen);
 
@@ -645,26 +648,22 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.debug("savePreScreenInitial ::: save PrescreenFacility : {}", prescreenFacilityList);
         prescreenFacilityDAO.persist(prescreenFacilityList);
 
+
         //Remove all Customer before add new
-        //TODO Remove customer from customerDeleteList
-        /*List<Customer> customerListDelete = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
-        log.debug("savePreScreenInitial :: delete Customer from delete list size(): {}", customerInfoDeleteList.size());
-        for(Customer customer : customerListDelete){
-            if(customer.getId() != 0){
-                if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
-                    List<Address> addressList = customer.getAddressesList();
-                    addressDAO.delete(addressList);
-                }
-                if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                    Individual individual = customer.getIndividual();
-                    individualDAO.delete(individual);
-                } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.JURISTIC.value()){
-                    Juristic juristic = customer.getJuristic();
-                    juristicDAO.delete(juristic);
-                }
-                customerDAO.delete(customer);
+        List<Customer> customerDeleteList = customerTransform.transformToModelList(customerInfoDeleteList, workCasePrescreen, null);
+        log.info("savePreScreenInitial ::: customerDeleteList : {}", customerDeleteList);
+        for(Customer customer : customerDeleteList){
+            addressDAO.delete(customer.getAddressesList());
+
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                individualDAO.delete(customer.getIndividual());
+            } else {
+                juristicDAO.delete(customer.getJuristic());
             }
-        }*/
+
+            customerDAO.delete(customer);
+        }
 
         //Add all Customer from customer list
         for(CustomerInfoView customerInfoView : customerInfoViewList){

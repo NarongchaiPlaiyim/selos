@@ -7,13 +7,6 @@ import com.clevel.selos.model.view.TCGDetailView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 1/10/2556
- * Time: 14:27 น.
- * To change this template use File | Settings | File Templates.
- */
 public class TCGDetailTransform extends Transform {
 
     public List<TCGDetail> transformTCGDetailViewToModel(List<TCGDetailView> tcgDetailViewList , TCG tcg) {

@@ -13,8 +13,6 @@ import java.util.Date;
 
 
 public class QualitativeTransform extends Transform {
-    @Inject
-    Logger log;
 
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView ,WorkCase workCase ,User user){
         log.info("transformQualitativeAToModel ::: ");
