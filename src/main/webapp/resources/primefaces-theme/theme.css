@@ -6,6 +6,7 @@
 
 /* Layout helpers
 ----------------------------------*/
+
 .ui-helper-hidden {
     display: none;
 }
@@ -970,6 +971,7 @@ body .ui-tooltip {
 
 /* Interaction states
 ----------------------------------*/
+
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
@@ -1098,7 +1100,7 @@ body .ui-tooltip {
 }
 
 .ui-state-default .ui-icon {
-    background-image: url("#{resource['primefaces-theme:images/ui-icons_676767_256x240.png']}");
+   / background-image: url("#{resource['primefaces-theme:images/ui-icons_676767_256x240.png']}");
 }
 
 .ui-state-hover .ui-icon,

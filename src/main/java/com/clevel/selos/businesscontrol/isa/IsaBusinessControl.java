@@ -56,25 +56,25 @@ public class IsaBusinessControl implements Serializable {
         user.setActive(isaCreateUserView.getActive());
 
 
-        if (isaCreateUserView.getUserDepartment().getId() == 0) {
+        if (isaCreateUserView.getUserDepartment().getId() == -1) {
             user.setDepartment(null);
         }
-        if (isaCreateUserView.getRole().getId() == 0) {
+        if (isaCreateUserView.getRole().getId() == -1) {
             user.setRole(null);
         }
-        if (isaCreateUserView.getUserDivision().getId() == 0) {
+        if (isaCreateUserView.getUserDivision().getId() == -1) {
             user.setDivision(null);
         }
-        if (isaCreateUserView.getUserRegion().getId() == 0) {
+        if (isaCreateUserView.getUserRegion().getId() == -1) {
             user.setRegion(null);
         }
-        if (isaCreateUserView.getUserTeam().getId() == 0) {
+        if (isaCreateUserView.getUserTeam().getId() == -1) {
             user.setTeam(null);
         }
-        if (isaCreateUserView.getUserTitle().getId() == 0) {
+        if (isaCreateUserView.getUserTitle().getId() == -1) {
             user.setTitle(null);
         }
-        if (isaCreateUserView.getUserZone().getId() == 0) {
+        if (isaCreateUserView.getUserZone().getId() == -1) {
             user.setZone(null);
         }
 
@@ -134,7 +134,7 @@ public class IsaBusinessControl implements Serializable {
     }
 
 
-    public IsaCreateUserView SelectUserById(String id) {
+    public IsaCreateUserView SelectUserById(String id) throws Exception{
         log.debug("SelectUserById()");
         System.out.println("SelectUserById : " + id);
         User user = userDAO.findById(id);
@@ -182,24 +182,23 @@ public class IsaBusinessControl implements Serializable {
     }
 
 
-    public void deleteUser(String id) {
+    public void deleteUser(String id) throws Exception {
         log.debug("deleteUser()");
 
-        RequestContext context = RequestContext.getCurrentInstance();
         User user = userDAO.findById(id);
         user.setUserStatus(UserStatus.MARK_AS_DELETED);
-
-        try {
-            userDAO.persist(user);
-        } catch (ConstraintViolationException ex) {
-            complete = false;
-            throw ex;
-        } catch (Exception e) {
-            complete = false;
-        }
-
-        context.addCallbackParam("functionComplete", complete);
+        userDAO.persist(user);
 
     }
 
+    public void deleteUserList(User[] userlist) {
+        log.debug("deleteUserList()");
+
+        for (User list : userlist) {
+            User user = userDAO.findById(list.getId());
+            user.setUserStatus(UserStatus.MARK_AS_DELETED);
+            userDAO.persist(user);
+
+        }
+    }
 }
