@@ -190,3 +190,10 @@ function handleContactRecordRequest(xhr, status, args) {
 function testHandle(){
     return true;
 }
+
+function handleDialogRequest(xhr, status, args, widgetVarName){
+    if(args.functionComplete){
+        var name =  widgetVarName;
+        PF(name).hide();
+    }
+}

@@ -18,9 +18,6 @@ public class DBR implements Serializable {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_DBR_ID")
     private long id;
 
-    @Column(name = "active")
-    private boolean active;
-
     @ManyToOne
     @JoinColumn(name="workcase_id")
     private WorkCase workCase;
@@ -142,14 +139,6 @@ public class DBR implements Serializable {
 
     public void setDbrBeforeRequest(BigDecimal dbrBeforeRequest) {
         this.dbrBeforeRequest = dbrBeforeRequest;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public List<DBRDetail> getDbrDetails() {

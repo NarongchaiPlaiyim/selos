@@ -38,4 +38,15 @@ public class LoanTypeTransform{
         }
         return loanTypeViews;
     }
+
+    public AccountType getLoanType(LoanTypeView loanTypeView){
+        AccountType loanType = new AccountType();
+        if(loanTypeView == null){
+            return loanType;
+        }
+        loanType.setId(loanTypeView.getId());
+        loanType.setName(loanTypeView.getName());
+        return loanType;
+
+    }
 }
