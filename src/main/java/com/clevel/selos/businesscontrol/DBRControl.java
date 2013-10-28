@@ -1,10 +1,25 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.DBRDAO;
+import com.clevel.selos.dao.working.DBRDetailDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.DBR;
+import com.clevel.selos.model.db.working.DBRDetail;
+import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.view.DBRDetailView;
+import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.transform.DBRDetailTransform;
+import com.clevel.selos.transform.DBRTransform;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class DBRControl {
@@ -14,12 +29,66 @@ public class DBRControl {
     @Inject
     DBRDAO dbrdao;
 
+    @Inject
+    DBRDetailDAO dbrDetailDAO;
+
+    @Inject
+    WorkCaseDAO workCaseDAO;
+
+    @Inject
+    UserDAO userDAO;
+
+    @Inject
+    DBRTransform dbrTransform;
+
+    @Inject
+    DBRDetailTransform dbrDetailTransform;
+
     public DBRControl(){
 
     }
 
+    public void saveDBRInfo(DBRView dbrView, long workCaseId, String userId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = userDAO.findById(userId);
+        DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
+        DBR returnDBRInfo = dbrdao.persist(dbr);
+        List<DBRDetailView> dbrDetailViews = dbrView.getDbrDetailViews();
+        List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
+        List<DBRDetail> oldDbrDetails =  dbrDetailDAO.createCriteria().add(Restrictions.eq("dbr", dbr)).list();  // old record
+        if(dbrDetailViews != null && !dbrDetailViews.isEmpty()){
+            newDbrDetails = dbrDetailTransform.getDbrDetailModels(dbrDetailViews, user, returnDBRInfo);
+            if(oldDbrDetails.size() == 0){
+                dbrDetailDAO.persist(newDbrDetails); //ADD New OR Update
+            }else{
+                //delete old without new record
+                for(DBRDetail oldDbrDetail : oldDbrDetails){
+                    boolean isDelete = true;
+                    for(DBRDetail newDbrDetail : newDbrDetails){
+                        if(oldDbrDetail.getId() == newDbrDetail.getId()){
+                            isDelete = false;
+                        }
+                    }
+                    if(isDelete){
+                        dbrDetailDAO.delete(oldDbrDetail);
+                    }
+                }
+                //Add new record
+                dbrDetailDAO.persist(newDbrDetails);
+            }
+        }else {  //Delete all record from DBR
+           if (oldDbrDetails != null && !oldDbrDetails.isEmpty()){
+                dbrDetailDAO.delete(oldDbrDetails);
+           }
+        }
+    }
 
-
-
+    public DBRView getDBRByWorkCase(long workCaseId){
+       WorkCase workCase = workCaseDAO.findById(workCaseId);
+       workCase.setId(workCaseId);
+       DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
+       DBRView dbrView =  dbrTransform.getDBRView(dbr);
+       return dbrView;
+    }
 
 }

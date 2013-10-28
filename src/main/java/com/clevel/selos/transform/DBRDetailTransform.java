@@ -1,20 +1,23 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.working.DBRDetailDAO;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.DBRDetail;
 import com.clevel.selos.model.view.DBRDetailView;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBRDetailTransform extends Transform {
 
     @Inject
-    Logger logger;
-
-    @Inject
     LoanTypeTransform loanTypeTransform;
+    @Inject
+    DBRDetailDAO dbrDetailDAO;
 
     public DBRDetailView getDBRDetailView(DBRDetail dbrDetail){
         DBRDetailView dbrDetailView = new DBRDetailView();
@@ -39,5 +42,46 @@ public class DBRDetailTransform extends Transform {
            dbrDetailViews.add(getDBRDetailView(dbrDetail));
         }
         return dbrDetailViews;
+    }
+
+    public DBRDetail getDBRDetailModel(DBRDetailView dbrDetailView, User user, DBR dbr){
+        DBRDetail dbrDetail = new DBRDetail();
+        if(dbrDetailView == null){
+            return dbrDetail;
+        }
+        Date now = new Date();
+        if(dbrDetailView.getId() == 0){
+            dbrDetail.setCreateBy(user);
+            dbrDetail.setCreateDate(now);
+        }else{
+            dbrDetail = dbrDetailDAO.findById(dbrDetailView.getId());
+            if(dbrDetail == null){
+                dbrDetail.setCreateBy(user);
+                dbrDetail.setCreateDate(now);
+            }else{
+                dbrDetail.setId(dbrDetailView.getId());
+            }
+        }
+
+        dbrDetail.setLimit(dbrDetailView.getLimit());
+        dbrDetail.setAccountName(dbrDetailView.getAccountName());
+        dbrDetail.setDebtForCalculate(dbrDetailView.getDebtForCalculate());
+        dbrDetail.setInstallment(dbrDetailView.getInstallment());
+        dbrDetail.setLoanType(loanTypeTransform.getLoanType(dbrDetailView.getLoanTypeView()));
+        dbrDetail.setModifyDate(now);
+        dbrDetail.setModifyBy(user);
+        dbrDetail.setDbr(dbr);
+        return dbrDetail;
+    }
+
+    public List<DBRDetail> getDbrDetailModels(List<DBRDetailView> dbrDetailViews, User user, DBR dbr){
+        List<DBRDetail> dbrDetails = new ArrayList<DBRDetail>();
+        if(dbrDetailViews == null && dbrDetailViews.isEmpty()){
+            return dbrDetails;
+        }
+        for(DBRDetailView dbrDetailView : dbrDetailViews){
+            dbrDetails.add(getDBRDetailModel(dbrDetailView, user, dbr));
+        }
+        return dbrDetails;
     }
 }
