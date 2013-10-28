@@ -31,12 +31,12 @@
                                 <h:outputText value=" TotalUser : #{isa.userSize}"/>
                             </p:panelGrid>
 
-                        <p:dataTable id="dataTable" var="c" value="#{isa.userDetail}" styleClass="center"
+                        <p:dataTable id="dataTable" value="#{isa.userDetail}" var="c" styleClass="center"
+                                     rowKey="#{c.id}"
+                                     selection="#{isa.selectUserDetail}"
                                      rowIndexVar="rowIndex" rows="20" paginator="true">
                             <!--scrollable="true" scrollHeight="400">-->
-                            <p:column headerText="">
-                                <h:selectBooleanCheckbox />
-                            </p:column>
+                            <p:column headerText="" selectionMode="multiple"/>
 
                             <p:column headerText="Id">
                                 <h:outputText value="#{c.id}"/>
@@ -44,9 +44,9 @@
                             <p:column headerText="Username">
                                 <h:outputText value="#{c.userName}"/>
                             </p:column>
-                            <p:column headerText="EmailAddress">
-                                <h:outputText value="#{c.emailAddress}"/>
-                            </p:column>
+                            <!--<p:column headerText="EmailAddress">-->
+                                <!--<h:outputText value="#{c.emailAddress}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Active">
                                 <h:outputText value="#{c.active}"/>
                             </p:column>
@@ -59,9 +59,9 @@
                             <p:column headerText="LastLogon">
                                 <h:outputText value="#{c.lastLogon}"/>
                             </p:column>
-                            <p:column headerText="PhoneNumber">
-                                <h:outputText value="#{c.phoneNumber}"/>
-                            </p:column>
+                            <!--<p:column headerText="PhoneNumber">-->
+                                <!--<h:outputText value="#{c.phoneNumber}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Role">
                                 <h:outputText value="#{c.role.name}"/>
                             </p:column>
@@ -84,9 +84,9 @@
                                 <h:outputText value="#{c.zone.name}"/>
                             </p:column>
 
-                            <p:column headerText="Status">
-                                <h:outputText value="#{c.userStatus}"/>
-                            </p:column>
+                            <!--<p:column headerText="Status">-->
+                                <!--<h:outputText value="#{c.userStatus}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Management">
                                 <p:commandButton icon="ui-icon-pencil"
                                                  title="${c.id}"
@@ -114,6 +114,8 @@
                                                                      <!--target="#{}"/>-->
                                 </p:commandButton>
 
+                        <p:commandButton value="Delete" actionListener="#{isa.onDeleteUserList()}"
+                                update=":msgBoxSystemMessagePanel"/>
                     </h:form>
                 </div>
             </div>

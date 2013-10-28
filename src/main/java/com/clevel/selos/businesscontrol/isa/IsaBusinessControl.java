@@ -107,25 +107,25 @@ public class IsaBusinessControl implements Serializable {
         user.setUserStatus(UserStatus.NORMAL);
 
 
-        if (isaCreateUserView.getUserDepartment().getId() == 0) {
+        if (isaCreateUserView.getUserDepartment().getId() == -1) {
             user.setDepartment(null);
         }
-        if (isaCreateUserView.getRole().getId() == 0) {
+        if (isaCreateUserView.getRole().getId() == -1) {
             user.setRole(null);
         }
-        if (isaCreateUserView.getUserDivision().getId() == 0) {
+        if (isaCreateUserView.getUserDivision().getId() == -1) {
             user.setDivision(null);
         }
-        if (isaCreateUserView.getUserRegion().getId() == 0) {
+        if (isaCreateUserView.getUserRegion().getId() == -1) {
             user.setRegion(null);
         }
-        if (isaCreateUserView.getUserTeam().getId() == 0) {
+        if (isaCreateUserView.getUserTeam().getId() == -1) {
             user.setTeam(null);
         }
-        if (isaCreateUserView.getUserTitle().getId() == 0) {
+        if (isaCreateUserView.getUserTitle().getId() == -1) {
             user.setTitle(null);
         }
-        if (isaCreateUserView.getUserZone().getId() == 0) {
+        if (isaCreateUserView.getUserZone().getId() == -1) {
             user.setZone(null);
         }
 

@@ -8,7 +8,7 @@
         <h:panelGrid columns="2">
 
             <h:outputText value="Id :"/>
-            <p:inputText value="#{isa.createUserView.id}"/>
+            <p:inputText value="#{isa.createUserView.id}" required="true"/>
 
             <h:outputText value="Username :"/>
             <p:inputText value="#{isa.createUserView.username}"/>
@@ -27,7 +27,7 @@
 
             <h:outputText value="Role"/>
             <p:selectOneMenu value="#{isa.createUserView.role.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userRoleList}"
                                var="roleItem"
                                itemLabel="#{roleItem.name}"
@@ -35,7 +35,7 @@
             </p:selectOneMenu>
             <h:outputText value="Department"/>
             <p:selectOneMenu value="#{isa.createUserView.userDepartment.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userDepartmentList}"
                                var="departmentItem"
                                itemLabel="#{departmentItem.name}"
@@ -43,7 +43,7 @@
             </p:selectOneMenu>
             <h:outputText value="Division"/>
             <p:selectOneMenu value="#{isa.createUserView.userDivision.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userDivisionList}"
                                var="divisionItem"
                                itemLabel="#{divisionItem.name}"
@@ -51,7 +51,7 @@
             </p:selectOneMenu>
             <h:outputText value="Region"/>
             <p:selectOneMenu value="#{isa.createUserView.userRegion.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userRegionList}"
                                var="regionItem"
                                itemLabel="#{regionItem.name}"
@@ -59,7 +59,7 @@
             </p:selectOneMenu>
             <h:outputText value="Team"/>
             <p:selectOneMenu value="#{isa.createUserView.userTeam.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userTeamList}"
                                var="teamItem"
                                itemLabel="#{teamItem.name}"
@@ -67,7 +67,7 @@
             </p:selectOneMenu>
             <h:outputText value="Title"/>
             <p:selectOneMenu value="#{isa.createUserView.userTitle.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userTitleList}"
                                var="titleItem"
                                itemLabel="#{titleItem.name}"
@@ -75,7 +75,7 @@
             </p:selectOneMenu>
             <h:outputText value="Zone"/>
             <p:selectOneMenu value="#{isa.createUserView.userZone.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
                 <f:selectItems value="#{isa.userZoneList}"
                                var="zoneItem"
                                itemLabel="#{zoneItem.name}"
