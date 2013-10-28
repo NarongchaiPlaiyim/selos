@@ -731,8 +731,8 @@
                                                  value="#{qualitative.qualitativeView.qualityLevel.id}"
                                                  styleClass="largest"
                                                  size="1"
-                                                 required="true">
-                                    <f:selectItem itemLabel="- please select -" itemValue="0"/>
+                                                 required="#{not empty param[addQualitativeButton.clientId]}">
+                                    <f:selectItem itemLabel="- please select -" itemValue=""/>
                                     <f:selectItems value="#{qualitative.qualityLevelList}"
                                                    var="qualityItemsA"
                                                    itemLabel="#{qualityItemsA.description}"
@@ -830,10 +830,11 @@
                 <td colspan="2" class="center">
                     <p:commandButton value="#{msg.get('app.qualitative.button.saveButton')}"
                                      id="btnSave"
+                                     binding="#{addQualitativeButton}"
                                      styleClass="medium"
                                      process=":frmMain"
                                      action="#{qualitative.onSaveQualitativeA}"
-                                     update=":msgBoxSystemMessagePanel"/>
+                                     update=":frmMain,:msgBoxSystemMessagePanel"/>
                     <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
                                      id="btnCancel"
                                      styleClass="medium"

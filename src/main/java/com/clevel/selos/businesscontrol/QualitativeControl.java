@@ -15,7 +15,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 
-
 @Stateless
 public class QualitativeControl extends BusinessControl {
 
@@ -32,6 +31,7 @@ public class QualitativeControl extends BusinessControl {
 
     @Inject
     public QualitativeControl() {}
+
 
     public void saveQualitativeA(QualitativeView qualitativeAView, long workCaseId ,User user) {
         log.info("start saveQualitativeA ::: ");
