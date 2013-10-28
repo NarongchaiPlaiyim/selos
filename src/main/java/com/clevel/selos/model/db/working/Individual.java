@@ -58,6 +58,10 @@ public class Individual implements Serializable {
     @Column(name="num_of_children")
     private int numberOfChildren;
 
+    @OneToOne
+    @JoinColumn(name="citizen_country_id")
+    private Country citizenCountry;
+
     public Individual() {
     }
 
@@ -157,21 +161,30 @@ public class Individual implements Serializable {
         this.numberOfChildren = numberOfChildren;
     }
 
+    public Country getCitizenCountry() {
+        return citizenCountry;
+    }
+
+    public void setCitizenCountry(Country citizenCountry) {
+        this.citizenCountry = citizenCountry;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("customer", customer)
-                .append("citizenId", citizenId)
-                .append("birthDate", birthDate)
-                .append("gender", gender)
-                .append("nationality", nationality)
-                .append("sndNationality", sndNationality)
-                .append("race", race)
-                .append("education", education)
-                .append("occupation", occupation)
-                .append("maritalStatus", maritalStatus)
-                .append("numberOfChildren", numberOfChildren)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("customer", customer).
+                append("citizenId", citizenId).
+                append("birthDate", birthDate).
+                append("gender", gender).
+                append("nationality", nationality).
+                append("sndNationality", sndNationality).
+                append("race", race).
+                append("education", education).
+                append("occupation", occupation).
+                append("maritalStatus", maritalStatus).
+                append("numberOfChildren", numberOfChildren).
+                append("citizenCountry", citizenCountry).
+                toString();
     }
 }

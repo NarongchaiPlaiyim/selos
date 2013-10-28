@@ -57,18 +57,32 @@ public class CustomerTransform extends Transform {
         CustomerInfoView customerInfoView = new CustomerInfoView();
 
         customerInfoView.setId(customer.getId());
-        customerInfoView.setTitleTh(customer.getTitle());
-        customerInfoView.setFirstNameTh(customer.getNameTh());
-        customerInfoView.setLastNameTh(customer.getLastNameTh());
-        if(customerInfoView.getLastNameTh() == null){
-            customerInfoView.setLastNameTh("");
-        }
+
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
         if(customerInfoView.getCustomerEntity() == null){
             customerInfoView.setCustomerEntity(new CustomerEntity());
         }
-        customerInfoView.setAge(customer.getAge());
+
+        customerInfoView.setDocumentType(customer.getDocumentType());
+        if(customerInfoView.getDocumentType() == null){
+            customerInfoView.setDocumentType(new DocumentType());
+        }
+
+        customerInfoView.setDocumentAuthorizeBy(customer.getDocumentAuthorizeBy());
+        customerInfoView.setServiceSegment(customer.getServiceSegment());
+        customerInfoView.setCollateralOwner(customer.getCollateralOwner());
+        customerInfoView.setPercentShare(customer.getPercentShare());
+        customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
+        customerInfoView.setDocumentExpiredDate(customer.getExpireDate());
+
+        customerInfoView.setTitleTh(customer.getTitle());
+        customerInfoView.setFirstNameTh(customer.getNameTh());
+        customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setSearchFromRM(customer.getSearchFromRM());
+        customerInfoView.setValidId(2);
+        customerInfoView.setAge(customer.getAge());
+
         customerInfoView.setRelation(customer.getRelation());
         if(customerInfoView.getRelation() == null){
             customerInfoView.setRelation(new Relation());
@@ -77,14 +91,34 @@ public class CustomerTransform extends Transform {
         if(customerInfoView.getReference() == null){
             customerInfoView.setReference(new Reference());
         }
-        customerInfoView.setApproxIncome(customer.getApproxIncome());
-        customerInfoView.setDocumentType(customer.getDocumentType());
-        if(customerInfoView.getDocumentType() == null){
-            customerInfoView.setDocumentType(new DocumentType());
+
+        customerInfoView.setCsi(customer.getCsi());
+        if(customerInfoView.getCsi() == null){
+            customerInfoView.setCsi(new WarningCode());
         }
-        customerInfoView.setNcbFlag(customer.getNcbFlag());
-        customerInfoView.setSearchFromRM(customer.getSearchFromRM());
-        customerInfoView.setValidId(2);
+        customerInfoView.setLastNameTh(customer.getLastNameTh());
+        if(customerInfoView.getLastNameTh() == null){
+            customerInfoView.setLastNameTh("");
+        }
+
+        //todo:
+//        private BigDecimal approxIncome;
+//        private String mobileNumber;
+//        private String faxNumber;
+//        private String email;
+//        private KYCLevel kycLevel;
+//        private int convenantFlag;
+//        private int reviewFlag;
+//        private String reason;
+//        private BusinessType businessType;
+//        private WarningCode csi;
+//        private Date documentAuthorizeDate;
+//        private String kycReason;
+//        private int worthiness;
+//        private AddressType mailingAddressType;
+//        private BigDecimal percentShare;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
             List<Address> addressList = customer.getAddressesList();
@@ -133,6 +167,8 @@ public class CustomerTransform extends Transform {
             customerInfoView.setWorkAddress(new AddressView());
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         if(customer.getCustomerEntity().getId() == 1){
             //Individual
             Individual individual = customer.getIndividual();
@@ -173,15 +209,20 @@ public class CustomerTransform extends Transform {
                 } else {
                     customerInfoView.setOccupation(new Occupation());
                 }
+
+                if(individual.getCitizenCountry() != null){
+                    customerInfoView.setCitizenCountry(individual.getCitizenCountry());
+                } else {
+                    customerInfoView.setCitizenCountry(new Country());
+                }
             } else {
                 customerInfoView.setEducation(new Education());
                 customerInfoView.setMaritalStatus(new MaritalStatus());
                 customerInfoView.setNationality(new Nationality());
                 customerInfoView.setSndNationality(new Nationality());
                 customerInfoView.setOccupation(new Occupation());
+                customerInfoView.setCitizenCountry(new Country());
             }
-
-
         } else {
             //Juristic
             Juristic juristic = customer.getJuristic();
@@ -202,13 +243,8 @@ public class CustomerTransform extends Transform {
             } else {
                 customerInfoView.setRegistrationCountry(new Country());
             }
-
         }
 
-        customerInfoView.setCsi(customer.getCsi());
-        if(customerInfoView.getCsi() == null){
-            customerInfoView.setCsi(new WarningCode());
-        }
         log.info("Return Customer {}", customerInfoView);
         return customerInfoView;
     }
@@ -473,6 +509,11 @@ public class CustomerTransform extends Transform {
                 individual.setOccupation(null);
             }
 
+            if(customerInfoView.getCitizenCountry() != null && customerInfoView.getCitizenCountry().getId() != 0){
+                individual.setCitizenCountry(countryDAO.findById(customerInfoView.getCitizenCountry().getId()));
+            } else {
+                individual.setCitizenCountry(null);
+            }
             customer.setIndividual(individual);
         } else {
             //Juristic
@@ -504,10 +545,21 @@ public class CustomerTransform extends Transform {
         }
 
         //todo:
-//        private BigDecimal share;
+//        private BigDecimal approxIncome;
+//        private String mobileNumber;
+//        private String faxNumber;
+//        private String email;
+//        private KYCLevel kycLevel;
+//        private int convenantFlag;
+//        private int reviewFlag;
+//        private String reason;
+//        private BusinessType businessType;
+//        private WarningCode csi;
 //        private Date documentAuthorizeDate;
 //        private String kycReason;
 //        private int worthiness;
+//        private AddressType mailingAddressType;
+//        private BigDecimal percentShare;
 
         return customer;
     }

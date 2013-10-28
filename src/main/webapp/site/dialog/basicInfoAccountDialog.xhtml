@@ -68,11 +68,11 @@
                             styleClass="small"
                             actionListener="#{basicInfo.addAccount}"
                             process="@form"
-                            update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
+                            update=":basicInfoAccountDlgForm,:frmMain:resultTableOpeningAccount"
                             oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
-                            <!--oncomplete="basicInfoAccountDlg.hide()"/>-->
-                    <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
-                                     onclick="basicInfoAccountDlg.hide()" update=":basicInfoAccountDlgForm"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+                                     type="button" process="@this" update=":basicInfoAccountDlgForm"
+                                     onclick="basicInfoAccountDlg.hide()"/>
                 </td>
             </tr>
         </table>

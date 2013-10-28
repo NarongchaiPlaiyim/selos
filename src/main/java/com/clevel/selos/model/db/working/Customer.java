@@ -115,6 +115,42 @@ public class Customer implements Serializable {
     @Column(name="is_search_rm", nullable=false, columnDefinition = "int default 0")
     private int searchFromRM;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="document_authorize_date")
+    private Date documentAuthorizeDate;
+
+    @Column(name="kyc_reason")
+    private String kycReason;
+
+    @Column(name="worthiness")
+    private int worthiness;
+
+    @Column(name="mobile_number")
+    private String mobileNumber;
+
+    @Column(name="fax_number")
+    private String faxNumber;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="convenant_flag")
+    private int convenantFlag;
+
+    @Column(name="review_flag")
+    private int reviewFlag;
+
+    @Column(name="reason")
+    private String reason;
+
+    @OneToOne
+    @JoinColumn(name="kyclevel_id")
+    private KYCLevel kycLevel;
+
+    @OneToOne
+    @JoinColumn(name="mailing_address_id")
+    private AddressType mailingAddressType;
+
     public Customer() {
     }
 
@@ -358,38 +394,147 @@ public class Customer implements Serializable {
         this.searchFromRM = searchFromRM;
     }
 
+    public int getSpouse() {
+        return isSpouse;
+    }
+
+    public void setSpouse(int spouse) {
+        isSpouse = spouse;
+    }
+
+    public Date getDocumentAuthorizeDate() {
+        return documentAuthorizeDate;
+    }
+
+    public void setDocumentAuthorizeDate(Date documentAuthorizeDate) {
+        this.documentAuthorizeDate = documentAuthorizeDate;
+    }
+
+    public String getKycReason() {
+        return kycReason;
+    }
+
+    public void setKycReason(String kycReason) {
+        this.kycReason = kycReason;
+    }
+
+    public int getWorthiness() {
+        return worthiness;
+    }
+
+    public void setWorthiness(int worthiness) {
+        this.worthiness = worthiness;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getConvenantFlag() {
+        return convenantFlag;
+    }
+
+    public void setConvenantFlag(int convenantFlag) {
+        this.convenantFlag = convenantFlag;
+    }
+
+    public int getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(int reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public KYCLevel getKycLevel() {
+        return kycLevel;
+    }
+
+    public void setKycLevel(KYCLevel kycLevel) {
+        this.kycLevel = kycLevel;
+    }
+
+    public AddressType getMailingAddressType() {
+        return mailingAddressType;
+    }
+
+    public void setMailingAddressType(AddressType mailingAddressType) {
+        this.mailingAddressType = mailingAddressType;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("workCasePrescreen", workCasePrescreen)
-                .append("customerEntity", customerEntity)
-                .append("documentType", documentType)
-                .append("documentAuthorizeBy", documentAuthorizeBy)
-                .append("serviceSegment", serviceSegment)
-                .append("collateralOwner", collateralOwner)
-                .append("percentShare", percentShare)
-                .append("approxIncome", approxIncome)
-                .append("idNumber", idNumber)
-                .append("expireDate", expireDate)
-                .append("title", title)
-                .append("nameEn", nameEn)
-                .append("nameTh", nameTh)
-                .append("lastNameTh", lastNameTh)
-                .append("lastNameEn", lastNameEn)
-                .append("age", age)
-                .append("ncbFlag", ncbFlag)
-                .append("individual", individual)
-                .append("juristic", juristic)
-                .append("addressesList", addressesList)
-                .append("businessType", businessType)
-                .append("relation", relation)
-                .append("reference", reference)
-                .append("ncb", ncb)
-                .append("csi", csi)
-                .append("isSpouse", isSpouse)
-                .append("spouseId", spouseId)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("workCasePrescreen", workCasePrescreen).
+                append("customerEntity", customerEntity).
+                append("documentType", documentType).
+                append("documentAuthorizeBy", documentAuthorizeBy).
+                append("serviceSegment", serviceSegment).
+                append("collateralOwner", collateralOwner).
+                append("percentShare", percentShare).
+                append("approxIncome", approxIncome).
+                append("idNumber", idNumber).
+                append("expireDate", expireDate).
+                append("title", title).
+                append("nameEn", nameEn).
+                append("nameTh", nameTh).
+                append("lastNameTh", lastNameTh).
+                append("lastNameEn", lastNameEn).
+                append("age", age).
+                append("ncbFlag", ncbFlag).
+                append("individual", individual).
+                append("juristic", juristic).
+                append("addressesList", addressesList).
+                append("businessType", businessType).
+                append("relation", relation).
+                append("reference", reference).
+                append("ncb", ncb).
+                append("csi", csi).
+                append("isSpouse", isSpouse).
+                append("spouseId", spouseId).
+                append("searchFromRM", searchFromRM).
+                append("documentAuthorizeDate", documentAuthorizeDate).
+                append("kycReason", kycReason).
+                append("worthiness", worthiness).
+                append("mobileNumber", mobileNumber).
+                append("faxNumber", faxNumber).
+                append("email", email).
+                append("convenantFlag", convenantFlag).
+                append("reviewFlag", reviewFlag).
+                append("reason", reason).
+                append("kycLevel", kycLevel).
+                append("businessType", businessType).
+                append("mailingAddressType", mailingAddressType).
+                toString();
     }
 }

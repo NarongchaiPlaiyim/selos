@@ -451,7 +451,9 @@
                                                                      process="@this"
                                                                      actionListener="#{basicInfo.onAddAccount}"
                                                                      update=":basicInfoAccountDlgForm"
-                                                                     oncomplete="basicInfoAccountDlg.show();"/>
+                                                                     oncomplete="basicInfoAccountDlg.show();">
+                                                        <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                    </p:commandButton>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -480,7 +482,7 @@
                                                         </p:column>
 
                                                         <p:column headerText="" styleClass="center" style="width:54px;">
-                                                            <p:commandButton title="Edit"
+                                                            <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                              icon="ui-icon-pencil"
                                                                              action="#{basicInfo.onEditAccount()}"
                                                                              update=":basicInfoAccountDlgForm"
@@ -489,8 +491,9 @@
                                                                                              target="#{basicInfo.selectAccount}"/>
                                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                                              target="#{basicInfo.rowIndex}"/>
+                                                                <p:resetInput target=":basicInfoAccountDlgForm"/>
                                                             </p:commandButton>
-                                                            <p:commandButton title="Remove"
+                                                            <p:commandButton title="#{msg.get('app.button.remove')}"
                                                                              icon="ui-icon-trash"
                                                                              oncomplete="confirmDeleteAccountDlg.show()" >
                                                                 <f:setPropertyActionListener value="#{item}"

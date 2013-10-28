@@ -54,6 +54,19 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int collateralOwner;
     private BigDecimal percentShare;
     private BigDecimal approxIncome;
+    private String mobileNumber;
+    private String faxNumber;
+    private String email;
+    private KYCLevel kycLevel;
+    private int convenantFlag;
+    private int reviewFlag;
+    private String reason;
+    private BusinessType businessType;
+    private WarningCode csi;
+    private Date documentAuthorizeDate;
+    private String kycReason;
+    private int worthiness;
+    private AddressType mailingAddressType;
 
     //*** Var for Individual ***//
     private Date dateOfBirth;
@@ -66,6 +79,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Nationality sndNationality;
     private Race origin;
     private Occupation occupation;
+    private Country citizenCountry;
 
     //*** Var for Juristic ***//
     private BigDecimal capital;
@@ -75,36 +89,17 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String registrationId;
     private String signCondition;
     private BigDecimal totalShare;
+    private Country registrationCountry;
 
     //*** Var for Address ***//
     private AddressView currentAddress;
     private AddressView workAddress;
     private AddressView registerAddress;
-    private AddressType mailingAddressType;
 
     //*** Var for Children ***//
     private List<ChildrenView> childrenList;
 
-    private Country citizenCountry;
-    private Country registrationCountry;
-    private String mobileNumber;
-    private String faxNumber;
-    private String email;
-    private KYCLevel kycLevel;
-    private int convenantFlag;
-    private int ewsFlag;
-    private int reviewFlag;
-    private String reason;
-    private BusinessType businessType;
-
     private CustomerInfoView spouse;
-
-    private WarningCode csi;
-
-    private BigDecimal share;
-    private Date documentAuthorizeDate;
-    private String kycReason;
-    private int worthiness;
 
     public CustomerInfoView(){
         //reset();
@@ -158,14 +153,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.email = "";
         this.kycLevel = new KYCLevel();
         this.convenantFlag = -1;
-        this.ewsFlag = -1;
         this.reviewFlag = -1;
         this.reason = "";
         this.spouse = new CustomerInfoView();
         this.csi = new WarningCode();
         this.businessType = new BusinessType();
         this.documentAuthorizeDate = new Date();
-        this.share = BigDecimal.ZERO;
     }
 
     public long getIndividualId() {
@@ -326,14 +319,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setConvenantFlag(int convenantFlag) {
         this.convenantFlag = convenantFlag;
-    }
-
-    public int getEwsFlag() {
-        return ewsFlag;
-    }
-
-    public void setEwsFlag(int ewsFlag) {
-        this.ewsFlag = ewsFlag;
     }
 
     public int getReviewFlag() {
@@ -711,14 +696,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setSearchFromRM(int searchFromRM) {
         this.searchFromRM = searchFromRM;
     }
-    public BigDecimal getShare() {
-        return share;
-    }
-
-    public void setShare(BigDecimal share) {
-        this.share = share;
-    }
-
     public Date getDocumentAuthorizeDate() {
         return documentAuthorizeDate;
     }

@@ -1,9 +1,10 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
+import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -19,7 +20,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSummary")
@@ -43,20 +47,13 @@ public class CustomerInfoSummary implements Serializable {
     private CustomerEntityDAO customerEntityDAO;
 
     @Inject
-    private CustomerInfoSummaryControl customerInfoSummaryControl;
+    private CustomerInfoControl customerInfoControl;
 
     //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
 
     //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
-
-    //Dialog
-//    private BasicInfoAccountView basicInfoAccountView;
-//    enum ModeForButton{ ADD, EDIT }
-//    private ModeForButton modeForButton;
-//    private BasicInfoAccountView selectAccount;
-//    private int rowIndex;
 
     private String messageHeader;
     private String message;
@@ -65,6 +62,8 @@ public class CustomerInfoSummary implements Serializable {
     private long workCaseId;
     private long stepId;
     private String userId;
+
+    private CustomerInfoView selectEditCustomerBorrower;
 
     public CustomerInfoSummary(){
     }
@@ -103,8 +102,40 @@ public class CustomerInfoSummary implements Serializable {
         customerEntityList = customerEntityDAO.findAll();
         customerInfoSummaryView = new CustomerInfoSummaryView();
 
-        customerInfoSummaryView = customerInfoSummaryControl.getCustomerInfoSummary(workCaseId);
+        customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
     }
+
+    public String onLinkToEditBorrower() {
+//        passParamsToBankStmtDetail(false, summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
+        if(selectEditCustomerBorrower.getCustomerEntity().getId() == 1){ // Individual
+            passParamsToIndividual(selectEditCustomerBorrower.getId());
+            return "customerInfoIndividual?faces-redirect=true";
+        }else{
+            passParamsToJuristic(selectEditCustomerBorrower.getId());
+            return "customerInfoJuristic?faces-redirect=true";
+        }
+    }
+
+    public String onLinkToEditGuarantor() {
+        return null;
+    }
+
+    public String onLinkToEditRelated() {
+        return null;
+    }
+
+    private void passParamsToIndividual(long customerId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("customerId", customerId);
+        FacesUtil.getFlash().put("cusInfoParams", map);
+    }
+
+    private void passParamsToJuristic(long customerId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("customerId", customerId);
+        FacesUtil.getFlash().put("cusInfoParams", map);
+    }
+
 
     public CustomerInfoSummaryView getCustomerInfoSummaryView() {
         return customerInfoSummaryView;
@@ -120,5 +151,13 @@ public class CustomerInfoSummary implements Serializable {
 
     public void setCustomerEntityList(List<CustomerEntity> customerEntityList) {
         this.customerEntityList = customerEntityList;
+    }
+
+    public CustomerInfoView getSelectEditCustomerBorrower() {
+        return selectEditCustomerBorrower;
+    }
+
+    public void setSelectEditCustomerBorrower(CustomerInfoView selectEditCustomerBorrower) {
+        this.selectEditCustomerBorrower = selectEditCustomerBorrower;
     }
 }

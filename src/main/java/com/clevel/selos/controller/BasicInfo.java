@@ -195,6 +195,10 @@ public class BasicInfo implements Serializable {
     public void onAddAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
 
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+
+        openAccountProductList = new ArrayList<OpenAccountProduct>();
+
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
         for(OpenAccountPurpose oap : openAccountPurposeList){
@@ -209,6 +213,7 @@ public class BasicInfo implements Serializable {
     public void onEditAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
+        onChangeAccountType();
         for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
             if(biapv.isSelected()){
                 for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){

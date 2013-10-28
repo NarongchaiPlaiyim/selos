@@ -174,6 +174,262 @@
                                             </p:column>
 
                                             <p:column> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{custInfoSummary.selectEditCustomerBorrower}"/>
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <!-- Guarantor -->
+
+                                <tr>
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                        #{msg.get('app.custInfoSummary.content.guarantor')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="resultTableGuarantor" var="item2" value="#{custInfoSummary.customerInfoSummaryView.guarantorCustomerViewList}"
+                                                     paginator="false" rowKey="#{item2}" rowIndexVar="rowIndex">
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column rowspan="2" width="20px;"/>
+                                                    <p:column rowspan="2" width="200px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="160px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="170px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="280px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="30px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="40px;"/>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="1" width="100px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="60px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="130px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="40px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.titleTh.titleTh}#{item2.firstNameTh} #{item2.lastNameTh}" />
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.citizenId}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.tmbCustomerId}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.relation.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <!--<h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : item2.collateralOwner == 0 ? 'N' : '-'}"/>-->
+                                                <h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.reference.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.reference.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.percentShare}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.age}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.kycLevel.kycLevel}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.csi.code}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.id}"/>
+                                            </p:column>
+
+                                            <p:column> <!--14-->
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <!-- Related -->
+
+                                <tr>
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                        #{msg.get('app.custInfoSummary.content.related')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="resultTableRelated" var="item3" value="#{custInfoSummary.customerInfoSummaryView.relatedCustomerViewList}"
+                                                     paginator="false" rowKey="#{item3}" rowIndexVar="rowIndex">
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column rowspan="2" width="20px;"/>
+                                                    <p:column rowspan="2" width="200px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="160px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="170px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="280px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="30px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="40px;"/>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="1" width="100px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="60px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="130px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="40px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140px;">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{rowIndex+1}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.titleTh.titleTh}#{item3.firstNameTh} #{item3.lastNameTh}" />
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.citizenId}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.tmbCustomerId}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.relation.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <!--<h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : item3.collateralOwner == 0 ? 'N' : '-'}"/>-->
+                                                <h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.reference.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.reference.description}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.percentShare}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.age}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.kycLevel.kycLevel}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.csi.code}"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.id}"/>
+                                            </p:column>
+
+                                            <p:column> <!--14-->
                                             </p:column>
 
                                         </p:dataTable>
