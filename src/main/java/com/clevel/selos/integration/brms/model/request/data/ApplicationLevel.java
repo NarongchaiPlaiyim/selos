@@ -29,9 +29,8 @@ public class ApplicationLevel implements Serializable {
     private Province bizLocation;
     private int yearInBusiness;
     private Country countryOfRegistration;
-    private ProductGroup productGroup;
 
-    List<CustomerLevel> customerLevelList;
+    List<BorrowerLevel> customerLevelList;
     List<BankAccountLevel> bankAccountLevelList;
     List<BusinessLevel> businessLevelList;
 
@@ -101,7 +100,6 @@ public class ApplicationLevel implements Serializable {
         this.bizLocation = bizLocation;
         this.yearInBusiness = yearInBusiness;
         this.countryOfRegistration = countryOfRegistration;
-        this.productGroup = productGroup;
     }
 
     public String getLendingReferType() {
@@ -304,14 +302,6 @@ public class ApplicationLevel implements Serializable {
         this.countryOfRegistration = countryOfRegistration;
     }
 
-    public ProductGroup getProductGroup() {
-        return productGroup;
-    }
-
-    public void setProductGroup(ProductGroup productGroup) {
-        this.productGroup = productGroup;
-    }
-
     public BigDecimal getNumOfTotalFacility() {
         return numOfTotalFacility;
     }
@@ -336,11 +326,11 @@ public class ApplicationLevel implements Serializable {
         this.businessLocation = businessLocation;
     }
 
-    public List<CustomerLevel> getCustomerLevelList() {
+    public List<BorrowerLevel> getCustomerLevelList() {
         return customerLevelList;
     }
 
-    public void setCustomerLevelList(List<CustomerLevel> customerLevelList) {
+    public void setCustomerLevelList(List<BorrowerLevel> customerLevelList) {
         this.customerLevelList = customerLevelList;
     }
 
@@ -635,7 +625,6 @@ public class ApplicationLevel implements Serializable {
                 .append("bizLocation", bizLocation)
                 .append("yearInBusiness", yearInBusiness)
                 .append("countryOfRegistration", countryOfRegistration)
-                .append("productGroup", productGroup)
                 .append("customerLevelList", customerLevelList)
                 .append("bankAccountLevelList", bankAccountLevelList)
                 .append("businessLevelList", businessLevelList)

@@ -1,7 +1,9 @@
 package com.clevel.selos.integration.brms.model.request;
 
 import com.clevel.selos.integration.brms.model.request.data.ApplicationLevel;
-import com.clevel.selos.integration.brms.model.request.data.CustomerLevel;
+import com.clevel.selos.integration.brms.model.request.data.BorrowerLevel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.List;
 
@@ -9,12 +11,12 @@ public class StandardPricingFeeRequest {
     public ApplicationLevel applicationLevel;
     //todo add more data level/group (Fac)
 
-    List<CustomerLevel> customerLevelList;
+    List<BorrowerLevel> customerLevelList;
 
     public StandardPricingFeeRequest() {
     }
 
-    public StandardPricingFeeRequest(ApplicationLevel applicationLevel, List<CustomerLevel> customerLevelList) {
+    public StandardPricingFeeRequest(ApplicationLevel applicationLevel, List<BorrowerLevel> customerLevelList) {
         this.applicationLevel = applicationLevel;
         this.customerLevelList = customerLevelList;
     }
@@ -27,11 +29,19 @@ public class StandardPricingFeeRequest {
         this.applicationLevel = applicationLevel;
     }
 
-    public List<CustomerLevel> getCustomerLevelList() {
+    public List<BorrowerLevel> getCustomerLevelList() {
         return customerLevelList;
     }
 
-    public void setCustomerLevelList(List<CustomerLevel> customerLevelList) {
+    public void setCustomerLevelList(List<BorrowerLevel> customerLevelList) {
         this.customerLevelList = customerLevelList;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("applicationLevel", applicationLevel)
+                .append("customerLevelList", customerLevelList)
+                .toString();
     }
 }

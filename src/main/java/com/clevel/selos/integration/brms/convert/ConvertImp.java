@@ -1,20 +1,34 @@
 package com.clevel.selos.integration.brms.convert;
 
+import com.clevel.selos.integration.BRMS;
 import com.clevel.selos.integration.brms.model.request.*;
 import com.clevel.selos.integration.brms.model.request.data.*;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.BorrowerType;
+import com.clevel.selos.integration.brms.service.standardpricing.feerules.ProductType;
+import com.clevel.selos.model.db.master.ProductGroup;
+import org.slf4j.Logger;
 
+import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ConvertImp implements ConvertInf, Serializable {
     private ApplicationLevel applicationLevel;
-    List<CustomerLevel> customerLevelList;
+    List<BorrowerLevel> customerLevelList;
     List<BusinessLevel> businessLevelList;
     List<BankAccountLevel> bankAccountLevelList;
     private TmbAccountLevel tmbAccountLevel;
     private NcbAccountLevel ncbAccountLevel;
     private Collateralevel collateralevel;
 
+    @Inject
+    @BRMS
+    Logger log;
+
+    @Inject
     public ConvertImp() {
     }
 
@@ -24,7 +38,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         customerLevelList = inputModel.getCustomerLevelList();
         businessLevelList = inputModel.getApplicationLevel().getBusinessLevelList();
         bankAccountLevelList = inputModel.getApplicationLevel().getBankAccountLevelList();
-
+        tmbAccountLevel = inputModel.getTmbAccountLevel();
 
         applicationLevel.getApplicationNumber();                //1
         applicationLevel.getProcessDate();                      //2
@@ -32,13 +46,13 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getExpectedSubmitDate();               //4
         applicationLevel.getCustomerEntity();                   //5
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getCustomerEntity();                          //5
         }
 
         applicationLevel.isExistingSMECustomer();               //6
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.isExistingSMECustomer();                      //6
         }
 
@@ -53,7 +67,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getYearInBusiness();                   //45
         applicationLevel.getCountryOfRegistration();            //46
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getRelationshipType();                        //51
             model.getReference();                               //52
             model.getNationality();                             //53
@@ -61,9 +75,9 @@ public class ConvertImp implements ConvertInf, Serializable {
             model.getNewQualitative();                          //55
         }
 
-        tmbAccountLevel.getBotClass();//56??????????
+        tmbAccountLevel.getBotClass();                          //56
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getNextReviewDate();          //57
             model.isNextReviewDateFlag();//58
             model.getExtendedReviewDate();//59
@@ -83,7 +97,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         tmbAccountLevel.getNumberOfDayInterestPastDue();//77???????
         tmbAccountLevel.getCardBlockCode();//78???????
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.isNcbFlag();          //79
         }
 
@@ -98,7 +112,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         ncbAccountLevel.getOverdue31dTo60dCount();//89???????
         ncbAccountLevel.getOverLimitLast6MthsCount();//90???????
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getNumSearchesLast6Mths();//91
             model.getNumberOfDaysNCBcheck();//92
             model.getWarningCodeFullyMatched();//93
@@ -113,7 +127,7 @@ public class ConvertImp implements ConvertInf, Serializable {
             model.isHighRiskFlag();//109
         }
 
-        applicationLevel.getProductGroup();//110
+//        applicationLevel.getProductGroup();//110
 
         //113-114
 
@@ -134,13 +148,13 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getExpectedSubmitDate();               //4
         applicationLevel.getCustomerEntity();                   //5
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getCustomerEntity();                          //5
         }
 
         applicationLevel.isExistingSMECustomer();               //6
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.isExistingSMECustomer();                      //6
         }
 
@@ -184,7 +198,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getTradeChequeReturn();                //47
         applicationLevel.getCollateralPotertialForPricing();    //48
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getRelationshipType();                        //51
             model.getReference();                               //52
             model.getNationality();                             //53
@@ -194,7 +208,7 @@ public class ConvertImp implements ConvertInf, Serializable {
 
         tmbAccountLevel.getBotClass();                          //56??????????
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getNextReviewDate();                          //57
             model.isNextReviewDateFlag();                       //58
             model.getExtendedReviewDate();                      //59
@@ -216,7 +230,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         tmbAccountLevel.getNumberOfDayInterestPastDue();        //77???????
         tmbAccountLevel.getCardBlockCode();                     //78???????
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.isNcbFlag();                                  //79
         }
 
@@ -231,7 +245,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         ncbAccountLevel.getOverdue31dTo60dCount();              //89???????
         ncbAccountLevel.getOverLimitLast6MthsCount();           //90???????
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getNumSearchesLast6Mths();                    //91
             model.getNumberOfDaysNCBcheck();                    //92
             model.getWarningCodeFullyMatched();                 //93
@@ -247,7 +261,7 @@ public class ConvertImp implements ConvertInf, Serializable {
             model.isHighRiskFlag();                             //109
         }
 
-        applicationLevel.getProductGroup();                     //110
+//        applicationLevel.getProductGroup();                     //110
         applicationLevel.getMaxCreditLimitByCollateral();       //111
         applicationLevel.getTotalProposedCreditLimit();         //112
 
@@ -264,7 +278,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         collateralevel.getAppraisalValueOfBuildin();            //123
         collateralevel.getLengthOfAppraisal();                  //124
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getDayAnnualReviewOverdue();                  //#N/A
         }
 
@@ -286,13 +300,13 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getAppInDate();                        //3
         applicationLevel.getCustomerEntity();                   //5
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getCustomerEntity();                          //5
         }
 
         applicationLevel.isExistingSMECustomer();               //6
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.isExistingSMECustomer();                      //6
         }
 
@@ -304,7 +318,7 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getTopUpBAFlag();                      //12
         applicationLevel.getSBCGFlag();                         //13
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getRelationshipType();                        //51
             model.getReference();                               //52
             model.getNationality();                             //53
@@ -314,7 +328,7 @@ public class ConvertImp implements ConvertInf, Serializable {
             model.getMarriageStatus();                          //71
         }
 
-        applicationLevel.getProductGroup();                     //110
+//        applicationLevel.getProductGroup();                     //110
 
         //113-114
 
@@ -331,10 +345,10 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getProcessDate();                      //2
         applicationLevel.getAppInDate();                        //3
         applicationLevel.isSameSetOfBorrower();                 //7
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getPersonalId();                              //69
         }
-        applicationLevel.getProductGroup();                     //110
+//        applicationLevel.getProductGroup();                     //110
 
         //113-114
 
@@ -352,11 +366,11 @@ public class ConvertImp implements ConvertInf, Serializable {
         applicationLevel.getAppInDate();                        //3
         applicationLevel.getCollateralPotertialForPricing();    //48
 
-        for (CustomerLevel model : customerLevelList) {
+        for (BorrowerLevel model : customerLevelList) {
             model.getPersonalId();                              //69
         }
 
-        applicationLevel.getProductGroup();                     //110
+//        applicationLevel.getProductGroup();                     //110
         applicationLevel.getTotalProposedCreditLimit();         //112
 
         //113-115
@@ -368,26 +382,54 @@ public class ConvertImp implements ConvertInf, Serializable {
 
     @Override
     public void convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception{
-        applicationLevel = inputModel.getApplicationLevel();
-        customerLevelList = inputModel.getCustomerLevelList();
+        log.debug("convertInputModelToRequestModel({})", inputModel.toString());
+        String applicationNumber = null;
+        Date dateOfApplication = null;
+        Date dateTimeValue = null;
+        String collateralPotential = null; //stringValue  _collateralPotential enum =CollateralPotentialEnum
+        String citizenID = null;
+        ProductGroup productType = null; //stringValue  _selosProductGroup enum = SELOSProductGroupEnum
+        BigDecimal requestedCreditLimit = null;
 
-        applicationLevel.getApplicationNumber();                //1
-        applicationLevel.getProcessDate();                      //2
-        applicationLevel.getAppInDate();                        //3
-        applicationLevel.getCollateralPotertialForPricing();    //48
+        List<BorrowerType> borrowerTypeList = null;
+        BorrowerType borrowerType = null;
+        com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest request = null;
+        com.clevel.selos.integration.brms.service.standardpricing.feerules.ApplicationType applicationType = null;
+        try {
+            request = new com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest();
+            applicationType = request.getUnderwritingRequest().getUnderwritingApprovalRequest().getApplication();
+            applicationLevel = inputModel.getApplicationLevel();
+            customerLevelList = inputModel.getCustomerLevelList();
 
-        for (CustomerLevel model : customerLevelList) {
-            model.getPersonalId();                              //69
+            applicationNumber = applicationLevel.getApplicationNumber();                //1
+            dateOfApplication = applicationLevel.getProcessDate();                      //2
+            dateTimeValue     = applicationLevel.getAppInDate();                        //3
+            applicationLevel.getCollateralPotertialForPricing();                        //48
+//            productType = applicationLevel.getProductGroup();                           //110
+            applicationLevel.getTotalProposedCreditLimit();         //112
+
+            //113-115
+
+            applicationLevel.getGuaranteeType();                    //117
+            collateralevel.getCollateralPotential();                //119
+            collateralevel.getCollateralType();                     //120
+
+
+            borrowerTypeList = new ArrayList<BorrowerType>();
+            for (BorrowerLevel model : customerLevelList) {
+                citizenID = model.getPersonalId();                                      //69
+                borrowerType = new BorrowerType();
+                borrowerType.getIndividual().setCitizenID(citizenID);
+                borrowerTypeList.add(borrowerType);
+            }
+
+            List<ProductType> product;
+            applicationType.setApplicationNumber(applicationNumber);
+
+
+        } catch (Exception e) {
+            log.error("Error {}", e);
         }
-
-        applicationLevel.getProductGroup();                     //110
-        applicationLevel.getTotalProposedCreditLimit();         //112
-
-        //113-115
-
-        applicationLevel.getGuaranteeType();                    //117
-        collateralevel.getCollateralPotential();                //119
-        collateralevel.getCollateralType();                     //120
     }
 
 

@@ -7,8 +7,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-public class CustomerLevel implements Serializable {
+public class BorrowerLevel implements Serializable {
     private CustomerEntity customerEntity;
     private boolean isExistingSMECustomer;
     private Relation relationshipType;
@@ -39,10 +40,12 @@ public class CustomerLevel implements Serializable {
     private String sPouseRelationshipType;
     private String marriageStatus;
 
-    public CustomerLevel() {
+    List<NcbAccountLevel> ncbAccountLevelList;
+
+    public BorrowerLevel() {
     }
 
-    public CustomerLevel(CustomerEntity customerEntity, boolean existingSMECustomer, Relation relationshipType, Reference reference, Nationality nationality, int numberOfMonthFromLastSetUpDate, String newQualitative, Date nextReviewDate, boolean nextReviewDateFlag, Date extendedReviewDate, boolean extendedReviewDateFlag, String ratingFinal, boolean unpaidFeePaid, boolean claimedLGFlag, String personalId, int age, boolean ncbFlag, int numSearchesLast6Mths, int numberOfDaysNCBcheck, WarningCode warningCodeFullyMatched, WarningCode warningCodeSomeMatched, int dayOverdueAnnualReview) {
+    public BorrowerLevel(CustomerEntity customerEntity, boolean existingSMECustomer, Relation relationshipType, Reference reference, Nationality nationality, int numberOfMonthFromLastSetUpDate, String newQualitative, Date nextReviewDate, boolean nextReviewDateFlag, Date extendedReviewDate, boolean extendedReviewDateFlag, String ratingFinal, boolean unpaidFeePaid, boolean claimedLGFlag, String personalId, int age, boolean ncbFlag, int numSearchesLast6Mths, int numberOfDaysNCBcheck, WarningCode warningCodeFullyMatched, WarningCode warningCodeSomeMatched, int dayOverdueAnnualReview) {
         this.customerEntity = customerEntity;
         isExistingSMECustomer = existingSMECustomer;
         this.relationshipType = relationshipType;
