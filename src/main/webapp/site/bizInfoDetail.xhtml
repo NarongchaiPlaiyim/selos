@@ -212,9 +212,10 @@
                         <tr>
                             <td class="left" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.bizProductDetail')}"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton id="btnAddBizProduct"
                                                  value="#{msg.get('app.button.add')}"
-                                                 styleClass="smaller"
+                                                 styleClass="medium"
                                                  process="@this"
                                                  actionListener="#{bizInfoDetail.onAddBizProductDetailView()}"
                                                  update=":bizProductViewDlgForm"
@@ -222,7 +223,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" class="center">
+                            <td colspan="6" align="center">
                                 <p:dataTable styleClass="main_container" style="width: 100%"
                                              id="bizProductViewTable"
                                              var="bizProductDetailView"
@@ -237,10 +238,14 @@
                                         <p:outputLabel value="#{bizProductDetailView.productType}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizProduct.table.percentSalesVolume')}" styleClass="center" style="width: 20%;">
-                                        <p:outputLabel value="#{bizProductDetailView.percentSalesVolume}"/>
+                                        <p:outputLabel value="#{bizProductDetailView.percentSalesVolume}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizProduct.table.percentEBIT')}" styleClass="center" style="width: 20%;">
-                                        <p:outputLabel value="#{bizProductDetailView.percentEBIT}"/>
+                                        <p:outputLabel value="#{bizProductDetailView.percentEBIT}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizProduct.table.productDetail')}" styleClass="center" style="width: 30%;">
                                         <p:outputLabel value="#{bizProductDetailView.productDetail}"/>
@@ -269,20 +274,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6"><p:spacer width="5px"/></td>
+                            <td colspan="6"><p:spacer width="10px"/></td>
                         </tr>
                         <tr>
                             <td colspan="6"><p:separator/></td>
                         </tr>
                         <tr>
-                            <td colspan="6"><p:spacer width="5px"/></td>
+                            <td colspan="6"><p:spacer width="10px"/></td>
                         </tr>
                         <tr>
                             <td class="title" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.supplierDetail')}"/>
-                                <p:spacer width="5px"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton value="#{msg.get('app.button.add')}"
-                                                 styleClass="small"
+                                                 styleClass="medium"
                                                  process="@this"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
@@ -292,10 +297,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6" >
+                            <td colspan="6" align="center">
                                 <p:dataTable style="width: 100%;"
                                              id="supplierTable"
                                              var="supplierItem"
+                                             styleClass="medium"
                                              value="#{bizInfoDetail.bizInfoDetailView.supplierDetailList}"
                                              paginator="false"
                                              rowKey="#{supplierItem.no}"
@@ -316,13 +322,19 @@
                                         <p:outputLabel styleClass="right" value="#{supplierItem.contactYear}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentBuysVolume')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentSalesVolume}"/>
+                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentSalesVolume}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentCash')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentCash}"/>
+                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentCash}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentCredit')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentCredit}"/>
+                                        <p:outputLabel styleClass="right" value="#{supplierItem.percentCredit}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.creditTerm')}" styleClass="center" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{supplierItem.creditTerm}"/>
@@ -433,9 +445,10 @@
                         <tr>
                             <td class="title" colspan="6">
                                 <p:outputLabel value="#{msg.get('app.bizInfoDetail.label.buyerDetail')}"/>
-                                <p:spacer width="5px"/>
+                                <p:spacer width="10px"/>
                                 <p:commandButton value="#{msg.get('app.button.add')}"
                                                  process="@this"
+                                                 styleClass="medium"
                                                  action="#{bizInfoDetail.onAddBizStakeHolderDetailView()}"
                                                  update=":stakeholderViewDlgForm" oncomplete="stakeholderViewDlg.show()">
                                     <f:setPropertyActionListener value="2"
@@ -444,7 +457,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="6" align="center">
                                 <p:dataTable id="buyerTable" style="width: 100%;"
                                              var="buyerItem"
                                              value="#{bizInfoDetail.bizInfoDetailView.buyerDetailList}"
@@ -467,13 +480,19 @@
                                         <p:outputLabel styleClass="right" value="#{buyerItem.contactYear}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentSalesVolume')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentSalesVolume}"/>
+                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentSalesVolume}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentCash')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentCash}"/>
+                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentCash}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.percentCredit')}" styleClass="center" style="width:11%;">
-                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentCredit}"/>
+                                        <p:outputLabel styleClass="right" value="#{buyerItem.percentCredit}">
+                                            <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
+                                        </p:outputLabel>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.bizInfoDetail.bizStakeHolder.table.creditTerm')}" styleClass="center" style="width:11%;">
                                         <p:outputLabel styleClass="right" value="#{buyerItem.creditTerm}"/>
@@ -772,12 +791,12 @@
     </h:form>
     </p:panel>
 
-    <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"
+    <p:dialog id="stakeholderViewDialog" header="stakeholderView Information" widgetVar="stakeholderViewDlg"  resizable="false"
               modal="true" width="350" height="280">
         <ui:include src="dialog/fullscreenStakeholderDialog.xhtml"/>
     </p:dialog>
 
-    <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg"
+    <p:dialog id="bizProductViewDialog" header="bizProductView Information" widgetVar="bizProductViewDlg" resizable="false"
               modal="true" width="350" height="170">
         <ui:include src="dialog/fullscreenBizProductDialog.xhtml"/>
     </p:dialog>

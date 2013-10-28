@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -21,8 +22,27 @@ public class IsaCreateUserView implements Serializable {
     private UserTeam userTeam;
     private UserTitle userTitle;
     private UserZone userZone;
+    private int active;
 
+    private ManageUserAction flag;
 
+    public void reset() {
+        this.id = "";
+        this.username = "";
+        this.emailAddress = "";
+        this.phoneExt = "";
+        this.phoneNumber = "";
+        this.buCode = "";
+        this.userDepartment = new UserDepartment();
+        this.role = new Role();
+        this.userDivision = new UserDivision();
+        this.userRegion = new UserRegion();
+        this.userTeam = new UserTeam();
+        this.userTitle = new UserTitle();
+        this.userZone = new UserZone();
+        this.active = 1;
+//        this.flag = ManageUserAction.ADD;
+    }
 
     public String getId() {
         return id;
@@ -128,6 +148,22 @@ public class IsaCreateUserView implements Serializable {
         this.userZone = userZone;
     }
 
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public ManageUserAction getFlag() {
+        return flag;
+    }
+
+    public void setFlag(ManageUserAction flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -144,6 +180,8 @@ public class IsaCreateUserView implements Serializable {
                 .append("userTeam", userTeam)
                 .append("userTitle", userTitle)
                 .append("userZone", userZone)
+                .append("active",active)
+                .append("flag",flag)
                 .toString();
     }
 }

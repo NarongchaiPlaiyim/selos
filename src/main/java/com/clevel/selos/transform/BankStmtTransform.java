@@ -41,14 +41,11 @@ public class BankStmtTransform extends Transform{
     //Transform
     @Inject
     BankTransform bankTransform;
-
-
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
 
     @Inject
     public BankStmtTransform(){
-
     }
 
     public BankStmtView getBankStmtView(DWHBankStatement dwhBankStatement){
@@ -158,10 +155,10 @@ public class BankStmtTransform extends Transform{
 
             bankStatement.setBank(bankDAO.findById(bankStmtView.getBankView().getCode()));
             bankStatement.setBranch(bankStmtView.getBranchName());
-            bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStatement.getBankAccountType().getId()));
+            bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
             bankStatement.setAccountNo(bankStmtView.getAccountNumber());
             bankStatement.setAccountName(bankStmtView.getAccountName());
-            bankStatement.setOtherAccountType(bankStmtView.getOthBankAccountTypeView().getId());
+            bankStatement.setOtherAccountType(bankStmtView.getOtherAccountType());
             bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
