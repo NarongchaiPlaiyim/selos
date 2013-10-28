@@ -16,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,17 @@ public class Isa implements Serializable {
     IsaBusinessControl isaBusinessControl;
 
     public Isa() {
-        complete = true;
+
+    }
+
+    private User[] selectUserDetail;
+
+    public User[] getSelectUserDetail() {
+        return selectUserDetail;
+    }
+
+    public void setSelectUserDetail(User[] selectUserDetail) {
+        this.selectUserDetail = selectUserDetail;
     }
 
     private List<User> userDetail;
@@ -66,6 +77,7 @@ public class Isa implements Serializable {
     private List<UserTeam> userTeamList;
     private List<UserTitle> userTitleList;
     private List<UserZone> userZoneList;
+
 
     private IsaCreateUserView createUserView;
 
@@ -86,13 +98,14 @@ public class Isa implements Serializable {
     public void onManageUserAction() {
         log.debug("onCreateNewUser()");
         RequestContext context = RequestContext.getCurrentInstance();
-
+        complete = true;
+        System.out.println("------------------  :  " + createUserView.toString());
 
         try {
             if (createUserView.getFlag() == ManageUserAction.ADD) {
-                messageHeader = "Add New User!";
+                messageHeader = "Add New User.";
 
-                User user = userDAO.findByUserName(createUserView.getUsername());
+                User user = userDAO.findOneByCriteria(Restrictions.eq("id", createUserView.getId()));
                 if (user != null) {
                     complete = false;
                     message = "Add new User failed. Cause : Duplicate UserId found in system!";
@@ -104,7 +117,7 @@ public class Isa implements Serializable {
                 }
 
             } else if (createUserView.getFlag() == ManageUserAction.EDIT) {
-                messageHeader = "Edit User!";
+                messageHeader = "Edit User.";
                 isaBusinessControl.editUser(createUserView);
                 onSelectUser();
                 message = "Edit User Success.";
@@ -135,7 +148,8 @@ public class Isa implements Serializable {
         log.debug("onSelectUser()");
         userDetail = new ArrayList<User>();
         User user = new User();
-        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
+//        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
+        userDetail = userDAO.findAll();
         userSize = userDetail.size() + "";
     }
 
@@ -159,7 +173,9 @@ public class Isa implements Serializable {
         log.debug("onCreateNewUser()");
         createUserView = new IsaCreateUserView();
         createUserView.reset();
+        createUserView.getRole().setId(-1);
         createUserView.setFlag(ManageUserAction.ADD);
+
 
         getSelectUserDetailList();
     }
@@ -178,12 +194,12 @@ public class Isa implements Serializable {
                 getSelectUserDetailList();
 
             } else {
-                messageHeader = "Edit Form";
+                messageHeader = "Edit Form.";
                 message = "Open edit form failed. Cause : User is not found!";
                 context.execute("msgBoxSystemMessageDlg.show()");
             }
         } catch (Exception e) {
-            messageHeader = "Edit Form";
+            messageHeader = "Edit Form.";
             if (e.getCause() != null) {
                 message = "Open edit form failed. Cause : " + e.getCause().getMessage();
             } else {
@@ -196,9 +212,50 @@ public class Isa implements Serializable {
 
     public void onDelete() {
         System.out.println("------------------ " + id);
+        complete = true;
+        try {
+            isaBusinessControl.deleteUser(id);
+            onSelectUser();
 
-        isaBusinessControl.deleteUser(id);
-        onSelectUser();
+        } catch (Exception e) {
+            complete = false;
+            messageHeader = "Delete User.";
+            if (e.getCause() != null) {
+            message = "Delete User failed. Cause : "+e.getCause().getMessage();
+            }else{
+            message = "Delete User failed. Cause : "+e.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+
+    }
+
+    public void onDeleteUserList() {
+
+           RequestContext context=RequestContext.getCurrentInstance();
+        try {
+            messageHeader = "Delete User.";
+
+            if(selectUserDetail.length==0){
+                message = "Please Select User ";
+                context.execute("msgBoxSystemMessageDlg.show()");
+//                context.update(":msgBoxSystemMessagePanel");
+            }else{
+                isaBusinessControl.deleteUserList(selectUserDetail);
+                onSelectUser();
+                context.execute("confirmDeleteUserListDlg.show()");
+            }
+
+        } catch (Exception e) {
+            complete = false;
+
+            if (e.getCause() != null) {
+                message = "Delete User failed. Cause : "+e.getCause().getMessage();
+            }else{
+                message = "Delete User failed. Cause : "+e.getMessage();
+            }
+            context.execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
 
