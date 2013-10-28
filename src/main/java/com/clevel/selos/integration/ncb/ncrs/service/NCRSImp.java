@@ -22,6 +22,7 @@ import com.clevel.selos.system.Config;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMapping;
+import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
@@ -29,7 +30,6 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +47,7 @@ public class NCRSImp implements NCRS, Serializable {
     Post post;
 
     @Inject
-    @ValidationMessage
+    @ExceptionMessage
     Message message;
 
     @Inject
@@ -72,7 +72,6 @@ public class NCRSImp implements NCRS, Serializable {
     @Inject
     @Config(name = "system.encryption.enable")
     String encryptionEnable;
-
 
     @Inject
     EncryptionService encryptionService;
@@ -108,7 +107,6 @@ public class NCRSImp implements NCRS, Serializable {
     private String firstName = null;
     private String lastName = null;
     private String passwordEncrypt;
-
     private final String action = "NCRS";
     private final String ONLINE = "BB01001";
     private final String FIND = "TS01001";
@@ -158,7 +156,6 @@ public class NCRSImp implements NCRS, Serializable {
             memberref = ncrsModel.getMemberref();
             firstName = ncrsModel.getFirstName();
             lastName = ncrsModel.getLastName();
-
             idModelArrayList = new ArrayList<TUEFEnquiryIdModel>();
             if ("07".equals(customerType)) {
                 idModel = new TUEFEnquiryIdModel(customerType, customerId, countryCode);
@@ -258,15 +255,15 @@ public class NCRSImp implements NCRS, Serializable {
                 }
             } catch (HttpHostConnectException e) {
                 reason = e.getMessage();
-                log.error("NCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (ConnectTimeoutException e) {
                 reason = e.getMessage();
-                log.error("NCRS FAILED {}", reason);
+                log.error("NCRS FAILED {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.FAILED, reason, customerId, responseModel, ncrsModel));
             } catch (Exception e) {
                 reason = e.getMessage();
-                log.error("NCRS EXCEPTION 55555 {}", reason);
+                log.error("NCRS EXCEPTION {}", e);
                 responseModelArrayList.add(new NCRSOutputModel(appRefNumber, ActionResult.EXCEPTION, reason, customerId, responseModel, ncrsModel));
             }
         }
@@ -318,24 +315,28 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
-//            throw new HttpHostConnectException(new HttpHost(url), new ConnectException());
+            throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException,resultDesc));
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
-//            throw new ConnectTimeoutException(e.getMessage());
-        } catch (Exception e) {
+            throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException,resultDesc));
+        } catch(NCBInterfaceException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
-//            throw new Exception(e.getMessage());
+            throw new NCBInterfaceException(e, exception, resultDesc);
+        } catch(Exception e) {
+            resultDesc = e.getMessage();
+            resultDate = new Date();
+            log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
+                    linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
+            throw new NCBInterfaceException(e, exception, message.get(exception,resultDesc));
         }
     }
 
@@ -403,7 +404,6 @@ public class NCRSImp implements NCRS, Serializable {
                         resultDesc = "NCRS NCB Exception Transaction is null";
                         log.error("NCRS NCB Exception Transaction is null");
                         throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
-//                        throw new Exception("NCRS NCB Exception Transaction is null");
                     }
                 } else {
                     return checkOnlineResponseModel(callOnline(ncrsModel));
@@ -412,7 +412,6 @@ public class NCRSImp implements NCRS, Serializable {
                 resultDesc = "Matched transaction did not found";
                 log.error("Matched transaction did not found");
                 throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
-//                throw new Exception("Matched transaction did not found");
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
@@ -421,7 +420,6 @@ public class NCRSImp implements NCRS, Serializable {
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
-//            throw new HttpHostConnectException(new HttpHost(url), new ConnectException());
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
@@ -429,7 +427,13 @@ public class NCRSImp implements NCRS, Serializable {
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
-//            throw new ConnectTimeoutException(e.getMessage());
+        } catch(NCBInterfaceException e) {
+            resultDesc = e.getMessage();
+            resultDate = new Date();
+            log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
+                    linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
+            ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
+            throw new NCBInterfaceException(e, exception, resultDesc);
         } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
@@ -437,7 +441,6 @@ public class NCRSImp implements NCRS, Serializable {
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
-//            throw new Exception(e.getMessage());
         }
     }
 
@@ -457,22 +460,19 @@ public class NCRSImp implements NCRS, Serializable {
                         ErrorModel errorModel = arrayList.get(i);
                         exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
                     }
-                    resultDesc = "NCRS NCB Exception TUEFERROR " + exception.toString();
+                    resultDesc = exception.toString();
                     log.error("NCRS NCB Exception TUEFERROR {}", null != exception ? exception.toString() : "");
-                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//                    throw new Exception(null!=exception?exception.toString():"");
+                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 }
             } else {
-                resultDesc = "NCRS NCB Exception " + responseModel.getBodyModel().getErrormsg();
+                resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
-                throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//                throw new Exception("NCRS NCB Exception "+responseModel.getBodyModel().getErrormsg());
+                throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
             }
         } else {
             String resultDesc = "NCRS Response model is null";
             log.error("NCRS Response model is null");
-            throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//                throw new Exception("NCRS Response model is null");
+            throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
         }
     }
 
@@ -482,16 +482,14 @@ public class NCRSImp implements NCRS, Serializable {
             if (!ERROR.equals(responseModel.getHeaderModel().getCommand())) {
                 return responseModel;
             } else {
-                String resultDesc = "NCRS NCB Exception " + responseModel.getBodyModel().getErrormsg();
+                String resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
-                throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//                throw new Exception("NCRS NCB Exception {}"+responseModel.getBodyModel().getErrormsg());
+                throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
             }
         } else {
             String resultDesc = "NCRS Response model is null";
             log.error("NCRS Response model is null");
-            throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//            throw new Exception("NCRS Response model is null");
+            throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
         }
     }
 
@@ -542,16 +540,12 @@ public class NCRSImp implements NCRS, Serializable {
         String enqPurpose = ncrsModel.getEnqpurpose();
         String enqAmount = ncrsModel.getEnqamount();
         String consent = ncrsModel.getConsent();
-
-
         return new NCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         new TUEFEnquiryModel(
                                 new TUEFEnquiryHeaderModel(memberRef, enqPurpose, enqAmount, consent),
                                 nameModelArrayList, idModelArrayList)));
-
-
     }
 
     private NCRSRequestModel createFindModel(NCRSModel ncrsModel, String command) {
@@ -591,16 +585,16 @@ public class NCRSImp implements NCRS, Serializable {
 
         xStream = new XStream();
         xStream.processAnnotations(NCRSRequestModel.class);
-        xml = new String(xStream.toXML(ncrsRequest).getBytes(HTTP.UTF_8));
+        xml = new String(xStream.toXML(ncrsRequest).getBytes("UTF-8"));
         log.debug("NCRS Request : \n{}", xml);
         int nTimeOut = 1; //minute
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
-            log.debug("cannot convert time out to integer");
+            log.debug("error can not convert time out to integer");
         }
 
-        result = new String(post.sendPost(xml, url, nTimeOut).getBytes(HTTP.ISO_8859_1), HTTP.UTF_8);
+        result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");
         if (!"".equals(result)) {
             xStream.processAnnotations(NCRSResponseModel.class);
             ncrsResponse = (NCRSResponseModel) xStream.fromXML(result);
@@ -610,7 +604,6 @@ public class NCRSImp implements NCRS, Serializable {
             String resultDesc = "NCRS XML response error : " + result;
             log.error("NCRS XML response error : {}", result);
             throw new NCBInterfaceException(new Exception(resultDesc), this.exception, message.get(this.exception, resultDesc));
-//            throw new Exception("XML response error");
         }
     }
 

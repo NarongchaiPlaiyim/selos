@@ -8,13 +8,13 @@
     <h:form id="bizProductViewDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}" required="true"/>
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentSalesVolume" styleClass="right" value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2" />
@@ -23,7 +23,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText id="percentEBIT" styleClass="right" value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true" >
                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="2"  />
@@ -32,7 +32,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/> : <h:outputLabel value="*" styleClass="require-field"/></td>
+                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
                     <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="true"/>
                 </td>
@@ -49,7 +49,7 @@
                             value="#{msg.get('app.button.save')}"
                             action="#{bizInfoDetail.onSaveBizProductDetailView()}"
                             process=":bizProductViewDlgForm"
-                            update=":frmMain:bizProductViewTable,:bizProductViewDlgForm"
+                            update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
                             oncomplete="handleFullappBizProductRequest(xhr, status, args)"
                             />
                     <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bizProductViewDlg.hide()"/>
@@ -57,5 +57,8 @@
             </tr>
         </table>
     </h:form>
-
+    <p:blockUI block=":bizProductViewDlgForm" trigger=":bizProductViewDlgForm:btnSaveBizProductView">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 </ui:composition>

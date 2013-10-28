@@ -6,10 +6,7 @@ import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
-import com.clevel.selos.model.db.master.BusinessActivity;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.master.BusinessType;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
 import com.clevel.selos.model.view.BizProductDetailView;
@@ -17,6 +14,7 @@ import com.clevel.selos.model.view.BizStakeHolderDetailView;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -40,13 +38,11 @@ public class BizInfoDetail implements Serializable {
     Message msg;
 
     private String stakeType;
-    private BigDecimal supplierVolumeSum1;
-    private BigDecimal supplierVolumeSum2;
-    private BigDecimal supplierTermSum;
 
-    private BigDecimal buyerVolumeSum1;
-    private BigDecimal buyerVolumeSum2;
-    private BigDecimal buyerTermSum;
+    double sumBizPercent = 0;
+    private BigDecimal sumSalePercentB ;
+    private BigDecimal sumCreditPercentB ;
+    private BigDecimal sumCreditTermB ;
 
     private String messageHeader;
     private String message;
@@ -55,7 +51,6 @@ public class BizInfoDetail implements Serializable {
     private String modeForButton;
     private String dlgStakeName;
     private String dlgStakeSaleType;
-    private int bizGroupId;
     long bizInfoSummaryId;
     long bizInfoDetailViewId;
     private String descType;
@@ -64,6 +59,7 @@ public class BizInfoDetail implements Serializable {
     private List<BizStakeHolderDetailView> supplierDetailList;
     private List<BizStakeHolderDetailView> buyerDetailList;
     private BizProductDetailView bizProductDetailView;
+    private BizProductDetailView bizProductDetailViewTemp;
 
     private BizProductDetailView selectBizProductDetail;
     private List<BizProductDetailView> bizProductDetailViewList;
@@ -84,6 +80,7 @@ public class BizInfoDetail implements Serializable {
     private BusinessType bizType;
 
     private BizInfoSummaryView bizInfoSummaryView;
+    private User user;
 
     @Inject
     Logger log;
@@ -112,30 +109,25 @@ public class BizInfoDetail implements Serializable {
             HttpSession session = FacesUtil.getSession(true);
 
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info( " get FROM session workCaseId is " + workCaseId);
             bizInfoDetailViewId = Long.parseLong(session.getAttribute("bizInfoDetailViewId").toString());
-            log.info( " get FROM session bizInfoDetailViewId is " + bizInfoDetailViewId);
 
             bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
             bizInfoSummaryId = bizInfoSummaryView.getId();
-            log.info( " get FROM session bizInfoSummaryId is " + bizInfoSummaryId);
 
             descType = "";
-
             businessActivityList = businessActivityDAO.findAll();
             businessTypeList = businessTypeDAO.findAll();
             businessGroupList = businessGroupDAO.findAll();
 
+            bizProductDetailViewList = new ArrayList<BizProductDetailView>();
+            supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
+            buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
+
+            getBusinessInfoListDB();
             if(bizInfoDetailViewId == -1 ){
 
                 log.info( "bizInfoDetailView NEW RECORD");
-
                 bizInfoDetailView = new BizInfoDetailView();
-
-                bizProductDetailViewList = new ArrayList<BizProductDetailView>();
-                supplierDetailList = new ArrayList<BizStakeHolderDetailView>();
-                buyerDetailList = new ArrayList<BizStakeHolderDetailView>();
-
                 bizStakeHolderDetailView = new BizStakeHolderDetailView();
                 bizProductDetailView = new BizProductDetailView();
 
@@ -150,32 +142,23 @@ public class BizInfoDetail implements Serializable {
                 bizInfoDetailView.setBizGroup(bizGroup);
                 bizInfoDetailView.setBizType(bizType);
                 bizInfoDetailView.setBizActivity(bizActivity);
-
-                log.info( "bizInfoDetailView NEW RECORD");
-
             }else{
                 //
                 log.info( "bizInfoDetailView FIND BY ID ");
                 bizInfoDetailView = bizInfoDetailControl.onFindByID(bizInfoDetailViewId);
 
-                log.info( "bizInfoDetailView getBizProductDetailViewList Size " +  bizInfoDetailView.getBizProductDetailViewList().size());
                 if(bizInfoDetailView.getBizProductDetailViewList().size()>0){
                     bizProductDetailViewList =   bizInfoDetailView.getBizProductDetailViewList();
-                }else {
-                    bizProductDetailViewList =   new ArrayList<BizProductDetailView>();
                 }
-                log.info( "bizInfoDetailView getSupplierDetailList Size " +  bizInfoDetailView.getSupplierDetailList().size());
+
                 if(bizInfoDetailView.getSupplierDetailList().size()>0){
                     supplierDetailList =   bizInfoDetailView.getSupplierDetailList();
-                }else {
-                    supplierDetailList =   new ArrayList<BizStakeHolderDetailView>();
                 }
-                log.info( "bizInfoDetailView getBuyerDetailList Size " +  bizInfoDetailView.getBuyerDetailList().size());
+
                 if(bizInfoDetailView.getBuyerDetailList().size()>0){
                     buyerDetailList =   bizInfoDetailView.getBuyerDetailList();
-                }else {
-                    buyerDetailList =   new ArrayList<BizStakeHolderDetailView>();
                 }
+
                 bizGroup =  bizInfoDetailView.getBizGroup();
                 bizDesc =  bizInfoDetailView.getBizDesc();
 
@@ -183,7 +166,10 @@ public class BizInfoDetail implements Serializable {
                 onChangeBusinessGroup();
                 onChangeBusinessDesc();
                 descType = "";
+
+                sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
             }
+
             bizInfoDetailView.setBizProductDetailViewList(bizProductDetailViewList);
             bizInfoDetailView.setSupplierDetailList(supplierDetailList);
             bizInfoDetailView.setBuyerDetailList(buyerDetailList);
@@ -199,9 +185,21 @@ public class BizInfoDetail implements Serializable {
         }
     }
 
+    public void getBusinessInfoListDB(){
+        List<BizInfoDetailView> bizInfoDetailViewList;
+        bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryId);
+        sumBizPercent = 0;
+        BizInfoDetailView bizInfoDetailViewTemp;
+        if(bizInfoDetailViewList.size()!=0){
+            for(int i=0;i<bizInfoDetailViewList.size();i++){
+                bizInfoDetailViewTemp =    bizInfoDetailViewList.get(i);
+                sumBizPercent += bizInfoDetailViewTemp.getPercentBiz().doubleValue();
+            }
+        }
+    }
+
     public void onChangeBusinessGroup(){
         businessDescriptionList = businessDescriptionDAO.getListByBusinessGroup(bizGroup);
-
         if(descType.equals("")){
             bizInfoDetailView.setBizCode("");
             bizInfoDetailView.setIncomeFactor(null);
@@ -216,10 +214,8 @@ public class BizInfoDetail implements Serializable {
     public void onChangeBusinessDesc(){
         BusinessDescription viewBizDesc;
         BusinessDescription businessDesc;
-
         viewBizDesc = bizInfoDetailView.getBizDesc();
         businessDesc = bizInfoDetailControl.onFindBizDescByID(viewBizDesc);
-
         if(descType.equals("")){
             bizInfoDetailView.setBizCode(businessDesc.getTmbCode());
             bizInfoDetailView.setIncomeFactor(businessDesc.getIncomeFactor());
@@ -236,6 +232,8 @@ public class BizInfoDetail implements Serializable {
         modeForButton = "add";
     }
 
+
+
     public void onEditBizProductDetailView() {
         log.info( " onEditBizProductDetailView is " + selectBizProductDetail);
         modeForButton = "edit";
@@ -247,11 +245,17 @@ public class BizInfoDetail implements Serializable {
             bizProductDetailView.setPercentEBIT(selectBizProductDetail.getPercentEBIT());
             bizProductDetailView.setProductDetail(selectBizProductDetail.getProductDetail());
         }
+        bizProductDetailViewTemp = new BizProductDetailView();
+        bizProductDetailViewTemp.setProductType(selectBizProductDetail.getProductType());
+        bizProductDetailViewTemp.setPercentSalesVolume(selectBizProductDetail.getPercentSalesVolume());
+        bizProductDetailViewTemp.setPercentEBIT(selectBizProductDetail.getPercentEBIT());
+        bizProductDetailViewTemp.setProductDetail(selectBizProductDetail.getProductDetail());
 }
 
     public void onDeleteBizProductDetailView() {
         log.info( " onDeleteBizProductDetailView is " + selectBizProductDetail);
         bizProductDetailViewList.remove(selectBizProductDetail);
+        calSumBizProductDetailView();
         onSetRowNoBizProductDetail();
     }
 
@@ -263,7 +267,250 @@ public class BizInfoDetail implements Serializable {
         }
     }
 
-    public void onSetRowNoBizBizStakeHolderDetail(){
+    public void onSaveBizProductDetailView(){
+        boolean complete = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+
+        if(!bizProductDetailView.getProductType().equals("")&&!bizProductDetailView.getProductDetail().equals("")&&!bizProductDetailView.getPercentSalesVolume().equals("")&&!bizProductDetailView.getPercentEBIT().equals("")){
+            complete = true;
+            if(modeForButton.equalsIgnoreCase("add")){
+                log.info("onSaveBizProductDetailView add >>> begin ");
+                bizProductDetailView.setNo(bizProductDetailViewList.size()+1);
+                bizProductDetailViewList.add(bizProductDetailView);
+
+                if(!calSumBizProductDetailView()){
+                    bizProductDetailViewList.remove(bizProductDetailView);
+                    calSumBizProductDetailView();
+                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    complete = false;
+                }
+                bizProductDetailView = new BizProductDetailView();
+            }else if(modeForButton.equalsIgnoreCase("edit")){
+                BizProductDetailView bizTemp;
+                bizTemp = bizProductDetailViewList.get(rowIndex);
+                bizTemp.setProductType(bizProductDetailView.getProductType());
+                bizTemp.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
+                bizTemp.setPercentEBIT(bizProductDetailView.getPercentEBIT());
+                bizTemp.setProductDetail(bizProductDetailView.getProductDetail());
+                if(!calSumBizProductDetailView()){
+                    bizTemp.setProductType(bizProductDetailViewTemp.getProductType());
+                    bizTemp.setPercentSalesVolume(bizProductDetailViewTemp.getPercentSalesVolume());
+                    bizTemp.setPercentEBIT(bizProductDetailViewTemp.getPercentEBIT());
+                    bizTemp.setProductDetail(bizProductDetailViewTemp.getProductDetail());
+                    calSumBizProductDetailView();
+                    messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                    message = msg.get("app.bizInfoDetail.message.validate.bizProductOver.fail");
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    complete = false;
+                }
+                bizProductDetailView = new BizProductDetailView();
+            }
+        }
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    private boolean calSumBizProductDetailView(){
+        BizProductDetailView bizProductDetailViewTemp;
+        double salePercentBizPro=0;
+        double sumSalePercentBizPro = 0;
+        sumSalePercentBizPro = 0;
+        for(int i=0 ; i<bizProductDetailViewList.size(); i++){
+            bizProductDetailViewTemp = bizProductDetailViewList.get(i);
+            salePercentBizPro = bizProductDetailViewTemp.getPercentSalesVolume().doubleValue();
+            sumSalePercentBizPro += salePercentBizPro;
+        }
+        if(sumSalePercentBizPro>100.001 ){
+            return false;
+        }
+        return true;
+    }
+
+    public void onAddBizStakeHolderDetailView(){
+        log.info("onAddBizStakeHolderDetailView >>> label is  " + stakeType );
+        modeForButton = "add";
+        onSetLabelStakeHolder();
+        bizStakeHolderDetailView = new BizStakeHolderDetailView();
+    }
+
+    public void onEditBizStakeHolderDetailView() {
+        modeForButton = "edit";
+        onSetLabelStakeHolder();
+        bizStakeHolderDetailView = new BizStakeHolderDetailView();
+        bizStakeHolderDetailView.setStakeHolderType(stakeType);
+        bizStakeHolderDetailView = onSetStakeHolder(bizStakeHolderDetailView,selectStakeHolder);
+        bizStakeHolderTemp = new BizStakeHolderDetailView();
+        bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,selectStakeHolder);
+    }
+
+    private void onSetLabelStakeHolder(){
+        if(stakeType.equalsIgnoreCase("1")){
+            dlgStakeName = msg.get("app.bizInfoDetail.bizStakeHolder.label.supplierName");
+            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentBuysVolume");
+        }else if(stakeType.equalsIgnoreCase("2")){
+            dlgStakeName =msg.get("app.bizInfoDetail.bizStakeHolder.label.buyerName");
+            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentSalesVolume");
+        }
+    }
+
+    public void onDeleteBizStakeHolderDetailView() {
+        if(stakeType.equalsIgnoreCase("1")){
+            supplierDetailList.remove(selectStakeHolder);
+            calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+        }else if(stakeType.equalsIgnoreCase("2")){
+            buyerDetailList.remove(selectStakeHolder);
+            calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+        }
+        onSetRowNoBizStakeHolderDetail();
+    }
+
+    public void onSaveBizStakeHolderDetailView(){
+        boolean supplier;
+        boolean buyer;
+        BizStakeHolderDetailView  stakeHolderRow;
+        boolean complete = onValidateStakeHolder();
+        RequestContext context = RequestContext.getCurrentInstance();
+        if(complete){
+            if(modeForButton.equalsIgnoreCase("add")){
+                if(stakeType.equals("1")){
+                    bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
+                    supplierDetailList.add(bizStakeHolderDetailView);
+                    supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     if(!supplier){
+                         supplierDetailList.remove(bizStakeHolderDetailView);
+                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                         message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
+                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                         complete = false;
+                     }
+                }else if(stakeType.equals("2")){
+                    bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
+                     buyerDetailList.add(bizStakeHolderDetailView);
+                     buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                     if(!buyer){
+                         buyerDetailList.remove(bizStakeHolderDetailView);
+                         calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                         message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
+                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                         complete = false;
+                     }
+                }
+            }else if(modeForButton.equalsIgnoreCase("edit")){
+                if(stakeType.equals("1")){
+                     stakeHolderRow = supplierDetailList.get(rowIndex);
+                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                     supplierDetailList.set(rowIndex, stakeHolderRow);
+                     supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                     if(!supplier){
+                         stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                         supplierDetailList.set(rowIndex,stakeHolderRow);
+                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
+                         messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                         message = msg.get("app.bizInfoDetail.message.validate.supplierOver.fail");
+                         RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                         complete = false;
+                     }
+                }else if(stakeType.equals("2")){
+                    stakeHolderRow = buyerDetailList.get(rowIndex);
+                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
+                    buyerDetailList.set(rowIndex, stakeHolderRow);
+                    buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                    if(!buyer){
+                        stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
+                        buyerDetailList.set(rowIndex,stakeHolderRow);
+                        calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
+                        messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                        message = msg.get("app.bizInfoDetail.message.validate.buyerOver.fail");
+                        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                        complete = false;
+                    }
+                }
+            }
+        }
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+    private BizStakeHolderDetailView onSetStakeHolder(BizStakeHolderDetailView stakeHolderMaster ,BizStakeHolderDetailView stakeHolderChild){
+        stakeHolderMaster.setName(stakeHolderChild.getName());
+        stakeHolderMaster.setContactName(stakeHolderChild.getContactName());
+        stakeHolderMaster.setPhoneNo(stakeHolderChild.getPhoneNo());
+        stakeHolderMaster.setContactYear(stakeHolderChild.getContactYear());
+        stakeHolderMaster.setPercentSalesVolume(stakeHolderChild.getPercentSalesVolume());
+        stakeHolderMaster.setPercentCash(stakeHolderChild.getPercentCash());
+        stakeHolderMaster.setPercentCredit(stakeHolderChild.getPercentCredit());
+        stakeHolderMaster.setCreditTerm(stakeHolderChild.getCreditTerm());
+
+        return stakeHolderMaster;
+    }
+
+    private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeHolder){
+        double sumSalePercent = 0;
+        double sumCreditPercent = 0;
+        double sumCreditTerm = 0;
+        double salePercent;
+        double creditPercent;
+        double creditPercentCal;
+        double creditTerm;
+        double creditTermCal;
+        BizStakeHolderDetailView stakeHoldersCal;
+        for(int i=0 ; i<stakeHoldersCalList.size(); i++){
+            stakeHoldersCal = stakeHoldersCalList.get(i);
+            salePercent = stakeHoldersCal.getPercentSalesVolume().doubleValue();
+            sumSalePercent += salePercent;
+            creditPercent = stakeHoldersCal.getPercentCredit().doubleValue();
+            creditPercentCal = (creditPercent*salePercent)/100;
+            sumCreditPercent += creditPercentCal ;
+            creditTerm = stakeHoldersCal.getCreditTerm().doubleValue();
+            creditTermCal = (creditTerm*salePercent)/100;
+            sumCreditTerm += creditTermCal;
+        }
+        log.info(" sumSalePercent   is " + sumSalePercent);
+        log.info(" sumCreditPercent is " + sumCreditPercent);
+        log.info(" sumCreditTerm    is " + sumCreditTerm);
+
+        if(sumSalePercent>100.001 ){
+            return false;
+        }
+
+        sumSalePercentB = new BigDecimal(sumSalePercent).setScale(2);
+        sumCreditPercentB = new BigDecimal(sumCreditPercent).setScale(2);
+        sumCreditTermB = new BigDecimal(sumCreditTerm).setScale(2);
+        if(stakeType.equals("1")){
+            bizInfoDetailView.setSupplierTotalPercentBuyVolume(sumSalePercentB);
+            bizInfoDetailView.setSupplierTotalPercentCredit(sumCreditPercentB);
+            bizInfoDetailView.setSupplierTotalCreditTerm(sumCreditTermB);
+            bizInfoDetailView.setSupplierUWAdjustPercentCredit(sumCreditPercentB);
+            bizInfoDetailView.setSupplierUWAdjustCreditTerm(sumCreditTermB);
+        }else if(stakeType.equals("2")){
+            bizInfoDetailView.setBuyerTotalPercentBuyVolume(sumSalePercentB);
+            bizInfoDetailView.setBuyerTotalPercentCredit(sumCreditPercentB);
+            bizInfoDetailView.setBuyerTotalCreditTerm(sumCreditTermB);
+            bizInfoDetailView.setBuyerUWAdjustPercentCredit(sumCreditPercentB);
+            bizInfoDetailView.setBuyerUWAdjustCreditTerm(sumCreditTermB);
+        }
+        return true;
+    }
+
+    private boolean onValidateStakeHolder(){
+        boolean validate  = false;
+        if(!bizStakeHolderDetailView.getName().equals("" )
+                &&!bizStakeHolderDetailView.getContactName().equals("")
+                &&!bizStakeHolderDetailView.getPhoneNo().equals("")
+                &&!bizStakeHolderDetailView.getContactYear().equals("")
+                &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
+                &&!bizStakeHolderDetailView.getPercentCash().equals("")
+                &&!bizStakeHolderDetailView.getPercentCredit().equals("")
+                &&!bizStakeHolderDetailView.getCreditTerm().equals("")
+                ){
+            validate = true;
+        }
+        return validate;
+    }
+
+    public void onSetRowNoBizStakeHolderDetail(){
         BizStakeHolderDetailView bizStakeHolderDetailViewTemp;
         bizStakeHolderDetailViewTemp = new BizStakeHolderDetailView();
         if(stakeType.equals("1")){
@@ -278,245 +525,41 @@ public class BizInfoDetail implements Serializable {
             }
         }
         bizStakeHolderTemp = new BizStakeHolderDetailView();
-
         bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,bizStakeHolderDetailViewTemp);
-
-        log.info( " bizStakeHolderTemp at onRow is " + bizStakeHolderTemp);
-
-
     }
 
-    public void onSaveBizProductDetailView(){
-        boolean complete = false;
-        log.info(" modeForButton is " + modeForButton);
-
-        log.info( "context.addCallbackParam " );
-        RequestContext context = RequestContext.getCurrentInstance();
-
-        if(!bizProductDetailView.getProductType().equals("")&&!bizProductDetailView.getProductDetail().equals("")&&!bizProductDetailView.getPercentSalesVolume().equals("")&&!bizProductDetailView.getPercentEBIT().equals("")){
-            if(modeForButton.equalsIgnoreCase("add")){
-                log.info("onSaveBizProductDetailView add >>> begin ");
-
-                bizProductDetailView.setNo(bizProductDetailViewList.size()+1);
-                bizProductDetailViewList.add(bizProductDetailView);
-                bizProductDetailView = new BizProductDetailView();
-            }else if(modeForButton.equalsIgnoreCase("edit")){
-                log.info("onSaveBizProductDetailView edit >>> begin ");
-                BizProductDetailView bizTemp;
-                bizTemp = bizProductDetailViewList.get(rowIndex);
-                bizTemp.setProductType(bizProductDetailView.getProductType());
-                bizTemp.setPercentSalesVolume(bizProductDetailView.getPercentSalesVolume());
-                bizTemp.setPercentEBIT(bizProductDetailView.getPercentEBIT());
-                bizTemp.setProductDetail(bizProductDetailView.getProductDetail());
-
-                bizProductDetailView = new BizProductDetailView();
-            }
-            complete = true;
-        }
-
-        context.addCallbackParam("functionComplete", complete);
-    }
-
-    public void onAddBizStakeHolderDetailView(){
-        log.info("onAddBizStakeHolderDetailView >>> label is  " + stakeType );
-        modeForButton = "add";
-        onSetLabelStakeHolder();
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-
-    }
-
-
-
-    public void onEditBizStakeHolderDetailView() {
-        modeForButton = "edit";
-        onSetLabelStakeHolder();
-        bizStakeHolderDetailView = new BizStakeHolderDetailView();
-        bizStakeHolderDetailView.setStakeHolderType(stakeType);
-        bizStakeHolderDetailView = onSetStakeHolder(bizStakeHolderDetailView,selectStakeHolder);
-
-        bizStakeHolderTemp = new BizStakeHolderDetailView();
-        bizStakeHolderTemp = onSetStakeHolder(bizStakeHolderTemp,selectStakeHolder);
-
-        log.info( " bizStakeHolderTemp at onRow is " + bizStakeHolderTemp);
-    }
-
-    private void onSetLabelStakeHolder(){
-        if(stakeType.equalsIgnoreCase("1")){
-            dlgStakeName = msg.get("app.bizInfoDetail.bizStakeHolder.label.supplierName");
-            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentBuysVolume");
-        }else if(stakeType.equalsIgnoreCase("2")){
-            dlgStakeName =msg.get("app.bizInfoDetail.bizStakeHolder.label.buyerName");
-            dlgStakeSaleType = msg.get("app.bizInfoDetail.bizStakeHolder.label.percentSalesVolume");
-        }
-    }
-
-    public void onDeleteBizStakeHolderDetailView() {
-        log.info("onDeleteBizStakeHolderDetailView is " + selectStakeHolder);
-
-        if(stakeType.equalsIgnoreCase("1")){
-            supplierDetailList.remove(selectStakeHolder);
-            calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-        }else if(stakeType.equalsIgnoreCase("2")){
-            buyerDetailList.remove(selectStakeHolder);
-            calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-        }
-
-        onSetRowNoBizBizStakeHolderDetail();
-    }
-
-    public void onSaveBizStakeHolderDetailView(){
-        boolean supplier;
-        boolean buyer;
-        BizStakeHolderDetailView  stakeHolderRow;
-
-        boolean complete = onValidateStakeHolder();
-        log.info("Validate StakeHolder complete is " + complete);
-
-        RequestContext context = RequestContext.getCurrentInstance();
-        if(complete){
-            if(modeForButton.equalsIgnoreCase("add")){
-                if(stakeType.equals("1")){
-                    bizStakeHolderDetailView.setNo(supplierDetailList.size()+1);
-                    supplierDetailList.add(bizStakeHolderDetailView);
-                    supplier =calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                     if(!supplier){
-                         context.addCallbackParam("functionCalSum", true);
-                         supplierDetailList.remove(bizStakeHolderDetailView);
-                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                     }
-                }else if(stakeType.equals("2")){
-                    bizStakeHolderDetailView.setNo(buyerDetailList.size()+1);
-                     buyerDetailList.add(bizStakeHolderDetailView);
-                     buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                     if(!buyer){
-                         context.addCallbackParam("functionCalSum", true);
-                         buyerDetailList.remove(bizStakeHolderDetailView);
-                         calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                     }
-                }
-            }else if(modeForButton.equalsIgnoreCase("edit")){
-                log.info( " bizStakeHolderTemp at mode edit is " + bizStakeHolderTemp);
-                if(stakeType.equals("1")){
-                     stakeHolderRow = supplierDetailList.get(rowIndex);
-                     stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                     supplierDetailList.set(rowIndex, stakeHolderRow);
-                     supplier = calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-
-                     if(!supplier){
-                         stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                         supplierDetailList.set(rowIndex,stakeHolderRow);
-                         calSumBizStakeHolderDetailView(supplierDetailList, stakeType);
-                         context.addCallbackParam("functionCalSum", true);
-                     }
-
-                }else if(stakeType.equals("2")){
-                    stakeHolderRow = buyerDetailList.get(rowIndex);
-                    stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderDetailView);
-                    buyerDetailList.set(rowIndex, stakeHolderRow);
-                    buyer = calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-
-                    if(!buyer){
-                        stakeHolderRow = onSetStakeHolder(stakeHolderRow,bizStakeHolderTemp);
-                        buyerDetailList.set(rowIndex,stakeHolderRow);
-                        calSumBizStakeHolderDetailView(buyerDetailList, stakeType);
-                        context.addCallbackParam("functionCalSum", true);
-                    }
-                }
-            }
-        }
-
-        context.addCallbackParam("functionComplete", complete);
-    }
-
-    private BizStakeHolderDetailView onSetStakeHolder(BizStakeHolderDetailView stakeHolderMaster ,BizStakeHolderDetailView stakeHolderChild){
-
-        stakeHolderMaster.setName(stakeHolderChild.getName());
-        stakeHolderMaster.setContactName(stakeHolderChild.getContactName());
-        stakeHolderMaster.setPhoneNo(stakeHolderChild.getPhoneNo());
-        stakeHolderMaster.setContactYear(stakeHolderChild.getContactYear());
-        stakeHolderMaster.setPercentSalesVolume(stakeHolderChild.getPercentSalesVolume());
-        stakeHolderMaster.setPercentCash(stakeHolderChild.getPercentCash());
-        stakeHolderMaster.setPercentCredit(stakeHolderChild.getPercentCredit());
-        stakeHolderMaster.setCreditTerm(stakeHolderChild.getCreditTerm());
-
-        return stakeHolderMaster;
-    }
-
-    private boolean calSumBizStakeHolderDetailView(List<BizStakeHolderDetailView> stakeHoldersCalList,String stakeHolder){
-        float summ1 = 0.0f;
-        float summ2 = 0.0f;
-        int   summ3 = 0;
-
-        BizStakeHolderDetailView stakeHoldersCal;
-
-        for(int i=0 ; i<stakeHoldersCalList.size(); i++){
-            stakeHoldersCal = stakeHoldersCalList.get(i);
-            summ1 += stakeHoldersCal.getPercentSalesVolume().doubleValue();
-            summ2 += stakeHoldersCal.getPercentCredit().doubleValue() + stakeHoldersCal.getPercentCash().doubleValue();
-            summ3 += stakeHoldersCal.getCreditTerm().intValue();
-        }
-
-        if(summ1>100.001 ||summ2>100.001 ){
-            return false;
-        }
-
-        if(stakeType.equals("1")){
-            supplierVolumeSum1 = new BigDecimal(summ1).setScale(2, RoundingMode.HALF_EVEN);;
-            supplierVolumeSum2 = new BigDecimal(summ2).setScale(2, RoundingMode.HALF_EVEN);
-            supplierTermSum = new BigDecimal(summ3).setScale(2, RoundingMode.HALF_EVEN);
-
-            bizInfoDetailView.setSupplierTotalPercentBuyVolume(supplierVolumeSum1);
-            bizInfoDetailView.setSupplierTotalPercentCredit(supplierVolumeSum2);
-            bizInfoDetailView.setSupplierTotalCreditTerm(supplierTermSum);
-            bizInfoDetailView.setSupplierUWAdjustPercentCredit(supplierVolumeSum2);
-            bizInfoDetailView.setSupplierUWAdjustCreditTerm(supplierTermSum);
-        }else if(stakeType.equals("2")){
-            buyerVolumeSum1 = new BigDecimal(summ1).setScale(2, RoundingMode.HALF_EVEN);;
-            buyerVolumeSum2 = new BigDecimal(summ2).setScale(2, RoundingMode.HALF_EVEN);;
-            buyerTermSum = new BigDecimal(summ3).setScale(2, RoundingMode.HALF_EVEN);;
-
-            bizInfoDetailView.setBuyerTotalPercentBuyVolume(buyerVolumeSum1);
-            bizInfoDetailView.setBuyerTotalPercentCredit(buyerVolumeSum2);
-            bizInfoDetailView.setBuyerTotalCreditTerm(buyerTermSum);
-            bizInfoDetailView.setBuyerUWAdjustPercentCredit(buyerVolumeSum2);
-            bizInfoDetailView.setBuyerUWAdjustCreditTerm(buyerTermSum);
-
-        }
-
-        return true;
-    }
-    private boolean onValidateStakeHolder(){
-        boolean validate  = false;
-
-        if(!bizStakeHolderDetailView.getName().equals("" )
-                &&!bizStakeHolderDetailView.getContactName().equals("")
-                &&!bizStakeHolderDetailView.getPhoneNo().equals("")
-                &&!bizStakeHolderDetailView.getContactYear().equals("")
-                &&!bizStakeHolderDetailView.getPercentSalesVolume().equals("")
-                &&!bizStakeHolderDetailView.getPercentCash().equals("")
-                &&!bizStakeHolderDetailView.getPercentCredit().equals("")
-                &&!bizStakeHolderDetailView.getCreditTerm().equals("")
-                ){
-            validate = true;
-        }
-
-        return validate;
-    }
     public void onSaveBizInfoView(){
-
         try{
-            log.info("onSaveBizInfoView begin");
-            bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
-            messageHeader = "Save Basic Info Success.";
-            message = "Save Basic Info data success.";
+            sumBizPercent = sumBizPercent +  bizInfoDetailView.getPercentBiz().doubleValue();
+            if(sumBizPercent>100.001){
+                sumBizPercent = sumBizPercent -  bizInfoDetailView.getPercentBiz().doubleValue();
+                messageHeader = msg.get("app.bizInfoDetail.message.validate.header.fail");
+                message = msg.get("app.bizInfoDetail.message.validate.percentBizOver.fail");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
+            if(bizInfoDetailView.getId() == 0){
+                bizInfoDetailView.setCreateBy(user);
+                bizInfoDetailView.setCreateDate(DateTime.now().toDate());
+                bizInfoDetailView.setModifyBy(user);
+            }
+            bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
+            messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
+            message = msg.get("app.bizInfoDetail.message.body.save.success");
+
+            log.info(" after save to DB BizInfoDetail is "+bizInfoDetailView.getId());
+            bizInfoDetailViewId =  bizInfoDetailView.getId();
+            HttpSession session = FacesUtil.getSession(true);
+            session.setAttribute("bizInfoDetailViewId", bizInfoDetailViewId );
+            log.info(" after save to DB BizInfoDetail bizInfoDetailViewId at session is "+session.getAttribute("bizInfoDetailViewId"));
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Basic Info Failed.";
+            messageHeader = msg.get("app.bizInfoDetail.message.header.save.fail");
             if(ex.getCause() != null){
-                message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
+                message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getCause().toString();
             } else {
-                message = "Save Basic Info data failed. Cause : " + ex.getMessage();
+                message = msg.get("app.bizInfoDetail.message.body.save.fail") + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }finally {
@@ -525,7 +568,31 @@ public class BizInfoDetail implements Serializable {
     }
 
     public void onDeleteBizInfoView(){
-        bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
+        try{
+            log.info("onDeleteBizInfoView begin");
+            bizInfoDetailControl.onDeleteBizInfoToDB(bizInfoDetailView);
+            messageHeader = msg.get("app.bizInfoDetail.message.header.delete.success");
+            message = msg.get("app.bizInfoDetail.message.body.delete.success");
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = msg.get("app.bizInfoDetail.message.header.delete.fail");
+            if(ex.getCause() != null){
+                message = msg.get("app.bizInfoDetail.message.body.delete.fail") + ex.getCause().toString();
+            } else {
+                message = msg.get("app.bizInfoDetail.message.body.delete.fail") + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }finally {
+            log.info("onDeleteBizInfoView end");
+        }
+    }
+
+    public void onChangeBizPermission(){
+        if(bizInfoDetailView.getBizPermission().equals("N")){
+            //xx
+        }else if( bizInfoDetailView.getBizPermission().equals("Y")){
+           //xx
+        }
     }
 
     public BizStakeHolderDetailView getBizStakeHolderDetailView() {
@@ -590,62 +657,6 @@ public class BizInfoDetail implements Serializable {
 
     public void setDlgStakeName(String dlgStakeName) {
         this.dlgStakeName = dlgStakeName;
-    }
-
-    public int getBizGroupId() {
-        return bizGroupId;
-    }
-
-    public void setBizGroupId(int bizGroupId) {
-        this.bizGroupId = bizGroupId;
-    }
-
-    public BigDecimal getBuyerTermSum() {
-        return buyerTermSum;
-    }
-
-    public void setBuyerTermSum(BigDecimal buyerTermSum) {
-        this.buyerTermSum = buyerTermSum;
-    }
-
-    public BigDecimal getBuyerVolumeSum2() {
-        return buyerVolumeSum2;
-    }
-
-    public void setBuyerVolumeSum2(BigDecimal buyerVolumeSum2) {
-        this.buyerVolumeSum2 = buyerVolumeSum2;
-    }
-
-    public BigDecimal getBuyerVolumeSum1() {
-        return buyerVolumeSum1;
-    }
-
-    public void setBuyerVolumeSum1(BigDecimal buyerVolumeSum1) {
-        this.buyerVolumeSum1 = buyerVolumeSum1;
-    }
-
-    public BigDecimal getSupplierTermSum() {
-        return supplierTermSum;
-    }
-
-    public void setSupplierTermSum(BigDecimal supplierTermSum) {
-        this.supplierTermSum = supplierTermSum;
-    }
-
-    public BigDecimal getSupplierVolumeSum2() {
-        return supplierVolumeSum2;
-    }
-
-    public void setSupplierVolumeSum2(BigDecimal supplierVolumeSum2) {
-        this.supplierVolumeSum2 = supplierVolumeSum2;
-    }
-
-    public BigDecimal getSupplierVolumeSum1() {
-        return supplierVolumeSum1;
-    }
-
-    public void setSupplierVolumeSum1(BigDecimal supplierVolumeSum1) {
-        this.supplierVolumeSum1 = supplierVolumeSum1;
     }
 
     public BizProductDetailView getSelectBizProductDetail() {
@@ -726,5 +737,13 @@ public class BizInfoDetail implements Serializable {
 
     public void setDlgStakeSaleType(String dlgStakeSaleType) {
         this.dlgStakeSaleType = dlgStakeSaleType;
+    }
+
+    public double getSumBizPercent() {
+        return sumBizPercent;
+    }
+
+    public void setSumBizPercent(double sumBizPercent) {
+        this.sumBizPercent = sumBizPercent;
     }
 }

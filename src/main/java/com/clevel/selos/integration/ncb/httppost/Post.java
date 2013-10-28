@@ -13,12 +13,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -44,7 +44,7 @@ public class Post implements Serializable {
     }
 
     public String sendPost(String xml, String url, int timeOut) throws Exception {
-        log.debug("Call : sendPost() url {}, timeOut {}", url,timeOut);
+        log.debug("Call : sendPost(url : {}, timeOut : {})", url,timeOut);
         if(ValidationUtil.isNull(xml)){
             throw new ValidationException(required, message.get(required, "XML"));
         }
@@ -55,7 +55,6 @@ public class Post implements Serializable {
             throw new ValidationException(required, message.get(required, "Time Out"));
         }
 
-        log.debug("url : {}", url);
         DefaultHttpClient client = null;
         HttpPost post = null;
         List<NameValuePair> urlParameters = null;
@@ -71,12 +70,13 @@ public class Post implements Serializable {
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
-        post.setHeader(HTTP.USER_AGENT, "Mozilla/5.0");
-        post.setHeader(HTTP.CONTENT_TYPE, "application/x-www-form-urlencoded;charset=" + HTTP.UTF_8);
+        post.setHeader("User-Agent", "Mozilla/5.0");
+        post.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=" + "UTF-8");
 
         urlParameters = new ArrayList<NameValuePair>();
         urlParameters.add(new BasicNameValuePair("q", xml));
-        post.setEntity(new UrlEncodedFormEntity(urlParameters, HTTP.UTF_8));
+        post.setEntity(new UrlEncodedFormEntity(urlParameters, "UTF-8"));
+
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
         if (resCode==200) {
@@ -89,9 +89,8 @@ public class Post implements Serializable {
             }
             return builder!=null?builder.toString():"";
         }else{
-            log.error("The request has failed, Error code is {}", resCode);
-            throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
+             log.error("The request has failed, Error code is {}", resCode);
+             throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
         }
-
     }
 }

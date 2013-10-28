@@ -1,7 +1,9 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
@@ -22,6 +24,8 @@ public class CustomerInfoSummaryControl extends BusinessControl {
     CustomerDAO customerDAO;
     @Inject
     WorkCaseDAO workCaseDAO;
+    @Inject
+    IndividualDAO individualDAO;
 
     @Inject
     CustomerTransform customerTransform;
@@ -55,5 +59,14 @@ public class CustomerInfoSummaryControl extends BusinessControl {
             }
         }
         return caseBorrowerTypeId;
+    }
+
+    public void saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        Customer customer = customerTransform.transformToModel(customerInfoView, null, workCase);
+        customerDAO.persist(customer);
+        individualDAO.persist(customer.getIndividual());
+
     }
 }

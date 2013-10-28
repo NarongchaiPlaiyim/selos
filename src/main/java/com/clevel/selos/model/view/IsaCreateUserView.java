@@ -1,5 +1,7 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.model.ManageUserAction;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,15 +15,34 @@ public class IsaCreateUserView implements Serializable {
     private String phoneExt;
     private String phoneNumber;
     private String buCode;
-    private int departmentId;
-    private int roleId;
-    private int divisionId;
-    private int regionId;
-    private int teamId;
-    private int titleId;
-    private int zoneId;
+    private UserDepartment userDepartment;
+    private Role role;
+    private UserDivision userDivision;
+    private UserRegion userRegion;
+    private UserTeam userTeam;
+    private UserTitle userTitle;
+    private UserZone userZone;
+    private int active;
 
+    private ManageUserAction flag;
 
+    public void reset() {
+        this.id = "";
+        this.username = "";
+        this.emailAddress = "";
+        this.phoneExt = "";
+        this.phoneNumber = "";
+        this.buCode = "";
+        this.userDepartment = new UserDepartment();
+        this.role = new Role();
+        this.userDivision = new UserDivision();
+        this.userRegion = new UserRegion();
+        this.userTeam = new UserTeam();
+        this.userTitle = new UserTitle();
+        this.userZone = new UserZone();
+        this.active = 1;
+//        this.flag = ManageUserAction.ADD;
+    }
 
     public String getId() {
         return id;
@@ -71,60 +92,76 @@ public class IsaCreateUserView implements Serializable {
         this.buCode = buCode;
     }
 
-    public int getDepartmentId() {
-        return departmentId;
+    public UserDepartment getUserDepartment() {
+        return userDepartment;
     }
 
-    public void setDepartmentId(int departmentId) {
-        this.departmentId = departmentId;
+    public void setUserDepartment(UserDepartment userDepartment) {
+        this.userDepartment = userDepartment;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public int getDivisionId() {
-        return divisionId;
+    public UserDivision getUserDivision() {
+        return userDivision;
     }
 
-    public void setDivisionId(int divisionId) {
-        this.divisionId = divisionId;
+    public void setUserDivision(UserDivision userDivision) {
+        this.userDivision = userDivision;
     }
 
-    public int getRegionId() {
-        return regionId;
+    public UserRegion getUserRegion() {
+        return userRegion;
     }
 
-    public void setRegionId(int regionId) {
-        this.regionId = regionId;
+    public void setUserRegion(UserRegion userRegion) {
+        this.userRegion = userRegion;
     }
 
-    public int getTeamId() {
-        return teamId;
+    public UserTeam getUserTeam() {
+        return userTeam;
     }
 
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
+    public void setUserTeam(UserTeam userTeam) {
+        this.userTeam = userTeam;
     }
 
-    public int getTitleId() {
-        return titleId;
+    public UserTitle getUserTitle() {
+        return userTitle;
     }
 
-    public void setTitleId(int titleId) {
-        this.titleId = titleId;
+    public void setUserTitle(UserTitle userTitle) {
+        this.userTitle = userTitle;
     }
 
-    public int getZoneId() {
-        return zoneId;
+    public UserZone getUserZone() {
+        return userZone;
     }
 
-    public void setZoneId(int zoneId) {
-        this.zoneId = zoneId;
+    public void setUserZone(UserZone userZone) {
+        this.userZone = userZone;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public ManageUserAction getFlag() {
+        return flag;
+    }
+
+    public void setFlag(ManageUserAction flag) {
+        this.flag = flag;
     }
 
     @Override
@@ -136,13 +173,15 @@ public class IsaCreateUserView implements Serializable {
                 .append("phoneExt", phoneExt)
                 .append("phoneNumber", phoneNumber)
                 .append("buCode", buCode)
-                .append("departmentId", departmentId)
-                .append("roleId", roleId)
-                .append("divisionId", divisionId)
-                .append("regionId", regionId)
-                .append("teamId", teamId)
-                .append("titleId", titleId)
-                .append("zoneId", zoneId)
+                .append("userDepartment", userDepartment)
+                .append("role", role)
+                .append("userDivision", userDivision)
+                .append("userRegion", userRegion)
+                .append("userTeam", userTeam)
+                .append("userTitle", userTitle)
+                .append("userZone", userZone)
+                .append("active",active)
+                .append("flag",flag)
                 .toString();
     }
 }

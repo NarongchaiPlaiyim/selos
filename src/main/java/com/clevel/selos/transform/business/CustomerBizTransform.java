@@ -71,7 +71,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     }
                     customerInfoView.setFirstNameTh(individualModel.getFirstname());
                     customerInfoView.setLastNameTh(individualModel.getLastname());
-                    customerInfoView.setTmbCustomerId(individualModel.getDocumentType());
+                    customerInfoView.setTmbCustomerId(individualModel.getTmbCusID());
                     customerInfoView.setDocumentType(documentTypeDAO.findOneByCriteria(Restrictions.eq("documentTypeCode", individualModel.getDocumentType())));
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(1));
                     if(customerInfoView.getDocumentType() == null){
@@ -359,6 +359,10 @@ public class CustomerBizTransform extends BusinessTransform {
 
                     //CurrentAddress
                     AddressView currentAddress = new AddressView();
+                    currentAddress.setAddressNo(corporateModel.getAddressNo());
+                    currentAddress.setMoo(corporateModel.getAddressMoo());
+                    currentAddress.setBuilding(corporateModel.getAddressBuilding());
+                    currentAddress.setRoad(corporateModel.getAddressStreet());
                     currentAddress.setProvince(provinceDAO.getByName(corporateModel.getProvince()));
                     if(currentAddress.getProvince() == null || currentAddress.getProvince()!=null && currentAddress.getProvince().getCode()==0){
                         currentAddress.setProvince(new Province());
@@ -380,9 +384,14 @@ public class CustomerBizTransform extends BusinessTransform {
                     if(currentAddress.getCountry() == null){
                         currentAddress.setCountry(new Country());
                     }
+                    currentAddress.setAddressType(addressTypeDAO.findById(1));
                     customerInfoView.setCurrentAddress(currentAddress);
 
                     AddressView registrationAddress = new AddressView();
+                    registrationAddress.setAddressNo(corporateModel.getRegistrationAddress().getAddressNo());
+                    registrationAddress.setMoo(corporateModel.getRegistrationAddress().getAddressMoo());
+                    registrationAddress.setBuilding(corporateModel.getRegistrationAddress().getAddressBuilding());
+                    registrationAddress.setRoad(corporateModel.getRegistrationAddress().getAddressStreet());
                     registrationAddress.setProvince(provinceDAO.getByName(corporateModel.getProvince()));
                     if(registrationAddress.getProvince() == null || registrationAddress.getProvince()!=null && registrationAddress.getProvince().getCode()==0){
                         registrationAddress.setProvince(new Province());
@@ -407,6 +416,7 @@ public class CustomerBizTransform extends BusinessTransform {
                     registrationAddress.setExtension(corporateModel.getRegistrationAddress().getExtension());
                     registrationAddress.setContactName(corporateModel.getRegistrationAddress().getContactName());
                     registrationAddress.setContactPhone(corporateModel.getRegistrationAddress().getContactPhoneNo());
+                    registrationAddress.setAddressType(addressTypeDAO.findById(2));
                     customerInfoView.setRegisterAddress(registrationAddress);
 
                     customerInfoResultView.setCustomerInfoView(customerInfoView);

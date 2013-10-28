@@ -1,6 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.PotentialCollateral;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,8 +18,8 @@ public class PrescreenCollateral implements Serializable{
     private Prescreen prescreen;
 
     @OneToOne
-    @JoinColumn(name="collateral_type_id")
-    private CollateralType collateralType;
+    @JoinColumn(name="potential_collateral_id")
+    private PotentialCollateral potentialCollateral;
 
     public long getId() {
         return id;
@@ -37,11 +37,11 @@ public class PrescreenCollateral implements Serializable{
         this.prescreen = prescreen;
     }
 
-    public CollateralType getCollateralType() {
-        return collateralType;
+    public PotentialCollateral getPotentialCollateral() {
+        return potentialCollateral;
     }
 
-    public void setCollateralType(CollateralType collateralType) {
-        this.collateralType = collateralType;
+    public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
+        this.potentialCollateral = potentialCollateral;
     }
 }

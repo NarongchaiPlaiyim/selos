@@ -54,6 +54,9 @@ public class WorkCase implements Serializable {
     @OneToMany(mappedBy="workCase")
     private List<Customer> customerList;
 
+    @OneToOne(mappedBy="workCase")
+    private BizInfoSummary bizInfoSummary;
+
     @OneToMany(mappedBy="workCase")
     private List<DBR> dbrList;
 
@@ -81,8 +84,7 @@ public class WorkCase implements Serializable {
     @JoinColumn(name="workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @OneToOne
-    private BizInfoSummary bizInfoSummary;
+
 
     public WorkCase() {
     }

@@ -52,6 +52,8 @@ public class NCRSService implements Serializable {
 
     public ArrayList<NCRSOutputModel> process(NCRSInputModel inputModel) throws Exception{
         ArrayList<NCRSOutputModel> responseModelArrayList = null;
+        NCRSInputModel inputModelForNewCustomers = null;
+        ArrayList<NCRSModel> ncrsModelArrayListForNewCustomers = null;
         try {
             log.debug("NCRS process()");
             boolean flag = resultImp.isChecked(inputModel.getAppRefNumber());
@@ -67,15 +69,47 @@ public class NCRSService implements Serializable {
                 responseModelArrayList = ncrsImp.requestOnline(inputModel);
                 return responseModelArrayList;
             } else {
-                responseModelArrayList =  ncrsImp.requestOffline(inputModel);
-                return responseModelArrayList;
-            }
+                ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
+                NCRSModel ncrsModel = null;
+                int resultOfSize = 0;
+                boolean result = false;
+                boolean flagCheckNewCustomer = false;
+                resultOfSize = resultImp.getSizeFromAppNumber(inputModel.getAppRefNumber());
+                ncrsModelArrayListForNewCustomers = new ArrayList<NCRSModel>();
+                pointer : for(int i = 0; i<ncrsModelArrayList.size(); i++){
+                    ncrsModel = ncrsModelArrayList.get(i);
+                    result = resultImp.isOldCustomer(inputModel.getAppRefNumber(), ncrsModel.getCitizenId());
+                    if (!result) {
+                        flagCheckNewCustomer = true;
+                        if (0!=resultOfSize){
+                            ncrsModel.setMemberref(Util.setRequestNo(inputModel.getAppRefNumber(), resultOfSize));
+                            resultOfSize++;
+                            log.debug("NCRS MemberRef = {}", ncrsModel.getMemberref());
+                            ncrsModelArrayListForNewCustomers.add(ncrsModel);
+                            ncrsModelArrayList.remove(i);
+                            i--;
+                        } else {
+                            continue pointer;
+                        }
+                    }
+                }
 
+                if (flagCheckNewCustomer) {
+                    log.debug("Request offline and online");
+                    inputModelForNewCustomers = new NCRSInputModel(inputModel.getUserId(), inputModel.getAppRefNumber(), inputModel.getCANumber(), inputModel.getReferenceTel(), ncrsModelArrayListForNewCustomers);
+                    responseModelArrayList =  ncrsImp.requestOffline(inputModel);
+                    responseModelArrayList.addAll(ncrsImp.requestOnline(inputModelForNewCustomers));
+                    return responseModelArrayList;
+                } else {
+                    log.debug("Request offline");
+                    responseModelArrayList =  ncrsImp.requestOffline(inputModel);
+                    return responseModelArrayList;
+                }
+            }
         } catch (Exception e) {
             String resultDesc = "NCCRS Exception : "+ e.getMessage();
             log.error("NCRS Exception", e);
             throw new NCBInterfaceException(e, exception,message.get(exception, resultDesc));
-//            throw new Exception("NCRS Exception : "+e.getMessage());
         }
     }
 

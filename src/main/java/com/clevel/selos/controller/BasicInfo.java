@@ -11,6 +11,7 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.BankAccountTypeTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -88,6 +89,8 @@ public class BasicInfo implements Serializable {
     private List<BorrowingType> borrowingTypeList;
     private List<BAPaymentMethod> baPaymentMethodList;
 
+    private List<String> yearList;
+
     //*** View ***//
     private BasicInfoView basicInfoView;
 
@@ -136,7 +139,6 @@ public class BasicInfo implements Serializable {
         }
     }
 
-
     @PostConstruct
     public void onCreation() {
 
@@ -152,7 +154,8 @@ public class BasicInfo implements Serializable {
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-        openAccountProductList = openAccountProductDAO.findAll();
+//        openAccountProductList = openAccountProductDAO.findAll();
+        openAccountProductList = new ArrayList<OpenAccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
@@ -185,6 +188,8 @@ public class BasicInfo implements Serializable {
         }
 
         basicInfoAccountView = new BasicInfoAccountView();
+
+        yearList = DateTimeUtil.getPreviousFiftyYearTH();
     }
 
     public void onAddAccount(){
@@ -256,6 +261,10 @@ public class BasicInfo implements Serializable {
         }else{
             basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
         }
+
+        boolean complete = true;        //Change only failed to save
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("functionComplete", complete);
     }
 
     public void onDeleteAccount() {
@@ -303,6 +312,10 @@ public class BasicInfo implements Serializable {
                 basicInfoView.getBaPaymentMethod().setId(0);
             }
         }
+    }
+
+    public void onChangeAccountType(){
+        openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
     }
 
     // Get Set
@@ -448,5 +461,13 @@ public class BasicInfo implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public List<String> getYearList() {
+        return yearList;
+    }
+
+    public void setYearList(List<String> yearList) {
+        this.yearList = yearList;
     }
 }

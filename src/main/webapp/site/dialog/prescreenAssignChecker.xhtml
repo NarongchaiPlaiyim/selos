@@ -9,9 +9,9 @@
     <h:form id="assignCheckerDlgForm">
         <table class="content_form">
             <tr>
-                <td class="title">Assign to :</td>
+                <td class="title right" style="min-width: 80px; width: 80px;">Assign to :</td>
                 <td>
-                    <p:selectOneMenu style="width: 200px;" size="1"
+                    <p:selectOneMenu style="min-width: 234px; width: 234px; max-width: 234px;" size="1"
                                      value="#{prescreenMaker.prescreenView.checkerId}"
                                      required="true">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -23,9 +23,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="title">Remark :</td>
+                <td class="title right top">Remark :</td>
                 <td>
-                    <p:inputTextarea value="#{prescreenMaker.prescreenView.remark}" autoResize="false" cols="30" rows="5"></p:inputTextarea>
+                    <p:inputTextarea value="#{prescreenMaker.prescreenView.remark}" autoResize="false" cols="35" rows="5"></p:inputTextarea>
                 </td>
             </tr>
             <tr>
@@ -36,7 +36,7 @@
                                      action="#{prescreenMaker.onAssignToChecker}"
                                      process="@form"
                                      update=":assignCheckerDlgForm"/>
-                    <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" onclick="assignCheckerDlg.hide()"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" process="@this" type="button" styleClass="small" onclick="assignCheckerDlg.hide()"/>
                 </td>
             </tr>
         </table>

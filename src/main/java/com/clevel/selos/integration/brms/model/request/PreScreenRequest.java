@@ -1,22 +1,25 @@
 package com.clevel.selos.integration.brms.model.request;
 
 import com.clevel.selos.integration.brms.model.request.data.ApplicationLevel;
-import com.clevel.selos.integration.brms.model.request.data.CustomerLevel;
+import com.clevel.selos.integration.brms.model.request.data.BorrowerLevel;
+import com.clevel.selos.integration.brms.model.request.data.TmbAccountLevel;
 
 import java.util.List;
 
 public class PreScreenRequest {
-    public ApplicationLevel applicationLevel;
-    public List<CustomerLevel> customerLevelList;
-    public String bizDescription;
+    private ApplicationLevel applicationLevel;
+    private List<BorrowerLevel> customerLevelList;
+    private String bizDescription;
+    private TmbAccountLevel tmbAccountLevel;
 
     public PreScreenRequest() {
     }
 
-    public PreScreenRequest(ApplicationLevel applicationLevel, List<CustomerLevel> customerLevelList, String bizDescription) {
+    public PreScreenRequest(ApplicationLevel applicationLevel, List<BorrowerLevel> customerLevelList, String bizDescription, TmbAccountLevel tmbAccountLevel) {
         this.applicationLevel = applicationLevel;
         this.customerLevelList = customerLevelList;
         this.bizDescription = bizDescription;
+        this.tmbAccountLevel = tmbAccountLevel;
     }
 
     public ApplicationLevel getApplicationLevel() {
@@ -27,11 +30,11 @@ public class PreScreenRequest {
         this.applicationLevel = applicationLevel;
     }
 
-    public List<CustomerLevel> getCustomerLevelList() {
+    public List<BorrowerLevel> getCustomerLevelList() {
         return customerLevelList;
     }
 
-    public void setCustomerLevelList(List<CustomerLevel> customerLevelList) {
+    public void setCustomerLevelList(List<BorrowerLevel> customerLevelList) {
         this.customerLevelList = customerLevelList;
     }
 
@@ -41,5 +44,13 @@ public class PreScreenRequest {
 
     public void setBizDescription(String bizDescription) {
         this.bizDescription = bizDescription;
+    }
+
+    public TmbAccountLevel getTmbAccountLevel() {
+        return tmbAccountLevel;
+    }
+
+    public void setTmbAccountLevel(TmbAccountLevel tmbAccountLevel) {
+        this.tmbAccountLevel = tmbAccountLevel;
     }
 }

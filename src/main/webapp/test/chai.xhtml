@@ -13,65 +13,6 @@
     <h:body>
 
         <p:panel id="top" header="Calculate Risk Level Request Message">
-            <h:form id="form">
-
-                <p:panel id="all" header="Header Section">
-
-                    <h:panelGrid id="Header" columns="3">
-
-                        <h:outputText value="reqId"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="reqId" value="#{calculateRiskLevelPage.reqId}"/>
-
-                        <h:outputText value="productCode"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="productCode" value="#{calculateRiskLevelPage.productCode}"/>
-
-                        <h:outputText value="acronym"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="acronym" value="#{calculateRiskLevelPage.acronym}"/>
-
-                        <h:outputText value="selectorFlag"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="selectorFlag" value="#{calculateRiskLevelPage.selectorFlag}"/>
-
-                    </h:panelGrid>
-
-                    <h:panelGrid id="Body" columns="3">
-
-                        <h:outputText value="firstName"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="firstName" value="#{calculateRiskLevelPage.firstName}"/>
-
-                        <h:outputText value="lastName"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="lastName" value="#{calculateRiskLevelPage.lastName}"/>
-
-                        <h:outputText value="cardId"/>
-                        <h:outputText value=":"/>
-                        <p:inputText id="cardId" value="#{calculateRiskLevelPage.cardId}"/>
-
-
-                    </h:panelGrid>
-
-                    <h:panelGrid id="Result" columns="3">
-                        <h:outputText value="Result"/>
-                        <h:outputText value=":"/>
-                        <p:inputTextarea id="resultTextarea" rows="6" cols="33" value="#{calculateRiskLevelPage.result}" />
-                    </h:panelGrid>
-
-                    <h:panelGrid id="submit" columns="2">
-                        <p:commandButton id="Submit" value="Submit" update="@form" action="#{calculateRiskLevelPage.onSubmit}" />
-                        <p:commandButton value="Reset"  type="reset" />
-                    </h:panelGrid>
-
-
-
-                </p:panel>
-
-
-
-            </h:form>
             <h:form id="NCRS">
                 <p:panel id="HeaderNCB" header="NCB">
                     <h:panelGrid id="BodyHeaderNCB" columns="2">

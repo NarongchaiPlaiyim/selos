@@ -1,9 +1,6 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.BusinessActivity;
-import com.clevel.selos.model.db.master.BusinessDescription;
-import com.clevel.selos.model.db.master.BusinessGroup;
-import com.clevel.selos.model.db.master.BusinessType;
+import com.clevel.selos.model.db.master.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -177,6 +174,14 @@ public class BizInfoDetail implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modify_date")
     private Date modifyDate;
+
+    @OneToOne
+    @JoinColumn(name="create_user_id")
+    private User createBy;
+
+    @OneToOne
+    @JoinColumn(name="modify_user_id")
+    private User modifyBy;
 
     @ManyToOne
     @JoinColumn(name = "workcase_prescreen_id")
@@ -595,6 +600,22 @@ public class BizInfoDetail implements Serializable {
 
     public void setModifyDate(Date modifyDate) {
         this.modifyDate = modifyDate;
+    }
+
+    public User getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(User createBy) {
+        this.createBy = createBy;
+    }
+
+    public User getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(User modifyBy) {
+        this.modifyBy = modifyBy;
     }
 
     public WorkCasePrescreen getWorkCasePrescreen() {

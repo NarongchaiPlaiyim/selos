@@ -20,8 +20,16 @@ public class NCBDetailTransform extends Transform{
             ncbDetail.setAccountType(NCBDetailView.getAccountType());
             ncbDetail.setAccountOpenDate(NCBDetailView.getAccountOpenDate());
             ncbDetail.setAccountTMBFlag(NCBDetailView.getTMBAccount());
-            ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
-            ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
+            if(NCBDetailView.getCurrentPayment()!=null && NCBDetailView.getCurrentPayment().getId()!=0){
+                ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
+            } else {
+                ncbDetail.setCurrentPayment(null);
+            }
+            if(NCBDetailView.getHistoryPayment()!=null && NCBDetailView.getHistoryPayment().getId()!=0){
+                ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
+            } else {
+                ncbDetail.setHistoryPayment(null);
+            }
             ncbDetail.setAsOfDate(NCBDetailView.getDateOfInfo());
             ncbDetail.setLastReStructureDate(NCBDetailView.getDateOfDebtRestructuring());
             ncbDetail.setInstallment(NCBDetailView.getInstallment());
@@ -38,6 +46,7 @@ public class NCBDetailTransform extends Transform{
             ncbDetail.setMonth6(NCBDetailView.getMonth6());
             ncbDetail.setWcFlag(NCBDetailView.getWcFlag());
             ncbDetail.setOverLimit(NCBDetailView.getNoOfOverLimit());
+            ncbDetail.setCanToEdit(NCBDetailView.isCanToEdit());
             NCBDetailList.add(ncbDetail);
         }
         return NCBDetailList;
@@ -70,6 +79,7 @@ public class NCBDetailTransform extends Transform{
             ncbDetailView.setMonth6(ncbDetail.getMonth6());
             ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
             ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
+            ncbDetailView.setCanToEdit(ncbDetail.isCanToEdit());
             ncbDetailViewList.add(ncbDetailView);
         }
 

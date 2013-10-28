@@ -3,8 +3,10 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
 import com.clevel.selos.model.view.BizInfoDetailView;
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
@@ -15,6 +17,9 @@ public class BizInfoDetailTransform extends Transform {
 
         if(bizInfoDetailView.getId()!= 0){
             bizInfoDetail.setId(bizInfoDetailView.getId());
+        }else if(bizInfoDetailView.getId()== 0){
+            bizInfoDetail.setCreateBy(bizInfoDetailView.getCreateBy());
+            bizInfoDetail.setCreateDate(bizInfoDetailView.getCreateDate());
         }
 
         bizInfoDetail.setBizInfoText(bizInfoDetailView.getBizInfoText());
@@ -61,6 +66,11 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setStockDurationUW(bizInfoDetailView.getStockDurationUW());
         bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
         bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
+
+        bizInfoDetail.setModifyBy(bizInfoDetailView.getCreateBy());
+        bizInfoDetail.setModifyDate(DateTime.now().toDate());
+
+
         return bizInfoDetail;
     }
 
@@ -113,6 +123,11 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setStockDurationUW(bizInfoDetail.getStockDurationUW());
         bizInfoDetailView.setStockValueBDM(bizInfoDetail.getStockValueBDM());
         bizInfoDetailView.setStockValueUW(bizInfoDetail.getStockValueUW());
+
+        bizInfoDetailView.setModifyBy(bizInfoDetail.getModifyBy());
+        bizInfoDetailView.setModifyDate(bizInfoDetail.getModifyDate());
+        bizInfoDetailView.setCreateBy(bizInfoDetail.getCreateBy());
+        bizInfoDetailView.setCreateDate(bizInfoDetail.getCreateDate());
 
         return bizInfoDetailView;
     }

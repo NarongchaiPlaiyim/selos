@@ -42,13 +42,14 @@ public class NCBDetailView implements Serializable {
     private BigDecimal month4;
     private BigDecimal month5;
     private BigDecimal month6;
+    private boolean canToEdit;
+    private boolean monthFlagPage;
 
-    private String TMB;
-    private String refinance ;
-    private String wc ;
+    private boolean TMB;
+    private boolean refinance ;
+    private boolean wc ;
 
     public NCBDetailView() {
-        reset();
     }
 
     public void reset() {
@@ -77,6 +78,8 @@ public class NCBDetailView implements Serializable {
         this.month5 = new BigDecimal(0);
         this.month6 = new BigDecimal(0);
         this.wcFlag = 0;
+        this.canToEdit = false;
+        this.monthFlagPage = false;
     }
 
     public long getId() {
@@ -132,6 +135,11 @@ public class NCBDetailView implements Serializable {
     }
 
     public int getTMBAccount() {
+        if(TMB == true){
+           this.isTMBAccount=1;
+        }else{
+           this.isTMBAccount=0;
+        }
         return isTMBAccount;
     }
 
@@ -139,17 +147,17 @@ public class NCBDetailView implements Serializable {
         isTMBAccount = TMBAccount;
     }
 
-    public String getTMB() {
+    public boolean isTMB() {
 
         if(isTMBAccount == 1){
-            this.TMB = "Y";
+            this.TMB = true;
         }else{
-            this.TMB = "N";
+            this.TMB = false;
         }
         return TMB;
     }
 
-    public void setTMB(String TMB) {
+    public void setTMB(boolean TMB) {
         this.TMB = TMB;
     }
 
@@ -301,35 +309,40 @@ public class NCBDetailView implements Serializable {
 
 
 
-    public String getRefinance() {
+    public boolean isRefinance() {
         if(refinanceFlag== 1){
-            this.refinance = "Y";
+            this.refinance = true;
         }else{
-            this.refinance = "N";
+            this.refinance = false;
         }
         return refinance;
     }
 
-    public void setRefinance(String refinance) {
+    public void setRefinance(boolean refinance) {
         this.refinance = refinance;
     }
 
-    public String getWc() {
+    public boolean isWc() {
         if(wcFlag == 1){
-            this.wc = "Y";
+            this.wc = true;
         }else{
-            this.wc = "N";
+            this.wc = false;
         }
         return wc;
     }
 
-    public void setWc(String wc) {
+    public void setWc(boolean wc) {
         this.wc = wc;
     }
 
 
 
     public int getRefinanceFlag() {
+        if(refinance == true){
+            refinanceFlag = 1;
+        } else{
+            refinanceFlag = 0;
+        }
         return refinanceFlag;
     }
 
@@ -339,6 +352,11 @@ public class NCBDetailView implements Serializable {
 
 
     public int getWcFlag() {
+        if(wc == true){
+            wcFlag = 1;
+        } else{
+            wcFlag = 0;
+        }
         return wcFlag;
     }
 
@@ -359,7 +377,28 @@ public class NCBDetailView implements Serializable {
         this.monthsPaymentFlag = monthsPaymentFlag;
     }
 
+    public boolean isCanToEdit() {
+        return canToEdit;
+    }
 
+    public void setCanToEdit(boolean canToEdit) {
+        this.canToEdit = canToEdit;
+    }
+
+    public boolean isMonthFlagPage() {
+        if(accountType.getMonthFlag()==1){
+            monthFlagPage = true;
+        }
+        else{
+            monthFlagPage = false;
+        }
+
+        return monthFlagPage;
+    }
+
+    public void setMonthFlagPage(boolean monthFlagPage) {
+        this.monthFlagPage = monthFlagPage;
+    }
 
     @Override
     public String toString() {
