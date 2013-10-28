@@ -72,7 +72,7 @@ public class ExecutiveSummary implements Serializable {
 
         try{
                 messageHeader = msg.get("app.header.save.success");
-                message = msg.get("app.tcg.response.save.success");
+                message = msg.get("");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
@@ -82,9 +82,9 @@ public class ExecutiveSummary implements Serializable {
             messageHeader = msg.get("app.header.save.failed");
 
             if(ex.getCause() != null){
-                message = msg.get("app.tcg.response.save.failed") + " cause : " + ex.getCause().toString();
+                message = msg.get("") + " cause : " + ex.getCause().toString();
             } else {
-                message = msg.get("app.tcg.response.save.failed") + ex.getMessage();
+                message = msg.get("") + ex.getMessage();
             }
 
             messageErr = true;
@@ -95,9 +95,9 @@ public class ExecutiveSummary implements Serializable {
     }
 
 
-    public void onCancelTcgInfo(){
+    public void onCancelExecutiveSummary(){
         modeForDB = ModeForDB.CANCEL_DB;
-        log.info("onCancelTcgInfo ::: ");
+        log.info("onCancelExecutiveSummary ::: ");
 
         onCreation();
     }

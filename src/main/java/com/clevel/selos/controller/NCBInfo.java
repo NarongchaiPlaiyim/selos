@@ -488,7 +488,9 @@ public class NCBInfo implements Serializable {
     //for rendered จำนวนเดือนที่หาร
     public void onChangeAccountType(){
         log.info("onChangeAccountType::");
-        log.info("ncbDetailView.getAccountType().getMonthFlag() :: {}" ,ncbDetailView.getAccountType().getMonthFlag());
+        log.info("ncbDetailView.getAccountType().getId :: {}",ncbDetailView.getAccountType().getId());
+        log.info("ncbDetailView.getMonthFlag() :: {}" ,ncbDetailView.getAccountType().getMonthFlag());
+        log.info("ncbDetailView.monthFlagPage() :: {}" ,ncbDetailView.isMonthFlagPage());
 
     }
 

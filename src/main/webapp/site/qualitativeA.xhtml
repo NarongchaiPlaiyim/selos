@@ -813,7 +813,7 @@
             </tr>
             <tr>
                 <td>
-                    <h:outputLabel value="DL :"/>
+                    <h:outputLabel value="#{msg.get('app.qualitative.level.item.description.DL')}"/>
                 </td>
                 <td>
                     <h:outputLabel value="#{msg.get('app.qualitative.level.description.dl')}" />
@@ -826,26 +826,24 @@
 
 <tr>
     <td>
-        <h:form id="form_button">
-            <table class="table_noborder" style="width:100%">
-                <tr>
-                    <td colspan="2" class="center">
-                        <p:commandButton value="#{msg.get('app.qualitative.button.saveButton')}"
-                                         id="btnSave"
-                                         styleClass="medium"
-                                         process=":frmMain"
-                                         action="#{qualitative.onSaveQualitativeA}"
-                                         update=":msgBoxSystemMessagePanel"/>
-                        <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
-                                         id="btnCancel"
-                                         styleClass="medium"
-                                         process=":frmMain"
-                                         action="#{qualitative.onCancelQualitativeA}"
-                                         update=":frmMain"/>
-                    </td>
-                </tr>
-            </table>
-        </h:form>
+        <table class="table_noborder" style="width:100%">
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton value="#{msg.get('app.qualitative.button.saveButton')}"
+                                     id="btnSave"
+                                     styleClass="medium"
+                                     process=":frmMain"
+                                     action="#{qualitative.onSaveQualitativeA}"
+                                     update=":msgBoxSystemMessagePanel"/>
+                    <p:commandButton value="#{msg.get('app.qualitative.button.cancelButton')}"
+                                     id="btnCancel"
+                                     styleClass="medium"
+                                     process=":frmMain"
+                                     action="#{qualitative.onCancelQualitativeA}"
+                                     update=":frmMain"/>
+                </td>
+            </tr>
+        </table>
     </td>
 </tr>
 
@@ -866,7 +864,7 @@
 </p:panel>
 
 
-<p:blockUI block="pnl_maincontainer" trigger=":frmMain:form_button:btnSave,:frmMain:form_button:btnCancel">
+<p:blockUI block="pnl_maincontainer" trigger=":frmMain:btnSave,:frmMain:btnCancel">
     LOADING<br/>
     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
 </p:blockUI>
