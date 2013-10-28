@@ -11,10 +11,12 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.sql.SQLException;
 
 @Stateless
-public class IsaBusinessControl implements Serializable{
+public class IsaBusinessControl implements Serializable {
 
     @Inject
     Logger log;
@@ -23,21 +25,23 @@ public class IsaBusinessControl implements Serializable{
     UserDAO userDAO;
 
     @Inject
-    public IsaBusinessControl(){
+    public IsaBusinessControl() {
 
     }
 
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
 
     }
 
-    public void createUser(IsaCreateUserView isaCreateUserView){
+    boolean complete = true;
+
+    public void createUser(IsaCreateUserView isaCreateUserView) throws Exception {
 
         log.debug("createUser()");
 
-        User user=new User();
-        user.setId(isaCreateUserView.getUsername());
+        User user = new User();
+        user.setId(isaCreateUserView.getId());
         user.setUserName(isaCreateUserView.getUsername());
         user.setBuCode(isaCreateUserView.getBuCode());
         user.setPhoneExt(isaCreateUserView.getPhoneExt());
@@ -49,25 +53,95 @@ public class IsaBusinessControl implements Serializable{
         user.setRegion(isaCreateUserView.getUserRegion());
         user.setTeam(isaCreateUserView.getUserTeam());
         user.setTitle(isaCreateUserView.getUserTitle());
-
-        if(isaCreateUserView.getUserZone().getId()==0){
         user.setZone(isaCreateUserView.getUserZone());
-        }
         user.setUserStatus(UserStatus.NORMAL);
+        user.setActive(isaCreateUserView.getActive());
 
-        userDAO.save(user);
 
-        RequestContext.getCurrentInstance().execute("newUserDlg.hide()");
+        if (isaCreateUserView.getUserDepartment().getId() == 0) {
+            user.setDepartment(null);
+        }
+        if (isaCreateUserView.getRole().getId() == 0) {
+            user.setRole(null);
+        }
+        if (isaCreateUserView.getUserDivision().getId() == 0) {
+            user.setDivision(null);
+        }
+        if (isaCreateUserView.getUserRegion().getId() == 0) {
+            user.setRegion(null);
+        }
+        if (isaCreateUserView.getUserTeam().getId() == 0) {
+            user.setTeam(null);
+        }
+        if (isaCreateUserView.getUserTitle().getId() == 0) {
+            user.setTitle(null);
+        }
+        if (isaCreateUserView.getUserZone().getId() == 0) {
+            user.setZone(null);
+        }
 
-        System.out.println(isaCreateUserView.toString());
+        userDAO.persist(user);
+
     }
 
-    public IsaCreateUserView editUser(String id){
+
+    public void editUser(IsaCreateUserView isaCreateUserView) throws ConstraintViolationException, Exception {
+
         log.debug("editUser()");
 
-        User user=userDAO.findById(id);
+        User user = new User();
+//        User user =userDAO.findById(isaCreateUserView.getId());
 
-        IsaCreateUserView isaCreateUserView=new IsaCreateUserView();
+        user.setId(isaCreateUserView.getId());
+        user.setUserName(isaCreateUserView.getUsername());
+        user.setBuCode(isaCreateUserView.getBuCode());
+        user.setPhoneExt(isaCreateUserView.getPhoneExt());
+        user.setPhoneNumber(isaCreateUserView.getPhoneNumber());
+        user.setEmailAddress(isaCreateUserView.getEmailAddress());
+        user.setRole(isaCreateUserView.getRole());
+        user.setDepartment(isaCreateUserView.getUserDepartment());
+        user.setDivision(isaCreateUserView.getUserDivision());
+        user.setRegion(isaCreateUserView.getUserRegion());
+        user.setTeam(isaCreateUserView.getUserTeam());
+        user.setTitle(isaCreateUserView.getUserTitle());
+        user.setZone(isaCreateUserView.getUserZone());
+        user.setActive(isaCreateUserView.getActive());
+        user.setUserStatus(UserStatus.NORMAL);
+
+
+        if (isaCreateUserView.getUserDepartment().getId() == 0) {
+            user.setDepartment(null);
+        }
+        if (isaCreateUserView.getRole().getId() == 0) {
+            user.setRole(null);
+        }
+        if (isaCreateUserView.getUserDivision().getId() == 0) {
+            user.setDivision(null);
+        }
+        if (isaCreateUserView.getUserRegion().getId() == 0) {
+            user.setRegion(null);
+        }
+        if (isaCreateUserView.getUserTeam().getId() == 0) {
+            user.setTeam(null);
+        }
+        if (isaCreateUserView.getUserTitle().getId() == 0) {
+            user.setTitle(null);
+        }
+        if (isaCreateUserView.getUserZone().getId() == 0) {
+            user.setZone(null);
+        }
+
+        userDAO.persist(user);
+
+    }
+
+
+    public IsaCreateUserView SelectUserById(String id) {
+        log.debug("SelectUserById()");
+        System.out.println("SelectUserById : " + id);
+        User user = userDAO.findById(id);
+
+        IsaCreateUserView isaCreateUserView = new IsaCreateUserView();
         isaCreateUserView.setId(user.getId());
         isaCreateUserView.setUsername(user.getUserName());
         isaCreateUserView.setPhoneExt(user.getPhoneExt());
@@ -81,21 +155,53 @@ public class IsaBusinessControl implements Serializable{
         isaCreateUserView.setUserTeam(user.getTeam());
         isaCreateUserView.setUserTitle(user.getTitle());
         isaCreateUserView.setUserZone(user.getZone());
+        isaCreateUserView.setActive(user.getActive());
+
+
+        if (isaCreateUserView.getUserDepartment() == null) {
+            isaCreateUserView.setUserDepartment(new UserDepartment());
+        }
+        if (isaCreateUserView.getRole() == null) {
+            isaCreateUserView.setRole(new Role());
+        }
+        if (isaCreateUserView.getUserDivision() == null) {
+            isaCreateUserView.setUserDivision(new UserDivision());
+        }
+        if (isaCreateUserView.getUserRegion() == null) {
+            isaCreateUserView.setUserRegion(new UserRegion());
+        }
+        if (isaCreateUserView.getUserTeam() == null) {
+            isaCreateUserView.setUserTeam(new UserTeam());
+        }
+        if (isaCreateUserView.getUserTitle() == null) {
+            isaCreateUserView.setUserTitle(new UserTitle());
+        }
+        if (isaCreateUserView.getUserZone() == null) {
+            isaCreateUserView.setUserZone(new UserZone());
+        }
 
         return isaCreateUserView;
     }
 
 
-    public void deleteUser(String id){
+    public void deleteUser(String id) {
         log.debug("deleteUser()");
 
-        User user=userDAO.findById(id);
+        RequestContext context = RequestContext.getCurrentInstance();
+        User user = userDAO.findById(id);
         user.setUserStatus(UserStatus.MARK_AS_DELETED);
-        userDAO.persist(user);
-        RequestContext context=RequestContext.getCurrentInstance();
 
-        context.update(":userTableData");
-        context.execute("confirmDlg.hide()");
+        try {
+            userDAO.persist(user);
+        } catch (ConstraintViolationException ex) {
+            complete = false;
+            throw ex;
+        } catch (Exception e) {
+            complete = false;
+        }
+
+        context.addCallbackParam("functionComplete", complete);
+
     }
 
 }

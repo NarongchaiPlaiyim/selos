@@ -809,7 +809,7 @@
                     action="#{prescreenMaker.onSaveCustomerInfo}"
                     process="@form"
                     update=":customerDlgForm :frmMain :msgBoxSystemMessagePanel"
-                    oncomplete="handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
+                    oncomplete=" handlePrescreenCustomerInfoRequest(xhr, status, args)"/>
             <p:commandButton value="Cancel" styleClass="small"
                              process="@this" update=":customerDlgForm"
                              oncomplete="customerDlg.hide()">

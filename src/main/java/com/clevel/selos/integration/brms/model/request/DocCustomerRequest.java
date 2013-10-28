@@ -1,19 +1,19 @@
 package com.clevel.selos.integration.brms.model.request;
 
 import com.clevel.selos.integration.brms.model.request.data.ApplicationLevel;
-import com.clevel.selos.integration.brms.model.request.data.CustomerLevel;
+import com.clevel.selos.integration.brms.model.request.data.BorrowerLevel;
 
 import java.util.List;
 
 public class DocCustomerRequest {
     public ApplicationLevel applicationLevel;
-    public List<CustomerLevel> customerLevelList;
+    public List<BorrowerLevel> customerLevelList;
     //todo add more data level/group (Acc/Requested)
 
     public DocCustomerRequest() {
     }
 
-    public DocCustomerRequest(ApplicationLevel applicationLevel, List<CustomerLevel> customerLevelList) {
+    public DocCustomerRequest(ApplicationLevel applicationLevel, List<BorrowerLevel> customerLevelList) {
         this.applicationLevel = applicationLevel;
         this.customerLevelList = customerLevelList;
     }
@@ -26,11 +26,11 @@ public class DocCustomerRequest {
         this.applicationLevel = applicationLevel;
     }
 
-    public List<CustomerLevel> getCustomerLevelList() {
+    public List<BorrowerLevel> getCustomerLevelList() {
         return customerLevelList;
     }
 
-    public void setCustomerLevelList(List<CustomerLevel> customerLevelList) {
+    public void setCustomerLevelList(List<BorrowerLevel> customerLevelList) {
         this.customerLevelList = customerLevelList;
     }
 }

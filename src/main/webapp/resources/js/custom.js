@@ -120,6 +120,12 @@ function showWindowsScrollBar(){
     $("body").attr("style","overflow-y: scroll");
 }
 
+function handleManageUserDialogRequest(xhr,status,args){
+    if(args.functionComplete){
+        manageUserDlg.hide();
+    }
+}
+
 function handlePrescreenCustomerInfoRequest(xhr, status, args) {
     if(args.functionComplete){
         customerDlg.hide();
@@ -172,6 +178,12 @@ function handletcgInfoRequest(xhr, status, args) {
 function handleBasicInfoAccountRequest(xhr, status, args) {
     if(args.functionComplete){
         basicInfoAccountDlg.hide();
+    }
+}
+
+function handleContactRecordRequest(xhr, status, args) {
+    if(args.functionComplete){
+        contactRecordDetailViewDlg.hide();
     }
 }
 

@@ -481,12 +481,18 @@ h2{
     color: #393939;
 }
 
-
-
-
-
 .clear{
     clear: both;
+}
+
+/** Bank statement detail Table **/
+td .cell_spacer {
+    background-color: #ffffff;
+    height: 28px;
+}
+
+.calendar_right input {
+    text-align: right;
 }
 
 /** Overide Primeface Theme **/

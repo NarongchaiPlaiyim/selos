@@ -19,6 +19,7 @@ public class LogProducer {
     private static final String LOGGER_NAME_ECM = "ECM";
     private static final String LOGGER_NAME_WS = "WS";
     private static final String LOGGER_NAME_DWH = "DWH";
+    private static final String LOGGER_NAME_COMS = "COMS";
 
     @Produces
     Logger createLogger(InjectionPoint injectionPoint) {
@@ -83,5 +84,11 @@ public class LogProducer {
     @DWH
     Logger createDWHLogger() {
         return LoggerFactory.getLogger(LOGGER_NAME_DWH);
+    }
+
+    @Produces
+    @COMS
+    Logger createCOMSLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_COMS);
     }
 }

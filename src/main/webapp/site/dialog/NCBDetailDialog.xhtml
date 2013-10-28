@@ -23,7 +23,7 @@
                            var="dlgAccountTypeList"
                            itemLabel="#{dlgAccountTypeList.name}"
                            itemValue="#{dlgAccountTypeList.id}"/>
-            <p:ajax event="change" listener="#{ncbInfo.onChangeAccountType}" update=":ncbDlgForm"/>
+            <p:ajax event="change" listener="#{ncbInfo.onChangeAccountType}" process=":ncbDlgForm:dlgType" update=":ncbDlgForm:panelNoOfmonthsPaymentFlag"/>
         </p:selectOneMenu>
     </td>
 </tr>
@@ -185,25 +185,28 @@
     </td>
 </tr>
 <tr>
-    <p:panel style="border-width: 0;"  id="panelNoOfmonthsPaymentFlag"  rendered="#{ncbInfo.ncbDetailView.monthFlagPage}">
-        <td class="title" style="width: 230px;">
-            <h:outputText value="#{msg.get('app.dlg.noOfmonthsPayment')}"/>
-        </td>
-        <td>
-            <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: right">
-                <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue="0"/>
-                <f:selectItem itemLabel="1" itemValue="1"/>
-                <f:selectItem itemLabel="2" itemValue="2"/>
-                <f:selectItem itemLabel="3" itemValue="3"/>
-                <f:selectItem itemLabel="4" itemValue="4"/>
-                <f:selectItem itemLabel="5" itemValue="5"/>
-                <f:selectItem itemLabel="6" itemValue="6"/>
-                <p:ajax event="change"
-                        listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment()}"
-                        process="@this"
-                        update=":ncbDlgForm:genTextBoxFlagPanel"/>
-            </h:selectOneMenu>
-        </td>
+    <p:panel style="border-width: 0;"  id="panelNoOfmonthsPaymentFlag" >
+<!--        <p:panel style="border-width: 0;"  rendered="#{ncbInfo.ncbDetailView.monthFlagPage}">-->
+        <p:panel style="border-width: 0;" >
+            <td class="title" style="width: 230px;">
+                <h:outputText value="#{msg.get('app.dlg.noOfmonthsPayment')}"/>
+            </td>
+            <td>
+                <h:selectOneMenu value="#{ncbInfo.ncbDetailView.noOfmonthsPayment}" style="text-align: right">
+                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}"  itemValue="0"/>
+                    <f:selectItem itemLabel="1" itemValue="1"/>
+                    <f:selectItem itemLabel="2" itemValue="2"/>
+                    <f:selectItem itemLabel="3" itemValue="3"/>
+                    <f:selectItem itemLabel="4" itemValue="4"/>
+                    <f:selectItem itemLabel="5" itemValue="5"/>
+                    <f:selectItem itemLabel="6" itemValue="6"/>
+                    <p:ajax event="change"
+                            listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment()}"
+                            process="@this"
+                            update=":ncbDlgForm:genTextBoxFlagPanel"/>
+                </h:selectOneMenu>
+            </td>
+        </p:panel>
     </p:panel>
 </tr>
 <tr>

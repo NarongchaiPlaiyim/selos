@@ -1,5 +1,9 @@
 package com.clevel.selos.businesscontrol;
 
+import com.clevel.selos.dao.working.BankStatementDAO;
+import com.clevel.selos.dao.working.BankStatementDetailDAO;
+import com.clevel.selos.dao.working.BankStatementSummaryDAO;
+import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.DWHInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAccountListModel;
@@ -7,7 +11,11 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.BankStatement;
+import com.clevel.selos.model.db.working.BankStatementDetail;
 import com.clevel.selos.model.db.working.BankStatementSummary;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.ActionStatusTransform;
 import com.clevel.selos.transform.BankStmtTransform;
@@ -22,16 +30,25 @@ import java.util.List;
 
 @Stateless
 public class BankStmtControl extends BusinessControl{
-
+    //Interface
     @Inject
     private RMInterface rmInterface;
-
     @Inject
     DWHInterface dwhInterface;
 
+    //DAO
+    @Inject
+    WorkCaseDAO workCaseDAO;
+    @Inject
+    BankStatementDAO bankStatementDAO;
+    @Inject
+    BankStatementDetailDAO bankStatementDetailDAO;
+    @Inject
+    BankStatementSummaryDAO bankStatementSummaryDAO;
+
+    //Transform
     @Inject
     ActionStatusTransform actionStatusTransform;
-
     @Inject
     BankStmtTransform bankStmtTransform;
 
@@ -141,5 +158,26 @@ public class BankStmtControl extends BusinessControl{
         customerAccountResult.setCustomerId(tmbCusId);
         customerAccountResult.setAccountListModels(accountListModelList);
         return customerAccountResult;
+    }
+
+    public void saveBankStmt(BankStmtSummaryView bankStmtSummaryView, BankStmtView bankStmtView, long workCaseId, String userId) {
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+        User user = userDAO.findById(userId);
+
+        //todo: find and update before persist bank statement
+//        BankStatementSummary bankStatementSummary = bankStatementSummaryDAO.findById(bankStmtSummaryView.getId());
+        BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
+
+        BankStatement bankStatement = bankStmtTransform.getBankStatement(bankStmtView, bankStatementSummary, user);
+        bankStatementDAO.persist(bankStatement);
+        log.debug("persist BankStatement: {}", bankStatement);
+
+        if (bankStmtView.getBankStmtDetailViewList() != null) {
+            for (BankStmtDetailView bankStmtDetailView : bankStmtView.getBankStmtDetailViewList()) {
+                BankStatementDetail bankStatementDetail = bankStmtTransform.getBankStatementDetail(bankStmtDetailView, bankStatement);
+                bankStatementDetailDAO.persist(bankStatementDetail);
+                log.debug("persist BankStatementDetail: {}", bankStatementDetail);
+            }
+        }
     }
 }
