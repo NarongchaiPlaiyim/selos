@@ -111,6 +111,7 @@ public class NCBInfo implements Serializable {
         noOfmonthsPaymentFlag = false;
 
         HttpSession session = FacesUtil.getSession(true);
+        user = (User)session.getAttribute("user");
 
         if(session.getAttribute("customerId") != null){
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
@@ -505,6 +506,8 @@ public class NCBInfo implements Serializable {
                     ncbInfoView.setCreateDate(DateTime.now().toDate());
                 }
 
+                ncbInfoView.setModifyBy(user);
+                ncbInfoView.setModifyDate(DateTime.now().toDate());
                 ncbInfoControl.onSaveNCBToDB(ncbInfoView, ncbDetailViewList);
 
                 messageHeader = msg.get("app.header.save.success");
