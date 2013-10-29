@@ -4,11 +4,14 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Months;
 import org.joda.time.chrono.BuddhistChronology;
+import org.joda.time.chrono.ISOChronology;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -18,10 +21,57 @@ public class DateTimeUtil {
 
     public static final String defaultDateFormat = "dd/MM/yyyy";
 
+    private static final Locale THAI_LOCALE = new Locale("th", "TH");
+
     public static int compareDate(Date targetDate,Date referenceDate) {
         DateTime referenceDateTime = new DateTime(getOnlyDate(referenceDate));
         DateTime targetDateTime = new DateTime(getOnlyDate(targetDate));
         return targetDateTime.compareTo(referenceDateTime);
+    }
+
+    public static Date convertToDateUS(Date date){
+        DateTime dateConvert = new DateTime(date, ISOChronology.getInstance());
+        return dateConvert.toDate();
+    }
+
+    public static Date convertToDateTH(Date date){
+        DateTime dateConvert = new DateTime(date, BuddhistChronology.getInstance());
+        log.debug("dateConvert : {}", dateConvert);
+        log.debug("dateConvert.toDate() : {}", dateConvert.toDate());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = simpleDateFormat.format(dateConvert.toDate());
+        log.debug("Date String TH : {}", dateString);
+        try{
+            Date dateTH = simpleDateFormat.parse(dateConvert.toString("dd/MM/yyyy"));
+            log.debug("Date TH : {}", dateTH);
+            return dateTH;
+        } catch (ParseException e){
+            log.error("error, parsing date");
+        }
+        return new Date();
+    }
+
+    public static Date convertStringToDate(String date, Locale locale){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
+        Date dateConvert = new Date();
+        try {
+            dateConvert = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            log.error("Error to parsing date. {}", date);
+        }
+        return dateConvert;
+    }
+
+    public static String convertDateToString(Date date, Locale locale){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
+        String dateConvert = "";
+        try {
+            dateConvert = simpleDateFormat.format(date);
+        } catch (Exception e) {
+            log.error("Error to parsing date. {}", date);
+        }
+        return dateConvert;
     }
 
     public static Date getOnlyDate(Date date) {
@@ -63,25 +113,11 @@ public class DateTimeUtil {
         return dt.toDate();
     }
 
-    public static Date getCurrentDate(){
+    public static Date getCurrentDateTH(){
         Date date = new Date();
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
-                .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
-        DateTime dt = new DateTime(date);
-        log.debug("dt : {}", dt);
-        String dtStr = dt.toString(formatter);
+        Date currentDate = convertToDateTH(date);
 
-        return new DateTime(dtStr).toDate();
-
-        /*String strDate = getDateTimeStr(date);
-        log.debug("strDate : {}", strDate);
-        String strDate2 = getDateStr(date);
-        log.debug("strDate2 : {}", strDate2);
-        Locale lc = new Locale("th", "TH");
-        Date dt = parseToDate(strDate2, defaultDateFormat, lc);
-        log.debug("dt : {}", dt);
-        dt = getOnlyDate(dt);
-        return dt;*/
+        return currentDate;
     }
 
     public static int daysBetween2Dates(Date date1, Date date2) {
@@ -160,7 +196,7 @@ public class DateTimeUtil {
 
     public static String getDateStr(Date date) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy")
-                .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
+                .withChronology(BuddhistChronology.getInstance()).withLocale(new Locale("th", "TH"));
         DateTime dt = new DateTime(date);
         return dt.toString(formatter);
     }

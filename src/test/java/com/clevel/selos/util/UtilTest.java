@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,17 +19,17 @@ public class UtilTest {
     @Test
     public void testReplaceToBlank() throws Exception {
         log.info("testReplaceToBlank.");
-        String strToReplace = "à¢µ|á¢Ç§";
-        String text1 = "à¢µÅÒ´¾ÃéÒÇ";
-        String text2 = "á¢Ç§´ØÊÔµ";
+        String strToReplace = "à¢µ|ï¿½Ç§";
+        String text1 = "à¢µï¿½Ò´ï¿½ï¿½ï¿½ï¿½ï¿½";
+        String text2 = "ï¿½Ç§ï¿½ï¿½ï¿½Ôµ";
 
         log.info("text1 output: {}",Util.replaceToBlank(text1,strToReplace));
         log.info("text2 output: {}",Util.replaceToBlank(text2,strToReplace));
 
-        assertEquals("expected equal.", "ÅÒ´¾ÃéÒÇ", Util.replaceToBlank(text1,strToReplace));
-        assertEquals("expected equal.", "´ØÊÔµ", Util.replaceToBlank(text2,strToReplace));
+        assertEquals("expected equal.", "ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ï¿½", Util.replaceToBlank(text1,strToReplace));
+        assertEquals("expected equal.", "ï¿½ï¿½ï¿½Ôµ", Util.replaceToBlank(text2,strToReplace));
         assertEquals("expected equal.", "", Util.replaceToBlank(null,strToReplace));
-        assertEquals("expected equal.", "à¢µÅÒ´¾ÃéÒÇ", Util.replaceToBlank(text1, null));
+        assertEquals("expected equal.", "à¢µï¿½Ò´ï¿½ï¿½ï¿½ï¿½ï¿½", Util.replaceToBlank(text1, null));
         assertEquals("expected equal.", "", Util.replaceToBlank(null,null));
     }
 
@@ -44,5 +46,12 @@ public class UtilTest {
         assertTrue("expected true", Util.isTrue(1));
 
         assertFalse("expected false", Util.isTrue("0"));
+    }
+
+    @Test
+    public void testDate() throws Exception {
+        Date dt = DateTimeUtil.getCurrentDateTH();
+        log.debug("current date : {}", dt);
+        log.debug("convert to EN : {}", DateTimeUtil.convertToDateUS(dt));
     }
 }

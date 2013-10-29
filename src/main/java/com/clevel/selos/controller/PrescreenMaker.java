@@ -2537,8 +2537,9 @@ public class PrescreenMaker implements Serializable {
     }
 
     public Date getCurrentDate() {
-        log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDate());
-        return DateTimeUtil.getCurrentDate();
+        log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDateTH());
+        return DateTime.now().toDate();
+        //return DateTimeUtil.getCurrentDate();
     }
 
     public void setCurrentDate(Date currentDate) {
