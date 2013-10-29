@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class UserDepartmentDAO extends GenericDAO<UserDepartment,Integer> {
+public class UserDepartmentDAO extends GenericDAO<UserDepartment, Integer> {
     @Inject
     private Logger log;
 

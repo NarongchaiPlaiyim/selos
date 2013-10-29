@@ -13,16 +13,16 @@ public class Role implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 20)
+    @Column(name = "name", length = 20)
     private String name;
-    @Column(name = "description",length = 100)
+    @Column(name = "description", length = 100)
     private String description;
-    @Column(name = "system_name",length = 20)
+    @Column(name = "system_name", length = 20)
     private String systemName;
     @OneToOne
-    @JoinColumn(name="roletype_id")
+    @JoinColumn(name = "roletype_id")
     private RoleType roleType;
-    @OneToMany(mappedBy="role")
+    @OneToMany(mappedBy = "role")
     List<Step> stepList;
     @Column(name = "active")
     private int active;

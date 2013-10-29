@@ -52,7 +52,7 @@ public class Inbox implements Serializable {
 
     private InboxView inboxViewSelectItem;
 
-    public Inbox(){
+    public Inbox() {
 
     }
 
@@ -61,15 +61,15 @@ public class Inbox implements Serializable {
         // *** Get user from Session *** //
         userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         log.info("onCreation ::: userDetail : {}", userDetail);
-           try{
-        inboxViewList = inboxControl.getInboxFromBPM(userDetail);
-           }catch (Exception e){
-               e.printStackTrace();
-           }
+        try {
+            inboxViewList = inboxControl.getInboxFromBPM(userDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         log.info("onCreation ::: inboxViewList : {}", inboxViewList);
     }
 
-    public void onSelectInbox(){
+    public void onSelectInbox() {
         HttpSession session = FacesUtil.getSession(false);
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
@@ -82,19 +82,19 @@ public class Inbox implements Serializable {
         AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        try{
+        try {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 
-            if(inboxViewSelectItem.getStepId() == 1001){
+            if (inboxViewSelectItem.getStepId() == 1001) {
                 ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1002){
+            } else if (inboxViewSelectItem.getStepId() == 1002) {
                 ec.redirect(ec.getRequestContextPath() + "/site/prescreenChecker.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1003){
+            } else if (inboxViewSelectItem.getStepId() == 1003) {
                 ec.redirect(ec.getRequestContextPath() + "/site/prescreenMaker.jsf");
             }
             return;
-        }catch (Exception ex){
-            log.info("Exception :: {}",ex);
+        } catch (Exception ex) {
+            log.info("Exception :: {}", ex);
         }
     }
 

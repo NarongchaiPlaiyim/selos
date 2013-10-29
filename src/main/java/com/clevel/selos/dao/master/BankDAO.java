@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BankDAO extends GenericDAO<Bank,Integer> {
+public class BankDAO extends GenericDAO<Bank, Integer> {
     @Inject
     private Logger log;
 
@@ -36,7 +36,7 @@ public class BankDAO extends GenericDAO<Bank,Integer> {
     public List<Bank> getListRefinance() {
         Criteria criteria = createCriteria()
                 .add(Restrictions.eq("active", 1))
-                .add(Restrictions.eq("refinance",1));
+                .add(Restrictions.eq("refinance", 1));
         List<Bank> list = criteria.list();
         return list;
     }

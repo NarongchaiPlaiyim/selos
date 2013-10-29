@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -71,17 +71,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "custType",
-    "type",
-    "custId",
-    "custNbr",
-    "custName",
-    "radSelectSearch"
+        "custType",
+        "type",
+        "custId",
+        "custNbr",
+        "custName",
+        "radSelectSearch"
 })
 public class Body {
 
@@ -96,11 +94,9 @@ public class Body {
 
     /**
      * Gets the value of the custType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustType() {
         return custType;
@@ -108,11 +104,9 @@ public class Body {
 
     /**
      * Sets the value of the custType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustType(String value) {
         this.custType = value;
@@ -120,11 +114,9 @@ public class Body {
 
     /**
      * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getType() {
         return type;
@@ -132,11 +124,9 @@ public class Body {
 
     /**
      * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setType(String value) {
         this.type = value;
@@ -144,11 +134,9 @@ public class Body {
 
     /**
      * Gets the value of the custId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustId() {
         return custId;
@@ -156,11 +144,9 @@ public class Body {
 
     /**
      * Sets the value of the custId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustId(String value) {
         this.custId = value;
@@ -168,11 +154,9 @@ public class Body {
 
     /**
      * Gets the value of the custNbr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustNbr() {
         return custNbr;
@@ -180,11 +164,9 @@ public class Body {
 
     /**
      * Sets the value of the custNbr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustNbr(String value) {
         this.custNbr = value;
@@ -192,11 +174,9 @@ public class Body {
 
     /**
      * Gets the value of the custName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustName() {
         return custName;
@@ -204,11 +184,9 @@ public class Body {
 
     /**
      * Sets the value of the custName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustName(String value) {
         this.custName = value;
@@ -216,11 +194,9 @@ public class Body {
 
     /**
      * Gets the value of the radSelectSearch property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRadSelectSearch() {
         return radSelectSearch;
@@ -228,11 +204,9 @@ public class Body {
 
     /**
      * Sets the value of the radSelectSearch property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRadSelectSearch(String value) {
         this.radSelectSearch = value;

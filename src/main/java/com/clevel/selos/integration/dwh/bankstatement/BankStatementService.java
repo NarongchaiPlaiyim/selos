@@ -116,42 +116,42 @@ public class BankStatementService implements Serializable {
 
     }
 
-    public DWHBankStatementResult getBankStatementData(String accountNumber, Date fromDate, int numberOfMonth){
+    public DWHBankStatementResult getBankStatementData(String accountNumber, Date fromDate, int numberOfMonth) {
         DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
-        if(fromDate!=null && numberOfMonth>0 && numberOfMonth<13 && !Util.isEmpty(accountNumber)){
+        if (fromDate != null && numberOfMonth > 0 && numberOfMonth < 13 && !Util.isEmpty(accountNumber)) {
             //find last month on system param
             SystemParameter systemParameter = systemParameterDAO.findByParameterName(lastMonth);
-            if(systemParameter!=null){
-                Date lastMonth = Util.strToDateFormat(systemParameter.getValue(),FORMAT_MONTH_YEAR);
+            if (systemParameter != null) {
+                Date lastMonth = Util.strToDateFormat(systemParameter.getValue(), FORMAT_MONTH_YEAR);
                 int numOfDifMonth = DateTimeUtil.monthBetween2DatesWithNoDate(fromDate, lastMonth);
                 String firstMonth = "";
-                if(numOfDifMonth==0){
+                if (numOfDifMonth == 0) {
                     firstMonth = month1;
-                } else if(numOfDifMonth==1){
+                } else if (numOfDifMonth == 1) {
                     firstMonth = month2;
-                } else if(numOfDifMonth==2){
+                } else if (numOfDifMonth == 2) {
                     firstMonth = month3;
-                } else if(numOfDifMonth==3 && numberOfMonth<12){
+                } else if (numOfDifMonth == 3 && numberOfMonth < 12) {
                     firstMonth = month4;
-                } else if(numOfDifMonth==4 && numberOfMonth<11){
+                } else if (numOfDifMonth == 4 && numberOfMonth < 11) {
                     firstMonth = month5;
-                } else if(numOfDifMonth==5 && numberOfMonth<10){
+                } else if (numOfDifMonth == 5 && numberOfMonth < 10) {
                     firstMonth = month6;
-                } else if(numOfDifMonth==6 && numberOfMonth<9){
+                } else if (numOfDifMonth == 6 && numberOfMonth < 9) {
                     firstMonth = month7;
-                } else if(numOfDifMonth==7 && numberOfMonth<8){
+                } else if (numOfDifMonth == 7 && numberOfMonth < 8) {
                     firstMonth = month8;
-                } else if(numOfDifMonth==8 && numberOfMonth<7){
+                } else if (numOfDifMonth == 8 && numberOfMonth < 7) {
                     firstMonth = month9;
-                } else if(numOfDifMonth==9 && numberOfMonth<6){
+                } else if (numOfDifMonth == 9 && numberOfMonth < 6) {
                     firstMonth = month10;
-                } else if(numOfDifMonth==10 && numberOfMonth<5){
+                } else if (numOfDifMonth == 10 && numberOfMonth < 5) {
                     firstMonth = month11;
-                } else if(numOfDifMonth==11 && numberOfMonth<4){
+                } else if (numOfDifMonth == 11 && numberOfMonth < 4) {
                     firstMonth = month12;
-                } else if(numOfDifMonth==12 && numberOfMonth<3){
+                } else if (numOfDifMonth == 12 && numberOfMonth < 3) {
                     firstMonth = month13;
-                } else if(numOfDifMonth==13 && numberOfMonth<2){
+                } else if (numOfDifMonth == 13 && numberOfMonth < 2) {
                     firstMonth = monthTmp;
                 } else {
                     bankStatementResult.setActionResult(ActionResult.FAILED);
@@ -160,11 +160,11 @@ public class BankStatementService implements Serializable {
                 }
 
                 //get first table
-                if(!Util.isEmpty(firstMonth)){
+                if (!Util.isEmpty(firstMonth)) {
                     systemParameter = systemParameterDAO.findByParameterName(firstMonth);
-                    if(systemParameter!=null){
-                        List<DWHBankStatement> bankStatementList = getList(accountNumber,systemParameter.getValue(),numberOfMonth);
-                        if(bankStatementList!=null && bankStatementList.size()>0){
+                    if (systemParameter != null) {
+                        List<DWHBankStatement> bankStatementList = getList(accountNumber, systemParameter.getValue(), numberOfMonth);
+                        if (bankStatementList != null && bankStatementList.size() > 0) {
                             bankStatementResult.setActionResult(ActionResult.SUCCESS);
                             bankStatementResult.setBankStatementList(bankStatementList);
                         } else {
@@ -191,859 +191,859 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public List<DWHBankStatement> getList(String accountNumber, String tableNumber, int numberOfMonth){
+    public List<DWHBankStatement> getList(String accountNumber, String tableNumber, int numberOfMonth) {
         List<DWHBankStatement> bankStatementList = new ArrayList<DWHBankStatement>();
-        if(numberOfMonth<=12){
-            if(tableNumber.equalsIgnoreCase("1")){
-                if(numberOfMonth>0){ //get from table month1
+        if (numberOfMonth <= 12) {
+            if (tableNumber.equalsIgnoreCase("1")) {
+                if (numberOfMonth > 0) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month2
+                if (numberOfMonth > 1) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month3
+                if (numberOfMonth > 2) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month4
+                if (numberOfMonth > 3) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month5
+                if (numberOfMonth > 4) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month6
+                if (numberOfMonth > 5) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month7
+                if (numberOfMonth > 6) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month8
+                if (numberOfMonth > 7) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month9
+                if (numberOfMonth > 8) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month10
+                if (numberOfMonth > 9) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month11
+                if (numberOfMonth > 10) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month12
+                if (numberOfMonth > 11) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("2")){
-                if(numberOfMonth>0){ //get from table month2
+            } else if (tableNumber.equalsIgnoreCase("2")) {
+                if (numberOfMonth > 0) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month3
+                if (numberOfMonth > 1) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month4
+                if (numberOfMonth > 2) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month5
+                if (numberOfMonth > 3) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month6
+                if (numberOfMonth > 4) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month7
+                if (numberOfMonth > 5) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month8
+                if (numberOfMonth > 6) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month9
+                if (numberOfMonth > 7) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month10
+                if (numberOfMonth > 8) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month11
+                if (numberOfMonth > 9) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month12
+                if (numberOfMonth > 10) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month13
+                if (numberOfMonth > 11) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("3")){
-                if(numberOfMonth>0){ //get from table month3
+            } else if (tableNumber.equalsIgnoreCase("3")) {
+                if (numberOfMonth > 0) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month4
+                if (numberOfMonth > 1) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month5
+                if (numberOfMonth > 2) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month6
+                if (numberOfMonth > 3) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month7
+                if (numberOfMonth > 4) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month8
+                if (numberOfMonth > 5) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month9
+                if (numberOfMonth > 6) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month10
+                if (numberOfMonth > 7) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month11
+                if (numberOfMonth > 8) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month12
+                if (numberOfMonth > 9) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month13
+                if (numberOfMonth > 10) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month14
+                if (numberOfMonth > 11) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("4")){
-                if(numberOfMonth>0){ //get from table month4
+            } else if (tableNumber.equalsIgnoreCase("4")) {
+                if (numberOfMonth > 0) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month5
+                if (numberOfMonth > 1) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month6
+                if (numberOfMonth > 2) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month7
+                if (numberOfMonth > 3) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month8
+                if (numberOfMonth > 4) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month9
+                if (numberOfMonth > 5) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month10
+                if (numberOfMonth > 6) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month11
+                if (numberOfMonth > 7) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month12
+                if (numberOfMonth > 8) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month13
+                if (numberOfMonth > 9) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month14
+                if (numberOfMonth > 10) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month1
+                if (numberOfMonth > 11) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("5")){
-                if(numberOfMonth>0){ //get from table month5
+            } else if (tableNumber.equalsIgnoreCase("5")) {
+                if (numberOfMonth > 0) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month6
+                if (numberOfMonth > 1) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month7
+                if (numberOfMonth > 2) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month8
+                if (numberOfMonth > 3) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month9
+                if (numberOfMonth > 4) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month10
+                if (numberOfMonth > 5) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month11
+                if (numberOfMonth > 6) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month12
+                if (numberOfMonth > 7) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month13
+                if (numberOfMonth > 8) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month14
+                if (numberOfMonth > 9) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month1
+                if (numberOfMonth > 10) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month2
+                if (numberOfMonth > 11) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("6")){
-                if(numberOfMonth>0){ //get from table month6
+            } else if (tableNumber.equalsIgnoreCase("6")) {
+                if (numberOfMonth > 0) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month7
+                if (numberOfMonth > 1) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month8
+                if (numberOfMonth > 2) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month9
+                if (numberOfMonth > 3) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month10
+                if (numberOfMonth > 4) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month11
+                if (numberOfMonth > 5) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month12
+                if (numberOfMonth > 6) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month13
+                if (numberOfMonth > 7) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month14
+                if (numberOfMonth > 8) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month1
+                if (numberOfMonth > 9) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month2
+                if (numberOfMonth > 10) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month3
+                if (numberOfMonth > 11) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("7")){
-                if(numberOfMonth>0){ //get from table month7
+            } else if (tableNumber.equalsIgnoreCase("7")) {
+                if (numberOfMonth > 0) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month8
+                if (numberOfMonth > 1) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month9
+                if (numberOfMonth > 2) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month10
+                if (numberOfMonth > 3) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month11
+                if (numberOfMonth > 4) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month12
+                if (numberOfMonth > 5) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month13
+                if (numberOfMonth > 6) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month14
+                if (numberOfMonth > 7) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month1
+                if (numberOfMonth > 8) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month2
+                if (numberOfMonth > 9) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month3
+                if (numberOfMonth > 10) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month4
+                if (numberOfMonth > 11) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("8")){
-                if(numberOfMonth>0){ //get from table month8
+            } else if (tableNumber.equalsIgnoreCase("8")) {
+                if (numberOfMonth > 0) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month9
+                if (numberOfMonth > 1) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month10
+                if (numberOfMonth > 2) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month11
+                if (numberOfMonth > 3) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month12
+                if (numberOfMonth > 4) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month13
+                if (numberOfMonth > 5) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month14
+                if (numberOfMonth > 6) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month1
+                if (numberOfMonth > 7) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month2
+                if (numberOfMonth > 8) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month3
+                if (numberOfMonth > 9) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month4
+                if (numberOfMonth > 10) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month5
+                if (numberOfMonth > 11) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("9")){
-                if(numberOfMonth>0){ //get from table month9
+            } else if (tableNumber.equalsIgnoreCase("9")) {
+                if (numberOfMonth > 0) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month10
+                if (numberOfMonth > 1) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month11
+                if (numberOfMonth > 2) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month12
+                if (numberOfMonth > 3) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month13
+                if (numberOfMonth > 4) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month14
+                if (numberOfMonth > 5) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month1
+                if (numberOfMonth > 6) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month2
+                if (numberOfMonth > 7) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month3
+                if (numberOfMonth > 8) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month4
+                if (numberOfMonth > 9) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month5
+                if (numberOfMonth > 10) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month6
+                if (numberOfMonth > 11) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("10")){
-                if(numberOfMonth>0){ //get from table month10
+            } else if (tableNumber.equalsIgnoreCase("10")) {
+                if (numberOfMonth > 0) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month11
+                if (numberOfMonth > 1) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month12
+                if (numberOfMonth > 2) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month13
+                if (numberOfMonth > 3) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month14
+                if (numberOfMonth > 4) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month1
+                if (numberOfMonth > 5) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month2
+                if (numberOfMonth > 6) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month3
+                if (numberOfMonth > 7) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month4
+                if (numberOfMonth > 8) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month5
+                if (numberOfMonth > 9) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month6
+                if (numberOfMonth > 10) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month7
+                if (numberOfMonth > 11) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("11")){
-                if(numberOfMonth>0){ //get from table month11
+            } else if (tableNumber.equalsIgnoreCase("11")) {
+                if (numberOfMonth > 0) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month12
+                if (numberOfMonth > 1) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month13
+                if (numberOfMonth > 2) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month14
+                if (numberOfMonth > 3) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month1
+                if (numberOfMonth > 4) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month2
+                if (numberOfMonth > 5) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month3
+                if (numberOfMonth > 6) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month4
+                if (numberOfMonth > 7) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month5
+                if (numberOfMonth > 8) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month6
+                if (numberOfMonth > 9) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month7
+                if (numberOfMonth > 10) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month8
+                if (numberOfMonth > 11) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("12")){
-                if(numberOfMonth>0){ //get from table month12
+            } else if (tableNumber.equalsIgnoreCase("12")) {
+                if (numberOfMonth > 0) { //get from table month12
                     BankStatement12 bankStatement12 = bankStatement12DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement12);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month13
+                if (numberOfMonth > 1) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month14
+                if (numberOfMonth > 2) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month1
+                if (numberOfMonth > 3) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month2
+                if (numberOfMonth > 4) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month3
+                if (numberOfMonth > 5) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month4
+                if (numberOfMonth > 6) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month5
+                if (numberOfMonth > 7) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month6
+                if (numberOfMonth > 8) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month7
+                if (numberOfMonth > 9) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month8
+                if (numberOfMonth > 10) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month9
+                if (numberOfMonth > 11) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("13")){
-                if(numberOfMonth>0){ //get from table month13
+            } else if (tableNumber.equalsIgnoreCase("13")) {
+                if (numberOfMonth > 0) { //get from table month13
                     BankStatement13 bankStatement13 = bankStatement13DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement13);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month14
+                if (numberOfMonth > 1) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month1
+                if (numberOfMonth > 2) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month2
+                if (numberOfMonth > 3) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month3
+                if (numberOfMonth > 4) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month4
+                if (numberOfMonth > 5) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month5
+                if (numberOfMonth > 6) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month6
+                if (numberOfMonth > 7) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month7
+                if (numberOfMonth > 8) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month8
+                if (numberOfMonth > 9) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month9
+                if (numberOfMonth > 10) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month10
+                if (numberOfMonth > 11) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-            } else if(tableNumber.equalsIgnoreCase("14")){
-                if(numberOfMonth>0){ //get from table month14
+            } else if (tableNumber.equalsIgnoreCase("14")) {
+                if (numberOfMonth > 0) { //get from table month14
                     BankStatement14 bankStatement14 = bankStatement14DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement14);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>1){ //get from table month1
+                if (numberOfMonth > 1) { //get from table month1
                     BankStatement1 bankStatement1 = bankStatement1DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement1);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>2){ //get from table month2
+                if (numberOfMonth > 2) { //get from table month2
                     BankStatement2 bankStatement2 = bankStatement2DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement2);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>3){ //get from table month3
+                if (numberOfMonth > 3) { //get from table month3
                     BankStatement3 bankStatement3 = bankStatement3DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement3);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>4){ //get from table month4
+                if (numberOfMonth > 4) { //get from table month4
                     BankStatement4 bankStatement4 = bankStatement4DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement4);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>5){ //get from table month5
+                if (numberOfMonth > 5) { //get from table month5
                     BankStatement5 bankStatement5 = bankStatement5DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement5);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>6){ //get from table month6
+                if (numberOfMonth > 6) { //get from table month6
                     BankStatement6 bankStatement6 = bankStatement6DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement6);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>7){ //get from table month7
+                if (numberOfMonth > 7) { //get from table month7
                     BankStatement7 bankStatement7 = bankStatement7DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement7);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>8){ //get from table month8
+                if (numberOfMonth > 8) { //get from table month8
                     BankStatement8 bankStatement8 = bankStatement8DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement8);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>9){ //get from table month9
+                if (numberOfMonth > 9) { //get from table month9
                     BankStatement9 bankStatement9 = bankStatement9DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement9);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>10){ //get from table month10
+                if (numberOfMonth > 10) { //get from table month10
                     BankStatement10 bankStatement10 = bankStatement10DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement10);
                     bankStatementList.add(bankStatement);
                 }
-                if(numberOfMonth>11){ //get from table month11
+                if (numberOfMonth > 11) { //get from table month11
                     BankStatement11 bankStatement11 = bankStatement11DAO.getByAccountNumber(accountNumber);
                     DWHBankStatement bankStatement = transform(bankStatement11);
                     bankStatementList.add(bankStatement);
@@ -1053,9 +1053,9 @@ public class BankStatementService implements Serializable {
         return bankStatementList;
     }
 
-    public DWHBankStatement transform(BankStatement1 bankStatement){
+    public DWHBankStatement transform(BankStatement1 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1082,9 +1082,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement2 bankStatement){
+    public DWHBankStatement transform(BankStatement2 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1111,9 +1111,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement3 bankStatement){
+    public DWHBankStatement transform(BankStatement3 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1140,9 +1140,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement4 bankStatement){
+    public DWHBankStatement transform(BankStatement4 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1169,9 +1169,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement5 bankStatement){
+    public DWHBankStatement transform(BankStatement5 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1198,9 +1198,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement6 bankStatement){
+    public DWHBankStatement transform(BankStatement6 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1227,9 +1227,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement7 bankStatement){
+    public DWHBankStatement transform(BankStatement7 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1256,9 +1256,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement8 bankStatement){
+    public DWHBankStatement transform(BankStatement8 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1285,9 +1285,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement9 bankStatement){
+    public DWHBankStatement transform(BankStatement9 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1314,9 +1314,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement10 bankStatement){
+    public DWHBankStatement transform(BankStatement10 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1343,9 +1343,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement11 bankStatement){
+    public DWHBankStatement transform(BankStatement11 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1372,9 +1372,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement12 bankStatement){
+    public DWHBankStatement transform(BankStatement12 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1401,9 +1401,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement13 bankStatement){
+    public DWHBankStatement transform(BankStatement13 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());
@@ -1430,9 +1430,9 @@ public class BankStatementService implements Serializable {
         return bankStatementResult;
     }
 
-    public DWHBankStatement transform(BankStatement14 bankStatement){
+    public DWHBankStatement transform(BankStatement14 bankStatement) {
         DWHBankStatement bankStatementResult = new DWHBankStatement();
-        if(bankStatement!=null){
+        if (bankStatement != null) {
             bankStatementResult.setAccountStatus(bankStatement.getAccountStatus());
             bankStatementResult.setAccountOpenDate(bankStatement.getAccountOpenDate());
             bankStatementResult.setBranchCode(bankStatement.getBranchCode());

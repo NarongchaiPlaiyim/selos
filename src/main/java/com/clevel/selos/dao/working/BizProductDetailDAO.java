@@ -18,7 +18,7 @@ import java.util.List;
  * Time: 16:02 น.
  * To change this template use File | Settings | File Templates.
  */
-public class BizProductDetailDAO extends GenericDAO<BizProductDetail,Long> {
+public class BizProductDetailDAO extends GenericDAO<BizProductDetail, Long> {
     @Inject
     private Logger log;
 
@@ -26,7 +26,7 @@ public class BizProductDetailDAO extends GenericDAO<BizProductDetail,Long> {
     public BizProductDetailDAO() {
     }
 
-    public List<BizProductDetail> findByBizInfoDetail(BizInfoDetail bizInfoDetail ){
+    public List<BizProductDetail> findByBizInfoDetail(BizInfoDetail bizInfoDetail) {
 
         log.info("findByBizInfoDetail begin ");
         Criteria criteria = createCriteria();

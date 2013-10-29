@@ -10,12 +10,12 @@ import java.util.List;
 
 public class BasicInfoAccPurposeTransform extends Transform {
 
-    public OpenAccPurpose transformToModel(BasicInfoAccountPurposeView basicInfoAccountPurposeView, OpenAccount openAccount){
+    public OpenAccPurpose transformToModel(BasicInfoAccountPurposeView basicInfoAccountPurposeView, OpenAccount openAccount) {
         OpenAccPurpose openAccPurpose = new OpenAccPurpose();
 
         openAccPurpose.setOpenAccount(openAccount);
 
-        if(basicInfoAccountPurposeView.getPurpose().getId() != 0){
+        if (basicInfoAccountPurposeView.getPurpose().getId() != 0) {
             openAccPurpose.setId(basicInfoAccountPurposeView.getPurpose().getId());
         }
 
@@ -24,7 +24,7 @@ public class BasicInfoAccPurposeTransform extends Transform {
         return openAccPurpose;
     }
 
-    public BasicInfoAccountPurposeView transformToView(OpenAccPurpose openAccPurpose){
+    public BasicInfoAccountPurposeView transformToView(OpenAccPurpose openAccPurpose) {
         BasicInfoAccountPurposeView basicInfoAccountPurposeView = new BasicInfoAccountPurposeView();
         OpenAccountPurpose openAccountPurpose = new OpenAccountPurpose();
 
@@ -38,10 +38,10 @@ public class BasicInfoAccPurposeTransform extends Transform {
         return basicInfoAccountPurposeView;
     }
 
-    public List<BasicInfoAccountPurposeView> transformToViewList(List<OpenAccPurpose> openAccPurposeList){
+    public List<BasicInfoAccountPurposeView> transformToViewList(List<OpenAccPurpose> openAccPurposeList) {
         List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = new ArrayList<BasicInfoAccountPurposeView>();
-        if(openAccPurposeList != null){
-            for(OpenAccPurpose oap : openAccPurposeList){
+        if (openAccPurposeList != null) {
+            for (OpenAccPurpose oap : openAccPurposeList) {
                 BasicInfoAccountPurposeView basicInfoAccountPurposeView = transformToView(oap);
                 basicInfoAccountPurposeViews.add(basicInfoAccountPurposeView);
             }

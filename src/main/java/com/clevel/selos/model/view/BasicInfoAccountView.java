@@ -14,11 +14,11 @@ public class BasicInfoAccountView implements Serializable {
     private List<BasicInfoAccountPurposeView> basicInfoAccountPurposeView;
     private String purposeForShow;
 
-    public BasicInfoAccountView(){
+    public BasicInfoAccountView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.bankAccountTypeView = new BankAccountTypeView();
         this.product = new OpenAccountProduct();
         this.basicInfoAccountPurposeView = new ArrayList<BasicInfoAccountPurposeView>();

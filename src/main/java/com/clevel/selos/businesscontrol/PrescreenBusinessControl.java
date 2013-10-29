@@ -133,14 +133,14 @@ public class PrescreenBusinessControl extends BusinessControl {
     BankStmtControl bankStmtControl;
 
 
-    public PrescreenBusinessControl(){
+    public PrescreenBusinessControl() {
 
     }
 
     //** function for integration **//
 
     // *** Function for RM *** //
-    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
+    public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user) {
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
         log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
@@ -148,10 +148,10 @@ public class PrescreenBusinessControl extends BusinessControl {
         DocumentType masterDocumentType = new DocumentType();
 
         RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-        if(customerInfoView.getSearchBy() == 1){
+        if (customerInfoView.getSearchBy() == 1) {
             searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
             masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
-        }else if(customerInfoView.getSearchBy() == 2){
+        } else if (customerInfoView.getSearchBy() == 2) {
             searcyBy = RMInterface.SearchBy.TMBCUS_ID;
             masterDocumentType = documentTypeDAO.findById(1);
         }
@@ -164,17 +164,17 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         RMInterface.DocumentType documentType = RMInterface.DocumentType.CITIZEN_ID;
 
-        if(documentTypeCode.equalsIgnoreCase("CI")){
+        if (documentTypeCode.equalsIgnoreCase("CI")) {
             documentType = RMInterface.DocumentType.CITIZEN_ID;
             CustomerEntity customerEntity = new CustomerEntity();
             customerEntity.setId(1);
             customerInfoView.setCustomerEntity(customerEntity);
-        }else if(documentTypeCode.equalsIgnoreCase("PP")){
+        } else if (documentTypeCode.equalsIgnoreCase("PP")) {
             documentType = RMInterface.DocumentType.PASSPORT;
             CustomerEntity customerEntity = new CustomerEntity();
             customerEntity.setId(1);
             customerInfoView.setCustomerEntity(customerEntity);
-        }else if(documentTypeCode.equalsIgnoreCase("SC")){
+        } else if (documentTypeCode.equalsIgnoreCase("SC")) {
             documentType = RMInterface.DocumentType.CORPORATE_ID;
             CustomerEntity customerEntity = new CustomerEntity();
             customerEntity.setId(2);
@@ -185,11 +185,11 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
 
 
-        if(customerInfoView.getCustomerEntity().getId() == 1) {
+        if (customerInfoView.getCustomerEntity().getId() == 1) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: individualResult : {}", individualResult);
             customerInfoResultSearch = customerBizTransform.tranformIndividual(individualResult);
-        } else if(customerInfoView.getCustomerEntity().getId() == 2){
+        } else if (customerInfoView.getCustomerEntity().getId() == 2) {
             CorporateResult corporateResult = rmInterface.getCorporateInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
             log.info("getCustomerInfoFromRM ::: corporateResult : {}", corporateResult);
             customerInfoResultSearch = customerBizTransform.tranformJuristic(corporateResult);
@@ -203,14 +203,15 @@ public class PrescreenBusinessControl extends BusinessControl {
     /**
      * To Retreive the following Interface Information in Prescreen
      * <ul>
-     *     <li>DWH Obligation - Existing Credit</li>
-     *     <li>DWH BankStatement</li>
+     * <li>DWH Obligation - Existing Credit</li>
+     * <li>DWH BankStatement</li>
      * </ul>
+     *
      * @param customerInfoViewList
      * @param prescreenResultView
      * @return
      */
-    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView){
+    public PrescreenResultView getInterfaceInfo(List<CustomerInfoView> customerInfoViewList, PrescreenResultView prescreenResultView) {
         log.info("retreive interface for customer list: {}", customerInfoViewList);
 
         ExistingCreditView existingCreditView = existingCreditControl.refreshExistingCredit(customerInfoViewList);
@@ -221,9 +222,9 @@ public class PrescreenBusinessControl extends BusinessControl {
         prescreenResultView.setBankStmtSummaryView(bankStmtSummaryView);
         //Calculate for Group Income
         BigDecimal groupIncome = new BigDecimal(0);
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
-            if(Util.isTrue(customerInfoView.getReference().getGroupIncome())){
-                if(customerInfoView.getApproxIncome() != null)
+        for (CustomerInfoView customerInfoView : customerInfoViewList) {
+            if (Util.isTrue(customerInfoView.getReference().getGroupIncome())) {
+                if (customerInfoView.getApproxIncome() != null)
                     groupIncome = groupIncome.add(customerInfoView.getApproxIncome());
             }
         }
@@ -231,13 +232,13 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Calculate for Group Exposure
         BigDecimal groupExposure = new BigDecimal(0);
-        if(existingCreditView.getTotalBorrowerComLimit() != null)
+        if (existingCreditView.getTotalBorrowerComLimit() != null)
             groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerComLimit());
-        if(existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
+        if (existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
             groupExposure = groupExposure.add(existingCreditView.getTotalBorrowerAppInRLOSLimit());
-        if(existingCreditView.getTotalRelatedComLimit() != null)
+        if (existingCreditView.getTotalRelatedComLimit() != null)
             groupExposure = groupExposure.add(existingCreditView.getTotalRelatedComLimit());
-        if(existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
+        if (existingCreditView.getTotalRelatedAppInRLOSLimit() != null)
             groupExposure = groupExposure.add(existingCreditView.getTotalRelatedAppInRLOSLimit());
 
         prescreenResultView.setGroupExposure(groupExposure);
@@ -246,27 +247,27 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenResultView;
     }
 
-    public PrescreenResultView getPrescreenResult(long workCasePreScreenId){
+    public PrescreenResultView getPrescreenResult(long workCasePreScreenId) {
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
         PrescreenResultView prescreenResultView = prescreenTransform.getPrescreenResultView(prescreen);
         prescreenResultView.setExistingCreditView(existingCreditControl.getExistingCredit(workCasePreScreenId));
         return prescreenResultView;
     }
 
-    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId){
+    public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId) {
         Prescreen prescreen = prescreenTransform.getPrescreen(prescreenResultView, getCurrentUser());
         prescreenDAO.persist(prescreen);
 
-        try{
+        try {
             existingCreditControl.saveExistingCredit(prescreenResultView.getExistingCreditView(), getWorkCase(workCasePrescreenId));
 
-        } catch(Exception ex){
+        } catch (Exception ex) {
             log.error("cannot get workcase prescreen id", ex);
         }
     }
 
     // *** Function for BRMS (PreScreenRules) ***//
-    public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList){
+    public List<PreScreenResponseView> getPreScreenResultFromBRMS(List<CustomerInfoView> customerInfoViewList) {
         //TODO Transform view model to prescreenRequest
         PreScreenRequest preScreenRequest = preScreenResultTransform.transformToRequest(customerInfoViewList);
         List<PreScreenResponse> preScreenResponseList;
@@ -278,7 +279,7 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception {
         List<NcbView> ncbViewList = new ArrayList<NcbView>();
         NCRSInputModel ncrsInputModel = null;
         ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
@@ -288,19 +289,19 @@ public class PrescreenBusinessControl extends BusinessControl {
         User user = userDAO.findById(userId);
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
-        for(CustomerInfoView customerItem : customerInfoViewList){
+        for (CustomerInfoView customerItem : customerInfoViewList) {
             log.info("customerItem : {}", customerItem);
-            if(customerItem.getCustomerEntity().getId() == 1
-                    && customerItem.getNcbFlag() == RadioValue.NO.value()){
+            if (customerItem.getCustomerEntity().getId() == 1
+                    && customerItem.getNcbFlag() == RadioValue.NO.value()) {
                 log.info("customerItem ::: NcbFlag : {}", customerItem.getNcbFlag());
                 NCRSModel ncrsModel = new NCRSModel();
 
-                if(customerItem.getTitleTh() != null){
-                    if(customerItem.getTitleTh().getCode().equals("1")){
+                if (customerItem.getTitleTh() != null) {
+                    if (customerItem.getTitleTh().getCode().equals("1")) {
                         ncrsModel.setTitleNameCode(TitleName.Mr);
-                    } else if(customerItem.getTitleTh().getCode().equals("2")){
+                    } else if (customerItem.getTitleTh().getCode().equals("2")) {
                         ncrsModel.setTitleNameCode(TitleName.Mrs);
-                    } else if(customerItem.getTitleTh().getCode().equals("3")){
+                    } else if (customerItem.getTitleTh().getCode().equals("3")) {
                         ncrsModel.setTitleNameCode(TitleName.Miss);
                     } else {
                         //send other
@@ -311,10 +312,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                 ncrsModel.setLastName(customerItem.getLastNameTh());
                 ncrsModel.setCitizenId(customerItem.getCitizenId());
 
-                if(customerItem.getDocumentType() != null){
-                    if(customerItem.getDocumentType().getId() == 1){
+                if (customerItem.getDocumentType() != null) {
+                    if (customerItem.getDocumentType().getId() == 1) {
                         ncrsModel.setIdType(IdType.CITIZEN);
-                    } else if(customerItem.getDocumentType().getId() == 2){
+                    } else if (customerItem.getDocumentType().getId() == 2) {
                         ncrsModel.setIdType(IdType.PASSPORT);
                     }
                 }
@@ -325,18 +326,18 @@ public class PrescreenBusinessControl extends BusinessControl {
                 ncrsModel.setCountryCode("TH");
                 log.debug("getNCBFromNCB ::: ncrsModel : {}", ncrsModel);
                 ncrsModelList.add(ncrsModel);
-            } else if(customerItem.getCustomerEntity().getId() == 2
+            } else if (customerItem.getCustomerEntity().getId() == 2
                     && customerItem.getNcbFlag() == RadioValue.NO.value()) {
                 NCCRSModel nccrsModel = new NCCRSModel();
-                if(customerItem.getDocumentType() != null){
-                    if(customerItem.getTitleTh() != null){
-                        if(customerItem.getTitleTh().getCode().equals("1")){
+                if (customerItem.getDocumentType() != null) {
+                    if (customerItem.getTitleTh() != null) {
+                        if (customerItem.getTitleTh().getCode().equals("1")) {
                             nccrsModel.setRegistType(RegistType.CompanyLimited);
-                        } else if(customerItem.getTitleTh().getCode().equals("2")){
+                        } else if (customerItem.getTitleTh().getCode().equals("2")) {
                             nccrsModel.setRegistType(RegistType.PublicCompanyLimited);
-                        } else if(customerItem.getTitleTh().getCode().equals("3")){
+                        } else if (customerItem.getTitleTh().getCode().equals("3")) {
                             nccrsModel.setRegistType(RegistType.LimitedPartnership);
-                        } else if(customerItem.getTitleTh().getCode().equals("4")){
+                        } else if (customerItem.getTitleTh().getCode().equals("4")) {
                             nccrsModel.setRegistType(RegistType.RegisteredOrdinaryPartnership);
                         } else {
                             nccrsModel.setRegistType(RegistType.ForeignRegistrationIdOrOthers);
@@ -350,47 +351,47 @@ public class PrescreenBusinessControl extends BusinessControl {
             }
         }
         log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
-        if(ncrsModelList.size() > 0){
+        if (ncrsModelList.size() > 0) {
             ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
         }
 
-        if(nccrsModelList.size() > 0){
+        if (nccrsModelList.size() > 0) {
             nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
         }
 
         //Get NCB for Individual
-            //ncbInterface.request();
+        //ncbInterface.request();
         //Get NCB for Juristic
-        try{
+        try {
             boolean checkNCBComplete = false;
             String exceptionMessage = "";
-            if(ncrsInputModel != null){
+            if (ncrsInputModel != null) {
                 log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
                 List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
                 log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
                 List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
                 log.info("getNCBFromNCB ::: ncbIndividualViewList : {}", ncbIndividualViewList);
-                if(ncbIndividualViewList != null){
-                    for(NcbView item : ncbIndividualViewList){
+                if (ncbIndividualViewList != null) {
+                    for (NcbView item : ncbIndividualViewList) {
                         ncbViewList.add(item);
                     }
                 }
 
 
                 //TODO Check CSI
-                for(NcbView ncbView : ncbIndividualViewList){
+                for (NcbView ncbView : ncbIndividualViewList) {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
                     //need to save ncb if check NCB Success
-                    if(ncbView.getResult() == ActionResult.SUCCESS){
+                    if (ncbView.getResult() == ActionResult.SUCCESS) {
                         Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
                         log.info("findByCitizenId customer : {}", customer);
-                        if(customer == null ){
+                        if (customer == null) {
                             customer = new Customer();
                         }
 
-                        log.debug("ncbView before transform : {}",ncbView);
+                        log.debug("ncbView before transform : {}", ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
@@ -400,8 +401,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncb.setCustomer(customer);
                         ncbDAO.persist(ncb);
                         //transform NCBDetail list
-                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
-                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                        if (ncbDetailViewList != null && ncbDetailViewList.size() > 0) {
+                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList, ncb);
                             ncbDetailDAO.persist(ncbDetailList);
                         }
 
@@ -418,13 +419,13 @@ public class PrescreenBusinessControl extends BusinessControl {
                         //Customer customer = customerDAO.findById(new Long(151));
                         log.info("findByCitizenId customer : {}", customer);
 
-                        if(customer == null ){
+                        if (customer == null) {
                             customer = new Customer();
                         }
 
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
-                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                        for (CSIData csiData : csiResult.getWarningCodeFullMatched()) {
                             log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
@@ -434,7 +435,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSIList.add(customerCSI);
                         }
 
-                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                        for (CSIData csiData : csiResult.getWarningCodePartialMatched()) {
                             log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
@@ -444,7 +445,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSIList.add(customerCSI);
                         }
                         log.info("getCSI ::: customerCSIList : {}", customerCSIList);
-                        if(customerCSIList != null && customerCSIList.size() > 0){
+                        if (customerCSIList != null && customerCSIList.size() > 0) {
                             log.info("getCSI ::: persist item");
                             customerCSIDAO.persist(customerCSIList);
                         }
@@ -453,30 +454,30 @@ public class PrescreenBusinessControl extends BusinessControl {
                 }
             }
 
-            if(nccrsInputModel != null){
+            if (nccrsInputModel != null) {
                 log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
                 List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
                 log.info("getNCBFromNCB ::: nccrsOutputModelList : {}", nccrsOutputModelList);
                 List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
                 log.info("getNCBFromNCB ::: ncbJuristicViewList : {}", ncbJuristicViewList);
-                if(ncbJuristicViewList != null){
-                    for(NcbView item : ncbJuristicViewList){
+                if (ncbJuristicViewList != null) {
+                    for (NcbView item : ncbJuristicViewList) {
                         ncbViewList.add(item);
                     }
                 }
 
                 //TODO Check CSI
-                for(NcbView ncbView : ncbJuristicViewList){
+                for (NcbView ncbView : ncbJuristicViewList) {
                     log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
                     log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
 
-                    if(ncbView.getResult() == ActionResult.SUCCESS){
+                    if (ncbView.getResult() == ActionResult.SUCCESS) {
                         Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
-                        if(customer == null ){
+                        if (customer == null) {
                             customer = new Customer();
                         }
 
-                        log.debug("ncbView before transform : {}",ncbView);
+                        log.debug("ncbView before transform : {}", ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
@@ -486,8 +487,8 @@ public class PrescreenBusinessControl extends BusinessControl {
                         ncb.setCustomer(customer);
                         ncbDAO.persist(ncb);
                         //transform NCBDetail list
-                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
-                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                        if (ncbDetailViewList != null && ncbDetailViewList.size() > 0) {
+                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList, ncb);
                             ncbDetailDAO.persist(ncbDetailList);
                         }
 
@@ -504,7 +505,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                         List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
-                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                        for (CSIData csiData : csiResult.getWarningCodeFullMatched()) {
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
@@ -513,7 +514,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSIList.add(customerCSI);
                         }
 
-                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                        for (CSIData csiData : csiResult.getWarningCodePartialMatched()) {
                             CustomerCSI customerCSI = new CustomerCSI();
                             customerCSI.setCustomer(customer);
                             customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
@@ -521,41 +522,47 @@ public class PrescreenBusinessControl extends BusinessControl {
                             customerCSI.setMatchedType("P");
                             customerCSIList.add(customerCSI);
                         }
-                        if(customerCSIList != null && customerCSIList.size() >0){
+                        if (customerCSIList != null && customerCSIList.size() > 0) {
                             customerCSIDAO.persist(customerCSIList);
                         }
                     }
                 }
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
 
         return ncbViewList;
     }
 
-    public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
+    public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews) {
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
         preScreenResponseViewList = preScreenResultTransform.tranformToCustomerResponse(prescreenResponseViews);
 
         return preScreenResponseViewList;
     }
 
-    public List<PreScreenResponseView> getPreScreenGroupResult(List<PreScreenResponseView> prescreenResponseViews){
+    public List<PreScreenResponseView> getPreScreenGroupResult(List<PreScreenResponseView> prescreenResponseViews) {
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
         preScreenResponseViewList = preScreenResultTransform.tranformToGroupResponse(prescreenResponseViews);
 
         return preScreenResponseViewList;
     }
 
-    public void savePreScreenResult(List<PreScreenResponseView> preScreenResponseViews, long workCasePreScreenId, long workCaseId, long stepId, User user){
+    public void savePreScreenResult(List<PreScreenResponseView> preScreenResponseViews, long workCasePreScreenId, long workCaseId, long stepId, User user) {
         WorkCasePrescreen workCasePrescreen = null;
         WorkCase workCase = null;
         Step step = null;
 
-        if(workCasePreScreenId != 0){ workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId); }
-        if(workCaseId != 0){ workCase = workCaseDAO.findById(workCaseId); }
-        if(stepId != 0){ step = stepDAO.findById(stepId); }
+        if (workCasePreScreenId != 0) {
+            workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        }
+        if (workCaseId != 0) {
+            workCase = workCaseDAO.findById(workCaseId);
+        }
+        if (stepId != 0) {
+            step = stepDAO.findById(stepId);
+        }
 
         List<BRMSResult> brmsResultList = preScreenResultTransform.transformResultToModel(preScreenResponseViews, workCasePrescreen, workCase, step, user);
 
@@ -563,11 +570,11 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for PreScreen *** //
-    public int getCaseBorrowerTypeId(long workCasePreScreenId){
+    public int getCaseBorrowerTypeId(long workCasePreScreenId) {
         int caseBorrowerTypeId = 0;
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        if(workCasePrescreen != null){
-            if(workCasePrescreen.getBorrowerType() != null){
+        if (workCasePrescreen != null) {
+            if (workCasePrescreen.getBorrowerType() != null) {
                 caseBorrowerTypeId = workCasePrescreen.getBorrowerType().getId();
             }
         }
@@ -575,12 +582,12 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for PreScreen Initial *** //
-    public PrescreenView getPreScreen(long workCasePreScreenId){
+    public PrescreenView getPreScreen(long workCasePreScreenId) {
         log.info("getPreScreen ::: workCasePreScreenId : {}", workCasePreScreenId);
         PrescreenView prescreenView = null;
         Prescreen prescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePreScreenId);
 
-        if(prescreen != null){
+        if (prescreen != null) {
             log.info("getPreScreen ::: prescreen : {}", prescreen);
             prescreenView = prescreenTransform.transformToView(prescreen);
         }
@@ -588,40 +595,40 @@ public class PrescreenBusinessControl extends BusinessControl {
         return prescreenView;
     }
 
-    public List<FacilityView> getPreScreenFacility(PrescreenView prescreenView){
+    public List<FacilityView> getPreScreenFacility(PrescreenView prescreenView) {
         log.info("getPreScreenFacility ::: prescreenView : {}", prescreenView);
         List<FacilityView> facilityViewList = null;
         List<PrescreenFacility> prescreenFacilityList = prescreenFacilityDAO.findByPreScreenId(prescreenView.getId());
 
-        if(prescreenFacilityList != null){
+        if (prescreenFacilityList != null) {
             facilityViewList = prescreenFacilityTransform.transformToView(prescreenFacilityList);
         }
         log.info("getPreScreenFacility ::: prescreenFacilityList : {}", prescreenFacilityList.size());
         return facilityViewList;
     }
 
-    public List<BizInfoDetailView> getPreScreenBusinessInfo(long prescreenId){
+    public List<BizInfoDetailView> getPreScreenBusinessInfo(long prescreenId) {
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
         List<PrescreenBusiness> prescreenBusinessList = prescreenBusinessDAO.findByPreScreenId(prescreenId);
-        if(prescreenBusinessList != null){
+        if (prescreenBusinessList != null) {
             bizInfoDetailViewList = prescreenBusinessTransform.transformToViewList(prescreenBusinessList);
         }
 
         return bizInfoDetailViewList;
     }
 
-    public List<PrescreenCollateralView> getPreScreenCollateral(long prescreenId){
+    public List<PrescreenCollateralView> getPreScreenCollateral(long prescreenId) {
         List<PrescreenCollateralView> prescreenCollateralViewList = new ArrayList<PrescreenCollateralView>();
         List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralDAO.findByPreScreenId(prescreenId);
 
-        if(prescreenCollateralList != null){
+        if (prescreenCollateralList != null) {
             prescreenCollateralViewList = prescreenCollateralTransform.transformToViewList(prescreenCollateralList);
         }
 
         return prescreenCollateralViewList;
     }
 
-    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, long workCasePreScreenId, int caseBorrowerTypeId, User user){
+    public void savePreScreenInitial(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, long workCasePreScreenId, int caseBorrowerTypeId, User user) {
         log.debug("savePreScreenInitial ::: Starting ... ");
         log.debug("savePreScreenInitial ::: caseBorrowerType : {}", caseBorrowerTypeId);
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
@@ -636,7 +643,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Facility before add new
         List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
+        if (prescreenFacilitieListDelete != null) {
             log.debug("savePreScreenInitial ::: delete PreScreenFacility : {}", prescreenFacilitieListDelete);
             prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
         }
@@ -667,27 +674,27 @@ public class PrescreenBusinessControl extends BusinessControl {
         }*/
 
         //Add all Customer from customer list
-        for(CustomerInfoView customerInfoView : customerInfoViewList){
+        for (CustomerInfoView customerInfoView : customerInfoViewList) {
             Customer customer = new Customer();
             customer = customerTransform.transformToModel(customerInfoView, workCasePrescreen, null);
             customer.setIsSpouse(0);
             customer.setSpouseId(0);
             customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
+            if (customer.getAddressesList() != null) {
                 addressDAO.persist(customer.getAddressesList());
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
                 individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+            } else if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
                 //Juristic
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
             }
 
-            if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2){
+            if (customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
+                if (customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2) {
                     Customer spouse = new Customer();
                     spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
                     spouse.setIsSpouse(1);
@@ -696,7 +703,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     customer.setSpouseId(spouse.getId());
                     customerDAO.persist(customer);
 
-                    if(spouse.getAddressesList() != null){
+                    if (spouse.getAddressesList() != null) {
                         //addressDAO.persist(customer.getAddressesList());
                     }
 
@@ -744,7 +751,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         }*/
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
+    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
@@ -752,7 +759,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Facility before add new
         List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
+        if (prescreenFacilitieListDelete != null) {
             prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
         }
 
@@ -779,16 +786,16 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
-        for(Customer customer : customerList){
+        for (Customer customer : customerList) {
             customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
+            if (customer.getAddressesList() != null) {
                 //addressDAO.persist(customer.getAddressesList());
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
                 individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+            } else if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
                 //Juristic
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
@@ -797,7 +804,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Business before add new
         List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
-        if(prescreenBusinessDelete != null){
+        if (prescreenBusinessDelete != null) {
             prescreenBusinessDAO.delete(prescreenBusinessDelete);
         }
 
@@ -816,21 +823,21 @@ public class PrescreenBusinessControl extends BusinessControl {
         bizInfoDAO.persist(bizInfoList);*/
     }
 
-    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId){
+    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
 
         log.info("saveCustomer ::: customerList : {}", customerList);
-        for(Customer customer : customerList){
+        for (Customer customer : customerList) {
             customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
+            if (customer.getAddressesList() != null) {
                 //addressDAO.persist(customer.getAddressesList());
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
                 individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+            } else if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
                 //Juristic
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
@@ -838,7 +845,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
+    public void savePreScreenMaker(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<BizInfoDetailView> bizInfoDetailViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
@@ -846,7 +853,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Facility before add new
         List<PrescreenFacility> prescreenFacilitieListDelete = prescreenFacilityDAO.findByPreScreen(prescreen);
-        if(prescreenFacilitieListDelete != null){
+        if (prescreenFacilitieListDelete != null) {
             prescreenFacilityDAO.delete(prescreenFacilitieListDelete);
         }
 
@@ -855,15 +862,15 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Remove all Customer before add new
         List<Customer> customerListDelete = customerDAO.findByWorkCasePreScreenId(workCasePreScreenId);
-        for(Customer customer : customerListDelete){
-            if(customer.getAddressesList() != null){
+        for (Customer customer : customerListDelete) {
+            if (customer.getAddressesList() != null) {
                 List<Address> addressList = customer.getAddressesList();
                 addressDAO.delete(addressList);
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 Individual individual = customer.getIndividual();
                 individualDAO.delete(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2){
+            } else if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.delete(juristic);
             }
@@ -873,16 +880,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         //Save all Customer after Remove
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViewList, workCasePrescreen, null);
         log.info("savePreScreenInitial ::: customerList : {}", customerList);
-        for(Customer customer : customerList){
+        for (Customer customer : customerList) {
             customerDAO.persist(customer);
-            if(customer.getAddressesList() != null){
+            if (customer.getAddressesList() != null) {
                 addressDAO.persist(customer.getAddressesList());
             }
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 Individual individual = customer.getIndividual();
                 individualDAO.persist(individual);
-            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+            } else if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
                 //Juristic
                 Juristic juristic = customer.getJuristic();
                 juristicDAO.persist(juristic);
@@ -891,7 +898,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Save PreScreen Business
         List<PrescreenBusiness> prescreenBusinessDelete = prescreenBusinessDAO.findByPreScreen(prescreen);
-        if(prescreenBusinessDelete != null){
+        if (prescreenBusinessDelete != null) {
             prescreenBusinessDAO.delete(prescreenBusinessDelete);
         }
 
@@ -900,7 +907,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         //Save PreScreen Collateral
         List<PrescreenCollateral> prescreenCollateralDelete = prescreenCollateralDAO.findByPreScreen(prescreen);
-        if(prescreenCollateralDelete != null){
+        if (prescreenCollateralDelete != null) {
             prescreenCollateralDAO.delete(prescreenCollateralDelete);
         }
 
@@ -909,11 +916,11 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     }
 
-    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode){
+    public void assignChecker(long workCasePreScreenId, String queueName, String checkerId, String actionCode) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
-        HashMap<String,String> fields = new HashMap<String, String>();
+        HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getName());
         fields.put("BDMCheckerUserName", checkerId);
@@ -927,11 +934,11 @@ public class PrescreenBusinessControl extends BusinessControl {
         bpmInterface.dispatchCase(queueName, workCasePrescreen.getWobNumber(), fields);
     }
 
-    public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode){
+    public void nextStepPreScreen(long workCasePreScreenId, String queueName, String actionCode) {
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         Action action = actionDAO.findById(Long.parseLong(actionCode));
 
-        HashMap<String,String> fields = new HashMap<String, String>();
+        HashMap<String, String> fields = new HashMap<String, String>();
         fields.put("Action_Code", Long.toString(action.getId()));
         fields.put("Action_Name", action.getName());
 
@@ -945,10 +952,10 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     //*** Function for PreScreen Checker ***//
-    public String getBDMMakerName(long workCasePreScreenId){
+    public String getBDMMakerName(long workCasePreScreenId) {
         String bdmMakerName = "";
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
-        if(workCasePrescreen != null){
+        if (workCasePrescreen != null) {
             bdmMakerName = workCasePrescreen.getCreateBy().getUserName();
         }
 
@@ -964,23 +971,23 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         return customerInfoViewList;
     }*/
-    public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId){
+    public List<CustomerInfoView> getCustomerListByWorkCasePreScreenId(long workCasePreScreenId) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         List<Customer> customerList = customerDAO.findCustomerByWorkCasePreScreenId(workCasePreScreenId);
 
         CustomerInfoView customerInfoView;
         CustomerInfoView spouseInfoView;
-        for(Customer customer : customerList){
+        for (Customer customer : customerList) {
             customerInfoView = new CustomerInfoView();
             customerInfoView = customerTransform.transformToView(customer);
 
             customerInfoView.setListIndex(customerInfoViewList.size());
 
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
-                if(Long.toString(customer.getSpouseId()) != null && customer.getSpouseId() != 0 ){
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
+                if (Long.toString(customer.getSpouseId()) != null && customer.getSpouseId() != 0) {
                     Customer spouse = new Customer();
                     spouse = customerDAO.findSpouseById(customer.getSpouseId());
-                    if(spouse != null){
+                    if (spouse != null) {
                         spouseInfoView = new CustomerInfoView();
                         spouseInfoView = customerTransform.transformToView(spouse);
                         spouseInfoView.setListIndex(customerInfoViewList.size());
@@ -1000,43 +1007,42 @@ public class PrescreenBusinessControl extends BusinessControl {
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> getBorrowerViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> getBorrowerViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         customerInfoViewList = customerTransform.transformToBorrowerViewList(customerInfoViews);
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> getGuarantorViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> getGuarantorViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         customerInfoViewList = customerTransform.transformToGuarantorViewList(customerInfoViews);
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> getRelatedViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> getRelatedViewListByCustomerViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         customerInfoViewList = customerTransform.transformToRelatedViewList(customerInfoViews);
         return customerInfoViewList;
     }
 
 
-
-    public void save(WorkCasePrescreen workCasePrescreen){
+    public void save(WorkCasePrescreen workCasePrescreen) {
         workCasePrescreenDAO.persist(workCasePrescreen);
     }
 
-    public void delete(WorkCasePrescreen workCasePrescreen){
+    public void delete(WorkCasePrescreen workCasePrescreen) {
         workCasePrescreenDAO.delete(workCasePrescreen);
     }
 
-    public WorkCasePrescreen getWorkCase(long caseId) throws Exception{
+    public WorkCasePrescreen getWorkCase(long caseId) throws Exception {
         WorkCasePrescreen workCasePrescreen = new WorkCasePrescreen();
-        try{
+        try {
             workCasePrescreen = workCasePrescreenDAO.findById(caseId);
             log.info("getWorkCasePrescreen : {}", workCasePrescreen);
-            if(workCasePrescreen == null){
+            if (workCasePrescreen == null) {
                 throw new Exception("no data found.");
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             log.info("getWorkCasePrescreen ::: error : {}", ex.toString());
             throw new Exception(ex.getMessage());
         }
@@ -1046,30 +1052,30 @@ public class PrescreenBusinessControl extends BusinessControl {
 
 
     // *** Function for Drop Down *** //
-    public List<Relation> getRelationByStepId(long stepId){
+    public List<Relation> getRelationByStepId(long stepId) {
         List<Relation> relationList = new ArrayList<Relation>();
         List<Relation> borrowerRelationList = new ArrayList<Relation>();
         List<Relation> otherRelationList = new ArrayList<Relation>();
         List<Relation> tempList = relationDAO.findAll();
 
-        for(Relation relation : tempList){
-            if(relation.getId() != 1){
+        for (Relation relation : tempList) {
+            if (relation.getId() != 1) {
                 otherRelationList.add(relation);
             } else {
                 borrowerRelationList.add(relation);
             }
         }
 
-        if(stepId == 1001){
+        if (stepId == 1001) {
             relationList = borrowerRelationList;
-        } else if (stepId == 1003){
+        } else if (stepId == 1003) {
             relationList = otherRelationList;
         }
 
         return relationList;
     }
 
-    public CustomerInfoView cloneCustomer(CustomerInfoView customerInfoView){
+    public CustomerInfoView cloneCustomer(CustomerInfoView customerInfoView) {
         CustomerInfoView customer = new CustomerInfoView();
 
         customer.setIndividualId(customerInfoView.getIndividualId());
@@ -1201,7 +1207,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         customer.setReviewFlag(customerInfoView.getReviewFlag());
         customer.setReason(customerInfoView.getReason());
         customer.setBusinessType(customerInfoView.getBusinessType());
-        if(customerInfoView.getSpouse() != null){
+        if (customerInfoView.getSpouse() != null) {
             CustomerInfoView spouse = new CustomerInfoView();
             CustomerInfoView oldSpouse = customerInfoView.getSpouse();
 

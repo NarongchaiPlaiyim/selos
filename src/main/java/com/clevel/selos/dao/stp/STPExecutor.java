@@ -29,7 +29,7 @@ public class STPExecutor {
             query.setParameter("param", segmentCode);
             applicationNumber = (String) query.getSingleResult();
 
-            log.debug("applicationNumber: {}",applicationNumber);
+            log.debug("applicationNumber: {}", applicationNumber);
         } catch (Exception e) {
             log.error("Exception getApplicationNumber! (message: {})", e.getMessage());
         }

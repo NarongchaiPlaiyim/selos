@@ -14,7 +14,7 @@ public class NCBInfoView implements Serializable {
     private String ncbCusMarriageStatus;
     private Date checkingDate;
     private Date ncbLastInfoAsOfDate;
-    private String enquiry ;
+    private String enquiry;
     private int checkIn6Month;
     private String paymentClass;
     private String personalId;
@@ -29,7 +29,7 @@ public class NCBInfoView implements Serializable {
     private int nplOtherMonth;
     private int nplOtherYear;
     private int tdrFlag;
-    private String  tdrFlagText;
+    private String tdrFlagText;
     private boolean tdrTMBFlag;
     private int tdrTMBMonth;
     private int tdrTMBYear;
@@ -49,23 +49,23 @@ public class NCBInfoView implements Serializable {
     private User modifyBy;
 
 
-    public NCBInfoView(){
+    public NCBInfoView() {
     }
 
-    public void reset(){
-        this.checkingDate  = new Date();
+    public void reset() {
+        this.checkingDate = new Date();
         this.checkIn6Month = 0;
-        this.paymentClass  = "";
-        this.personalId    = "";
+        this.paymentClass = "";
+        this.personalId = "";
         this.currentPaymentType = "";
         this.historyPaymentType = "";
-        this.nplFlag     = 0;
-        this.nplTMBFlag  = false;
+        this.nplFlag = 0;
+        this.nplTMBFlag = false;
         this.nplTMBMonth = 0;
-        this.nplTMBYear  = 0;
+        this.nplTMBYear = 0;
         this.nplOtherFlag = false;
         this.nplOtherMonth = 0;
-        this.nplOtherYear  = 0;
+        this.nplOtherYear = 0;
         this.tdrFlag = 0;
         this.tdrTMBFlag = false;
         this.tdrTMBMonth = 0;
@@ -308,6 +308,7 @@ public class NCBInfoView implements Serializable {
     public int getNplFlag() {
         return nplFlag;
     }
+
     public void setNplFlag(int nplFlag) {
         this.nplFlag = nplFlag;
     }
@@ -393,7 +394,7 @@ public class NCBInfoView implements Serializable {
     }
 
     public String getNplFlagText() {
-        return (this.nplFlag==1)?"Y":"N";
+        return (this.nplFlag == 1) ? "Y" : "N";
     }
 
     public void setNplFlagText(String nplFlagText) {
@@ -401,7 +402,7 @@ public class NCBInfoView implements Serializable {
     }
 
     public String getTdrFlagText() {
-        return (this.tdrFlag==1)?"Y":"N";
+        return (this.tdrFlag == 1) ? "Y" : "N";
     }
 
     public void setTdrFlagText(String tdrFlagText) {

@@ -46,8 +46,8 @@ public class NCBDetailView implements Serializable {
     private boolean monthFlagPage;
 
     private boolean TMB;
-    private boolean refinance ;
-    private boolean wc ;
+    private boolean refinance;
+    private boolean wc;
 
     public NCBDetailView() {
     }
@@ -104,9 +104,9 @@ public class NCBDetailView implements Serializable {
 
         if ((this.noOfmonthsPayment != 0)) {
 
-            for(int i = 0 ; i<moneys.size() ; i ++){
-                if(i < this.noOfmonthsPayment){
-                    moneyTotal += " เดือนที่ "+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + " บาท ";
+            for (int i = 0; i < moneys.size(); i++) {
+                if (i < this.noOfmonthsPayment) {
+                    moneyTotal += " เดือนที่ " + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + " บาท ";
                 }
             }
 
@@ -135,10 +135,10 @@ public class NCBDetailView implements Serializable {
     }
 
     public int getTMBAccount() {
-        if(TMB == true){
-           this.isTMBAccount=1;
-        }else{
-           this.isTMBAccount=0;
+        if (TMB == true) {
+            this.isTMBAccount = 1;
+        } else {
+            this.isTMBAccount = 0;
         }
         return isTMBAccount;
     }
@@ -149,9 +149,9 @@ public class NCBDetailView implements Serializable {
 
     public boolean isTMB() {
 
-        if(isTMBAccount == 1){
+        if (isTMBAccount == 1) {
             this.TMB = true;
-        }else{
+        } else {
             this.TMB = false;
         }
         return TMB;
@@ -308,11 +308,10 @@ public class NCBDetailView implements Serializable {
     }
 
 
-
     public boolean isRefinance() {
-        if(refinanceFlag== 1){
+        if (refinanceFlag == 1) {
             this.refinance = true;
-        }else{
+        } else {
             this.refinance = false;
         }
         return refinance;
@@ -323,9 +322,9 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isWc() {
-        if(wcFlag == 1){
+        if (wcFlag == 1) {
             this.wc = true;
-        }else{
+        } else {
             this.wc = false;
         }
         return wc;
@@ -336,11 +335,10 @@ public class NCBDetailView implements Serializable {
     }
 
 
-
     public int getRefinanceFlag() {
-        if(refinance == true){
+        if (refinance == true) {
             refinanceFlag = 1;
-        } else{
+        } else {
             refinanceFlag = 0;
         }
         return refinanceFlag;
@@ -352,9 +350,9 @@ public class NCBDetailView implements Serializable {
 
 
     public int getWcFlag() {
-        if(wc == true){
+        if (wc == true) {
             wcFlag = 1;
-        } else{
+        } else {
             wcFlag = 0;
         }
         return wcFlag;
@@ -365,9 +363,9 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthsPaymentFlag() {
-        if(this.noOfmonthsPayment != 0 ){
+        if (this.noOfmonthsPayment != 0) {
             this.monthsPaymentFlag = true;
-        }else{
+        } else {
             this.monthsPaymentFlag = false;
         }
         return monthsPaymentFlag;
@@ -386,10 +384,9 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthFlagPage() {
-        if(accountType.getMonthFlag()==1){
+        if (accountType.getMonthFlag() == 1) {
             monthFlagPage = true;
-        }
-        else{
+        } else {
             monthFlagPage = false;
         }
 

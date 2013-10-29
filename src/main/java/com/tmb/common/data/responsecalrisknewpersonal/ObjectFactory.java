@@ -8,18 +8,17 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.tmb.common.data.responsecalrisknewpersonal package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.tmb.common.data.responsecalrisknewpersonal package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -44,14 +43,12 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.tmb.common.data.responsecalrisknewpersonal
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link Header }
-     * 
      */
     public Header createHeader() {
         return new Header();
@@ -59,7 +56,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link WarningListPersonSection }
-     * 
      */
     public WarningListPersonSection createWarningListPersonSection() {
         return new WarningListPersonSection();
@@ -67,7 +63,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Body }
-     * 
      */
     public Body createBody() {
         return new Body();
@@ -75,7 +70,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResCalRiskNewPersonal }
-     * 
      */
     public ResCalRiskNewPersonal createResCalRiskNewPersonal() {
         return new ResCalRiskNewPersonal();
@@ -83,7 +77,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link MessageSection }
-     * 
      */
     public MessageSection createMessageSection() {
         return new MessageSection();
@@ -91,7 +84,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link ResCalRiskNewPersonal }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://data.common.tmb.com/responseCalRiskNewPersonal", name = "resCalRiskNewPersonal")
     public JAXBElement<ResCalRiskNewPersonal> createResCalRiskNewPersonal(ResCalRiskNewPersonal value) {
@@ -100,7 +92,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "cardId", scope = WarningListPersonSection.class)
     public JAXBElement<String> createWarningListPersonSectionCardId(String value) {
@@ -109,7 +100,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "riskLevel", scope = WarningListPersonSection.class)
     public JAXBElement<String> createWarningListPersonSectionRiskLevel(String value) {
@@ -118,7 +108,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "remark", scope = WarningListPersonSection.class)
     public JAXBElement<String> createWarningListPersonSectionRemark(String value) {
@@ -127,7 +116,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "fullName", scope = WarningListPersonSection.class)
     public JAXBElement<String> createWarningListPersonSectionFullName(String value) {
@@ -136,7 +124,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resCode1", scope = Body.class)
     public JAXBElement<String> createBodyResCode1(String value) {
@@ -145,7 +132,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resCode2", scope = Body.class)
     public JAXBElement<String> createBodyResCode2(String value) {
@@ -154,7 +140,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resCode3", scope = Body.class)
     public JAXBElement<String> createBodyResCode3(String value) {
@@ -163,7 +148,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resCode4", scope = Body.class)
     public JAXBElement<String> createBodyResCode4(String value) {
@@ -172,7 +156,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "maxRisk", scope = Body.class)
     public JAXBElement<String> createBodyMaxRisk(String value) {
@@ -181,7 +164,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resDesc1", scope = Body.class)
     public JAXBElement<String> createBodyResDesc1(String value) {
@@ -190,7 +172,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resDesc2", scope = Body.class)
     public JAXBElement<String> createBodyResDesc2(String value) {
@@ -199,7 +180,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resDesc3", scope = Body.class)
     public JAXBElement<String> createBodyResDesc3(String value) {
@@ -208,7 +188,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "resDesc4", scope = Body.class)
     public JAXBElement<String> createBodyResDesc4(String value) {
@@ -217,7 +196,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "maxRiskRM", scope = Body.class)
     public JAXBElement<String> createBodyMaxRiskRM(String value) {
@@ -226,7 +204,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "statusSWF", scope = Body.class)
     public JAXBElement<String> createBodyStatusSWF(String value) {
@@ -235,7 +212,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "", name = "sourceOfRisk", scope = Body.class)
     public JAXBElement<String> createBodySourceOfRisk(String value) {

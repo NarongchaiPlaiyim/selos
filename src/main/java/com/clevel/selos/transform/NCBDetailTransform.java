@@ -8,24 +8,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class NCBDetailTransform extends Transform{
+public class NCBDetailTransform extends Transform {
 
-    public List<NCBDetail> transformToModel(List<NCBDetailView> NCBDetailViewList,NCB ncb){
+    public List<NCBDetail> transformToModel(List<NCBDetailView> NCBDetailViewList, NCB ncb) {
         List<NCBDetail> NCBDetailList = new ArrayList<NCBDetail>();
 
-        for(NCBDetailView NCBDetailView : NCBDetailViewList){
+        for (NCBDetailView NCBDetailView : NCBDetailViewList) {
             NCBDetail ncbDetail = new NCBDetail();
             ncbDetail.setNcb(ncb);
             ncbDetail.setAccountStatus(NCBDetailView.getAccountStatus());
             ncbDetail.setAccountType(NCBDetailView.getAccountType());
             ncbDetail.setAccountOpenDate(NCBDetailView.getAccountOpenDate());
             ncbDetail.setAccountTMBFlag(NCBDetailView.getTMBAccount());
-            if(NCBDetailView.getCurrentPayment()!=null && NCBDetailView.getCurrentPayment().getId()!=0){
+            if (NCBDetailView.getCurrentPayment() != null && NCBDetailView.getCurrentPayment().getId() != 0) {
                 ncbDetail.setCurrentPayment(NCBDetailView.getCurrentPayment());
             } else {
                 ncbDetail.setCurrentPayment(null);
             }
-            if(NCBDetailView.getHistoryPayment()!=null && NCBDetailView.getHistoryPayment().getId()!=0){
+            if (NCBDetailView.getHistoryPayment() != null && NCBDetailView.getHistoryPayment().getId() != 0) {
                 ncbDetail.setHistoryPayment(NCBDetailView.getHistoryPayment());
             } else {
                 ncbDetail.setHistoryPayment(null);
@@ -52,10 +52,10 @@ public class NCBDetailTransform extends Transform{
         return NCBDetailList;
     }
 
-    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList){
+    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList) {
         List<NCBDetailView> ncbDetailViewList = new ArrayList<NCBDetailView>();
 
-        for(NCBDetail ncbDetail : ncbDetailList){
+        for (NCBDetail ncbDetail : ncbDetailList) {
             NCBDetailView ncbDetailView = new NCBDetailView();
             ncbDetailView.setAccountStatus(ncbDetail.getAccountStatus());
             ncbDetailView.setAccountType(ncbDetail.getAccountType());

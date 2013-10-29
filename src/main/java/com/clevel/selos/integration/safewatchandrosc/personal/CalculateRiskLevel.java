@@ -21,22 +21,23 @@ import java.net.URL;
 public class CalculateRiskLevel implements Serializable {
     @Inject
     Logger log;
+
     public CalculateRiskLevel() {
 
     }
 
-    public String  process(CalculateRiskLevelPage calculateRiskLevelPage){
+    public String process(CalculateRiskLevelPage calculateRiskLevelPage) {
         System.out.println("process()");
 
         log.info("=========================================process()");
-        log.info("========================================="+calculateRiskLevelPage.toString());
-        log.info("========================================= reqId : "+calculateRiskLevelPage.getReqId());
-        log.info("========================================= productCode : "+calculateRiskLevelPage.getProductCode());
-        log.info("========================================= acronym : "+calculateRiskLevelPage.getAcronym());
-        log.info("========================================= selectorFlag : "+calculateRiskLevelPage.getSelectorFlag());
-        log.info("========================================= firstName : "+calculateRiskLevelPage.getFirstName());
-        log.info("========================================= lastName : "+calculateRiskLevelPage.getLastName());
-        log.info("========================================= cardId : "+calculateRiskLevelPage.getCardId());
+        log.info("=========================================" + calculateRiskLevelPage.toString());
+        log.info("========================================= reqId : " + calculateRiskLevelPage.getReqId());
+        log.info("========================================= productCode : " + calculateRiskLevelPage.getProductCode());
+        log.info("========================================= acronym : " + calculateRiskLevelPage.getAcronym());
+        log.info("========================================= selectorFlag : " + calculateRiskLevelPage.getSelectorFlag());
+        log.info("========================================= firstName : " + calculateRiskLevelPage.getFirstName());
+        log.info("========================================= lastName : " + calculateRiskLevelPage.getLastName());
+        log.info("========================================= cardId : " + calculateRiskLevelPage.getCardId());
 
         ReqCalRiskNewPersonal reqPersonal = new ReqCalRiskNewPersonal();
 
@@ -64,19 +65,19 @@ public class CalculateRiskLevel implements Serializable {
             EAICalRiskNewPersonal_Service service = new EAICalRiskNewPersonal_Service();
             EAICalRiskNewPersonal port = service.getEAICalRiskNewPersonal();
 
-            ((BindingProvider)port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                     "http://10.175.140.18:7824/services/EAICalRiskNewPersonal");
 
             reqPersonal.setBody(reqBody);
             ResCalRiskNewPersonal resPersonal = port.calRiskNewPersonal(reqPersonal);
 
-            System.out.println("getResCode()"+resPersonal.getHeader().getResCode());
-            System.out.println("getReqId()"+resPersonal.getHeader().getReqId());
+            System.out.println("getResCode()" + resPersonal.getHeader().getResCode());
+            System.out.println("getReqId()" + resPersonal.getHeader().getReqId());
             return resPersonal.getHeader().getResCode();
         } catch (MalformedURLException e) {
             System.out.println("Error : " + e);
         }
 
-         return "Test";
+        return "Test";
     }
 }

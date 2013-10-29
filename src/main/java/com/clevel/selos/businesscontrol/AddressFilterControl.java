@@ -22,60 +22,60 @@ public class AddressFilterControl {
     @Inject
     SubDistrictDAO subDistrictDAO;
 
-    public List<Province> onGetListOrderByParameter(String parameter){
+    public List<Province> onGetListOrderByParameter(String parameter) {
 
         List<Province> provinceList;
-        try{
-            log.info( "onFilterByProvince begin" );
+        try {
+            log.info("onFilterByProvince begin");
 
             provinceList = provinceDAO.getListOrderByParameter(parameter);
 
             return provinceList;
 
-        }catch (Exception e){
-            log.error( "onFilterByProvince error" + e);
+        } catch (Exception e) {
+            log.error("onFilterByProvince error" + e);
             return null;
-        }finally{
+        } finally {
 
-            log.info( "onFilterByProvince end" );
+            log.info("onFilterByProvince end");
 
         }
     }
 
-    public List<District> onFilterByProvince(Province province){
+    public List<District> onFilterByProvince(Province province) {
         List<District> districtList;
-        try{
-            log.info( "onFilterByProvince begin" );
+        try {
+            log.info("onFilterByProvince begin");
 
             districtList = districtDAO.getListByProvince(province);
 
             return districtList;
-        }catch (Exception e){
-            log.error( "onFilterByProvince error" + e);
+        } catch (Exception e) {
+            log.error("onFilterByProvince error" + e);
             return null;
-        }finally{
+        } finally {
 
-            log.info( "onFilterByProvince end" );
+            log.info("onFilterByProvince end");
 
         }
     }
 
-    public List<SubDistrict> onFilterByDistrict(District district ){
+    public List<SubDistrict> onFilterByDistrict(District district) {
         List<SubDistrict> subDistrictList;
-        try{
-            log.info( "onFilterByDistrict begin" );
+        try {
+            log.info("onFilterByDistrict begin");
 
             subDistrictList = subDistrictDAO.getListByDistrict(district);
 
             return subDistrictList;
 
-        }catch (Exception e){
-            log.error( "onFilterByDistrict error" + e);
+        } catch (Exception e) {
+            log.error("onFilterByDistrict error" + e);
             return null;
 
-        }finally{
+        } finally {
 
-            log.info( "onFilterByDistrict end" );
+            log.info("onFilterByDistrict end");
 
         }
     }

@@ -28,18 +28,18 @@ public class NCBResultImp implements Serializable {
     public NCBResultImp() {
     }
 
-    public void add(String appRefNumber, String customerType, String customerId, Date inquiryDate, ActionResult actionResult, String reason, String requestNo){
+    public void add(String appRefNumber, String customerType, String customerId, Date inquiryDate, ActionResult actionResult, String reason, String requestNo) {
         log.debug("Call add (appRefNumber : {} customerType : {} customerId : {} inquiryDate : {} actionResult : {} reason : {})",
-                            appRefNumber,      customerType,     customerId,     inquiryDate,     actionResult.toString(), reason, requestNo);
+                appRefNumber, customerType, customerId, inquiryDate, actionResult.toString(), reason, requestNo);
         ncbResult.persist(new NCBResult(appRefNumber, customerType, customerId, inquiryDate, actionResult.toString(), reason, requestNo));
     }
 
-    public List<NCBResult> getListByAppRefNumber(String appRefNumber){
+    public List<NCBResult> getListByAppRefNumber(String appRefNumber) {
         log.debug("Call getListByAppRefNumber({})", appRefNumber);
         return ncbResult.findByCriteria(Restrictions.eq("appNumber", appRefNumber));
     }
 
-    public int getSizeFromAppNumber(String appRefNumber){
+    public int getSizeFromAppNumber(String appRefNumber) {
         log.debug("Call getSizeFromAppNumber({})", appRefNumber);
         List<NCBResult> ncbResultList = ncbResult.findByCriteria(Restrictions.eq("appNumber", appRefNumber));
         int result = ncbResultList.size();
@@ -47,48 +47,48 @@ public class NCBResultImp implements Serializable {
         return result;
     }
 
-    public boolean isSUCCEED(String appRefNumber, String customerId){
+    public boolean isSUCCEED(String appRefNumber, String customerId) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        boolean result = ActionResult.SUCCESS.toString().equals(model.getResult())?true:false;
+        boolean result = ActionResult.SUCCESS.toString().equals(model.getResult()) ? true : false;
         log.debug("Call isSUCCEED({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
-    public String getRequestNo(String appRefNumber, String customerId){
-        log.debug("getRequestNo (appRefNumber: {}, customerId: {})",appRefNumber,customerId);
+    public String getRequestNo(String appRefNumber, String customerId) {
+        log.debug("getRequestNo (appRefNumber: {}, customerId: {})", appRefNumber, customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         String result = model.getRequestNo();
         log.debug("getRequestNo result (result: {})", result);
         return result;
     }
 
-    public boolean isFAILED(String appRefNumber, String customerId){
+    public boolean isFAILED(String appRefNumber, String customerId) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        boolean result = ActionResult.FAILED.toString().equals(model.getResult())?true:false;
+        boolean result = ActionResult.FAILED.toString().equals(model.getResult()) ? true : false;
         log.debug("Call isFAILED({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
-    public boolean isEXCEPTION(String appRefNumber, String customerId){
+    public boolean isEXCEPTION(String appRefNumber, String customerId) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        boolean result = ActionResult.EXCEPTION.toString().equals(model.getResult())?true:false;
+        boolean result = ActionResult.EXCEPTION.toString().equals(model.getResult()) ? true : false;
         log.debug("Call isEXCEPTION({}, {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
-    public boolean isChecked(String appRefNumber){
+    public boolean isChecked(String appRefNumber) {
         boolean result = ncbResult.isExist(appRefNumber);
         log.debug("Call isChecked({}) is {}", appRefNumber, result);
         return result;
     }
 
-    public boolean isOldCustomer(String appRefNumber, String customerId){
+    public boolean isOldCustomer(String appRefNumber, String customerId) {
         boolean result = ncbResult.isCheckLlst(appRefNumber, customerId);
         log.info("Call isOldCustomer(appRefNumber : {}, customerId : {}) is {}", appRefNumber, customerId, result);
         return result;
     }
 
-    public void updateSUCCEED(String appRefNumber, String customerId, String trackingId){
+    public void updateSUCCEED(String appRefNumber, String customerId, String trackingId) {
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
         model.setResult(ActionResult.SUCCESS.toString());
         model.setReason(trackingId);
@@ -96,10 +96,10 @@ public class NCBResultImp implements Serializable {
         log.debug("Call updateSUCCEED({}, {}) has updated", appRefNumber, customerId);
     }
 
-    public void checkStatus(String appRefNumber, String customerId, String trackingId){
+    public void checkStatus(String appRefNumber, String customerId, String trackingId) {
         log.debug("Call checkStatus({}, {})", appRefNumber, customerId);
         NCBResult model = ncbResult.findOneByCriteria(Restrictions.and(Restrictions.eq("appNumber", appRefNumber), Restrictions.eq("customerId", customerId)));
-        if (!ActionResult.SUCCESS.toString().equals(model.getResult())){
+        if (!ActionResult.SUCCESS.toString().equals(model.getResult())) {
             updateSUCCEED(appRefNumber, customerId, trackingId);
             log.debug("Call checkStatus({}, {}) updated", appRefNumber, customerId);
         }

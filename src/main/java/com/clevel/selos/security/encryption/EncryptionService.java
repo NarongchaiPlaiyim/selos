@@ -38,34 +38,34 @@ public class EncryptionService {
     }
 
     public void loadKey() {
-        if (secretKey==null) {
+        if (secretKey == null) {
             try {
-                secretKey = loadKey(keyFile,KEY_FILE_PASSWORD);
+                secretKey = loadKey(keyFile, KEY_FILE_PASSWORD);
                 log.debug("loading key file successful.");
             } catch (KeyStoreException e) {
-                log.error("loading key file failed!",e);
+                log.error("loading key file failed!", e);
             } catch (IOException e) {
-                log.error("loading key file failed!",e);
+                log.error("loading key file failed!", e);
             } catch (NoSuchAlgorithmException e) {
-                log.error("loading key file failed!",e);
+                log.error("loading key file failed!", e);
             } catch (UnrecoverableEntryException e) {
-                log.error("loading key file failed!",e);
+                log.error("loading key file failed!", e);
             }
         }
     }
 
-    public SecretKey loadKey(String keyFile,String password) throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableEntryException {
-        log.debug("loadKey. (keyFile: {})",keyFile);
+    public SecretKey loadKey(String keyFile, String password) throws KeyStoreException, IOException, NoSuchAlgorithmException, UnrecoverableEntryException {
+        log.debug("loadKey. (keyFile: {})", keyFile);
 
         KeyStore ks = KeyStore.getInstance("BKS");
         FileInputStream fis = new FileInputStream(keyFile);
         try {
             ks.load(fis, password.toCharArray());
         } catch (CertificateException e) {
-            log.error("",e);
+            log.error("", e);
         }
 
-        KeyStore.SecretKeyEntry skEntry = (KeyStore.SecretKeyEntry) ks.getEntry("secretKey",new KeyStore.PasswordProtection(password.toCharArray()));
+        KeyStore.SecretKeyEntry skEntry = (KeyStore.SecretKeyEntry) ks.getEntry("secretKey", new KeyStore.PasswordProtection(password.toCharArray()));
         SecretKey secretKey = skEntry.getSecretKey();
 
         fis.close();
@@ -73,12 +73,12 @@ public class EncryptionService {
     }
 
     public byte[] encrypt(String plaintext) {
-        if (plaintext==null) return "".getBytes();
+        if (plaintext == null) return "".getBytes();
 
-        log.debug("encrypt.",plaintext);
+        log.debug("encrypt.", plaintext);
         byte[] data = "".getBytes();
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding","BC");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             AlgorithmParameters params = cipher.getParameters();
             byte[] iv = params.getParameterSpec(IvParameterSpec.class).getIV();
@@ -106,31 +106,31 @@ public class EncryptionService {
     }
 
     public String decrypt(byte[] data) {
-        if (data==null) return "";
+        if (data == null) return "";
 
         log.debug("decrypt.");
         String text = "";
         try {
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding","BC");
-            byte[] iv = ArrayUtils.subarray(data,0,16);
-            byte[] data2 = ArrayUtils.subarray(data,16,data.length);
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
+            byte[] iv = ArrayUtils.subarray(data, 0, 16);
+            byte[] data2 = ArrayUtils.subarray(data, 16, data.length);
             cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
             text = new String(cipher.doFinal(data2), "UTF-8");
             log.debug("decryption successful.");
         } catch (NoSuchAlgorithmException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (NoSuchPaddingException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (InvalidKeyException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (InvalidAlgorithmParameterException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (UnsupportedEncodingException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (IllegalBlockSizeException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (BadPaddingException e) {
-            log.error("decryption failed!",e);
+            log.error("decryption failed!", e);
         } catch (NoSuchProviderException e) {
             log.error("decryption failed!", e);
         }

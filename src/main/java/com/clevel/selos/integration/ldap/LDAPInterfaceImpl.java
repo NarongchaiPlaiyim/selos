@@ -40,7 +40,7 @@ public class LDAPInterfaceImpl implements LDAPInterface {
     public void authenticate(String userName, String password) {
         log.debug("authenticate. (userName: {}, password: [HIDDEN])", userName);
         DirContext ctx;
-        if (userName == null || "".equalsIgnoreCase(userName)){
+        if (userName == null || "".equalsIgnoreCase(userName)) {
             log.debug("username is null or empty!");
             throw new LDAPInterfaceException(null, ExceptionMapping.LDAP_EMPTY_USERNAME, msg.get(ExceptionMapping.LDAP_EMPTY_USERNAME));
         }
@@ -56,9 +56,9 @@ public class LDAPInterfaceImpl implements LDAPInterface {
                     attributes.get("memberOf"));
         } catch (NamingException e) {
             log.error("", e);
-            throw new LDAPInterfaceException(e, ExceptionMapping.LDAP_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.LDAP_AUTHENTICATION_FAILED,getLDAPErrorCode(e.getMessage())));
+            throw new LDAPInterfaceException(e, ExceptionMapping.LDAP_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.LDAP_AUTHENTICATION_FAILED, getLDAPErrorCode(e.getMessage())));
         }
-        log.debug("authentication success. (userName: {})",userName);
+        log.debug("authentication success. (userName: {})", userName);
     }
 
     private DirContext getDirContext(String userName, String password) throws NamingException {
@@ -90,12 +90,12 @@ public class LDAPInterfaceImpl implements LDAPInterface {
     }
 
     private String getLDAPErrorCode(String exceptionMessage) {
-        try{
-        String[] tmp = exceptionMessage.substring(exceptionMessage.indexOf(", data")).split(",");
+        try {
+            String[] tmp = exceptionMessage.substring(exceptionMessage.indexOf(", data")).split(",");
 
-        tmp = tmp[1].split(" ");
-        return tmp[2].trim();
-        }catch (StringIndexOutOfBoundsException e){
+            tmp = tmp[1].split(" ");
+            return tmp[2].trim();
+        } catch (StringIndexOutOfBoundsException e) {
             return "";
         }
     }

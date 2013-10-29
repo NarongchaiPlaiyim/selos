@@ -11,108 +11,108 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_customer")
+@Table(name = "wrk_customer")
 public class Customer implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CUSTOMER_ID", sequenceName="SEQ_WRK_CUSTOMER_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUSTOMER_ID")
+    @SequenceGenerator(name = "SEQ_WRK_CUSTOMER_ID", sequenceName = "SEQ_WRK_CUSTOMER_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CUSTOMER_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
     @OneToOne
-    @JoinColumn(name="customerentity_id")
+    @JoinColumn(name = "customerentity_id")
     private CustomerEntity customerEntity;
 
     @OneToOne
-    @JoinColumn(name="documenttype_id")
+    @JoinColumn(name = "documenttype_id")
     private DocumentType documentType;
 
-    @Column(name="document_authorize_by")
+    @Column(name = "document_authorize_by")
     private String documentAuthorizeBy;
 
-    @Column(name="service_segment")
+    @Column(name = "service_segment")
     private String serviceSegment;
 
-    @Column(name="collateral_owner")
+    @Column(name = "collateral_owner")
     private int collateralOwner;
 
-    @Column(name="percent_share")
+    @Column(name = "percent_share")
     private BigDecimal percentShare;
 
-    @Column(name="approx_income")
+    @Column(name = "approx_income")
     private BigDecimal approxIncome;
 
-    @Column(name="id_number")
+    @Column(name = "id_number")
     private String idNumber;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="expire_date")
+    @Column(name = "expire_date")
     private Date expireDate;
 
     @OneToOne
-    @JoinColumn(name="title_id")
+    @JoinColumn(name = "title_id")
     private Title title;
 
-    @Column(name="name_en")
+    @Column(name = "name_en")
     private String nameEn;
 
-    @Column(name="name_th")
+    @Column(name = "name_th")
     private String nameTh;
 
-    @Column(name="lastname_th")
+    @Column(name = "lastname_th")
     private String lastNameTh;
 
-    @Column(name="lastname_en")
+    @Column(name = "lastname_en")
     private String lastNameEn;
 
-    @Column(name="age")
+    @Column(name = "age")
     private int age;
 
-    @Column(name="ncb_checked", nullable=false, columnDefinition="int default 0")
+    @Column(name = "ncb_checked", nullable = false, columnDefinition = "int default 0")
     private int ncbFlag;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy = "customer")
     private Individual individual;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy = "customer")
     private Juristic juristic;
 
-    @OneToMany(mappedBy="customer")
+    @OneToMany(mappedBy = "customer")
     private List<Address> addressesList;
 
     @OneToOne
-    @JoinColumn(name="businesstype_id")
+    @JoinColumn(name = "businesstype_id")
     private BusinessType businessType;
 
     @OneToOne
-    @JoinColumn(name="relation_id")
+    @JoinColumn(name = "relation_id")
     private Relation relation;
 
     @OneToOne
-    @JoinColumn(name="reference_id")
+    @JoinColumn(name = "reference_id")
     private Reference reference;
 
-    @OneToOne(mappedBy="customer")
+    @OneToOne(mappedBy = "customer")
     private NCB ncb;
 
     @OneToOne
-    @JoinColumn(name="warningcode_id")
+    @JoinColumn(name = "warningcode_id")
     private WarningCode csi;
 
-    @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")
+    @Column(name = "is_spouse", nullable = false, columnDefinition = "int default 0")
     private int isSpouse;
 
-    @Column(name="spouse_id")
+    @Column(name = "spouse_id")
     private long spouseId;
 
-    @Column(name="is_search_rm", nullable=false, columnDefinition = "int default 0")
+    @Column(name = "is_search_rm", nullable = false, columnDefinition = "int default 0")
     private int searchFromRM;
 
     public Customer() {

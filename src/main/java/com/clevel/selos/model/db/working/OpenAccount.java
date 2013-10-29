@@ -10,29 +10,29 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_open_account")
+@Table(name = "wrk_open_account")
 public class OpenAccount implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_OPEN_ACC_ID", sequenceName="SEQ_WRK_OPEN_ACC_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_OPEN_ACC_ID")
+    @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_ID", sequenceName = "SEQ_WRK_OPEN_ACC_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="basic_info_id")
+    @JoinColumn(name = "basic_info_id")
     private BasicInfo basicInfo;
 
-    @Column(name="account_name")
+    @Column(name = "account_name")
     private String accountName;
 
     @OneToOne
-    @JoinColumn(name="bank_account_type_id")
+    @JoinColumn(name = "bank_account_type_id")
     private BankAccountType bankAccountType;
 
     @OneToOne
-    @JoinColumn(name="open_account_product_id")
+    @JoinColumn(name = "open_account_product_id")
     private OpenAccountProduct accountProduct;
 
-    @OneToMany(mappedBy="openAccount")
+    @OneToMany(mappedBy = "openAccount")
     private List<OpenAccPurpose> openAccPurposeList;
 
     public long getId() {

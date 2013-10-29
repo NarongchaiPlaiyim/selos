@@ -23,7 +23,7 @@ public class ContactRecordDetailView {
     private String callingResultStr;
     private int acceptResult;
     private String acceptResultStr;
-    private Date nextCallingDate ;
+    private Date nextCallingDate;
     private String nextCallingTime;
     private Reason reason;
     private String remark;
@@ -75,7 +75,7 @@ public class ContactRecordDetailView {
     }
 
     public String getCallingResultStr() {
-        System.out.println(" this.callingResult is "+ this.callingResult);
+        System.out.println(" this.callingResult is " + this.callingResult);
         /*if(this.callingResult==0){
             System.out.println(" case 0 " + msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact"));
             callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact");

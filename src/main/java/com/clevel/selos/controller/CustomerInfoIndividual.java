@@ -8,7 +8,6 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -136,10 +135,10 @@ public class CustomerInfoIndividual implements Serializable {
 
     private int caseBorrowerTypeId;
 
-    public CustomerInfoIndividual(){
+    public CustomerInfoIndividual() {
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
@@ -149,19 +148,19 @@ public class CustomerInfoIndividual implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
-        }else{
+        } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }
@@ -213,16 +212,16 @@ public class CustomerInfoIndividual implements Serializable {
 //        customerInfoView = customerInfoSummaryControl.getCustomerInfoSummary(workCaseId);
     }
 
-    public void onChangeRelation(){
+    public void onChangeRelation() {
         referenceList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
     }
 
     public void onChangeProvinceForm1() {
-        if(customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getCurrentAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
             districtForm1List = districtDAO.getListByProvince(province);
             customerInfoView.getCurrentAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm1List = provinceDAO.getListOrderByParameter("name");
             districtForm1List = new ArrayList<District>();
             subDistrictForm1List = new ArrayList<SubDistrict>();
@@ -230,21 +229,21 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm1() {
-        if(customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getCurrentAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
             subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm1();
             subDistrictForm1List = new ArrayList<SubDistrict>();
         }
     }
 
     public void onChangeProvinceForm2() {
-        if(customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getRegisterAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
             districtForm2List = districtDAO.getListByProvince(province);
             customerInfoView.getRegisterAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm2List = provinceDAO.getListOrderByParameter("name");
             districtForm2List = new ArrayList<District>();
             subDistrictForm2List = new ArrayList<SubDistrict>();
@@ -252,21 +251,21 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm2() {
-        if(customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getRegisterAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
             subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm2();
             subDistrictForm2List = new ArrayList<SubDistrict>();
         }
     }
 
     public void onChangeProvinceForm3() {
-        if(customerInfoView.getWorkAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getWorkAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
             districtForm3List = districtDAO.getListByProvince(province);
             customerInfoView.getWorkAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm3List = provinceDAO.getListOrderByParameter("name");
             districtForm3List = new ArrayList<District>();
             subDistrictForm3List = new ArrayList<SubDistrict>();
@@ -274,21 +273,21 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm3() {
-        if(customerInfoView.getWorkAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getWorkAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
             subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm3();
             subDistrictForm3List = new ArrayList<SubDistrict>();
         }
     }
 
     public void onChangeProvinceForm4() {
-        if(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
             districtForm4List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getCurrentAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm4List = provinceDAO.getListOrderByParameter("name");
             districtForm4List = new ArrayList<District>();
             subDistrictForm4List = new ArrayList<SubDistrict>();
@@ -296,21 +295,21 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm4() {
-        if(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
             subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm4();
             subDistrictForm4List = new ArrayList<SubDistrict>();
         }
     }
 
     public void onChangeProvinceForm5() {
-        if(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
             districtForm5List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getRegisterAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm5List = provinceDAO.getListOrderByParameter("name");
             districtForm5List = new ArrayList<District>();
             subDistrictForm5List = new ArrayList<SubDistrict>();
@@ -318,21 +317,21 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm5() {
-        if(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
             subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm5();
             subDistrictForm5List = new ArrayList<SubDistrict>();
         }
     }
 
     public void onChangeProvinceForm6() {
-        if(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
+        if (customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0) {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
             districtForm6List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getWorkAddress().setDistrict(new District());
-        }else{
+        } else {
             provinceForm6List = provinceDAO.getListOrderByParameter("name");
             districtForm6List = new ArrayList<District>();
             subDistrictForm6List = new ArrayList<SubDistrict>();
@@ -340,48 +339,48 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeDistrictForm6() {
-        if(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
+        if (customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0) {
             District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
             subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
-        }else{
+        } else {
             onChangeProvinceForm6();
             subDistrictForm6List = new ArrayList<SubDistrict>();
         }
     }
 
-    public void onSave(){
+    public void onSave() {
 
-        if(addressFlagForm2 == 1){ //dup address 1 to address 2
+        if (addressFlagForm2 == 1) { //dup address 1 to address 2
             customerInfoView.setRegisterAddress(customerInfoView.getCurrentAddress());
         }
 
-        if(addressFlagForm3 == 1){
+        if (addressFlagForm3 == 1) {
             customerInfoView.setWorkAddress(customerInfoView.getCurrentAddress());
-        }else if(addressFlagForm3 == 2){
+        } else if (addressFlagForm3 == 2) {
             customerInfoView.setWorkAddress(customerInfoView.getRegisterAddress());
         }
 
-        if(addressFlagForm5 == 1){ //dup address 1 to address 2
+        if (addressFlagForm5 == 1) { //dup address 1 to address 2
             customerInfoView.getSpouse().setRegisterAddress(customerInfoView.getSpouse().getCurrentAddress());
         }
 
-        if(addressFlagForm6 == 1){
+        if (addressFlagForm6 == 1) {
             customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getCurrentAddress());
-        }else if(addressFlagForm6 == 2){
+        } else if (addressFlagForm6 == 2) {
             customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getRegisterAddress());
         }
 
         customerInfoView.getCustomerEntity().setId(1); // for individual
 
-        try{
+        try {
             customerInfoSummaryControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             messageHeader = "Save Customer Info Individual Success.";
             message = "Save Customer Info Individual data success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             messageHeader = "Save Customer Info Individual Failed.";
-            if(ex.getCause() != null){
+            if (ex.getCause() != null) {
                 message = "Save Customer Info Individual failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save Customer Info Individual failed. Cause : " + ex.getMessage();

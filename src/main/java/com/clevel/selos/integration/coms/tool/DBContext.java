@@ -1,7 +1,6 @@
 package com.clevel.selos.integration.coms.tool;
 
 import com.clevel.selos.integration.COMS;
-import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.util.Util;
@@ -30,25 +29,25 @@ public class DBContext implements Serializable {
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver").newInstance();
         } catch (InstantiationException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (IllegalAccessException e) {
-            log.error("",e);
+            log.error("", e);
         } catch (ClassNotFoundException e) {
-            log.error("",e);
+            log.error("", e);
         }
     }
 
-    public Connection getConnection(String jdbcURL,String user,String password) {
+    public Connection getConnection(String jdbcURL, String user, String password) {
         Connection conn = null;
-        log.debug("DB URL: {}, User: {}, Password: HIDDEN",jdbcURL,user);
+        log.debug("DB URL: {}, User: {}, Password: HIDDEN", jdbcURL, user);
 
         try {
             if (Util.isTrue(encryptionEnable)) {
                 password = encryptionService.decrypt(Base64.decodeBase64(password));
             }
-            conn = DriverManager.getConnection(jdbcURL,user,password);
+            conn = DriverManager.getConnection(jdbcURL, user, password);
         } catch (SQLException e) {
-            log.error("Exception while connect to database!",e);
+            log.error("Exception while connect to database!", e);
         }
         return conn;
     }

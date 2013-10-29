@@ -32,7 +32,7 @@ public class NormalMessageProvider extends MessageProvider {
         try {
             message = getBundle().getString(key);
         } catch (MissingResourceException e) {
-            log.error("Missing resource! (key: {})",key,e);
+            log.error("Missing resource! (key: {})", key, e);
             message = "???";
         }
         return message;

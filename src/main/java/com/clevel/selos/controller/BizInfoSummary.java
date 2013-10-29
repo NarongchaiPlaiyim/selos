@@ -52,8 +52,8 @@ public class BizInfoSummary implements Serializable {
     private Country country;
     private User user;
 
-    private ReferredExperience  referredExperience;
-    private String  sumIncomeAmountDis;
+    private ReferredExperience referredExperience;
+    private String sumIncomeAmountDis;
     private BigDecimal sumIncomeAmount;
     private BigDecimal sumIncomePercent;
     private BigDecimal sumweightIntvIncomeFactor;
@@ -96,12 +96,12 @@ public class BizInfoSummary implements Serializable {
     @Inject
     private Util util;
 
-    public BizInfoSummary(){
+    public BizInfoSummary() {
 
     }
 
     @PostConstruct
-    public void onCreation(){
+    public void onCreation() {
         log.info("onCreation bizInfoSum");
         onSearchBizInfoSummaryByWorkCase();
 
@@ -110,11 +110,11 @@ public class BizInfoSummary implements Serializable {
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
 
-        if(bizInfoSummaryView == null){
+        if (bizInfoSummaryView == null) {
 
-            log.info("bizInfoSummaryView == null " );
+            log.info("bizInfoSummaryView == null ");
 
-            bizInfoSummaryView =  new BizInfoSummaryView();
+            bizInfoSummaryView = new BizInfoSummaryView();
 
             province = new Province();
             district = new District();
@@ -137,7 +137,7 @@ public class BizInfoSummary implements Serializable {
             bizInfoSummaryView.setSumWeightInterviewedIncomeFactorPercent(new BigDecimal(0));
 
 
-        }else{
+        } else {
             getBusinessInfoListDB();
             onChangeProvince();
             onChangeDistrict();
@@ -146,17 +146,18 @@ public class BizInfoSummary implements Serializable {
 
     }
 
-    public void onSearchBizInfoSummaryByWorkCase(){
-        log.info( " Initial session ");
+    public void onSearchBizInfoSummaryByWorkCase() {
+        log.info(" Initial session ");
         HttpSession session = FacesUtil.getSession(true);
         log.info(" Initial session is " + session);
 
         session.setAttribute("workCaseId", 10001);
         long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-        log.info( " get FROM session workCaseId is " + workCaseId);
+        log.info(" get FROM session workCaseId is " + workCaseId);
         bizInfoSummaryView = bizInfoSummaryControl.onGetBizInfoSummaryByWorkCase(workCaseId);
 
     }
+
     public void onChangeProvince() {
         Province proSelect = bizInfoSummaryView.getSubDistrict().getDistrict().getProvince();
         districtList = districtDAO.getListByProvince(proSelect);
@@ -164,46 +165,46 @@ public class BizInfoSummary implements Serializable {
     }
 
     public void onChangeDistrict() {
-        District districtSelect= bizInfoSummaryView.getSubDistrict().getDistrict();
+        District districtSelect = bizInfoSummaryView.getSubDistrict().getDistrict();
         subDistrictList = subDistrictDAO.getListByDistrict(districtSelect);
         log.info("onChangeDistrict :::: subDistrictList.size ::: ", subDistrictList.size());
     }
 
 
-    public void getBusinessInfoListDB(){
+    public void getBusinessInfoListDB() {
 
         long bizInfoSummaryViewId;
         bizInfoSummaryViewId = bizInfoSummaryView.getId();
         bizInfoDetailViewList = bizInfoSummaryControl.onGetBizInfoDetailByBizInfoSummary(bizInfoSummaryViewId);
 
 
-        if(bizInfoDetailViewList.size()==0){
+        if (bizInfoDetailViewList.size() == 0) {
             bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        }else{
-            double bankstatementAvg=0;
-            double incomeAmountCal= 0;
+        } else {
+            double bankstatementAvg = 0;
+            double incomeAmountCal = 0;
             double sumIncomeAmountD = 0;
 
-            double sumIncomePercentD =0;
-            double incomePercentD =0;
+            double sumIncomePercentD = 0;
+            double incomePercentD = 0;
 
-            double adjustIncome= 0;
-            double adjustIncomeCal= 0;
+            double adjustIncome = 0;
+            double adjustIncomeCal = 0;
             double sumAdjust = 0;
 
-            long ar= 0;
-            double arCal= 0;
-            double sumAR= 0;
+            long ar = 0;
+            double arCal = 0;
+            double sumAR = 0;
 
-            long ap= 0;
-            double apCal= 0;
-            double sumAP= 0;
+            long ap = 0;
+            double apCal = 0;
+            double sumAP = 0;
 
-            long inv= 0;
-            double invCal= 0;
-            double sumINV= 0;
+            long inv = 0;
+            double invCal = 0;
+            double sumINV = 0;
 
-            for(int i=0;i<bizInfoDetailViewList.size();i++){
+            for (int i = 0; i < bizInfoDetailViewList.size(); i++) {
 
                 BizInfoDetailView temp = bizInfoDetailViewList.get(i);
 
@@ -211,25 +212,25 @@ public class BizInfoSummary implements Serializable {
                 sumIncomePercentD += incomePercentD;
 
                 bankstatementAvg = 12000;
-                incomeAmountCal = bankstatementAvg*12;
+                incomeAmountCal = bankstatementAvg * 12;
                 sumIncomeAmountD += incomeAmountCal;
 
 
                 adjustIncome = temp.getAdjustedIncomeFactor().doubleValue();
-                adjustIncomeCal = (adjustIncome*incomePercentD)/100;
+                adjustIncomeCal = (adjustIncome * incomePercentD) / 100;
                 sumAdjust += adjustIncomeCal;
 
                 ar = temp.getBizDesc().getAr();
-                arCal = (ar*incomePercentD)/100;
+                arCal = (ar * incomePercentD) / 100;
                 sumAR += arCal;
 
                 ap = temp.getBizDesc().getAp();
-                apCal = (ap*incomePercentD)/100;
+                apCal = (ap * incomePercentD) / 100;
                 sumAP += apCal;
 
                 inv = temp.getBizDesc().getInv();
 
-                invCal = (inv*incomePercentD)/100;
+                invCal = (inv * incomePercentD) / 100;
                 sumINV += invCal;
 
             }
@@ -243,9 +244,9 @@ public class BizInfoSummary implements Serializable {
 
             sumIncomeAmount = new BigDecimal(sumIncomeAmountD).setScale(2);
             sumIncomePercent = new BigDecimal(sumIncomePercentD).setScale(2);
-            sumweightAR  = new BigDecimal(sumAR).setScale(2);
-            sumweightAP  = new BigDecimal(sumAP).setScale(2);
-            sumweightINV  = new BigDecimal(sumINV).setScale(2);
+            sumweightAR = new BigDecimal(sumAR).setScale(2);
+            sumweightAP = new BigDecimal(sumAP).setScale(2);
+            sumweightINV = new BigDecimal(sumINV).setScale(2);
             sumweightIntvIncomeFactor = new BigDecimal(sumAdjust).setScale(2);
 
 
@@ -259,26 +260,26 @@ public class BizInfoSummary implements Serializable {
     }
 
 
-    public void onSaveBizInfoSummary(){
+    public void onSaveBizInfoSummary() {
 
-        try{
+        try {
             log.info("onSaveBizInfoSummary begin");
-            if(bizInfoSummaryView.getId() == 0){
+            if (bizInfoSummaryView.getId() == 0) {
                 bizInfoSummaryView.setCreateBy(user);
                 bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
                 bizInfoSummaryView.setModifyBy(user);
             }
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("workCaseId", 10001);
-            session.setAttribute("bizInfoDetailViewId", -1 );
+            session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             log.info("bizInfoSummaryControl end");
 
 
-            if(redirect!=null&&!redirect.equals("")){
+            if (redirect != null && !redirect.equals("")) {
                 log.info("have to redirect ");
-                if(redirect.equals("viewDetail")){
+                if (redirect.equals("viewDetail")) {
                     log.info("view Detail ");
                     onViewDetail();
                 }
@@ -288,7 +289,7 @@ public class BizInfoSummary implements Serializable {
                 ExternalContext ec = fc.getExternalContext();
                 log.info("redirect to new page");
                 ec.redirect(url);
-            }else{
+            } else {
                 log.info("not have to redirect ");
             }
 
@@ -299,10 +300,10 @@ public class BizInfoSummary implements Serializable {
             onCreation();
             log.info("onCreation() after Save");
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             log.info("onSaveBizInfoSummary Error");
             messageHeader = "Save BizInfoSummary Failed.";
-            if(ex.getCause() != null){
+            if (ex.getCause() != null) {
                 log.info("ex.getCause().toString() is " + ex.getCause().toString());
                 message = "Save BizInfoSummary data failed. Cause : " + ex.getCause().toString();
             } else {
@@ -310,29 +311,29 @@ public class BizInfoSummary implements Serializable {
                 message = "Save BizInfoSummary data failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }finally {
+        } finally {
             log.info("onSaveBizInfoSummary end");
         }
     }
 
-    public void onViewDetail(){
+    public void onViewDetail() {
         log.info(" onViewDetail begin !! {}");
         HttpSession session = FacesUtil.getSession(true);
-        session.setAttribute("bizInfoDetailViewId",selectBizInfoDetailView.getId() );
+        session.setAttribute("bizInfoDetailViewId", selectBizInfoDetailView.getId());
         log.info(" onViewDetail end !! {}");
     }
 
 
-    public void onDeleteBizInfoToDB(){
+    public void onDeleteBizInfoToDB() {
 
-        try{
-            log.info("onDeleteBizInfoToDB Controller begin " );
+        try {
+            log.info("onDeleteBizInfoToDB Controller begin ");
             bizInfoDetailControl.onDeleteBizInfoToDB(selectBizInfoDetailView);
             getBusinessInfoListDB();
-        }catch (Exception e){
+        } catch (Exception e) {
 
-        }finally {
-            log.info("onDeleteBizInfoToDB Controller end " );
+        } finally {
+            log.info("onDeleteBizInfoToDB Controller end ");
         }
     }
 

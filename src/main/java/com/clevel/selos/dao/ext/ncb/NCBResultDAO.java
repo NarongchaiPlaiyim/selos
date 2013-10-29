@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class NCBResultDAO extends GenericDAO<NCBResult,Long> {
+public class NCBResultDAO extends GenericDAO<NCBResult, Long> {
     @Inject
     private Logger log;
 

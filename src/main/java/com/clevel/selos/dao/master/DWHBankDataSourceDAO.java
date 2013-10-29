@@ -1,7 +1,6 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
-import com.clevel.selos.model.db.master.BankAccountType;
 import com.clevel.selos.model.db.master.DWHBankDataSource;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -15,14 +14,14 @@ public class DWHBankDataSourceDAO extends GenericDAO<DWHBankDataSource, Integer>
     private Logger log;
 
     @Inject
-    public DWHBankDataSourceDAO(){
+    public DWHBankDataSourceDAO() {
 
     }
 
-    public DWHBankDataSource findByDataSource(String dataSource){
+    public DWHBankDataSource findByDataSource(String dataSource) {
         Criteria criteria = getSession().createCriteria(getEntityClass())
                 .add(Restrictions.eq("dataSource", dataSource));
-        return (DWHBankDataSource)criteria.uniqueResult();
+        return (DWHBankDataSource) criteria.uniqueResult();
     }
 
 }

@@ -52,7 +52,7 @@ public class CustomerTransform extends Transform {
     @Inject
     AddressDAO addressDAO;
 
-    public CustomerInfoView transformToView(Customer customer){
+    public CustomerInfoView transformToView(Customer customer) {
 
         CustomerInfoView customerInfoView = new CustomerInfoView();
 
@@ -60,35 +60,35 @@ public class CustomerTransform extends Transform {
         customerInfoView.setTitleTh(customer.getTitle());
         customerInfoView.setFirstNameTh(customer.getNameTh());
         customerInfoView.setLastNameTh(customer.getLastNameTh());
-        if(customerInfoView.getLastNameTh() == null){
+        if (customerInfoView.getLastNameTh() == null) {
             customerInfoView.setLastNameTh("");
         }
         customerInfoView.setCustomerEntity(customer.getCustomerEntity());
-        if(customerInfoView.getCustomerEntity() == null){
+        if (customerInfoView.getCustomerEntity() == null) {
             customerInfoView.setCustomerEntity(new CustomerEntity());
         }
         customerInfoView.setAge(customer.getAge());
         customerInfoView.setTmbCustomerId(customer.getIdNumber());
         customerInfoView.setRelation(customer.getRelation());
-        if(customerInfoView.getRelation() == null){
+        if (customerInfoView.getRelation() == null) {
             customerInfoView.setRelation(new Relation());
         }
         customerInfoView.setReference(customer.getReference());
-        if(customerInfoView.getReference() == null){
+        if (customerInfoView.getReference() == null) {
             customerInfoView.setReference(new Reference());
         }
         customerInfoView.setApproxIncome(customer.getApproxIncome());
         customerInfoView.setDocumentType(customer.getDocumentType());
-        if(customerInfoView.getDocumentType() == null){
+        if (customerInfoView.getDocumentType() == null) {
             customerInfoView.setDocumentType(new DocumentType());
         }
         customerInfoView.setNcbFlag(customer.getNcbFlag());
         customerInfoView.setSearchFromRM(customer.getSearchFromRM());
         customerInfoView.setValidId(2);
 
-        if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
+        if (customer.getAddressesList() != null && customer.getAddressesList().size() > 0) {
             List<Address> addressList = customer.getAddressesList();
-            for(Address address : addressList){
+            for (Address address : addressList) {
                 AddressView addressView = new AddressView();
                 addressView.setId(address.getId());
                 addressView.setAddressType(address.getAddressType());
@@ -107,22 +107,22 @@ public class CustomerTransform extends Transform {
                 addressView.setContactPhone(address.getContactPhone());
                 addressView.setAddress(address.getAddress());
 
-                if(address.getAddressType().getId() == 1){
+                if (address.getAddressType().getId() == 1) {
                     // Current address
                     customerInfoView.setCurrentAddress(addressView);
-                    if(customerInfoView.getCurrentAddress() == null){
+                    if (customerInfoView.getCurrentAddress() == null) {
                         customerInfoView.setCurrentAddress(new AddressView());
                     }
-                } else if(address.getAddressType().getId() == 2){
+                } else if (address.getAddressType().getId() == 2) {
                     // Register Address
                     customerInfoView.setRegisterAddress(addressView);
-                    if(customerInfoView.getRegisterAddress() == null){
+                    if (customerInfoView.getRegisterAddress() == null) {
                         customerInfoView.setRegisterAddress(new AddressView());
                     }
-                } else if(address.getAddressType().getId() == 3){
+                } else if (address.getAddressType().getId() == 3) {
                     // Work Address
                     customerInfoView.setWorkAddress(addressView);
-                    if(customerInfoView.getWorkAddress() == null){
+                    if (customerInfoView.getWorkAddress() == null) {
                         customerInfoView.setWorkAddress(new AddressView());
                     }
                 }
@@ -133,42 +133,42 @@ public class CustomerTransform extends Transform {
             customerInfoView.setWorkAddress(new AddressView());
         }
 
-        if(customer.getCustomerEntity().getId() == 1){
+        if (customer.getCustomerEntity().getId() == 1) {
             //Individual
             Individual individual = customer.getIndividual();
 
-            if(individual != null){
+            if (individual != null) {
                 customerInfoView.setIndividualId(individual.getId());
                 customerInfoView.setCitizenId(individual.getCitizenId());
                 customerInfoView.setGender(individual.getGender());
                 customerInfoView.setDateOfBirth(individual.getBirthDate());
                 customerInfoView.setNumberOfChild(individual.getNumberOfChildren());
 
-                if(individual.getEducation() != null){
+                if (individual.getEducation() != null) {
                     customerInfoView.setEducation(individual.getEducation());
                 } else {
                     customerInfoView.setEducation(new Education());
                 }
 
-                if(individual.getMaritalStatus() != null){
+                if (individual.getMaritalStatus() != null) {
                     customerInfoView.setMaritalStatus(individual.getMaritalStatus());
                 } else {
                     customerInfoView.setMaritalStatus(new MaritalStatus());
                 }
 
-                if(individual.getNationality() != null){
+                if (individual.getNationality() != null) {
                     customerInfoView.setNationality(individual.getNationality());
                 } else {
                     customerInfoView.setNationality(new Nationality());
                 }
 
-                if(individual.getSndNationality() != null){
+                if (individual.getSndNationality() != null) {
                     customerInfoView.setSndNationality(individual.getSndNationality());
                 } else {
                     customerInfoView.setSndNationality(new Nationality());
                 }
 
-                if(individual.getOccupation() != null){
+                if (individual.getOccupation() != null) {
                     customerInfoView.setOccupation(individual.getOccupation());
                 } else {
                     customerInfoView.setOccupation(new Occupation());
@@ -187,14 +187,14 @@ public class CustomerTransform extends Transform {
             Juristic juristic = customer.getJuristic();
             log.info("transform juristic : {}", juristic);
 
-            if(juristic != null){
+            if (juristic != null) {
                 customerInfoView.setCapital(juristic.getCapital());
                 customerInfoView.setPaidCapital(juristic.getPaidCapital());
                 customerInfoView.setFinancialYear(juristic.getFinancialYear());
                 customerInfoView.setDateOfRegister(juristic.getRegisterDate());
                 customerInfoView.setSignCondition(juristic.getSignCondition());
                 customerInfoView.setRegistrationId(juristic.getRegistrationId());
-                if(juristic.getRegisterCountry() != null){
+                if (juristic.getRegisterCountry() != null) {
                     customerInfoView.setRegistrationCountry(juristic.getRegisterCountry());
                 } else {
                     customerInfoView.setRegistrationCountry(new Country());
@@ -206,35 +206,35 @@ public class CustomerTransform extends Transform {
         }
 
         customerInfoView.setCsi(customer.getCsi());
-        if(customerInfoView.getCsi() == null){
+        if (customerInfoView.getCsi() == null) {
             customerInfoView.setCsi(new WarningCode());
         }
         log.info("Return Customer {}", customerInfoView);
         return customerInfoView;
     }
 
-    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCase workCase){
+    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCase workCase) {
         Customer customer = new Customer();
 
         return customer;
     }
 
-    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public Customer transformToModel(CustomerInfoView customerInfoView, WorkCasePrescreen workCasePrescreen, WorkCase workCase) {
         log.info("transformToModel ::: customerInfoView : {}", customerInfoView);
         Customer customer = new Customer();
-        if(customerInfoView.getId() != 0){
+        if (customerInfoView.getId() != 0) {
             customer = customerDAO.findById(customerInfoView.getId());
         }
         customer.setWorkCase(workCase);
         customer.setWorkCasePrescreen(workCasePrescreen);
 
-        if(customerInfoView.getCustomerEntity() != null && customerInfoView.getCustomerEntity().getId() != 0){
+        if (customerInfoView.getCustomerEntity() != null && customerInfoView.getCustomerEntity().getId() != 0) {
             customer.setCustomerEntity(customerEntityDAO.findById(customerInfoView.getCustomerEntity().getId()));
         } else {
             customer.setCustomerEntity(null);
         }
 
-        if(customerInfoView.getDocumentType() != null && customerInfoView.getDocumentType().getId() != 0){
+        if (customerInfoView.getDocumentType() != null && customerInfoView.getDocumentType().getId() != 0) {
             customer.setDocumentType(documentTypeDAO.findById(customerInfoView.getDocumentType().getId()));
         } else {
             customer.setDocumentType(null);
@@ -242,7 +242,7 @@ public class CustomerTransform extends Transform {
 
         customer.setIdNumber(customerInfoView.getTmbCustomerId());
         //customer.setExpireDate(item.getExpireDate());
-        if(customerInfoView.getTitleTh() != null && customerInfoView.getTitleTh().getId() != 0){
+        if (customerInfoView.getTitleTh() != null && customerInfoView.getTitleTh().getId() != 0) {
             customer.setTitle(titleDAO.findById(customerInfoView.getTitleTh().getId()));
         } else {
             customer.setTitle(null);
@@ -253,13 +253,13 @@ public class CustomerTransform extends Transform {
         customer.setAge(customerInfoView.getAge());
         customer.setNcbFlag(customerInfoView.getNcbFlag());
 
-        if(customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0){
+        if (customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0) {
             customer.setRelation(relationDAO.findById(customerInfoView.getRelation().getId()));
         } else {
             customer.setRelation(null);
         }
 
-        if(customerInfoView.getReference() != null && customerInfoView.getReference().getId() != 0){
+        if (customerInfoView.getReference() != null && customerInfoView.getReference().getId() != 0) {
             customer.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
         } else {
             customer.setReference(null);
@@ -271,10 +271,10 @@ public class CustomerTransform extends Transform {
 
         List<Address> addressList = new ArrayList<Address>();
 
-        if(customerInfoView.getCurrentAddress() != null){
+        if (customerInfoView.getCurrentAddress() != null) {
             Address address = new Address();
             AddressView currentAddress = customerInfoView.getCurrentAddress();
-            if(currentAddress.getId() != 0){
+            if (currentAddress.getId() != 0) {
                 address = addressDAO.findById(currentAddress.getId());
             }
 
@@ -289,28 +289,28 @@ public class CustomerTransform extends Transform {
             address.setBuilding(currentAddress.getBuilding());
             address.setRoad(currentAddress.getRoad());
 
-            if(currentAddress.getProvince() != null && currentAddress.getProvince().getCode() != 0){
+            if (currentAddress.getProvince() != null && currentAddress.getProvince().getCode() != 0) {
                 Province province = provinceDAO.findById(currentAddress.getProvince().getCode());
                 address.setProvince(province);
             } else {
                 address.setProvince(null);
             }
 
-            if(currentAddress.getDistrict() != null && currentAddress.getDistrict().getId() != 0){
+            if (currentAddress.getDistrict() != null && currentAddress.getDistrict().getId() != 0) {
                 District district = districtDAO.findById(currentAddress.getDistrict().getId());
                 address.setDistrict(district);
             } else {
                 address.setDistrict(null);
             }
 
-            if(currentAddress.getSubDistrict() != null && currentAddress.getSubDistrict().getCode() != 0){
+            if (currentAddress.getSubDistrict() != null && currentAddress.getSubDistrict().getCode() != 0) {
                 SubDistrict subDistrict = subDistrictDAO.findById(currentAddress.getSubDistrict().getCode());
                 address.setSubDistrict(subDistrict);
             } else {
                 address.setSubDistrict(null);
             }
 
-            if(currentAddress.getCountry() != null && currentAddress.getId() != 0){
+            if (currentAddress.getCountry() != null && currentAddress.getId() != 0) {
                 Country country = countryDAO.findById(currentAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -328,10 +328,10 @@ public class CustomerTransform extends Transform {
             addressList.add(address);
         }
 
-        if(customerInfoView.getRegisterAddress() != null){
+        if (customerInfoView.getRegisterAddress() != null) {
             Address address = new Address();
             AddressView registerAddress = customerInfoView.getRegisterAddress();
-            if(registerAddress.getId() != 0){
+            if (registerAddress.getId() != 0) {
                 address = addressDAO.findById(registerAddress.getId());
             }
             address.setCustomer(customer);
@@ -345,28 +345,28 @@ public class CustomerTransform extends Transform {
             address.setBuilding(registerAddress.getBuilding());
             address.setRoad(registerAddress.getRoad());
 
-            if(registerAddress.getProvince() != null && registerAddress.getProvince().getCode() != 0){
+            if (registerAddress.getProvince() != null && registerAddress.getProvince().getCode() != 0) {
                 Province province = provinceDAO.findById(registerAddress.getProvince().getCode());
                 address.setProvince(province);
             } else {
                 address.setProvince(null);
             }
 
-            if(registerAddress.getDistrict() != null && registerAddress.getDistrict().getId() != 0){
+            if (registerAddress.getDistrict() != null && registerAddress.getDistrict().getId() != 0) {
                 District district = districtDAO.findById(registerAddress.getDistrict().getId());
                 address.setDistrict(district);
             } else {
                 address.setDistrict(null);
             }
 
-            if(registerAddress.getSubDistrict() != null && registerAddress.getSubDistrict().getCode() != 0){
+            if (registerAddress.getSubDistrict() != null && registerAddress.getSubDistrict().getCode() != 0) {
                 SubDistrict subDistrict = subDistrictDAO.findById(registerAddress.getSubDistrict().getCode());
                 address.setSubDistrict(subDistrict);
             } else {
                 address.setSubDistrict(null);
             }
 
-            if(registerAddress.getCountry() != null && registerAddress.getId() != 0){
+            if (registerAddress.getCountry() != null && registerAddress.getId() != 0) {
                 Country country = countryDAO.findById(registerAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -383,10 +383,10 @@ public class CustomerTransform extends Transform {
             addressList.add(address);
         }
 
-        if(customerInfoView.getWorkAddress() != null){
+        if (customerInfoView.getWorkAddress() != null) {
             Address address = new Address();
             AddressView workAddress = customerInfoView.getWorkAddress();
-            if(workAddress.getId() != 0){
+            if (workAddress.getId() != 0) {
                 address = addressDAO.findById(workAddress.getId());
             }
             address.setCustomer(customer);
@@ -400,28 +400,28 @@ public class CustomerTransform extends Transform {
             address.setBuilding(workAddress.getBuilding());
             address.setRoad(workAddress.getRoad());
 
-            if(workAddress.getProvince() != null && workAddress.getProvince().getCode() != 0){
+            if (workAddress.getProvince() != null && workAddress.getProvince().getCode() != 0) {
                 Province province = provinceDAO.findById(workAddress.getProvince().getCode());
                 address.setProvince(province);
             } else {
                 address.setProvince(null);
             }
 
-            if(workAddress.getDistrict() != null && workAddress.getDistrict().getId() != 0){
+            if (workAddress.getDistrict() != null && workAddress.getDistrict().getId() != 0) {
                 District district = districtDAO.findById(workAddress.getDistrict().getId());
                 address.setDistrict(district);
             } else {
                 address.setDistrict(null);
             }
 
-            if(workAddress.getSubDistrict() != null && workAddress.getSubDistrict().getCode() != 0){
+            if (workAddress.getSubDistrict() != null && workAddress.getSubDistrict().getCode() != 0) {
                 SubDistrict subDistrict = subDistrictDAO.findById(workAddress.getSubDistrict().getCode());
                 address.setSubDistrict(subDistrict);
             } else {
                 address.setSubDistrict(null);
             }
 
-            if(workAddress.getCountry() != null && workAddress.getId() != 0){
+            if (workAddress.getCountry() != null && workAddress.getId() != 0) {
                 Country country = countryDAO.findById(workAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -440,34 +440,34 @@ public class CustomerTransform extends Transform {
         customer.setAddressesList(addressList);
         log.info("transformToModel : customer after adding address : {}", customer);
 
-        if(customerInfoView.getCustomerEntity().getId() == 1){
+        if (customerInfoView.getCustomerEntity().getId() == 1) {
             //Individual
             Individual individual = new Individual();
-            if(customer.getIndividual() != null){
+            if (customer.getIndividual() != null) {
                 individual = customer.getIndividual();
             }
             individual.setBirthDate(customerInfoView.getDateOfBirth());
             individual.setCitizenId(customerInfoView.getCitizenId());
             individual.setCustomer(customer);
-            if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() != 0){
+            if (customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() != 0) {
                 individual.setMaritalStatus(maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId()));
             } else {
                 individual.setMaritalStatus(null);
             }
             individual.setGender(customerInfoView.getGender());
-            if(customerInfoView.getEducation() != null && customerInfoView.getEducation().getId() != 0){
+            if (customerInfoView.getEducation() != null && customerInfoView.getEducation().getId() != 0) {
                 individual.setEducation(educationDAO.findById(customerInfoView.getEducation().getId()));
             } else {
                 individual.setEducation(null);
             }
 
-            if(customerInfoView.getNationality() != null && customerInfoView.getNationality().getId() != 0){
+            if (customerInfoView.getNationality() != null && customerInfoView.getNationality().getId() != 0) {
                 individual.setNationality(nationalityDAO.findById(customerInfoView.getNationality().getId()));
             } else {
                 individual.setNationality(null);
             }
 
-            if(customerInfoView.getOccupation() != null && customerInfoView.getOccupation().getId() != 0){
+            if (customerInfoView.getOccupation() != null && customerInfoView.getOccupation().getId() != 0) {
                 individual.setOccupation(occupationDAO.findById(customerInfoView.getOccupation().getId()));
             } else {
                 individual.setOccupation(null);
@@ -477,7 +477,7 @@ public class CustomerTransform extends Transform {
         } else {
             //Juristic
             Juristic juristic = new Juristic();
-            if(customer.getJuristic() != null){
+            if (customer.getJuristic() != null) {
                 juristic = customer.getJuristic();
             }
             juristic.setCustomer(customer);
@@ -487,9 +487,9 @@ public class CustomerTransform extends Transform {
             juristic.setRegisterDate(customerInfoView.getDateOfRegister());
             juristic.setRegistrationId(customerInfoView.getRegistrationId());
             juristic.setRegisterCountry(customerInfoView.getRegistrationCountry());
-            if(juristic.getRegisterCountry() != null && juristic.getRegisterCountry().getId() != 0){
+            if (juristic.getRegisterCountry() != null && juristic.getRegisterCountry().getId() != 0) {
                 juristic.setRegisterCountry(countryDAO.findById(juristic.getRegisterCountry().getId()));
-            }else{
+            } else {
                 juristic.setRegisterCountry(null);
             }
             juristic.setSignCondition(customerInfoView.getSignCondition());
@@ -499,7 +499,7 @@ public class CustomerTransform extends Transform {
         }
 
         customer.setCsi(customerInfoView.getCsi());
-        if(customer.getCsi().getId() == 0){
+        if (customer.getCsi().getId() == 0) {
             customer.setCsi(null);
         }
 
@@ -512,16 +512,16 @@ public class CustomerTransform extends Transform {
         return customer;
     }
 
-    private Individual transformToIndividual(CustomerInfoView customerInfoView){
+    private Individual transformToIndividual(CustomerInfoView customerInfoView) {
         Individual individual = new Individual();
 
         return individual;
     }
 
-    public List<CustomerInfoView> transformToViewList(List<Customer> customers){
+    public List<CustomerInfoView> transformToViewList(List<Customer> customers) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
 
-        for(Customer item : customers){
+        for (Customer item : customers) {
             CustomerInfoView customerInfoView = transformToView(item);
             customerInfoViewList.add(customerInfoView);
         }
@@ -529,16 +529,16 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> transformToBorrowerViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> transformToBorrowerViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         int customerIndex = 0;
-        for(CustomerInfoView item : customerInfoViews){
+        for (CustomerInfoView item : customerInfoViews) {
             log.info("transformToBorrowerViewList : CustomerInfoView : {}", item);
-            if(item.getRelation() != null && item.getRelation().getId() == 1){
+            if (item.getRelation() != null && item.getRelation().getId() == 1) {
                 item.setListIndex(customerIndex);
                 item.setSubIndex(customerInfoViewList.size());
                 item.setListName("BORROWER");
-                if(item.getSpouse() == null){
+                if (item.getSpouse() == null) {
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();
                     spouse.setSpouse(null);
@@ -552,15 +552,15 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> transformToGuarantorViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> transformToGuarantorViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         int customerIndex = 0;
-        for(CustomerInfoView item : customerInfoViews){
-            if(item.getRelation() != null && item.getRelation().getId() == 2){
+        for (CustomerInfoView item : customerInfoViews) {
+            if (item.getRelation() != null && item.getRelation().getId() == 2) {
                 item.setListIndex(customerIndex);
                 item.setListName("GUARANTOR");
                 item.setSubIndex(customerInfoViewList.size());
-                if(item.getSpouse() == null){
+                if (item.getSpouse() == null) {
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();
                     item.setSpouse(spouse);
@@ -573,15 +573,15 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
-    public List<CustomerInfoView> transformToRelatedViewList(List<CustomerInfoView> customerInfoViews){
+    public List<CustomerInfoView> transformToRelatedViewList(List<CustomerInfoView> customerInfoViews) {
         List<CustomerInfoView> customerInfoViewList = new ArrayList<CustomerInfoView>();
         int customerIndex = 0;
-        for(CustomerInfoView item : customerInfoViews){
-            if(item.getRelation() != null && (item.getRelation().getId() == 3 || item.getRelation().getId() == 4)){
+        for (CustomerInfoView item : customerInfoViews) {
+            if (item.getRelation() != null && (item.getRelation().getId() == 3 || item.getRelation().getId() == 4)) {
                 item.setListIndex(customerIndex);
                 item.setSubIndex(customerInfoViewList.size());
                 item.setListName("RELATED");
-                if(item.getSpouse() == null){
+                if (item.getSpouse() == null) {
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();
                     item.setSpouse(spouse);
@@ -594,22 +594,22 @@ public class CustomerTransform extends Transform {
         return customerInfoViewList;
     }
 
-    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public HashMap<String, Customer> transformToHashMap(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase) {
         HashMap<String, Customer> customerHashMap = new HashMap<String, Customer>();
-        if(customerInfoViews != null){
-            for(CustomerInfoView item : customerInfoViews){
+        if (customerInfoViews != null) {
+            for (CustomerInfoView item : customerInfoViews) {
                 log.info("transformToModelList before item : {}", item);
                 Customer customer = transformToModel(item, workCasePrescreen, workCase);
                 log.info("transformToModelList after item : {}", customer);
 
-                if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                if (customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()) {
                     customerHashMap.put(customer.getIndividual().getCitizenId(), customer);
                 } else {
                     customerHashMap.put(customer.getJuristic().getRegistrationId(), customer);
                 }
 
-                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
-                    if(item.getSpouse() != null){
+                if (item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2) {
+                    if (item.getSpouse() != null) {
                         log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
                         Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
                         log.debug("transformToModelList after item (spouse) : {}", spouse);
@@ -624,17 +624,17 @@ public class CustomerTransform extends Transform {
         return customerHashMap;
     }
 
-    public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase){
+    public List<Customer> transformToModelList(List<CustomerInfoView> customerInfoViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase) {
         List<Customer> customerList = new ArrayList<Customer>();
 
-        if(customerInfoViews != null){
-            for(CustomerInfoView item : customerInfoViews){
+        if (customerInfoViews != null) {
+            for (CustomerInfoView item : customerInfoViews) {
                 log.info("transformToModelList before item : {}", item);
                 Customer customer = transformToModel(item, workCasePrescreen, workCase);
                 log.info("transformToModelList after item : {}", customer);
                 customerList.add(customer);
-                if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
-                    if(item.getSpouse() != null){
+                if (item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2) {
+                    if (item.getSpouse() != null) {
                         log.debug("transformToModelList before item (spouse) : {}", item.getSpouse());
                         Customer spouse = transformToModel(item.getSpouse(), workCasePrescreen, workCase);
                         log.debug("transformToModelList after item (spouse) : {}", spouse);

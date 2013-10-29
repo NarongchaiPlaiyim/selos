@@ -15,11 +15,11 @@ public class Nationality implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
     @Column(name = "active")
     private int active;
-    @Column(name = "code",length = 5)
+    @Column(name = "code", length = 5)
     private String code;
 
     public Nationality() {

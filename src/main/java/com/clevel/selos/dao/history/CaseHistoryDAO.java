@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CaseHistoryDAO extends GenericDAO<CaseHistory,Long> {
+public class CaseHistoryDAO extends GenericDAO<CaseHistory, Long> {
     @Inject
     private Logger log;
 

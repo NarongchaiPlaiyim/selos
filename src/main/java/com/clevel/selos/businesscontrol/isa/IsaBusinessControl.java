@@ -4,7 +4,6 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.IsaCreateUserView;
-import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -13,7 +12,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
-import java.sql.SQLException;
 
 @Stateless
 public class IsaBusinessControl implements Serializable {

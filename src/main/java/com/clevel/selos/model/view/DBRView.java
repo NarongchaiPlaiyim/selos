@@ -6,6 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBRView implements Serializable {
@@ -20,6 +21,25 @@ public class DBRView implements Serializable {
     private BigDecimal currentDBR;
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
+
+    public DBRView() {
+        reset();
+    }
+
+    public void reset() {
+        this.id = 0;
+        this.incomeFactor = 0;
+        this.workCase = new WorkCase();
+        this.dbrDetailViews = new ArrayList<DBRDetailView>();
+        this.monthlyIncome = BigDecimal.ZERO;
+        this.monthlyIncomeAdjust = BigDecimal.ZERO;
+        this.monthlyIncomePerMonth = BigDecimal.ZERO;
+        this.netMonthlyIncome = BigDecimal.ZERO;
+        this.currentDBR = BigDecimal.ZERO;
+        this.dbrBeforeRequest = BigDecimal.ZERO;
+        this.dbrInterest = BigDecimal.ZERO;
+    }
+
 
     public long getId() {
         return id;

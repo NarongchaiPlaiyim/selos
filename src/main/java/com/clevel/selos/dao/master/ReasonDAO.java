@@ -33,7 +33,7 @@ public class ReasonDAO extends GenericDAO<Reason, Integer> {
         return list;
     }
 
-    public List<Reason> getCancleList(){
+    public List<Reason> getCancleList() {
         log.debug("getCancleList");
 
         Criteria criteria = createCriteria();

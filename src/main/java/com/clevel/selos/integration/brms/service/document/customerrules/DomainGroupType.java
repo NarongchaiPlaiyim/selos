@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for DomainGroupType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="DomainGroupType">
  *   &lt;complexContent>
@@ -24,14 +24,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DomainGroupType", propOrder = {
-    "domainGroupName",
-    "code",
-    "codeDescription"
+        "domainGroupName",
+        "code",
+        "codeDescription"
 })
 public class DomainGroupType {
 
@@ -41,11 +39,9 @@ public class DomainGroupType {
 
     /**
      * Gets the value of the domainGroupName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDomainGroupName() {
         return domainGroupName;
@@ -53,11 +49,9 @@ public class DomainGroupType {
 
     /**
      * Sets the value of the domainGroupName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDomainGroupName(String value) {
         this.domainGroupName = value;
@@ -65,11 +59,9 @@ public class DomainGroupType {
 
     /**
      * Gets the value of the code property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCode() {
         return code;
@@ -77,11 +69,9 @@ public class DomainGroupType {
 
     /**
      * Sets the value of the code property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCode(String value) {
         this.code = value;
@@ -89,11 +79,9 @@ public class DomainGroupType {
 
     /**
      * Gets the value of the codeDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCodeDescription() {
         return codeDescription;
@@ -101,11 +89,9 @@ public class DomainGroupType {
 
     /**
      * Sets the value of the codeDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCodeDescription(String value) {
         this.codeDescription = value;

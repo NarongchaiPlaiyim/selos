@@ -8,11 +8,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="wrk_prescreen_business")
+@Table(name = "wrk_prescreen_business")
 public class PrescreenBusiness implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_PRESCRN_BIZ_ID", sequenceName="SEQ_WRK_PRESCRN_BIZ_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PRESCRN_BIZ_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PRESCRN_BIZ_ID", sequenceName = "SEQ_WRK_PRESCRN_BIZ_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PRESCRN_BIZ_ID")
     private long id;
 
     @OneToOne

@@ -1,18 +1,14 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -25,13 +21,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "decisionID",
-    "underwritingRequest"
+        "decisionID",
+        "underwritingRequest"
 })
 @XmlRootElement(name = "DecisionServiceRequest", namespace = "http://www.ilog.com/rules/DecisionService")
 public class DecisionServiceRequest {
@@ -43,11 +37,9 @@ public class DecisionServiceRequest {
 
     /**
      * Gets the value of the decisionID property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDecisionID() {
         return decisionID;
@@ -55,11 +47,9 @@ public class DecisionServiceRequest {
 
     /**
      * Sets the value of the decisionID property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDecisionID(String value) {
         this.decisionID = value;
@@ -67,11 +57,9 @@ public class DecisionServiceRequest {
 
     /**
      * Gets the value of the underwritingRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UnderwritingRequest }
-     *     
+     *
+     * @return possible object is
+     *         {@link UnderwritingRequest }
      */
     public UnderwritingRequest getUnderwritingRequest() {
         return underwritingRequest;
@@ -79,11 +67,9 @@ public class DecisionServiceRequest {
 
     /**
      * Sets the value of the underwritingRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UnderwritingRequest }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link UnderwritingRequest }
      */
     public void setUnderwritingRequest(UnderwritingRequest value) {
         this.underwritingRequest = value;

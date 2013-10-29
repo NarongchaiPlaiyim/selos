@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class JuristicDAO extends GenericDAO<Juristic,Long> {
+public class JuristicDAO extends GenericDAO<Juristic, Long> {
     @Inject
     private Logger log;
 
@@ -17,19 +17,19 @@ public class JuristicDAO extends GenericDAO<Juristic,Long> {
     public JuristicDAO() {
     }
 
-    public Juristic findByRegisterId(String registerId){
+    public Juristic findByRegisterId(String registerId) {
         log.info("findByCitizenId : {}", registerId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("registrationId", registerId));
-        Juristic juristic = (Juristic)criteria.uniqueResult();
+        Juristic juristic = (Juristic) criteria.uniqueResult();
 
         return juristic;
     }
 
-    public Customer findByRegistrationId(String registrationId, long workCasePreScreenId){
+    public Customer findByRegistrationId(String registrationId, long workCasePreScreenId) {
         log.info("findByCitizenId ::: registrationId : {}, workCasePreScreenId : {}", registrationId, workCasePreScreenId);
         String query = "SELECT customer FROM Juristic juristic WHERE juristic.customer.workCasePrescreen.id = " + workCasePreScreenId + " AND juristic.registrationId = '" + registrationId + "'";
-        Customer customer = (Customer)getSession().createQuery(query).uniqueResult();
+        Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
 
         return customer;
 

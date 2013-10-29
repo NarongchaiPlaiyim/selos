@@ -8,11 +8,11 @@ public class BasicInfoAccountPurposeView implements Serializable {
     private boolean isSelected;
     private OpenAccountPurpose purpose;
 
-    public BasicInfoAccountPurposeView(){
+    public BasicInfoAccountPurposeView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.purpose = new OpenAccountPurpose();
     }
 

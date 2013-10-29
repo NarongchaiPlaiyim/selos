@@ -15,8 +15,9 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+
 @Stateless
-public class CustomerAcceptanceControl  extends BusinessControl {
+public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
     Logger log;
     @Inject
@@ -31,7 +32,7 @@ public class CustomerAcceptanceControl  extends BusinessControl {
     ContactRecordDetailTransform contactRecordDetailTransform;
 
 
-    public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList,long workCaseId){
+    public void onSaveCustomerAcceptance(CustomerAcceptanceView customerAcceptanceView, List<ContactRecordDetailView> contactRecordDetailViewList, long workCaseId) {
 
         log.info("onSaveCustomerAcceptance begin");
         log.info("onSaveCustomerAcceptance begin workCaseId " + workCaseId);
@@ -39,7 +40,7 @@ public class CustomerAcceptanceControl  extends BusinessControl {
         log.info("contactRecordDetailViewList size begin  " + contactRecordDetailViewList.size());
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        CustomerAcceptance customerAcceptance = customerAcceptanceTransform.transformToModel( customerAcceptanceView );
+        CustomerAcceptance customerAcceptance = customerAcceptanceTransform.transformToModel(customerAcceptanceView);
         customerAcceptance.setWorkCase(workCase);
         log.info("customerAcceptance getWorkCase before persist is " + customerAcceptance.getWorkCase());
         log.info("customerAcceptance getApproveResult before  persist is " + customerAcceptance.getApproveResult());
@@ -47,15 +48,15 @@ public class CustomerAcceptanceControl  extends BusinessControl {
         log.info("persist customerAcceptance");
 
         log.info("persist customerAcceptance after id is " + customerAcceptance.getId());
-        if(contactRecordDetailViewList.size()>0){
-            List<ContactRecordDetail> contactRecordDetailListDelete =  contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptance.getId());
+        if (contactRecordDetailViewList.size() > 0) {
+            List<ContactRecordDetail> contactRecordDetailListDelete = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptance.getId());
             log.info("recordCallingDetailViewListDelete :: {}", contactRecordDetailListDelete.size());
 
             contactRecordDetailDAO.delete(contactRecordDetailListDelete);
             log.info("delete contactRecordDetailListDelete");
         }
 
-        List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList,customerAcceptance) ;
+        List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailTransform.transformToModel(contactRecordDetailViewList, customerAcceptance);
         log.info("contactRecordDetailTransform contactRecordDetailViewList before add size is " + contactRecordDetailList.size());
 
         contactRecordDetailDAO.persist(contactRecordDetailList);
@@ -63,47 +64,47 @@ public class CustomerAcceptanceControl  extends BusinessControl {
 
     }
 
-    public CustomerAcceptanceView getCustomerAcceptanceByWorkCase(long workCaseId){
+    public CustomerAcceptanceView getCustomerAcceptanceByWorkCase(long workCaseId) {
         log.info("getCustomerAcceptanceByWorkCase :: customer id  :: {}", workCaseId);
         CustomerAcceptanceView customerAcceptanceView = null;
 
-        try{
+        try {
             WorkCase workCase = new WorkCase();
             workCase.setId(workCaseId);
-            CustomerAcceptance customerAcceptance =  customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCase);
-            if(customerAcceptance != null){
-                log.info("customerAcceptance getId :: {} ",customerAcceptance.getId());
-                log.info("customerAcceptance getApproveResult :: {} ",customerAcceptance.getApproveResult());
-                customerAcceptanceView  = customerAcceptanceTransform.transformToView(customerAcceptance);
+            CustomerAcceptance customerAcceptance = customerAcceptanceDAO.findCustomerAcceptanceByWorkCase(workCase);
+            if (customerAcceptance != null) {
+                log.info("customerAcceptance getId :: {} ", customerAcceptance.getId());
+                log.info("customerAcceptance getApproveResult :: {} ", customerAcceptance.getApproveResult());
+                customerAcceptanceView = customerAcceptanceTransform.transformToView(customerAcceptance);
             }
-        }catch (Exception e){
-            log.error( "getCustomerAcceptanceView error :: " + e.getMessage());
-        }finally{
-            log.info( "getCustomerAcceptanceView end" );
+        } catch (Exception e) {
+            log.error("getCustomerAcceptanceView error :: " + e.getMessage());
+        } finally {
+            log.info("getCustomerAcceptanceView end");
         }
-        log.info("customerAcceptanceView getApproveResult :: {} ",customerAcceptanceView.getApproveResult());
+        log.info("customerAcceptanceView getApproveResult :: {} ", customerAcceptanceView.getApproveResult());
         return customerAcceptanceView;
     }
 
-    public List<ContactRecordDetailView> getContactRecordViewList(CustomerAcceptanceView customerAcceptanceView){
+    public List<ContactRecordDetailView> getContactRecordViewList(CustomerAcceptanceView customerAcceptanceView) {
         log.info("getRecordCallingViewList :: customerAcceptanceViewId  :: {}", customerAcceptanceView.getId());
         List<ContactRecordDetailView> contactRecordDetailViewList = null;
 
-        try{
-            List<ContactRecordDetail> contactRecordDetailList =  contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptanceView.getId());
+        try {
+            List<ContactRecordDetail> contactRecordDetailList = contactRecordDetailDAO.findRecordCallingByCustomerAcceptance(customerAcceptanceView.getId());
 
-            if(contactRecordDetailList.size() > 0){
+            if (contactRecordDetailList.size() > 0) {
                 contactRecordDetailViewList = contactRecordDetailTransform.transformToView(contactRecordDetailList);
             }
 
-        }catch (Exception e){
-            log.error( "getRecordCallingViewList error :: " + e.getMessage());
-        }finally{
-            log.info( "getRecordCallingViewList end" );
+        } catch (Exception e) {
+            log.error("getRecordCallingViewList error :: " + e.getMessage());
+        } finally {
+            log.info("getRecordCallingViewList end");
         }
 
         return contactRecordDetailViewList;
     }
-    
-    
+
+
 }

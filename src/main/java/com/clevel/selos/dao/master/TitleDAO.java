@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class TitleDAO extends GenericDAO<Title,Integer> {
+public class TitleDAO extends GenericDAO<Title, Integer> {
     @Inject
     private Logger log;
 
@@ -25,7 +25,7 @@ public class TitleDAO extends GenericDAO<Title,Integer> {
         criteria.add(Restrictions.eq("customerEntity", customerEntity));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
-        log.info("getListByCustomerType. (result size: {})",titles.size());
+        log.info("getListByCustomerType. (result size: {})", titles.size());
         return titles;
     }
 
@@ -35,7 +35,7 @@ public class TitleDAO extends GenericDAO<Title,Integer> {
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
         criteria.addOrder(Order.asc("id"));
         List<Title> titles = criteria.list();
-        log.info("getListByCustomerType. (result size: {})",titles.size());
+        log.info("getListByCustomerType. (result size: {})", titles.size());
         return titles;
     }
 }

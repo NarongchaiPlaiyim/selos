@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class ProductGroupDAO extends GenericDAO<ProductGroup,Integer> {
+public class ProductGroupDAO extends GenericDAO<ProductGroup, Integer> {
     @Inject
     private Logger log;
 
@@ -20,7 +20,7 @@ public class ProductGroupDAO extends GenericDAO<ProductGroup,Integer> {
     @Override
     public List<ProductGroup> findAll() {
         Criteria criteria = getSession().createCriteria(getEntityClass())
-                .add(Restrictions.eq("active",1));
+                .add(Restrictions.eq("active", 1));
         List<ProductGroup> list = criteria.list();
         return list;
     }

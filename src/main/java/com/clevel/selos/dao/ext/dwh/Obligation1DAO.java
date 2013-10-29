@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class Obligation1DAO extends GenericDAO<Obligation1,Long> {
+public class Obligation1DAO extends GenericDAO<Obligation1, Long> {
     @Inject
     private Logger log;
 
@@ -18,9 +18,9 @@ public class Obligation1DAO extends GenericDAO<Obligation1,Long> {
     }
 
     public List<Obligation1> getListByTmbCusIdList(List<String> tmbCusIdList) {
-        log.debug("getListByTmbCusId. (tmbCusIdList: {})",tmbCusIdList);
+        log.debug("getListByTmbCusId. (tmbCusIdList: {})", tmbCusIdList);
 
-        if(tmbCusIdList!=null && tmbCusIdList.size()>0){
+        if (tmbCusIdList != null && tmbCusIdList.size() > 0) {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.in("tmbCusId", tmbCusIdList));
 

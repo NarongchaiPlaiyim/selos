@@ -15,9 +15,9 @@ public class Stage implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 20)
+    @Column(name = "name", length = 20)
     private String name;
-    @Column(name = "description",length = 50)
+    @Column(name = "description", length = 50)
     private String description;
     @Column(name = "active")
     private int active;

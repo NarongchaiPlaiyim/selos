@@ -33,7 +33,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(PreScreenRequest inputModel)throws Exception{
+    public void convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception {
         applicationLevel = inputModel.getApplicationLevel();
         customerLevelList = inputModel.getCustomerLevelList();
         businessLevelList = inputModel.getApplicationLevel().getBusinessLevelList();
@@ -137,7 +137,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception{
+    public void convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception {
         applicationLevel = inputModel.getApplicationLevel();
         customerLevelList = inputModel.getCustomerLevelList();
         businessLevelList = inputModel.getApplicationLevel().getBusinessLevelList();
@@ -291,7 +291,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(DocCustomerRequest inputModel) throws Exception{
+    public void convertInputModelToRequestModel(DocCustomerRequest inputModel) throws Exception {
         applicationLevel = inputModel.getApplicationLevel();
         customerLevelList = inputModel.getCustomerLevelList();
 
@@ -337,7 +337,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(DocAppraisalRequest inputModel) throws Exception{
+    public void convertInputModelToRequestModel(DocAppraisalRequest inputModel) throws Exception {
         applicationLevel = inputModel.getApplicationLevel();
         customerLevelList = inputModel.getCustomerLevelList();
 
@@ -357,7 +357,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(StandardPricingIntRequest inputModel) throws Exception{
+    public void convertInputModelToRequestModel(StandardPricingIntRequest inputModel) throws Exception {
         applicationLevel = inputModel.getApplicationLevel();
         customerLevelList = inputModel.getCustomerLevelList();
 
@@ -381,7 +381,7 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception{
+    public void convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel({})", inputModel.toString());
         String applicationNumber = null;
         Date dateOfApplication = null;
@@ -403,7 +403,7 @@ public class ConvertImp implements ConvertInf, Serializable {
 
             applicationNumber = applicationLevel.getApplicationNumber();                //1
             dateOfApplication = applicationLevel.getProcessDate();                      //2
-            dateTimeValue     = applicationLevel.getAppInDate();                        //3
+            dateTimeValue = applicationLevel.getAppInDate();                        //3
             applicationLevel.getCollateralPotertialForPricing();                        //48
 //            productType = applicationLevel.getProductGroup();                           //110
             applicationLevel.getTotalProposedCreditLimit();         //112

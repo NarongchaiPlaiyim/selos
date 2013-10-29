@@ -29,14 +29,14 @@ public class ValidationImp implements Validation, Serializable {
 
     @Override
     public void validation(NCRSInputModel inputModel) throws Exception {
-        if(null == inputModel){
+        if (null == inputModel) {
             throw new ValidationException(required, validationMsg.get(required, "NCRSInputModel"));
         }
-        if(!ValidationUtil.isValueInRange(1, 10, inputModel.getUserId())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
+        if (!ValidationUtil.isValueInRange(1, 10, inputModel.getUserId())) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "User ID"));
         }
-        if(!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppNumber"));
+        if (!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "AppNumber"));
         }
         /*if(!ValidationUtil.isValueInRange(20, 20, inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
@@ -48,46 +48,47 @@ public class ValidationImp implements Validation, Serializable {
             throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
         }    */
         ArrayList<NCRSModel> ncrsModelArrayList = inputModel.getNcrsModelArrayList();
-        if(null == ncrsModelArrayList){
+        if (null == ncrsModelArrayList) {
             throw new ValidationException(required, validationMsg.get(required, "NCRS Model ArrayList"));
         }
-        if(!ValidationUtil.isValueInRange(1, 99, ncrsModelArrayList)){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "NCRS Model ArrayList"));
+        if (!ValidationUtil.isValueInRange(1, 99, ncrsModelArrayList)) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "NCRS Model ArrayList"));
         }
-        for(NCRSModel ncrsModel : ncrsModelArrayList){
-            if(!ValidationUtil.isValueInRange(02, 02, ncrsModel.getTitleNameCode())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Title Name"));
+        for (NCRSModel ncrsModel : ncrsModelArrayList) {
+            if (!ValidationUtil.isValueInRange(02, 02, ncrsModel.getTitleNameCode())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Title Name"));
             }
-            if(!ValidationUtil.isValueInRange(1, 30, ncrsModel.getFirstName())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "First Name"));
+            if (!ValidationUtil.isValueInRange(1, 30, ncrsModel.getFirstName())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "First Name"));
             }
-            if(!ValidationUtil.isValueInRange(1, 50, ncrsModel.getLastName())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Last Name"));
+            if (!ValidationUtil.isValueInRange(1, 50, ncrsModel.getLastName())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Last Name"));
             }
-            if(!ValidationUtil.isValueInRange(13, 20, ncrsModel.getCitizenId())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Citizen ID"));
+            if (!ValidationUtil.isValueInRange(13, 20, ncrsModel.getCitizenId())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Citizen ID"));
             }
-            if(!ValidationUtil.isNumeric(ncrsModel.getCitizenId())){
+            if (!ValidationUtil.isNumeric(ncrsModel.getCitizenId())) {
                 throw new ValidationException(required, validationMsg.get(required, "Citizen ID"));
             }
-            if(!ValidationUtil.isValueInRange(2, 2, ncrsModel.getIdType())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "ID Type"));
+            if (!ValidationUtil.isValueInRange(2, 2, ncrsModel.getIdType())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "ID Type"));
             }
-            if(!ValidationUtil.isValueInRange(2, 2, ncrsModel.getCountryCode())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Country Code"));
+            if (!ValidationUtil.isValueInRange(2, 2, ncrsModel.getCountryCode())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Country Code"));
             }
         }
     }
+
     @Override
     public void validation(NCCRSInputModel inputModel) throws Exception {
-        if(null == inputModel){
-            throw new ValidationException(required,validationMsg.get(required, "NCCRSInputModel"));
+        if (null == inputModel) {
+            throw new ValidationException(required, validationMsg.get(required, "NCCRSInputModel"));
         }
-        if(!ValidationUtil.isValueInRange(1,10,inputModel.getUserId())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "User ID"));
+        if (!ValidationUtil.isValueInRange(1, 10, inputModel.getUserId())) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "User ID"));
         }
-        if(!ValidationUtil.isValueInRange(16,16,inputModel.getAppRefNumber())){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "AppNumber"));
+        if (!ValidationUtil.isValueInRange(16, 16, inputModel.getAppRefNumber())) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "AppNumber"));
         }
         /*if(!ValidationUtil.isValueInRange(20,20,inputModel.getCANumber())){
             throw new ValidationException(invalid,  validationMsg.get(invalid, "CA Number"));
@@ -99,21 +100,21 @@ public class ValidationImp implements Validation, Serializable {
             throw new ValidationException(required, validationMsg.get(required, "Reference Tel"));
         }   */
         ArrayList<NCCRSModel> nccrsModelArrayList = inputModel.getNccrsModelArrayList();
-        if(null == nccrsModelArrayList){
+        if (null == nccrsModelArrayList) {
             throw new ValidationException(required, validationMsg.get(required, "NCCRS Model ArrayList"));
         }
-        if(!ValidationUtil.isValueInRange(1, 99, nccrsModelArrayList)){
-            throw new ValidationException(invalid,  validationMsg.get(invalid, "NCCRS Model ArrayList"));
+        if (!ValidationUtil.isValueInRange(1, 99, nccrsModelArrayList)) {
+            throw new ValidationException(invalid, validationMsg.get(invalid, "NCCRS Model ArrayList"));
         }
-        for(NCCRSModel nccrsModel : nccrsModelArrayList){
-            if(!ValidationUtil.isValueInRange(7, 7, nccrsModel.getRegistType())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Regist Type"));
+        for (NCCRSModel nccrsModel : nccrsModelArrayList) {
+            if (!ValidationUtil.isValueInRange(7, 7, nccrsModel.getRegistType())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Regist Type"));
             }
-            if(!ValidationUtil.isValueInRange(1, 99, nccrsModel.getRegistId())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Regist ID"));
+            if (!ValidationUtil.isValueInRange(1, 99, nccrsModel.getRegistId())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Regist ID"));
             }
-            if(!ValidationUtil.isValueInRange(1, 90, nccrsModel.getCompanyName())){
-                throw new ValidationException(invalid,  validationMsg.get(invalid, "Company Name"));
+            if (!ValidationUtil.isValueInRange(1, 90, nccrsModel.getCompanyName())) {
+                throw new ValidationException(invalid, validationMsg.get(invalid, "Company Name"));
             }
         }
     }

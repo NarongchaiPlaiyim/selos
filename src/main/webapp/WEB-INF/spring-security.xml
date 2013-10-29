@@ -10,30 +10,32 @@
 
     <http auto-config="false">
         <intercept-url pattern="/admin/**" access="ROLE_SYSTEM"/>
-        <intercept-url pattern="/site/**" access="ROLE_SYSTEM,ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_HSME,ROLE_CHIEF,ROLE_UW,ROLE_SSO"/>
+        <intercept-url pattern="/site/**"
+                       access="ROLE_SYSTEM,ROLE_ABDM,ROLE_BDM,ROLE_ZM,ROLE_RM,ROLE_HSME,ROLE_CHIEF,ROLE_UW,ROLE_SSO"/>
         <intercept-url pattern="/isa/**" access="ROLE_ISA"/>
-        <form-login login-page="/login.jsf" />
+        <form-login login-page="/login.jsf"/>
         <logout invalidate-session="true" delete-cookies="true" logout-success-url="/login.jsf"/>
-        <access-denied-handler error-page="/error/accessDenied.jsf" />
+        <access-denied-handler error-page="/error/accessDenied.jsf"/>
         <anonymous enabled="false"/>
-        <custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER" />
+        <custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER"/>
         <session-management>
             <concurrency-control max-sessions="1" error-if-maximum-exceeded="false"
                                  session-registry-alias="sessionRegistry" expired-url="/login.jsf"/>
         </session-management>
     </http>
 
-    <authentication-manager />
+    <authentication-manager/>
 
     <bean:bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
-        <bean:constructor-arg name="securityContextRepository" ref="httpSessionSecurityContextRepository" />
-        <bean:property name="invalidSessionStrategy" ref="jsfRedirectStrategy" />
+        <bean:constructor-arg name="securityContextRepository" ref="httpSessionSecurityContextRepository"/>
+        <bean:property name="invalidSessionStrategy" ref="jsfRedirectStrategy"/>
     </bean:bean>
 
     <bean:bean id="jsfRedirectStrategy" class="com.clevel.selos.security.JSFRedirectionStrategy">
-        <bean:property name="invalidSessionUrl" value="/login.jsf" />
+        <bean:property name="invalidSessionUrl" value="/login.jsf"/>
     </bean:bean>
 
-    <bean:bean id="httpSessionSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
+    <bean:bean id="httpSessionSecurityContextRepository"
+               class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
 
 </bean:beans>

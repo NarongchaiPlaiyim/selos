@@ -12,25 +12,25 @@ import java.util.Date;
 @Table(name = "adt_ecm_activity")
 public class ECMActivity implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_ADT_ECM_ID", sequenceName="SEQ_ADT_ECM_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_ADT_ECM_ID")
+    @SequenceGenerator(name = "SEQ_ADT_ECM_ID", sequenceName = "SEQ_ADT_ECM_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ADT_ECM_ID")
     private long id;
-    @Column(name="user_id", nullable=false)
+    @Column(name = "user_id", nullable = false)
     private String userId;
-    @Column(name="action", nullable=false)
+    @Column(name = "action", nullable = false)
     private String action;
-    @Column(name="action_desc", length = 500)
+    @Column(name = "action_desc", length = 500)
     private String actionDesc;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="action_date", nullable=false)
+    @Column(name = "action_date", nullable = false)
     private Date actionDate;
-    @Column(name="result", nullable=false)
+    @Column(name = "result", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionResult actionResult;
-    @Column(name="result_desc", length = 500)
+    @Column(name = "result_desc", length = 500)
     private String resultDesc;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="result_date", nullable=false)
+    @Column(name = "result_date", nullable = false)
     private Date resultDate;
     @Column(name = "link_key")
     private String linkKey;

@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.document.customerrules;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * <p>Java class for ResultType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="ResultType">
  *   &lt;complexContent>
@@ -40,26 +40,24 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ResultType", propOrder = {
-    "id",
-    "code",
-    "type",
-    "description",
-    "severity",
-    "checkingCriteria",
-    "screen",
-    "field",
-    "messageDisplay",
-    "underwritingAction",
-    "stringValue",
-    "numericValue",
-    "color",
-    "ruleName",
-    "attribute"
+        "id",
+        "code",
+        "type",
+        "description",
+        "severity",
+        "checkingCriteria",
+        "screen",
+        "field",
+        "messageDisplay",
+        "underwritingAction",
+        "stringValue",
+        "numericValue",
+        "color",
+        "ruleName",
+        "attribute"
 })
 public class ResultType {
 
@@ -82,11 +80,9 @@ public class ResultType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -94,11 +90,9 @@ public class ResultType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -106,11 +100,9 @@ public class ResultType {
 
     /**
      * Gets the value of the code property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCode() {
         return code;
@@ -118,11 +110,9 @@ public class ResultType {
 
     /**
      * Sets the value of the code property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCode(String value) {
         this.code = value;
@@ -130,11 +120,9 @@ public class ResultType {
 
     /**
      * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getType() {
         return type;
@@ -142,11 +130,9 @@ public class ResultType {
 
     /**
      * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setType(String value) {
         this.type = value;
@@ -154,11 +140,9 @@ public class ResultType {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDescription() {
         return description;
@@ -166,11 +150,9 @@ public class ResultType {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -178,11 +160,9 @@ public class ResultType {
 
     /**
      * Gets the value of the severity property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSeverity() {
         return severity;
@@ -190,11 +170,9 @@ public class ResultType {
 
     /**
      * Sets the value of the severity property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSeverity(String value) {
         this.severity = value;
@@ -202,11 +180,9 @@ public class ResultType {
 
     /**
      * Gets the value of the checkingCriteria property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCheckingCriteria() {
         return checkingCriteria;
@@ -214,11 +190,9 @@ public class ResultType {
 
     /**
      * Sets the value of the checkingCriteria property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCheckingCriteria(String value) {
         this.checkingCriteria = value;
@@ -226,11 +200,9 @@ public class ResultType {
 
     /**
      * Gets the value of the screen property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getScreen() {
         return screen;
@@ -238,11 +210,9 @@ public class ResultType {
 
     /**
      * Sets the value of the screen property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setScreen(String value) {
         this.screen = value;
@@ -250,11 +220,9 @@ public class ResultType {
 
     /**
      * Gets the value of the field property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getField() {
         return field;
@@ -262,11 +230,9 @@ public class ResultType {
 
     /**
      * Sets the value of the field property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setField(String value) {
         this.field = value;
@@ -274,11 +240,9 @@ public class ResultType {
 
     /**
      * Gets the value of the messageDisplay property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getMessageDisplay() {
         return messageDisplay;
@@ -286,11 +250,9 @@ public class ResultType {
 
     /**
      * Sets the value of the messageDisplay property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setMessageDisplay(String value) {
         this.messageDisplay = value;
@@ -298,11 +260,9 @@ public class ResultType {
 
     /**
      * Gets the value of the underwritingAction property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getUnderwritingAction() {
         return underwritingAction;
@@ -310,11 +270,9 @@ public class ResultType {
 
     /**
      * Sets the value of the underwritingAction property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setUnderwritingAction(String value) {
         this.underwritingAction = value;
@@ -322,11 +280,9 @@ public class ResultType {
 
     /**
      * Gets the value of the stringValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getStringValue() {
         return stringValue;
@@ -334,11 +290,9 @@ public class ResultType {
 
     /**
      * Sets the value of the stringValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStringValue(String value) {
         this.stringValue = value;
@@ -346,11 +300,9 @@ public class ResultType {
 
     /**
      * Gets the value of the numericValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getNumericValue() {
         return numericValue;
@@ -358,11 +310,9 @@ public class ResultType {
 
     /**
      * Sets the value of the numericValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setNumericValue(BigDecimal value) {
         this.numericValue = value;
@@ -370,11 +320,9 @@ public class ResultType {
 
     /**
      * Gets the value of the color property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getColor() {
         return color;
@@ -382,11 +330,9 @@ public class ResultType {
 
     /**
      * Sets the value of the color property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setColor(String value) {
         this.color = value;
@@ -394,11 +340,9 @@ public class ResultType {
 
     /**
      * Gets the value of the ruleName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRuleName() {
         return ruleName;
@@ -406,11 +350,9 @@ public class ResultType {
 
     /**
      * Sets the value of the ruleName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRuleName(String value) {
         this.ruleName = value;
@@ -418,25 +360,23 @@ public class ResultType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

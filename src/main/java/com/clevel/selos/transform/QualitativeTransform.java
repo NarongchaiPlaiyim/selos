@@ -16,7 +16,7 @@ public class QualitativeTransform extends Transform {
     @Inject
     Logger log;
 
-    public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView ,WorkCase workCase ,User user){
+    public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");
         QualitativeA qualitativeA = new QualitativeA();
 //        Date createDate = DateTime.now().toDate();
@@ -24,14 +24,14 @@ public class QualitativeTransform extends Transform {
 //        log.info("transformQualitativeAToModel createDate  :: {} ",createDate);
 //        log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
 
-        if(qualitativeAView.getId() != 0){
+        if (qualitativeAView.getId() != 0) {
             qualitativeA.setId(qualitativeAView.getId());
         }
 
         qualitativeA.setActive(true);
         qualitativeA.setWorkCase(workCase);
 
-        if(qualitativeA.getId() == 0){
+        if (qualitativeA.getId() == 0) {
             qualitativeA.setCreateBy(user);
             qualitativeA.setCreateDate(qualitativeAView.getCreateDate());
         }
@@ -112,7 +112,7 @@ public class QualitativeTransform extends Transform {
         return qualitativeA;
     }
 
-    public QualitativeView transformQualitativeAToView(QualitativeA qualitativeA){
+    public QualitativeView transformQualitativeAToView(QualitativeA qualitativeA) {
         QualitativeView qualitativeView = new QualitativeView();
 
         qualitativeView.setId(qualitativeA.getId());
@@ -195,19 +195,19 @@ public class QualitativeTransform extends Transform {
         return qualitativeView;
     }
 
-    public QualitativeB transformQualitativeBToModel(QualitativeView qualitativeBView,WorkCase workCase,User user){
+    public QualitativeB transformQualitativeBToModel(QualitativeView qualitativeBView, WorkCase workCase, User user) {
         QualitativeB qualitativeB = new QualitativeB();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
 
-        if(qualitativeBView.getId() != 0){
+        if (qualitativeBView.getId() != 0) {
             qualitativeB.setId(qualitativeBView.getId());
         }
 
         qualitativeB.setActive(true);
         qualitativeB.setWorkCase(workCase);
 
-        if(qualitativeB.getId() == 0){
+        if (qualitativeB.getId() == 0) {
             qualitativeB.setCreateBy(user);
             qualitativeB.setCreateDate(createDate);
         }
@@ -288,7 +288,7 @@ public class QualitativeTransform extends Transform {
     }
 
 
-    public QualitativeView transformQualitativeBToView(QualitativeB qualitativeB){
+    public QualitativeView transformQualitativeBToView(QualitativeB qualitativeB) {
         QualitativeView qualitativeBView = new QualitativeView();
 
         qualitativeBView.setId(qualitativeB.getId());
@@ -370,14 +370,14 @@ public class QualitativeTransform extends Transform {
     }
 
 
-   public boolean convertToView(int dbObject){
-        return dbObject==1?true:false;
+    public boolean convertToView(int dbObject) {
+        return dbObject == 1 ? true : false;
     }
 
-    public int convertToDB(boolean viewObject){
-        if(viewObject == true){
+    public int convertToDB(boolean viewObject) {
+        if (viewObject == true) {
             return 1;
-        }else{
+        } else {
             return 0;
         }
     }

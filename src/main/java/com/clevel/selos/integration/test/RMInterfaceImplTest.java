@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Alternative
-public class RMInterfaceImplTest implements RMInterface ,Serializable {
+public class RMInterfaceImplTest implements RMInterface, Serializable {
     @Inject
     @RM
     Logger log;
@@ -28,10 +28,10 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
 
 
     @Override
-    public IndividualResult getIndividualInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
+    public IndividualResult getIndividualInfo(String userId, String customerId, DocumentType documentType, SearchBy searchBy) {
 
         log.debug("======= IndividualServiceTest =======");
-        IndividualResult individualResult=new IndividualResult();
+        IndividualResult individualResult = new IndividualResult();
         individualResult.setCustomerId(customerId);
         individualResult.setActionResult(ActionResult.SUCCESS);
 //        IndividualModel individualModel = new IndividualModel();
@@ -68,7 +68,7 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CorporateResult getCorporateInfo(String userId,String customerId, DocumentType documentType,SearchBy searchBy) {
+    public CorporateResult getCorporateInfo(String userId, String customerId, DocumentType documentType, SearchBy searchBy) {
         log.debug("======= CorporateServiceTest =======");
 
         CorporateResult corporateResult = new CorporateResult();
@@ -112,59 +112,59 @@ public class RMInterfaceImplTest implements RMInterface ,Serializable {
     }
 
     @Override
-    public CustomerAccountResult getCustomerAccountInfo(String userId,String customerId) {
+    public CustomerAccountResult getCustomerAccountInfo(String userId, String customerId) {
 
         log.debug("======= CustomerAccountServiceTest =======");
 
         CustomerAccountResult customerAccountResult = new CustomerAccountResult();
         customerAccountResult.setActionResult(ActionResult.SUCCESS);
 
-        List<CustomerAccountListModel> listModelList=new ArrayList<CustomerAccountListModel>();
+        List<CustomerAccountListModel> listModelList = new ArrayList<CustomerAccountListModel>();
 
-       CustomerAccountListModel customerAccountListModel;
-                    customerAccountListModel = new CustomerAccountListModel();
-                    customerAccountListModel.setRel("PRI");
-                    customerAccountListModel.setCd("IND");
-                    customerAccountListModel.setpSO("P");
-                    customerAccountListModel.setAppl("AC");
-                    customerAccountListModel.setAccountNo("00000000000022");
-                    customerAccountListModel.setTrlr("");
-                    customerAccountListModel.setBalance(new BigDecimal(0.00));
-                    customerAccountListModel.setDir("D");
-                    customerAccountListModel.setProd("");
-                    customerAccountListModel.setCtl1("0011");
-                    customerAccountListModel.setCtl2("0000");
-                    customerAccountListModel.setCtl3("0000");
-                    customerAccountListModel.setCtl4("0000");
-                    customerAccountListModel.setStatus("");
-                    customerAccountListModel.setDate("11/03/2546");
-                    customerAccountListModel.setName("นาย ชรัหาญ");
-                    customerAccountListModel.setCitizenId("3100101068917");
-                    customerAccountListModel.setCurr("THB");
-                    listModelList.add(customerAccountListModel);
+        CustomerAccountListModel customerAccountListModel;
+        customerAccountListModel = new CustomerAccountListModel();
+        customerAccountListModel.setRel("PRI");
+        customerAccountListModel.setCd("IND");
+        customerAccountListModel.setpSO("P");
+        customerAccountListModel.setAppl("AC");
+        customerAccountListModel.setAccountNo("00000000000022");
+        customerAccountListModel.setTrlr("");
+        customerAccountListModel.setBalance(new BigDecimal(0.00));
+        customerAccountListModel.setDir("D");
+        customerAccountListModel.setProd("");
+        customerAccountListModel.setCtl1("0011");
+        customerAccountListModel.setCtl2("0000");
+        customerAccountListModel.setCtl3("0000");
+        customerAccountListModel.setCtl4("0000");
+        customerAccountListModel.setStatus("");
+        customerAccountListModel.setDate("11/03/2546");
+        customerAccountListModel.setName("นาย ชรัหาญ");
+        customerAccountListModel.setCitizenId("3100101068917");
+        customerAccountListModel.setCurr("THB");
+        listModelList.add(customerAccountListModel);
 
-                    customerAccountListModel = new CustomerAccountListModel();
-                    customerAccountListModel.setRel("PRI");
-                    customerAccountListModel.setCd("IND");
-                    customerAccountListModel.setpSO("P");
-                    customerAccountListModel.setAppl("AL");
-                    customerAccountListModel.setAccountNo("00015914591004");
-                    customerAccountListModel.setTrlr("");
-                    customerAccountListModel.setBalance(new BigDecimal(0.00));
-                    customerAccountListModel.setDir("D");
-                    customerAccountListModel.setProd("");
-                    customerAccountListModel.setCtl1("0011");
-                    customerAccountListModel.setCtl2("0001");
-                    customerAccountListModel.setCtl3("0001");
-                    customerAccountListModel.setCtl4("0000");
-                    customerAccountListModel.setStatus("");
-                    customerAccountListModel.setDate("00/00/0000");
-                    customerAccountListModel.setName("นาย ชรัหาญ");
-                    customerAccountListModel.setCitizenId("3100101068917");
-                    customerAccountListModel.setCurr("");
-                    listModelList.add(customerAccountListModel);
+        customerAccountListModel = new CustomerAccountListModel();
+        customerAccountListModel.setRel("PRI");
+        customerAccountListModel.setCd("IND");
+        customerAccountListModel.setpSO("P");
+        customerAccountListModel.setAppl("AL");
+        customerAccountListModel.setAccountNo("00015914591004");
+        customerAccountListModel.setTrlr("");
+        customerAccountListModel.setBalance(new BigDecimal(0.00));
+        customerAccountListModel.setDir("D");
+        customerAccountListModel.setProd("");
+        customerAccountListModel.setCtl1("0011");
+        customerAccountListModel.setCtl2("0001");
+        customerAccountListModel.setCtl3("0001");
+        customerAccountListModel.setCtl4("0000");
+        customerAccountListModel.setStatus("");
+        customerAccountListModel.setDate("00/00/0000");
+        customerAccountListModel.setName("นาย ชรัหาญ");
+        customerAccountListModel.setCitizenId("3100101068917");
+        customerAccountListModel.setCurr("");
+        listModelList.add(customerAccountListModel);
 
-            customerAccountResult.setAccountListModels(listModelList);
+        customerAccountResult.setAccountListModels(listModelList);
 
         return customerAccountResult;
     }

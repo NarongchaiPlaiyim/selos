@@ -11,22 +11,22 @@ import java.util.Date;
 @Table(name = "his_case_history")
 public class CaseHistory implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_HIS_CASE_ID", sequenceName="SEQ_HIS_CASE_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_CASE_ID")
+    @SequenceGenerator(name = "SEQ_HIS_CASE_ID", sequenceName = "SEQ_HIS_CASE_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HIS_CASE_ID")
     private long id;
-    @Column(name="step_id")
+    @Column(name = "step_id")
     private int stepId;
-    @Column(name="step_name")
+    @Column(name = "step_name")
     private String stepName;
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private String userId;
-    @Column(name="action")
+    @Column(name = "action")
     private String action;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
-    @Column(name="ca_number")
+    @Column(name = "ca_number")
     private String caNumber;
-    @Column(name="app_number")
+    @Column(name = "app_number")
     private String appNumber;
 
     public CaseHistory() {

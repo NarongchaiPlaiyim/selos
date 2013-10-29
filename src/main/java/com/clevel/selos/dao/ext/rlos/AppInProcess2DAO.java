@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class AppInProcess2DAO extends GenericDAO<AppInProcess2,Long> {
+public class AppInProcess2DAO extends GenericDAO<AppInProcess2, Long> {
     @Inject
     private Logger log;
 

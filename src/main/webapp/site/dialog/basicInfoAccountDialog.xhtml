@@ -28,7 +28,7 @@
                                        itemValue="#{oepnAccountType.id}"/>
                         <p:ajax event="change"
                                 listener="#{basicInfo.onChangeAccountType}"
-                                update=":basicInfoAccountDlgForm:accountProduct" />
+                                update=":basicInfoAccountDlgForm:accountProduct"/>
                     </p:selectOneMenu>
                 </td>
             </tr>
@@ -53,7 +53,8 @@
                     <h:outputText value="#{msg.get('app.basicInfo.dialog.purpose')}"/>
                 </td>
                 <td>
-                    <p:dataGrid value="#{basicInfo.basicInfoAccountPurposeViewList}" var="purposeList" columns="1" style="border: 0">
+                    <p:dataGrid value="#{basicInfo.basicInfoAccountPurposeViewList}" var="purposeList" columns="1"
+                                style="border: 0">
                         <p:column>
                             <h:selectBooleanCheckbox value="#{purposeList.selected}"/>
                             <h:outputText value="#{purposeList.purpose.name}"/>
@@ -64,21 +65,22 @@
             <tr>
                 <td class="center" colspan="2" style="margin-top: 20px;">
                     <p:commandButton id="dlgSaveBasicAccBtn"
-                            value="#{msg.get('app.button.ok')}"
-                            styleClass="small"
-                            actionListener="#{basicInfo.addAccount}"
-                            process="@form"
-                            update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
-                            oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
-                            <!--oncomplete="basicInfoAccountDlg.hide()"/>-->
+                                     value="#{msg.get('app.button.ok')}"
+                                     styleClass="small"
+                                     actionListener="#{basicInfo.addAccount}"
+                                     process="@form"
+                                     update=":basicInfoAccountDlgForm :frmMain:resultTableOpeningAccount"
+                                     oncomplete="handleBasicInfoAccountRequest(xhr, status, args)"/>
+                    <!--oncomplete="basicInfoAccountDlg.hide()"/>-->
                     <p:commandButton type="button" value="#{msg.get('app.button.cancel')}" styleClass="small"
                                      onclick="basicInfoAccountDlg.hide()" update=":basicInfoAccountDlgForm"/>
                 </td>
             </tr>
         </table>
     </h:form>
-    <p:blockUI widgetVar="blockBasicInfoAccDlg" block="basicInfoAccountDlgForm" trigger=":basicInfoAccountDlgForm:dlgSaveBasicAccBtn">
-        LOADING<br />
+    <p:blockUI widgetVar="blockBasicInfoAccDlg" block="basicInfoAccountDlgForm"
+               trigger=":basicInfoAccountDlgForm:dlgSaveBasicAccBtn">
+        LOADING<br/>
         <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
     </p:blockUI>
 </ui:composition>

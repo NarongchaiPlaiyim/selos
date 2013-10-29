@@ -16,11 +16,11 @@ public class CustomerInfoSummaryView implements Serializable {
     private List<CustomerInfoView> guarantorCustomerViewList;
     private List<CustomerInfoView> relatedCustomerViewList;
 
-    public CustomerInfoSummaryView(){
+    public CustomerInfoSummaryView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.customerEntity = new CustomerEntity();
         this.customerInfoViewList = new ArrayList<CustomerInfoView>();
         this.borrowerCustomerViewList = new ArrayList<CustomerInfoView>();

@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -42,15 +42,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "searchResult",
-    "lastPageFlag",
-    "personalListSection",
-    "personalDetailSection"
+        "searchResult",
+        "lastPageFlag",
+        "personalListSection",
+        "personalDetailSection"
 })
 public class Body {
 
@@ -62,11 +60,9 @@ public class Body {
 
     /**
      * Gets the value of the searchResult property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSearchResult() {
         return searchResult;
@@ -74,11 +70,9 @@ public class Body {
 
     /**
      * Sets the value of the searchResult property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSearchResult(String value) {
         this.searchResult = value;
@@ -86,11 +80,9 @@ public class Body {
 
     /**
      * Gets the value of the lastPageFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLastPageFlag() {
         return lastPageFlag;
@@ -98,11 +90,9 @@ public class Body {
 
     /**
      * Sets the value of the lastPageFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLastPageFlag(String value) {
         this.lastPageFlag = value;
@@ -110,11 +100,9 @@ public class Body {
 
     /**
      * Gets the value of the personalListSection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PersonalListSection }
-     *     
+     *
+     * @return possible object is
+     *         {@link PersonalListSection }
      */
     public PersonalListSection getPersonalListSection() {
         return personalListSection;
@@ -122,11 +110,9 @@ public class Body {
 
     /**
      * Sets the value of the personalListSection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PersonalListSection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link PersonalListSection }
      */
     public void setPersonalListSection(PersonalListSection value) {
         this.personalListSection = value;
@@ -134,11 +120,9 @@ public class Body {
 
     /**
      * Gets the value of the personalDetailSection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PersonalDetailSection }
-     *     
+     *
+     * @return possible object is
+     *         {@link PersonalDetailSection }
      */
     public PersonalDetailSection getPersonalDetailSection() {
         return personalDetailSection;
@@ -146,11 +130,9 @@ public class Body {
 
     /**
      * Sets the value of the personalDetailSection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PersonalDetailSection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link PersonalDetailSection }
      */
     public void setPersonalDetailSection(PersonalDetailSection value) {
         this.personalDetailSection = value;

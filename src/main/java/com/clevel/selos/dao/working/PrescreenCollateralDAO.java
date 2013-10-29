@@ -16,26 +16,26 @@ public class PrescreenCollateralDAO extends GenericDAO<PrescreenCollateral, Long
     private Logger log;
 
     @Inject
-    public PrescreenCollateralDAO(){
+    public PrescreenCollateralDAO() {
 
     }
 
-    public List<PrescreenCollateral> findByPreScreen(Prescreen prescreen){
+    public List<PrescreenCollateral> findByPreScreen(Prescreen prescreen) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen", prescreen));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenCollateral> prescreenBusinessList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenBusinessList.size());
 
         return prescreenBusinessList;
     }
 
-    public List<PrescreenCollateral> findByPreScreenId(long prescreenId){
+    public List<PrescreenCollateral> findByPreScreenId(long prescreenId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen.id", prescreenId));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenCollateral> prescreenBusinessList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenBusinessList.size());
 
         return prescreenBusinessList;
     }

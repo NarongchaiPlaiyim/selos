@@ -8,18 +8,17 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the com.tmb.sme.data.responsesearchcorporatecustomer package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the com.tmb.sme.data.responsesearchcorporatecustomer package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -28,14 +27,12 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.tmb.sme.data.responsesearchcorporatecustomer
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link CorporateDetail }
-     * 
      */
     public CorporateDetail createCorporateDetail() {
         return new CorporateDetail();
@@ -43,7 +40,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CorporateList }
-     * 
      */
     public CorporateList createCorporateList() {
         return new CorporateList();
@@ -51,7 +47,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CorporateCustomerDetailSection }
-     * 
      */
     public CorporateCustomerDetailSection createCorporateCustomerDetailSection() {
         return new CorporateCustomerDetailSection();
@@ -59,7 +54,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link ResSearchCorporateCustomer }
-     * 
      */
     public ResSearchCorporateCustomer createResSearchCorporateCustomer() {
         return new ResSearchCorporateCustomer();
@@ -67,7 +61,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Body }
-     * 
      */
     public Body createBody() {
         return new Body();
@@ -75,7 +68,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link CorporateCustomerListSection }
-     * 
      */
     public CorporateCustomerListSection createCorporateCustomerListSection() {
         return new CorporateCustomerListSection();
@@ -83,7 +75,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link Header }
-     * 
      */
     public Header createHeader() {
         return new Header();
@@ -91,7 +82,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ResSearchCorporateCustomer }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://data.sme.tmb.com/responseSearchCorporateCustomer", name = "resSearchCorporateCustomer")
     public JAXBElement<ResSearchCorporateCustomer> createResSearchCorporateCustomer(ResSearchCorporateCustomer value) {

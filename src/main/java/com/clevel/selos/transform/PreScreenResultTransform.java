@@ -20,29 +20,28 @@ import java.util.List;
 public class PreScreenResultTransform extends Transform {
 
 
-
     @Inject
-    public PreScreenResultTransform(){
+    public PreScreenResultTransform() {
 
     }
 
-    public PreScreenRequest transformToRequest(List<CustomerInfoView> customerInfoViewList){
+    public PreScreenRequest transformToRequest(List<CustomerInfoView> customerInfoViewList) {
         PreScreenRequest preScreenRequest = new PreScreenRequest();
         //TODO Transform to preScreenRequest
         return preScreenRequest;
     }
 
-    public List<PreScreenResponseView> transformResponseToView(List<PreScreenResponse> presCreenResponses){
+    public List<PreScreenResponseView> transformResponseToView(List<PreScreenResponse> presCreenResponses) {
         List<PreScreenResponseView> preScreenResponseList = new ArrayList<PreScreenResponseView>();
         //TODO Transform to preScreenResponse
         return preScreenResponseList;
     }
 
-    public List<PreScreenResponseView> tranformToCustomerResponse(List<PreScreenResponseView> preScreenResponseViews){
+    public List<PreScreenResponseView> tranformToCustomerResponse(List<PreScreenResponseView> preScreenResponseViews) {
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        for(PreScreenResponseView item : preScreenResponseViews){
+        for (PreScreenResponseView item : preScreenResponseViews) {
             PreScreenResponseView preScreenResponseView = new PreScreenResponseView();
-            if(item.getPersonalId() != null){
+            if (item.getPersonalId() != null) {
                 preScreenResponseView.setId(item.getId());
                 preScreenResponseView.setRuleName(item.getRuleName());
                 preScreenResponseView.setRuleOrder(item.getRuleOrder());
@@ -58,11 +57,11 @@ public class PreScreenResultTransform extends Transform {
         return preScreenResponseViewList;
     }
 
-    public List<PreScreenResponseView> tranformToGroupResponse(List<PreScreenResponseView> preScreenResponseViews){
+    public List<PreScreenResponseView> tranformToGroupResponse(List<PreScreenResponseView> preScreenResponseViews) {
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        for(PreScreenResponseView item : preScreenResponseViews){
+        for (PreScreenResponseView item : preScreenResponseViews) {
             PreScreenResponseView preScreenResponseView = new PreScreenResponseView();
-            if(item.getPersonalId() == null){
+            if (item.getPersonalId() == null) {
                 preScreenResponseView.setId(item.getId());
                 preScreenResponseView.setRuleName(item.getRuleName());
                 preScreenResponseView.setRuleOrder(item.getRuleOrder());
@@ -78,11 +77,11 @@ public class PreScreenResultTransform extends Transform {
         return preScreenResponseViewList;
     }
 
-    public List<BRMSResult> transformResultToModel(List<PreScreenResponseView> preScreenResponseViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, Step step, User user){
+    public List<BRMSResult> transformResultToModel(List<PreScreenResponseView> preScreenResponseViews, WorkCasePrescreen workCasePrescreen, WorkCase workCase, Step step, User user) {
         List<BRMSResult> brmsResultList = new ArrayList<BRMSResult>();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
-        for(PreScreenResponseView item : preScreenResponseViews){
+        for (PreScreenResponseView item : preScreenResponseViews) {
             BRMSResult brmsResult = new BRMSResult();
             brmsResult.setId(item.getId());
             brmsResult.setWorkCase(workCase);
@@ -95,7 +94,7 @@ public class PreScreenResultTransform extends Transform {
             brmsResult.setPersonalId(item.getPersonalId());
             brmsResult.setDeviationFlag(item.getDeviationFlag());
             brmsResult.setRejectGroupCode(item.getRejectGroupCode());
-            if(brmsResult.getId() == 0){
+            if (brmsResult.getId() == 0) {
                 brmsResult.setCreateDate(createDate);
                 brmsResult.setCreateBy(user);
             }
@@ -107,9 +106,9 @@ public class PreScreenResultTransform extends Transform {
         return brmsResultList;
     }
 
-    public List<PreScreenResponseView> transformResultToView(List<BRMSResult> brmsResults){
+    public List<PreScreenResponseView> transformResultToView(List<BRMSResult> brmsResults) {
         List<PreScreenResponseView> preScreenResponseViewList = new ArrayList<PreScreenResponseView>();
-        for(BRMSResult item : brmsResults){
+        for (BRMSResult item : brmsResults) {
             PreScreenResponseView preScreenResponseView = new PreScreenResponseView();
             preScreenResponseView.setId(item.getId());
             preScreenResponseView.setRuleName(item.getRuleName());

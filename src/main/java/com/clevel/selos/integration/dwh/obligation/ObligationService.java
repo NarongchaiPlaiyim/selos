@@ -46,21 +46,21 @@ public class ObligationService implements Serializable {
 
     }
 
-    public ObligationResult getObligationByTmbCusId(List<String> tmbCusIdList){
-        log.debug("getObligationByTmbCusId (tmbCusIdList : {})",tmbCusIdList);
+    public ObligationResult getObligationByTmbCusId(List<String> tmbCusIdList) {
+        log.debug("getObligationByTmbCusId (tmbCusIdList : {})", tmbCusIdList);
         ObligationResult obligationResult = new ObligationResult();
 
         //check which table is current
         SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
 
-        if(systemParameter!=null){
+        if (systemParameter != null) {
             String value = systemParameter.getValue();
 
-            if(value.equalsIgnoreCase("1")){
+            if (value.equalsIgnoreCase("1")) {
                 //get from table 1 (Obligation1)
                 List<Obligation1> obligation1List = obligation1DAO.getListByTmbCusIdList(tmbCusIdList);
-                if(obligation1List!=null && obligation1List.size()>0){
-                    List<Obligation> obligationList = transformObligation(obligation1List,null);
+                if (obligation1List != null && obligation1List.size() > 0) {
+                    List<Obligation> obligationList = transformObligation(obligation1List, null);
                     obligationResult.setActionResult(ActionResult.SUCCESS);
                     obligationResult.setObligationList(obligationList);
                 } else {
@@ -68,11 +68,11 @@ public class ObligationService implements Serializable {
                     obligationResult.setReason(exceptionMsg.get(ExceptionMapping.DWH_DATA_NOT_FOUND));
                     obligationResult.setObligationList(new ArrayList<Obligation>());
                 }
-            } else if(value.equalsIgnoreCase("2")){
+            } else if (value.equalsIgnoreCase("2")) {
                 //get from table 2 (Obligation2)
                 List<Obligation2> obligation2List = obligation2DAO.getListByTmbCusIdList(tmbCusIdList);
-                if(obligation2List!=null && obligation2List.size()>0){
-                    List<Obligation> obligationList = transformObligation(null,obligation2List);
+                if (obligation2List != null && obligation2List.size() > 0) {
+                    List<Obligation> obligationList = transformObligation(null, obligation2List);
                     obligationResult.setActionResult(ActionResult.SUCCESS);
                     obligationResult.setObligationList(obligationList);
                 } else {
@@ -94,10 +94,10 @@ public class ObligationService implements Serializable {
         return obligationResult;
     }
 
-    public List<Obligation> transformObligation(List<Obligation1> obligation1List, List<Obligation2> obligation2List){
+    public List<Obligation> transformObligation(List<Obligation1> obligation1List, List<Obligation2> obligation2List) {
         List<Obligation> obligationList = new ArrayList<Obligation>();
-        if(obligation1List!=null){
-            for(Obligation1 obligation1:obligation1List){
+        if (obligation1List != null) {
+            for (Obligation1 obligation1 : obligation1List) {
                 Obligation obligation = new Obligation();
                 obligation.setId(obligation1.getId());
                 obligation.setTmbCusId(obligation1.getTmbCusId());
@@ -135,8 +135,8 @@ public class ObligationService implements Serializable {
                 obligation.setNumMonthIntPastDueTDRAcc(obligation1.getNumMonthIntPastDueTDRAcc());
                 obligationList.add(obligation);
             }
-        } else if(obligation2List!=null){
-            for(Obligation2 obligation2:obligation2List){
+        } else if (obligation2List != null) {
+            for (Obligation2 obligation2 : obligation2List) {
                 Obligation obligation = new Obligation();
                 obligation.setId(obligation2.getId());
                 obligation.setTmbCusId(obligation2.getTmbCusId());

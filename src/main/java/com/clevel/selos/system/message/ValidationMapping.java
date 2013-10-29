@@ -9,7 +9,6 @@ public interface ValidationMapping {
     public static final String NCB_FIELD_LENGTH_INVALID = "1002";
 
 
-
     // web service
     public static final String DUPLICATE_CA = "1101";
     public static final String INVALID_BDM = "1102";

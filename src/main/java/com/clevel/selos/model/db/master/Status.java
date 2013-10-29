@@ -13,12 +13,12 @@ public class Status implements Serializable {
     @Id
     @Column(name = "id")
     private long id;
-    @Column(name = "type",length = 20)
+    @Column(name = "type", length = 20)
     @Enumerated(EnumType.STRING)
     private StepType stepType;
-    @Column(name = "name",length = 20)
+    @Column(name = "name", length = 20)
     private String name;
-    @Column(name = "description",length = 100)
+    @Column(name = "description", length = 100)
     private String description;
     @Column(name = "active")
     private int active;

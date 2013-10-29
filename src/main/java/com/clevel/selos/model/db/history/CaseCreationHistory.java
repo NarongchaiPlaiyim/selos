@@ -12,76 +12,76 @@ import java.util.Date;
 @Table(name = "his_case_creation")
 public class CaseCreationHistory implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_HIS_CASE_CREATION_ID", sequenceName="SEQ_HIS_CASE_CREATION_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_HIS_CASE_CREATION_ID")
+    @SequenceGenerator(name = "SEQ_HIS_CASE_CREATION_ID", sequenceName = "SEQ_HIS_CASE_CREATION_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_HIS_CASE_CREATION_ID")
     private long id;
-    @Column(name="job_name")
+    @Column(name = "job_name")
     private String jobName;
-    @Column(name="ca_number")
+    @Column(name = "ca_number")
     private String caNumber;
-    @Column(name="old_ca_number")
+    @Column(name = "old_ca_number")
     private String oldCaNumber;
-    @Column(name="account_no1")
+    @Column(name = "account_no1")
     private String accountNo1;
-    @Column(name="customer_id")
+    @Column(name = "customer_id")
     private String customerId;
-    @Column(name="customer_name")
+    @Column(name = "customer_name")
     private String customerName;
-    @Column(name="citizen_id")
+    @Column(name = "citizen_id")
     private String citizenId;
-    @Column(name="request_type")
+    @Column(name = "request_type")
     private int requestType;
-    @Column(name="customer_type")
+    @Column(name = "customer_type")
     private int customerType;
-    @Column(name="bdm_id")
+    @Column(name = "bdm_id")
     private String bdmId;
-    @Column(name="hub_code")
+    @Column(name = "hub_code")
     private String hubCode;
-    @Column(name="region_code")
+    @Column(name = "region_code")
     private String regionCode;
-    @Column(name="uw_id")
+    @Column(name = "uw_id")
     private String uwId;
-    @Column(name="appindate_bdm")
+    @Column(name = "appindate_bdm")
     private String appInDateBDM;
-    @Column(name="final_approved")
+    @Column(name = "final_approved")
     private String finalApproved;
-    @Column(name="parallel")
+    @Column(name = "parallel")
     private String parallel;
-    @Column(name="pending")
+    @Column(name = "pending")
     private String pending;
-    @Column(name="ca_exist")
+    @Column(name = "ca_exist")
     private String caExist;
-    @Column(name="ca_end")
+    @Column(name = "ca_end")
     private String caEnd;
-    @Column(name="account_no2")
+    @Column(name = "account_no2")
     private String accountNo2;
-    @Column(name="account_no3")
+    @Column(name = "account_no3")
     private String accountNo3;
-    @Column(name="account_no4")
+    @Column(name = "account_no4")
     private String accountNo4;
-    @Column(name="account_no5")
+    @Column(name = "account_no5")
     private String accountNo5;
-    @Column(name="account_no6")
+    @Column(name = "account_no6")
     private String accountNo6;
-    @Column(name="account_no7")
+    @Column(name = "account_no7")
     private String accountNo7;
-    @Column(name="account_no8")
+    @Column(name = "account_no8")
     private String accountNo8;
-    @Column(name="account_no9")
+    @Column(name = "account_no9")
     private String accountNo9;
-    @Column(name="account_no10")
+    @Column(name = "account_no10")
     private String accountNo10;
-    @Column(name="appindate_uw")
+    @Column(name = "appindate_uw")
     private String appInDateUW;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
-    @Column(name="create_status")
+    @Column(name = "create_status")
     @Enumerated(EnumType.STRING)
     private ActionResult status;
-    @Column(name="create_status_detail", length = 500)
+    @Column(name = "create_status_detail", length = 500)
     private String statusDetail;
-    @Column(name="app_number")
+    @Column(name = "app_number")
     private String appNumber;
 
     public CaseCreationHistory() {

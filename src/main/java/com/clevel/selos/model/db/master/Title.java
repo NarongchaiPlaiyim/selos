@@ -12,14 +12,14 @@ public class Title implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code",length = 5)
+    @Column(name = "code", length = 5)
     private String code;
-    @Column(name = "title_th",length = 100)
+    @Column(name = "title_th", length = 100)
     private String titleTh;
-    @Column(name = "title_en",length = 100)
+    @Column(name = "title_en", length = 100)
     private String titleEn;
     @OneToOne
-    @JoinColumn(name="customerentity_id")
+    @JoinColumn(name = "customerentity_id")
     private CustomerEntity customerEntity;
     @Column(name = "active")
     private int active;

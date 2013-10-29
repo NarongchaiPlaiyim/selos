@@ -13,7 +13,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -44,14 +43,14 @@ public class Post implements Serializable {
     }
 
     public String sendPost(String xml, String url, int timeOut) throws Exception {
-        log.debug("Call : sendPost(url : {}, timeOut : {})", url,timeOut);
-        if(ValidationUtil.isNull(xml)){
+        log.debug("Call : sendPost(url : {}, timeOut : {})", url, timeOut);
+        if (ValidationUtil.isNull(xml)) {
             throw new ValidationException(required, message.get(required, "XML"));
         }
-        if(ValidationUtil.isNull(url)){
+        if (ValidationUtil.isNull(url)) {
             throw new ValidationException(required, message.get(required, "URL"));
         }
-        if(timeOut <= 0){
+        if (timeOut <= 0) {
             throw new ValidationException(required, message.get(required, "Time Out"));
         }
 
@@ -65,8 +64,8 @@ public class Post implements Serializable {
 
         params = new BasicHttpParams();
         int minute = 60000;
-        HttpConnectionParams.setSoTimeout(params, minute*timeOut);
-        HttpConnectionParams.setConnectionTimeout(params, minute*timeOut);
+        HttpConnectionParams.setSoTimeout(params, minute * timeOut);
+        HttpConnectionParams.setConnectionTimeout(params, minute * timeOut);
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
@@ -79,7 +78,7 @@ public class Post implements Serializable {
 
         response = client.execute(post);
         int resCode = response.getStatusLine().getStatusCode();
-        if (resCode==200) {
+        if (resCode == 200) {
             log.debug("The request has succeeded");
             rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             builder = new StringBuilder();
@@ -87,10 +86,10 @@ public class Post implements Serializable {
             while ((line = rd.readLine()) != null) {
                 builder.append(line);
             }
-            return builder!=null?builder.toString():"";
-        }else{
-             log.error("The request has failed, Error code is {}", resCode);
-             throw new NCBInterfaceException(new Exception("The request has failed, Error code is "+resCode), exception,message.get(exception, ""+resCode));
+            return builder != null ? builder.toString() : "";
+        } else {
+            log.error("The request has failed, Error code is {}", resCode);
+            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode), exception, message.get(exception, "" + resCode));
         }
     }
 }

@@ -7,20 +7,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @XStreamAlias("transaction")
-public class TransactionModel  implements Serializable {
-    
+public class TransactionModel implements Serializable {
+
     @XStreamAlias("trackingid")
     private String trackingid;
-    
+
     @XStreamAlias("user")
     private String user;
-    
+
     @XStreamAlias("transactiondate")
     private String transactiondate;
-    
+
     @XStreamAlias("mediacode")
     private String mediacode;
-    
+
     @XStreamAlias("disputeenquiry")
     private String disputeenquiry;
 
@@ -32,28 +32,28 @@ public class TransactionModel  implements Serializable {
 
     @XStreamAlias("enquirypurpose")
     private String enquirypurpose;
-    
+
     @XStreamAlias("enquiryamount")
     private String enquiryamount;
-    
+
     @XStreamAlias("consent")
     private String consent;
-    
+
     @XStreamAlias("memberref")
     private String memberref;
-    
+
     @XStreamAlias("enquirydate")
     private String enquirydate;
-    
+
     @XStreamAlias("enquirystatus")
     private String enquirystatus;
-    
+
     @XStreamAlias("responsedate")
     private String responsedate;
-    
+
     @XStreamAlias("tuefenquiry")
     private TUEFEnquiryModel tuefenquiry;
-    
+
     @XStreamAlias("tuefresponse")
     private TUEFResponseModel tuefresponse;
 
@@ -115,14 +115,14 @@ public class TransactionModel  implements Serializable {
     public String getResponsedate() {
         return responsedate;
     }
-    
+
     public TUEFEnquiryModel getTuefenquiry() {
         return tuefenquiry;
     }
 
     public TUEFResponseModel getTuefresponse() {
         return tuefresponse;
-    }  
+    }
 
     public String getEnquirystatus() {
         return enquirystatus;

@@ -1,22 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for EmploymentType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="EmploymentType">
  *   &lt;complexContent>
@@ -48,32 +44,30 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EmploymentType", propOrder = {
-    "id",
-    "nameOfEmployer",
-    "startDate",
-    "endDate",
-    "timeOnJob",
-    "occupationType",
-    "position",
-    "businessType",
-    "businessTypeRiskLevel",
-    "monthlySalary",
-    "monthlyResidualIncome",
-    "appointedAtCurrentPostFlag",
-    "passedProbationFlag",
-    "occupationTypeRiskLevel",
-    "thaiMilitaryFlag",
-    "thaiMilitaryRank",
-    "countryOfEmployment",
-    "contractPeriod",
-    "lengthOfEmployment",
-    "natureOfBusiness",
-    "attribute"
+        "id",
+        "nameOfEmployer",
+        "startDate",
+        "endDate",
+        "timeOnJob",
+        "occupationType",
+        "position",
+        "businessType",
+        "businessTypeRiskLevel",
+        "monthlySalary",
+        "monthlyResidualIncome",
+        "appointedAtCurrentPostFlag",
+        "passedProbationFlag",
+        "occupationTypeRiskLevel",
+        "thaiMilitaryFlag",
+        "thaiMilitaryRank",
+        "countryOfEmployment",
+        "contractPeriod",
+        "lengthOfEmployment",
+        "natureOfBusiness",
+        "attribute"
 })
 public class EmploymentType {
 
@@ -104,11 +98,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -116,11 +108,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -128,11 +118,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the nameOfEmployer property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNameOfEmployer() {
         return nameOfEmployer;
@@ -140,11 +128,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the nameOfEmployer property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNameOfEmployer(String value) {
         this.nameOfEmployer = value;
@@ -152,11 +138,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the startDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getStartDate() {
         return startDate;
@@ -164,11 +148,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the startDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setStartDate(XMLGregorianCalendar value) {
         this.startDate = value;
@@ -176,11 +158,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the endDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getEndDate() {
         return endDate;
@@ -188,11 +168,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the endDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setEndDate(XMLGregorianCalendar value) {
         this.endDate = value;
@@ -200,11 +178,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the timeOnJob property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Double }
-     *     
+     *
+     * @return possible object is
+     *         {@link Double }
      */
     public Double getTimeOnJob() {
         return timeOnJob;
@@ -212,11 +188,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the timeOnJob property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Double }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Double }
      */
     public void setTimeOnJob(Double value) {
         this.timeOnJob = value;
@@ -224,11 +198,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the occupationType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getOccupationType() {
         return occupationType;
@@ -236,11 +208,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the occupationType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setOccupationType(String value) {
         this.occupationType = value;
@@ -248,11 +218,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the position property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPosition() {
         return position;
@@ -260,11 +228,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the position property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPosition(String value) {
         this.position = value;
@@ -272,11 +238,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the businessType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusinessType() {
         return businessType;
@@ -284,11 +248,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the businessType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusinessType(String value) {
         this.businessType = value;
@@ -296,11 +258,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the businessTypeRiskLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusinessTypeRiskLevel() {
         return businessTypeRiskLevel;
@@ -308,11 +268,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the businessTypeRiskLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusinessTypeRiskLevel(String value) {
         this.businessTypeRiskLevel = value;
@@ -320,11 +278,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the monthlySalary property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getMonthlySalary() {
         return monthlySalary;
@@ -332,11 +288,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the monthlySalary property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setMonthlySalary(BigDecimal value) {
         this.monthlySalary = value;
@@ -344,11 +298,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the monthlyResidualIncome property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getMonthlyResidualIncome() {
         return monthlyResidualIncome;
@@ -356,11 +308,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the monthlyResidualIncome property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setMonthlyResidualIncome(BigDecimal value) {
         this.monthlyResidualIncome = value;
@@ -368,11 +318,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the appointedAtCurrentPostFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isAppointedAtCurrentPostFlag() {
         return appointedAtCurrentPostFlag;
@@ -380,11 +328,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the appointedAtCurrentPostFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setAppointedAtCurrentPostFlag(Boolean value) {
         this.appointedAtCurrentPostFlag = value;
@@ -392,11 +338,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the passedProbationFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isPassedProbationFlag() {
         return passedProbationFlag;
@@ -404,11 +348,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the passedProbationFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setPassedProbationFlag(Boolean value) {
         this.passedProbationFlag = value;
@@ -416,11 +358,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the occupationTypeRiskLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getOccupationTypeRiskLevel() {
         return occupationTypeRiskLevel;
@@ -428,11 +368,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the occupationTypeRiskLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setOccupationTypeRiskLevel(String value) {
         this.occupationTypeRiskLevel = value;
@@ -440,11 +378,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the thaiMilitaryFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isThaiMilitaryFlag() {
         return thaiMilitaryFlag;
@@ -452,11 +388,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the thaiMilitaryFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setThaiMilitaryFlag(Boolean value) {
         this.thaiMilitaryFlag = value;
@@ -464,11 +398,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the thaiMilitaryRank property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getThaiMilitaryRank() {
         return thaiMilitaryRank;
@@ -476,11 +408,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the thaiMilitaryRank property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setThaiMilitaryRank(String value) {
         this.thaiMilitaryRank = value;
@@ -488,11 +418,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the countryOfEmployment property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCountryOfEmployment() {
         return countryOfEmployment;
@@ -500,11 +428,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the countryOfEmployment property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCountryOfEmployment(String value) {
         this.countryOfEmployment = value;
@@ -512,11 +438,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the contractPeriod property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getContractPeriod() {
         return contractPeriod;
@@ -524,11 +448,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the contractPeriod property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setContractPeriod(Integer value) {
         this.contractPeriod = value;
@@ -536,11 +458,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the lengthOfEmployment property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getLengthOfEmployment() {
         return lengthOfEmployment;
@@ -548,11 +468,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the lengthOfEmployment property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setLengthOfEmployment(Integer value) {
         this.lengthOfEmployment = value;
@@ -560,11 +478,9 @@ public class EmploymentType {
 
     /**
      * Gets the value of the natureOfBusiness property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNatureOfBusiness() {
         return natureOfBusiness;
@@ -572,11 +488,9 @@ public class EmploymentType {
 
     /**
      * Sets the value of the natureOfBusiness property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNatureOfBusiness(String value) {
         this.natureOfBusiness = value;
@@ -584,25 +498,23 @@ public class EmploymentType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

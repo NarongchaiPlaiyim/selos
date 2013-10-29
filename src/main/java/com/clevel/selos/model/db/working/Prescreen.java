@@ -10,82 +10,82 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name="wrk_prescreen")
+@Table(name = "wrk_prescreen")
 public class Prescreen implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_PRESCREEN_ID", sequenceName="SEQ_WRK_PRESCREEN_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PRESCREEN_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PRESCREEN_ID", sequenceName = "SEQ_WRK_PRESCREEN_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PRESCREEN_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
     @OneToOne
-    @JoinColumn(name="product_group_id")
+    @JoinColumn(name = "product_group_id")
     private ProductGroup productGroup;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="expected_submit_date")
+    @Column(name = "expected_submit_date")
     private Date expectedSubmitDate;
 
-    @Column(name="group_income")
+    @Column(name = "group_income")
     private BigDecimal groupIncome;
 
-    @Column(name="group_exposure")
+    @Column(name = "group_exposure")
     private BigDecimal groupExposure;
 
     @OneToOne
-    @JoinColumn(name="business_location_id")
+    @JoinColumn(name = "business_location_id")
     private Province businessLocation;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="register_date")
+    @Column(name = "register_date")
     private Date registerDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name="referred_date")
+    @Column(name = "referred_date")
     private Date referredDate;
 
     @OneToOne
-    @JoinColumn(name="referred_experience_id")
+    @JoinColumn(name = "referred_experience_id")
     private ReferredExperience referredExperience;
 
-    @Column(name="tcg")
+    @Column(name = "tcg")
     private boolean tcg;
 
-    @Column(name="refinance")
+    @Column(name = "refinance")
     private boolean refinance;
 
     @OneToOne
-    @JoinColumn(name="refinance_bank_id")
+    @JoinColumn(name = "refinance_bank_id")
     private Bank refinanceBank;
 
     @OneToOne
-    @JoinColumn(name="borrowing_type_id")
+    @JoinColumn(name = "borrowing_type_id")
     private BorrowingType borrowingType;
 
     @OneToOne
-    @JoinColumn(name="bdm_checker_id")
+    @JoinColumn(name = "bdm_checker_id")
     private User bdmChecker;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    public  Prescreen(){
+    public Prescreen() {
 
     }
 

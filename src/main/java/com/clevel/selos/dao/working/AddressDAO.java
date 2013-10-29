@@ -11,7 +11,7 @@ public class AddressDAO extends GenericDAO<Address, Long> {
     private Logger log;
 
     @Inject
-    public AddressDAO(){
+    public AddressDAO() {
 
     }
 }

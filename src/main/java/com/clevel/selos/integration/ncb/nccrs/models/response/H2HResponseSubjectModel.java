@@ -4,7 +4,7 @@ public class H2HResponseSubjectModel {
     private HeadingModel heading;
     private ProfileModel profile;
     private ShareHoldersModel shareholders;
-    private CollateralsModel collaterals; 
+    private CollateralsModel collaterals;
     private DisPuteModel dispute;
     private CreditScoreModel creditscore;
     private ExecutiveSummaryModel executivesummary;
@@ -14,7 +14,7 @@ public class H2HResponseSubjectModel {
     private InquiryHistoriesModel inquiryhistories;
     private ContactMessageModel contactmessage;
     private HistoricalBalanceReportModel historicalbalancereport;
-    
+
     public HeadingModel getHeading() {
         return heading;
     }

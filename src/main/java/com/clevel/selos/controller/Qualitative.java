@@ -23,6 +23,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -64,7 +65,7 @@ public class Qualitative {
     private String messageHeader;
     private String message;
     private boolean messageErr;
-
+    private Date date;
     public Qualitative(){
     }
 

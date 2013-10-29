@@ -10,9 +10,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for warningListPersonSection complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="warningListPersonSection">
  *   &lt;complexContent>
@@ -55,15 +55,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "warningListPersonSection", propOrder = {
-    "fullName",
-    "cardId",
-    "riskLevel",
-    "remark"
+        "fullName",
+        "cardId",
+        "riskLevel",
+        "remark"
 })
 public class WarningListPersonSection {
 
@@ -78,11 +76,9 @@ public class WarningListPersonSection {
 
     /**
      * Gets the value of the fullName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getFullName() {
         return fullName;
@@ -90,23 +86,19 @@ public class WarningListPersonSection {
 
     /**
      * Sets the value of the fullName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setFullName(JAXBElement<String> value) {
-        this.fullName = ((JAXBElement<String> ) value);
+        this.fullName = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the cardId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getCardId() {
         return cardId;
@@ -114,23 +106,19 @@ public class WarningListPersonSection {
 
     /**
      * Sets the value of the cardId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setCardId(JAXBElement<String> value) {
-        this.cardId = ((JAXBElement<String> ) value);
+        this.cardId = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the riskLevel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getRiskLevel() {
         return riskLevel;
@@ -138,23 +126,19 @@ public class WarningListPersonSection {
 
     /**
      * Sets the value of the riskLevel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setRiskLevel(JAXBElement<String> value) {
-        this.riskLevel = ((JAXBElement<String> ) value);
+        this.riskLevel = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the remark property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getRemark() {
         return remark;
@@ -162,14 +146,12 @@ public class WarningListPersonSection {
 
     /**
      * Sets the value of the remark property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setRemark(JAXBElement<String> value) {
-        this.remark = ((JAXBElement<String> ) value);
+        this.remark = ((JAXBElement<String>) value);
     }
 
 }

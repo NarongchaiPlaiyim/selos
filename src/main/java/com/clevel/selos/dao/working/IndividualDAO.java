@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class IndividualDAO extends GenericDAO<Individual,Long> {
+public class IndividualDAO extends GenericDAO<Individual, Long> {
     @Inject
     private Logger log;
 
@@ -15,10 +15,10 @@ public class IndividualDAO extends GenericDAO<Individual,Long> {
     public IndividualDAO() {
     }
 
-    public Customer findByCitizenId(String citizenId, long workCasePreScreenId){
+    public Customer findByCitizenId(String citizenId, long workCasePreScreenId) {
         log.info("findByCitizenId ::: citizenId : {}, workCasePreScreenId : {}", citizenId, workCasePreScreenId);
         String query = "SELECT customer FROM Individual individual WHERE individual.customer.workCasePrescreen.id = " + workCasePreScreenId + " AND individual.citizenId = '" + citizenId + "'";
-        Customer customer = (Customer)getSession().createQuery(query).uniqueResult();
+        Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
 
         return customer;
 

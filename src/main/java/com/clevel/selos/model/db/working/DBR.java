@@ -11,18 +11,15 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_dbr")
+@Table(name = "wrk_dbr")
 public class DBR implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_DBR_ID", sequenceName="SEQ_WRK_DBR_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_DBR_ID")
+    @SequenceGenerator(name = "SEQ_WRK_DBR_ID", sequenceName = "SEQ_WRK_DBR_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_DBR_ID")
     private long id;
 
-    @Column(name = "active")
-    private boolean active;
-
     @ManyToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @OneToMany(mappedBy = "dbr")
@@ -53,22 +50,22 @@ public class DBR implements Serializable {
     private BigDecimal dbrInterest;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    public DBR(){
+    public DBR() {
 
     }
 
@@ -142,14 +139,6 @@ public class DBR implements Serializable {
 
     public void setDbrBeforeRequest(BigDecimal dbrBeforeRequest) {
         this.dbrBeforeRequest = dbrBeforeRequest;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public List<DBRDetail> getDbrDetails() {

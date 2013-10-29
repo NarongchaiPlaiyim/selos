@@ -10,136 +10,136 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_basicinfo")
+@Table(name = "wrk_basicinfo")
 public class BasicInfo implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BASIC_INFO_ID", sequenceName="SEQ_WRK_BASIC_INFO_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BASIC_INFO_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BASIC_INFO_ID", sequenceName = "SEQ_WRK_BASIC_INFO_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BASIC_INFO_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @OneToOne
-    @JoinColumn(name="requesttype_id")
+    @JoinColumn(name = "requesttype_id")
     private RequestType requestType;
 
     @OneToOne
-    @JoinColumn(name="productgroup_id")
+    @JoinColumn(name = "productgroup_id")
     private ProductGroup productGroup;
 
-    @Column(name="unpaid_fee_insurance")
+    @Column(name = "unpaid_fee_insurance")
     private int unpaidFeeInsurance;
 
-    @Column(name="no_pending_claim_lg")
+    @Column(name = "no_pending_claim_lg")
     private int noPendingClaimLG;
 
-    @Column(name="construct_request_lg")
+    @Column(name = "construct_request_lg")
     private int constructionRequestLG;
 
-    @Column(name="able_to_get_guarantor")
+    @Column(name = "able_to_get_guarantor")
     private int ableToGettingGuarantorJob;
 
-    @Column(name="claim_lg_history")
+    @Column(name = "claim_lg_history")
     private int noClaimLGHistory;
 
-    @Column(name="revoke_license")
+    @Column(name = "revoke_license")
     private int noRevokedLicense;
 
-    @Column(name="late_work_delivery")
+    @Column(name = "late_work_delivery")
     private int noLateWorkDelivery;
 
-    @Column(name="adequate_capital_resource")
+    @Column(name = "adequate_capital_resource")
     private int adequateOfCapitalResource;
 
-    @Column(name="apply_special_program")
+    @Column(name = "apply_special_program")
     private int applySpecialProgram;
 
     @OneToOne
-    @JoinColumn(name="specialprogram_id")
+    @JoinColumn(name = "specialprogram_id")
     private SpecialProgram specialProgram;
 
-    @Column(name="refinance_in")
+    @Column(name = "refinance_in")
     private int refinanceIN;
 
     @OneToOne
-    @JoinColumn(name="refinancein_id")
+    @JoinColumn(name = "refinancein_id")
     private Bank refinanceInValue;
 
-    @Column(name="refinance_out")
+    @Column(name = "refinance_out")
     private int refinanceOUT;
 
     @OneToOne
-    @JoinColumn(name="refinanceout_id")
+    @JoinColumn(name = "refinanceout_id")
     private Bank refinanceOutValue;
 
     @OneToOne
-    @JoinColumn(name="risktype_id")
+    @JoinColumn(name = "risktype_id")
     private RiskType riskCustomerType;
 
-    @Column(name="qualitative_type")
+    @Column(name = "qualitative_type")
     private int qualitativeType;
 
-    @Column(name="existing_sme_customer")
+    @Column(name = "existing_sme_customer")
     private int existingSMECustomer;
 
-    @Column(name="existing_since")
+    @Column(name = "existing_since")
     private String existingSMECustomerSince;
 
-    @Column(name="last_review_date")
+    @Column(name = "last_review_date")
     private Date lastReviewDate;
 
-    @Column(name="extended_review_date")
+    @Column(name = "extended_review_date")
     private Date extendedReviewDate;
 
     @OneToOne
-    @JoinColumn(name="sbfscore_id")
+    @JoinColumn(name = "sbfscore_id")
     private SBFScore sbfScore;
 
-    @Column(name="request_loan_same_name")
+    @Column(name = "request_loan_same_name")
     private int requestLoanWithSameName;
 
-    @Column(name="loan_in_one_year")
+    @Column(name = "loan_in_one_year")
     private int haveLoanInOneYear;
 
-    @Column(name="pass_annual_review")
+    @Column(name = "pass_annual_review")
     private int passAnnualReview;
 
     @OneToOne
-    @JoinColumn(name="borrowingtype_id")
+    @JoinColumn(name = "borrowingtype_id")
     private BorrowingType loanRequestPattern;
 
-    @Column(name="referral_name")
+    @Column(name = "referral_name")
     private String referralName;
 
-    @Column(name="referral_id")
+    @Column(name = "referral_id")
     private String referralID;
 
-    @Column(name="apply_ba")
+    @Column(name = "apply_ba")
     private int applyBA;
 
     @OneToOne
-    @JoinColumn(name="bapaymentmethod_id")
+    @JoinColumn(name = "bapaymentmethod_id")
     private BAPaymentMethod baPaymentMethod;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy="basicInfo")
+    @OneToMany(mappedBy = "basicInfo")
     private List<OpenAccount> openAccountList;
 
     public long getId() {

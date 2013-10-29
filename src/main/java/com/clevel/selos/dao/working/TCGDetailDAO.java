@@ -15,16 +15,16 @@ public class TCGDetailDAO extends GenericDAO<TCGDetail, Integer> {
     private Logger log;
 
     @Inject
-    public TCGDetailDAO(){
+    public TCGDetailDAO() {
 
     }
 
-    public List<TCGDetail> findTCGDetailByTcgId(long tcgId){
-        log.info("findTCGDetailByTcgId ::: {}", tcgId );
+    public List<TCGDetail> findTCGDetailByTcgId(long tcgId) {
+        log.info("findTCGDetailByTcgId ::: {}", tcgId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("tcg.id", tcgId));
         criteria.addOrder(Order.asc("id"));
-        List<TCGDetail> tcgDetailList = (List<TCGDetail>)criteria.list();
+        List<TCGDetail> tcgDetailList = (List<TCGDetail>) criteria.list();
         log.info("tcgDetailList ::: size : {}", tcgDetailList.size());
         return tcgDetailList;
     }

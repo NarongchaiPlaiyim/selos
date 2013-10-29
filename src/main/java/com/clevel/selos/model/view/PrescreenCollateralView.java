@@ -21,13 +21,13 @@ public class PrescreenCollateralView implements Serializable {
 
     private long id;
     private PotentialCollateral potentialCollateral;
-    private String     collateralTypeName;
+    private String collateralTypeName;
     private BigDecimal collateralAmount;
 
     public PrescreenCollateralView() {
     }
 
-    public void reset(){
+    public void reset() {
         this.id = 0;
         this.potentialCollateral = new PotentialCollateral();
         this.collateralTypeName = "";

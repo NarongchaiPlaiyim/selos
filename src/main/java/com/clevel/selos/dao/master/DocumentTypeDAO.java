@@ -15,17 +15,17 @@ public class DocumentTypeDAO extends GenericDAO<DocumentType, Integer> {
     private Logger log;
 
     @Inject
-    public DocumentTypeDAO(){
+    public DocumentTypeDAO() {
 
     }
 
-    public List<DocumentType> findByCustomerEntityId(int customerEntityId){
+    public List<DocumentType> findByCustomerEntityId(int customerEntityId) {
         log.info("findByCustomerEntityId. (customerEntityId: {})", customerEntityId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
         criteria.addOrder(Order.asc("id"));
         List<DocumentType> documentTypeList = criteria.list();
-        log.info("findByCustomerEntityId. (result size: {})",documentTypeList.size());
+        log.info("findByCustomerEntityId. (result size: {})", documentTypeList.size());
         return documentTypeList;
     }
 }

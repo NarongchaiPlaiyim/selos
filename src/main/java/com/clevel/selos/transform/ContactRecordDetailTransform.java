@@ -8,11 +8,11 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactRecordDetailTransform extends Transform  {
+public class ContactRecordDetailTransform extends Transform {
 
-    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,CustomerAcceptance customerAcceptance){
+    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList, CustomerAcceptance customerAcceptance) {
         List<ContactRecordDetail> contactRecordDetailList = new ArrayList<ContactRecordDetail>();
-        for(ContactRecordDetailView contactRecordDetailView : contactRecordDetailViewList){
+        for (ContactRecordDetailView contactRecordDetailView : contactRecordDetailViewList) {
 
             ContactRecordDetail ContactRecordDetail = new ContactRecordDetail();
             ContactRecordDetail.setCustomerAcceptance(customerAcceptance);
@@ -35,9 +35,9 @@ public class ContactRecordDetailTransform extends Transform  {
         return contactRecordDetailList;
     }
 
-    public List<ContactRecordDetailView> transformToView(List<ContactRecordDetail> contactRecordDetailList){
+    public List<ContactRecordDetailView> transformToView(List<ContactRecordDetail> contactRecordDetailList) {
         List<ContactRecordDetailView> contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-        for(ContactRecordDetail ContactRecordDetail : contactRecordDetailList){
+        for (ContactRecordDetail ContactRecordDetail : contactRecordDetailList) {
             ContactRecordDetailView contactRecordDetailView = new ContactRecordDetailView();
             contactRecordDetailView.setId(ContactRecordDetail.getId());
             contactRecordDetailView.setNo(ContactRecordDetail.getNo());

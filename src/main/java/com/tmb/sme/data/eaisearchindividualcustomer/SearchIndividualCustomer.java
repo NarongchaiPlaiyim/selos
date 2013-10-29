@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.*;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -22,12 +22,10 @@ import javax.xml.bind.annotation.*;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "requestData"
+        "requestData"
 })
 @XmlRootElement(name = "searchIndividualCustomer")
 public class SearchIndividualCustomer {
@@ -37,11 +35,9 @@ public class SearchIndividualCustomer {
 
     /**
      * Gets the value of the requestData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ReqSearchIndividualCustomer }
-     *     
+     *
+     * @return possible object is
+     *         {@link ReqSearchIndividualCustomer }
      */
     public ReqSearchIndividualCustomer getRequestData() {
         return requestData;
@@ -49,11 +45,9 @@ public class SearchIndividualCustomer {
 
     /**
      * Sets the value of the requestData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ReqSearchIndividualCustomer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ReqSearchIndividualCustomer }
      */
     public void setRequestData(ReqSearchIndividualCustomer value) {
         this.requestData = value;

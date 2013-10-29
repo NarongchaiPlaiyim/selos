@@ -1,27 +1,16 @@
 package com.clevel.selos.integration.coms.module;
 
 import com.clevel.selos.integration.COMS;
-import com.clevel.selos.integration.RLOS;
-import com.clevel.selos.integration.RLOSInterface;
-import com.clevel.selos.integration.rlos.csi.model.CSIData;
-import com.clevel.selos.integration.rlos.csi.tool.DBContext;
-import com.clevel.selos.model.DocumentType;
+import com.clevel.selos.integration.coms.tool.DBContext;
 import com.clevel.selos.system.Config;
-import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-public class DBExecute implements Serializable{
+public class DBExecute implements Serializable {
     @Inject
     @COMS
     Logger log;
@@ -30,13 +19,10 @@ public class DBExecute implements Serializable{
     String connRlos;
     @Inject
     @Config(name = "interface.coms.oracle.username")
-    String rlosUser;
+    String comsUser;
     @Inject
     @Config(name = "interface.coms.oracle.password")
-    String rlosPassword;
-    @Inject
-    @Config(name = "interface.coms.oracle.table")
-    String tableName;
+    String comsPassword;
 
     @Inject
     DBContext dbContext;
@@ -45,7 +31,7 @@ public class DBExecute implements Serializable{
     transient ResultSet rs = null;
 
     @Inject
-    public DBExecute(){
+    public DBExecute() {
 
     }
 

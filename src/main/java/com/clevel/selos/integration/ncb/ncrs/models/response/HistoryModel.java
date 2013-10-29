@@ -6,16 +6,16 @@ import java.io.Serializable;
 
 @XStreamAlias("history")
 public class HistoryModel implements Serializable {
-    
+
     @XStreamAlias("asofdate")
     private String asofdate;
-    
+
     @XStreamAlias("overduemonth")
     private String overduemonth;
-    
+
     @XStreamAlias("creditlimit")
     private String creditlimit;
-    
+
     @XStreamAlias("amountowed")
     private String amountowed;
 
@@ -41,6 +41,6 @@ public class HistoryModel implements Serializable {
     public String getAmountowed() {
         return amountowed;
     }
-    
-    
+
+
 }

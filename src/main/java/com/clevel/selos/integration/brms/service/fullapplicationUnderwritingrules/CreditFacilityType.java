@@ -1,20 +1,20 @@
 
 package com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * <p>Java class for CreditFacilityType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="CreditFacilityType">
  *   &lt;complexContent>
@@ -33,19 +33,17 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CreditFacilityType", propOrder = {
-    "id",
-    "type",
-    "creditLimit",
-    "tenor",
-    "loanPurpose",
-    "pricing",
-    "fee",
-    "attribute"
+        "id",
+        "type",
+        "creditLimit",
+        "tenor",
+        "loanPurpose",
+        "pricing",
+        "fee",
+        "attribute"
 })
 public class CreditFacilityType {
 
@@ -61,11 +59,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -73,11 +69,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -85,11 +79,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the type property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getType() {
         return type;
@@ -97,11 +89,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the type property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setType(String value) {
         this.type = value;
@@ -109,11 +99,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the creditLimit property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getCreditLimit() {
         return creditLimit;
@@ -121,11 +109,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the creditLimit property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setCreditLimit(BigDecimal value) {
         this.creditLimit = value;
@@ -133,11 +119,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the tenor property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getTenor() {
         return tenor;
@@ -145,11 +129,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the tenor property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setTenor(Integer value) {
         this.tenor = value;
@@ -157,11 +139,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the loanPurpose property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLoanPurpose() {
         return loanPurpose;
@@ -169,11 +149,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the loanPurpose property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLoanPurpose(String value) {
         this.loanPurpose = value;
@@ -181,11 +159,9 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the pricing property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link PricingType }
-     *     
+     *
+     * @return possible object is
+     *         {@link PricingType }
      */
     public PricingType getPricing() {
         return pricing;
@@ -193,11 +169,9 @@ public class CreditFacilityType {
 
     /**
      * Sets the value of the pricing property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link PricingType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link PricingType }
      */
     public void setPricing(PricingType value) {
         this.pricing = value;
@@ -205,25 +179,23 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the fee property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the fee property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getFee().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link FeeType }
-     * 
-     * 
      */
     public List<FeeType> getFee() {
         if (fee == null) {
@@ -234,25 +206,23 @@ public class CreditFacilityType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

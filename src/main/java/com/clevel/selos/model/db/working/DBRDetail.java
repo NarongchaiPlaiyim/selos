@@ -11,21 +11,18 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name="wrk_dbr_detail")
+@Table(name = "wrk_dbr_detail")
 public class DBRDetail implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_DBR_DETAIL_ID", sequenceName="SEQ_WRK_DBR_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_DBR_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_DBR_DETAIL_ID", sequenceName = "SEQ_WRK_DBR_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_DBR_DETAIL_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="dbr_id")
+    @JoinColumn(name = "dbr_id")
     private DBR dbr;
 
-    @Column(name = "active")
-    private boolean active;
-
-    @Column(name = "account_name" , length = 100)
+    @Column(name = "account_name", length = 100)
     private String accountName;
 
     @OneToOne
@@ -42,22 +39,22 @@ public class DBRDetail implements Serializable {
     private BigDecimal debtForCalculate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date", updatable = false)
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id", updatable = false)
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    public DBRDetail(){
+    public DBRDetail() {
 
     }
 
@@ -141,14 +138,6 @@ public class DBRDetail implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public AccountType getLoanType() {
         return loanType;
     }
@@ -162,7 +151,6 @@ public class DBRDetail implements Serializable {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
                 .append("dbr", dbr)
-                .append("active", active)
                 .append("accountName", accountName)
                 .append("loanType", loanType)
                 .append("limit", limit)

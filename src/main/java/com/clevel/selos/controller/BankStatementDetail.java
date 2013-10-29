@@ -1,7 +1,10 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BankStmtControl;
-import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.master.AccountStatusDAO;
+import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.master.BankDAO;
+import com.clevel.selos.dao.master.RelationDAO;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -17,8 +20,6 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -96,7 +97,7 @@ public class BankStatementDetail implements Serializable {
     private long stepId;
     private String userId;
 
-    public BankStatementDetail(){
+    public BankStatementDetail() {
     }
 
     private void preRender() {
@@ -109,17 +110,17 @@ public class BankStatementDetail implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
         } else {
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try{
+            try {
                 FacesUtil.redirect("/site/inbox.jsf");
                 return;
-            } catch (Exception e){
+            } catch (Exception e) {
                 log.info("Exception :: {}", e);
             }
         }
@@ -148,7 +149,7 @@ public class BankStatementDetail implements Serializable {
         numberOfMonths = bankStmtControl.getRetrieveMonthBankStmt(seasonal);
         bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
         Date date;
-        for (int i=0; i<numberOfMonths; i++) {
+        for (int i = 0; i < numberOfMonths; i++) {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
             date = DateTimeUtil.getOnlyDatePlusMonth(startBankStmtDate, -i);
             bankStmtDetailView.setAsOfDate(date);
@@ -199,7 +200,7 @@ public class BankStatementDetail implements Serializable {
             initNewForm();
         } catch (Exception e) {
             messageHeader = "Save Bank Statement Detail Failed.";
-            if(e.getCause() != null) {
+            if (e.getCause() != null) {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getCause().toString();
             } else {
                 message = "Save Bank Statement Detail data failed. Cause : " + e.getMessage();
@@ -319,8 +320,7 @@ public class BankStatementDetail implements Serializable {
             if (ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
                 detailView.setSwingPercent(BigDecimal.ZERO);
                 detailView.setUtilizationPercent(BigDecimal.ZERO);
-            }
-            else {
+            } else {
                 detailView.setSwingPercent(detailView.getHighestBalance().subtract(detailView.getLowestBalance()).abs()
                         .divide(detailView.getOverLimitAmount(), 2, RoundingMode.HALF_UP));
 
@@ -388,12 +388,11 @@ public class BankStatementDetail implements Serializable {
         if (bankStmtDetailViewList == null || bankStmtDetailViewList.size() < 6) {
             log.debug("bankStmtDetailViewList is null! or size is less than 6");
             return new ArrayList<BankStmtDetailView>();
-        }
-        else {
+        } else {
             // 12 Month
             if (bankStmtDetailViewList.size() > 6)
                 return bankStmtDetailViewList.subList(6, 12);
-            // 6 Month
+                // 6 Month
             else
                 return bankStmtDetailViewList;
         }

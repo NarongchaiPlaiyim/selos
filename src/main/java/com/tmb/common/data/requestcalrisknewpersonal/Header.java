@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for header complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="header">
  *   &lt;complexContent>
@@ -53,15 +53,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "header", propOrder = {
-    "reqId",
-    "productCode",
-    "acronym",
-    "selectorFlag"
+        "reqId",
+        "productCode",
+        "acronym",
+        "selectorFlag"
 })
 public class Header {
 
@@ -76,11 +74,9 @@ public class Header {
 
     /**
      * Gets the value of the reqId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getReqId() {
         return reqId;
@@ -88,11 +84,9 @@ public class Header {
 
     /**
      * Sets the value of the reqId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setReqId(String value) {
         this.reqId = value;
@@ -100,11 +94,9 @@ public class Header {
 
     /**
      * Gets the value of the productCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getProductCode() {
         return productCode;
@@ -112,11 +104,9 @@ public class Header {
 
     /**
      * Sets the value of the productCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setProductCode(String value) {
         this.productCode = value;
@@ -124,11 +114,9 @@ public class Header {
 
     /**
      * Gets the value of the acronym property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAcronym() {
         return acronym;
@@ -136,11 +124,9 @@ public class Header {
 
     /**
      * Sets the value of the acronym property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAcronym(String value) {
         this.acronym = value;
@@ -148,11 +134,9 @@ public class Header {
 
     /**
      * Gets the value of the selectorFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSelectorFlag() {
         return selectorFlag;
@@ -160,11 +144,9 @@ public class Header {
 
     /**
      * Sets the value of the selectorFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSelectorFlag(String value) {
         this.selectorFlag = value;

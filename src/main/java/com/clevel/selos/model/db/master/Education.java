@@ -15,11 +15,11 @@ public class Education implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "code",length = 5)
+    @Column(name = "code", length = 5)
     private String code;
-    @Column(name = "name_th",length = 100)
+    @Column(name = "name_th", length = 100)
     private String nameTh;
-    @Column(name = "name_en",length = 100)
+    @Column(name = "name_en", length = 100)
     private String nameEn;
     @Column(name = "active")
     private int active;
