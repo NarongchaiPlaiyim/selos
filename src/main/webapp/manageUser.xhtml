@@ -31,14 +31,13 @@
                                 <h:outputText value=" TotalUser : #{isa.userSize}"/>
                             </p:panelGrid>
 
-                        <p:dataTable id="dataTable" value="#{isa.userDetail}" var="c" styleClass="center"
-                                     rowKey="#{c.id}"
-                                     selection="#{isa.selectUserDetail}"
+                        <p:dataTable id="dataTable" var="c" value="#{isa.userDetail}" styleClass="center"
+                                     selection="#{isa.selectUserDetail}" rowKey="#{c.id}"
                                      rowIndexVar="rowIndex" rows="20" paginator="true">
-                            <!--scrollable="true" scrollHeight="400">-->
-                            <p:column headerText="" selectionMode="multiple"/>
 
-                            <p:column headerText="Id">
+                            <p:column selectionMode="multiple"/>
+
+                            <p:column headerText="userId">
                                 <h:outputText value="#{c.id}"/>
                             </p:column>
                             <p:column headerText="Username">
@@ -50,9 +49,9 @@
                             <p:column headerText="Active">
                                 <h:outputText value="#{c.active}"/>
                             </p:column>
-                            <p:column headerText="BuCode">
-                                <h:outputText value="#{c.buCode}"/>
-                            </p:column>
+                            <!--<p:column headerText="BuCode">-->
+                                <!--<h:outputText value="#{c.buCode}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="LastIp">
                                 <h:outputText value="#{c.lastIP}"/>
                             </p:column>
@@ -84,15 +83,18 @@
                                 <h:outputText value="#{c.zone.name}"/>
                             </p:column>
 
-                            <!--<p:column headerText="Status">-->
-                                <!--<h:outputText value="#{c.userStatus}"/>-->
-                            <!--</p:column>-->
+                            <p:column headerText="Status">
+                                <h:outputText value="#{c.userStatus}"/>
+                            </p:column>
                             <p:column headerText="Management">
                                 <p:commandButton icon="ui-icon-pencil"
                                                  title="${c.id}"
-                                                 actionListener="#{isa.onOpenEditForm(c.id)}"
+                                                 action="#{isa.onOpenEditForm()}"
                                                  oncomplete="manageUserDlg.show()"
-                                                 update=":manageDialogForm"/>
+                                                 update=":manageDialogForm">
+                                    <f:setPropertyActionListener value="#{c.id}"
+                                                                 target="#{isa.id}"  />
+                                        </p:commandButton>
 
                                 <p:commandButton icon="ui-icon-trash"
                                                  title="Remove"
@@ -101,7 +103,6 @@
                                                                      target="#{isa.id}"  />
 
                                         </p:commandButton>
-
 
                             </p:column>
                         </p:dataTable>
@@ -149,6 +150,15 @@
             <ui:param name="formId" value="frmConfirmDeleteUser"/>
             <ui:param name="controller" value="#{isa}"/>
             <ui:param name="action" value="onDelete"/>
+            <ui:param name="update" value=":userTableData"/>
+        </ui:include>
+
+        <ui:include src="site/dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteUserListDialog"/>
+            <ui:param name="name" value="confirmDeleteUserListDlg"/>
+            <ui:param name="formId" value="frmConfirmDeleteUserList"/>
+            <ui:param name="controller" value="#{isa}"/>
+            <ui:param name="action" value="deleteUserList"/>
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 

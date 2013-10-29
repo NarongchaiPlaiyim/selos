@@ -87,22 +87,24 @@ public class IsaBusinessControl implements Serializable {
 
         log.debug("editUser()");
 
-        User user = new User();
-//        User user =userDAO.findById(isaCreateUserView.getId());
 
-        user.setId(isaCreateUserView.getId());
+        User user =userDAO.findById(isaCreateUserView.getId());
+
+//        user.setId(isaCreateUserView.getId());
         user.setUserName(isaCreateUserView.getUsername());
         user.setBuCode(isaCreateUserView.getBuCode());
         user.setPhoneExt(isaCreateUserView.getPhoneExt());
         user.setPhoneNumber(isaCreateUserView.getPhoneNumber());
         user.setEmailAddress(isaCreateUserView.getEmailAddress());
-        user.setRole(isaCreateUserView.getRole());
-        user.setDepartment(isaCreateUserView.getUserDepartment());
-        user.setDivision(isaCreateUserView.getUserDivision());
-        user.setRegion(isaCreateUserView.getUserRegion());
-        user.setTeam(isaCreateUserView.getUserTeam());
-        user.setTitle(isaCreateUserView.getUserTitle());
-        user.setZone(isaCreateUserView.getUserZone());
+//        user.setRole(isaCreateUserView.getRole());
+//        user.setDepartment(isaCreateUserView.getUserDepartment());
+        UserDivision userDivision=new UserDivision();
+        userDivision.setId(isaCreateUserView.getUserDivision().getId());
+        user.setDivision(userDivision);
+//        user.setRegion(isaCreateUserView.getUserRegion());
+//        user.setTeam(isaCreateUserView.getUserTeam());
+//        user.setTitle(isaCreateUserView.getUserTitle());
+//        user.setZone(isaCreateUserView.getUserZone());
         user.setActive(isaCreateUserView.getActive());
         user.setUserStatus(UserStatus.NORMAL);
 
@@ -191,7 +193,7 @@ public class IsaBusinessControl implements Serializable {
 
     }
 
-    public void deleteUserList(User[] userlist) {
+    public void deleteUserList(User[] userlist) throws Exception{
         log.debug("deleteUserList()");
 
         for (User list : userlist) {

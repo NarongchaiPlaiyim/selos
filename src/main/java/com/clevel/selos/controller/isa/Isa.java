@@ -181,7 +181,7 @@ public class Isa implements Serializable {
     }
 
 
-    public void onOpenEditForm(String id) {
+    public void onOpenEditForm() {
         System.out.println("------------------ " + id);
 
         RequestContext context = RequestContext.getCurrentInstance();
@@ -231,7 +231,10 @@ public class Isa implements Serializable {
     }
 
     public void onDeleteUserList() {
-
+        System.out.println("-------------------------------------22 : "+selectUserDetail.length);
+        for (User list:selectUserDetail){
+            System.out.println(list.getId());
+        }
            RequestContext context=RequestContext.getCurrentInstance();
         try {
             messageHeader = "Delete User.";
@@ -239,10 +242,7 @@ public class Isa implements Serializable {
             if(selectUserDetail.length==0){
                 message = "Please Select User ";
                 context.execute("msgBoxSystemMessageDlg.show()");
-//                context.update(":msgBoxSystemMessagePanel");
             }else{
-                isaBusinessControl.deleteUserList(selectUserDetail);
-                onSelectUser();
                 context.execute("confirmDeleteUserListDlg.show()");
             }
 
@@ -258,6 +258,25 @@ public class Isa implements Serializable {
         }
     }
 
+    public void deleteUserList(){
+
+        RequestContext context=RequestContext.getCurrentInstance();
+        try{
+
+        isaBusinessControl.deleteUserList(selectUserDetail);
+
+        }catch (Exception e){
+
+            messageHeader = "Delete User.";
+            if (e.getCause() != null) {
+                message = "Delete User failed. Cause : "+e.getCause().getMessage();
+            }else{
+                message = "Delete User failed. Cause : "+e.getMessage();
+            }
+                    context.execute("msgBoxSystemMessageDlg.show()");
+        }
+        onSelectUser();
+    }
 
     public List<User> getUserDetail() {
         return userDetail;
