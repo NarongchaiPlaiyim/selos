@@ -5,11 +5,9 @@ import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.view.BizProductDetailView;
 import org.joda.time.DateTime;
 
-import java.security.Timestamp;
-
 public class BizProductDetailTransform extends Transform {
 
-    public BizProductDetailView transformToView(BizProductDetail bizProductDetail){
+    public BizProductDetailView transformToView(BizProductDetail bizProductDetail) {
 
         BizProductDetailView bizProductDetailView = new BizProductDetailView();
         bizProductDetailView.setNo(bizProductDetail.getNo());
@@ -28,7 +26,7 @@ public class BizProductDetailTransform extends Transform {
         return bizProductDetailView;
     }
 
-    public BizProductDetail transformToModel(BizProductDetailView bizProductDetailView,BizInfoDetail bizInfoDetail){
+    public BizProductDetail transformToModel(BizProductDetailView bizProductDetailView, BizInfoDetail bizInfoDetail) {
 
         BizProductDetail bizProductDetail = new BizProductDetail();
         bizProductDetail.setNo(bizProductDetailView.getNo());
@@ -43,7 +41,6 @@ public class BizProductDetailTransform extends Transform {
         bizProductDetail.setModifyDate(DateTime.now().toDate());
 
         bizProductDetail.setBizInfoDetail(bizInfoDetail);
-
 
 
         return bizProductDetail;

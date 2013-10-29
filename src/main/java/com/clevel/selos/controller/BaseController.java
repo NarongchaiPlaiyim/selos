@@ -30,39 +30,39 @@ public class BaseController implements Serializable {
     private AppHeaderView appHeaderView;
     private long stepId;
 
-    public BaseController(){
+    public BaseController() {
     }
 
     @PostConstruct
-    public void onCreation(){
+    public void onCreation() {
         log.info("BaseController ::: Creation ");
         manageButton = new ManageButton();
         HttpSession session = FacesUtil.getSession(true);
         long workCasePreScreenId = 0;
         stepId = 0;
 
-        if(session.getAttribute("workCasePreScreenId") != null){
+        if (session.getAttribute("workCasePreScreenId") != null) {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
         }
-        if(session.getAttribute("stepId") != null){
+        if (session.getAttribute("stepId") != null) {
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
         }
-        log.info("BaseController ::: getSession : workcase = {}, stepid = {}",workCasePreScreenId, stepId);
+        log.info("BaseController ::: getSession : workcase = {}, stepid = {}", workCasePreScreenId, stepId);
 
-        if(stepId == 1001){
+        if (stepId == 1001) {
             manageButton.setAssignToCheckerButton(true);
             manageButton.setCancelCAButton(true);
             manageButton.setCheckMandateDocButton(true);
         }
 
-        if(stepId == 1002){
+        if (stepId == 1002) {
             manageButton.setCheckMandateDocButton(true);
             manageButton.setCheckNCBButton(true);
             manageButton.setReturnToMakerButton(true);
             //manageButton.setCancelCAButton(true);
         }
 
-        if(stepId == 1003){
+        if (stepId == 1003) {
             manageButton.setCancelCAButton(true);
             manageButton.setCloseSaleButton(true);
             manageButton.setCheckBRMSButton(true);
@@ -70,11 +70,11 @@ public class BaseController implements Serializable {
             manageButton.setRequestAppraisalButton(true);
         }
 
-        appHeaderView = (AppHeaderView)session.getAttribute("appHeaderInfo");
+        appHeaderView = (AppHeaderView) session.getAttribute("appHeaderInfo");
         log.info("BaseController ::: appHeader : {}", appHeaderView);
 
-        user = (User)session.getAttribute("user");
-        if(user == null){
+        user = (User) session.getAttribute("user");
+        if (user == null) {
             UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);

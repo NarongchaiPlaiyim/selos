@@ -14,9 +14,9 @@ import java.math.BigDecimal;
 
 /**
  * <p>Java class for corporateDetail complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="corporateDetail">
  *   &lt;complexContent>
@@ -810,110 +810,108 @@ import java.math.BigDecimal;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "corporateDetail", propOrder = {
-    "custNbr",
-    "title",
-    "thaiName1",
-    "thaiName2",
-    "thaiName3",
-    "engName1",
-    "engName2",
-    "engName3",
-    "cId",
-    "citizenCId",
-    "estDate",
-    "isoCountry",
-    "addressLine1PRI",
-    "addressLine2PRI",
-    "addrTumbon",
-    "addrAumper",
-    "city",
-    "postalCd",
-    "ctry",
-    "isoCtryCode",
-    "emailAddress1",
-    "addressLine1REG",
-    "addressLine2REG",
-    "comRegTumbon",
-    "comRegAumper",
-    "city2",
-    "ctry2",
-    "isoCtryCode2",
-    "emailAddress2",
-    "telephoneType1",
-    "telephoneNumber1",
-    "extension1",
-    "titleOfContact",
-    "contactPerson",
-    "telephoneNbr",
-    "contactReason",
-    "description",
-    "typeOfOwnership",
-    "salesVolume",
-    "nbrOfEmps",
-    "smallBusiness",
-    "custType",
-    "busType1",
-    "busType2",
-    "branchOpening",
-    "branchResp",
-    "co",
-    "netFixedAssetAmt",
-    "hunter",
-    "farmer",
-    "capitalRegAmt",
-    "capitalPaidAmt",
-    "historicalRating",
-    "issuedDate",
-    "ratedBy",
-    "lastReviewDate",
-    "nextReviewDate",
-    "haveData",
-    "localRating1",
-    "localIssuedDate",
-    "localRatedBy",
-    "foreignRating1",
-    "foreignIssuedDate",
-    "foreignRatedBy",
-    "telephoneType2",
-    "telephoneNumber2",
-    "extension2",
-    "telephoneType3",
-    "telephoneNumber3",
-    "extension3",
-    "telephoneType4",
-    "telephoneNumber4",
-    "extension4",
-    "telephoneType5",
-    "telephoneNumber5",
-    "extension5",
-    "telephoneType6",
-    "telephoneNumber6",
-    "extension6",
-    "telephoneType7",
-    "telephoneNumber7",
-    "extension7",
-    "telephoneType8",
-    "telephoneNumber8",
-    "extension8",
-    "emailType1",
-    "emailType2",
-    "telephoneNumber9",
-    "extension9",
-    "telephoneType9",
-    "telephoneNumber10",
-    "extension10",
-    "telephoneType10",
-    "telephoneNumber11",
-    "extension11",
-    "telephoneType11",
-    "telephoneNumber12",
-    "extension12",
-    "telephoneType12"
+        "custNbr",
+        "title",
+        "thaiName1",
+        "thaiName2",
+        "thaiName3",
+        "engName1",
+        "engName2",
+        "engName3",
+        "cId",
+        "citizenCId",
+        "estDate",
+        "isoCountry",
+        "addressLine1PRI",
+        "addressLine2PRI",
+        "addrTumbon",
+        "addrAumper",
+        "city",
+        "postalCd",
+        "ctry",
+        "isoCtryCode",
+        "emailAddress1",
+        "addressLine1REG",
+        "addressLine2REG",
+        "comRegTumbon",
+        "comRegAumper",
+        "city2",
+        "ctry2",
+        "isoCtryCode2",
+        "emailAddress2",
+        "telephoneType1",
+        "telephoneNumber1",
+        "extension1",
+        "titleOfContact",
+        "contactPerson",
+        "telephoneNbr",
+        "contactReason",
+        "description",
+        "typeOfOwnership",
+        "salesVolume",
+        "nbrOfEmps",
+        "smallBusiness",
+        "custType",
+        "busType1",
+        "busType2",
+        "branchOpening",
+        "branchResp",
+        "co",
+        "netFixedAssetAmt",
+        "hunter",
+        "farmer",
+        "capitalRegAmt",
+        "capitalPaidAmt",
+        "historicalRating",
+        "issuedDate",
+        "ratedBy",
+        "lastReviewDate",
+        "nextReviewDate",
+        "haveData",
+        "localRating1",
+        "localIssuedDate",
+        "localRatedBy",
+        "foreignRating1",
+        "foreignIssuedDate",
+        "foreignRatedBy",
+        "telephoneType2",
+        "telephoneNumber2",
+        "extension2",
+        "telephoneType3",
+        "telephoneNumber3",
+        "extension3",
+        "telephoneType4",
+        "telephoneNumber4",
+        "extension4",
+        "telephoneType5",
+        "telephoneNumber5",
+        "extension5",
+        "telephoneType6",
+        "telephoneNumber6",
+        "extension6",
+        "telephoneType7",
+        "telephoneNumber7",
+        "extension7",
+        "telephoneType8",
+        "telephoneNumber8",
+        "extension8",
+        "emailType1",
+        "emailType2",
+        "telephoneNumber9",
+        "extension9",
+        "telephoneType9",
+        "telephoneNumber10",
+        "extension10",
+        "telephoneType10",
+        "telephoneNumber11",
+        "extension11",
+        "telephoneType11",
+        "telephoneNumber12",
+        "extension12",
+        "telephoneType12"
 })
 public class CorporateDetail {
 
@@ -1046,11 +1044,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the custNbr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustNbr() {
         return custNbr;
@@ -1058,11 +1054,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the custNbr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustNbr(String value) {
         this.custNbr = value;
@@ -1070,11 +1064,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the title property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTitle() {
         return title;
@@ -1082,11 +1074,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the title property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTitle(String value) {
         this.title = value;
@@ -1094,11 +1084,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the thaiName1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getThaiName1() {
         return thaiName1;
@@ -1106,11 +1094,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the thaiName1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setThaiName1(String value) {
         this.thaiName1 = value;
@@ -1118,11 +1104,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the thaiName2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getThaiName2() {
         return thaiName2;
@@ -1130,11 +1114,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the thaiName2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setThaiName2(String value) {
         this.thaiName2 = value;
@@ -1142,11 +1124,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the thaiName3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getThaiName3() {
         return thaiName3;
@@ -1154,11 +1134,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the thaiName3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setThaiName3(String value) {
         this.thaiName3 = value;
@@ -1166,11 +1144,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the engName1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEngName1() {
         return engName1;
@@ -1178,11 +1154,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the engName1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEngName1(String value) {
         this.engName1 = value;
@@ -1190,11 +1164,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the engName2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEngName2() {
         return engName2;
@@ -1202,11 +1174,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the engName2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEngName2(String value) {
         this.engName2 = value;
@@ -1214,11 +1184,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the engName3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEngName3() {
         return engName3;
@@ -1226,11 +1194,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the engName3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEngName3(String value) {
         this.engName3 = value;
@@ -1238,11 +1204,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the cId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCId() {
         return cId;
@@ -1250,11 +1214,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the cId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCId(String value) {
         this.cId = value;
@@ -1262,11 +1224,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the citizenCId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCitizenCId() {
         return citizenCId;
@@ -1274,11 +1234,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the citizenCId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCitizenCId(String value) {
         this.citizenCId = value;
@@ -1286,11 +1244,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the estDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEstDate() {
         return estDate;
@@ -1298,11 +1254,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the estDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEstDate(String value) {
         this.estDate = value;
@@ -1310,11 +1264,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the isoCountry property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getIsoCountry() {
         return isoCountry;
@@ -1322,11 +1274,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the isoCountry property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIsoCountry(String value) {
         this.isoCountry = value;
@@ -1334,11 +1284,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addressLine1PRI property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddressLine1PRI() {
         return addressLine1PRI;
@@ -1346,11 +1294,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addressLine1PRI property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddressLine1PRI(String value) {
         this.addressLine1PRI = value;
@@ -1358,11 +1304,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addressLine2PRI property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddressLine2PRI() {
         return addressLine2PRI;
@@ -1370,11 +1314,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addressLine2PRI property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddressLine2PRI(String value) {
         this.addressLine2PRI = value;
@@ -1382,11 +1324,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addrTumbon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddrTumbon() {
         return addrTumbon;
@@ -1394,11 +1334,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addrTumbon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddrTumbon(String value) {
         this.addrTumbon = value;
@@ -1406,11 +1344,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addrAumper property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddrAumper() {
         return addrAumper;
@@ -1418,11 +1354,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addrAumper property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddrAumper(String value) {
         this.addrAumper = value;
@@ -1430,11 +1364,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the city property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCity() {
         return city;
@@ -1442,11 +1374,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the city property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCity(String value) {
         this.city = value;
@@ -1454,11 +1384,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the postalCd property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPostalCd() {
         return postalCd;
@@ -1466,11 +1394,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the postalCd property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPostalCd(String value) {
         this.postalCd = value;
@@ -1478,11 +1404,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the ctry property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtry() {
         return ctry;
@@ -1490,11 +1414,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the ctry property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtry(String value) {
         this.ctry = value;
@@ -1502,11 +1424,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the isoCtryCode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getIsoCtryCode() {
         return isoCtryCode;
@@ -1514,11 +1434,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the isoCtryCode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIsoCtryCode(String value) {
         this.isoCtryCode = value;
@@ -1526,11 +1444,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the emailAddress1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEmailAddress1() {
         return emailAddress1;
@@ -1538,11 +1454,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the emailAddress1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmailAddress1(String value) {
         this.emailAddress1 = value;
@@ -1550,11 +1464,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addressLine1REG property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddressLine1REG() {
         return addressLine1REG;
@@ -1562,11 +1474,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addressLine1REG property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddressLine1REG(String value) {
         this.addressLine1REG = value;
@@ -1574,11 +1484,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the addressLine2REG property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getAddressLine2REG() {
         return addressLine2REG;
@@ -1586,11 +1494,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the addressLine2REG property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setAddressLine2REG(String value) {
         this.addressLine2REG = value;
@@ -1598,11 +1504,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the comRegTumbon property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getComRegTumbon() {
 
@@ -1616,11 +1520,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the comRegTumbon property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setComRegTumbon(String value) {
         this.comRegTumbon = value;
@@ -1628,11 +1530,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the comRegAumper property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getComRegAumper() {
         try {
@@ -1645,11 +1545,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the comRegAumper property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setComRegAumper(String value) {
         this.comRegAumper = value;
@@ -1657,11 +1555,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the city2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCity2() {
         return city2;
@@ -1669,11 +1565,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the city2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCity2(String value) {
         this.city2 = value;
@@ -1681,11 +1575,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the ctry2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCtry2() {
         return ctry2;
@@ -1693,11 +1585,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the ctry2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCtry2(String value) {
         this.ctry2 = value;
@@ -1705,11 +1595,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the isoCtryCode2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getIsoCtryCode2() {
         return isoCtryCode2;
@@ -1717,11 +1605,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the isoCtryCode2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIsoCtryCode2(String value) {
         this.isoCtryCode2 = value;
@@ -1729,11 +1615,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the emailAddress2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEmailAddress2() {
         return emailAddress2;
@@ -1741,11 +1625,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the emailAddress2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmailAddress2(String value) {
         this.emailAddress2 = value;
@@ -1753,11 +1635,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType1() {
         return telephoneType1;
@@ -1765,11 +1645,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType1(String value) {
         this.telephoneType1 = value;
@@ -1777,11 +1655,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber1() {
         return telephoneNumber1;
@@ -1789,11 +1665,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber1(String value) {
         this.telephoneNumber1 = value;
@@ -1801,11 +1675,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension1() {
         return extension1;
@@ -1813,11 +1685,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension1(String value) {
         this.extension1 = value;
@@ -1825,11 +1695,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the titleOfContact property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTitleOfContact() {
         return titleOfContact;
@@ -1837,11 +1705,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the titleOfContact property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTitleOfContact(String value) {
         this.titleOfContact = value;
@@ -1849,11 +1715,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the contactPerson property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getContactPerson() {
         return contactPerson;
@@ -1861,11 +1725,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the contactPerson property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setContactPerson(String value) {
         this.contactPerson = value;
@@ -1873,11 +1735,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNbr property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNbr() {
         return telephoneNbr;
@@ -1885,11 +1745,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNbr property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNbr(String value) {
         this.telephoneNbr = value;
@@ -1897,11 +1755,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the contactReason property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getContactReason() {
         return contactReason;
@@ -1909,11 +1765,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the contactReason property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setContactReason(String value) {
         this.contactReason = value;
@@ -1921,11 +1775,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getDescription() {
         return description;
@@ -1933,11 +1785,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -1945,11 +1795,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the typeOfOwnership property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTypeOfOwnership() {
         return typeOfOwnership;
@@ -1957,11 +1805,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the typeOfOwnership property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTypeOfOwnership(String value) {
         this.typeOfOwnership = value;
@@ -1969,11 +1815,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the salesVolume property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSalesVolume() {
         return salesVolume;
@@ -1981,11 +1825,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the salesVolume property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSalesVolume(String value) {
         this.salesVolume = value;
@@ -1993,11 +1835,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the nbrOfEmps property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNbrOfEmps() {
         return nbrOfEmps;
@@ -2005,11 +1845,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the nbrOfEmps property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNbrOfEmps(String value) {
         this.nbrOfEmps = value;
@@ -2017,11 +1855,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the smallBusiness property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSmallBusiness() {
         return smallBusiness;
@@ -2029,11 +1865,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the smallBusiness property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSmallBusiness(String value) {
         this.smallBusiness = value;
@@ -2041,11 +1875,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the custType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCustType() {
         return custType;
@@ -2053,11 +1885,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the custType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCustType(String value) {
         this.custType = value;
@@ -2065,11 +1895,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the busType1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusType1() {
         return busType1;
@@ -2077,11 +1905,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the busType1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusType1(String value) {
         this.busType1 = value;
@@ -2089,11 +1915,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the busType2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBusType2() {
         return busType2;
@@ -2101,11 +1925,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the busType2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBusType2(String value) {
         this.busType2 = value;
@@ -2113,11 +1935,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the branchOpening property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBranchOpening() {
         return branchOpening;
@@ -2125,11 +1945,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the branchOpening property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBranchOpening(String value) {
         this.branchOpening = value;
@@ -2137,11 +1955,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the branchResp property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getBranchResp() {
         return branchResp;
@@ -2149,11 +1965,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the branchResp property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setBranchResp(String value) {
         this.branchResp = value;
@@ -2161,11 +1975,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the co property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCo() {
         return co;
@@ -2173,11 +1985,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the co property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCo(String value) {
         this.co = value;
@@ -2185,11 +1995,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the netFixedAssetAmt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link BigDecimal }
      */
     public BigDecimal getNetFixedAssetAmt() {
         return netFixedAssetAmt;
@@ -2197,11 +2005,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the netFixedAssetAmt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BigDecimal }
      */
     public void setNetFixedAssetAmt(BigDecimal value) {
         this.netFixedAssetAmt = value;
@@ -2209,11 +2015,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the hunter property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getHunter() {
         return hunter;
@@ -2221,11 +2025,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the hunter property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setHunter(String value) {
         this.hunter = value;
@@ -2233,11 +2035,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the farmer property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFarmer() {
         return farmer;
@@ -2245,11 +2045,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the farmer property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setFarmer(String value) {
         this.farmer = value;
@@ -2257,11 +2055,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the capitalRegAmt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link BigDecimal }
      */
     public BigDecimal getCapitalRegAmt() {
         return capitalRegAmt;
@@ -2269,11 +2065,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the capitalRegAmt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BigDecimal }
      */
     public void setCapitalRegAmt(BigDecimal value) {
         this.capitalRegAmt = value;
@@ -2281,11 +2075,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the capitalPaidAmt property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link BigDecimal }
      */
     public BigDecimal getCapitalPaidAmt() {
         return capitalPaidAmt;
@@ -2293,11 +2085,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the capitalPaidAmt property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BigDecimal }
      */
     public void setCapitalPaidAmt(BigDecimal value) {
         this.capitalPaidAmt = value;
@@ -2305,11 +2095,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the historicalRating property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getHistoricalRating() {
         return historicalRating;
@@ -2317,11 +2105,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the historicalRating property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setHistoricalRating(String value) {
         this.historicalRating = value;
@@ -2329,11 +2115,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the issuedDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getIssuedDate() {
         return issuedDate;
@@ -2341,11 +2125,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the issuedDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setIssuedDate(String value) {
         this.issuedDate = value;
@@ -2353,11 +2135,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the ratedBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRatedBy() {
         return ratedBy;
@@ -2365,11 +2145,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the ratedBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRatedBy(String value) {
         this.ratedBy = value;
@@ -2377,11 +2155,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the lastReviewDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLastReviewDate() {
         return lastReviewDate;
@@ -2389,11 +2165,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the lastReviewDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLastReviewDate(String value) {
         this.lastReviewDate = value;
@@ -2401,11 +2175,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the nextReviewDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getNextReviewDate() {
         return nextReviewDate;
@@ -2413,11 +2185,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the nextReviewDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setNextReviewDate(String value) {
         this.nextReviewDate = value;
@@ -2425,11 +2195,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the haveData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getHaveData() {
         return haveData;
@@ -2437,11 +2205,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the haveData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setHaveData(String value) {
         this.haveData = value;
@@ -2449,11 +2215,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the localRating1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocalRating1() {
         return localRating1;
@@ -2461,11 +2225,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the localRating1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLocalRating1(String value) {
         this.localRating1 = value;
@@ -2473,11 +2235,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the localIssuedDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocalIssuedDate() {
         return localIssuedDate;
@@ -2485,11 +2245,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the localIssuedDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLocalIssuedDate(String value) {
         this.localIssuedDate = value;
@@ -2497,11 +2255,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the localRatedBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getLocalRatedBy() {
         return localRatedBy;
@@ -2509,11 +2265,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the localRatedBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLocalRatedBy(String value) {
         this.localRatedBy = value;
@@ -2521,11 +2275,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the foreignRating1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getForeignRating1() {
         return foreignRating1;
@@ -2533,11 +2285,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the foreignRating1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setForeignRating1(String value) {
         this.foreignRating1 = value;
@@ -2545,11 +2295,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the foreignIssuedDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getForeignIssuedDate() {
         return foreignIssuedDate;
@@ -2557,11 +2305,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the foreignIssuedDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setForeignIssuedDate(String value) {
         this.foreignIssuedDate = value;
@@ -2569,11 +2315,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the foreignRatedBy property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getForeignRatedBy() {
         return foreignRatedBy;
@@ -2581,11 +2325,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the foreignRatedBy property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setForeignRatedBy(String value) {
         this.foreignRatedBy = value;
@@ -2593,11 +2335,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType2() {
         return telephoneType2;
@@ -2605,11 +2345,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType2(String value) {
         this.telephoneType2 = value;
@@ -2617,11 +2355,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber2() {
         return telephoneNumber2;
@@ -2629,11 +2365,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber2(String value) {
         this.telephoneNumber2 = value;
@@ -2641,11 +2375,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension2() {
         return extension2;
@@ -2653,11 +2385,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension2(String value) {
         this.extension2 = value;
@@ -2665,11 +2395,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType3() {
         return telephoneType3;
@@ -2677,11 +2405,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType3(String value) {
         this.telephoneType3 = value;
@@ -2689,11 +2415,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber3() {
         return telephoneNumber3;
@@ -2701,11 +2425,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber3(String value) {
         this.telephoneNumber3 = value;
@@ -2713,11 +2435,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension3() {
         return extension3;
@@ -2725,11 +2445,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension3(String value) {
         this.extension3 = value;
@@ -2737,11 +2455,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType4() {
         return telephoneType4;
@@ -2749,11 +2465,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType4(String value) {
         this.telephoneType4 = value;
@@ -2761,11 +2475,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber4() {
         return telephoneNumber4;
@@ -2773,11 +2485,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber4(String value) {
         this.telephoneNumber4 = value;
@@ -2785,11 +2495,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension4() {
         return extension4;
@@ -2797,11 +2505,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension4(String value) {
         this.extension4 = value;
@@ -2809,11 +2515,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType5 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType5() {
         return telephoneType5;
@@ -2821,11 +2525,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType5 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType5(String value) {
         this.telephoneType5 = value;
@@ -2833,11 +2535,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber5 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber5() {
         return telephoneNumber5;
@@ -2845,11 +2545,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber5 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber5(String value) {
         this.telephoneNumber5 = value;
@@ -2857,11 +2555,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension5 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension5() {
         return extension5;
@@ -2869,11 +2565,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension5 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension5(String value) {
         this.extension5 = value;
@@ -2881,11 +2575,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType6 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType6() {
         return telephoneType6;
@@ -2893,11 +2585,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType6 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType6(String value) {
         this.telephoneType6 = value;
@@ -2905,11 +2595,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber6 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber6() {
         return telephoneNumber6;
@@ -2917,11 +2605,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber6 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber6(String value) {
         this.telephoneNumber6 = value;
@@ -2929,11 +2615,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension6 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension6() {
         return extension6;
@@ -2941,11 +2625,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension6 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension6(String value) {
         this.extension6 = value;
@@ -2953,11 +2635,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType7 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType7() {
         return telephoneType7;
@@ -2965,11 +2645,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType7 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType7(String value) {
         this.telephoneType7 = value;
@@ -2977,11 +2655,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber7 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber7() {
         return telephoneNumber7;
@@ -2989,11 +2665,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber7 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber7(String value) {
         this.telephoneNumber7 = value;
@@ -3001,11 +2675,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension7 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension7() {
         return extension7;
@@ -3013,11 +2685,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension7 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension7(String value) {
         this.extension7 = value;
@@ -3025,11 +2695,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType8 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType8() {
         return telephoneType8;
@@ -3037,11 +2705,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType8 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType8(String value) {
         this.telephoneType8 = value;
@@ -3049,11 +2715,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber8 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber8() {
         return telephoneNumber8;
@@ -3061,11 +2725,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber8 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber8(String value) {
         this.telephoneNumber8 = value;
@@ -3073,11 +2735,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension8 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension8() {
         return extension8;
@@ -3085,11 +2745,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension8 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension8(String value) {
         this.extension8 = value;
@@ -3097,11 +2755,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the emailType1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEmailType1() {
         return emailType1;
@@ -3109,11 +2765,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the emailType1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmailType1(String value) {
         this.emailType1 = value;
@@ -3121,11 +2775,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the emailType2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getEmailType2() {
         return emailType2;
@@ -3133,11 +2785,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the emailType2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setEmailType2(String value) {
         this.emailType2 = value;
@@ -3145,11 +2795,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber9 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber9() {
         return telephoneNumber9;
@@ -3157,11 +2805,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber9 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber9(String value) {
         this.telephoneNumber9 = value;
@@ -3169,11 +2815,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension9 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension9() {
         return extension9;
@@ -3181,11 +2825,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension9 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension9(String value) {
         this.extension9 = value;
@@ -3193,11 +2835,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType9 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType9() {
         return telephoneType9;
@@ -3205,11 +2845,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType9 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType9(String value) {
         this.telephoneType9 = value;
@@ -3217,11 +2855,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber10 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber10() {
         return telephoneNumber10;
@@ -3229,11 +2865,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber10 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber10(String value) {
         this.telephoneNumber10 = value;
@@ -3241,11 +2875,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension10 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension10() {
         return extension10;
@@ -3253,11 +2885,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension10 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension10(String value) {
         this.extension10 = value;
@@ -3265,11 +2895,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType10 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType10() {
         return telephoneType10;
@@ -3277,11 +2905,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType10 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType10(String value) {
         this.telephoneType10 = value;
@@ -3289,11 +2915,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber11 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber11() {
         return telephoneNumber11;
@@ -3301,11 +2925,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber11 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber11(String value) {
         this.telephoneNumber11 = value;
@@ -3313,11 +2935,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension11 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension11() {
         return extension11;
@@ -3325,11 +2945,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension11 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension11(String value) {
         this.extension11 = value;
@@ -3337,11 +2955,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType11 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType11() {
         return telephoneType11;
@@ -3349,11 +2965,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType11 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType11(String value) {
         this.telephoneType11 = value;
@@ -3361,11 +2975,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneNumber12 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneNumber12() {
         return telephoneNumber12;
@@ -3373,11 +2985,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneNumber12 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneNumber12(String value) {
         this.telephoneNumber12 = value;
@@ -3385,11 +2995,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the extension12 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getExtension12() {
         return extension12;
@@ -3397,11 +3005,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the extension12 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setExtension12(String value) {
         this.extension12 = value;
@@ -3409,11 +3015,9 @@ public class CorporateDetail {
 
     /**
      * Gets the value of the telephoneType12 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getTelephoneType12() {
         return telephoneType12;
@@ -3421,11 +3025,9 @@ public class CorporateDetail {
 
     /**
      * Sets the value of the telephoneType12 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setTelephoneType12(String value) {
         this.telephoneType12 = value;

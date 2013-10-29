@@ -13,15 +13,15 @@ public class WarningCodeDAO extends GenericDAO<WarningCode, Integer> {
     private Logger log;
 
     @Inject
-    public WarningCodeDAO(){
+    public WarningCodeDAO() {
 
     }
 
-    public WarningCode findByCode(String code){
+    public WarningCode findByCode(String code) {
         log.info("findByCode : {}", code);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("code", code));
-        WarningCode warningCode = (WarningCode)criteria.uniqueResult();
+        WarningCode warningCode = (WarningCode) criteria.uniqueResult();
 
         return warningCode;
     }

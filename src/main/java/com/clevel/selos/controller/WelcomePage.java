@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @ViewScoped
-@ManagedBean(name="welcomePage")
+@ManagedBean(name = "welcomePage")
 public class WelcomePage implements Serializable {
     @Inject
     Logger log;
@@ -123,23 +123,23 @@ public class WelcomePage implements Serializable {
 //            log.error("",e);
 //        }
 //        log.debug("system: {}",system);
-        userAuditor.addSucceed("user1","test","test action");
-        rmAuditor.add("user1","test","test RM",new Date(), ActionResult.SUCCESS,"",new Date(),"12345");
-        ncbAuditor.add("user1","test","test NCB",new Date(), ActionResult.SUCCESS,"",new Date(),"67890");
+        userAuditor.addSucceed("user1", "test", "test action");
+        rmAuditor.add("user1", "test", "test RM", new Date(), ActionResult.SUCCESS, "", new Date(), "12345");
+        ncbAuditor.add("user1", "test", "test NCB", new Date(), ActionResult.SUCCESS, "", new Date(), "67890");
     }
 
     public void testBRMS() {
         try {
             List<PreScreenResponse> preScreenResponseList = brms.checkPreScreenRule(new PreScreenRequest());
-            log.debug("{}",preScreenResponseList);
+            log.debug("{}", preScreenResponseList);
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
 //        log.debug("system: {}",system);
     }
 
     public void testRLOSCSI() {
-        try{
+        try {
             CSIResult csiResult;
             CSIInputData csiInputData = new CSIInputData();
 
@@ -158,49 +158,49 @@ public class WelcomePage implements Serializable {
             csiInputData.setIdModelList(idModelList);
             csiInputData.setNameModelList(nameModelList);
             csiResult = rlos.getCSIData("10001", csiInputData);
-            log.debug("csi result : {}",csiResult);
+            log.debug("csi result : {}", csiResult);
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
 //        log.debug("system: {}",system);
     }
 
     public void testDWHObligation() {
-        try{
+        try {
             ObligationResult obligationResult = new ObligationResult();
             List<String> customerList = new ArrayList<String>();
             customerList.add("1234");
             customerList.add("1235");
             obligationResult = dwh.getObligationData("BDM001", customerList);
-            log.debug("obligation result : {}",obligationResult);
+            log.debug("obligation result : {}", obligationResult);
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
 //        log.debug("system: {}",system);
     }
 
     public void testRLOSAppIn() {
-        try{
+        try {
             AppInProcessResult appInProcessResult = new AppInProcessResult();
             List<String> citizenIdList = new ArrayList<String>();
             citizenIdList.add("11111");
             citizenIdList.add("22222");
             appInProcessResult = rlos.getAppInProcessData("BDM001", citizenIdList);
-            log.debug("testRLOSAppIn result : {}",appInProcessResult);
+            log.debug("testRLOSAppIn result : {}", appInProcessResult);
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
 //        log.debug("system: {}",system);
     }
 
     public void testBankStatement() {
-        try{
+        try {
             DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
-            Date fromDate = Util.strToDateFormat("082013","MMyyyy");
-            bankStatementResult = dwh.getBankStatementData("BDM001","3042582720",fromDate,12);
-            log.debug("BankStatement result : {}",bankStatementResult);
+            Date fromDate = Util.strToDateFormat("082013", "MMyyyy");
+            bankStatementResult = dwh.getBankStatementData("BDM001", "3042582720", fromDate, 12);
+            log.debug("BankStatement result : {}", bankStatementResult);
         } catch (Exception e) {
-            log.error("",e);
+            log.error("", e);
         }
 //        log.debug("system: {}",system);
     }
@@ -220,14 +220,14 @@ public class WelcomePage implements Serializable {
         log.debug("on001");
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
-        log.debug("v: {}, e: {}",validationStr,exceptionStr);
+        log.debug("v: {}, e: {}", validationStr, exceptionStr);
     }
 
     public void on002() {
         log.debug("on002");
         validationStr = validationMsg.get("002");
         exceptionStr = exceptionMsg.get("501");
-        log.debug("v: {}, e: {}",validationStr,exceptionStr);
+        log.debug("v: {}, e: {}", validationStr, exceptionStr);
     }
 
     public void testException() {
@@ -237,9 +237,9 @@ public class WelcomePage implements Serializable {
 //            throw new BPMInterfaceException(null,"101","test BPM exception!");
 //            throw new EmailInterfaceException(null,"XXX","test EMAIL exception!");
         } catch (ApplicationRuntimeException e) {
-            log.error("",e);
+            log.error("", e);
             log.debug("cause stack: {}", ExceptionUtils.getStackTrace(e.getCause()));
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,"Runtime exception!","Exception Code: "+ e.getCode()+", Message: "+e.getMessage() +", stack trace: "+ ExceptionUtils.getMessage(e.getCause()));
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Runtime exception!", "Exception Code: " + e.getCode() + ", Message: " + e.getMessage() + ", stack trace: " + ExceptionUtils.getMessage(e.getCause()));
 //            RequestContext.getCurrentInstance().showMessageInDialog(message);
         }
     }
@@ -250,7 +250,7 @@ public class WelcomePage implements Serializable {
 
     public void testEmail() {
         log.debug("testEmail.");
-        email.sendMail("user1@test.local","test subject","",new HashMap<String, String>());
+        email.sendMail("user1@test.local", "test subject", "", new HashMap<String, String>());
     }
 
     public void reloadConfig() {
@@ -258,18 +258,19 @@ public class WelcomePage implements Serializable {
     }
 
     public void onActionRM() {
-        rmLog.debug("test RM log. ({})",new Date());
+        rmLog.debug("test RM log. ({})", new Date());
     }
 
     public void onActionNCB() {
-        ncbLog.debug("test NCB log. ({})",new Date());
+        ncbLog.debug("test NCB log. ({})", new Date());
     }
 
     public void onActionSW() {
-        swLog.debug("test SW log. ({})",new Date());
+        swLog.debug("test SW log. ({})", new Date());
     }
+
     public void onActionEmail() {
-        emailLog.debug("test Email log. ({})",new Date());
+        emailLog.debug("test Email log. ({})", new Date());
     }
 
     public void onActionRLOS() {
@@ -277,10 +278,10 @@ public class WelcomePage implements Serializable {
     }
 
     public void onActionBRMS() {
-        brmsLog.debug("test BRMS log. ({})",new Date());
+        brmsLog.debug("test BRMS log. ({})", new Date());
         try {
             com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceResponse response = endPointImp.callStandardPricingInterestRulesService(null);
-            if (null!=response){
+            if (null != response) {
                 brmsLog.debug("Response in not null");
             } else {
                 brmsLog.debug("Response in null");
@@ -294,13 +295,13 @@ public class WelcomePage implements Serializable {
             endPointImp.callStandardPricingInterestRulesService(null);
 
         } catch (Exception e) {
-            brmsLog.error("Exception : {}",e);
+            brmsLog.error("Exception : {}", e);
         }
 
     }
 
     public void onActionCOMS() {
-        comsLog.debug("test COMS log. ({})",new Date());
+        comsLog.debug("test COMS log. ({})", new Date());
     }
 
     public Date getNow() {
@@ -325,29 +326,30 @@ public class WelcomePage implements Serializable {
     public void onLoadDescription() {
         log.debug("onLoadDescription.");
         businessGroups = businessGroupDAO.findAll();
-        log.debug("group size: {}",businessGroups.size());
+        log.debug("group size: {}", businessGroups.size());
         selectedBusinessGroup = businessGroups.get(0);
         businessDescriptions = businessDescriptionDAO.getListByBusinessGroup(businessGroups.get(0));
         selectedBusinessDescription = businessDescriptions.get(0);
     }
 
     public void onChangeGroup() {
-        log.debug("onChangeGroup. (selected: {})",selectedBusinessGroup);
+        log.debug("onChangeGroup. (selected: {})", selectedBusinessGroup);
         BusinessGroup businessGroup = businessGroupDAO.findById(selectedBusinessGroup.getId());
-        log.debug("{}",businessGroup);
+        log.debug("{}", businessGroup);
         businessDescriptions = businessDescriptionDAO.getListByBusinessGroup(businessGroup);
-        selectedText = "GROUP: "+businessGroup.getName();
+        selectedText = "GROUP: " + businessGroup.getName();
     }
 
     public void onChangeDescription() {
         log.debug("onChangeDescription.");
         BusinessDescription businessDescription = businessDescriptionDAO.findById(selectedBusinessDescription.getId());
-        log.debug("{}",businessDescription);
-        selectedText = "DESCRIPTION: "+businessDescription.getName();
+        log.debug("{}", businessDescription);
+        selectedText = "DESCRIPTION: " + businessDescription.getName();
     }
 
     @Inject
     STPExecutor STPExecutor;
+
     public void testStoredProcedure() {
         log.debug("testStoredProcedure");
         STPExecutor.getApplicationNumber("XX");
@@ -355,6 +357,7 @@ public class WelcomePage implements Serializable {
 
     @Inject
     BPMInterface bpmInterface;
+
     public void testBPM() {
         log.debug("testBPM");
 //        UserDTO userDTO = bpmInterface.getUserDTO();

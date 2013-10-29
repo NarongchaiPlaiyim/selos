@@ -43,7 +43,8 @@ public class PrescreenResult implements Serializable {
     @Inject
     PrescreenBusinessControl prescreenBusinessControl;
 
-    enum ModeForButton{ ADD, EDIT, DELETE }
+    enum ModeForButton {ADD, EDIT, DELETE}
+
     private ModeForButton modeForButton;
     private long workCasePreScreenId;
     private long stepId;
@@ -52,36 +53,36 @@ public class PrescreenResult implements Serializable {
 
     private PrescreenResultView prescreenResultView;
 
-    public PrescreenResult(){
+    public PrescreenResult() {
 
     }
 
-    public void preRender(){
+    public void preRender() {
         HttpSession session = FacesUtil.getSession(true);
         log.info("preRender ::: setSession ");
 
-        if(session.getAttribute("workCasePreScreenId") != null){
+        if (session.getAttribute("workCasePreScreenId") != null) {
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
 
-            if(stepId != 1003){
-                try{
+            if (stepId != 1003) {
+                try {
                     ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                     ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                     return;
-                }catch (Exception ex){
-                    log.info("Exception :: {}",ex);
+                } catch (Exception ex) {
+                    log.info("Exception :: {}", ex);
                 }
             }
-        }else{
+        } else {
             //TODO return to inbox
             log.info("preRender ::: workCasePrescreenId is null.");
-            try{
+            try {
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            }catch (Exception ex){
-                log.info("Exception :: {}",ex);
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
     }
@@ -91,19 +92,19 @@ public class PrescreenResult implements Serializable {
         log.info("PrescreenResult ::: onCreation");
         HttpSession session = FacesUtil.getSession(true);
 
-        if(session.getAttribute("workCasePreScreenId") != null){
+        if (session.getAttribute("workCasePreScreenId") != null) {
             log.info("onCreation ::: getAttrubute workCasePreScreenId : {}", session.getAttribute("workCasePreScreenId"));
             log.info("onCreation ::: getAttrubute stepId : {}", session.getAttribute("stepId"));
             workCasePreScreenId = Long.parseLong(session.getAttribute("workCasePreScreenId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             queueName = session.getAttribute("queueName").toString();
-            user = (User)session.getAttribute("user");
+            user = (User) session.getAttribute("user");
 
             prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
         }
     }
 
-    public void onRetrieveInterfaceInfo(){
+    public void onRetrieveInterfaceInfo() {
         log.info("Start on Retrieve Interface Info");
 
         List<CustomerInfoView> customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
@@ -111,12 +112,12 @@ public class PrescreenResult implements Serializable {
 
     }
 
-    public void onSave(){
+    public void onSave() {
         log.info("Start onSave {}", prescreenResultView);
         prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId);
     }
 
-    public void onCloseSale(){
+    public void onCloseSale() {
 
     }
 

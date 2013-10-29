@@ -6,16 +6,16 @@ import java.io.Serializable;
 
 @XStreamAlias("name")
 public class TUEFEnquiryNameModel implements Serializable {
-    
+
     @XStreamAlias("familyname")
     private String familyname;
-    
+
     @XStreamAlias("firstname")
     private String firstname;
-    
+
     @XStreamAlias("middlename")
     private String middlename;
-    
+
     @XStreamAlias("dateofbirth")
     private String dateofbirth;
 
@@ -41,6 +41,6 @@ public class TUEFEnquiryNameModel implements Serializable {
     public String getDateofbirth() {
         return dateofbirth;
     }
-    
-    
+
+
 }

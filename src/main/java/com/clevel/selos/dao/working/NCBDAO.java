@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * Time: 16:02 น.
  * To change this template use File | Settings | File Templates.
  */
-public class NCBDAO extends GenericDAO<NCB,Long> {
+public class NCBDAO extends GenericDAO<NCB, Long> {
     @Inject
     private Logger log;
 
@@ -23,11 +23,11 @@ public class NCBDAO extends GenericDAO<NCB,Long> {
     public NCBDAO() {
     }
 
-    public NCB findNcbByCustomer(long customerId){
+    public NCB findNcbByCustomer(long customerId) {
         log.info("findNcbByCustomer : {}", customerId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customer.id", customerId));
-        NCB ncb = (NCB)criteria.uniqueResult();
+        NCB ncb = (NCB) criteria.uniqueResult();
 
         return ncb;
     }

@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for corporateCustomerDetailSection complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="corporateCustomerDetailSection">
  *   &lt;complexContent>
@@ -23,12 +23,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "corporateCustomerDetailSection", propOrder = {
-    "corporateDetail"
+        "corporateDetail"
 })
 public class CorporateCustomerDetailSection {
 
@@ -37,11 +35,9 @@ public class CorporateCustomerDetailSection {
 
     /**
      * Gets the value of the corporateDetail property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CorporateDetail }
-     *     
+     *
+     * @return possible object is
+     *         {@link CorporateDetail }
      */
     public CorporateDetail getCorporateDetail() {
         return corporateDetail;
@@ -49,11 +45,9 @@ public class CorporateCustomerDetailSection {
 
     /**
      * Sets the value of the corporateDetail property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CorporateDetail }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CorporateDetail }
      */
     public void setCorporateDetail(CorporateDetail value) {
         this.corporateDetail = value;

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class RequestTypeDAO extends GenericDAO<RequestType,Integer> {
+public class RequestTypeDAO extends GenericDAO<RequestType, Integer> {
     @Inject
     private Logger log;
 
@@ -20,7 +20,7 @@ public class RequestTypeDAO extends GenericDAO<RequestType,Integer> {
     @Override
     public List<RequestType> findAll() {
         Criteria criteria = getSession().createCriteria(getEntityClass())
-                .add(Restrictions.eq("active",1));
+                .add(Restrictions.eq("active", 1));
         List<RequestType> list = criteria.list();
         return list;
     }

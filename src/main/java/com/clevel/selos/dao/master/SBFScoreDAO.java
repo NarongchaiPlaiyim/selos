@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class SBFScoreDAO extends GenericDAO<SBFScore,Integer> {
+public class SBFScoreDAO extends GenericDAO<SBFScore, Integer> {
     @Inject
     private Logger log;
 

@@ -6,7 +6,7 @@
 }
 
 .selosmenu ul {
-    z-index:100;
+    z-index: 100;
     margin: 0;
     padding: 0;
     list-style-type: none;
@@ -28,6 +28,7 @@
     border-right: 1px solid transparent;
     text-decoration: none;
 }
+
 /* Sub level menu links style */
 .selosmenu ul li ul li a {
     background: #107ecb;
@@ -53,7 +54,8 @@
     background: #075c9a;
 }
 
-* html .selosmenu ul li a { /*IE6 hack to get sub menu links to behave correctly*/
+* html .selosmenu ul li a {
+    /*IE6 hack to get sub menu links to behave correctly*/
     display: inline-block;
 }
 
@@ -61,7 +63,8 @@
     color: white;
 }
 
-.selosmenu ul li a.selected { /*CSS class that's dynamically added to the currently active menu items' LI A element*/
+.selosmenu ul li a.selected {
+    /*CSS class that's dynamically added to the currently active menu items' LI A element*/
     background: #075c9a !important;
     color: white;
 }
@@ -71,7 +74,7 @@
     background: #075c9a;
     color: white;
 }
-	
+
 /* sub menus */
 .selosmenu ul li ul {
     position: absolute;
@@ -94,11 +97,13 @@
 /* Holly Hack for IE \*/
 * html .selosmenu {
     height: 1%;
-} /*Holly Hack for IE7 and below*/
+}
+
+/*Holly Hack for IE7 and below*/
 
 /* ######### CSS classes applied to down and right arrow images  ######### */
 
-.downarrowclass{
+.downarrowclass {
     background: url('../images/shared/down.gif') no-repeat;
     width: 11px;
     height: 8px;
@@ -130,7 +135,8 @@
 
 .ddcss3support .ddshadow.toplevelshadow {
     margin: 0; /* in CSS3 capable browsers overrides offset from NON CSS3 capable browsers, allowing the box-shadow values in the next selector to govern that */
-    /* opacity: 1; */ /* optionally uncomment this to remove partial opacity for browsers supporting a box-shadow property which has its own slight gradient opacity */
+    /* opacity: 1; */
+    /* optionally uncomment this to remove partial opacity for browsers supporting a box-shadow property which has its own slight gradient opacity */
 }
 
 .ddcss3support .ddshadow {

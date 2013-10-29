@@ -20,19 +20,22 @@
                 <div id="main_container">
                     <!-- Start Header Logo -->
                     <ui:include src="include/header_logo.xhtml"/>
+
                     <div id="content_container">
                         <div id="content_name">Inbox</div>
-                            <div id="content_inbox">
-                                <div id="content_form">
-                                    <!-- start content -->
-                                    <table class="content_table_form">
+                        <div id="content_inbox">
+                            <div id="content_form">
+                                <!-- start content -->
+                                <table class="content_table_form">
                                     <tr>
                                         <td>
                                             <p:dataTable id="resultInbox" var="item" value="#{inbox.inboxViewList}"
                                                          selection="#{inbox.inboxViewSelectItem}" selectionMode="single"
-                                                         paginator="false" rowKey="#{item.fnWobNum}" rowIndexVar="rowIndex" >
+                                                         paginator="false" rowKey="#{item.fnWobNum}"
+                                                         rowIndexVar="rowIndex">
 
-                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox" listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()" />
+                                                <p:ajax event="rowSelect" update=":frmMain:resultInbox"
+                                                        listener="#{inbox.onSelectInbox}" onstart="blockInbox.show()"/>
 
                                                 <p:column headerText="" styleClass="center" style="width:22px;">
                                                     <h:outputText value="#{rowIndex+1}"/>
@@ -42,11 +45,13 @@
                                                     <h:outputText value="#{item.caNo}"/>
                                                 </p:column>
 
-                                                <p:column headerText="FN_WobNum" styleClass="center" style="width: 130px;">
+                                                <p:column headerText="FN_WobNum" styleClass="center"
+                                                          style="width: 130px;">
                                                     <h:outputText value="#{item.fnWobNum}"/>
                                                 </p:column>
 
-                                                <p:column headerText="FN_StepName" styleClass="center" style="width: 110px;">
+                                                <p:column headerText="FN_StepName" styleClass="center"
+                                                          style="width: 110px;">
                                                     <h:outputText value="#{item.fnStepName}"/>
                                                 </p:column>
 
@@ -54,23 +59,26 @@
                                                     <h:outputText value="#{item.stepCode}"/>
                                                 </p:column>
 
-                                                <p:column headerText="Lock_Status" styleClass="center" style="width: 110px;">
+                                                <p:column headerText="Lock_Status" styleClass="center"
+                                                          style="width: 110px;">
                                                     <h:outputText value="#{item.lockStatus}"/>
                                                 </p:column>
 
-                                                <p:column headerText="Locked_User" styleClass="center" style="width: 110px;">
+                                                <p:column headerText="Locked_User" styleClass="center"
+                                                          style="width: 110px;">
                                                     <h:outputText value="#{item.lockedUser}"/>
                                                 </p:column>
 
-                                                <p:column headerText="QUEUE_NAME" styleClass="center" style="width: 110px;">
+                                                <p:column headerText="QUEUE_NAME" styleClass="center"
+                                                          style="width: 110px;">
                                                     <h:outputText value="#{item.queueName}"/>
                                                 </p:column>
                                             </p:dataTable>
                                         </td>
                                     </tr>
-                                    </table>
-                                </div>
+                                </table>
                             </div>
+                        </div>
                     </div>
                     <div class="clear"></div>
                     <!-- Start Footer -->
@@ -82,7 +90,7 @@
             </h:form>
         </p:panel>
         <p:blockUI widgetVar="blockInbox" block=":frmMain">
-            LOADING<br />
+            LOADING<br/>
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>
     </h:body>

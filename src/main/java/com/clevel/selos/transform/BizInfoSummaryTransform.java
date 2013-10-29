@@ -6,14 +6,14 @@ import org.joda.time.DateTime;
 
 public class BizInfoSummaryTransform extends Transform {
 
-    public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView){
+    public BizInfoSummary transformToModel(BizInfoSummaryView bizInfoSummaryView) {
         BizInfoSummary bizInfoSummary;
 
         bizInfoSummary = new BizInfoSummary();
 
-        if(bizInfoSummaryView.getId() != 0 ){
+        if (bizInfoSummaryView.getId() != 0) {
             bizInfoSummary.setId(bizInfoSummaryView.getId());
-        }else if(bizInfoSummaryView.getId() == 0 ){
+        } else if (bizInfoSummaryView.getId() == 0) {
             bizInfoSummary.setCreateBy(bizInfoSummaryView.getCreateBy());
             bizInfoSummary.setCreateDate(DateTime.now().toDate());
         }
@@ -77,16 +77,14 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
 
 
-
         bizInfoSummary.setModifyBy(bizInfoSummaryView.getCreateBy());
         bizInfoSummaryView.setModifyDate(DateTime.now().toDate());
-
 
 
         return bizInfoSummary;
     }
 
-    public BizInfoSummaryView transformToView(BizInfoSummary bizInfoSummary){
+    public BizInfoSummaryView transformToView(BizInfoSummary bizInfoSummary) {
         BizInfoSummaryView bizInfoSummaryView;
 
         bizInfoSummaryView = new BizInfoSummaryView();

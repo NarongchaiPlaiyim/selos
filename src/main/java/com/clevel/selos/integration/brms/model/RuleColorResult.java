@@ -1,7 +1,7 @@
 package com.clevel.selos.integration.brms.model;
 
 public enum RuleColorResult {
-    GREEN(1,"G"),YELLOW(2,"Y"),RED(3,"R");
+    GREEN(1, "G"), YELLOW(2, "Y"), RED(3, "R");
     int value;
     private String persistValue;
 

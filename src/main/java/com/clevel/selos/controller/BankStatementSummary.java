@@ -37,7 +37,10 @@ public class BankStatementSummary {
     Message exceptionMsg;
 
     //Dialog
-    enum ModeForButton{ADD, EDIT}
+    enum ModeForButton {
+        ADD, EDIT
+    }
+
     private ModeForButton modeForButton;
 
     //View
@@ -45,7 +48,7 @@ public class BankStatementSummary {
     private List<BankStmtView> tmbBankStmtViewList;
     private List<BankStmtView> otherBankStmtViewList;
 
-    public BankStatementSummary(){
+    public BankStatementSummary() {
     }
 
     @PostConstruct

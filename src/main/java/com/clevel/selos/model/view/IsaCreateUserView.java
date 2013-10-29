@@ -180,8 +180,8 @@ public class IsaCreateUserView implements Serializable {
                 .append("userTeam", userTeam)
                 .append("userTitle", userTitle)
                 .append("userZone", userZone)
-                .append("active",active)
-                .append("flag",flag)
+                .append("active", active)
+                .append("flag", flag)
                 .toString();
     }
 }

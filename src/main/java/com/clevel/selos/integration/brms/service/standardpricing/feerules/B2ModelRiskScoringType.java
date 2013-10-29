@@ -1,21 +1,17 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for B2ModelRiskScoringType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="B2ModelRiskScoringType">
  *   &lt;complexContent>
@@ -34,19 +30,17 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "B2ModelRiskScoringType", propOrder = {
-    "id",
-    "startTime",
-    "endTime",
-    "b2ModelTransaction",
-    "message",
-    "passFlag",
-    "versionNumber",
-    "versionDate"
+        "id",
+        "startTime",
+        "endTime",
+        "b2ModelTransaction",
+        "message",
+        "passFlag",
+        "versionNumber",
+        "versionDate"
 })
 public class B2ModelRiskScoringType {
 
@@ -67,11 +61,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -79,11 +71,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -91,11 +81,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the startTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getStartTime() {
         return startTime;
@@ -103,11 +91,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the startTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setStartTime(XMLGregorianCalendar value) {
         this.startTime = value;
@@ -115,11 +101,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the endTime property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getEndTime() {
         return endTime;
@@ -127,11 +111,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the endTime property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setEndTime(XMLGregorianCalendar value) {
         this.endTime = value;
@@ -139,25 +121,23 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the b2ModelTransaction property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the b2ModelTransaction property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getB2ModelTransaction().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link B2ModelTransactionType }
-     * 
-     * 
      */
     public List<B2ModelTransactionType> getB2ModelTransaction() {
         if (b2ModelTransaction == null) {
@@ -168,25 +148,23 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the message property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the message property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getMessage().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link MessageType }
-     * 
-     * 
      */
     public List<MessageType> getMessage() {
         if (message == null) {
@@ -197,11 +175,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the passFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getPassFlag() {
         return passFlag;
@@ -209,11 +185,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the passFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPassFlag(String value) {
         this.passFlag = value;
@@ -221,11 +195,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the versionNumber property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getVersionNumber() {
         return versionNumber;
@@ -233,11 +205,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the versionNumber property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setVersionNumber(String value) {
         this.versionNumber = value;
@@ -245,11 +215,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Gets the value of the versionDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getVersionDate() {
         return versionDate;
@@ -257,11 +225,9 @@ public class B2ModelRiskScoringType {
 
     /**
      * Sets the value of the versionDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setVersionDate(XMLGregorianCalendar value) {
         this.versionDate = value;

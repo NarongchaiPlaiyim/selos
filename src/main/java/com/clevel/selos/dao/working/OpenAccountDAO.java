@@ -14,10 +14,10 @@ public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
     private Logger log;
 
     @Inject
-    public OpenAccountDAO(){
+    public OpenAccountDAO() {
     }
 
-    public List<OpenAccount> findByBasicInfoId(long basicInfoId){
+    public List<OpenAccount> findByBasicInfoId(long basicInfoId) {
         log.info("findByBasicInfoId : {}", basicInfoId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("basicInfo.id", basicInfoId));

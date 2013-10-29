@@ -8,30 +8,30 @@ import java.util.ArrayList;
 
 @XStreamAlias("body")
 public class BodyModel implements Serializable {
-    
+
     @XStreamAlias("transaction")
     private TransactionModel transaction;
-    
+
     @XStreamAlias("errormsg")
     private String errormsg;
 
     //@XStreamAlias("trackingid")
     private String sTrackingid;
-    
+
     //@XStreamAlias("result")
     private String sResult;
-    
+
     //@XStreamImplicit(itemFieldName = "trackingid")
     private ArrayList<TrackingIdModel> trackingidd = new ArrayList<TrackingIdModel>();
 
     @XStreamImplicit(itemFieldName = "trackingid")//The response of TS01001
     private ArrayList<String> trackingid = new ArrayList<String>();
-    
-    
+
+
     @XStreamImplicit(itemFieldName = "result")
     private ArrayList<ResultModel> result = new ArrayList<ResultModel>();
-    
-    
+
+
     public BodyModel(TransactionModel transaction, String errormsg) {
         this.transaction = transaction;
         this.errormsg = errormsg;
@@ -64,6 +64,6 @@ public class BodyModel implements Serializable {
     public ArrayList<String> getTrackingid() {
         return trackingid;
     }
-    
-    
+
+
 }

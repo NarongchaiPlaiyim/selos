@@ -20,11 +20,11 @@ public class BusinessInfoView implements Serializable {
 
     private BusinessDescription businessDescription;
 
-    public BusinessInfoView(){
+    public BusinessInfoView() {
 
     }
 
-    public void reset(){
+    public void reset() {
         this.businessDescription = new BusinessDescription();
         this.businessDescription.setBusinessGroup(new BusinessGroup());
     }

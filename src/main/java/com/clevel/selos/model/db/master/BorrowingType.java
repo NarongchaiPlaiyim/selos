@@ -11,12 +11,12 @@ public class BorrowingType implements Serializable {
     private int id;
     @Column(name = "code")
     private int code;
-    @Column(name = "name",length = 50)
+    @Column(name = "name", length = 50)
     private String name;
     @Column(name = "active")
     private int active;
     @OneToOne
-    @JoinColumn(name="customer_entity_id")
+    @JoinColumn(name = "customer_entity_id")
     private CustomerEntity customerEntity;
 
     public BorrowingType() {

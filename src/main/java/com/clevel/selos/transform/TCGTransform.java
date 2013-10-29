@@ -6,11 +6,11 @@ import com.clevel.selos.model.view.TCGView;
 
 public class TCGTransform extends Transform {
 
-    public TCG transformTCGViewToModel(TCGView tcgView ,WorkCase workCase) {
+    public TCG transformTCGViewToModel(TCGView tcgView, WorkCase workCase) {
 
         TCG tcg = new TCG();
 
-        if(tcgView.getId() != 0 ){
+        if (tcgView.getId() != 0) {
             tcg.setId(tcgView.getId());
         }
         tcg.setWorkCase(workCase);

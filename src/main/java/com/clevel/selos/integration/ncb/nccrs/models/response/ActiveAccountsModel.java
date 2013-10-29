@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @XStreamAlias("activeaccounts")
 public class ActiveAccountsModel {
-    
+
     @XStreamImplicit(itemFieldName = "account")
     ArrayList<AccountModel> account = new ArrayList<AccountModel>();
 

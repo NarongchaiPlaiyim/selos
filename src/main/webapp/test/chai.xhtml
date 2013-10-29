@@ -44,12 +44,12 @@
                         <h:outputText value="userId"/>
                         <p:inputText id="userId" value="#{TestNCRS.userId}"/>
 
-                        <p:commandButton id="SubmitBodyHeaderNCB" value="NCRS" update="@form" action="#{TestNCRS.onClickNCRS()}" />
+                        <p:commandButton id="SubmitBodyHeaderNCB" value="NCRS" update="@form"
+                                         action="#{TestNCRS.onClickNCRS()}"/>
 
                     </h:panelGrid>
                 </p:panel>
             </h:form>
-
 
 
             <h:form id="NCCRS">
@@ -83,7 +83,8 @@
                         <h:outputText value="Historical Balance Report"/>
                         <p:inputText id="NCCRSHistoricalBalanceReport" value="#{TestNCRS.historicalBalanceReport}"/>
 
-                        <p:commandButton id="SubmitBodyHeaderNCCRS" value="NCCRS" update="@form" action="#{TestNCRS.onClickNCCRS()}" />
+                        <p:commandButton id="SubmitBodyHeaderNCCRS" value="NCCRS" update="@form"
+                                         action="#{TestNCRS.onClickNCCRS()}"/>
 
                     </h:panelGrid>
                 </p:panel>

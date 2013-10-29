@@ -15,21 +15,21 @@ public class TestCrsWebservice {
     CaseCreation crsWebservice;
 
 
-    public TestCrsWebservice(){
+    public TestCrsWebservice() {
 
     }
 
     private String testValue;
 
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
     }
 
     private CaseCreationResponse caseCreationResponse;
 
-    public void callservice(){
+    public void callservice() {
 
-        caseCreationResponse=crsWebservice.newCase("KK", new Date()+"", "2323", "", "", "", getTestValue(), 0, 0, "", "", "", "", "", "0", "0", "", "", "", "", "", "", "", "", "", "", "", "", "");
+        caseCreationResponse = crsWebservice.newCase("KK", new Date() + "", "2323", "", "", "", getTestValue(), 0, 0, "", "", "", "", "", "0", "0", "", "", "", "", "", "", "", "", "", "", "", "", "");
     }
 
     public CaseCreation getCrsWebservice() {

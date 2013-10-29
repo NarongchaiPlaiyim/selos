@@ -16,5 +16,5 @@ public class H2HResponseModel {
     public H2HErrorModel getH2herror() {
         return h2herror;
     }
-    
+
 }

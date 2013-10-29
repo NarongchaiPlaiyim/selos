@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PrescreenView implements Serializable{
+public class PrescreenView implements Serializable {
     private long id;
     protected ProductGroup productGroup;
     private int searchBy;
@@ -32,11 +32,11 @@ public class PrescreenView implements Serializable{
     private User createBy;
     private User modifyBy;
 
-    public PrescreenView(){
+    public PrescreenView() {
 
     }
 
-    public void reset(){
+    public void reset() {
         this.productGroup = new ProductGroup();
         this.expectedSubmitDate = null;
         this.businessLocation = new Province();

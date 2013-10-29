@@ -20,7 +20,7 @@ public class DWHBankDataSource implements Serializable {
     private String description;
 
     @OneToOne
-    @JoinColumn(name="bank_account_type_id")
+    @JoinColumn(name = "bank_account_type_id")
     private BankAccountType bankAccountType;
 
     @Column(name = "active")

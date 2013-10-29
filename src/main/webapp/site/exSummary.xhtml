@@ -31,13 +31,15 @@
 <div id="content">
 <div id="content_info">
     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
-        <h:outputText
-                id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+    <div id="content_lastupdate">Last update by
+        <h:outputText id="lastupdateName" value="#{executiveSummary.user.userName}"/>,
+        <h:outputText id="lastupdateTime" value="#{executiveSummary.exSummaryView.modifyDate}"/></div>
 </div>
 <div id="content_form">
 <!-- start content -->
 <table class="content_table_form">
+
+
 <tr>
     <td>
         <!-- start content -->
@@ -47,7 +49,7 @@
                     <h:outputText value="#{msg.get('app.exSummary.borrower.table.caption')}"/>
                 </td>
             </tr>
-            <tr>
+         <!--   <tr>
                 <td colspan="2">
                     <p:dataTable id="borrower" var="item" style="width: 100%">
 
@@ -143,13 +145,14 @@
 
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
         </table>
         <!-- end content -->
     </td>
 </tr>
 
-<tr>
+
+<!--<tr>
     <td>
         <table class="table_content" style="width: 100%">
             <tr>
@@ -190,7 +193,7 @@
             </tr>
         </table>
     </td>
-</tr>
+</tr>-->
 
 <tr>
     <td>
@@ -201,7 +204,8 @@
                     <h:outputText value="#{msg.get('app.exSummary.trade.table.caption')}"/>
                 </td>
             </tr>
-            <tr>
+
+           <!-- <tr>
                 <td colspan="2">
                     <p:dataTable id="tradeTable" var="item" style="width: 100%">
 
@@ -260,11 +264,13 @@
                         </p:column>
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
+
         </table>
         <!-- end content -->
     </td>
 </tr>
+
 
 <tr>
     <td>
@@ -277,7 +283,10 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p:dataTable id="borrower" var="item" style="width: 100%">
+                    <p:dataTable id="borrower" var="itemBorrower"
+                                 value="#{executiveSummary.exSummaryView.exCharacteristicListView}"
+                                 paginator="false" rowKey="#{itemBorrower.ExSumCharacteristicView}"
+                                 rowIndexVar="rowIndex" style="width: 100%">
 
                         <p:columnGroup type="header">
                             <p:row>
@@ -325,57 +334,80 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.customer}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.currentDBR}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.finalDBR}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.income}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.recommendedWCNeed}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.actualWC}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.startBusinessDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.yearInBusiness}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.salePerYearBDM}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.salePerYearUW}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.groupSaleBDM}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.groupSaleUW}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBorrower.groupExposureBDM}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
+                        <p:column styleClass="center">
+                            <h:outputText value="#{itemBorrower.groupExposureUW}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
                     </p:dataTable>
                 </td>
             </tr>
@@ -395,7 +427,10 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p:dataTable id="borrower" var="item" style="width: 100%">
+                    <p:dataTable id="businessInfoSum" var="itemBusinessInfo"
+                                 value="#{executiveSummary.exSummaryView.exSumBusinessInfoListView}"
+                                 paginator="false" rowKey="#{itemBusinessInfo.ExSumBusinessInfoView}"
+                                 rowIndexVar="rowIndex" style="width: 100%">
 
                         <p:columnGroup type="header">
                             <p:row>
@@ -439,59 +474,63 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.netFixAsset}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.noOfEmployee}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizProvince}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizType}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizGroup}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizCode}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizDesc}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.qualitativeClass}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.bizSize}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.BDM}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.UW}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.AR}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.AP}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemBusinessInfo.INV}"/>
                         </p:column>
 
                     </p:dataTable>
@@ -499,29 +538,29 @@
             </tr>
 
             <tr>
-                <td style="text-align: left" class="title">
+                <td style="text-align: left;width:100px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.businessInfoSum.label.businessOperationActivity')}"/>
                 </td>
                 <td>
-                    <h:outputText/>
+                    <h:outputText  value="#{executiveSummary.exSummaryView.businessOperationActivity}"/>
                 </td>
             </tr>
 
             <tr>
-                <td style="text-align: left" class="title">
+                <td style="text-align: left;width:100px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.businessInfoSum.label.businessPermission')}"/>
                 </td>
                 <td>
-                    <h:outputText/>
+                    <h:outputText value="#{executiveSummary.exSummaryView.businessPermission}"/>
                 </td>
             </tr>
 
             <tr>
-                <td style="text-align: left" class="title">
+                <td style="text-align: left;width:100px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.businessInfoSum.label.expiryDate')}"/>
                 </td>
                 <td>
-                    <h:outputText/>
+                    <h:outputText value="#{executiveSummary.exSummaryView.expiryDate}"/>
                 </td>
             </tr>
 
@@ -547,7 +586,8 @@
                     <h:outputText value="#{msg.get('app.exSummary.ncb.tb.caption')}"/>
                 </td>
             </tr>
-            <tr>
+
+            <!--<tr>
                 <td colspan="2">
                     <p:dataTable id="tradeTable" var="item" style="width: 100%">
 
@@ -606,7 +646,7 @@
                         </p:column>
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
         </table>
         <!-- end content -->
     </td>
@@ -627,7 +667,8 @@
                     <h:outputText value="#{msg.get('app.exSummary.tb.account.caption')}"/>
                 </td>
             </tr>
-            <tr>
+
+            <!--<tr>
                 <td colspan="2">
                     <p:dataTable id="tradeTable" var="item" style="width: 100%">
 
@@ -708,7 +749,8 @@
                         </p:column>
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
+
         </table>
         <!-- end content -->
     </td>
@@ -729,7 +771,8 @@
                     <h:outputText value="#{msg.get('app.exSummary.tb.collateral.caption')}"/>
                 </td>
             </tr>
-            <tr>
+
+           <!-- <tr>
                 <td colspan="2">
                     <p:dataTable id="tradeTable" var="item" style="width: 100%">
 
@@ -778,7 +821,8 @@
 
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
+
         </table>
         <!-- end content -->
     </td>
@@ -799,7 +843,8 @@
                     <h:outputText value="#{msg.get('app.exSummary.tb.creditRiskInfo.caption')}"/>
                 </td>
             </tr>
-            <tr>
+
+           <!-- <tr>
                 <td colspan="2">
                     <p:dataTable id="tradeTable" var="item" style="width: 100%">
 
@@ -858,7 +903,8 @@
                         </p:column>
                     </p:dataTable>
                 </td>
-            </tr>
+            </tr>-->
+
         </table>
         <!-- end content -->
     </td>
@@ -880,16 +926,18 @@
                 </td>
             </tr>
             <tr>
-                <td style="text-align: left" class="title">
+                <td colspan="2" style="text-align: left" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.deviationReasonDetailCaption')}"/>
                 </td>
-                <td style="text-align: left" class="title">
-                    <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult.last')}"/>
-                </td>
+
             </tr>
             <tr>
-                <td colspan="2" style="text-align: left" class="title">
+                <td  colspan="2" style="text-align: left;width:10px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult')}"/>
+                    <p:spacer width="10px;" />
+                    <h:outputText value="color result"/>
+                    <p:spacer width="10px;" />
+                    <h:outputText value="#{msg.get('app.exSummary.deviation.label.applicationResult.last')}"/>
                 </td>
             </tr>
             <tr>
@@ -906,7 +954,12 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    <p:dataTable id="tradeTable" var="item" style="width: 100%">
+                    <p:dataTable style="width: 100%"
+                                 id="decisionTable"
+                                 var="itemDecision"
+                                 value="#{executiveSummary.exSummaryView.exSumDecisionListView}"
+                                 paginator="false" rowKey="#{itemDecision.ExSumDecisionView}"
+                                 rowIndexVar="rowIndex">
 
                         <p:columnGroup type="header">
                             <p:row>
@@ -931,23 +984,23 @@
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemDecision.flag}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemDecision.group}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemDecision.ruleName}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemDecision.cusName}"/>
                         </p:column>
 
                         <p:column styleClass="center">
-                            <h:outputText value=""/>
+                            <h:outputText value="#{itemDecision.deviationReason}"/>
                         </p:column>
 
                         <p:column styleClass="center">
@@ -989,7 +1042,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="150"
                                      rows="5"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.natureOfBusiness}" />
                 </td>
             </tr>
 
@@ -1003,7 +1056,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="150"
                                      rows="5"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.historicalAndReasonOfChange}"/>
                 </td>
             </tr>
 
@@ -1017,7 +1070,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="150"
                                      rows="5"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.tmbCreditHistory}"/>
                 </td>
             </tr>
 
@@ -1031,7 +1084,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="150"
                                      rows="5"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.supportReason}"/>
                 </td>
             </tr>
 
@@ -1046,7 +1099,7 @@
                     <h:outputText value="#{msg.get('app.exSummary.label.RM008Code')}"/>
                 </td>
                 <td>
-                    <h:selectOneRadio id="RM008" value="">
+                    <h:selectOneRadio id="RM008" value="#{executiveSummary.exSummaryView.rm008Code}">
                         <f:selectItem itemLabel="ตอบ" itemValue="1"/>
                         <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
                     </h:selectOneRadio>
@@ -1057,7 +1110,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="160"
                                      rows="2"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.rm008Remark}" />
                 </td>
             </tr>
 
@@ -1066,7 +1119,7 @@
                     <h:outputText value="#{msg.get('app.exSummary.label.RM204Code')}"/>
                 </td>
                 <td>
-                    <h:selectOneRadio id="RM204" value="">
+                    <h:selectOneRadio id="RM204" value="#{executiveSummary.exSummaryView.rm204Code}">
                         <f:selectItem itemLabel="ตอบ" itemValue="1"/>
                         <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
                     </h:selectOneRadio>
@@ -1077,7 +1130,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="160"
                                      rows="2"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.rm204Remark}"/>
                 </td>
             </tr>
 
@@ -1086,7 +1139,7 @@
                     <h:outputText value="#{msg.get('app.exSummary.label.RM020Code')}"/>
                 </td>
                 <td>
-                    <h:selectOneRadio id="RM020" value="">
+                    <h:selectOneRadio id="RM020" value="#{executiveSummary.exSummaryView.rm020Code}">
                         <f:selectItem itemLabel="ตอบ" itemValue="1"/>
                         <f:selectItem itemLabel="ไม่ตอบ" itemValue="0"/>
                     </h:selectOneRadio>
@@ -1097,7 +1150,7 @@
                 <td colspan="2" style="text-align: left">
                     <h:inputTextarea cols="160"
                                      rows="2"
-                                     value=""/>
+                                     value="#{executiveSummary.exSummaryView.rm020Remark}"/>
                 </td>
             </tr>
 
@@ -1122,31 +1175,32 @@
                 </td>
             </tr>
             <tr>
-                <td style="text-align: left" class="title">
+                <td style="text-align: left;width:200px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.label.approveAuthority')}"/>
                 </td>
-                <td>
+                <td style="text-align: left;width:200px;">
+                    <h:outputText value="combo approveAuthority"/>
                     <!--       <p:selectOneMenu id=""
                                             value=""
                                             styleClass="largest"
                                             size="1" >
                                <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                               &lt;!&ndash;<f:selectItems value="#{ncbInfo.accountStatusList}"
+                               <f:selectItems value="#{ncbInfo.accountStatusList}"
                                               var="dlgAccountStatusList"
                                               itemLabel="#{dlgAccountStatusList.name}"
-                                              itemValue="#{dlgAccountStatusList.id}"&ndash;&gt;/>
+                                              itemValue="#{dlgAccountStatusList.id}"/>
                            </p:selectOneMenu>-->
                 </td>
-                <td style="text-align: right" class="title">
+                <td style="text-align: right;width:100px;" class="title">
                     <h:outputText value="#{msg.get('app.exSummary.label.uwCode')}"/>
                 </td>
                 <td>
-                    <p:inputText/>
+                    <p:inputText value="#{executiveSummary.exSummaryView.uwCode}"/>
                 </td>
             </tr>
             <tr>
                 <td colspan="4" style="text-align: left" class="title">
-                    <h:selectOneRadio id="RM020" value="">
+                    <h:selectOneRadio id="RM020"  value="#{executiveSummary.exSummaryView.decision}">
                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.normal.approve')}" itemValue="1"/>
                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.deviation')}" itemValue="2"/>
                         <f:selectItem itemLabel="#{msg.get('app.exSummary.label.radio.reject')}" itemValue="3"/>
@@ -1155,15 +1209,16 @@
             </tr>
             <tr>
                 <td colspan="2" style="text-align: left">
+                    <h:outputText value="combo decisionCode"/>
                     <!--   <p:selectOneMenu id=""
                                         value=""
                                         styleClass="largest"
                                         size="1" >
                            <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
-                           &lt;!&ndash;<f:selectItems value="#{ncbInfo.accountStatusList}"
+                             <f:selectItems value="#{ncbInfo.accountStatusList}"
                                           var="dlgAccountStatusList"
                                           itemLabel="#{dlgAccountStatusList.name}"
-                                          itemValue="#{dlgAccountStatusList.id}"&ndash;&gt;/>
+                                          itemValue="#{dlgAccountStatusList.id}"/>
                        </p:selectOneMenu>-->
                 </td>
                 <td colspan="2" style="text-align: left">
@@ -1178,7 +1233,7 @@
 
             <tr>
                 <td colspan="4">
-                    <p:dataTable id="tradeTable" var="item" style="width: 100%">
+                    <p:dataTable id="UWDecisionTable" var="itemUWDecision" style="width: 100%">
 
                         <p:columnGroup type="header">
                             <p:row>
@@ -1226,7 +1281,7 @@
     <td colspan="2" style="text-align: left">
         <h:inputTextarea cols="170"
                          rows="7"
-                         value=""/>
+                         value="#{executiveSummary.exSummaryView.uwComment}"/>
     </td>
 </tr>
 

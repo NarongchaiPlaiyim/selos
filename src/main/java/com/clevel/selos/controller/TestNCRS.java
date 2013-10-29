@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 @ViewScoped
-@ManagedBean(name="TestNCRS")
+@ManagedBean(name = "TestNCRS")
 public class TestNCRS implements Serializable {
 
     @Inject
@@ -38,8 +38,7 @@ public class TestNCRS implements Serializable {
     NCBInterfaceImpl ncbInterface;
 
 
-
-//    @Inject
+    //    @Inject
 //    NCBIService ncbiService;
     //NCRS
     private String result;
@@ -50,28 +49,28 @@ public class TestNCRS implements Serializable {
     private String disputeenquiry;
 
     private String idNumber = "3100300390029";
-    private String idNumber2= "3100504308002";
+    private String idNumber2 = "3100504308002";
     private String appRefNumber = "0420140301000101";
     private String userId = "SERID";
-    private String CANumber ="01234567890123456789";
+    private String CANumber = "01234567890123456789";
     private String referenceTel = "0800000000";
 
     //NCCRS
-    private String registType ="1140002";
-    private String registId ="1000000000001";
-    private String companyName ="ทดสอบสอง";
-    private String inqPurose ="1170001";
-    private String productType ="2030001";
-    private String memberRef ="TEST20120918";
-    private String confirmConsent ="Y";
-    private String language ="2060002";
-    private String historicalBalanceReport ="Y";
+    private String registType = "1140002";
+    private String registId = "1000000000001";
+    private String companyName = "ทดสอบสอง";
+    private String inqPurose = "1170001";
+    private String productType = "2030001";
+    private String memberRef = "TEST20120918";
+    private String confirmConsent = "Y";
+    private String language = "2060002";
+    private String historicalBalanceReport = "Y";
 
     @Inject
     public TestNCRS() {
     }
 
-    public void onClickNCRS(){
+    public void onClickNCRS() {
         log.info("========================================= onClickNCRS");
         NCRSModel ncrsModel = null;
         ArrayList<NCRSModel> ncrsModelArrayList = new ArrayList<NCRSModel>();
@@ -178,7 +177,7 @@ public class TestNCRS implements Serializable {
         NCRSInputModel inputModel = new NCRSInputModel(userId, "1111", CANumber, referenceTel, ncrsModelArrayList);
         try {
             ArrayList<NCRSOutputModel> ncrsOutputModelArrayList = ncbInterface.request(inputModel);
-            for(NCRSOutputModel ncrsOutputModel : ncrsOutputModelArrayList){
+            for (NCRSOutputModel ncrsOutputModel : ncrsOutputModelArrayList) {
                 log.info("NCRS response : {}", ncrsOutputModel.toString());
             }
         } catch (Exception e) {
@@ -186,7 +185,8 @@ public class TestNCRS implements Serializable {
         }
 
     }
-    public void onClickNCCRS(){
+
+    public void onClickNCCRS() {
         log.info("========================================= onClickNCCRS");
         ArrayList<NCCRSModel> modelArrayList = new ArrayList<NCCRSModel>();
         NCCRSModel nccrsModel = null;
@@ -232,7 +232,7 @@ public class TestNCRS implements Serializable {
         NCCRSInputModel inputModel = new NCCRSInputModel("55555", "0123456789012345", CANumber, referenceTel, modelArrayList);
         try {
             ArrayList<NCCRSOutputModel> nccrsOutputModelArrayList = ncbInterface.request(inputModel);
-            for(NCCRSOutputModel nccrsOutputModel : nccrsOutputModelArrayList){
+            for (NCCRSOutputModel nccrsOutputModel : nccrsOutputModelArrayList) {
                 log.info("NCCRS response : {}", nccrsOutputModel.toString());
             }
         } catch (Exception e) {

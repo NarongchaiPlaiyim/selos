@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class RiskTypeDAO extends GenericDAO<RiskType,Integer> {
+public class RiskTypeDAO extends GenericDAO<RiskType, Integer> {
     @Inject
     private Logger log;
 

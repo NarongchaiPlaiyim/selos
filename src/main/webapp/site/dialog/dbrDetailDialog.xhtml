@@ -4,74 +4,94 @@
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
-    <p:panel id="dbrDetailDlgPanel" styleClass="panel-dialog">
-        <h:form id="dbrDetailDlgForm">
+    <h:form id="dbrDetailDlgForm">
+        <p:panel id="dbrDetailDlgPanel" styleClass="panel-dialog">
+
             <table class="content_form" border="0" style="width:650px;">
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.dbrDetail.label.accountName')}"/>
-                    </td>
-                    <td >
-                        <h:inputText value="#{dbrInfo.selectedItem.accountName}"/>
-                    </td>
-                </tr>
-               <tr>
-                   <td class="title">
-                       <h:outputText value="#{msg.get('app.dbrDetail.label.loanType')}"/>
-                   </td>
-                   <td>
-                       <h:selectOneMenu value="#{dbrInfo.selectedItem.loanTypeView.id}" >
-                           <f:selectItem itemLabel="- Please Select -"  />
-                           <f:selectItems value="#{dbrInfo.loanTypes}"
-                                          var="loanType"
-                                          itemLabel="#{loanType.name}"
-                                          itemValue="#{loanType.id}"/>
-                       </h:selectOneMenu>
-                   </td>
-               </tr>
-                <tr>
-                    <td class="title">
-                        <h:outputText value="#{msg.get('app.dbrDetail.label.limit')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.accountName')}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{dbrInfo.selectedItem.limit}"/>
+                        <p:inputText value="#{dbrInfo.selectedItem.accountName}" required="true"/>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.dbrDetail.label.installment')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{dbrInfo.selectedItem.installment}"/>
+                        <p:selectOneMenu value="#{dbrInfo.selectedItem.loanTypeView.id}" required="true">
+                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                            <f:selectItems value="#{dbrInfo.loanTypes}"
+                                           var="loanType"
+                                           itemLabel="#{loanType.name}"
+                                           itemValue="#{loanType.id}"/>
+                        </p:selectOneMenu>
                     </td>
                 </tr>
                 <tr>
                     <td class="title">
-                        <h:outputText value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.limit')}"/>
                     </td>
                     <td>
-                        <h:inputText value="#{dbrInfo.selectedItem.debtForCalculate}"/>
+                        <h:inputHidden value="#{dbrInfo.selectedItem.id}"/>
+                        <p:inputText id="limit" value="#{dbrInfo.selectedItem.limit}" required="true">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:limit"/>
+                        </p:inputText>
                     </td>
                 </tr>
-                <tr >
-                    <td>
-                        <h:outputText />
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.installment')}"/>
                     </td>
-                    <td >
+                    <td>
+                        <p:inputText id="installment" value="#{dbrInfo.selectedItem.installment}" required="true">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:installment"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <p:outputLabel value="#{msg.get('app.dbrDetail.label.debtForCalculate')}"/>
+                    </td>
+                    <td>
+                        <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"
+                                     required="true">
+                            <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                             type="number"/>
+                            <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate"/>
+                        </p:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:outputText/>
+                    </td>
+                    <td>
                         <p:commandButton value="#{msg.get('app.button.save')}"
                                          styleClass="small"
-                                         action="#{dbrInfo.onAddDBRDetail()}"
-                                         oncomplete="dbrDetailDialog.hide()" update=":frmMain" >
+                                         process="@form"
+                                         actionListener="#{dbrInfo.onAddDBRDetail()}"
+                                         oncomplete="handleDialogRequest(xhr, status, args, 'dbrDetailDialog')"
+                                         update=":dbrDetailDlgForm :frmMain:dbrDetailDT">
+
                         </p:commandButton>
                         <p:commandButton value="#{msg.get('app.button.cancel')}"
                                          styleClass="small"
+                                         process="@this"
+                                         update=":dbrDetailDlgForm"
                                          onclick="dbrDetailDialog.hide()">
-
+                            <p:resetInput target=":dbrDetailDlgForm"/>
                         </p:commandButton>
                     </td>
                 </tr>
             </table>
-        </h:form>
-    </p:panel>
 
+        </p:panel>
+    </h:form>
 </ui:composition>

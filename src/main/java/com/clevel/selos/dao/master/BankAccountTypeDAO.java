@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BankAccountTypeDAO extends GenericDAO<BankAccountType,Integer> {
+public class BankAccountTypeDAO extends GenericDAO<BankAccountType, Integer> {
     @Inject
     private Logger log;
 
@@ -20,7 +20,7 @@ public class BankAccountTypeDAO extends GenericDAO<BankAccountType,Integer> {
     public List<BankAccountType> findOpenAccountType() {
         Criteria criteria = createCriteria()
                 .add(Restrictions.eq("active", 1))
-                .add(Restrictions.eq("openAccountFlag",1));
+                .add(Restrictions.eq("openAccountFlag", 1));
 
         List<BankAccountType> list = criteria.list();
         return list;

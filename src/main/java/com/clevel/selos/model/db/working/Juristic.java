@@ -13,42 +13,42 @@ import java.util.Date;
 @Table(name = "wrk_juristic")
 public class Juristic implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_JURISTIC_ID", sequenceName="SEQ_WRK_JURISTIC_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_JURISTIC_ID")
+    @SequenceGenerator(name = "SEQ_WRK_JURISTIC_ID", sequenceName = "SEQ_WRK_JURISTIC_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_JURISTIC_ID")
     private long id;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Column(name="registration_id")
+    @Column(name = "registration_id")
     private String registrationId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JoinColumn(name="register_date")
+    @JoinColumn(name = "register_date")
     private Date registerDate;
 
     @OneToOne
-    @JoinColumn(name="register_country")
+    @JoinColumn(name = "register_country")
     private Country registerCountry;
 
     @OneToOne
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name = "owner_id")
     private Individual owner;
 
-    @Column(name="financial_year")
+    @Column(name = "financial_year")
     private int financialYear;
 
-    @Column(name="capital")
+    @Column(name = "capital")
     private BigDecimal capital;
 
-    @Column(name="paidCapital")
+    @Column(name = "paidCapital")
     private BigDecimal paidCapital;
 
-    @Column(name="totalShare")
+    @Column(name = "totalShare")
     private BigDecimal totalShare;
 
-    @Column(name="signCondition")
+    @Column(name = "signCondition")
     private String signCondition;
 
     public Juristic() {

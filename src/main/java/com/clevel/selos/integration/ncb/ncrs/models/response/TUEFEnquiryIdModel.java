@@ -6,13 +6,13 @@ import java.io.Serializable;
 
 @XStreamAlias("id")
 public class TUEFEnquiryIdModel implements Serializable {
-    
+
     @XStreamAlias("idtype")
     private String idtype;
-    
+
     @XStreamAlias("idnumber")
     private String idnumber;
-    
+
     @XStreamAlias("issuecountry")
     private String issuecountry;
 
@@ -33,6 +33,6 @@ public class TUEFEnquiryIdModel implements Serializable {
     public String getIssuecountry() {
         return issuecountry;
     }
-    
-    
+
+
 }

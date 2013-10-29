@@ -111,9 +111,9 @@ public class NCRSModel implements Serializable {
     }
 
     public String getCustomerDocmentType() {
-        if("01".equals(idType)){
+        if ("01".equals(idType)) {
             return customerDocumentType = "01";
-        } else if("07".equals(idType)) {
+        } else if ("07".equals(idType)) {
             return customerDocumentType = "03";
         } else {
             return customerDocumentType = "01";

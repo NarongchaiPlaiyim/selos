@@ -1,22 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for IBNRModelTransactionType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="IBNRModelTransactionType">
  *   &lt;complexContent>
@@ -49,33 +45,31 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IBNRModelTransactionType", propOrder = {
-    "id",
-    "asOfDate",
-    "processingDate",
-    "flagNonK",
-    "sumPDHL",
-    "numberPDHL",
-    "sumPDPL",
-    "numberPDPL",
-    "sumPDOD",
-    "numberPDOD",
-    "sumPDTDR",
-    "numberPDTDR",
-    "sumPDOT",
-    "numberPDOT",
-    "sumPDNonKAccount",
-    "numberNonKAccount",
-    "account",
-    "borrower",
-    "product",
-    "riskModel",
-    "score",
-    "attribute"
+        "id",
+        "asOfDate",
+        "processingDate",
+        "flagNonK",
+        "sumPDHL",
+        "numberPDHL",
+        "sumPDPL",
+        "numberPDPL",
+        "sumPDOD",
+        "numberPDOD",
+        "sumPDTDR",
+        "numberPDTDR",
+        "sumPDOT",
+        "numberPDOT",
+        "sumPDNonKAccount",
+        "numberNonKAccount",
+        "account",
+        "borrower",
+        "product",
+        "riskModel",
+        "score",
+        "attribute"
 })
 public class IBNRModelTransactionType {
 
@@ -107,11 +101,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -119,11 +111,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -131,11 +121,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the asOfDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getAsOfDate() {
         return asOfDate;
@@ -143,11 +131,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the asOfDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setAsOfDate(XMLGregorianCalendar value) {
         this.asOfDate = value;
@@ -155,11 +141,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the processingDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getProcessingDate() {
         return processingDate;
@@ -167,11 +151,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the processingDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setProcessingDate(XMLGregorianCalendar value) {
         this.processingDate = value;
@@ -179,11 +161,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the flagNonK property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getFlagNonK() {
         return flagNonK;
@@ -191,11 +171,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the flagNonK property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setFlagNonK(String value) {
         this.flagNonK = value;
@@ -203,11 +181,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDHL property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDHL() {
         return sumPDHL;
@@ -215,11 +191,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDHL property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDHL(BigDecimal value) {
         this.sumPDHL = value;
@@ -227,11 +201,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberPDHL property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberPDHL() {
         return numberPDHL;
@@ -239,11 +211,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberPDHL property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberPDHL(Integer value) {
         this.numberPDHL = value;
@@ -251,11 +221,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDPL property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDPL() {
         return sumPDPL;
@@ -263,11 +231,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDPL property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDPL(BigDecimal value) {
         this.sumPDPL = value;
@@ -275,11 +241,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberPDPL property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberPDPL() {
         return numberPDPL;
@@ -287,11 +251,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberPDPL property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberPDPL(Integer value) {
         this.numberPDPL = value;
@@ -299,11 +261,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDOD property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDOD() {
         return sumPDOD;
@@ -311,11 +271,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDOD property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDOD(BigDecimal value) {
         this.sumPDOD = value;
@@ -323,11 +281,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberPDOD property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberPDOD() {
         return numberPDOD;
@@ -335,11 +291,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberPDOD property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberPDOD(Integer value) {
         this.numberPDOD = value;
@@ -347,11 +301,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDTDR property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDTDR() {
         return sumPDTDR;
@@ -359,11 +311,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDTDR property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDTDR(BigDecimal value) {
         this.sumPDTDR = value;
@@ -371,11 +321,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberPDTDR property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberPDTDR() {
         return numberPDTDR;
@@ -383,11 +331,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberPDTDR property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberPDTDR(Integer value) {
         this.numberPDTDR = value;
@@ -395,11 +341,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDOT property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDOT() {
         return sumPDOT;
@@ -407,11 +351,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDOT property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDOT(BigDecimal value) {
         this.sumPDOT = value;
@@ -419,11 +361,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberPDOT property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberPDOT() {
         return numberPDOT;
@@ -431,11 +371,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberPDOT property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberPDOT(Integer value) {
         this.numberPDOT = value;
@@ -443,11 +381,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the sumPDNonKAccount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getSumPDNonKAccount() {
         return sumPDNonKAccount;
@@ -455,11 +391,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the sumPDNonKAccount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setSumPDNonKAccount(BigDecimal value) {
         this.sumPDNonKAccount = value;
@@ -467,11 +401,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the numberNonKAccount property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNumberNonKAccount() {
         return numberNonKAccount;
@@ -479,11 +411,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the numberNonKAccount property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNumberNonKAccount(Integer value) {
         this.numberNonKAccount = value;
@@ -491,11 +421,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the account property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AccountType }
-     *     
+     *
+     * @return possible object is
+     *         {@link AccountType }
      */
     public AccountType getAccount() {
         return account;
@@ -503,11 +431,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the account property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AccountType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link AccountType }
      */
     public void setAccount(AccountType value) {
         this.account = value;
@@ -515,11 +441,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the borrower property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link BorrowerType }
-     *     
+     *
+     * @return possible object is
+     *         {@link BorrowerType }
      */
     public BorrowerType getBorrower() {
         return borrower;
@@ -527,11 +451,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the borrower property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link BorrowerType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link BorrowerType }
      */
     public void setBorrower(BorrowerType value) {
         this.borrower = value;
@@ -539,11 +461,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the product property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ProductType }
-     *     
+     *
+     * @return possible object is
+     *         {@link ProductType }
      */
     public ProductType getProduct() {
         return product;
@@ -551,11 +471,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the product property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ProductType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ProductType }
      */
     public void setProduct(ProductType value) {
         this.product = value;
@@ -563,11 +481,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the riskModel property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link RiskModelType }
-     *     
+     *
+     * @return possible object is
+     *         {@link RiskModelType }
      */
     public RiskModelType getRiskModel() {
         return riskModel;
@@ -575,11 +491,9 @@ public class IBNRModelTransactionType {
 
     /**
      * Sets the value of the riskModel property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link RiskModelType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link RiskModelType }
      */
     public void setRiskModel(RiskModelType value) {
         this.riskModel = value;
@@ -587,25 +501,23 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the score property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the score property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getScore().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link ScoreType }
-     * 
-     * 
      */
     public List<ScoreType> getScore() {
         if (score == null) {
@@ -616,25 +528,23 @@ public class IBNRModelTransactionType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

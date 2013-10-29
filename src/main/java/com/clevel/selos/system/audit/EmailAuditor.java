@@ -24,11 +24,11 @@ public class EmailAuditor implements SystemAuditor {
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, Date resultDate, String linkKey) {
-        emailActivityDAO.persist(new EmailActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,resultDate,linkKey));
+        emailActivityDAO.persist(new EmailActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, resultDate, linkKey));
     }
 
     @Override
     public void add(String userId, String action, String actionDesc, Date actionDate, ActionResult actionResult, String resultDesc, String linkKey) {
-        emailActivityDAO.persist(new EmailActivity(userId,action,actionDesc,actionDate,actionResult,resultDesc,new Date(),linkKey));
+        emailActivityDAO.persist(new EmailActivity(userId, action, actionDesc, actionDate, actionResult, resultDesc, new Date(), linkKey));
     }
 }

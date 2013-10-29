@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
-public class DBExecute implements Serializable{
+public class DBExecute implements Serializable {
     @Inject
     @COMS
     Logger log;
@@ -31,7 +31,7 @@ public class DBExecute implements Serializable{
     transient ResultSet rs = null;
 
     @Inject
-    public DBExecute(){
+    public DBExecute() {
 
     }
 

@@ -15,16 +15,16 @@ public class ExistingCreditSummaryDAO extends GenericDAO<ExistingCreditSummary, 
     private Logger log;
 
     @Inject
-    public ExistingCreditSummaryDAO(){
+    public ExistingCreditSummaryDAO() {
 
     }
 
-    public ExistingCreditSummary findByWorkCasePreScreenId(long workCasePreScreenId){
+    public ExistingCreditSummary findByWorkCasePreScreenId(long workCasePreScreenId) {
         log.info("findByWorkCasePreScreenId : {}", workCasePreScreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePreScreenId));
         criteria.addOrder(Order.asc("id"));
-        ExistingCreditSummary existingCreditSummary = (ExistingCreditSummary)criteria.uniqueResult();
+        ExistingCreditSummary existingCreditSummary = (ExistingCreditSummary) criteria.uniqueResult();
         return existingCreditSummary;
     }
 }

@@ -6,18 +6,17 @@ import com.clevel.selos.model.view.BizInfoDetailView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class BizInfoDetailTransform extends Transform {
 
-    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView){
+    public BizInfoDetail transformToModel(BizInfoDetailView bizInfoDetailView) {
 
         BizInfoDetail bizInfoDetail = new BizInfoDetail();
 
-        if(bizInfoDetailView.getId()!= 0){
+        if (bizInfoDetailView.getId() != 0) {
             bizInfoDetail.setId(bizInfoDetailView.getId());
-        }else if(bizInfoDetailView.getId()== 0){
+        } else if (bizInfoDetailView.getId() == 0) {
             bizInfoDetail.setCreateBy(bizInfoDetailView.getCreateBy());
             bizInfoDetail.setCreateDate(bizInfoDetailView.getCreateDate());
         }
@@ -52,14 +51,14 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setPurchasePercentCash(bizInfoDetailView.getPurchasePercentCash());
         bizInfoDetail.setPurchasePercentCredit(bizInfoDetailView.getPurchasePercentCredit());
         bizInfoDetail.setPurchasePercentLocal(bizInfoDetailView.getPurchasePercentLocal());
-        bizInfoDetail.setPurchasePercentForeign( bizInfoDetailView.getPurchasePercentForeign());
+        bizInfoDetail.setPurchasePercentForeign(bizInfoDetailView.getPurchasePercentForeign());
         bizInfoDetail.setPurchaseTerm(bizInfoDetailView.getPurchaseTerm());
-        bizInfoDetail.setStandardAccountPayable( bizInfoDetailView.getStandardAccountPayable());
+        bizInfoDetail.setStandardAccountPayable(bizInfoDetailView.getStandardAccountPayable());
         bizInfoDetail.setAveragePayableAmount(bizInfoDetailView.getAveragePayableAmount());
         bizInfoDetail.setPayablePercentCash(bizInfoDetailView.getPayablePercentCash());
         bizInfoDetail.setPayablePercentCredit(bizInfoDetailView.getPayablePercentCredit());
         bizInfoDetail.setPayablePercentLocal(bizInfoDetailView.getPayablePercentLocal());
-        bizInfoDetail.setPayablePercentForeign( bizInfoDetailView.getPayablePercentForeign());
+        bizInfoDetail.setPayablePercentForeign(bizInfoDetailView.getPayablePercentForeign());
         bizInfoDetail.setPayableTerm(bizInfoDetailView.getPayableTerm());
         bizInfoDetail.setStandardStock(bizInfoDetailView.getStandardStock());
         bizInfoDetail.setStockDurationBDM(bizInfoDetailView.getStockDurationBDM());
@@ -74,7 +73,7 @@ public class BizInfoDetailTransform extends Transform {
         return bizInfoDetail;
     }
 
-    public BizInfoDetailView transformToView(BizInfoDetail bizInfoDetail){
+    public BizInfoDetailView transformToView(BizInfoDetail bizInfoDetail) {
 
         BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
 
@@ -109,14 +108,14 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetailView.setPurchasePercentCash(bizInfoDetail.getPurchasePercentCash());
         bizInfoDetailView.setPurchasePercentCredit(bizInfoDetail.getPurchasePercentCredit());
         bizInfoDetailView.setPurchasePercentLocal(bizInfoDetail.getPurchasePercentLocal());
-        bizInfoDetailView.setPurchasePercentForeign( bizInfoDetail.getPurchasePercentForeign());
+        bizInfoDetailView.setPurchasePercentForeign(bizInfoDetail.getPurchasePercentForeign());
         bizInfoDetailView.setPurchaseTerm(bizInfoDetail.getPurchaseTerm());
-        bizInfoDetailView.setStandardAccountPayable( bizInfoDetail.getStandardAccountPayable());
+        bizInfoDetailView.setStandardAccountPayable(bizInfoDetail.getStandardAccountPayable());
         bizInfoDetailView.setAveragePayableAmount(bizInfoDetail.getAveragePayableAmount());
         bizInfoDetailView.setPayablePercentCash(bizInfoDetail.getPayablePercentCash());
         bizInfoDetailView.setPayablePercentCredit(bizInfoDetail.getPayablePercentCredit());
         bizInfoDetailView.setPayablePercentLocal(bizInfoDetail.getPayablePercentLocal());
-        bizInfoDetailView.setPayablePercentForeign( bizInfoDetail.getPayablePercentForeign());
+        bizInfoDetailView.setPayablePercentForeign(bizInfoDetail.getPayablePercentForeign());
         bizInfoDetailView.setPayableTerm(bizInfoDetail.getPayableTerm());
         bizInfoDetailView.setStandardStock(bizInfoDetail.getStandardStock());
         bizInfoDetailView.setStockDurationBDM(bizInfoDetail.getStockDurationBDM());
@@ -132,9 +131,9 @@ public class BizInfoDetailTransform extends Transform {
         return bizInfoDetailView;
     }
 
-    public List<BizInfoDetailView> transformToPreScreenView(List<BizInfoDetail> bizInfoDetails){
+    public List<BizInfoDetailView> transformToPreScreenView(List<BizInfoDetail> bizInfoDetails) {
         List<BizInfoDetailView> bizInfoDetailViewList = new ArrayList<BizInfoDetailView>();
-        for(BizInfoDetail item : bizInfoDetails){
+        for (BizInfoDetail item : bizInfoDetails) {
             BizInfoDetailView bizInfoDetailView = new BizInfoDetailView();
             bizInfoDetailView.setId(item.getId());
             bizInfoDetailView.setBizInfoText(item.getBizInfoText());
@@ -154,9 +153,9 @@ public class BizInfoDetailTransform extends Transform {
         return bizInfoDetailViewList;
     }
 
-    public List<BizInfoDetail> transformPrescreenToModel(List<BizInfoDetailView> bizInfoDetailViews, WorkCasePrescreen workCasePrescreen){
+    public List<BizInfoDetail> transformPrescreenToModel(List<BizInfoDetailView> bizInfoDetailViews, WorkCasePrescreen workCasePrescreen) {
         List<BizInfoDetail> bizInfoDetailList = new ArrayList<BizInfoDetail>();
-        for(BizInfoDetailView item : bizInfoDetailViews){
+        for (BizInfoDetailView item : bizInfoDetailViews) {
             BizInfoDetail bizInfoDetail = new BizInfoDetail();
             bizInfoDetail.setId(item.getId());
             bizInfoDetail.setWorkCasePrescreen(workCasePrescreen);

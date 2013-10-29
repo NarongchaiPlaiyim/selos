@@ -16,7 +16,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class Isa implements Serializable {
     IsaBusinessControl isaBusinessControl;
 
     public Isa() {
-         complete=true;
+        complete = true;
     }
 
     private List<User> userDetail;
@@ -108,17 +107,17 @@ public class Isa implements Serializable {
                 messageHeader = "Edit User!";
                 isaBusinessControl.editUser(createUserView);
                 onSelectUser();
-                message="Edit User Success.";
+                message = "Edit User Success.";
 
             }
 
             context.addCallbackParam("functionComplete", complete);
             context.execute("msgBoxSystemMessageDlg.show()");
-        }catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
 
-            message="Edit User failed. Cause :";
+            message = "Edit User failed. Cause :";
             context.execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             log.debug("Exception : {}", ex);
             complete = false;
             if (ex.getCause() != null) {
@@ -141,15 +140,15 @@ public class Isa implements Serializable {
     }
 
     public void getSelectUserDetailList() {
-        try{
-        userRoleList = roleDAO.findAll();
-        userDepartmentList = userDepartmentDAO.findAll();
-        userDivisionList = userDivisionDAO.findAll();
-        userRegionList = userRegionDAO.findAll();
-        userTeamList = userTeamDAO.findAll();
-        userTitleList = userTitleDAO.findAll();
-        userZoneList = userZoneDAO.findAll();
-        }catch (Exception e){
+        try {
+            userRoleList = roleDAO.findAll();
+            userDepartmentList = userDepartmentDAO.findAll();
+            userDivisionList = userDivisionDAO.findAll();
+            userRegionList = userRegionDAO.findAll();
+            userTeamList = userTeamDAO.findAll();
+            userTitleList = userTitleDAO.findAll();
+            userZoneList = userZoneDAO.findAll();
+        } catch (Exception e) {
 
         }
 
@@ -186,9 +185,9 @@ public class Isa implements Serializable {
         } catch (Exception e) {
             messageHeader = "Edit Form";
             if (e.getCause() != null) {
-                message = "Open edit form failed. Cause : "+e.getCause().getMessage();
+                message = "Open edit form failed. Cause : " + e.getCause().getMessage();
             } else {
-                message = "Open edit form failed. Cause : "+e.getMessage();
+                message = "Open edit form failed. Cause : " + e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
 

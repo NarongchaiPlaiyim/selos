@@ -53,11 +53,11 @@ public class BasicInfoView implements Serializable {
     //for disable
     private int individual;
 
-    public BasicInfoView(){
+    public BasicInfoView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.requestType = new RequestType();
         this.productGroup = new ProductGroup();
         this.specialProgram = new SpecialProgram();

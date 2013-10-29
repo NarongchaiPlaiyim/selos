@@ -11,245 +11,245 @@ import java.util.Date;
 @Table(name = "wrk_qualitative_a")
 public class QualitativeA implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_QUALI_A_ID", sequenceName="SEQ_WRK_QUALI_A_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_QUALI_A_ID")
+    @SequenceGenerator(name = "SEQ_WRK_QUALI_A_ID", sequenceName = "SEQ_WRK_QUALI_A_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_QUALI_A_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name="active")
+    @Column(name = "active")
     private boolean active;
 
-    @Column(name="properties_p1")
+    @Column(name = "properties_p1")
     private int properties_p1;
 
-    @Column(name="properties_p2")
+    @Column(name = "properties_p2")
     private int properties_p2;
 
-    @Column(name="properties_p3")
+    @Column(name = "properties_p3")
     private int properties_p3;
 
-    @Column(name="properties_sm1")
+    @Column(name = "properties_sm1")
     private int properties_sm1;
 
-    @Column(name="properties_sm2")
+    @Column(name = "properties_sm2")
     private int properties_sm2;
 
-    @Column(name="properties_sm3")
+    @Column(name = "properties_sm3")
     private int properties_sm3;
 
-    @Column(name="properties_sm4")
+    @Column(name = "properties_sm4")
     private int properties_sm4;
 
-    @Column(name="properties_sm5")
+    @Column(name = "properties_sm5")
     private int properties_sm5;
 
-    @Column(name="properties_sm6")
+    @Column(name = "properties_sm6")
     private int properties_sm6;
 
-    @Column(name="properties_sm7")
+    @Column(name = "properties_sm7")
     private int properties_sm7;
 
-    @Column(name="properties_sm8")
+    @Column(name = "properties_sm8")
     private int properties_sm8;
 
-    @Column(name="properties_sm9")
+    @Column(name = "properties_sm9")
     private int properties_sm9;
 
-    @Column(name="properties_sm10")
+    @Column(name = "properties_sm10")
     private int properties_sm10;
 
-    @Column(name="properties_sm11")
+    @Column(name = "properties_sm11")
     private int properties_sm11;
 
-    @Column(name="properties_sm12")
+    @Column(name = "properties_sm12")
     private int properties_sm12;
 
-    @Column(name="properties_ss1")
+    @Column(name = "properties_ss1")
     private int properties_ss1;
 
-    @Column(name="properties_ss2")
+    @Column(name = "properties_ss2")
     private int properties_ss2;
 
-    @Column(name="properties_ss3")
+    @Column(name = "properties_ss3")
     private int properties_ss3;
 
-    @Column(name="properties_ss4")
+    @Column(name = "properties_ss4")
     private int properties_ss4;
 
-    @Column(name="properties_ss5")
+    @Column(name = "properties_ss5")
     private int properties_ss5;
 
-    @Column(name="properties_ss6")
+    @Column(name = "properties_ss6")
     private int properties_ss6;
 
-    @Column(name="properties_ss7")
+    @Column(name = "properties_ss7")
     private int properties_ss7;
 
-    @Column(name="properties_ss8")
+    @Column(name = "properties_ss8")
     private int properties_ss8;
 
-    @Column(name="properties_ss9")
+    @Column(name = "properties_ss9")
     private int properties_ss9;
 
-    @Column(name="properties_ss10")
+    @Column(name = "properties_ss10")
     private int properties_ss10;
 
-    @Column(name="properties_ss11")
+    @Column(name = "properties_ss11")
     private int properties_ss11;
 
-    @Column(name="properties_ss12")
+    @Column(name = "properties_ss12")
     private int properties_ss12;
 
-    @Column(name="properties_ss13")
+    @Column(name = "properties_ss13")
     private int properties_ss13;
 
-    @Column(name="properties_ss14")
+    @Column(name = "properties_ss14")
     private int properties_ss14;
 
-    @Column(name="properties_ss15")
+    @Column(name = "properties_ss15")
     private int properties_ss15;
 
-    @Column(name="properties_ss16")
+    @Column(name = "properties_ss16")
     private int properties_ss16;
 
-    @Column(name="properties_ss17")
+    @Column(name = "properties_ss17")
     private int properties_ss17;
 
-    @Column(name="properties_ss18")
+    @Column(name = "properties_ss18")
     private int properties_ss18;
 
-    @Column(name="properties_ss19")
+    @Column(name = "properties_ss19")
     private int properties_ss19;
 
-    @Column(name="properties_ss20")
+    @Column(name = "properties_ss20")
     private int properties_ss20;
 
-    @Column(name="properties_d1")
+    @Column(name = "properties_d1")
     private int properties_d1;
 
-    @Column(name="properties_d2")
+    @Column(name = "properties_d2")
     private int properties_d2;
 
-    @Column(name="properties_d3")
+    @Column(name = "properties_d3")
     private int properties_d3;
 
-    @Column(name="properties_d4")
+    @Column(name = "properties_d4")
     private int properties_d4;
 
-    @Column(name="properties_d5")
+    @Column(name = "properties_d5")
     private int properties_d5;
 
-    @Column(name="properties_d6")
+    @Column(name = "properties_d6")
     private int properties_d6;
 
-    @Column(name="properties_d7")
+    @Column(name = "properties_d7")
     private int properties_d7;
 
-    @Column(name="properties_d8")
+    @Column(name = "properties_d8")
     private int properties_d8;
 
-    @Column(name="properties_d9")
+    @Column(name = "properties_d9")
     private int properties_d9;
 
-    @Column(name="properties_d10")
+    @Column(name = "properties_d10")
     private int properties_d10;
 
-    @Column(name="properties_d11")
+    @Column(name = "properties_d11")
     private int properties_d11;
 
-    @Column(name="properties_d12")
+    @Column(name = "properties_d12")
     private int properties_d12;
 
-    @Column(name="properties_d13")
+    @Column(name = "properties_d13")
     private int properties_d13;
 
-    @Column(name="properties_d14")
+    @Column(name = "properties_d14")
     private int properties_d14;
 
-    @Column(name="properties_d15")
+    @Column(name = "properties_d15")
     private int properties_d15;
 
-    @Column(name="properties_d16")
+    @Column(name = "properties_d16")
     private int properties_d16;
 
-    @Column(name="properties_d17")
+    @Column(name = "properties_d17")
     private int properties_d17;
 
-    @Column(name="properties_d18")
+    @Column(name = "properties_d18")
     private int properties_d18;
 
-    @Column(name="properties_d19")
+    @Column(name = "properties_d19")
     private int properties_d19;
 
-    @Column(name="properties_d20")
+    @Column(name = "properties_d20")
     private int properties_d20;
 
-    @Column(name="properties_dl1")
+    @Column(name = "properties_dl1")
     private int properties_dl1;
 
-    @Column(name="properties_dl2")
+    @Column(name = "properties_dl2")
     private int properties_dl2;
 
-    @Column(name="properties_dl3")
+    @Column(name = "properties_dl3")
     private int properties_dl3;
 
-    @Column(name="properties_dl4")
+    @Column(name = "properties_dl4")
     private int properties_dl4;
 
-    @Column(name="properties_dl5")
+    @Column(name = "properties_dl5")
     private int properties_dl5;
 
-    @Column(name="properties_dl6")
+    @Column(name = "properties_dl6")
     private int properties_dl6;
 
-    @Column(name="properties_dl7")
+    @Column(name = "properties_dl7")
     private int properties_dl7;
 
-    @Column(name="properties_dl8")
+    @Column(name = "properties_dl8")
     private int properties_dl8;
 
-    @Column(name="properties_dl9")
+    @Column(name = "properties_dl9")
     private int properties_dl9;
 
-    @Column(name="properties_dl10")
+    @Column(name = "properties_dl10")
     private int properties_dl10;
 
-    @Column(name="properties_dl11")
+    @Column(name = "properties_dl11")
     private int properties_dl11;
 
-    @Column(name="properties_dl12")
+    @Column(name = "properties_dl12")
     private int properties_dl12;
 
-    @Column(name="properties_dl13")
+    @Column(name = "properties_dl13")
     private int properties_dl13;
 
     @OneToOne
-    @JoinColumn(name="quality_level_id")
+    @JoinColumn(name = "quality_level_id")
     private QualityLevel qualityLevel;
 
-    @Column(name="reason")
+    @Column(name = "reason")
     private String reason;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @Column(name="quality_result")
+    @Column(name = "quality_result")
     private String qualityResult;
 
     public long getId() {

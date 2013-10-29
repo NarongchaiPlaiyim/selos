@@ -8,13 +8,13 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankTransform extends Transform{
+public class BankTransform extends Transform {
 
     @Inject
-    public BankTransform(){
+    public BankTransform() {
     }
 
-    public BankView getBankView(Bank bank){
+    public BankView getBankView(Bank bank) {
         BankView bankView = new BankView();
         if (bank == null) {
             log.debug("getBankView() bank is null!");
@@ -27,7 +27,7 @@ public class BankTransform extends Transform{
         return bankView;
     }
 
-    public List<BankView> getBankViewList(List<Bank> banks){
+    public List<BankView> getBankViewList(List<Bank> banks) {
         List<BankView> bankViews = new ArrayList<BankView>();
         if (banks == null) {
             log.debug("getBankViewList() banks is null!");

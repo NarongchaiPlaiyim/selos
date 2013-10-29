@@ -14,22 +14,27 @@
     <h:body>
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml"/>
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="resources/header_detail_fullapp_bdm.xhtml" />
+            <ui:include src="resources/header_detail_fullapp_bdm.xhtml"/>
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml"/>
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">TCG Calculation</div>
                 <div id="content">
                     <table id="content_form">
-                        <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
-                            <a style="cursor: pointer;" href="#">[View Track Change]</a></td></tr>
                         <tr>
-                            <td colspan="100%"><div class="separate"><!-- --></div></td>
+                            <td colspan="100%" class="right"
+                                style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                                <a style="cursor: pointer;" href="#">[View Track Change]</a></td>
+                        </tr>
+                        <tr>
+                            <td colspan="100%">
+                                <div class="separate"><!-- --></div>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2"><h2>GUARANTEE CHECKLIST COLLATERAL CALCULATION</h2></td>
@@ -39,10 +44,17 @@
                                 <table class="table_noborder" style="padding-left: 100px;">
                                     <tr>
                                         <td class="title">TCG</td>
-                                        <td><input type="radio" value="N" name="isTCG" checked="true" disabled="disabled"/> No<p:spacer width="5px"/><input type="radio" value="Y" name="isTCG" disabled="disabled"/> Yes</td>
+                                        <td><input type="radio" value="N" name="isTCG" checked="true"
+                                                   disabled="disabled"/> No<p:spacer width="5px"/><input type="radio"
+                                                                                                         value="Y"
+                                                                                                         name="isTCG"
+                                                                                                         disabled="disabled"/> Yes
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="title" style="width: 300px;">วงเงินสินเชื่อธุรกิจที่ขอครั้งนี้ (ประเภทที่ใช้ บสย. ค้ำประกัน) :</td>
+                                        <td class="title"
+                                            style="width: 300px;">วงเงินสินเชื่อธุรกิจที่ขอครั้งนี้ (ประเภทที่ใช้ บสย. ค้ำประกัน) :
+                                        </td>
                                         <td><input type="text" class="large right" value="#,###,###.00"/></td>
                                     </tr>
                                     <tr>
@@ -64,7 +76,9 @@
                                 </table>
                             </td>
                         </tr>
-                        <tr><td colspan="2"><p:spacer width="2"/> </td></tr>
+                        <tr>
+                            <td colspan="2"><p:spacer width="2"/></td>
+                        </tr>
                         <tr>
                             <td class="left" colspan="2">
                                 <p:commandButton value="Add" styleClass="small" onclick="tcgCollateralDlg.show()"/>
@@ -117,7 +131,7 @@
                             <td colspan="2">
                                 <table class="table_noborder" style="padding-left: 100px;">
                                     <tr>
-                                        <td class="title">ตรวจสอบเกณฑ์หลักประกัน >= 30% : </td>
+                                        <td class="title">ตรวจสอบเกณฑ์หลักประกัน >= 30% :</td>
                                         <td>XX%<!--div style="width: 90px;height: 20px; line-height:20px;display: inline-block" class="result_green center">PASS</div--></td>
                                     </tr>
                                     <tr>
@@ -144,11 +158,11 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml"/>
             <!-- End Footer -->
             <p:dialog id="TCGCollateral" header="Collateral Information" widgetVar="tcgCollateralDlg"
                       modal="true" width="450px;">
-                <ui:include src="resources/dialog/addCollateralTCG.xhtml" />
+                <ui:include src="resources/dialog/addCollateralTCG.xhtml"/>
             </p:dialog>
         </div>
     </h:body>

@@ -18,106 +18,106 @@ public class Obligation2 implements Serializable {
     @Id
     private long id;
 
-    @Column(name="tmb_cus_id", length = 30)
+    @Column(name = "tmb_cus_id", length = 30)
     private String tmbCusId;
 
-    @Column(name="tmb_bot_cus_id", length = 140)
+    @Column(name = "tmb_bot_cus_id", length = 140)
     private String tmbBotCusId;
 
-    @Column(name="service_segment", length = 1)
+    @Column(name = "service_segment", length = 1)
     private String serviceSegment;
 
-    @Column(name="adjust_class", length = 2)
+    @Column(name = "adjust_class", length = 2)
     private String adjustClass;
 
-    @Column(name="last_contract_date")
+    @Column(name = "last_contract_date")
     private Date lastContractDate;
 
-    @Column(name="mis_product_group", length = 10)
+    @Column(name = "mis_product_group", length = 10)
     private String misProductGroup;
 
-    @Column(name="account_service_segment", length = 1)
+    @Column(name = "account_service_segment", length = 1)
     private String accountServiceSegment;
 
-    @Column(name="product_code", length = 10)
+    @Column(name = "product_code", length = 10)
     private String productCode;
 
-    @Column(name="project_code", length = 5)
+    @Column(name = "project_code", length = 5)
     private String projectCode;
 
-    @Column(name="data_source", length = 2)
+    @Column(name = "data_source", length = 2)
     private String dataSource;
 
-    @Column(name="account_name", length = 50)
+    @Column(name = "account_name", length = 50)
     private String accountName;
 
-    @Column(name="last_review_date")
+    @Column(name = "last_review_date")
     private Date lastReviewDate;
 
-    @Column(name="next_review_date")
+    @Column(name = "next_review_date")
     private Date nextReviewDate;
 
-    @Column(name="extended_review_date")
+    @Column(name = "extended_review_date")
     private Date extendedReviewDate;
 
-    @Column(name="scfscore_final_rate", length = 4)
+    @Column(name = "scfscore_final_rate", length = 4)
     private String scfScoreFinalRate;
 
-    @Column(name="scfscore_ms_final", length = 8)
+    @Column(name = "scfscore_ms_final", length = 8)
     private String scfScoreMsFinal;
 
-    @Column(name="scfscore_model_type_ibnr", length = 50)
+    @Column(name = "scfscore_model_type_ibnr", length = 50)
     private String scfScoreModelTypeIbnr;
 
-    @Column(name="claim_amount")
+    @Column(name = "claim_amount")
     private BigDecimal claimAmount;
 
-    @Column(name="com_amount")
+    @Column(name = "com_amount")
     private BigDecimal comAmount;
 
-    @Column(name="tmb_paid_expense_amount")
+    @Column(name = "tmb_paid_expense_amount")
     private BigDecimal tmbPaidExpenseAmount;
 
-    @Column(name="int_unearned")
+    @Column(name = "int_unearned")
     private BigDecimal intUnEarned;
 
-    @Column(name="int_accrued")
+    @Column(name = "int_accrued")
     private BigDecimal intAccrued;
 
-    @Column(name="limit")
+    @Column(name = "limit")
     private BigDecimal limit;
 
-    @Column(name="outstanding")
+    @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name="maturity_date")
+    @Column(name = "maturity_date")
     private Date maturityDate;
 
-    @Column(name="account_number", length =  10)
+    @Column(name = "account_number", length = 10)
     private String accountNumber;
 
-    @Column(name="account_suffix", length = 3)
+    @Column(name = "account_suffix", length = 3)
     private String accountSuffix;
 
-    @Column(name="account_ref", length = 17)
+    @Column(name = "account_ref", length = 17)
     private String accountRef;
 
-    @Column(name="account_status", length = 2)
+    @Column(name = "account_status", length = 2)
     private String accountStatus;
 
-    @Column(name="card_block_code", length = 1)
+    @Column(name = "card_block_code", length = 1)
     private String cardBlockCode;
 
-    @Column(name="cus_rel_account", length = 3)
+    @Column(name = "cus_rel_account", length = 3)
     private String cusRelAccount;
 
-    @Column(name="tdr_flag", length = 1)
+    @Column(name = "tdr_flag", length = 1)
     private String tdrFlag;
 
-    @Column(name="num_month_int_past_due")
+    @Column(name = "num_month_int_past_due")
     private BigDecimal numMonthIntPastDue;
 
-    @Column(name="num_month_int_past_due_tdr_acc")
+    @Column(name = "num_month_int_past_due_tdr_acc")
     private BigDecimal numMonthIntPastDueTDRAcc;
 
     public Obligation2() {
@@ -268,7 +268,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getClaimAmount() {
-        if(claimAmount==null){
+        if (claimAmount == null) {
             return BigDecimal.ZERO;
         }
         return claimAmount;
@@ -279,7 +279,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getComAmount() {
-        if(comAmount==null){
+        if (comAmount == null) {
             return BigDecimal.ZERO;
         }
         return comAmount;
@@ -290,7 +290,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getTmbPaidExpenseAmount() {
-        if(tmbPaidExpenseAmount==null){
+        if (tmbPaidExpenseAmount == null) {
             return BigDecimal.ZERO;
         }
         return tmbPaidExpenseAmount;
@@ -301,7 +301,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getIntUnEarned() {
-        if(intUnEarned==null){
+        if (intUnEarned == null) {
             return BigDecimal.ZERO;
         }
         return intUnEarned;
@@ -312,7 +312,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getIntAccrued() {
-        if(intAccrued==null){
+        if (intAccrued == null) {
             return BigDecimal.ZERO;
         }
         return intAccrued;
@@ -323,7 +323,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getLimit() {
-        if(limit==null){
+        if (limit == null) {
             return BigDecimal.ZERO;
         }
         return limit;
@@ -334,7 +334,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getOutstanding() {
-        if(outstanding==null){
+        if (outstanding == null) {
             return BigDecimal.ZERO;
         }
         return outstanding;
@@ -409,7 +409,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getNumMonthIntPastDue() {
-        if(numMonthIntPastDue==null){
+        if (numMonthIntPastDue == null) {
             return BigDecimal.ZERO;
         }
         return numMonthIntPastDue;
@@ -420,7 +420,7 @@ public class Obligation2 implements Serializable {
     }
 
     public BigDecimal getNumMonthIntPastDueTDRAcc() {
-        if(numMonthIntPastDueTDRAcc==null){
+        if (numMonthIntPastDueTDRAcc == null) {
             return BigDecimal.ZERO;
         }
         return numMonthIntPastDueTDRAcc;

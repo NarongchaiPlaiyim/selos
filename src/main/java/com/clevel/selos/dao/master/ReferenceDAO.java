@@ -10,16 +10,16 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class ReferenceDAO extends GenericDAO<Reference,Integer> {
+public class ReferenceDAO extends GenericDAO<Reference, Integer> {
     @Inject
     private Logger log;
 
     @Inject
-    public ReferenceDAO(){
+    public ReferenceDAO() {
 
     }
 
-    public List<Reference> findByCustomerEntityId(int customerEntityId, int borrowerTypeId, int relationId){
+    public List<Reference> findByCustomerEntityId(int customerEntityId, int borrowerTypeId, int relationId) {
         log.info("findByCustomerEntityId. (customerEntityId: {}, borrowerTypeId : {}, relationId : {})", customerEntityId, borrowerTypeId, relationId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
@@ -27,7 +27,7 @@ public class ReferenceDAO extends GenericDAO<Reference,Integer> {
         criteria.add(Restrictions.eq("relation.id", relationId));
         criteria.addOrder(Order.asc("id"));
         List<Reference> referenceList = criteria.list();
-        log.info("findByCustomerEntityId. (result size: {})",referenceList.size());
+        log.info("findByCustomerEntityId. (result size: {})", referenceList.size());
 
         return referenceList;
     }

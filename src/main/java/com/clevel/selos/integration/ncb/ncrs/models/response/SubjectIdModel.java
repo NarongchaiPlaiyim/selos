@@ -8,16 +8,16 @@ import java.util.ArrayList;
 
 @XStreamAlias("id")
 public class SubjectIdModel implements Serializable {
-    
+
     @XStreamAlias("idtype")
     private String idtype;
-    
+
     @XStreamAlias("idnumber")
     private String idnumber;
-    
+
     @XStreamAlias("issuecountry")
     private String issuecountry;
-    
+
     @XStreamImplicit(itemFieldName = "dispute")
     private ArrayList<SubjectIdDisputeModel> dispute = new ArrayList<SubjectIdDisputeModel>();
 
@@ -43,7 +43,6 @@ public class SubjectIdModel implements Serializable {
     public ArrayList<SubjectIdDisputeModel> getDispute() {
         return dispute;
     }
-    
-    
-    
+
+
 }

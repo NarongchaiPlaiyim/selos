@@ -6,28 +6,28 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="wrk_children")
-public class Children implements Serializable{
+@Table(name = "wrk_children")
+public class Children implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CHILDREN_ID", sequenceName="SEQ_WRK_CHILDREN_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CHILDREN_ID")
+    @SequenceGenerator(name = "SEQ_WRK_CHILDREN_ID", sequenceName = "SEQ_WRK_CHILDREN_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CHILDREN_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customerId;
 
     @OneToOne
-    @JoinColumn(name="title_id")
+    @JoinColumn(name = "title_id")
     private Title title;
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    public Children(){
+    public Children() {
 
     }
 

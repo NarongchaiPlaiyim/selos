@@ -28,7 +28,7 @@ public class WSDataPersist {
     }
 
     public void addFailedCase(CaseCreationHistory caseCreationHistory, String message) {
-        log.debug("addFailedHistory (message: {}, detail: {})",message,caseCreationHistory);
+        log.debug("addFailedHistory (message: {}, detail: {})", message, caseCreationHistory);
         caseCreationHistory.setStatus(ActionResult.FAILED);
         caseCreationHistory.setStatusDetail(message);
         addNewCase(caseCreationHistory);

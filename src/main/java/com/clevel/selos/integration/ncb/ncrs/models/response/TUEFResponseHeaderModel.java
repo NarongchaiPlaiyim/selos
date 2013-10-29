@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class TUEFResponseHeaderModel implements Serializable {
     @XStreamAlias("memberref")
     private String memberref;
-    
+
     @XStreamAlias("subjectreturncode")
     private String subjectreturncode;
-    
+
     @XStreamAlias("enqcontrolnum")
     private String enqcontrolnum;
 
@@ -32,7 +32,6 @@ public class TUEFResponseHeaderModel implements Serializable {
     public String getEnqcontrolnum() {
         return enqcontrolnum;
     }
-    
-    
-    
+
+
 }

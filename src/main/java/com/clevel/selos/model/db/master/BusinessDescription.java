@@ -35,19 +35,19 @@ public class BusinessDescription implements Serializable {
     private String deviate;
     @Column(name = "esr")
     private String esr;
-    @Column(name = "negative",length = 5)
+    @Column(name = "negative", length = 5)
     private String negative;
-    @Column(name = "high_risk",length = 5)
+    @Column(name = "high_risk", length = 5)
     private String highRisk;
-    @Column(name = "suspend",length = 5)
+    @Column(name = "suspend", length = 5)
     private String suspend;
     @Column(name = "business_comment")
     private String comment;
-    @Column(name = "allow_deviate",length = 100)
+    @Column(name = "allow_deviate", length = 100)
     private String allowDeviate;
-    @Column(name = "deviated_by",length = 100)
+    @Column(name = "deviated_by", length = 100)
     private String deviatedBy;
-    @Column(name = "business_permission",length = 5)
+    @Column(name = "business_permission", length = 5)
     private String businessPermission;
     @Column(name = "business_permission_desc")
     private String businessPermissionDesc;

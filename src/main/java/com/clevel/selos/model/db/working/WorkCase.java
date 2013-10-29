@@ -16,74 +16,73 @@ import java.util.List;
 @Table(name = "wrk_case")
 public class WorkCase implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CASE_ID", sequenceName = "SEQ_WRK_CASE_ID", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_WRK_CASE_ID")
-    @Column(name="id", nullable=false)
+    @SequenceGenerator(name = "SEQ_WRK_CASE_ID", sequenceName = "SEQ_WRK_CASE_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CASE_ID")
+    @Column(name = "id", nullable = false)
     private long id;
 
-    @Column(name="ca_number", length = 30, nullable=false)
+    @Column(name = "ca_number", length = 30, nullable = false)
     private String caNumber;
 
-    @Column(name="app_number", nullable=false)
+    @Column(name = "app_number", nullable = false)
     private String appNumber;
 
-    @Column(name="ref_app_number")
+    @Column(name = "ref_app_number")
     private String refAppNumber;
 
-    @Column(name="wob_number")
+    @Column(name = "wob_number")
     private String wobNumber;
 
-    @Column(name="case_lock")
+    @Column(name = "case_lock")
     private int lock;
 
-    @Column(name="lock_user")
+    @Column(name = "lock_user")
     private String lockUser;
 
     @OneToOne
-    @JoinColumn(name="step_id")
+    @JoinColumn(name = "step_id")
     private Step step;
 
     @OneToOne
-    @JoinColumn(name="status_id")
+    @JoinColumn(name = "status_id")
     private Status status;
 
     @OneToOne
-    @JoinColumn(name="borrower_type_id")
+    @JoinColumn(name = "borrower_type_id")
     private CustomerEntity borrowerType;
 
-    @OneToMany(mappedBy="workCase")
+    @OneToMany(mappedBy = "workCase")
     private List<Customer> customerList;
 
-    @OneToOne(mappedBy="workCase")
+    @OneToOne(mappedBy = "workCase")
     private BizInfoSummary bizInfoSummary;
 
-    @OneToMany(mappedBy="workCase")
+    @OneToMany(mappedBy = "workCase")
     private List<DBR> dbrList;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @OneToOne
-    @JoinColumn(name="create_by")
+    @JoinColumn(name = "create_by")
     private User createBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="modify_by")
+    @JoinColumn(name = "modify_by")
     private User modifyBy;
 
     @OneToOne
-    @JoinColumn(name="step_owner")
+    @JoinColumn(name = "step_owner")
     private User stepOwner;
 
     @OneToOne
-    @JoinColumn(name="workcaseprescreen_id")
+    @JoinColumn(name = "workcaseprescreen_id")
     private WorkCasePrescreen workCasePrescreen;
-
 
 
     public WorkCase() {

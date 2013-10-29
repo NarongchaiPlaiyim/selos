@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class TDRConditionDAO extends GenericDAO<TDRCondition,Integer> {
+public class TDRConditionDAO extends GenericDAO<TDRCondition, Integer> {
     @Inject
     private Logger log;
 

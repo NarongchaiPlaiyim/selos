@@ -8,70 +8,70 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name="wrk_tcg")
-public class TCG implements Serializable{
+@Table(name = "wrk_tcg")
+public class TCG implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_TCG_ID", sequenceName="SEQ_WRK_TCG_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_TCG_ID")
+    @SequenceGenerator(name = "SEQ_WRK_TCG_ID", sequenceName = "SEQ_WRK_TCG_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_TCG_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
-    @Column(name="active")
+    @Column(name = "active")
     private boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @Column(name="tcg_flag")
+    @Column(name = "tcg_flag")
     private int tcgFlag;
 
-    @Column(name="request_limit_tcg")
+    @Column(name = "request_limit_tcg")
     private BigDecimal requestLimitRequiredTCG;
 
-    @Column(name="request_limit_not_tcg")
+    @Column(name = "request_limit_not_tcg")
     private BigDecimal requestLimitNotRequiredTCG;
 
-    @Column(name="exist_loan_under_same")
+    @Column(name = "exist_loan_under_same")
     private BigDecimal existingLoanRatioUnderSameCollateral;
 
-    @Column(name="exist_loan_not_under_same")
+    @Column(name = "exist_loan_not_under_same")
     private BigDecimal existingLoanRatioNotUnderSameCollateral;
 
-    @Column(name="tcb_flood_amount")
+    @Column(name = "tcb_flood_amount")
     private BigDecimal tcbFloodAmount;
 
-    @Column(name="collateral_rule_result")
+    @Column(name = "collateral_rule_result")
     private BigDecimal collateralRuleResult;
 
-    @Column(name="request_tcg_amount")
+    @Column(name = "request_tcg_amount")
     private BigDecimal requestTCGAmount;
 
-    @Column(name="sum_appraisal_amount")
+    @Column(name = "sum_appraisal_amount")
     private BigDecimal sumAppraisalAmount;
 
-    @Column(name="sum_ltv_value")
+    @Column(name = "sum_ltv_value")
     private BigDecimal sumLtvValue;
 
-    @Column(name="sum_in_this_appraisal_amount")
+    @Column(name = "sum_in_this_appraisal_amount")
     private BigDecimal sumInThisAppraisalAmount;
 
-    @Column(name="sum_in_this_ltv_value")
+    @Column(name = "sum_in_this_ltv_value")
     private BigDecimal sumInThisLtvValue;
 
 

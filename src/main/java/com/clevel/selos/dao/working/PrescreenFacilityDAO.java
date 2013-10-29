@@ -16,26 +16,26 @@ public class PrescreenFacilityDAO extends GenericDAO<PrescreenFacility, Integer>
     private Logger log;
 
     @Inject
-    public PrescreenFacilityDAO(){
+    public PrescreenFacilityDAO() {
 
     }
 
-    public List<PrescreenFacility> findByPreScreen(Prescreen prescreen){
+    public List<PrescreenFacility> findByPreScreen(Prescreen prescreen) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen", prescreen));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenFacility> prescreenFacilityList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenFacilityList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenFacilityList.size());
 
         return prescreenFacilityList;
     }
 
-    public List<PrescreenFacility> findByPreScreenId(long preScreenId){
+    public List<PrescreenFacility> findByPreScreenId(long preScreenId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen.id", preScreenId));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenFacility> prescreenFacilityList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenFacilityList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenFacilityList.size());
 
         return prescreenFacilityList;
     }

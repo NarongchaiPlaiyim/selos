@@ -1,4 +1,5 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
+
 public class ProfileNameModel {
     private String asofdate;
     private String thainame;
@@ -20,5 +21,5 @@ public class ProfileNameModel {
     public String getSubmittedby() {
         return submittedby;
     }
-    
+
 }

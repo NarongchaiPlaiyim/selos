@@ -15,10 +15,10 @@ public class PrdGroupToPrdProgram implements Serializable {
     @Column(name = "id")
     private int id;
     @OneToOne
-    @JoinColumn(name="productgroup_id")
+    @JoinColumn(name = "productgroup_id")
     private ProductGroup productGroup;
     @OneToOne
-    @JoinColumn(name="productprogram_id")
+    @JoinColumn(name = "productprogram_id")
     private ProductProgram productProgram;
     @Column(name = "active")
     private int active;

@@ -30,9 +30,9 @@ public class ExceptionMessageProvider extends MessageProvider implements Excepti
     public String get(String key) {
         String message;
         try {
-            message = getBundle().getString("exception."+key);
+            message = getBundle().getString("exception." + key);
         } catch (MissingResourceException e) {
-            log.error("Missing resource! (key: {})",key,e);
+            log.error("Missing resource! (key: {})", key, e);
             message = "???";
         }
         return message;

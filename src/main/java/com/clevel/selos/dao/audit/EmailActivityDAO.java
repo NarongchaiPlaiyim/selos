@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class EmailActivityDAO extends GenericDAO<EmailActivity,Long> {
+public class EmailActivityDAO extends GenericDAO<EmailActivity, Long> {
     @Inject
     private Logger log;
 

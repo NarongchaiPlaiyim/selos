@@ -12,9 +12,9 @@ import java.util.List;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -123,25 +123,23 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "maxRisk",
-    "maxRiskRM",
-    "statusSWF",
-    "sourceOfRisk",
-    "resCode1",
-    "resDesc1",
-    "resCode2",
-    "resDesc2",
-    "resCode3",
-    "resDesc3",
-    "resCode4",
-    "resDesc4",
-    "messageSection",
-    "warningListPersonSection"
+        "maxRisk",
+        "maxRiskRM",
+        "statusSWF",
+        "sourceOfRisk",
+        "resCode1",
+        "resDesc1",
+        "resCode2",
+        "resDesc2",
+        "resCode3",
+        "resDesc3",
+        "resCode4",
+        "resDesc4",
+        "messageSection",
+        "warningListPersonSection"
 })
 public class Body {
 
@@ -174,11 +172,9 @@ public class Body {
 
     /**
      * Gets the value of the maxRisk property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getMaxRisk() {
         return maxRisk;
@@ -186,23 +182,19 @@ public class Body {
 
     /**
      * Sets the value of the maxRisk property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setMaxRisk(JAXBElement<String> value) {
-        this.maxRisk = ((JAXBElement<String> ) value);
+        this.maxRisk = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the maxRiskRM property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getMaxRiskRM() {
         return maxRiskRM;
@@ -210,23 +202,19 @@ public class Body {
 
     /**
      * Sets the value of the maxRiskRM property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setMaxRiskRM(JAXBElement<String> value) {
-        this.maxRiskRM = ((JAXBElement<String> ) value);
+        this.maxRiskRM = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the statusSWF property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getStatusSWF() {
         return statusSWF;
@@ -234,23 +222,19 @@ public class Body {
 
     /**
      * Sets the value of the statusSWF property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setStatusSWF(JAXBElement<String> value) {
-        this.statusSWF = ((JAXBElement<String> ) value);
+        this.statusSWF = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the sourceOfRisk property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getSourceOfRisk() {
         return sourceOfRisk;
@@ -258,23 +242,19 @@ public class Body {
 
     /**
      * Sets the value of the sourceOfRisk property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setSourceOfRisk(JAXBElement<String> value) {
-        this.sourceOfRisk = ((JAXBElement<String> ) value);
+        this.sourceOfRisk = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resCode1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResCode1() {
         return resCode1;
@@ -282,23 +262,19 @@ public class Body {
 
     /**
      * Sets the value of the resCode1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResCode1(JAXBElement<String> value) {
-        this.resCode1 = ((JAXBElement<String> ) value);
+        this.resCode1 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resDesc1 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResDesc1() {
         return resDesc1;
@@ -306,23 +282,19 @@ public class Body {
 
     /**
      * Sets the value of the resDesc1 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResDesc1(JAXBElement<String> value) {
-        this.resDesc1 = ((JAXBElement<String> ) value);
+        this.resDesc1 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resCode2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResCode2() {
         return resCode2;
@@ -330,23 +302,19 @@ public class Body {
 
     /**
      * Sets the value of the resCode2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResCode2(JAXBElement<String> value) {
-        this.resCode2 = ((JAXBElement<String> ) value);
+        this.resCode2 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resDesc2 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResDesc2() {
         return resDesc2;
@@ -354,23 +322,19 @@ public class Body {
 
     /**
      * Sets the value of the resDesc2 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResDesc2(JAXBElement<String> value) {
-        this.resDesc2 = ((JAXBElement<String> ) value);
+        this.resDesc2 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resCode3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResCode3() {
         return resCode3;
@@ -378,23 +342,19 @@ public class Body {
 
     /**
      * Sets the value of the resCode3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResCode3(JAXBElement<String> value) {
-        this.resCode3 = ((JAXBElement<String> ) value);
+        this.resCode3 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resDesc3 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResDesc3() {
         return resDesc3;
@@ -402,23 +362,19 @@ public class Body {
 
     /**
      * Sets the value of the resDesc3 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResDesc3(JAXBElement<String> value) {
-        this.resDesc3 = ((JAXBElement<String> ) value);
+        this.resDesc3 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resCode4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResCode4() {
         return resCode4;
@@ -426,23 +382,19 @@ public class Body {
 
     /**
      * Sets the value of the resCode4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResCode4(JAXBElement<String> value) {
-        this.resCode4 = ((JAXBElement<String> ) value);
+        this.resCode4 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the resDesc4 property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public JAXBElement<String> getResDesc4() {
         return resDesc4;
@@ -450,37 +402,33 @@ public class Body {
 
     /**
      * Sets the value of the resDesc4 property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.bind.JAXBElement }{@code <}{@link String }{@code >}
      */
     public void setResDesc4(JAXBElement<String> value) {
-        this.resDesc4 = ((JAXBElement<String> ) value);
+        this.resDesc4 = ((JAXBElement<String>) value);
     }
 
     /**
      * Gets the value of the messageSection property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the messageSection property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getMessageSection().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link MessageSection }
-     * 
-     * 
      */
     public List<MessageSection> getMessageSection() {
         if (messageSection == null) {
@@ -491,25 +439,23 @@ public class Body {
 
     /**
      * Gets the value of the warningListPersonSection property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the warningListPersonSection property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getWarningListPersonSection().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link WarningListPersonSection }
-     * 
-     * 
      */
     public List<WarningListPersonSection> getWarningListPersonSection() {
         if (warningListPersonSection == null) {

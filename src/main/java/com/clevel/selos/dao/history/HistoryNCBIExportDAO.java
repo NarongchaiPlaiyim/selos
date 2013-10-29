@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class HistoryNCBIExportDAO extends GenericDAO<HistoryNCBIExport,Long> {
+public class HistoryNCBIExportDAO extends GenericDAO<HistoryNCBIExport, Long> {
     @Inject
     private Logger log;
 

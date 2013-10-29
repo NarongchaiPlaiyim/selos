@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class WorkCaseDAO extends GenericDAO<WorkCase,Long> {
+public class WorkCaseDAO extends GenericDAO<WorkCase, Long> {
     @Inject
     private Logger log;
 
@@ -16,24 +16,24 @@ public class WorkCaseDAO extends GenericDAO<WorkCase,Long> {
     public WorkCaseDAO() {
     }
 
-    public long findIdByWobNumber(String wobNumber){
+    public long findIdByWobNumber(String wobNumber) {
         log.info("findIdByWobNum : {}", wobNumber);
         long workCaseId = 0;
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
-        WorkCase workCase = (WorkCase)criteria.uniqueResult();
-        if(workCase != null){
+        WorkCase workCase = (WorkCase) criteria.uniqueResult();
+        if (workCase != null) {
             workCaseId = workCase.getId();
         }
 
         return workCaseId;
     }
 
-    public WorkCase findByWobNumber(String wobNumber){
+    public WorkCase findByWobNumber(String wobNumber) {
         log.info("findIdByWobNum : {}", wobNumber);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("wobNumber", wobNumber));
-        WorkCase workCase = (WorkCase)criteria.uniqueResult();
+        WorkCase workCase = (WorkCase) criteria.uniqueResult();
 
         return workCase;
     }

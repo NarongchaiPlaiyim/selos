@@ -4,14 +4,16 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
     <div id="header_detail">
-        <div id="header_colapse" style="float: left; width: 50px; margin-top: 5px;">  ^  </div>
-        <div id="header_button" style="float:right; width: 820px; text-align: right; margin-right: 10px; margin-top: 5px;">
+        <div id="header_colapse" style="float: left; width: 50px; margin-top: 5px;"> ^</div>
+        <div id="header_button"
+             style="float:right; width: 820px; text-align: right; margin-right: 10px; margin-top: 5px;">
             <h:form>
-                <p:commandButton value="Check Mandate Doc" styleClass="blueButton" onclick="mandateDocDlg.show()" />
-                <p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Request Appraisal" styleClass="blueButton" onclick="requestAppraisalDlg.show()"/>
-                <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton" />
-                <p:commandButton value="Close Sales" ajax="false" styleClass="blueButton" />
+                <p:commandButton value="Check Mandate Doc" styleClass="blueButton" onclick="mandateDocDlg.show()"/>
+                <p:commandButton value="Check Prescreen" ajax="false" styleClass="blueButton"/>
+                <p:commandButton value="Request Appraisal" styleClass="blueButton"
+                                 onclick="requestAppraisalDlg.show()"/>
+                <p:commandButton value="Cancel CA" ajax="false" styleClass="blueButton"/>
+                <p:commandButton value="Close Sales" ajax="false" styleClass="blueButton"/>
             </h:form>
         </div>
         <div class="clear"></div>

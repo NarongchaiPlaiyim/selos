@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class SystemParameterDAO extends GenericDAO<SystemParameter,String> {
+public class SystemParameterDAO extends GenericDAO<SystemParameter, String> {
     @Inject
     private Logger log;
 
@@ -17,15 +17,15 @@ public class SystemParameterDAO extends GenericDAO<SystemParameter,String> {
     public SystemParameterDAO() {
     }
 
-    public SystemParameter findByParameterName(String parameterName){
-        log.debug("findByParameterName. (parameterName: {}",parameterName);
-        if(!Util.isEmpty(parameterName)){
+    public SystemParameter findByParameterName(String parameterName) {
+        log.debug("findByParameterName. (parameterName: {}", parameterName);
+        if (!Util.isEmpty(parameterName)) {
             //set for individual
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("name", parameterName));
             SystemParameter systemParameter = (SystemParameter) criteria.uniqueResult();
 
-            log.debug("findByParameterName. (systemParameter: {})",systemParameter);
+            log.debug("findByParameterName. (systemParameter: {})", systemParameter);
             return systemParameter;
         }
         return null;

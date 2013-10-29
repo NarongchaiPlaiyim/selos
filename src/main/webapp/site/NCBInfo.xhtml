@@ -31,11 +31,12 @@
 <div id="content">
 <div id="content_info">
     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText value="#{ncbInfo.ncbInfoView.modifyBy.userName}"/>, <h:outputText value="#{ncbInfo.ncbInfoView.modifyDate}"/></div>
+    <div id="content_lastupdate">Last update by <h:outputText value="#{ncbInfo.ncbInfoView.modifyBy.userName}"/>,
+        <h:outputText value="#{ncbInfo.ncbInfoView.modifyDate}"/></div>
 </div>
 <div id="content_form">
 <!-- start content -->
-<table class="content_table_form" >
+<table class="content_table_form">
 
 <tr>
     <td style="width: 50px" class="title">
@@ -49,7 +50,9 @@
         <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -58,7 +61,7 @@
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: right"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>
@@ -66,7 +69,7 @@
         <h:outputText value="#{msg.get('app.paymentClass')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>

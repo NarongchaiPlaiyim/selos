@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BizStakeHolderDetailDAO extends GenericDAO<BizStakeHolderDetail,Long> {
+public class BizStakeHolderDetailDAO extends GenericDAO<BizStakeHolderDetail, Long> {
     @Inject
     private Logger log;
 
@@ -19,7 +19,7 @@ public class BizStakeHolderDetailDAO extends GenericDAO<BizStakeHolderDetail,Lon
     public BizStakeHolderDetailDAO() {
     }
 
-    public List<BizStakeHolderDetail>findByBizInfoDetail(BizInfoDetail bizInfoDetail ,String stakeHolderType ){
+    public List<BizStakeHolderDetail> findByBizInfoDetail(BizInfoDetail bizInfoDetail, String stakeHolderType) {
 
         log.info("findByBizInfoDetail begin ");
         Criteria criteria = createCriteria();

@@ -65,7 +65,7 @@ public class BizInfoDetailView implements Serializable {
     private List<BizStakeHolderDetailView> supplierDetailList;
     private List<BizStakeHolderDetailView> buyerDetailList;
 
-    public void reset(){
+    public void reset() {
         this.bizDesc = new BusinessDescription();
         this.bizDesc.setBusinessGroup(new BusinessGroup());
         this.bizGroup = new BusinessGroup();

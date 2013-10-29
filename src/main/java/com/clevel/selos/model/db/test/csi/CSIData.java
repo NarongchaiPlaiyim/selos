@@ -10,26 +10,26 @@ import java.io.Serializable;
 @Table(name = "test_ext_csi")
 public class CSIData implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_CSI_ID", sequenceName="SEQ_EXT_CSI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_CSI_ID")
+    @SequenceGenerator(name = "SEQ_EXT_CSI_ID", sequenceName = "SEQ_EXT_CSI_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_EXT_CSI_ID")
     private long id;
-    @Column(name="citizen_id", length = 13)
+    @Column(name = "citizen_id", length = 13)
     private String citizenId;
-    @Column(name="passport_no", length = 25)
+    @Column(name = "passport_no", length = 25)
     private String passportNo;
-    @Column(name="business_reg_no", length = 25)
+    @Column(name = "business_reg_no", length = 25)
     private String businessRegNo;
-    @Column(name="name_th", length = 100)
+    @Column(name = "name_th", length = 100)
     private String nameTh;
-    @Column(name="name_en", length = 100)
+    @Column(name = "name_en", length = 100)
     private String nameEn;
-    @Column(name="warning_code", length = 4)
+    @Column(name = "warning_code", length = 4)
     private String warningCode;
-    @Column(name="source", length = 10)
+    @Column(name = "source", length = 10)
     private String source;
-    @Column(name="data_date", length = 8)
+    @Column(name = "data_date", length = 8)
     private String dataDate;
-    @Column(name="date_warning_code", length = 8)
+    @Column(name = "date_warning_code", length = 8)
     private String dateWarningCode;
 
     public CSIData() {

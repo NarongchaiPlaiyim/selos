@@ -8,32 +8,32 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name="wrk_tcg_detail")
+@Table(name = "wrk_tcg_detail")
 public class TCGDetail implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_TCG_DETAIL_ID", sequenceName="SEQ_WRK_TCG_DETAIL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_TCG_DETAIL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_TCG_DETAIL_ID", sequenceName = "SEQ_WRK_TCG_DETAIL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_TCG_DETAIL_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="tcg_id")
+    @JoinColumn(name = "tcg_id")
     private TCG tcg;
 
     @OneToOne
-    @JoinColumn(name="potential_collateral_id")
+    @JoinColumn(name = "potential_collateral_id")
     private PotentialCollateral potentialCollateral;
 
     @OneToOne
-    @JoinColumn(name="tcg_collateral_type_id")
+    @JoinColumn(name = "tcg_collateral_type_id")
     private TCGCollateralType tcgCollateralType;
 
-    @Column(name="appraisal_amount")
+    @Column(name = "appraisal_amount")
     private BigDecimal appraisalAmount;
 
-    @Column(name="ltv_value")
+    @Column(name = "ltv_value")
     private BigDecimal ltvValue;
 
-    @Column(name="propose_in_this_request_flag")
+    @Column(name = "propose_in_this_request_flag")
     private int isProposeInThisRequest;
 
     public long getId() {

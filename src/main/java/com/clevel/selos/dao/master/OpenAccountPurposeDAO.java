@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class OpenAccountPurposeDAO extends GenericDAO<OpenAccountPurpose,Integer> {
+public class OpenAccountPurposeDAO extends GenericDAO<OpenAccountPurpose, Integer> {
     @Inject
     private Logger log;
 

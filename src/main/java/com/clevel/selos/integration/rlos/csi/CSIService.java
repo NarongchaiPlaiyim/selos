@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CSIService implements Serializable{
+public class CSIService implements Serializable {
     @Inject
     @RLOS
     Logger log;
@@ -26,49 +26,49 @@ public class CSIService implements Serializable{
     DBExecute dbExecute;
 
     @Inject
-    public CSIService(){
+    public CSIService() {
 
     }
 
-    public CSIResult getCSIData(String userId,CSIInputData csiInputData) throws Exception{
-        log.debug("getCSIData service userId: {}, csiInputData: {}", userId,csiInputData.toString());
+    public CSIResult getCSIData(String userId, CSIInputData csiInputData) throws Exception {
+        log.debug("getCSIData service userId: {}, csiInputData: {}", userId, csiInputData.toString());
         List<CSIData> csiDataList = new ArrayList<CSIData>();
         List<CSIData> warningCodeFullMatched;
         List<CSIData> warningCodePartialMatched;
         CSIResult csiResult = null;
-        try{
+        try {
             Map<String, CSIData> fullyMatchedMap = null;
             Map<String, CSIData> partialMatchedMap = null;
 
             //get fully matched warning code
-            if(csiInputData.getIdModelList()!=null && csiInputData.getIdModelList().size()>0){
+            if (csiInputData.getIdModelList() != null && csiInputData.getIdModelList().size() > 0) {
                 fullyMatchedMap = new HashMap<String, CSIData>();
-                for(AccountInfoId idModel: csiInputData.getIdModelList()){
-                    Map<String,CSIData> warningCodeMap = dbExecute.getWarningCodeListFullyMatched(idModel.getDocumentType(),idModel.getIdNumber());
-                    if(warningCodeMap!=null){
-                        for (String key: warningCodeMap.keySet()) {
-                            fullyMatchedMap.put(key,warningCodeMap.get(key));
+                for (AccountInfoId idModel : csiInputData.getIdModelList()) {
+                    Map<String, CSIData> warningCodeMap = dbExecute.getWarningCodeListFullyMatched(idModel.getDocumentType(), idModel.getIdNumber());
+                    if (warningCodeMap != null) {
+                        for (String key : warningCodeMap.keySet()) {
+                            fullyMatchedMap.put(key, warningCodeMap.get(key));
                         }
                     }
                 }
             }
 
             //get partial matched warning code
-            if(csiInputData.getNameModelList()!=null && csiInputData.getNameModelList().size()>0){
+            if (csiInputData.getNameModelList() != null && csiInputData.getNameModelList().size() > 0) {
                 partialMatchedMap = new HashMap<String, CSIData>();
-                for(AccountInfoName nameModel: csiInputData.getNameModelList()){
+                for (AccountInfoName nameModel : csiInputData.getNameModelList()) {
                     String nameTh = null;
                     String nameEn = null;
-                    if(!Util.isEmpty(nameModel.getNameTh()) && !Util.isEmpty(nameModel.getSurnameTh())){
+                    if (!Util.isEmpty(nameModel.getNameTh()) && !Util.isEmpty(nameModel.getSurnameTh())) {
                         nameTh = nameModel.getNameTh().concat(" ").concat(nameModel.getSurnameTh());
                     }
-                    if(!Util.isEmpty(nameModel.getNameEn()) && !Util.isEmpty(nameModel.getSurnameEn())){
+                    if (!Util.isEmpty(nameModel.getNameEn()) && !Util.isEmpty(nameModel.getSurnameEn())) {
                         nameEn = nameModel.getNameEn().concat(" ").concat(nameModel.getSurnameEn());
                     }
-                    Map<String,CSIData> warningCodeMap = dbExecute.getWarningCodeListPartialMatched(nameTh,nameEn);
-                    if(warningCodeMap!=null){
-                        for (String key: warningCodeMap.keySet()) {
-                            partialMatchedMap.put(key,warningCodeMap.get(key));
+                    Map<String, CSIData> warningCodeMap = dbExecute.getWarningCodeListPartialMatched(nameTh, nameEn);
+                    if (warningCodeMap != null) {
+                        for (String key : warningCodeMap.keySet()) {
+                            partialMatchedMap.put(key, warningCodeMap.get(key));
                         }
                     }
                 }
@@ -79,19 +79,19 @@ public class CSIService implements Serializable{
             warningCodePartialMatched = new ArrayList<CSIData>();
 
             //check if partial is fully matched, remove from partial
-            if(fullyMatchedMap!=null && fullyMatchedMap.size()>0){
-                for (String key: fullyMatchedMap.keySet()) {
+            if (fullyMatchedMap != null && fullyMatchedMap.size() > 0) {
+                for (String key : fullyMatchedMap.keySet()) {
                     //set fully code to list
                     warningCodeFullMatched.add(fullyMatchedMap.get(key));
                     //remove code from partial matched
-                    if(partialMatchedMap!=null && partialMatchedMap.containsKey(key)){
+                    if (partialMatchedMap != null && partialMatchedMap.containsKey(key)) {
                         partialMatchedMap.remove(key);
                     }
                 }
             }
 
-            if(partialMatchedMap!=null && partialMatchedMap.size()>0){
-                for (String key: partialMatchedMap.keySet()) {
+            if (partialMatchedMap != null && partialMatchedMap.size() > 0) {
+                for (String key : partialMatchedMap.keySet()) {
                     //set remaining warning code to list
                     warningCodePartialMatched.add(partialMatchedMap.get(key));
                 }
@@ -100,7 +100,7 @@ public class CSIService implements Serializable{
             csiResult.setWarningCodeFullMatched(warningCodeFullMatched);
             csiResult.setWarningCodePartialMatched(warningCodePartialMatched);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
         return csiResult;

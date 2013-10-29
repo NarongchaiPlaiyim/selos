@@ -6,19 +6,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="wrk_prescreen_collateral")
-public class PrescreenCollateral implements Serializable{
+@Table(name = "wrk_prescreen_collateral")
+public class PrescreenCollateral implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_PS_COLL_ID", sequenceName="SEQ_WRK_PS_COLL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PS_COLL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PS_COLL_ID", sequenceName = "SEQ_WRK_PS_COLL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PS_COLL_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="prescreen_id")
+    @JoinColumn(name = "prescreen_id")
     private Prescreen prescreen;
 
     @OneToOne
-    @JoinColumn(name="potential_collateral_id")
+    @JoinColumn(name = "potential_collateral_id")
     private PotentialCollateral potentialCollateral;
 
     public long getId() {

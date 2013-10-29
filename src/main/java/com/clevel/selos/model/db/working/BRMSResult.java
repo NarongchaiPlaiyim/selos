@@ -9,57 +9,57 @@ import java.util.Date;
 
 public class BRMSResult implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BRMS_RESULT_ID", sequenceName="SEQ_WRK_BRMS_RESULT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BRMS_RESULT_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BRMS_RESULT_ID", sequenceName = "SEQ_WRK_BRMS_RESULT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BRMS_RESULT_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePreScreen;
 
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @OneToOne
-    @JoinColumn(name="step_id")
+    @JoinColumn(name = "step_id")
     private Step step;
 
-    @Column(name="rule_name")
+    @Column(name = "rule_name")
     private String ruleName;
 
-    @Column(name="rule_order")
+    @Column(name = "rule_order")
     private String ruleOrder;
 
-    @Column(name="rule_color")
+    @Column(name = "rule_color")
     private String ruleColor;
 
-    @Column(name="rule_type")
+    @Column(name = "rule_type")
     private String ruleType;
 
-    @Column(name="personal_id")
+    @Column(name = "personal_id")
     private String personalId;
 
-    @Column(name="deviation_flag")
+    @Column(name = "deviation_flag")
     private String deviationFlag;
 
-    @Column(name="reject_group_code")
+    @Column(name = "reject_group_code")
     private String rejectGroupCode;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     public long getId() {

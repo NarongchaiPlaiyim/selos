@@ -1,7 +1,7 @@
 package com.clevel.selos.integration;
 
 public enum IntegrationStatus {
-    SUCCESS(0),WAITING(1),SENDING(2),FAILED(3);
+    SUCCESS(0), WAITING(1), SENDING(2), FAILED(3);
     int value;
 
     IntegrationStatus(int value) {

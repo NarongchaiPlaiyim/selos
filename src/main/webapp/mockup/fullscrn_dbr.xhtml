@@ -1,181 +1,199 @@
 <!DOCTYPE html>
 <html>
-    <f:view xmlns="http://www.w3.org/1999/xhtml"
-            xmlns:f="http://java.sun.com/jsf/core"
-            xmlns:h="http://java.sun.com/jsf/html"
-            xmlns:ui="http://java.sun.com/jsf/facelets"
-            xmlns:p="http://primefaces.org/ui">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
 
-        <h:head>
-            <title>Financial Info.</title>
-            <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
-            <script type="text/javascript" src="resources/js/superfish.js"></script>
-        </h:head>
-        <h:body>
-            <div id="main_container">
+    <h:head>
+        <title>Financial Info.</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="resources/js/superfish.js"></script>
+    </h:head>
+    <h:body>
+        <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml"/>
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="resources/header_detail_fullapp.xhtml" />
+            <ui:include src="resources/header_detail_fullapp.xhtml"/>
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="resources/menubar_fullapp.xhtml" />
+            <ui:include src="resources/menubar_fullapp.xhtml"/>
             <!-- End Menu -->
             <div id="content_container">
-            <div id="content_name">Debt Burden Ratio</div>
-            <div id="content">
-            <table id="content_form">
-            <tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
-                <a style="cursor: pointer;" href="#">[View Track Change]</a></td></tr>
-            <tr>
-                <td colspan="6"><div class="separate"><!-- --></div></td>
-            </tr>
-
-            <tr>
-                <td class="title" style="width: 200px">รายได้ต่อเดือน : </td>
-                <td><input type="text" class="small" value=""/></td>
-                <td class="title" style="width: 200px">income factor : </td>
-                <td><input type="text" class="small" value=""/></td>
-                <td class="title" style="width: 150px; line-height: 15px">อัตราดอกเบี้ยสำหรับคำนวณ DBR(%) :</td>
-                <td><input type="text" class="small" value=""/></td>
-
-            </tr>
-                <tr>
-                    <td class="title" style="width: 200px">รายได้ต่อเดือน (Adjusted) : </td>
-                    <td><input type="text" class="small" value=""/></td>
-                    <!--td class="title" style="width: 200px">income factor (Adjusted by UW) : </td>
-                    <td colspan="3"><input type="text" class="small" value=""/></td-->
-                </tr>
-                <tr>
-                    <td class="title" style="width: 150px">รายได้เงินเดือนต่อเดือน : </td>
-                    <td colspan="5"><input type="text" class="small" value=""/></td>
-
-                </tr>
-                <tr>
-                    <td class="title" style="width: 200px">รายได้สุทธิ/เดือน ณ ปัจจุบัน : </td>
-                    <td><input type="text" class="small" value=""/></td>
-                    <td class="title" style="width: 200px">รวมภาระหนี้/เดือน ณ ปัจจุบัน : </td>
-                    <td><input type="text" class="small" value=""/></td>
-
-                </tr>
-            <tr>
-                <td colspan="6"><div class="separate"><!-- --></div></td>
-            </tr>
-            <tr>
-                <td colspan="6"><h2>ภาระหนี้ส่วนของผู้กู้</h2></td>
-            </tr>
-            <tr>
-                <td colspan="6">
-                <table class="table_content" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <th style="width:30px;"></th>
-                        <th style="width:250px;">ชื่อบัญชี</th>
-                        <th style="width:200px;">ประเภทสินเชื่อ</th>
-                        <th style="width:150px;">วงเงิน</th>
-                        <th style="width:150px;">ยอดชำระต่อเดือน</th>
-                        <th style="width:150px;">ภาระหนี้สำหรับคำนวณ</th>
-                    </tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td class="center">Mr. A Example</td>
-                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
-                        <td class="right">600,000.00</td>
-                        <td class="right">21,100.00</td>
-                        <td class="right">607,809.00</td>
-                    </tr>
-                    <tr>
-                        <td class="center">2</td>
-                        <td class="center">Mr. A Example</td>
-                        <td class="center">สินเชื่อหมุนเวียนส่วนบุคคล</td>
-                        <td class="right">600,000.00</td>
-                        <td class="right">21,100.00</td>
-                        <td class="right">0.00</td>
-                    </tr>
-                    <tr>
-                        <td class="center">3</td>
-                        <td class="center">Mr. A Example</td>
-                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
-                        <td class="right">100,000.00</td>
-                        <td class="right">8,809.00</td>
-                        <td class="right">2,100.00</td>
-                    </tr>
-                    <tr style="background-color:#f4f8b6;">
-                        <td colspan="5">รวมภาระหนี้/เดือน</td>
-                        <td class="right">609,909.00</td>
-                    </tr>
-                </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6" style="line-height: 15px"><p:spacer width="5px;"/></td>
-            </tr>
-            <tr>
-                <td colspan="6"><div class="separate"><!-- --></div></td>
-            </tr>
-            <tr>
-                <td><h2>ภาระหนี้ส่วนของผู้เกี่ยวข้อง</h2></td>
-                <td colspan="5"><p:commandButton value="Add" styleClass="small" onclick="relatedDBRDlg.show();"/></td>
-            </tr>
-            <tr>
-                <td colspan="6">
-                    <table class="table_content" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <th style="width:30px;"></th>
-                        <th style="width:250px;">ชื่อบัญชี</th>
-                        <th style="width:200px;">ประเภทสินเชื่อ</th>
-                        <th style="width:150px;">วงเงิน</th>
-                        <th style="width:150px;">ยอดชำระต่อเดือน</th>
-                        <th style="width:150px;">ภาระหนี้สำหรับคำนวณ</th>
-                        <th style="width:50px;"></th>
-                    </tr>
-                    <tr>
-                        <td class="center">1</td>
-                        <td class="center">Mr. D Related</td>
-                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
-                        <td class="right">###,###.00</td>
-                        <td class="right">###,###.00</td>
-                        <td class="right">###,###.00</td>
-                        <td class="option">
-                            <p:commandButton icon="ui-icon-pencil" title="Edit"/>
-                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
-                        </td>
-                    </tr>
-
-                        <tr style="background-color:#f4f8b6;">
-                            <td colspan="5">รวมภาระหนี้/เดือน</td>
-                            <td class="right">###,###.00</td>
-                            <td></td>
+                <div id="content_name">Debt Burden Ratio</div>
+                <div id="content">
+                    <table id="content_form">
+                        <tr>
+                            <td colspan="100%" class="right"
+                                style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39
+                                <a style="cursor: pointer;" href="#">[View Track Change]</a></td>
                         </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="separate"><!-- --></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="title" style="width: 200px">รายได้ต่อเดือน :</td>
+                            <td><input type="text" class="small" value=""/></td>
+                            <td class="title" style="width: 200px">income factor :</td>
+                            <td><input type="text" class="small" value=""/></td>
+                            <td class="title"
+                                style="width: 150px; line-height: 15px">อัตราดอกเบี้ยสำหรับคำนวณ DBR(%) :
+                            </td>
+                            <td><input type="text" class="small" value=""/></td>
+
+                        </tr>
+                        <tr>
+                            <td class="title" style="width: 200px">รายได้ต่อเดือน (Adjusted) :</td>
+                            <td><input type="text" class="small" value=""/></td>
+                            <!--td class="title" style="width: 200px">income factor (Adjusted by UW) : </td>
+                            <td colspan="3"><input type="text" class="small" value=""/></td-->
+                        </tr>
+                        <tr>
+                            <td class="title" style="width: 150px">รายได้เงินเดือนต่อเดือน :</td>
+                            <td colspan="5"><input type="text" class="small" value=""/></td>
+
+                        </tr>
+                        <tr>
+                            <td class="title" style="width: 200px">รายได้สุทธิ/เดือน ณ ปัจจุบัน :</td>
+                            <td><input type="text" class="small" value=""/></td>
+                            <td class="title" style="width: 200px">รวมภาระหนี้/เดือน ณ ปัจจุบัน :</td>
+                            <td><input type="text" class="small" value=""/></td>
+
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="separate"><!-- --></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><h2>ภาระหนี้ส่วนของผู้กู้</h2></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:250px;">ชื่อบัญชี</th>
+                                        <th style="width:200px;">ประเภทสินเชื่อ</th>
+                                        <th style="width:150px;">วงเงิน</th>
+                                        <th style="width:150px;">ยอดชำระต่อเดือน</th>
+                                        <th style="width:150px;">ภาระหนี้สำหรับคำนวณ</th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td class="center">Mr. A Example</td>
+                                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
+                                        <td class="right">600,000.00</td>
+                                        <td class="right">21,100.00</td>
+                                        <td class="right">607,809.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">2</td>
+                                        <td class="center">Mr. A Example</td>
+                                        <td class="center">สินเชื่อหมุนเวียนส่วนบุคคล</td>
+                                        <td class="right">600,000.00</td>
+                                        <td class="right">21,100.00</td>
+                                        <td class="right">0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">3</td>
+                                        <td class="center">Mr. A Example</td>
+                                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
+                                        <td class="right">100,000.00</td>
+                                        <td class="right">8,809.00</td>
+                                        <td class="right">2,100.00</td>
+                                    </tr>
+                                    <tr style="background-color:#f4f8b6;">
+                                        <td colspan="5">รวมภาระหนี้/เดือน</td>
+                                        <td class="right">609,909.00</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" style="line-height: 15px"><p:spacer width="5px;"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="separate"><!-- --></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h2>ภาระหนี้ส่วนของผู้เกี่ยวข้อง</h2></td>
+                            <td colspan="5"><p:commandButton value="Add" styleClass="small"
+                                                             onclick="relatedDBRDlg.show();"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <table class="table_content" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th style="width:30px;"></th>
+                                        <th style="width:250px;">ชื่อบัญชี</th>
+                                        <th style="width:200px;">ประเภทสินเชื่อ</th>
+                                        <th style="width:150px;">วงเงิน</th>
+                                        <th style="width:150px;">ยอดชำระต่อเดือน</th>
+                                        <th style="width:150px;">ภาระหนี้สำหรับคำนวณ</th>
+                                        <th style="width:50px;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td class="center">1</td>
+                                        <td class="center">Mr. D Related</td>
+                                        <td class="center">สินเชื่อบุคคล (เงินกู้)</td>
+                                        <td class="right">###,###.00</td>
+                                        <td class="right">###,###.00</td>
+                                        <td class="right">###,###.00</td>
+                                        <td class="option">
+                                            <p:commandButton icon="ui-icon-pencil" title="Edit"/>
+                                            <p:commandButton icon="ui-icon-trash" title="Remove"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr style="background-color:#f4f8b6;">
+                                        <td colspan="5">รวมภาระหนี้/เดือน</td>
+                                        <td class="right">###,###.00</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="6"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><p:separator/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><p:spacer width="2px"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="6" class="center">
+                                <p:commandButton value="Save" styleClass="small"
+                                                 onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+                                <p:commandButton value="Cancel" styleClass="small"
+                                                 onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+                            </td>
+                        </tr>
+
                     </table>
-                </td>
-            </tr>
-
-            <tr><td colspan="6"><p:spacer width="2px"/></td></tr>
-            <tr>
-                <td colspan="6"><p:separator/></td>
-            </tr>
-            <tr><td colspan="6"><p:spacer width="2px"/></td></tr>
-            <tr>
-                <td colspan="6" class="center">
-                    <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-                    <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-                </td>
-            </tr>
-
-            </table>
-            </div>
-            <div class="bottom_line"></div>
+                </div>
+                <div class="bottom_line"></div>
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml"/>
             <!-- End Footer -->
-                <p:dialog id="relatedDBR" header="Related Debt. Account Information" widgetVar="relatedDBRDlg"
-                          modal="true" width="450px;">
-                    <ui:include src="resources/dialog/addRelatedDBR.xhtml" />
-                </p:dialog>
-            </div>
-        </h:body>
-    </f:view>
+            <p:dialog id="relatedDBR" header="Related Debt. Account Information" widgetVar="relatedDBRDlg"
+                      modal="true" width="450px;">
+                <ui:include src="resources/dialog/addRelatedDBR.xhtml"/>
+            </p:dialog>
+        </div>
+    </h:body>
+</f:view>
 </html>

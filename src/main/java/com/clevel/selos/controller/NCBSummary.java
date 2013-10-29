@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -10,6 +11,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.NCBTransform;
 import com.clevel.selos.util.FacesUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -52,6 +55,8 @@ public class NCBSummary implements Serializable {
     private NCBInfoView ncbView;
     private List<Customer> customerView;
     private NCBInfoView ncbSummaryViewItem;
+    private User user;
+    private Date date;
 
     public NCBSummary() {
     }
@@ -64,6 +69,9 @@ public class NCBSummary implements Serializable {
         HttpSession session = FacesUtil.getSession(true);
 
         session.setAttribute("workCaseId", new Long(1));    // ไว้เทส set workCaseId ส่งมาจาก inbox
+
+        user = (User)session.getAttribute("user");
+        date = DateTime.now().toDate();
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
@@ -155,5 +163,21 @@ public class NCBSummary implements Serializable {
 
     public void setNcbSummaryViewItem(NCBInfoView ncbSummaryViewItem) {
         this.ncbSummaryViewItem = ncbSummaryViewItem;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

@@ -6,205 +6,219 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title>SE-LOS : BA (Top up BA) Information</title>
-        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
-        <script type="text/javascript" src="resources/js/superfish.js"></script>
-    </h:head>
-    <h:body>
-        <div id="main_container">
-            <!-- Start Header Logo -->
-            <ui:include src="resources/header_logo_callcenter.xhtml" />
-            <!-- End Header Logo -->
-            <!-- Start Header Detail -->
-            <ui:include src="resources/header_detail_recordcontract.xhtml" />
-            <!-- End Header Detail -->
-            <!-- Start Menu -->
-            <ui:include src="resources/menubar_callcenter.xhtml" />
-            <!-- End Menu -->
-            <div id="content_container">
-                <div id="content_name">BA (Top up BA)</div>
-                <div id="content">
-                    <table id="content_form">
-                        <tr>
-                            <td><p:spacer width="5"></p:spacer></td>
-                        </tr>
-                        <tr>
-                            <td class="center">
-                                <table class="table_content" width="90%" align="center">
+<h:head>
+    <title>SE-LOS : BA (Top up BA) Information</title>
+    <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/superfish.js"></script>
+</h:head>
+<h:body>
+    <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="resources/header_logo_callcenter.xhtml"/>
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="resources/header_detail_recordcontract.xhtml"/>
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="resources/menubar_callcenter.xhtml"/>
+        <!-- End Menu -->
+        <div id="content_container">
+            <div id="content_name">BA (Top up BA)</div>
+            <div id="content">
+                <table id="content_form">
+                    <tr>
+                        <td><p:spacer width="5"></p:spacer></td>
+                    </tr>
+                    <tr>
+                        <td class="center">
+                            <table class="table_content" width="90%" align="center">
+                                <tr>
+                                    <th colspan="6">BA (Top up BA)</th>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Include In Loan Amount :</td>
+                                    <td colspan="5" class="left">
+                                        <input type="radio" id="incloan" name="incloan"/><label
+                                            for="incloan">Yes</label>
+                                        <input type="radio" id="notincloan" name="incloan"/><label
+                                            for="notincloan">No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Pre - insurance premium :</td>
+                                    <td colspan="5" class="left"><input type="text" class="largest"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">No. of ผู้เอาประกันชีวิต :</td>
+                                    <td colspan="5" class="left"><input type="text" class="smallest"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">ผู้เอาประกันชีวิต :</td>
+                                    <td colspan="5" class="left"><input type="text" class="larger"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Sum insured :</td>
+                                    <td class="left"><input type="text" class="larger"/></td>
+                                    <td class="title right">Premium :</td>
+                                    <td class="left"><input type="text" class="larger"/></td>
+                                    <td class="title right">Years of coverage :</td>
+                                    <td class="left"><input type="text" class="larger"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Diff amt (Compare Top up Limit) :</td>
+                                    <td colspan="5" class="left"><input type="text" class="larger"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Clean loan 7 Days :</td>
+                                    <td colspan="5" class="left">
+                                        <input type="radio" id="clean" name="cleanloan"/><label for="clean">Yes</label>
+                                        <input type="radio" id="notclean" name="cleanloan"/><label
+                                            for="notclean">No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">ประเภทสินเชื่อ :</td>
+                                    <td colspan="5">
+                                        <table class="table_noborder">
+                                            <tr>
+                                                <td><select class="large">
+                                                    <option>- Please Select -</option>
+                                                </select></td>
+                                                <td class="title right">Limit :</td>
+                                                <td class="left"><input type="text" class="small"/></td>
+                                                <td class="title right">Hold limit :</td>
+                                                <td class="left"><input type="text" class="small"/></td>
+                                                <td class="title right">Date :</td>
+                                                <td class="left"><p:calendar id="loantypeCalendar" pattern="dd/MM/yyyy"
+                                                                             showOn="button"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Announce building 30 days :</td>
+                                    <td colspan="5" class="left">
+                                        <input type="radio" id="announce" name="announcebuild"/><label
+                                            for="announce">Yes</label>
+                                        <input type="radio" id="notannounce" name="announcebuild"/><label
+                                            for="notannounce">No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">ประเภทสินเชื่อ :</td>
+                                    <td colspan="5">
+                                        <table class="table_noborder">
+                                            <tr>
+                                                <td><select class="large">
+                                                    <option>- Please Select -</option>
+                                                </select></td>
+                                                <td class="title right">Limit :</td>
+                                                <td class="left"><input type="text" class="small"/></td>
+                                                <td class="title right">Hold limit :</td>
+                                                <td class="left"><input type="text" class="small"/></td>
+                                                <td class="title right">Date :</td>
+                                                <td class="left"><p:calendar id="loantypeCalendar2" pattern="dd/MM/yyyy"
+                                                                             showOn="button"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table_content" width="90%" align="center">
+                                <tr>
+                                    <th colspan="6">Approval Details</th>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Approval Result :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                    <td class="title right">Approved By :</td>
+                                    <td class="left"><input type="text" class="largest"/></td>
+                                    <td class="title right">Approved Date :</td>
+                                    <td class="left"><p:calendar id="approvedateCalendar" pattern="dd/MM/yyyy"
+                                                                 showOn="button"/></td>
+                                </tr>
+                            </table>
+                            <table class="table_content" width="90%" align="center">
+                                <tr>
+                                    <th colspan="6">Product Details</th>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Product Type :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                    <td class="title right">Sub Product Type :</td>
+                                    <td class="left"><input type="text" class="largest"/></td>
+                                    <td class="title right">Loan Purpose Code :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Approve Credit Limit :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                    <td class="title right">Installment Amount (THB) :</td>
+                                    <td class="left"><input type="text" class="largest"/></td>
+                                    <td class="title right">ระยะเวลาการเบิกใช้สินเชื่อ :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Approve Tenor :</td>
+                                    <td class="left"><input type="text" class="large"/></td>
+                                    <td class="title right">First Payment Due Date :</td>
+                                    <td class="left"><p:calendar id="firstPaymentDate" pattern="dd/MM/yyyy"
+                                                                 showOn="button"/></td>
+                                    <td class="title right">Pay date :</td>
+                                    <td class="left"><p:calendar id="payDate" pattern="dd/MM/yyyy" showOn="button"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title right">Loan A/C</td>
+                                    <td colspan="5" class="left"><input type="text" class="larger"/></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p:spacer width="5"></p:spacer></td>
+                    </tr>
+                    <!--<tr>
+                        <td class="center">
+                            <div style="width: 90%; display:table; margin: 0 auto;">
+                                <h2>Pricing Tiers</h2>
+                                <table class="table_content" width="100%" align="center">
                                     <tr>
-                                        <th colspan="6">BA (Top up BA)</th>
+                                        <th>S/N</th>
+                                        <th>Tiers</th>
+                                        <th>Pricing</th>
                                     </tr>
                                     <tr>
-                                        <td class="title right">Include In Loan Amount :</td>
-                                        <td colspan="5" class="left">
-                                            <input type="radio" id="incloan" name="incloan"/><label for="incloan">Yes</label>
-                                            <input type="radio" id="notincloan" name="incloan"/><label for="notincloan">No</label>
-                                        </td>
+                                        <td>1</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                     <tr>
-                                        <td class="title right">Pre - insurance premium :</td>
-                                        <td colspan="5" class="left"><input type="text" class="largest"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">No. of ผู้เอาประกันชีวิต :</td>
-                                        <td colspan="5" class="left"><input type="text" class="smallest"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">ผู้เอาประกันชีวิต :</td>
-                                        <td colspan="5" class="left"><input type="text" class="larger"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Sum insured :</td>
-                                        <td class="left"><input type="text" class="larger"/></td>
-                                        <td class="title right">Premium :</td>
-                                        <td class="left"><input type="text" class="larger"/></td>
-                                        <td class="title right">Years of coverage :</td>
-                                        <td class="left"><input type="text" class="larger"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Diff amt (Compare Top up Limit) :</td>
-                                        <td colspan="5" class="left"><input type="text" class="larger"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Clean loan 7 Days :</td>
-                                        <td colspan="5" class="left">
-                                            <input type="radio" id="clean" name="cleanloan"/><label for="clean">Yes</label>
-                                            <input type="radio" id="notclean" name="cleanloan"/><label for="notclean">No</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">ประเภทสินเชื่อ :</td>
-                                        <td colspan="5">
-                                            <table class="table_noborder">
-                                                <tr>
-                                                    <td><select class="large"><option>- Please Select -</option></select></td>
-                                                    <td class="title right">Limit :</td>
-                                                    <td class="left"><input type="text" class="small"/></td>
-                                                    <td class="title right">Hold limit :</td>
-                                                    <td class="left"><input type="text" class="small"/></td>
-                                                    <td class="title right">Date :</td>
-                                                    <td class="left"><p:calendar id="loantypeCalendar" pattern="dd/MM/yyyy" showOn="button"/></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Announce building 30 days :</td>
-                                        <td colspan="5" class="left">
-                                            <input type="radio" id="announce" name="announcebuild"/><label for="announce">Yes</label>
-                                            <input type="radio" id="notannounce" name="announcebuild"/><label for="notannounce">No</label>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">ประเภทสินเชื่อ :</td>
-                                        <td colspan="5">
-                                            <table class="table_noborder">
-                                                <tr>
-                                                    <td><select class="large"><option>- Please Select -</option></select></td>
-                                                    <td class="title right">Limit :</td>
-                                                    <td class="left"><input type="text" class="small"/></td>
-                                                    <td class="title right">Hold limit :</td>
-                                                    <td class="left"><input type="text" class="small"/></td>
-                                                    <td class="title right">Date :</td>
-                                                    <td class="left"><p:calendar id="loantypeCalendar2" pattern="dd/MM/yyyy" showOn="button"/></td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td>2</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
                                 </table>
-                                <table class="table_content" width="90%" align="center">
-                                    <tr>
-                                        <th colspan="6">Approval Details</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Approval Result :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                        <td class="title right">Approved By :</td>
-                                        <td class="left"><input type="text" class="largest"/></td>
-                                        <td class="title right">Approved Date :</td>
-                                        <td class="left"><p:calendar id="approvedateCalendar" pattern="dd/MM/yyyy" showOn="button"/></td>
-                                    </tr>
-                                </table>
-                                <table class="table_content" width="90%" align="center">
-                                    <tr>
-                                        <th colspan="6">Product Details</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Product Type :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                        <td class="title right">Sub Product Type :</td>
-                                        <td class="left"><input type="text" class="largest"/></td>
-                                        <td class="title right">Loan Purpose Code :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Approve Credit Limit :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                        <td class="title right">Installment Amount (THB) :</td>
-                                        <td class="left"><input type="text" class="largest"/></td>
-                                        <td class="title right">ระยะเวลาการเบิกใช้สินเชื่อ :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Approve Tenor :</td>
-                                        <td class="left"><input type="text" class="large"/></td>
-                                        <td class="title right">First Payment Due Date :</td>
-                                        <td class="left"><p:calendar id="firstPaymentDate" pattern="dd/MM/yyyy" showOn="button"/></td>
-                                        <td class="title right">Pay date :</td>
-                                        <td class="left"><p:calendar id="payDate" pattern="dd/MM/yyyy" showOn="button"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title right">Loan A/C</td>
-                                        <td colspan="5" class="left"><input type="text" class="larger"/></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><p:spacer width="5"></p:spacer></td>
-                        </tr>
-                        <!--<tr>
-                            <td class="center">
-                                <div style="width: 90%; display:table; margin: 0 auto;">
-                                    <h2>Pricing Tiers</h2>
-                                    <table class="table_content" width="100%" align="center">
-                                        <tr>
-                                            <th>S/N</th>
-                                            <th>Tiers</th>
-                                            <th>Pricing</th>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>-->
-                        <tr>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td class="center">
-                                <p:commandButton value="Save" styleClass="medium"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="bottom_line"><!-- --></div>
+                            </div>
+                        </td>
+                    </tr>-->
+                    <tr>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="center">
+                            <p:commandButton value="Save" styleClass="medium"/>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div class="clear"></div>
-            <!-- Start Footer -->
-            <ui:include src="resources/footer_confirmation.xhtml" />
-            <!-- End Footer -->
+            <div class="bottom_line"><!-- --></div>
         </div>
-    </h:body>
+        <div class="clear"></div>
+        <!-- Start Footer -->
+        <ui:include src="resources/footer_confirmation.xhtml"/>
+        <!-- End Footer -->
+    </div>
+</h:body>
 </f:view>
 </html>

@@ -60,8 +60,15 @@ war {
 //    war.rootSpec.exclude 'resources/js'
 //    war.rootSpec.exclude 'resources/primefaces-theme'
 
+    // exclude EJBs
+//    war.rootSpec.exclude 'com/clevel/selos/businesscontrol/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/dao/stp/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/system/audit/**/*'
+//    war.rootSpec.exclude 'com/clevel/selos/ws/WSDataPersist.*'
+
     // exclude temporary files
     war.rootSpec.exclude 'mockup'
+//    war.rootSpec.exclude 'test'
 
     // replace with bank environment
     rootSpec.eachFile { details ->
@@ -72,3 +79,12 @@ war {
         }
     }
 }
+
+task packEar(type: Jar) {
+    extension = 'ear'
+
+    metaInf { from 'src/main/application/META-INF' }
+
+    from war.outputs.files
+}
+

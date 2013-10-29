@@ -6,13 +6,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class Telephone implements Serializable{
+public class Telephone implements Serializable {
 
     private String telephoneNumber;
     private String extension;
     private String telephoneType;
 
-    public Telephone(){
+    public Telephone() {
 
     }
 

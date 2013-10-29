@@ -10,11 +10,11 @@ public enum RadioValue {
 
     int value;
 
-    RadioValue(int value){
+    RadioValue(int value) {
         this.value = value;
     }
 
-    public int value(){
+    public int value() {
         return this.value;
     }
 }

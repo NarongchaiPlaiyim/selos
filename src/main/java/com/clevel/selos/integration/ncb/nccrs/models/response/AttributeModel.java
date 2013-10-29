@@ -6,5 +6,5 @@ public class AttributeModel {
     public AttributeModel(String historicalbalancereport) {
         this.historicalbalancereport = historicalbalancereport;
     }
-    
+
 }

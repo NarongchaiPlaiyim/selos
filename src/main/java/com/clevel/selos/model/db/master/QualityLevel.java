@@ -14,9 +14,9 @@ import java.io.Serializable;
 public class QualityLevel implements Serializable {
     @Id
     private long id;
-    @Column(name="code")
+    @Column(name = "code")
     private String code;
-    @Column(name="description")
+    @Column(name = "description")
     private String description;
 
     public long getId() {

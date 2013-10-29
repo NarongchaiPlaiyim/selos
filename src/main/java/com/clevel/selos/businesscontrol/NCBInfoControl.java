@@ -35,62 +35,62 @@ public class NCBInfoControl extends BusinessControl {
     private CustomerDAO customerDAO;
 
     @Inject
-    public void NCBInfoControl(){
+    public void NCBInfoControl() {
 
     }
 
-    public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList){
+    public void onSaveNCBToDB(NCBInfoView NCBInfoView, List<NCBDetailView> NCBDetailViewList) {
         log.info("onSaveNCBToDB begin");
 
-        NCB ncb = ncbTransform.transformToModel( NCBInfoView );
+        NCB ncb = ncbTransform.transformToModel(NCBInfoView);
         ncbDAO.persist(ncb);
         log.info("persist ncb");
 
-        List<NCBDetail> NCBDetailListToDelete =  ncbDetailDAO.findNCBDetailByNcbId(ncb.getId());
-        log.info("NCBDetailListToDelete :: {}",NCBDetailListToDelete.size());
+        List<NCBDetail> NCBDetailListToDelete = ncbDetailDAO.findNCBDetailByNcbId(ncb.getId());
+        log.info("NCBDetailListToDelete :: {}", NCBDetailListToDelete.size());
         ncbDetailDAO.delete(NCBDetailListToDelete);
         log.info("delete NCBDetailListToDelete");
 
-        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList,ncb) ;
+        List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(NCBDetailViewList, ncb);
         ncbDetailDAO.persist(ncbDetailList);
 
     }
 
 
-    public NCBInfoView getNCBInfoView(long customerId){
+    public NCBInfoView getNCBInfoView(long customerId) {
         log.info("getNcbInfoView :: customer id  :: {}", customerId);
         NCBInfoView ncbInfoView = null;
 
-        try{
-            NCB ncb =  ncbDAO.findNcbByCustomer(customerId);
-            if(ncb != null){
-                log.info("ncb :: {} ",ncb.getId());
-                ncbInfoView  = ncbTransform.transformToView(ncb);
+        try {
+            NCB ncb = ncbDAO.findNcbByCustomer(customerId);
+            if (ncb != null) {
+                log.info("ncb :: {} ", ncb.getId());
+                ncbInfoView = ncbTransform.transformToView(ncb);
             }
-        }catch (Exception e){
-            log.error( "getNcbInfoView error :: " + e.getMessage());
-        }finally{
-            log.info( "getNcbInfoView end" );
+        } catch (Exception e) {
+            log.error("getNcbInfoView error :: " + e.getMessage());
+        } finally {
+            log.info("getNcbInfoView end");
         }
 
         return ncbInfoView;
     }
 
-    public List<NCBDetailView> getNcbDetailListView(NCBInfoView ncbInfoView){
+    public List<NCBDetailView> getNcbDetailListView(NCBInfoView ncbInfoView) {
         log.info("getNcbDetailListView :: ncbId  :: {}", ncbInfoView.getId());
         List<NCBDetailView> ncbDetailViewList = null;
 
-        try{
-            List<NCBDetail> NCBDetailList =  ncbDetailDAO.findNCBDetailByNcbId(ncbInfoView.getId());
+        try {
+            List<NCBDetail> NCBDetailList = ncbDetailDAO.findNCBDetailByNcbId(ncbInfoView.getId());
 
-            if(NCBDetailList.size() > 0){
-                ncbDetailViewList  = ncbDetailTransform.transformToView(NCBDetailList);
+            if (NCBDetailList.size() > 0) {
+                ncbDetailViewList = ncbDetailTransform.transformToView(NCBDetailList);
             }
 
-        }catch (Exception e){
-            log.error( "getNcbDetailListView error :: " + e.getMessage());
-        }finally{
-            log.info( "getNcbDetailListView end" );
+        } catch (Exception e) {
+            log.error("getNcbDetailListView error :: " + e.getMessage());
+        } finally {
+            log.info("getNcbDetailListView end");
         }
 
         return ncbDetailViewList;

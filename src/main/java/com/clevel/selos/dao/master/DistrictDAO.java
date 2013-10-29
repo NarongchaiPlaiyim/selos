@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class DistrictDAO extends GenericDAO<District,Integer> {
+public class DistrictDAO extends GenericDAO<District, Integer> {
     @Inject
     private Logger log;
 
@@ -20,22 +20,22 @@ public class DistrictDAO extends GenericDAO<District,Integer> {
     }
 
     public List<District> getListByProvince(Province province) {
-        log.info("getListByBusinessGroup. (province: {})",province);
+        log.info("getListByBusinessGroup. (province: {})", province);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("province", province));
         criteria.addOrder(Order.asc("name"));
         List<District> districts = criteria.list();
-        log.info("getListByProvince. (result size: {})",districts.size());
+        log.info("getListByProvince. (result size: {})", districts.size());
         return districts;
     }
 
-    public District getByNameAndProvince(String districtName,Province province) {
-        log.info("getByNameAndProvince. (districtName: {}, province: {})",districtName,province);
+    public District getByNameAndProvince(String districtName, Province province) {
+        log.info("getByNameAndProvince. (districtName: {}, province: {})", districtName, province);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("province", province));
         criteria.add(Restrictions.eq("name", districtName));
-        District district = (District)criteria.uniqueResult();
-        log.info("getByNameAndProvince. (result : {})",district);
+        District district = (District) criteria.uniqueResult();
+        log.info("getByNameAndProvince. (result : {})", district);
         return district;
     }
 }
