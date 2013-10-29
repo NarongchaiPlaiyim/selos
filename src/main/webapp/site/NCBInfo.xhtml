@@ -50,8 +50,9 @@
         <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true"
-                     style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -60,8 +61,7 @@
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true"
-                     style="width:200px;text-align: right"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>
@@ -69,7 +69,7 @@
         <h:outputText value="#{msg.get('app.paymentClass')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>
@@ -133,7 +133,7 @@
                     </h:selectOneMenu>
                 </td>
             </tr>
-            <tr style="display: none">
+             <tr style="display: none">
                 <td colspan="2">
                     <h:outputText value="#{ncbInfo.ncbInfoView.ncbCusMarriageStatus}"/>
                     <h:outputText value="#{ncbInfo.ncbInfoView.enquiry}"/>
@@ -238,12 +238,12 @@
 </tr>
 <tr>
     <td colspan="2">
-        <table class="content_table_form" style="width:90%">
+        <table class="content_table_form"  style="width:90%">
             <tr>
                 <td>
                     <!-- <div class="div_highlighter">-->
-                    <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
-                                 rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex">
+                        <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
+                                 rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex"  >
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column>
@@ -390,7 +390,7 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <!-- <h:outputText value="#{item.wc}"/>-->
+                               <!-- <h:outputText value="#{item.wc}"/>-->
                                 <h:selectBooleanCheckbox value="#{item.wc}"/>
                             </p:column>
 
@@ -409,7 +409,7 @@
                                 <p:commandButton title="Remove"
                                                  icon="ui-icon-trash"
                                                  oncomplete="confirmDeleteNcbRecordDlg.show()"
-                                                 rendered="#{item.canToEdit}">
+                                                 rendered="#{item.canToEdit}" >
                                     <f:setPropertyActionListener value="#{item}"
                                                                  target="#{ncbInfo.selectNcbRecordItem}"/>
                                 </p:commandButton>
@@ -426,7 +426,7 @@
 
                         </p:subTable>
                     </p:dataTable>
-                    <!--</div>-->
+                     <!--</div>-->
                 </td>
             </tr>
 
@@ -468,7 +468,7 @@
 </p:panel>
 
 <p:dialog id="ncbDialog" header="NCB Record Information" widgetVar="ncbDlg"
-          modal="true" onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" height="500">
+          modal="true"  onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()"   height="500">
     <ui:include src="dialog/NCBDetailDialog.xhtml"/>
 </p:dialog>
 

@@ -1,8 +1,8 @@
 package com.clevel.selos.controller;
 
-
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -52,6 +52,8 @@ public class ExecutiveSummary implements Serializable {
     private String message;
     private boolean messageErr;
 
+    private ExSummaryView exSummaryView;
+
     @Inject
     UserDAO userDAO;
 
@@ -70,6 +72,12 @@ public class ExecutiveSummary implements Serializable {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         }
+
+        if(exSummaryView == null){
+            exSummaryView = new ExSummaryView();
+        }
+
+
     }
 
     public void onSaveExecutiveSummary() {
@@ -130,6 +138,14 @@ public class ExecutiveSummary implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public ExSummaryView getExSummaryView() {
+        return exSummaryView;
+    }
+
+    public void setExSummaryView(ExSummaryView exSummaryView) {
+        this.exSummaryView = exSummaryView;
     }
 }
 
