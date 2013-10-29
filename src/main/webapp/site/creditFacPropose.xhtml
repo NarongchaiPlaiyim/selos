@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Credit Facility - Propose Line</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript"
+            src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+
+<h:body>
+<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+<h:form id="frmMain">
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="include/header_logo.xhtml"/>
+<!-- End Header Logo -->
+<!-- Start Header Detail -->
+<ui:include src="include/header_detail.xhtml"/>
+<!-- End Header Detail -->
+<!-- Start Menu -->
+<ui:include src="include/menubar.xhtml"/>
+<!-- End Menu -->
+<div id="content_container">
+<div id="content_name">#{msg.get('app.credit.facility.propose.title.header')}</div>
+<div id="content">
+<div id="content_info">
+    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]
+    </div>
+    <div id="content_lastupdate">Last update by
+        <h:outputText id="lastupdateName" value="??"/>,
+        <h:outputText id="lastupdateTime" value="??"/>
+    </div>
+</div>
+<div id="content_form">
+<!-- start content -->
+<table class="content_table_form">
+
+<tr>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.title.wcRequirement')}"/>
+    </td>
+</tr>
+
+<tr>
+
+<td>
+<!-- start content -->
+<table class="table_content" style="width:100%">
+
+<tr>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.WCNeed')}"/>
+    </td>
+    <td>
+        <p:inputText styleClass="large" value="">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                             maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
+        <p:spacer width="5px;"/>
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+    </td>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.totalCreditTurnover')}"/>
+    </td>
+    <td>
+        <p:inputText styleClass="large" value="">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                             maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
+        <p:spacer width="5px;"/>
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+    </td>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.WCNeedDiffer')}"/>
+    </td>
+    <td>
+        <p:inputText styleClass="large" value="">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                             maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
+        <p:spacer width="5px;"/>
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+    </td>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.totalWCdebit')}"/>
+    </td>
+    <td>
+        <p:inputText styleClass="large" value="">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                             maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
+        <p:spacer width="5px;"/>
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+    </td>
+    <td colspan="2">
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6">
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6">
+        <table class="table_noborder">
+            <tr>
+                <td colspan="8" style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case1WC')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case1WC.limit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case1WC.minLimit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case1WC.50CoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case1WC.debitCoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6">
+        <table class="table_noborder">
+            <tr>
+                <td colspan="8" style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case2WC')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case2WC.limit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case2WC.minLimit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case2WC.50CoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case2WC.debitCoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="6">
+        <table class="table_noborder">
+            <tr>
+                <td colspan="8" style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case3WC')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case3WC.limit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case3WC.minLimit')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case3WC.50CoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.case3WC.debitCoreWC')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                         maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.unit')}"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
+</table>
+<!-- end content -->
+</td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.proposed.credit')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.label.proposedPurposed.caption')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <table class="table_noborder" style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <h:selectOneRadio value="">
+                        <f:selectItem itemLabel="Normal" itemValue="1"/>
+                        <f:selectItem itemLabel="Prime" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;width:400px;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.proposed.credit.type')}"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="creditRequest"
+                                     value="#{creditFacPropose.creditRequestTypeSelected}"
+                                     size="1"
+                                     style="width: 200px;"
+                                     required="true">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{creditFacPropose.creditRequestTypeList}"
+                                       var="creditRequestType"
+                                       itemLabel="#{creditRequestType.description}"
+                                       itemValue="#{creditRequestType.code}"/>
+
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.investedCountry')}"/>
+                </td>
+                <td>
+                    <p:selectOneMenu id="countryItem"
+                                     value="#{creditFacPropose.countrySelected}"
+                                     size="1"
+                                     style="width: 200px;"
+                                     required="true">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
+                        <f:selectItems value="#{creditFacPropose.countryList}"
+                                       var="country"
+                                       itemLabel="#{country.name}"
+                                       itemValue="#{country.code}"/>
+
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.existingSMELimit')}"/>
+                </td>
+                <td style="text-align: left">
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.maximumExistingSMELimit')}"/>
+                    <p:spacer width="5px;"/>
+                    <p:inputText styleClass="medium" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td class="left">
+        <p:commandButton id="btnSave" value="#{msg.get('app.credit.facility.propose.button.addProposeCreditButton')}"
+                         styleClass="medium"
+                         process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
+                         actionListener="#{executiveSummary.onSaveExecutiveSummary}"/>
+        <p:commandButton value="#{msg.get('app.credit.facility.propose.button.retrieveProposeCreditButton')}"
+                         styleClass="medium" style="width:200px"
+                         process="@form" update=":frmMain"/>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <!-- start content -->
+        <table class="content_table_form">
+            <tr>
+                <td colspan="2">
+                    <table class="table_result" style="float:left;width:100%">
+                        <thead>
+                        <tr>
+                            <th class="ui-state-default"></th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.productProgram')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.creditType')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.productCode')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.limit')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.standardPrice')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.suggestPrice')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.finalPrice')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.installment')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.tenor')}</th>
+                            <th class="ui-state-default">#{msg.get('app.credit.facility.propose.tb.label.frontEndFee')}</th>
+                            <th class="ui-state-default"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <ui:repeat value="" var="item">
+                            <tr>
+                                <td rowspan="4">
+                                    <h:outputText value="#{rowIndex+1}"/>
+                                </td>
+                                <td rowspan="3">
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td rowspan="3">
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td rowspan="3">
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td rowspan="3">
+                                    <h:outputText value="##,###,###">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="##,###,###">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </td>
+                                <td style="text-align: center">
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td rowspan="3">
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td rowspan="3">
+                                    <p:commandButton icon="ui-icon-pencil"></p:commandButton>
+                                    <p:commandButton icon="ui-icon-trash"></p:commandButton>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="##,###,###">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </td>
+                                <td style="text-align: center">
+                                    <h:outputText value="test"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="test"/>
+                                </td>
+                                <td>
+                                    <h:outputText value="##,###,###">
+                                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </td>
+                                <td style="text-align: center">
+                                    <h:outputText value="test"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="10" style="width:500px;">
+                                    <table class="table_noborder">
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.requestType')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="requestType">
+                                                </h:outputText>
+                                            </td>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.refinance')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText
+                                                        value="refinance">
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.purpose')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td style="text-align: left" colspan="3">
+                                                <h:outputText
+                                                        value="purpose">
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.purpose.detail')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td style="text-align: left" colspan="3">
+                                                <h:outputText
+                                                        value="purpose detail">
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.disbursement')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="New">
+                                                </h:outputText>
+                                            </td>
+                                            <td style="text-align: left">
+                                                <h:outputText
+                                                        value="#{msg.get('app.credit.facility.propose.tb.label.holdAmount')}">
+                                                </h:outputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value="##,###,###">
+                                                    <f:convertNumber pattern="#,##0" minFractionDigits="2"
+                                                                     maxFractionDigits="2"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </ui:repeat>
+                        </tbody>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!-- end content -->
+    </td>
+</tr>
+<tr>
+    <td>
+        <table class="table_content" style="width:100%">
+            <tr>
+                <td style="text-align: left;width:300px;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.tb.label.totalPropose')}"/>
+                </td>
+                <td style="text-align: left; ">
+                    <h:outputText value="##,###,###"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.tb.caption.borrower')}"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left;width:300px;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.tb.label.totalCommercial')}"/>
+                </td>
+                <td style="text-align: left; ">
+                    <h:outputText value="##,###,###"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left;width:300px;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.tb.label.totalCommercialAndOBOD')}"/>
+                </td>
+                <td style="text-align: left; ">
+                    <h:outputText value="##,###,###"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left;width:300px;" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.tb.label.totalExposure')}"/>
+                </td>
+                <td style="text-align: left; ">
+                    <h:outputText value="##,###,###"/>
+                </td>
+            </tr>
+        </table>
+        <!-- end content -->
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr>
+    <td style="text-align: left" class="title">
+        <h:outputText
+                value="#{msg.get('app.credit.facility.propose.tradeFinanceHeader')}"/>
+    </td>
+</tr>
+
+<tr>
+
+    <td>
+        <!-- start content -->
+        <table class="table_content" style="width:100%">
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactName')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="large" value=""></p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.contactPhoneNo')}"/>
+                    <p:spacer width="5px;"/>
+                    <p:inputText styleClass="large" value=""></p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.interService')}"/>
+                    <p:spacer width="5px;"/>
+                    <p:inputText styleClass="large" value=""></p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.currentAddress')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="large" value="" style="width:200px;">
+                    </p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.registerredAddress')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="large" value="" style="width:200px;">
+                    </p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.emailAddress')}"/>
+                </td>
+                <td>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.import')}"/>
+                    <p:spacer width="5px;"/>
+                    <p:inputText styleClass="large" value=""></p:inputText>
+                    <p:spacer width="5px;"/>
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.export')}"/>
+                    <p:spacer width="5px;"/>
+                    <p:inputText styleClass="large" value=""></p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.depositBranchCode')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="large" value="" style="width:200px;">
+                    </p:inputText>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.trade.ownerBranchCode')}"/>
+                </td>
+                <td>
+                    <p:inputText styleClass="large" value="" style="width:200px;">
+                    </p:inputText>
+                </td>
+            </tr>
+
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2" style="text-align: left" class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.priceFeeReduction')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <table class="table_content" style="width: 100%">
+            <tr>
+                <td style="width: 300px;text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.intFeeDOA')}"/>
+                </td>
+                <td style="width: 70px;text-align: left">
+
+                    <p:inputText styleClass="small" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText> %
+                </td>
+                <td style="width: 300px;text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.frontendFeeDOA')}"/>
+                </td>
+                <td style="width: 70px;text-align: left">
+
+                    <p:inputText styleClass="small" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText> %
+                </td>
+                <td style="width: 100px;text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.guarantorBA')}"/>
+                </td>
+                <td style="width: 70px;text-align: left">
+
+                    <p:inputText styleClass="small" value="">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                        <p:ajax event="blur" update="@this"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.reasonForReduction')}"/>
+                </td>
+                <td style="text-align: left" colspan="5">
+                    <h:inputTextarea cols="150"
+                                     rows="4"
+                                     value=""/>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+
+
+<tr>
+    <td>
+        <!-- start content -->
+        <table class="content_table_form">
+            <tr>
+                <td colspan="2">
+                    <p:dataTable id="tradeTable" var="item" style="width: 100%">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.productProgram')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.standardFrontEndFee')}"/>
+                                <p:column style="width:500px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.commitmentFee')}"/>
+                                <p:column style="width:500px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.extensionFee')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.prepaymentFee')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.tb.label.fee.cancellationFee')}"/>
+
+                            </p:row>
+
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+                    </p:dataTable>
+                </td>
+            </tr>
+        </table>
+        <!-- end content -->
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2" style="text-align: left" class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.propose.collateral')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2" style="text-align: left">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.desc.propose.collateral')}"/>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2" style="text-align: left">
+        <p:commandButton
+                value="#{msg.get('app.addButton')}"
+                styleClass="smaller"
+                process="@this"
+                update=":frmMain">
+        </p:commandButton>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <table class="table_noborder" style="width: 100%">
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.jobID')}"/>
+                </td>
+                <td style="width: 100px;text-align: left" colspan="3">
+                    <h:outputText value="#001"/>
+                </td>
+                <td colspan="2" style="width:300px;text-align: right">
+                    <p:commandButton
+                            value="#{msg.get('app.credit.facility.propose.label.collateral.editButton')}"
+                            styleClass="smaller"
+                            process="@this"
+                            update=":frmMain">
+                    </p:commandButton>
+                    <p:commandButton
+                            value="#{msg.get('app.credit.facility.propose.label.collateral.deleteButton')}"
+                            styleClass="smaller"
+                            process="@this"
+                            update=":frmMain">
+                    </p:commandButton>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.appraisalDate')}"/>
+                </td>
+                <td style="text-align: left" colspan="5">
+                    <h:outputText value="date"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecision')}"/>
+                </td>
+                <td style="text-align: left" colspan="5">
+                    <h:outputText value="Accept"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReason')}"/>
+                </td>
+                <td style="width: 100px;text-align: left">
+                    <h:outputText value="Accept"/>
+                </td>
+
+                <td style="width: 120px;text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.collateral.AADDecisionReasonDetail')}"/>
+                </td>
+                <td style="text-align: left" colspan="3">
+                    <h:outputText value="Accept"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.usage')}"/>
+                </td>
+                <td style="width: 100px;text-align: left">
+                    <h:outputText value="Accept"/>
+                </td>
+
+                <td style="width: 120px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.typeOfUsage')}"/>
+                </td>
+                <td style="text-align: left" colspan="3">
+                    <h:outputText value="Accept"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
+                </td>
+                <td style="width: 100px;text-align: left">
+                    <h:outputText value="Accept"/>
+                </td>
+
+                <td style="width: 120px;text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageConditionDetail')}"/>
+                </td>
+                <td style="text-align: left" colspan="3">
+                    <h:outputText value=".........."/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.mortgageCondition')}"/>
+                </td>
+                <td colspan="5">
+                    <p:dataTable var="item" style="width: 100%">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column style="width:200px;"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.account')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.requestCreditType')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.productProgram')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.creditFacility')}"/>
+                                <p:column style="width:200px;"
+                                          headerText="#{msg.get('app.credit.facility.propose.label.collateral.limit')}"/>
+                            </p:row>
+
+                        </p:columnGroup>
+
+                        <p:column styleClass="center">
+                            <h:outputText value="#{rowIndex+1}"/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                        <p:column styleClass="center">
+                            <h:outputText value=""/>
+                        </p:column>
+
+                    </p:dataTable>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.collateral.BDMComments')}"/>
+                </td>
+                <td style="width: 100px;text-align: left" colspan="5">
+                    <h:outputText value=".........."/>
+                </td>
+            </tr>
+
+        </table>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <table class="table_noborder" style="width: 100%">
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.potential')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.collTypePercentLTV')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.existingCredit')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.titleDeed')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.collateralLocation')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.appraisalValue')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.headCollType')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:outputText value="#001"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width: 200px;text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.headcoll.insuranceCompany')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:selectOneRadio value="">
+                        <f:selectItem itemLabel="Partner" itemValue="1"/>
+                        <f:selectItem itemLabel="Non Partner" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+
+
+        </table>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="5">
+        <p:dataTable var="item" style="width: 100%">
+
+            <p:columnGroup type="header">
+                <p:row>
+                    <p:column style="width:200px;"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.subcollTypeCaption')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.titleDeed')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.AAD')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.collateralOwner.UW')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageType')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.relatedWith')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.appraisalValue')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.subcoll.mortgageValue')}"/>
+                </p:row>
+
+            </p:columnGroup>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+        </p:dataTable>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+<tr class="title">
+    <td>
+        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.proposedGuarantor')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <p:commandButton
+                id="btnAdd"
+                value="#{msg.get('app.credit.facility.propose.button.addGuarantorButton')}"
+                styleClass="smaller"
+                process="@this"
+                update=":frmMain">
+            <p:resetInput target=":frmMain"/>
+        </p:commandButton>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="5">
+        <p:dataTable var="item" style="width: 100%">
+
+            <p:columnGroup type="header">
+                <p:row>
+                    <p:column style="width:200px;"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.guarantorName')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.TCGLGNo')}"/>
+                    <p:column style="width:600px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.creditType')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.guarantor.totalGuaranteeAmount')}"/>
+                    <p:column style="width:200px;"/>
+                </p:row>
+
+            </p:columnGroup>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+            </p:column>
+
+            <p:columnGroup type="footer">
+                <p:row>
+                    <p:column colspan="4" footerText="#{msg.get('app.credit.facility.propose.label.guarantor.total')}"
+                              style="text-align:left"/>
+                    <p:column style="text-align:right">
+                        <f:facet name="footer">
+                            <h:outputText id="sumLtvValueId" value=""
+                                          style="text-align:right">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:column>
+                    <p:column/>
+                </p:row>
+            </p:columnGroup>
+        </p:dataTable>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+
+<tr class="title">
+    <td colspan="2">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.condition')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td colspan="2">
+        <p:commandButton
+                id="btnAdd"
+                value="#{msg.get('app.credit.facility.propose.button.addConditionButton')}"
+                styleClass="smaller"
+                process="@this"
+                update=":frmMain">
+            <p:resetInput target=":frmMain"/>
+        </p:commandButton>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="5">
+        <p:dataTable var="item" style="width: 80%">
+
+            <p:columnGroup type="header">
+                <p:row>
+                    <p:column style="width:200px;"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.condition.loanType')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.label.condition.conditionDesc')}"/>
+                    <p:column style="width:200px;"/>
+                </p:row>
+
+            </p:columnGroup>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value=""/>
+            </p:column>
+
+            <p:column styleClass="center">
+            </p:column>
+
+        </p:dataTable>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+
+<tr class="title">
+    <td colspan="2" class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.caption.other.related.info')}"/>
+    </td>
+</tr>
+
+<tr>
+    <td>
+        <!-- start content -->
+        <table class="table_content" style="width:100%">
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.relatedTMBLending')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:selectOneRadio value="">
+                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="1"/>
+                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText
+                            value="#{msg.get('app.credit.facility.propose.label.25percentShareRelatedTMBLending')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:selectOneRadio value="">
+                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="1"/>
+                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left" class="title">
+                    <h:outputText value="#{msg.get('app.credit.facility.propose.label.singleLendingLimit')}"/>
+                </td>
+                <td style="text-align: left">
+                    <h:selectOneRadio value="">
+                        <f:selectItem itemLabel="เกี่ยวข้อง" itemValue="1"/>
+                        <f:selectItem itemLabel="ไม่เกี่ยวข้อง" itemValue="0"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+
+        </table>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+
+
+<tr>
+    <td colspan="2" class="center">
+        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                         styleClass="smaller"
+                         process="@form"
+                         update=":frmMain, :msgBoxSystemMessagePanel"
+                         actionListener="#{creditFacPropose.onSaveCreditFacPropose()}"/>
+        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small"
+                         process="@form" update=":frmMain"
+                         actionListener="#{creditFacPropose.onCreation}"/>
+    </td>
+</tr>
+</table>
+<!-- end content -->
+</div>
+</div>
+<div id="bottom_line"><!-- --></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<ui:include src="include/footer.xhtml"/>
+<!-- End Footer -->
+</div>
+</h:form>
+
+<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+    LOADING<br/>
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
+
+</p:panel>
+
+
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="#{creditFacPropose.messageHeader}" message="#{creditFacPropose.message}">
+        <p:commandButton value="OK"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+
+</h:body>
+</f:view>
+</html>
