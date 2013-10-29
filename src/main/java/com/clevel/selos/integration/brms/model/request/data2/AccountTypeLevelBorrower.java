@@ -9,11 +9,11 @@ import java.util.List;
 public class AccountTypeLevelBorrower implements Serializable {
     private String dataSource; //todo : to be enum
     private boolean tdrFlag;
-    private List<AttributeTypeLevelBorrower> attributeType;
+    private AttributeTypeLevelBorrower attributeType;
     public AccountTypeLevelBorrower() {
     }
 
-    public AccountTypeLevelBorrower(String dataSource, boolean tdrFlag, List<AttributeTypeLevelBorrower> attributeType) {
+    public AccountTypeLevelBorrower(String dataSource, boolean tdrFlag, AttributeTypeLevelBorrower attributeType) {
         this.dataSource = dataSource;
         this.tdrFlag = tdrFlag;
         this.attributeType = attributeType;
@@ -35,11 +35,11 @@ public class AccountTypeLevelBorrower implements Serializable {
         this.tdrFlag = tdrFlag;
     }
 
-    public List<AttributeTypeLevelBorrower> getAttributeType() {
+    public AttributeTypeLevelBorrower getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelBorrower> attributeType) {
+    public void setAttributeType(AttributeTypeLevelBorrower attributeType) {
         this.attributeType = attributeType;
     }
 

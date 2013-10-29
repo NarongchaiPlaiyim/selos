@@ -8,12 +8,12 @@ import java.util.List;
 
 public class NCBEnquiryType implements Serializable {
     private int numberOfSearchInLast6Months;
-    private List<AttributeTypeLevelNCBEnquiryType> attributeType;
+    private AttributeTypeLevelNCBEnquiryType attributeType;
 
     public NCBEnquiryType() {
     }
 
-    public NCBEnquiryType(int numberOfSearchInLast6Months, List<AttributeTypeLevelNCBEnquiryType> attributeType) {
+    public NCBEnquiryType(int numberOfSearchInLast6Months, AttributeTypeLevelNCBEnquiryType attributeType) {
         this.numberOfSearchInLast6Months = numberOfSearchInLast6Months;
         this.attributeType = attributeType;
     }
@@ -26,11 +26,11 @@ public class NCBEnquiryType implements Serializable {
         this.numberOfSearchInLast6Months = numberOfSearchInLast6Months;
     }
 
-    public List<AttributeTypeLevelNCBEnquiryType> getAttributeType() {
+    public AttributeTypeLevelNCBEnquiryType getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelNCBEnquiryType> attributeType) {
+    public void setAttributeType(AttributeTypeLevelNCBEnquiryType attributeType) {
         this.attributeType = attributeType;
     }
 

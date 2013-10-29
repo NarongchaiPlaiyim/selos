@@ -10,12 +10,12 @@ public class CollateralType implements Serializable {
     private String collateralType;
 
     private List<AppraisalType> appraisalType;
-    private List<AttributeTypeLevelCollateral> attributeType;
+    private AttributeTypeLevelCollateral attributeType;
 
     public CollateralType() {
     }
 
-    public CollateralType(String collateralType, List<AppraisalType> appraisalType, List<AttributeTypeLevelCollateral> attributeType) {
+    public CollateralType(String collateralType, List<AppraisalType> appraisalType, AttributeTypeLevelCollateral attributeType) {
         this.collateralType = collateralType;
         this.appraisalType = appraisalType;
         this.attributeType = attributeType;
@@ -37,11 +37,11 @@ public class CollateralType implements Serializable {
         this.appraisalType = appraisalType;
     }
 
-    public List<AttributeTypeLevelCollateral> getAttributeType() {
+    public AttributeTypeLevelCollateral getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelCollateral> attributeType) {
+    public void setAttributeType(AttributeTypeLevelCollateral attributeType) {
         this.attributeType = attributeType;
     }
 

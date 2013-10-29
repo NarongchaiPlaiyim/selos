@@ -11,14 +11,14 @@ public class ProductType implements Serializable {
     private String productGroup; //todo : to be enum
     private BigDecimal totalProposedCreditLimit;
 
-    private List<AttributeTypeLevelProductType> attributeType;
+    private AttributeTypeLevelProductType attributeType;
     private List<CollateralType> collateralTypes;
     private List<SELOSProductProgramType> selosProductProgramTypes;
 
     public ProductType() {
     }
 
-    public ProductType(String productGroup, BigDecimal totalProposedCreditLimit, List<AttributeTypeLevelProductType> attributeType, List<CollateralType> collateralTypes, List<SELOSProductProgramType> selosProductProgramTypes) {
+    public ProductType(String productGroup, BigDecimal totalProposedCreditLimit, AttributeTypeLevelProductType attributeType, List<CollateralType> collateralTypes, List<SELOSProductProgramType> selosProductProgramTypes) {
         this.productGroup = productGroup;
         this.totalProposedCreditLimit = totalProposedCreditLimit;
         this.attributeType = attributeType;
@@ -42,11 +42,11 @@ public class ProductType implements Serializable {
         this.totalProposedCreditLimit = totalProposedCreditLimit;
     }
 
-    public List<AttributeTypeLevelProductType> getAttributeType() {
+    public AttributeTypeLevelProductType getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelProductType> attributeType) {
+    public void setAttributeType(AttributeTypeLevelProductType attributeType) {
         this.attributeType = attributeType;
     }
 

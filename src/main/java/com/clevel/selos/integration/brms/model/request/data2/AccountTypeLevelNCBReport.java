@@ -17,11 +17,11 @@ public class AccountTypeLevelNCBReport implements Serializable {
     private SettlementStatus paymentPattern12M;
     private int overDue31to60DaysWithinLast12Months;
     private int overLimitWithinLast6Months;
-    private List<AttributeTypeLevelAccountTypeNCB> attributeType;
+    private AttributeTypeLevelAccountTypeNCB attributeType;
     public AccountTypeLevelNCBReport() {
     }
 
-    public AccountTypeLevelNCBReport(String ncbAccountStatus, BigDecimal creditAmountFirstNPL, boolean ncbTDRFlag, SettlementStatus currentPayment, SettlementStatus paymentPattern6M, SettlementStatus paymentPattern12M, int overDue31to60DaysWithinLast12Months, int overLimitWithinLast6Months, List<AttributeTypeLevelAccountTypeNCB> attributeType) {
+    public AccountTypeLevelNCBReport(String ncbAccountStatus, BigDecimal creditAmountFirstNPL, boolean ncbTDRFlag, SettlementStatus currentPayment, SettlementStatus paymentPattern6M, SettlementStatus paymentPattern12M, int overDue31to60DaysWithinLast12Months, int overLimitWithinLast6Months, AttributeTypeLevelAccountTypeNCB attributeType) {
         this.ncbAccountStatus = ncbAccountStatus;
         this.creditAmountFirstNPL = creditAmountFirstNPL;
         this.ncbTDRFlag = ncbTDRFlag;
@@ -97,11 +97,11 @@ public class AccountTypeLevelNCBReport implements Serializable {
         this.overLimitWithinLast6Months = overLimitWithinLast6Months;
     }
 
-    public List<AttributeTypeLevelAccountTypeNCB> getAttributeType() {
+    public AttributeTypeLevelAccountTypeNCB getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelAccountTypeNCB> attributeType) {
+    public void setAttributeType(AttributeTypeLevelAccountTypeNCB attributeType) {
         this.attributeType = attributeType;
     }
 

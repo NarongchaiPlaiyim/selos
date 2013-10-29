@@ -23,7 +23,6 @@ public class ApplicationTypeLevel implements Serializable {
     private String lendingReferType;                //#N/a
     private boolean BAFlag;                         //#N/a
 
-
     private BigDecimal finalGroupExposure;
     private String collateralPotertialForPricing;
 
@@ -31,7 +30,7 @@ public class ApplicationTypeLevel implements Serializable {
     private List<AccountTypeLevel> accountType;
 
     //AttributeType
-    private List<AttributeTypeLevelApplication> attribute;
+    AttributeTypeLevelApplication attribute;
 
     //BorrowerType
     private List<BorrowerTypeLevel> borrowerType;
@@ -45,7 +44,7 @@ public class ApplicationTypeLevel implements Serializable {
     public ApplicationTypeLevel() {
     }
 
-    public ApplicationTypeLevel(String applicationNumber, Date processDate, BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, BigDecimal finalGroupExposure, String collateralPotertialForPricing, List<AccountTypeLevel> accountType, List<AttributeTypeLevelApplication> attribute, List<BorrowerTypeLevel> borrowerType, List<BusinessTypeLevel> businessType, List<ProductType> productType) {
+    public ApplicationTypeLevel(String applicationNumber, Date processDate, BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, BigDecimal finalGroupExposure, String collateralPotertialForPricing, List<AccountTypeLevel> accountType, AttributeTypeLevelApplication attribute, List<BorrowerTypeLevel> borrowerType, List<BusinessTypeLevel> businessType, List<ProductType> productType) {
         this.applicationNumber = applicationNumber;
         this.processDate = processDate;
         this.monthlyIncome = monthlyIncome;
@@ -178,11 +177,11 @@ public class ApplicationTypeLevel implements Serializable {
         this.accountType = accountType;
     }
 
-    public List<AttributeTypeLevelApplication> getAttribute() {
+    public AttributeTypeLevelApplication getAttribute() {
         return attribute;
     }
 
-    public void setAttribute(List<AttributeTypeLevelApplication> attribute) {
+    public void setAttribute(AttributeTypeLevelApplication attribute) {
         this.attribute = attribute;
     }
 

@@ -9,12 +9,12 @@ import java.util.List;
 public class BusinessTypeLevel implements Serializable {
     private String businessCodeRunningNumber;
     private String businessCode;
-    private List<AttributeTypeLevelBusiness> attributeType;
+    private AttributeTypeLevelBusiness attributeType;
 
     public BusinessTypeLevel() {
     }
 
-    public BusinessTypeLevel(String businessCodeRunningNumber, String businessCode, List<AttributeTypeLevelBusiness> attributeType) {
+    public BusinessTypeLevel(String businessCodeRunningNumber, String businessCode, AttributeTypeLevelBusiness attributeType) {
         this.businessCodeRunningNumber = businessCodeRunningNumber;
         this.businessCode = businessCode;
         this.attributeType = attributeType;
@@ -36,11 +36,11 @@ public class BusinessTypeLevel implements Serializable {
         this.businessCode = businessCode;
     }
 
-    public List<AttributeTypeLevelBusiness> getAttributeType() {
+    public AttributeTypeLevelBusiness getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelBusiness> attributeType) {
+    public void setAttributeType(AttributeTypeLevelBusiness attributeType) {
         this.attributeType = attributeType;
     }
 
