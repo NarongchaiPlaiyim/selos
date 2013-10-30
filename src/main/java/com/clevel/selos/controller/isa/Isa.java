@@ -6,6 +6,7 @@ import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.IsaCreateUserView;
+import org.hibernate.Hibernate;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -150,6 +152,7 @@ public class Isa implements Serializable {
         User user = new User();
 //        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
         userDetail = userDAO.findAll();
+        getSelectUserDetailList();
         userSize = userDetail.size() + "";
     }
 
@@ -277,6 +280,34 @@ public class Isa implements Serializable {
         }
         onSelectUser();
     }
+
+
+    public void notLogonOver(){
+//        List<NotLogonOverView> list = userProfileService.getUserNotLogonOver(days);
+//        StringBuilder builder =  new StringBuilder();
+//        builder.append("No."); builder.append(COMMA_DELIMITED);
+//        builder.append("User ID"); builder.append(COMMA_DELIMITED);
+//        builder.append("User Name"); builder.append(COMMA_DELIMITED);
+//        builder.append("Create Date"); builder.append(COMMA_DELIMITED);
+//        builder.append("Last Login Date"); builder.append(COMMA_DELIMITED);
+//        builder.append("Status"); builder.append(COMMA_DELIMITED);
+//        builder.append("Number of Day"); builder.append('\n');
+//        int number = 1;
+//        for(NotLogonOverView notLogonOverView : list) {
+//            builder.append(number); builder.append(COMMA_DELIMITED);
+//            builder.append('"'+notLogonOverView.getUserId()+'"'); builder.append(COMMA_DELIMITED);
+//            builder.append('"'+notLogonOverView.getUserName()+'"'); builder.append(COMMA_DELIMITED);
+//            builder.append('"'+notLogonOverView.getCreateDate()+'"'); builder.append(COMMA_DELIMITED);
+//            builder.append('"'+notLogonOverView.getLastLogin()+'"'); builder.append(COMMA_DELIMITED);
+//            builder.append('"'+notLogonOverView.getStatus()+'"'); builder.append(COMMA_DELIMITED);
+//            builder.append(notLogonOverView.getNumberOfDays()); builder.append('\n');
+//            number++;
+//        }
+//        streamExporter.exportCSV(response, "NotLogonOver_"+days+"_day_"+dateFileNameFormat.format(new Date()), builder.toString());
+//    }
+
+}
+
 
     public List<User> getUserDetail() {
         return userDetail;

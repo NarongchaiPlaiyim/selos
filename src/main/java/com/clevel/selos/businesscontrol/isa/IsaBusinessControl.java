@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.IsaCreateUserView;
+import org.hibernate.Hibernate;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -12,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.util.List;
 
 @Stateless
 public class IsaBusinessControl implements Serializable {
@@ -96,15 +98,13 @@ public class IsaBusinessControl implements Serializable {
         user.setPhoneExt(isaCreateUserView.getPhoneExt());
         user.setPhoneNumber(isaCreateUserView.getPhoneNumber());
         user.setEmailAddress(isaCreateUserView.getEmailAddress());
-//        user.setRole(isaCreateUserView.getRole());
-//        user.setDepartment(isaCreateUserView.getUserDepartment());
-        UserDivision userDivision=new UserDivision();
-        userDivision.setId(isaCreateUserView.getUserDivision().getId());
-        user.setDivision(userDivision);
-//        user.setRegion(isaCreateUserView.getUserRegion());
-//        user.setTeam(isaCreateUserView.getUserTeam());
-//        user.setTitle(isaCreateUserView.getUserTitle());
-//        user.setZone(isaCreateUserView.getUserZone());
+        user.setRole(isaCreateUserView.getRole());
+        user.setDepartment(isaCreateUserView.getUserDepartment());
+        user.setDivision(isaCreateUserView.getUserDivision());
+        user.setRegion(isaCreateUserView.getUserRegion());
+        user.setTeam(isaCreateUserView.getUserTeam());
+        user.setTitle(isaCreateUserView.getUserTitle());
+        user.setZone(isaCreateUserView.getUserZone());
         user.setActive(isaCreateUserView.getActive());
         user.setUserStatus(UserStatus.NORMAL);
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <ui:composition
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
@@ -91,7 +92,7 @@
 
             <p:commandButton value="OK"
                              actionListener="#{isa.onManageUserAction()}"
-                             update=":userTableData,:msgBoxSystemMessagePanel"
+                             update=":userTableData,:msgBoxSystemMessagePanel,:manageDialogForm"
                              oncomplete="handleManageUserDialogRequest(xhr,status, args)"/>
             <p:commandButton value="Cancel"
                              process="@this"

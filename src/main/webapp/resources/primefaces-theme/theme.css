@@ -6,7 +6,13 @@
 
 /* Layout helpers
 ----------------------------------*/
+.ui-chkbox .ui-chkbox-box {
+    background-color: rgb(221, 219, 224) !important;
+}
 
+
+
+/*-------------*/
 .ui-helper-hidden {
     display: none;
 }
