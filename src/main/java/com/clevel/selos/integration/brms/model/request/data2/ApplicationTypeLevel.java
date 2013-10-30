@@ -39,12 +39,12 @@ public class ApplicationTypeLevel implements Serializable {
     private List<BusinessTypeLevel> businessType;
 
     //ProductType
-    private List<ProductType> productType;
+    private List<ProductTypeLevel> productType;
 
     public ApplicationTypeLevel() {
     }
 
-    public ApplicationTypeLevel(String applicationNumber, Date processDate, BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, BigDecimal finalGroupExposure, String collateralPotertialForPricing, List<AccountTypeLevel> accountType, AttributeTypeLevelApplication attribute, List<BorrowerTypeLevel> borrowerType, List<BusinessTypeLevel> businessType, List<ProductType> productType) {
+    public ApplicationTypeLevel(String applicationNumber, Date processDate, BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, BigDecimal finalGroupExposure, String collateralPotertialForPricing, List<AccountTypeLevel> accountType, AttributeTypeLevelApplication attribute, List<BorrowerTypeLevel> borrowerType, List<BusinessTypeLevel> businessType, List<ProductTypeLevel> productType) {
         this.applicationNumber = applicationNumber;
         this.processDate = processDate;
         this.monthlyIncome = monthlyIncome;
@@ -201,11 +201,11 @@ public class ApplicationTypeLevel implements Serializable {
         this.businessType = businessType;
     }
 
-    public List<ProductType> getProductType() {
+    public List<ProductTypeLevel> getProductType() {
         return productType;
     }
 
-    public void setProductType(List<ProductType> productType) {
+    public void setProductType(List<ProductTypeLevel> productType) {
         this.productType = productType;
     }
 
