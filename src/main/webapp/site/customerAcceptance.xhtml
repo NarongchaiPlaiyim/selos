@@ -6,202 +6,194 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
+<h:head>
         <title>Customer Acceptance</title>
         <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
-        <script type="text/javascript" language="javascript"
-                src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
-        <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
-    </h:head>
-    <h:body>
-        <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-            <h:form id="frmMain">
-                <div id="main_container">
-                    <!-- Start Header Logo -->
-                    <ui:include src="include/header_logo.xhtml"/>
-                    <!-- End Header Logo -->
-                    <!-- Start Header Detail -->
-                    <ui:include src="include/header_detail.xhtml"/>
-                    <!-- End Header Detail -->
-                    <!-- Start Menu -->
-                    <ui:include src="include/menubar.xhtml"/>
-                    <!-- End Menu -->
-                    <div id="content_container">
-                        <div id="content_name">Customer Acceptant Confirm</div>
-                        <div id="content">
-                            <table id="table_content" style="width: 100%;" class="content_table_form">
-                                <tr>
-                                    <td><p:spacer width="5"></p:spacer></td>
-                                </tr>
-                                <tr>
-                                    <td class="center">
-                                        <table class="table_content" style="width: 80%;" align="center">
-                                            <tr>
-                                                <th colspan="6">Customer Acceptance</th>
-                                            </tr>
-                                            <tr>
-                                                <td class="title left" style="width: 10%;"><h:outputText
-                                                        value="#{msg.get('app.customerAcceptance.label.approveResult')}"/>
-                                                </td>
-                                                <td colspan="5" class="left">
-                                                    <p:selectOneRadio id="approveResultRadio"
-                                                                      value="#{customerAcceptance.customerAcceptanceView.approveResult}">
-                                                        <f:selectItem itemLabel="เหมือนขอ" itemValue="0"/>
-                                                        <f:selectItem itemLabel="ต่างขอ" itemValue="1"/>
-                                                    </p:selectOneRadio>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="left">
-                                        <p:spacer width="50" height="20"></p:spacer>
-                                        <p:commandButton id="btnAddContactRecordDetail"
-                                                         value="#{msg.get('app.button.add')}"
-                                                         styleClass="smaller"
-                                                         style="width: 150px"
-                                                         process="@this"
-                                                         actionListener="#{customerAcceptance.onAddContactRecordDetailView()}"
-                                                         update=":contactRecordViewDlgForm"
-                                                         oncomplete="contactRecordDetailViewDlg.show()"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center">
-                                        <p:dataTable tableStyleClass="center" style="width: 100%"
-                                                     id="contactRecordDetailViewTable"
-                                                     var="contactRecordDetailView"
-                                                     value="#{customerAcceptance.contactRecordDetailViewList}"
-                                                     paginator="false"
-                                                     rowKey="#{contactRecordDetailView.id}"
-                                                     rowIndexVar="rowIndex">
-                                            <p:column headerText="" styleClass="center" style="width:4%;">
-                                                <p:outputLabel value="#{contactRecordDetailView.no}"/>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.callingDate')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.callingDate}">
-                                                    <f:convertDateTime pattern="dd/MM/yyy"/>
-                                                </p:outputLabel>
-                                                <p:spacer width="10"/>
-                                                <p:outputLabel value="#{contactRecordDetailView.callingTime}">
-                                                    <f:convertDateTime pattern="HH:mm"/>
-                                                </p:outputLabel>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.callingResult')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.acceptResult')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.acceptResultStr}"/>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.nextCallingDate')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
-                                                    <f:convertDateTime pattern="dd/MM/yyy"/>
-                                                </p:outputLabel>
-                                                <p:spacer width="10"/>
-                                                <p:outputLabel value="#{contactRecordDetailView.nextCallingTime}">
-                                                    <f:convertDateTime pattern="HH:mm"/>
-                                                </p:outputLabel>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.reason')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.reason.description}"/>
-                                            </p:column>
-                                            <p:column
-                                                    headerText="#{msg.get('app.customerAcceptance.ContactRecordDetail.table.remark')}"
-                                                    styleClass="center">
-                                                <p:outputLabel value="#{contactRecordDetailView.remark}"/>
-                                            </p:column>
-                                            <p:column headerText="" styleClass="center" style="width:8%;">
-                                                <p:commandButton icon="ui-icon-pencil"
-                                                                 action="#{customerAcceptance.onEditContactRecordDetailView()}"
-                                                                 update=":contactRecordViewDlgForm"
-                                                                 process=":frmMain:contactRecordDetailViewTable"
-                                                                 oncomplete="contactRecordDetailViewDlg.show();">
-                                                    <f:setPropertyActionListener value="#{contactRecordDetailView}"
-                                                                                 target="#{customerAcceptance.selectContactRecordDetail}"/>
-                                                    <f:setPropertyActionListener value="#{rowIndex}"
-                                                                                 target="#{customerAcceptance.rowIndex}"/>
-                                                </p:commandButton>
-                                                <p:commandButton title="Remove" process="@this"
-                                                                 icon="ui-icon-trash"
-                                                                 oncomplete="confirmDeleteContactRecordDetailViewDlg.show()">
-                                                    <f:setPropertyActionListener value="#{contactRecordDetailView}"
-                                                                                 target="#{customerAcceptance.selectContactRecordDetail}"/>
-                                                    <f:setPropertyActionListener value="#{rowIndex}"
-                                                                                 target="#{customerAcceptance.rowIndex}"/>
-                                                </p:commandButton>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="center">
-                                        <p:commandButton id="btnSave"
-                                                         value="#{msg.get('app.saveButton')}"
-                                                         styleClass="medium"
-                                                         process=":frmMain"
-                                                         action="#{customerAcceptance.onSaveCustomerAcceptance()}"
-                                                         update=":msgBoxSystemMessagePanel"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+<h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name">Customer Acceptant Confirm</div>
+                    <div id="content">
+                        <table id="table_content" style="width: 100%;" class="content_table_form">
+                            <tr>
+                                <td colspan="6" class="right" style="padding-right: 1%;">
+                                    Last update by <p:outputLabel value="#{customerAcceptance.customerAcceptanceView.modifyBy.userName}"/> , <p:outputLabel value="#{customerAcceptance.customerAcceptanceView.modifyDate}"/>
+                                    <a style="cursor: pointer;" href="#">[View Track Change]</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td><p:spacer width="5"></p:spacer></td>
+                            </tr>
+                            <tr>
+                                <td class="center">
+                                    <table class="table_content" style="width: 80%;" align="center">
+                                        <tr>
+                                            <th colspan="6">Customer Acceptance</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="title left" style="width: 10%;"><h:outputText value="#{msg.get('app.customerAcceptance.label.approveResult')}"/></td>
+                                            <td colspan="5" class="left">
+                                                <p:selectOneRadio id="approveResultRadio" value="#{customerAcceptance.customerAcceptanceView.approveResult}">
+                                                    <f:selectItem itemLabel="เหมือนขอ"  itemValue="0" />
+                                                    <f:selectItem itemLabel="ต่างขอ" itemValue="1" />
+                                                </p:selectOneRadio>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="left">
+                                    <p:spacer width="50" height="20"></p:spacer>
+                                    <p:commandButton id="btnAddContactRecordDetail"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     styleClass="smaller"
+                                                     style="width: 150px"
+                                                     process="@this"
+                                                     actionListener="#{customerAcceptance.onAddContactRecordDetailView()}"
+                                                     update=":contactRecordViewDlgForm"
+                                                     oncomplete="contactRecordDetailViewDlg.show()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <p:dataTable tableStyleClass="center" style="width: 100%"
+                                                 id="contactRecordDetailViewTable"
+                                                 var="contactRecordDetailView"
+                                                 value="#{customerAcceptance.contactRecordDetailViewList}"
+                                                 paginator="false"
+                                                 rowKey="#{contactRecordDetailView.id}"
+                                                 rowIndexVar="rowIndex" >
+                                        <p:column headerText="" styleClass="center" style="width:4%;">
+                                            <p:outputLabel value="#{contactRecordDetailView.no}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}" styleClass="center" >
+                                            <p:outputLabel value="#{contactRecordDetailView.callingDate}" >
+                                                <f:convertDateTime pattern="dd/MM/yyy"  />
+                                             </p:outputLabel>
+                                            <p:spacer width="10" />
+                                            <p:outputLabel value="#{contactRecordDetailView.callingTime}" >
+                                                <f:convertDateTime pattern="HH:mm"  />
+                                            </p:outputLabel>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}" styleClass="center">
+                                            <p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.acceptResult')}" styleClass="center">
+                                            <p:outputLabel value="#{contactRecordDetailView.acceptResultStr}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}" styleClass="center">
+                                            <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyy"  />
+                                            </p:outputLabel>
+                                            <p:spacer width="10" />
+                                            <p:outputLabel value="#{contactRecordDetailView.nextCallingTime}">
+                                                <f:convertDateTime pattern="HH:mm"  />
+                                            </p:outputLabel>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.reason')}" styleClass="center">
+                                            <p:outputLabel value="#{contactRecordDetailView.reason.description}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.remark')}" styleClass="center">
+                                            <p:outputLabel value="#{contactRecordDetailView.remark}"/>
+                                        </p:column>
+                                        <p:column headerText="" styleClass="center" style="width:8%;">
+                                            <p:commandButton icon="ui-icon-pencil"
+                                                             action="#{customerAcceptance.onEditContactRecordDetailView()}"
+                                                             update=":contactRecordViewDlgForm"
+                                                             process=":frmMain:contactRecordDetailViewTable"
+                                                             oncomplete="contactRecordDetailViewDlg.show();">
+                                                <f:setPropertyActionListener value="#{contactRecordDetailView}"
+                                                                             target="#{customerAcceptance.selectContactRecordDetail}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{customerAcceptance.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove" process="@this"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteContactRecordDetailViewDlg.show()" >
+                                                <f:setPropertyActionListener value="#{contactRecordDetailView}"
+                                                                             target="#{customerAcceptance.selectContactRecordDetail}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{customerAcceptance.rowIndex}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="center">
+                                    <p:commandButton id="btnSave"
+                                                     value="#{msg.get('app.saveButton')}"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{customerAcceptance.onSaveCustomerAcceptance()}"
+                                                     update=":msgBoxSystemMessagePanel"/>
 
-                                        <p:commandButton value="#{msg.get('app.cancelButton')}"
-                                                         id="btnCancel"
-                                                         styleClass="medium"
-                                                         process=":frmMain"
-                                                         action="#{customerAcceptance.onCancelCustomerAcceptance()}"
-                                                         update=":frmMain"/>
+                                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                                     id="btnCancel"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{customerAcceptance.onCancelCustomerAcceptance()}"
+                                                     update=":frmMain"/>
 
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="bottom_line"><!-- --></div>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="clear"></div>
-                    <!-- Start Footer -->
-                    <ui:include src="../resources/footer.xhtml"/>
-                    <!-- End Footer -->
+                    <div class="bottom_line"><!-- --></div>
                 </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="../resources/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
             </h:form>
-        </p:panel>
-        <p:dialog id="contactRecordDetailViewDialog" header="Contact Record Information"
-                  widgetVar="contactRecordDetailViewDlg" resizable="false"
-                  modal="true" width="370" height="320">
-            <ui:include src="dialog/contactRecordDetailViewDialog.xhtml"/>
-        </p:dialog>
+    </p:panel>
+    <p:dialog id="contactRecordDetailViewDialog" header="Contact Record Information" widgetVar="contactRecordDetailViewDlg" resizable="false"
+              modal="true" width="370" height="320" >
+        <ui:include src="dialog/contactRecordDetailViewDialog.xhtml"/>
+    </p:dialog>
 
-        <ui:include src="dialog/confirmDeleteDlg.xhtml">
-            <ui:param name="id" value="confirmDeleteContactRecordDetailViewDialog"/>
-            <ui:param name="name" value="confirmDeleteContactRecordDetailViewDlg"/>
-            <ui:param name="formId" value="frmConfirmDeleteContactRecordDetailView"/>
-            <ui:param name="controller" value="#{customerAcceptance}"/>
-            <ui:param name="action" value="onDeleteContactRecordDetailView"/>
-            <ui:param name="update" value=":frmMain:contactRecordDetailViewTable"/>
-        </ui:include>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteContactRecordDetailViewDialog"/>
+        <ui:param name="name" value="confirmDeleteContactRecordDetailViewDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteContactRecordDetailView"/>
+        <ui:param name="controller" value="#{customerAcceptance}"/>
+        <ui:param name="action" value="onDeleteContactRecordDetailView"/>
+        <ui:param name="update" value=":frmMain:contactRecordDetailViewTable"/>
+    </ui:include>
 
-        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                             header="#{customerAcceptance.messageHeader}" message="#{customerAcceptance.message}">
-                <p:commandButton value="OK"
-                                 process="@this"
-                                 update="frmMain"
-                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
-            </p:confirmDialog>
-        </p:panel>
-        <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-            LOADING<br/>
-            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-        </p:blockUI>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{customerAcceptance.messageHeader}" message="#{customerAcceptance.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
 
-    </h:body>
+</h:body>
 </f:view>
 </html>
