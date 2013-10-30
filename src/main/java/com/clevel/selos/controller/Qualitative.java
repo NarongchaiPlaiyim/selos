@@ -66,6 +66,8 @@ public class Qualitative {
     private String message;
     private boolean messageErr;
     private Date date;
+    private String dateToShow;
+    private  int result;
     public Qualitative(){
     }
 
@@ -75,6 +77,7 @@ public class Qualitative {
 
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
+        result = 0;
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
@@ -122,6 +125,36 @@ public class Qualitative {
         }
     }
 
+    public void onClickQuality(int clickResult){
+
+        if(clickResult > result){
+            result = clickResult;
+            onSetQuality(result);
+        }else{
+            result = result;
+            onSetQuality(result);
+        }
+
+      log.info("result :: {}" , result);
+    }
+
+    public void onSetQuality(int clickResult){
+         if(clickResult == 1){
+             qualitativeView.setQualityResult("P");
+         }else if(clickResult == 2){
+             qualitativeView.setQualityResult("SM");
+         }else if(clickResult == 3){
+             qualitativeView.setQualityResult("SS");
+         }else if(clickResult == 4){
+             qualitativeView.setQualityResult("D");
+         }else if(clickResult == 5){
+            qualitativeView.setQualityResult("DL");
+         }
+
+
+        log.info("qualitativeView.getQualityResult :: {}" , qualitativeView.getQualityResult());
+    }
+
     public void onSaveQualitativeA(){
         log.info(" onSaveQualitativeA :::");
         log.info("modeForButton :: {} ",modeForButton);
@@ -131,6 +164,9 @@ public class Qualitative {
                 if(qualitativeView.getId() == 0){
                     qualitativeView.setCreateBy(user);
                     qualitativeView.setCreateDate(DateTime.now().toDate());
+//                    date = new Date();
+//                    log.info("DateTime.now().toDate() ;; {}", DateTimeUtil.getDateTimeStr(date));
+//                    dateToShow = DateTimeUtil.getDateTimeStr(date);
                 }
                 qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
@@ -252,5 +288,13 @@ public class Qualitative {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
+    }
+
+    public String getDateToShow() {
+        return dateToShow;
+    }
+
+    public void setDateToShow(String dateToShow) {
+        this.dateToShow = dateToShow;
     }
 }

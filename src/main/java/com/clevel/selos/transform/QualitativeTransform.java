@@ -31,12 +31,11 @@ public class QualitativeTransform extends Transform {
         qualitativeA.setActive(true);
         qualitativeA.setWorkCase(workCase);
 
-        if (qualitativeA.getId() == 0) {
-            qualitativeA.setCreateBy(user);
-            qualitativeA.setCreateDate(qualitativeAView.getCreateDate());
-        }
-        qualitativeA.setModifyDate(qualitativeAView.getModifyDate());
+
+        qualitativeA.setCreateBy(user);
         qualitativeA.setModifyBy(user);
+        qualitativeA.setCreateDate(qualitativeAView.getCreateDate());
+        qualitativeA.setModifyDate(qualitativeAView.getModifyDate());
         qualitativeA.setProperties_p1(convertToDB(qualitativeAView.isProperties_p1()));
         qualitativeA.setProperties_p2(convertToDB(qualitativeAView.isProperties_p2()));
         qualitativeA.setProperties_p3(convertToDB(qualitativeAView.isProperties_p3()));
@@ -207,12 +206,9 @@ public class QualitativeTransform extends Transform {
         qualitativeB.setActive(true);
         qualitativeB.setWorkCase(workCase);
 
-        if (qualitativeB.getId() == 0) {
-            qualitativeB.setCreateBy(user);
-            qualitativeB.setCreateDate(createDate);
-        }
-
+        qualitativeB.setCreateDate(createDate);
         qualitativeB.setModifyDate(modifyDate);
+        qualitativeB.setCreateBy(user);
         qualitativeB.setModifyBy(user);
         qualitativeB.setProperties_p1(convertToDB(qualitativeBView.isProperties_p1()));
         qualitativeB.setProperties_p2(convertToDB(qualitativeBView.isProperties_p2()));
