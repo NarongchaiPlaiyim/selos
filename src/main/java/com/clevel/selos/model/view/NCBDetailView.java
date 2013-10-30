@@ -50,6 +50,7 @@ public class NCBDetailView implements Serializable {
     private boolean wc;
 
     public NCBDetailView() {
+        reset();
     }
 
     public void reset() {

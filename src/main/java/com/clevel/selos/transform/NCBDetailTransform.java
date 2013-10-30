@@ -52,39 +52,46 @@ public class NCBDetailTransform extends Transform {
         return NCBDetailList;
     }
 
-    public List<NCBDetailView> transformToView(List<NCBDetail> ncbDetailList) {
-        List<NCBDetailView> ncbDetailViewList = new ArrayList<NCBDetailView>();
-
-        for (NCBDetail ncbDetail : ncbDetailList) {
-            NCBDetailView ncbDetailView = new NCBDetailView();
-            ncbDetailView.setAccountStatus(ncbDetail.getAccountStatus());
-            ncbDetailView.setAccountType(ncbDetail.getAccountType());
-            ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
-            ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
-            ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
-            ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
-            ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
-            ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
-            ncbDetailView.setInstallment(ncbDetail.getInstallment());
-            ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
-            ncbDetailView.setOutstanding(ncbDetail.getOutstanding());
-            ncbDetailView.setNoOfOutstandingPaymentIn12months(ncbDetail.getOutstandingIn12Month());
-            ncbDetailView.setNoOfmonthsPayment(ncbDetail.getNoOfMonthPayment());
-            ncbDetailView.setLimit(ncbDetail.getLimit());
-            ncbDetailView.setMonth1(ncbDetail.getMonth1());
-            ncbDetailView.setMonth2(ncbDetail.getMonth2());
-            ncbDetailView.setMonth3(ncbDetail.getMonth3());
-            ncbDetailView.setMonth4(ncbDetail.getMonth4());
-            ncbDetailView.setMonth5(ncbDetail.getMonth5());
-            ncbDetailView.setMonth6(ncbDetail.getMonth6());
-            ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
-            ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
-            ncbDetailView.setCanToEdit(ncbDetail.isCanToEdit());
-            ncbDetailViewList.add(ncbDetailView);
+    public NCBDetailView transformToView(NCBDetail ncbDetail){
+        NCBDetailView ncbDetailView = new NCBDetailView();
+        if(ncbDetail == null){
+            return ncbDetailView;
         }
+        ncbDetailView.setAccountStatus(ncbDetail.getAccountStatus());
+        ncbDetailView.setAccountType(ncbDetail.getAccountType());
+        ncbDetailView.setAccountOpenDate(ncbDetail.getAccountOpenDate());
+        ncbDetailView.setTMBAccount(ncbDetail.getAccountTMBFlag());
+        ncbDetailView.setCurrentPayment(ncbDetail.getCurrentPayment());
+        ncbDetailView.setHistoryPayment(ncbDetail.getHistoryPayment());
+        ncbDetailView.setDateOfInfo(ncbDetail.getAsOfDate());
+        ncbDetailView.setDateOfDebtRestructuring(ncbDetail.getLastReStructureDate());
+        ncbDetailView.setInstallment(ncbDetail.getInstallment());
+        ncbDetailView.setRefinanceFlag(ncbDetail.getRefinanceFlag());
+        ncbDetailView.setOutstanding(ncbDetail.getOutstanding());
+        ncbDetailView.setNoOfOutstandingPaymentIn12months(ncbDetail.getOutstandingIn12Month());
+        ncbDetailView.setNoOfmonthsPayment(ncbDetail.getNoOfMonthPayment());
+        ncbDetailView.setLimit(ncbDetail.getLimit());
+        ncbDetailView.setMonth1(ncbDetail.getMonth1());
+        ncbDetailView.setMonth2(ncbDetail.getMonth2());
+        ncbDetailView.setMonth3(ncbDetail.getMonth3());
+        ncbDetailView.setMonth4(ncbDetail.getMonth4());
+        ncbDetailView.setMonth5(ncbDetail.getMonth5());
+        ncbDetailView.setMonth6(ncbDetail.getMonth6());
+        ncbDetailView.setWcFlag(ncbDetail.getWcFlag());
+        ncbDetailView.setNoOfOverLimit(ncbDetail.getOverLimit());
+        ncbDetailView.setCanToEdit(ncbDetail.isCanToEdit());
+        return ncbDetailView;
+    }
 
+    public List<NCBDetailView> transformToViews(List<NCBDetail> ncbDetailList) {
+        List<NCBDetailView> ncbDetailViewList = new ArrayList<NCBDetailView>();
+        if(ncbDetailList == null && ncbDetailList.isEmpty()){
+            return ncbDetailViewList;
+        }
+        for (NCBDetail ncbDetail : ncbDetailList) {
+            ncbDetailViewList.add(transformToView(ncbDetail));
+        }
         return ncbDetailViewList;
-
     }
 
 }

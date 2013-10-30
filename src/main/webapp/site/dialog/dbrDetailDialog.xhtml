@@ -21,12 +21,12 @@
                         <p:outputLabel value="#{msg.get('app.dbrDetail.label.loanType')}"/>
                     </td>
                     <td>
-                        <p:selectOneMenu value="#{dbrInfo.selectedItem.loanTypeView.id}" required="true">
+                        <p:selectOneMenu value="#{dbrInfo.selectedItem.loanAccountTypeView.id}" required="true">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{dbrInfo.loanTypes}"
-                                           var="loanType"
-                                           itemLabel="#{loanType.name}"
-                                           itemValue="#{loanType.id}"/>
+                            <f:selectItems value="#{dbrInfo.loanAccountTypes}"
+                                           var="loanAccountType"
+                                           itemLabel="#{loanAccountType.name}"
+                                           itemValue="#{loanAccountType.id}"/>
                         </p:selectOneMenu>
                     </td>
                 </tr>
