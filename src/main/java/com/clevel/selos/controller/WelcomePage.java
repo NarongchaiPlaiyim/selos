@@ -27,6 +27,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -214,6 +215,8 @@ public class WelcomePage implements Serializable {
         normalStr = normalMsg.get("app.name");
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
+        dateTh = new Date();
+        dateEn = new Date();
     }
 
     public void on001() {
@@ -362,6 +365,33 @@ public class WelcomePage implements Serializable {
         log.debug("testBPM");
 //        UserDTO userDTO = bpmInterface.getUserDTO();
 //        log.debug("user: {}, password: {}",userDTO.getUserName(),userDTO.getPassword());
+    }
+
+    Date dateTh;
+    Date dateEn;
+
+    public void testCalendar() {
+        log.debug("test Calendar.");
+        log.debug("dateTh: {}, dateEn: {}",dateTh,dateEn);
+
+        log.debug("getDateTimeString dateTh: {}",DateTimeUtil.getDateTimeStr(dateTh));
+        log.debug("getDateTimeString dateEn: {}",DateTimeUtil.getDateTimeStr(dateEn));
+    }
+
+    public Date getDateTh() {
+        return dateTh;
+    }
+
+    public void setDateTh(Date dateTh) {
+        this.dateTh = dateTh;
+    }
+
+    public Date getDateEn() {
+        return dateEn;
+    }
+
+    public void setDateEn(Date dateEn) {
+        this.dateEn = dateEn;
     }
 
     public List<BusinessGroup> getBusinessGroups() {

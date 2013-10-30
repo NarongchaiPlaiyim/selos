@@ -54,7 +54,7 @@ public class NCBDetailView implements Serializable {
     }
 
     public void reset() {
-        this.isTMBAccount = 0;
+//        this.isTMBAccount = -1;
         this.dateOfInfo = new Date();
         this.accountOpenDate = new Date();
         this.limit = new BigDecimal(0);
@@ -63,7 +63,7 @@ public class NCBDetailView implements Serializable {
         this.dateOfDebtRestructuring = new Date();
         this.noOfOutstandingPaymentIn12months = new BigDecimal(0);
         this.noOfOverLimit = 0;
-        this.refinanceFlag = 0;
+//        this.refinanceFlag = -1;
         this.monthsPaymentFlag = false;
         this.accountType = new AccountType();
         this.accountStatus = new AccountStatus();
@@ -78,7 +78,7 @@ public class NCBDetailView implements Serializable {
         this.month4 = new BigDecimal(0);
         this.month5 = new BigDecimal(0);
         this.month6 = new BigDecimal(0);
-        this.wcFlag = 0;
+//        this.wcFlag = -1;
         this.canToEdit = false;
         this.monthFlagPage = false;
     }
@@ -138,7 +138,7 @@ public class NCBDetailView implements Serializable {
     public int getTMBAccount() {
         if (TMB == true) {
             this.isTMBAccount = 1;
-        } else {
+        } else  if (TMB == false) {
             this.isTMBAccount = 0;
         }
         return isTMBAccount;
@@ -339,7 +339,7 @@ public class NCBDetailView implements Serializable {
     public int getRefinanceFlag() {
         if (refinance == true) {
             refinanceFlag = 1;
-        } else {
+        } else  if (refinance == false) {
             refinanceFlag = 0;
         }
         return refinanceFlag;
@@ -353,7 +353,7 @@ public class NCBDetailView implements Serializable {
     public int getWcFlag() {
         if (wc == true) {
             wcFlag = 1;
-        } else {
+        } else if (wc == false) {
             wcFlag = 0;
         }
         return wcFlag;
@@ -385,10 +385,10 @@ public class NCBDetailView implements Serializable {
     }
 
     public boolean isMonthFlagPage() {
-        if (accountType.getMonthFlag() == 1) {
-            monthFlagPage = true;
-        } else {
+        if (accountType.getMonthFlag() == 1) {       // test before this the future 1 > true 0 > false
             monthFlagPage = false;
+        } else {
+            monthFlagPage = true;
         }
 
         return monthFlagPage;
