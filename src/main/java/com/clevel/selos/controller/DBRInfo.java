@@ -1,10 +1,11 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.DBRControl;
-import com.clevel.selos.businesscontrol.LoanTypeControl;
+import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
+import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
-import com.clevel.selos.model.view.LoanTypeView;
+import com.clevel.selos.model.view.LoanAccountTypeView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -47,7 +48,10 @@ public class DBRInfo implements Serializable {
     DBRControl dbrControl;
 
     @Inject
-    LoanTypeControl loanTypeControl;
+    LoanAccountTypeControl loanAccountTypeControl;
+
+    @Inject
+    NCBInfoControl ncbInfoControl;
 
     // message //
     private String messageHeader;
@@ -56,7 +60,7 @@ public class DBRInfo implements Serializable {
     // *** Content ***///
     private DBRView dbr;
     private List<DBRDetailView> dbrDetails;
-    private List<LoanTypeView> loanTypes;
+    private List<LoanAccountTypeView> loanAccountTypes;
     private List<NcbView> ncbViews;
 
     //**DBR Detail
@@ -106,16 +110,22 @@ public class DBRInfo implements Serializable {
     @PostConstruct
     public void onCreation() {
         preRender();
-        selectedItem = new DBRDetailView();
-        dbr = new DBRView();
-        dbr = dbrControl.getDBRByWorkCase(workCaseId);
-        dbrDetails = new ArrayList<DBRDetailView>();
-        if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
-            dbrDetails = dbr.getDbrDetailViews();
+        try{
+            selectedItem = new DBRDetailView();
+            dbr = new DBRView();
+            dbr = dbrControl.getDBRByWorkCase(workCaseId);
+            dbrDetails = new ArrayList<DBRDetailView>();
+            if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
+                dbrDetails = dbr.getDbrDetailViews();
+            }
+            loanAccountTypes = new ArrayList<LoanAccountTypeView>();
+            loanAccountTypes = loanAccountTypeControl.getListLoanTypeByCus(1);
+            ncbViews = new ArrayList<NcbView>(); // HardCode
+            ncbInfoControl.getNCBForCalDBR(workCaseId);
+        }catch (Exception e){
+
         }
-        loanTypes = new ArrayList<LoanTypeView>();
-        loanTypes = loanTypeControl.getListLoanTypeByCus(2);
-        ncbViews = new ArrayList<NcbView>(); // HardCode
+
     }
 
     public void initAddDBRDetail() {
@@ -128,15 +138,15 @@ public class DBRInfo implements Serializable {
     public void onAddDBRDetail() {
         log.debug("onAdd DBR Detail :{}", selectedItem);
         RequestContext context = RequestContext.getCurrentInstance();
-        if (selectedItem == null || loanTypes.isEmpty()) {
+        if (selectedItem == null || loanAccountTypes.isEmpty()) {
             return;
         }
-        for (LoanTypeView loanTypeView : loanTypes) {
-            if (loanTypeView.getId() == selectedItem.getLoanTypeView().getId()) {
-                LoanTypeView loanType = new LoanTypeView();
-                loanType.setId(selectedItem.getLoanTypeView().getId());
-                loanType.setName(loanTypeView.getName());
-                selectedItem.setLoanTypeView(loanType);
+        for (LoanAccountTypeView loanAccountTypeView : loanAccountTypes) {
+            if (loanAccountTypeView.getId() == selectedItem.getLoanAccountTypeView().getId()) {
+                LoanAccountTypeView loanAccountType = new LoanAccountTypeView();
+                loanAccountType.setId(selectedItem.getLoanAccountTypeView().getId());
+                loanAccountType.setName(loanAccountTypeView.getName());
+                selectedItem.setLoanAccountTypeView(loanAccountType);
                 break;
             }
         }
@@ -219,12 +229,12 @@ public class DBRInfo implements Serializable {
         this.selectedItem = selectedItem;
     }
 
-    public List<LoanTypeView> getLoanTypes() {
-        return loanTypes;
+    public List<LoanAccountTypeView> getLoanAccountTypes() {
+        return loanAccountTypes;
     }
 
-    public void setLoanTypes(List<LoanTypeView> loanTypes) {
-        this.loanTypes = loanTypes;
+    public void setLoanAccountTypes(List<LoanAccountTypeView> loanAccountTypes) {
+        this.loanAccountTypes = loanAccountTypes;
     }
 
     public List<NcbView> getNcbViews() {

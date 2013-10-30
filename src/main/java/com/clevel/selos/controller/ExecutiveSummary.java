@@ -17,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.Date;
 
 
 @ViewScoped
@@ -40,13 +41,8 @@ public class ExecutiveSummary implements Serializable {
 
     private Long workCaseId;
     private User user;
-
-    enum ModeForButton {ADD, EDIT}
-
-    private ModeForButton modeForButton;
-
+    private Date date;
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
-
     private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
@@ -57,8 +53,7 @@ public class ExecutiveSummary implements Serializable {
     @Inject
     UserDAO userDAO;
 
-    public ExecutiveSummary() {
-    }
+    public ExecutiveSummary() {}
 
 
     @PostConstruct
@@ -67,16 +62,17 @@ public class ExecutiveSummary implements Serializable {
 
         HttpSession session = FacesUtil.getSession(true);
         session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        user = (User) session.getAttribute("user");
+
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
         }
 
-        if(exSummaryView == null){
-            exSummaryView = new ExSummaryView();
-        }
-
+         if(exSummaryView == null){
+             exSummaryView = new ExSummaryView();
+         }
 
     }
 
@@ -146,6 +142,14 @@ public class ExecutiveSummary implements Serializable {
 
     public void setExSummaryView(ExSummaryView exSummaryView) {
         this.exSummaryView = exSummaryView;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 
