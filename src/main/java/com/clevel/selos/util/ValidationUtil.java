@@ -9,20 +9,20 @@ import java.util.ArrayList;
 public class ValidationUtil {
     private static Logger log = LoggerFactory.getLogger(ValidationUtil.class);
 
-    public static boolean isValueInRange(int min,int max,int value) {
+    public static boolean isValueInRange(int min, int max, int value) {
         return value >= min && value <= max;
     }
 
-    public static boolean isGreaterThan(int max,int value) {
+    public static boolean isGreaterThan(int max, int value) {
         return value > max;
     }
 
-    public static boolean isLessThan(int min,int value) {
-        return  value < min;
+    public static boolean isLessThan(int min, int value) {
+        return value < min;
     }
 
     public static boolean isValueEqual(int expected, int value) {
-        return  value == expected;
+        return value == expected;
     }
 
 
@@ -30,14 +30,16 @@ public class ValidationUtil {
     public static boolean isEmpty(String field) {
         return (field == null) || "".equalsIgnoreCase(field.trim());
     }
-    public static boolean isNull(String string){
-        if(string == null || "null".equals(string.toLowerCase().trim())){
+
+    public static boolean isNull(String string) {
+        if (string == null || "null".equals(string.toLowerCase().trim())) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    public static boolean isValueInRange(int min,int max,String string) {
+
+    public static boolean isValueInRange(int min, int max, String string) {
         if (!isNull(string)) {
             return (string.length() >= min) && (string.length() <= max);
         } else {
@@ -45,56 +47,55 @@ public class ValidationUtil {
         }
     }
 
-    public static boolean isValueInRange(int min,int max,ArrayList arrayList) {
-        if(null!=arrayList) {
+    public static boolean isValueInRange(int min, int max, ArrayList arrayList) {
+        if (null != arrayList) {
             return (arrayList.size() >= min) && (arrayList.size() <= max);
         } else {
             return false;
         }
     }
 
-    public static boolean isGreaterThan(int max,String string) {
+    public static boolean isGreaterThan(int max, String string) {
         return isNull(string) || string.length() > max;
     }
 
-    public static boolean isNotNullAndGreaterThan(int max,String string) {
-        if(string!=null){
+    public static boolean isNotNullAndGreaterThan(int max, String string) {
+        if (string != null) {
             return string.length() > max;
         } else {
             return false;
         }
     }
 
-    public static boolean isLessThan(int min,String string) {
+    public static boolean isLessThan(int min, String string) {
         return isNull(string) || string.length() < min;
     }
 
-    public static boolean isLessThan(int min,ArrayList arrayList) {
-        if (arrayList!=null) {
-            return  arrayList.size() < min;
+    public static boolean isLessThan(int min, ArrayList arrayList) {
+        if (arrayList != null) {
+            return arrayList.size() < min;
         } else {
             return true;
         }
     }
+
     public static boolean isInteger(String string) {
         try {
             Integer.parseInt(string);
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return false;
         }
         return true;
     }
 
-    public static boolean isNumeric(String str)
-    {
-        for (char c : str.toCharArray())
-        {
+    public static boolean isNumeric(String str) {
+        for (char c : str.toCharArray()) {
             if (!Character.isDigit(c)) return false;
         }
         return true;
     }
 
-    public static boolean isValueInRange(BigDecimal min,BigDecimal max,BigDecimal value) {
+    public static boolean isValueInRange(BigDecimal min, BigDecimal max, BigDecimal value) {
         return value.compareTo(min) >= 0 && value.compareTo(max) <= 0;
     }
 

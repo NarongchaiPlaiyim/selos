@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 @XStreamAlias("account")
 public class SubjectAccountModel implements Serializable {
-    
-    
+
+
     private String membercode;
     private String shortname;
     private String accounttype;
@@ -29,11 +29,11 @@ public class SubjectAccountModel implements Serializable {
     private String installmentnumofpayment;
     private String accountstatus;
     private String loanclass;
-    
+
     private String paymtpattern;
     private String paymtstartdate;
     private String paymtenddate;
-    
+
     private String paymt01;
     private String paymtdate01;
     private String paymt02;
@@ -106,12 +106,12 @@ public class SubjectAccountModel implements Serializable {
     private String paymtdate35;
     private String paymt36;
     private String paymtdate36;
-    
+
     private String loanobjective;
     private String collaterall1;
     private String collaterall2;
     private String collaterall3;
-    
+
     private String lastrestructureddate;
     private String pctpaymt;
     private String typeofcreditcard;
@@ -119,17 +119,17 @@ public class SubjectAccountModel implements Serializable {
     private String unitmake;
     private String unitmodel;
     private String credittypeflag;
-    
+
     @XStreamImplicit(itemFieldName = "dispute")
     private ArrayList<SubjectAccounDisputetModel> dispute = new ArrayList<SubjectAccounDisputetModel>();
-    
+
     @XStreamImplicit(itemFieldName = "history")
     private ArrayList<HistoryModel> history = new ArrayList<HistoryModel>();
 
-    public SubjectAccountModel(String membercode, String shortname, String accounttype, String accountnumber, String ownership, String currencycode, String opendate, String lastpaymentdate, String closeddate, String asofdate, String creditlimit, String amountowed, String amountpastdue, String defaultdate, String installmentfreq, String installmentamount, String installmentnumofpayment, String accountstatus, String loanclass, String paymtpattern, String paymtstartdate, String paymtenddate, 
-                               String paymt01, String paymtdate01, String paymt02, String paymtdate02, String paymt03, String paymtdate03, String paymt04, String paymtdate04, String paymt05, String paymtdate05, String paymt06, String paymtdate06, String paymt07, String paymtdate07, String paymt08, String paymtdate08, String paymt09, String paymtdate09, String paymt10, String paymtdate10, String paymt11, String paymtdate11, String paymt12, String paymtdate12, String paymt13, String paymtdate13, 
-                               String paymt14, String paymtdate14, String paymt15, String paymtdate15, String paymt16, String paymtdate16, String paymt17, String paymtdate17, String paymt18, String paymtdate18, String paymt19, String paymtdate19, String paymt20, String paymtdate20, String paymt21, String paymtdate21, String paymt22, String paymtdate22, String paymt23, String paymtdate23, String paymt24, String paymtdate24, String paymt25, String paymtdate25, String paymt26, String paymtdate26, 
-                               String paymt27, String paymtdate27, String paymt28, String paymtdate28, String paymt29, String paymtdate29, String paymt30, String paymtdate30, String paymt31, String paymtdate31, String paymt32, String paymtdate32, String paymt33, String paymtdate33, String paymt34, String paymtdate34, String paymt35, String paymtdate35, String paymt36, String paymtdate36, String loanobjective, String collaterall1, String collaterall2, String collaterall3, String lastrestructureddate, 
+    public SubjectAccountModel(String membercode, String shortname, String accounttype, String accountnumber, String ownership, String currencycode, String opendate, String lastpaymentdate, String closeddate, String asofdate, String creditlimit, String amountowed, String amountpastdue, String defaultdate, String installmentfreq, String installmentamount, String installmentnumofpayment, String accountstatus, String loanclass, String paymtpattern, String paymtstartdate, String paymtenddate,
+                               String paymt01, String paymtdate01, String paymt02, String paymtdate02, String paymt03, String paymtdate03, String paymt04, String paymtdate04, String paymt05, String paymtdate05, String paymt06, String paymtdate06, String paymt07, String paymtdate07, String paymt08, String paymtdate08, String paymt09, String paymtdate09, String paymt10, String paymtdate10, String paymt11, String paymtdate11, String paymt12, String paymtdate12, String paymt13, String paymtdate13,
+                               String paymt14, String paymtdate14, String paymt15, String paymtdate15, String paymt16, String paymtdate16, String paymt17, String paymtdate17, String paymt18, String paymtdate18, String paymt19, String paymtdate19, String paymt20, String paymtdate20, String paymt21, String paymtdate21, String paymt22, String paymtdate22, String paymt23, String paymtdate23, String paymt24, String paymtdate24, String paymt25, String paymtdate25, String paymt26, String paymtdate26,
+                               String paymt27, String paymtdate27, String paymt28, String paymtdate28, String paymt29, String paymtdate29, String paymt30, String paymtdate30, String paymt31, String paymtdate31, String paymt32, String paymtdate32, String paymt33, String paymtdate33, String paymt34, String paymtdate34, String paymt35, String paymtdate35, String paymt36, String paymtdate36, String loanobjective, String collaterall1, String collaterall2, String collaterall3, String lastrestructureddate,
                                String pctpaymt, String typeofcreditcard, String numberofcoborrower, String unitmake, String unitmodel, String credittypeflag, ArrayList<HistoryModel> history, ArrayList<SubjectAccounDisputetModel> dispute) {
         this.membercode = membercode;
         this.shortname = shortname;
@@ -668,8 +668,5 @@ public class SubjectAccountModel implements Serializable {
         return history;
     }
 
-   
-    
-    
-    
+
 }

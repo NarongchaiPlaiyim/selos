@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 
 
-
 public class ExistingCreditTransform extends BusinessTransform {
 
     @Inject
@@ -32,11 +31,11 @@ public class ExistingCreditTransform extends BusinessTransform {
     ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
-    public ExistingCreditTransform(){
+    public ExistingCreditTransform() {
 
     }
 
-    public ExistingCreditDetailView getExistingCredit(Obligation obligation){
+    public ExistingCreditDetailView getExistingCredit(Obligation obligation) {
         ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setAccountName(obligation.getAccountName());
         existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());
@@ -47,26 +46,26 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setLimit(obligation.getLimit());
         existingCreditDetailView.setOutstanding(obligation.getOutstanding());
         int days = DateTimeUtil.daysBetween2Dates(obligation.getLastContractDate(), obligation.getMaturityDate());
-        existingCreditDetailView.setTenor(new BigDecimal(days/30.4));
+        existingCreditDetailView.setTenor(new BigDecimal(days / 30.4));
         existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
         return existingCreditDetailView;
     }
 
-    public List<ExistingCreditDetailView> getExistingCredit(AppInProcess appInProcess){
+    public List<ExistingCreditDetailView> getExistingCredit(AppInProcess appInProcess) {
         List<ExistingCreditDetailView> existingCreditDetailViewList = new ArrayList<ExistingCreditDetailView>();
 
         List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
         List<CreditDetail> creditDetailList = appInProcess.getCreditDetailList();
         StringBuilder accountName = new StringBuilder();
-        for(int i = 0; i < customerDetailList.size(); i++){
+        for (int i = 0; i < customerDetailList.size(); i++) {
             CustomerDetail customerDetail = customerDetailList.get(i);
             accountName.append(customerDetail.getFirstNameTh()).append(" ").append(customerDetail.getLastNameTh());
-            if(i < customerDetailList.size() - 1)
+            if (i < customerDetailList.size() - 1)
                 accountName.append(",");
         }
 
-        for(CreditDetail creditDetail : creditDetailList){
-            if(creditDetail!=null){
+        for (CreditDetail creditDetail : creditDetailList) {
+            if (creditDetail != null) {
                 ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
                 existingCreditDetailView.setAccountName(accountName.toString());
                 existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
@@ -76,7 +75,7 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());
                 existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
 
-                if(creditDetail.getFinalLimit() != null && !creditDetail.getFinalLimit().equals(BigDecimal.ZERO)){
+                if (creditDetail.getFinalLimit() != null && !creditDetail.getFinalLimit().equals(BigDecimal.ZERO)) {
                     existingCreditDetailView.setLimit(creditDetail.getFinalLimit());
                     existingCreditDetailView.setTenor(creditDetail.getFinalTenors());
                     existingCreditDetailView.setInstallment(creditDetail.getFinalInstallment());
@@ -91,10 +90,10 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailViewList;
     }
 
-    public ExistingCreditSummary getExistingCreditSummary(ExistingCreditView existingCreditView, ExistingCreditSummary existingCreditSummary, User user){
+    public ExistingCreditSummary getExistingCreditSummary(ExistingCreditView existingCreditView, ExistingCreditSummary existingCreditSummary, User user) {
         log.info("Transform ExistingCreditSummary with ExistingCreditView{}", existingCreditView);
         Date now = new Date();
-        if(existingCreditSummary != null){
+        if (existingCreditSummary != null) {
             existingCreditSummary.setModifyBy(user);
             existingCreditSummary.setModifyDate(now);
         } else {
@@ -128,13 +127,13 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditSummary;
     }
 
-    public List<ExistingCreditDetail> getExistingCreditDetail(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditSummary existingCreditSummary, User user){
+    public List<ExistingCreditDetail> getExistingCreditDetail(List<ExistingCreditDetailView> existingCreditDetailViewList, ExistingCreditSummary existingCreditSummary, User user) {
         List<ExistingCreditDetail> existingCreditDetailList = new ArrayList<ExistingCreditDetail>();
-        if(existingCreditDetailViewList != null) {
-            for(ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList){
+        if (existingCreditDetailViewList != null) {
+            for (ExistingCreditDetailView existingCreditDetailView : existingCreditDetailViewList) {
                 ExistingCreditDetail existingCreditDetail = null;
                 Date now = new Date();
-                if(existingCreditDetailView.getId() != 0){
+                if (existingCreditDetailView.getId() != 0) {
                     existingCreditDetail = existingCreditDetailDAO.findById(existingCreditDetailView.getId());
                     existingCreditDetail.setModifyBy(user);
                     existingCreditDetail.setModifyDate(now);
@@ -161,10 +160,10 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditDetailList;
     }
 
-    public ExistingCreditView getExistingCreditView(ExistingCreditSummary existingCreditSummary){
+    public ExistingCreditView getExistingCreditView(ExistingCreditSummary existingCreditSummary) {
         ExistingCreditView existingCreditView = new ExistingCreditView();
 
-        if(existingCreditSummary != null){
+        if (existingCreditSummary != null) {
             existingCreditView.setId(existingCreditSummary.getId());
             existingCreditView.setTotalBorrowerAppInRLOSLimit(existingCreditSummary.getTotalBorrowerAppInRLOSLimit());
             existingCreditView.setTotalBorrowerComLimit(existingCreditSummary.getTotalBorrowerComLimit());
@@ -183,20 +182,20 @@ public class ExistingCreditTransform extends BusinessTransform {
 
 
             List<ExistingCreditDetail> existingCreditDetailList = existingCreditSummary.getExistingCreditDetailList();
-            for(ExistingCreditDetail existingCreditDetail : existingCreditDetailList){
+            for (ExistingCreditDetail existingCreditDetail : existingCreditDetailList) {
                 ExistingCreditDetailView existingCreditDetailView = getExistingCreditDetailView(existingCreditDetail);
-                if(existingCreditDetailView.getCreditCategory().equals(CreditCategory.COMMERCIAL)){
-                    if(existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
+                if (existingCreditDetailView.getCreditCategory().equals(CreditCategory.COMMERCIAL)) {
+                    if (existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
                         _borrowerComList.add(existingCreditDetailView);
                     else
                         _relatedComList.add(existingCreditDetailView);
-                } else if(existingCreditDetailView.getCreditCategory().equals(CreditCategory.RETAIL)){
-                    if(existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
+                } else if (existingCreditDetailView.getCreditCategory().equals(CreditCategory.RETAIL)) {
+                    if (existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
                         _borrowerRetList.add(existingCreditDetailView);
                     else
                         _relatedRetList.add(existingCreditDetailView);
                 } else {
-                    if(existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
+                    if (existingCreditDetailView.getCreditRelationType().equals(CreditRelationType.BORROWER))
                         _borrowerRLOSList.add(existingCreditDetailView);
                     else
                         _relatedRLOSList.add(existingCreditDetailView);
@@ -215,7 +214,7 @@ public class ExistingCreditTransform extends BusinessTransform {
         return existingCreditView;
     }
 
-    public ExistingCreditDetailView getExistingCreditDetailView(ExistingCreditDetail existingCreditDetail){
+    public ExistingCreditDetailView getExistingCreditDetailView(ExistingCreditDetail existingCreditDetail) {
         ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setId(existingCreditDetail.getId());
         existingCreditDetailView.setInstallment(existingCreditDetail.getInstallment());
@@ -228,14 +227,14 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setIntFeePercent(existingCreditDetail.getIntFee());
         existingCreditDetailView.setOutstanding(existingCreditDetail.getOutstanding());
 
-        if(existingCreditDetail.getCreditCategory() == CreditCategory.RETAIL.value())
+        if (existingCreditDetail.getCreditCategory() == CreditCategory.RETAIL.value())
             existingCreditDetailView.setCreditCategory(CreditCategory.RETAIL);
-        else if(existingCreditDetail.getCreditCategory() == CreditCategory.COMMERCIAL.value())
+        else if (existingCreditDetail.getCreditCategory() == CreditCategory.COMMERCIAL.value())
             existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
         else
             existingCreditDetailView.setCreditCategory(CreditCategory.RLOS_APP_IN);
 
-        if(existingCreditDetail.getCreditRelationType() == CreditRelationType.BORROWER.value())
+        if (existingCreditDetail.getCreditRelationType() == CreditRelationType.BORROWER.value())
             existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
         else
             existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);

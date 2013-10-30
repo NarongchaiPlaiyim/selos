@@ -12,9 +12,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for body complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="body">
  *   &lt;complexContent>
@@ -34,14 +34,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "body", propOrder = {
-    "searchResult",
-    "corporateCustomerListSection",
-    "corporateCustomerDetailSection"
+        "searchResult",
+        "corporateCustomerListSection",
+        "corporateCustomerDetailSection"
 })
 public class Body {
 
@@ -52,11 +50,9 @@ public class Body {
 
     /**
      * Gets the value of the searchResult property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSearchResult() {
         return searchResult;
@@ -64,11 +60,9 @@ public class Body {
 
     /**
      * Sets the value of the searchResult property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSearchResult(String value) {
         this.searchResult = value;
@@ -76,11 +70,9 @@ public class Body {
 
     /**
      * Gets the value of the corporateCustomerListSection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CorporateCustomerListSection }
-     *     
+     *
+     * @return possible object is
+     *         {@link CorporateCustomerListSection }
      */
     public CorporateCustomerListSection getCorporateCustomerListSection() {
         return corporateCustomerListSection;
@@ -88,11 +80,9 @@ public class Body {
 
     /**
      * Sets the value of the corporateCustomerListSection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CorporateCustomerListSection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CorporateCustomerListSection }
      */
     public void setCorporateCustomerListSection(CorporateCustomerListSection value) {
         this.corporateCustomerListSection = value;
@@ -100,11 +90,9 @@ public class Body {
 
     /**
      * Gets the value of the corporateCustomerDetailSection property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link CorporateCustomerDetailSection }
-     *     
+     *
+     * @return possible object is
+     *         {@link CorporateCustomerDetailSection }
      */
     public CorporateCustomerDetailSection getCorporateCustomerDetailSection() {
         return corporateCustomerDetailSection;
@@ -112,11 +100,9 @@ public class Body {
 
     /**
      * Sets the value of the corporateCustomerDetailSection property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link CorporateCustomerDetailSection }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link CorporateCustomerDetailSection }
      */
     public void setCorporateCustomerDetailSection(CorporateCustomerDetailSection value) {
         this.corporateCustomerDetailSection = value;

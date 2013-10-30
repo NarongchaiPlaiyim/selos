@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class BusinessLevel implements Serializable{
+public class BusinessLevel implements Serializable {
     private int businessSeqId;
     private String businesscode;
     private boolean negativeFlag;

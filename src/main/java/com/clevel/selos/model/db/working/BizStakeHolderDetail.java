@@ -19,12 +19,12 @@ import java.util.Date;
 public class BizStakeHolderDetail implements Serializable {
 
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_STAKE_HOLDER_ID", sequenceName="SEQ_WRK_BIZ_STAKE_HOLDER_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_STAKE_HOLDER_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BIZ_STAKE_HOLDER_ID", sequenceName = "SEQ_WRK_BIZ_STAKE_HOLDER_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BIZ_STAKE_HOLDER_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="biz_info_detail_id")
+    @JoinColumn(name = "biz_info_detail_id")
     private BizInfoDetail bizInfoDetail;
 
     @Column(name = "stake_holder_type")
@@ -66,11 +66,11 @@ public class BizStakeHolderDetail implements Serializable {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     public BizStakeHolderDetail() {

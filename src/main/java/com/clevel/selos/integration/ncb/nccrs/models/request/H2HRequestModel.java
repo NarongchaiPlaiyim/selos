@@ -1,4 +1,5 @@
 package com.clevel.selos.integration.ncb.nccrs.models.request;
+
 public class H2HRequestModel {
     private String registtype;
     private String registid;
@@ -19,5 +20,5 @@ public class H2HRequestModel {
         this.confirmconsent = confirmconsent;
         this.language = language;
     }
-    
+
 }

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class AddressView implements Serializable{
+public class AddressView implements Serializable {
     private long id;
     private AddressType addressType;
     private String addressNo;
@@ -24,11 +24,11 @@ public class AddressView implements Serializable{
     private String contactPhone;
     private String address;
 
-    public AddressView(){
+    public AddressView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.province = new Province();
         this.district = new District();
         this.subDistrict = new SubDistrict();

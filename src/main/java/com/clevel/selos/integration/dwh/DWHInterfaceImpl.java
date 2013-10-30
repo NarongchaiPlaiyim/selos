@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Default
-public class DWHInterfaceImpl implements DWHInterface,Serializable{
+public class DWHInterfaceImpl implements DWHInterface, Serializable {
     @Inject
     @DWH
     Logger log;
@@ -42,35 +42,35 @@ public class DWHInterfaceImpl implements DWHInterface,Serializable{
     }
 
     @Override
-    public ObligationResult getObligationData(String userId, List<String> tmbCusIdList){
-        log.debug("getObligationData (userId : {}, tmbCusIdList : {})",userId,tmbCusIdList);
+    public ObligationResult getObligationData(String userId, List<String> tmbCusIdList) {
+        log.debug("getObligationData (userId : {}, tmbCusIdList : {})", userId, tmbCusIdList);
         ObligationResult obligationResult = new ObligationResult();
-        try{
-            if(tmbCusIdList!=null && tmbCusIdList.size()>0){
+        try {
+            if (tmbCusIdList != null && tmbCusIdList.size() > 0) {
                 obligationResult = obligationService.getObligationByTmbCusId(tmbCusIdList);
-                log.debug("getObligationData result (obligationResult : {})",obligationResult);
+                log.debug("getObligationData result (obligationResult : {})", obligationResult);
             } else {
                 obligationResult.setActionResult(ActionResult.FAILED);
                 obligationResult.setReason(msg.get(ExceptionMapping.DWH_INVALID_INPUT));
                 obligationResult.setObligationList(new ArrayList<Obligation>());
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Exception while get obligation data!", e);
-            throw new DWHInterfaceException(e, ExceptionMapping.DWH_OBLIGATION_EXCEPTION,msg.get(ExceptionMapping.DWH_OBLIGATION_EXCEPTION,userId));
+            throw new DWHInterfaceException(e, ExceptionMapping.DWH_OBLIGATION_EXCEPTION, msg.get(ExceptionMapping.DWH_OBLIGATION_EXCEPTION, userId));
         }
 
         return obligationResult;
     }
 
     @Override
-    public DWHBankStatementResult getBankStatementData(String userId, String accountNumber, Date fromDate, int numberOfMonth){
-        log.debug("getBankStatementData (userId : {}, accountNumber : {}, fromDate : {}, numberOfMonth : {})",userId,accountNumber,fromDate,numberOfMonth);
+    public DWHBankStatementResult getBankStatementData(String userId, String accountNumber, Date fromDate, int numberOfMonth) {
+        log.debug("getBankStatementData (userId : {}, accountNumber : {}, fromDate : {}, numberOfMonth : {})", userId, accountNumber, fromDate, numberOfMonth);
         DWHBankStatementResult bankStatementResult = new DWHBankStatementResult();
-        try{
-            bankStatementResult = bankStatementService.getBankStatementData(accountNumber,fromDate,numberOfMonth);
-        } catch (Exception e){
+        try {
+            bankStatementResult = bankStatementService.getBankStatementData(accountNumber, fromDate, numberOfMonth);
+        } catch (Exception e) {
             log.error("Exception while get bankStatement data!", e);
-            throw new DWHInterfaceException(e, ExceptionMapping.DWH_BANK_STATEMENT_EXCEPTION,msg.get(ExceptionMapping.DWH_BANK_STATEMENT_EXCEPTION,userId));
+            throw new DWHInterfaceException(e, ExceptionMapping.DWH_BANK_STATEMENT_EXCEPTION, msg.get(ExceptionMapping.DWH_BANK_STATEMENT_EXCEPTION, userId));
         }
         return bankStatementResult;
     }

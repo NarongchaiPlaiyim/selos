@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CreditTypeDAO extends GenericDAO<CreditType,Integer> {
+public class CreditTypeDAO extends GenericDAO<CreditType, Integer> {
     @Inject
     private Logger log;
 

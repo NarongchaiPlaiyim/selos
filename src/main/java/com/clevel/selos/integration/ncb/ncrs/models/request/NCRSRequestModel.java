@@ -13,8 +13,8 @@ public class NCRSRequestModel implements Serializable {
     @XStreamAlias("body")
     private BodyModel body;
 
-    public NCRSRequestModel(HeaderModel header, BodyModel body){
-        this.header =  header;
+    public NCRSRequestModel(HeaderModel header, BodyModel body) {
+        this.header = header;
         this.body = body;
     }
 }

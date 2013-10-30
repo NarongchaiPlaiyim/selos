@@ -25,24 +25,24 @@ public class SecurityAuditor {
     public SecurityAuditor() {
     }
 
-    public void add(String userName,String action,String actionDetail,Date actionDate,ActionResult actionResult,String resultDetail) {
-        securityActivityDAO.persist(new SecurityActivity(userName,action,actionDetail,actionDate, actionResult,resultDetail, FacesUtil.getRequest().getRemoteAddr()));
+    public void add(String userName, String action, String actionDetail, Date actionDate, ActionResult actionResult, String resultDetail) {
+        securityActivityDAO.persist(new SecurityActivity(userName, action, actionDetail, actionDate, actionResult, resultDetail, FacesUtil.getRequest().getRemoteAddr()));
     }
 
-    public void addSucceed(String userName,String action,String actionDetail,Date actionDate) {
+    public void addSucceed(String userName, String action, String actionDetail, Date actionDate) {
         User user = userDAO.findById(userName);
         user.setLastLogon(actionDate);
         user.setLastIP(FacesUtil.getRequest().getRemoteAddr());
         userDAO.persist(user);
-        add(userName,action,actionDetail,actionDate,ActionResult.SUCCESS,"");
+        add(userName, action, actionDetail, actionDate, ActionResult.SUCCESS, "");
     }
 
-    public void addFailed(String userName,String action,String actionDetail,String resultDetail) {
-        add(userName,action,actionDetail,new Date(),ActionResult.FAILED,resultDetail);
+    public void addFailed(String userName, String action, String actionDetail, String resultDetail) {
+        add(userName, action, actionDetail, new Date(), ActionResult.FAILED, resultDetail);
     }
 
-    public void addException(String userName,String action,String actionDetail,String resultDetail) {
-        add(userName,action,actionDetail,new Date(),ActionResult.EXCEPTION,resultDetail);
+    public void addException(String userName, String action, String actionDetail, String resultDetail) {
+        add(userName, action, actionDetail, new Date(), ActionResult.EXCEPTION, resultDetail);
     }
 
 }

@@ -15,7 +15,7 @@ public class Region implements Serializable {
     @Id
     @Column(name = "code")
     private int code;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
     @Column(name = "active")
     private int active;

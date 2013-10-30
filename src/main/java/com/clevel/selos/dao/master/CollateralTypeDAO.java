@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CollateralTypeDAO extends GenericDAO<CollateralType,Integer> {
+public class CollateralTypeDAO extends GenericDAO<CollateralType, Integer> {
     @Inject
     private Logger log;
 

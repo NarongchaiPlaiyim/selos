@@ -13,49 +13,49 @@ import java.util.Date;
 @Table(name = "wrk_individual")
 public class Individual implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_INDIVIDUAL_ID", sequenceName="SEQ_WRK_INDIVIDUAL_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_INDIVIDUAL_ID")
+    @SequenceGenerator(name = "SEQ_WRK_INDIVIDUAL_ID", sequenceName = "SEQ_WRK_INDIVIDUAL_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_INDIVIDUAL_ID")
     private long id;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Column(name="citizen_id")
+    @Column(name = "citizen_id")
     private String citizenId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="birth_date")
+    @Column(name = "birth_date")
     private Date birthDate;
 
-    @Column(name="gender")
+    @Column(name = "gender")
     private Gender gender;
 
     @OneToOne
-    @JoinColumn(name="nationality_id")
+    @JoinColumn(name = "nationality_id")
     private Nationality nationality;
 
     @OneToOne
-    @JoinColumn(name="snd_nationality_id")
+    @JoinColumn(name = "snd_nationality_id")
     private Nationality sndNationality;
 
     @OneToOne
-    @JoinColumn(name="race_id")
+    @JoinColumn(name = "race_id")
     private Race race;
 
     @OneToOne
-    @JoinColumn(name="education_id")
+    @JoinColumn(name = "education_id")
     private Education education;
 
     @OneToOne
-    @JoinColumn(name="occupation_id")
+    @JoinColumn(name = "occupation_id")
     private Occupation occupation;
 
     @OneToOne
-    @JoinColumn(name="maritalstatus_id")
+    @JoinColumn(name = "maritalstatus_id")
     private MaritalStatus maritalStatus;
 
-    @Column(name="num_of_children")
+    @Column(name = "num_of_children")
     private int numberOfChildren;
 
     @OneToOne

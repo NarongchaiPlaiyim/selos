@@ -13,79 +13,79 @@ import java.util.Date;
 public class ExistingCreditDetail {
 
     @Id
-    @SequenceGenerator(name="SEQ_WRK_EXISTING_CREDIT_DET_ID", sequenceName="SEQ_WRK_EXISTING_CREDIT_DET_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_EXISTING_CREDIT_DET_ID")
+    @SequenceGenerator(name = "SEQ_WRK_EXISTING_CREDIT_DET_ID", sequenceName = "SEQ_WRK_EXISTING_CREDIT_DET_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_EXISTING_CREDIT_DET_ID")
     private long id;
 
-    @Column(name="account_name")
+    @Column(name = "account_name")
     private String accountName;
 
-    @Column(name="account_number")
+    @Column(name = "account_number")
     private String accountNumber;
 
-    @Column(name="account_suf")
+    @Column(name = "account_suf")
     private String accountSuf;
 
-    @Column(name="product_group")
+    @Column(name = "product_group")
     private String productGroup;
 
-    @Column(name="product_program")
+    @Column(name = "product_program")
     private String productProgram;
 
-    @Column(name="project_code")
+    @Column(name = "project_code")
     private String projectCode;
 
-    @Column(name="product_code")
+    @Column(name = "product_code")
     private String productCode;
 
-    @Column(name="credit_type")
+    @Column(name = "credit_type")
     private String creditType;
 
-    @Column(name="credit_category")
+    @Column(name = "credit_category")
     private int creditCategory;
 
-    @Column(name="credit_relation_type")
+    @Column(name = "credit_relation_type")
     private int creditRelationType;
 
-    @Column(name="limit")
+    @Column(name = "limit")
     private BigDecimal limit;
 
-    @Column(name="pce_percent")
+    @Column(name = "pce_percent")
     private BigDecimal pcePercent;
 
-    @Column(name="pce_limit")
+    @Column(name = "pce_limit")
     private BigDecimal pceLimit;
 
-    @Column(name="outstanding")
+    @Column(name = "outstanding")
     private BigDecimal outstanding;
 
-    @Column(name="installment")
+    @Column(name = "installment")
     private BigDecimal installment;
 
-    @Column(name="int_fee")
+    @Column(name = "int_fee")
     private BigDecimal intFee;
 
-    @Column(name="tenor")
+    @Column(name = "tenor")
     private int tenor;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name="existing_credit_id")
+    @JoinColumn(name = "existing_credit_id")
     private ExistingCreditSummary existingCreditSummary;
 
     public long getId() {

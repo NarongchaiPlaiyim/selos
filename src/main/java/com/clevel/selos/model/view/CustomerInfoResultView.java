@@ -12,7 +12,7 @@ public class CustomerInfoResultView implements Serializable {
     private String reason;
     private CustomerInfoView customerInfoView;
 
-    public CustomerInfoResultView(){
+    public CustomerInfoResultView() {
         //reset();
     }
 

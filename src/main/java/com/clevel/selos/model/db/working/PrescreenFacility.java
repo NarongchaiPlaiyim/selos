@@ -8,26 +8,26 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name="wrk_prescreen_facility")
+@Table(name = "wrk_prescreen_facility")
 public class PrescreenFacility implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_PRESCREEN_FACILITY_ID", sequenceName="SEQ_WRK_PRESCREEN_FACILITY_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_PRESCREEN_FACILITY_ID")
+    @SequenceGenerator(name = "SEQ_WRK_PRESCREEN_FACILITY_ID", sequenceName = "SEQ_WRK_PRESCREEN_FACILITY_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_PRESCREEN_FACILITY_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="prescreen_id")
+    @JoinColumn(name = "prescreen_id")
     private Prescreen prescreen;
 
     @OneToOne
-    @JoinColumn(name="product_program_id")
+    @JoinColumn(name = "product_program_id")
     private ProductProgram productProgram;
 
     @OneToOne
-    @JoinColumn(name="credit_type_id")
+    @JoinColumn(name = "credit_type_id")
     private CreditType creditType;
 
-    @Column(name="request_amount")
+    @Column(name = "request_amount")
     private BigDecimal requestAmount;
 
     public long getId() {

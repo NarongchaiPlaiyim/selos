@@ -11,9 +11,9 @@ import java.util.List;
 
 /**
  * <p>Java class for personalListSection complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="personalListSection">
  *   &lt;complexContent>
@@ -25,12 +25,10 @@ import java.util.List;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "personalListSection", propOrder = {
-    "personalList"
+        "personalList"
 })
 public class PersonalListSection {
 
@@ -39,25 +37,23 @@ public class PersonalListSection {
 
     /**
      * Gets the value of the personalList property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the personalList property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getPersonalList().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link PersonalList }
-     * 
-     * 
      */
     public List<PersonalList> getPersonalList() {
         if (personalList == null) {

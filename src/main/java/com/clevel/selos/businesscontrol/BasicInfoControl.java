@@ -46,12 +46,12 @@ public class BasicInfoControl extends BusinessControl {
     @Inject
     BasicInfoAccPurposeTransform basicInfoAccPurposeTransform;
 
-    public BasicInfoView getBasicInfo(long workCaseId){
+    public BasicInfoView getBasicInfo(long workCaseId) {
         log.info("getBasicInfo ::: workCaseId : {}", workCaseId);
         BasicInfo basicInfo = basicInfoDAO.findByWorkCaseId(workCaseId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
-        if(basicInfo == null){
+        if (basicInfo == null) {
             basicInfo = new BasicInfo();
         }
 
@@ -61,11 +61,11 @@ public class BasicInfoControl extends BusinessControl {
         return basicInfoView;
     }
 
-    public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId){
+    public CustomerEntity getCustomerEntityByWorkCaseId(long workCaseId) {
         CustomerEntity customerEntity;
         List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
-        for(Customer customer : customerList){
-            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){ // Customer Entity ; 1 = Individual ; 2 = Juristic
+        for (Customer customer : customerList) {
+            if (customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) { // Customer Entity ; 1 = Individual ; 2 = Juristic
                 customerEntity = customer.getCustomerEntity();
                 return customerEntity;
             }
@@ -74,15 +74,15 @@ public class BasicInfoControl extends BusinessControl {
         return customerEntity;
     }
 
-    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId, String userId){
+    public void saveBasicInfo(BasicInfoView basicInfoView, long workCaseId, String userId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = userDAO.findById(userId);
 
-        if(basicInfoView.getQualitative() == 0){
+        if (basicInfoView.getQualitative() == 0) {
             basicInfoView.setQualitative(2);
         }
 
-        if(basicInfoView.getApplyBA() == 0){
+        if (basicInfoView.getApplyBA() == 0) {
             basicInfoView.setBaPaymentMethod(new BAPaymentMethod());
         }
 
@@ -90,20 +90,20 @@ public class BasicInfoControl extends BusinessControl {
         basicInfoDAO.persist(basicInfo);
 
         List<OpenAccount> openAccountList = openAccountDAO.findByBasicInfoId(basicInfo.getId());
-        for(OpenAccount oa : openAccountList){
+        for (OpenAccount oa : openAccountList) {
             List<OpenAccPurpose> openAccPurposeList = openAccPurposeDAO.findByOpenAccountId(oa.getId());
             openAccPurposeDAO.delete(openAccPurposeList);
         }
         openAccountDAO.delete(openAccountList);
 
-        if(basicInfoView.getBasicInfoAccountViews().size() != 0){
-            for(BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()){
-                OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav,basicInfo);
+        if (basicInfoView.getBasicInfoAccountViews().size() != 0) {
+            for (BasicInfoAccountView biav : basicInfoView.getBasicInfoAccountViews()) {
+                OpenAccount openAccount = basicInfoAccountTransform.transformToModel(biav, basicInfo);
                 openAccountDAO.save(openAccount);
 
-                for (BasicInfoAccountPurposeView biapv : biav.getBasicInfoAccountPurposeView()){
-                    if(biapv.isSelected()){
-                        OpenAccPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv,openAccount);
+                for (BasicInfoAccountPurposeView biapv : biav.getBasicInfoAccountPurposeView()) {
+                    if (biapv.isSelected()) {
+                        OpenAccPurpose openAccPurpose = basicInfoAccPurposeTransform.transformToModel(biapv, openAccount);
                         openAccPurposeDAO.save(openAccPurpose);
                     }
                 }

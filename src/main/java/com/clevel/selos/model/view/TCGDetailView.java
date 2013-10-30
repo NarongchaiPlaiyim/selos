@@ -15,23 +15,24 @@ public class TCGDetailView implements Serializable {
     private BigDecimal appraisalAmount;
     private BigDecimal ltvValue;
     private int isProposeInThisRequest;
-    private String  proposeInThis;
+    private String proposeInThis;
 
 
-    private PotentialCollateral  potentialCollateral;
+    private PotentialCollateral potentialCollateral;
     private TCGCollateralType tcgCollateralType;
     private PotentialColToTCGCol potentialColToTCGCol;
 
 
-    public TCGDetailView(){}
+    public TCGDetailView() {
+    }
 
-    public void reset(){
-       this.appraisalAmount = new BigDecimal(0);
-       this.ltvValue = new BigDecimal(0);
-       this.isProposeInThisRequest = 0;
-       this.potentialCollateral = new PotentialCollateral();
-       this.tcgCollateralType = new TCGCollateralType();
-       this.potentialColToTCGCol = new PotentialColToTCGCol();
+    public void reset() {
+        this.appraisalAmount = new BigDecimal(0);
+        this.ltvValue = new BigDecimal(0);
+        this.isProposeInThisRequest = 0;
+        this.potentialCollateral = new PotentialCollateral();
+        this.tcgCollateralType = new TCGCollateralType();
+        this.potentialColToTCGCol = new PotentialColToTCGCol();
     }
 
 
@@ -93,10 +94,10 @@ public class TCGDetailView implements Serializable {
     }
 
     public String getProposeInThis() {
-        if(isProposeInThisRequest == 1){
-             proposeInThis = "Y";
-        }else if(isProposeInThisRequest == 0){
-             proposeInThis = "N";
+        if (isProposeInThisRequest == 1) {
+            proposeInThis = "Y";
+        } else if (isProposeInThisRequest == 0) {
+            proposeInThis = "N";
         }
         return proposeInThis;
     }

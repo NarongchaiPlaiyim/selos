@@ -8,13 +8,13 @@ import java.io.Serializable;
 
 public class SearchCustomerAccountModel implements Serializable {
 
-        private String reqId;
-        private String acronym;
-        private String productCode;
-        private String serverURL;
-        private String sessionId;
-        private String custNbr;
-        private String radSelectSearch;
+    private String reqId;
+    private String acronym;
+    private String productCode;
+    private String serverURL;
+    private String sessionId;
+    private String custNbr;
+    private String radSelectSearch;
 
 
     public String getSessionId() {
@@ -72,8 +72,6 @@ public class SearchCustomerAccountModel implements Serializable {
     public void setRadSelectSearch(String radSelectSearch) {
         this.radSelectSearch = radSelectSearch;
     }
-
-
 
 
     @Override

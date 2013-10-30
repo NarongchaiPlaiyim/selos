@@ -15,13 +15,13 @@ public class FacilityView implements Serializable {
     private BigDecimal requestAmount;
     private String productProgramName;
     private ProductProgram productProgram;
-    private CreditType creditType ;
+    private CreditType creditType;
 
-    public FacilityView(){
+    public FacilityView() {
 
     }
 
-    public void reset(){
+    public void reset() {
         this.id = 0;
         this.facilityName = "";
         this.requestAmount = new BigDecimal(0);

@@ -8,25 +8,25 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="wrk_customer_csi")
-public class CustomerCSI implements Serializable{
+@Table(name = "wrk_customer_csi")
+public class CustomerCSI implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_CUST_CSI_ID", sequenceName="SEQ_WRK_CUST_CSI_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUST_CSI_ID")
+    @SequenceGenerator(name = "SEQ_WRK_CUST_CSI_ID", sequenceName = "SEQ_WRK_CUST_CSI_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CUST_CSI_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     Customer customer;
 
     @OneToOne
-    @JoinColumn(name="warning_id")
+    @JoinColumn(name = "warning_id")
     WarningCode warningCode;
 
-    @Column(name="warning_date", length = 8)
+    @Column(name = "warning_date", length = 8)
     String warningDate;
 
-    @Column(name="matched_type", length = 1)
+    @Column(name = "matched_type", length = 1)
     String matchedType;
 
     public long getId() {

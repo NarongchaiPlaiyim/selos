@@ -2,9 +2,7 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.User;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class CustomerAcceptanceView implements Serializable {

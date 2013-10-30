@@ -9,18 +9,18 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoanTypeTransform{
+public class LoanTypeTransform {
     @Inject
     Logger log;
 
     @Inject
-    public LoanTypeTransform(){
+    public LoanTypeTransform() {
 
     }
 
-    public LoanTypeView getLoanTypeView(AccountType loanType){
+    public LoanTypeView getLoanTypeView(AccountType loanType) {
         LoanTypeView loanTypeView = new LoanTypeView();
-        if(loanType == null){
+        if (loanType == null) {
             return loanTypeView;
         }
         loanTypeView.setId(loanType.getId());
@@ -28,20 +28,20 @@ public class LoanTypeTransform{
         return loanTypeView;
     }
 
-    public List<LoanTypeView> getLoanTypeViews(List<AccountType> loanTypes){
+    public List<LoanTypeView> getLoanTypeViews(List<AccountType> loanTypes) {
         List<LoanTypeView> loanTypeViews = new ArrayList<LoanTypeView>();
-        if(loanTypes == null && loanTypes.isEmpty()){
+        if (loanTypes == null && loanTypes.isEmpty()) {
             return loanTypeViews;
         }
-        for(AccountType loanType : loanTypes){
+        for (AccountType loanType : loanTypes) {
             loanTypeViews.add(getLoanTypeView(loanType));
         }
         return loanTypeViews;
     }
 
-    public AccountType getLoanType(LoanTypeView loanTypeView){
+    public AccountType getLoanType(LoanTypeView loanTypeView) {
         AccountType loanType = new AccountType();
-        if(loanTypeView == null){
+        if (loanTypeView == null) {
             return loanType;
         }
         loanType.setId(loanTypeView.getId());

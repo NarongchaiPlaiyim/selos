@@ -29,10 +29,10 @@ public class PrescreenTransform extends Transform {
     PrescreenDAO prescreenDAO;
 
 
-    public Prescreen transformToModel(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen, User user){
+    public Prescreen transformToModel(PrescreenView prescreenView, WorkCasePrescreen workCasePrescreen, User user) {
         Prescreen prescreen = new Prescreen();
 
-        if(prescreenView.getId() != 0){
+        if (prescreenView.getId() != 0) {
             prescreen.setId(prescreenView.getId());
             prescreen.setCreateDate(prescreenView.getCreateDate());
             prescreen.setCreateBy(prescreenView.getCreateBy());
@@ -41,32 +41,32 @@ public class PrescreenTransform extends Transform {
             prescreen.setCreateBy(user);
         }
         prescreen.setWorkCasePrescreen(workCasePrescreen);
-        if(prescreenView.getProductGroup() != null && prescreenView.getProductGroup().getId() != 0){
+        if (prescreenView.getProductGroup() != null && prescreenView.getProductGroup().getId() != 0) {
             prescreen.setProductGroup(productGroupDAO.findById(prescreenView.getProductGroup().getId()));
         } else {
             prescreen.setProductGroup(null);
         }
         prescreen.setExpectedSubmitDate(prescreenView.getExpectedSubmitDate());
-        if(prescreenView.getBusinessLocation() != null && prescreenView.getBusinessLocation().getCode() != 0){
+        if (prescreenView.getBusinessLocation() != null && prescreenView.getBusinessLocation().getCode() != 0) {
             prescreen.setBusinessLocation(provinceDAO.findById(prescreenView.getBusinessLocation().getCode()));
         } else {
             prescreen.setBusinessLocation(null);
         }
         prescreen.setRegisterDate(prescreenView.getRegisterDate());
         prescreen.setReferredDate(prescreenView.getReferDate());
-        if(prescreenView.getReferredExperience() != null && prescreenView.getReferredExperience().getId() != 0){
+        if (prescreenView.getReferredExperience() != null && prescreenView.getReferredExperience().getId() != 0) {
             prescreen.setReferredExperience(referredExperienceDAO.findById(prescreenView.getReferredExperience().getId()));
         } else {
             prescreen.setReferredExperience(null);
         }
         prescreen.setRefinance(prescreenView.isRefinance());
-        if(prescreenView.getRefinanceBank() != null && prescreenView.getRefinanceBank().getCode() != 0){
+        if (prescreenView.getRefinanceBank() != null && prescreenView.getRefinanceBank().getCode() != 0) {
             prescreen.setRefinanceBank(bankDAO.findById(prescreenView.getRefinanceBank().getCode()));
         } else {
             prescreen.setRefinanceBank(null);
         }
         prescreen.setBorrowingType(prescreenView.getBorrowingType());
-        if(prescreenView.getBorrowingType() != null && prescreenView.getBorrowingType().getId() != 0){
+        if (prescreenView.getBorrowingType() != null && prescreenView.getBorrowingType().getId() != 0) {
             prescreen.setBorrowingType(borrowingTypeDAO.findById(prescreenView.getBorrowingType().getId()));
         } else {
             prescreen.setBorrowingType(null);
@@ -76,32 +76,32 @@ public class PrescreenTransform extends Transform {
         return prescreen;
     }
 
-    public PrescreenView transformToView(Prescreen prescreen){
+    public PrescreenView transformToView(Prescreen prescreen) {
         PrescreenView prescreenView = new PrescreenView();
 
         prescreenView.setId(prescreen.getId());
         prescreenView.setProductGroup(prescreen.getProductGroup());
-        if(prescreenView.getProductGroup() == null){
+        if (prescreenView.getProductGroup() == null) {
             prescreenView.setProductGroup(new ProductGroup());
         }
         prescreenView.setExpectedSubmitDate(prescreen.getExpectedSubmitDate());
         prescreenView.setBusinessLocation(prescreen.getBusinessLocation());
-        if(prescreenView.getBusinessLocation() == null){
+        if (prescreenView.getBusinessLocation() == null) {
             prescreenView.setBusinessLocation(new Province());
         }
         prescreenView.setRegisterDate(prescreen.getRegisterDate());
         prescreenView.setReferDate(prescreen.getReferredDate());
         prescreenView.setReferredExperience(prescreen.getReferredExperience());
-        if(prescreenView.getReferredExperience() == null){
+        if (prescreenView.getReferredExperience() == null) {
             prescreenView.setReferredExperience(new ReferredExperience());
         }
         prescreenView.setRefinance(prescreen.isRefinance());
         prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
-        if(prescreenView.getRefinanceBank() == null){
+        if (prescreenView.getRefinanceBank() == null) {
             prescreenView.setRefinanceBank(new Bank());
         }
         prescreenView.setBorrowingType(prescreen.getBorrowingType());
-        if(prescreenView.getBorrowingType() == null){
+        if (prescreenView.getBorrowingType() == null) {
             prescreenView.setBorrowingType(new BorrowingType());
         }
 
@@ -113,7 +113,7 @@ public class PrescreenTransform extends Transform {
         return prescreenView;
     }
 
-    public PrescreenResultView getPrescreenResultView(Prescreen prescreen){
+    public PrescreenResultView getPrescreenResultView(Prescreen prescreen) {
         PrescreenResultView prescreenResultView = new PrescreenResultView();
         prescreenResultView.setId(prescreen.getId());
         prescreenResultView.setBorrowingType(prescreen.getBorrowingType());
@@ -123,9 +123,9 @@ public class PrescreenTransform extends Transform {
         return prescreenResultView;
     }
 
-    public Prescreen getPrescreen(PrescreenResultView prescreenResultView, User user){
+    public Prescreen getPrescreen(PrescreenResultView prescreenResultView, User user) {
         Prescreen prescreen = null;
-        if(prescreenResultView.getId() != 0) {
+        if (prescreenResultView.getId() != 0) {
             prescreen = prescreenDAO.findById(prescreenResultView.getId());
             prescreen.setGroupExposure(prescreenResultView.getGroupExposure());
             prescreen.setGroupIncome(prescreenResultView.getGroupIncome());

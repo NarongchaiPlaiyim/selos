@@ -7,18 +7,18 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="wrk_open_account_purpose")
+@Table(name = "wrk_open_account_purpose")
 public class OpenAccPurpose implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_OPEN_ACC_PUR_ID", sequenceName="SEQ_WRK_OPEN_ACC_PUR_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_OPEN_ACC_PUR_ID")
+    @SequenceGenerator(name = "SEQ_WRK_OPEN_ACC_PUR_ID", sequenceName = "SEQ_WRK_OPEN_ACC_PUR_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_OPEN_ACC_PUR_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="open_account_id")
+    @JoinColumn(name = "open_account_id")
     private OpenAccount openAccount;
 
-    @Column(name="purpose_name")
+    @Column(name = "purpose_name")
     private String purposeName;
 
     public long getId() {

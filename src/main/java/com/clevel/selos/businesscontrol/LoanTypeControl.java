@@ -18,7 +18,7 @@ public class LoanTypeControl extends BusinessControl {
     @Inject
     AccountTypeDAO loanTypeDAO;
 
-    public List<LoanTypeView> getListLoanTypeByCus(int customerEntity){
+    public List<LoanTypeView> getListLoanTypeByCus(int customerEntity) {
         List<AccountType> loanTypes = loanTypeDAO.getListLoanTypeByCusEntity(customerEntity);
         List<LoanTypeView> loanTypeViews = loanTypeTransform.getLoanTypeViews(loanTypes);
         return loanTypeViews;

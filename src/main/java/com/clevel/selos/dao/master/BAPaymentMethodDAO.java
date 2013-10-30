@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BAPaymentMethodDAO extends GenericDAO<BAPaymentMethod,Integer> {
+public class BAPaymentMethodDAO extends GenericDAO<BAPaymentMethod, Integer> {
     @Inject
     private Logger log;
 

@@ -5,8 +5,8 @@ import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SubjectEnquiryModel  implements Serializable {
-    
+public class SubjectEnquiryModel implements Serializable {
+
     private String idtype;
     private String idnumber;
     private String issuecountry;
@@ -35,7 +35,6 @@ public class SubjectEnquiryModel  implements Serializable {
     public ArrayList<SubjectIdDisputeModel> getDispute() {
         return dispute;
     }
-    
-    
-    
+
+
 }

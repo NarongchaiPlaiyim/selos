@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class CustomerRelationDAO extends GenericDAO<CustomerRelation,Integer> {
+public class CustomerRelationDAO extends GenericDAO<CustomerRelation, Integer> {
     @Inject
     private Logger log;
 
     @Inject
-    public CustomerRelationDAO(){
+    public CustomerRelationDAO() {
 
     }
 }

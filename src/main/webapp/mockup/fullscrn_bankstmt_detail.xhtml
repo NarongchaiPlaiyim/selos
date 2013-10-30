@@ -6,410 +6,415 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title>SE-LOS : Template</title>
-        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
-        <script type="text/javascript" src="resources/js/superfish.js"></script>
-    </h:head>
-    <h:body>
-        <div id="main_container">
-            <!-- Start Header Logo -->
-            <ui:include src="resources/header_logo.xhtml"/>
-            <!-- End Header Logo -->
-            <!-- Start Header Detail -->
-            <ui:include src="resources/header_detail_fullapp.xhtml"/>
-            <!-- End Header Detail -->
-            <!-- Start Menu -->
-            <ui:include src="resources/menubar_fullapp.xhtml"/>
-            <!-- End Menu -->
-            <div id="content_container">
-                <div id="content_name">Bank Statement Detail</div>
-                <div id="content">
-                    <table id="content_form">
-                        <tr>
-                            <td colspan="100%" class="right"
-                                style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39 <span
-                                    style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%"><p:separator/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 150px;">การนับรวมรายได้:</td>
-                            <td class="left" colspan="3"><input type="checkbox" id="incomeinclude"/> บัญชีนี้ไม่นำมานับรวมรายได้</td>
-                        </tr>
-                        <tr>
-                            <td class="title">Bank Account:</td>
-                            <td class="left" colspan="3"><select class="largest_m">
-                                <option>ธ. ทหารไทย จำกัด (มหาชน) - [ TMB ]</option>
-                                <option value="12">ธ. พัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย - [ SME BANK ]</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Branch:</td>
-                            <td class="left" colspan="3"><input type="text" class="larger" id="branch"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 150px">Account Type:</td>
-                            <td class="left" style="width: 200px"><select class="larger">
-                                <option value="1">กระแสรายวัน</option>
-                                <option value="2">ออมทรัพย์</option>
-                                <option value="3">อื่นๆ</option>
-                            </select></td>
-                            <td class="title" style="width: 150px">Others :</td>
-                            <td class="left"><select class="larger">
-                                <option>-- โปรดระบุ --</option>
-                                <option value="1">TD</option>
-                                <option value="2">สลากออมสิน</option>
-                                <option value="3">อื่นๆ</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Account No.:</td>
-                            <td class="left" colspan="3"><input type="text" class="larger" id="accountNo"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Account Name:</td>
-                            <td class="left" colspan="3"><input type="text" class="larger" id="accountName"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title">Account Status:</td>
-                            <td class="left" colspan="3"><select>
-                                <option>Normal</option>
-                            </select></td>
-                        </tr>
-                        <tr>
-                            <td class="title">ลักษณะบัญชี:</td>
-                            <td class="left" colspan="3"><input type="radio" name="account"/> บัญชีผู้กู้ <input type="radio" name="account"/> บัญชี Main Director <input type="radio" name="account"/> บัญชีผู้เกี่ยวข้อง </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" style="line-height: 15px;"><table style="padding: 0px; border-spacing: 0px;">
-                                <tr>
-                                    <td class="right title" style="width: 945px;line-height: 15px;">หน่วย:บาท</td>
-                                    <td style="widht:500px;line-height: 15px;"></td>
-                                </tr>
-                            </table></td>
+<h:head>
+    <title>SE-LOS : Template</title>
+    <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+    <script type="text/javascript" src="resources/js/superfish.js"></script>
+</h:head>
+<h:body>
+<div id="main_container">
+<!-- Start Header Logo -->
+<ui:include src="resources/header_logo.xhtml"/>
+<!-- End Header Logo -->
+<!-- Start Header Detail -->
+<ui:include src="resources/header_detail_fullapp.xhtml"/>
+<!-- End Header Detail -->
+<!-- Start Menu -->
+<ui:include src="resources/menubar_fullapp.xhtml"/>
+<!-- End Menu -->
+<div id="content_container">
+<div id="content_name">Bank Statement Detail</div>
+<div id="content">
+<table id="content_form">
+<tr>
+    <td colspan="100%" class="right"
+        style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39 <span
+            style="cursor: pointer;font-style: oblique">[View Track Change]</span></td>
+</tr>
+<tr>
+    <td colspan="100%"><p:separator/></td>
+</tr>
+<tr>
+    <td class="title" style="width: 150px;">การนับรวมรายได้:</td>
+    <td class="left" colspan="3"><input type="checkbox" id="incomeinclude"/> บัญชีนี้ไม่นำมานับรวมรายได้</td>
+</tr>
+<tr>
+    <td class="title">Bank Account:</td>
+    <td class="left" colspan="3"><select class="largest_m">
+        <option>ธ. ทหารไทย จำกัด (มหาชน) - [ TMB ]</option>
+        <option value="12">ธ. พัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย - [ SME BANK ]</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">Branch:</td>
+    <td class="left" colspan="3"><input type="text" class="larger" id="branch"/></td>
+</tr>
+<tr>
+    <td class="title" style="width: 150px">Account Type:</td>
+    <td class="left" style="width: 200px"><select class="larger">
+        <option value="1">กระแสรายวัน</option>
+        <option value="2">ออมทรัพย์</option>
+        <option value="3">อื่นๆ</option>
+    </select></td>
+    <td class="title" style="width: 150px">Others :</td>
+    <td class="left"><select class="larger">
+        <option>-- โปรดระบุ --</option>
+        <option value="1">TD</option>
+        <option value="2">สลากออมสิน</option>
+        <option value="3">อื่นๆ</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">Account No.:</td>
+    <td class="left" colspan="3"><input type="text" class="larger" id="accountNo"/></td>
+</tr>
+<tr>
+    <td class="title">Account Name:</td>
+    <td class="left" colspan="3"><input type="text" class="larger" id="accountName"/></td>
+</tr>
+<tr>
+    <td class="title">Account Status:</td>
+    <td class="left" colspan="3"><select>
+        <option>Normal</option>
+    </select></td>
+</tr>
+<tr>
+    <td class="title">ลักษณะบัญชี:</td>
+    <td class="left" colspan="3"><input type="radio" name="account"/> บัญชีผู้กู้ <input type="radio"
+                                                                                         name="account"/> บัญชี Main Director
+        <input type="radio" name="account"/> บัญชีผู้เกี่ยวข้อง
+    </td>
+</tr>
+<tr>
+    <td colspan="4" style="line-height: 15px;">
+        <table style="padding: 0px; border-spacing: 0px;">
+            <tr>
+                <td class="right title" style="width: 945px;line-height: 15px;">หน่วย:บาท</td>
+                <td style="widht:500px;line-height: 15px;"></td>
+            </tr>
+        </table>
+    </td>
 
-                        </tr>
-                        <tr>
-                            <td colspan="4">
-                                <table class="table_content">
-                                    <tr>
-                                        <th></th>
-                                        <th>Apr 2555</th>
-                                        <th>May 2555</th>
-                                        <th>Jun 2555</th>
-                                        <th>Jul 2555</th>
-                                        <th>Aug 2555</th>
-                                        <th>Sep 2555</th>
-                                    </tr>
-                                    <tr>
-                                        <td>วงเงินเบิกเกินบัญชี</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดเงินฝาก (Gross)</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนครั้งที่ฝาก</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="6"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="22"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="24"/></td>
-                                        <td><input type="text" class="small right" value="15"/></td>
-                                        <td><input type="text" class="small right" value="10"/></td>
-                                        <td><input type="text" class="small right" value="13"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>หัก-รายการตามหลักเกณฑ์ - BDM</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>หัก-รายการตามหลักเกณฑ์ - UW</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดเงินฝาก (Net) - BDM</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดเงินฝาก (Net) - UW</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนเท่าของยอดฝากเฉลี่ย - BDM</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนเท่าของยอดฝากเฉลี่ย- UW</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                        <td><input type="text" class="small right" value="#.##"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดเงินถอน - UW</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนครั้งที่ถอน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="6"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="22"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="24"/></td>
-                                        <td><input type="text" class="small right" value="15"/></td>
-                                        <td><input type="text" class="small right" value="10"/></td>
-                                        <td><input type="text" class="small right" value="13"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>วันที่ยอดคงเหลือสูงสุด</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดคงเหลือสูงสุด ณ สิ้นวัน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>วันที่ยอดคงเหลือต่ำสุด</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                        <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดคงเหลือต่ำสุด ณ สิ้นวัน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ยอดคงเหลือ ณ สิ้นเดือน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="-#,###,###.00"/></td>
-                                        <td><input type="text" class="small right" value="#,###,###.00"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" style="background-color: white;"><p:spacer width="1" height="5px"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนเช็คคืน (ครั้ง)</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนเงินของเช็คการค้าคืน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                        <td><input type="text" class="small right" value="0.0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนครั้งที่เกินวงเงิน O/D</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>จำนวนวันสูงสุดที่เกินวงเงิน</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Swing (%)</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Utilization (%)</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="7" style="background-color: white;"><p:spacer width="1" height="5px"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gross Inflow per limit</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                        <td><input type="text" class="small right" value="##.##"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Total Transactions</td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                        <td><input type="text" class="small right" value="0"/></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="100%"><p:spacer width="2" height="1"/></td>
-                        </tr>
+</tr>
+<tr>
+<td colspan="4">
+<table class="table_content">
+<tr>
+    <th></th>
+    <th>Apr 2555</th>
+    <th>May 2555</th>
+    <th>Jun 2555</th>
+    <th>Jul 2555</th>
+    <th>Aug 2555</th>
+    <th>Sep 2555</th>
+</tr>
+<tr>
+    <td>วงเงินเบิกเกินบัญชี</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>ยอดเงินฝาก (Gross)</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>จำนวนครั้งที่ฝาก</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="6"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="22"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="24"/></td>
+    <td><input type="text" class="small right" value="15"/></td>
+    <td><input type="text" class="small right" value="10"/></td>
+    <td><input type="text" class="small right" value="13"/></td>
+</tr>
+<tr>
+    <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
+</tr>
+<tr>
+    <td>หัก-รายการตามหลักเกณฑ์ - BDM</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+</tr>
+<tr>
+    <td>หัก-รายการตามหลักเกณฑ์ - UW</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+</tr>
+<tr>
+    <td>ยอดเงินฝาก (Net) - BDM</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>ยอดเงินฝาก (Net) - UW</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>จำนวนเท่าของยอดฝากเฉลี่ย - BDM</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+</tr>
+<tr>
+    <td>จำนวนเท่าของยอดฝากเฉลี่ย- UW</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+    <td><input type="text" class="small right" value="#.##"/></td>
+</tr>
+<tr>
+    <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
+</tr>
+<tr>
+    <td>ยอดเงินถอน - UW</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>จำนวนครั้งที่ถอน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="6"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="22"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="24"/></td>
+    <td><input type="text" class="small right" value="15"/></td>
+    <td><input type="text" class="small right" value="10"/></td>
+    <td><input type="text" class="small right" value="13"/></td>
+</tr>
+<tr>
+    <td colspan="7" style="background-color: white;"><p:spacer width="1" height="1"/></td>
+</tr>
+<tr>
+    <td>วันที่ยอดคงเหลือสูงสุด</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+</tr>
+<tr>
+    <td>ยอดคงเหลือสูงสุด ณ สิ้นวัน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>วันที่ยอดคงเหลือต่ำสุด</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+    <td><input type="text" class="small right" value="DD/MM/YYYY"/></td>
+</tr>
+<tr>
+    <td>ยอดคงเหลือต่ำสุด ณ สิ้นวัน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td>ยอดคงเหลือ ณ สิ้นเดือน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="-#,###,###.00"/></td>
+    <td><input type="text" class="small right" value="#,###,###.00"/></td>
+</tr>
+<tr>
+    <td colspan="7" style="background-color: white;"><p:spacer width="1" height="5px"/></td>
+</tr>
+<tr>
+    <td>จำนวนเช็คคืน (ครั้ง)</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+</tr>
+<tr>
+    <td>จำนวนเงินของเช็คการค้าคืน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+    <td><input type="text" class="small right" value="0.0"/></td>
+</tr>
+<tr>
+    <td>จำนวนครั้งที่เกินวงเงิน O/D</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+</tr>
+<tr>
+    <td>จำนวนวันสูงสุดที่เกินวงเงิน</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+</tr>
+<tr>
+    <td>Swing (%)</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+</tr>
+<tr>
+    <td>Utilization (%)</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+</tr>
+<tr>
+    <td colspan="7" style="background-color: white;"><p:spacer width="1" height="5px"/></td>
+</tr>
+<tr>
+    <td>Gross Inflow per limit</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+    <td><input type="text" class="small right" value="##.##"/></td>
+</tr>
+<tr>
+    <td>Total Transactions</td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td style="background-color: #cccccc"><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+    <td><input type="text" class="small right" value="0"/></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+    <td colspan="100%"><p:spacer width="2" height="1"/></td>
+</tr>
 
-                        <tr>
-                            <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Gross):</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgDebit"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Net) BDM:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgNetBDM"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Net) UW:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgNetUW"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">ยอดเงินถอนเฉลี่ยต่อเดือน:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgCredit"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">ค่า Swing เฉลี่ย (%):</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AbgSwing"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">ค่า Utilization เฉลี่ย (%):</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgUtilize"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">Avg Gross Inflow per limit:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="AvgGrossInflowLimit"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">จำนวนเช็คคืน:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="noReturnCheque"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">จำนวนเงินรวมของเช็คการค้าคืน:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="amountReturnCheque"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">จำนวนครั้งที่เกินวงเงิน O/D:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="noOverODLimit"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">จำนวนวันสูงสุดที่เกินวงเงิน:</td>
-                            <td class="left" colspan="3"><input type="text" class="largest" id="noDaysOverODLimit"/></td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width:200px">หมายเหตุ:</td>
-                            <td class="left" colspan="3"><textarea id="Remark" style="width: 700px" maxlength="500" rows="5"/></td>
-                        </tr>
+<tr>
+    <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Gross):</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgDebit"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Net) BDM:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgNetBDM"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">ยอดเงินฝากเฉลี่ยต่อเดือน (Net) UW:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgNetUW"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">ยอดเงินถอนเฉลี่ยต่อเดือน:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgCredit"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">ค่า Swing เฉลี่ย (%):</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AbgSwing"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">ค่า Utilization เฉลี่ย (%):</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgUtilize"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">Avg Gross Inflow per limit:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="AvgGrossInflowLimit"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">จำนวนเช็คคืน:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="noReturnCheque"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">จำนวนเงินรวมของเช็คการค้าคืน:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="amountReturnCheque"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">จำนวนครั้งที่เกินวงเงิน O/D:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="noOverODLimit"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">จำนวนวันสูงสุดที่เกินวงเงิน:</td>
+    <td class="left" colspan="3"><input type="text" class="largest" id="noDaysOverODLimit"/></td>
+</tr>
+<tr>
+    <td class="title" style="width:200px">หมายเหตุ:</td>
+    <td class="left" colspan="3"><textarea id="Remark" style="width: 700px" maxlength="500" rows="5"/></td>
+</tr>
 
-                        <tr>
-                            <td colspan="100%">
-                                <div class="separate"><!-- --></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="center" colspan="100%">
-                                <p:commandButton value="Save" styleClass="small"/>
-                                <p:commandButton value="Cancel" styleClass="small"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="bottom_line"></div>
-            </div>
-            <div class="clear"></div>
-            <!-- Start Footer -->
-            <ui:include src="resources/footer.xhtml"/>
-            <!-- End Footer -->
-        </div>
-    </h:body>
+<tr>
+    <td colspan="100%">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+<tr>
+    <td class="center" colspan="100%">
+        <p:commandButton value="Save" styleClass="small"/>
+        <p:commandButton value="Cancel" styleClass="small"/>
+    </td>
+</tr>
+</table>
+</div>
+<div class="bottom_line"></div>
+</div>
+<div class="clear"></div>
+<!-- Start Footer -->
+<ui:include src="resources/footer.xhtml"/>
+<!-- End Footer -->
+</div>
+</h:body>
 </f:view>
 </html>

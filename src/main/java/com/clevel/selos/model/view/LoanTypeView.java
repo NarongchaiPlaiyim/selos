@@ -10,11 +10,11 @@ public class LoanTypeView implements Serializable {
     private int id;
     private String name;
 
-    public LoanTypeView(){
+    public LoanTypeView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.id = 0;
         this.name = "";
     }

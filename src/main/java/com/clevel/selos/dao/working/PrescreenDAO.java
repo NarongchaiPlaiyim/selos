@@ -14,24 +14,24 @@ public class PrescreenDAO extends GenericDAO<Prescreen, Long> {
     private Logger log;
 
     @Inject
-    public PrescreenDAO(){
+    public PrescreenDAO() {
 
     }
 
-    public Prescreen findByWorkCasePrescreen(WorkCasePrescreen workCasePrescreen){
+    public Prescreen findByWorkCasePrescreen(WorkCasePrescreen workCasePrescreen) {
         log.info("findByWorkCasePrescreen : {}", workCasePrescreen);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen", workCasePrescreen));
-        Prescreen prescreen = (Prescreen)criteria.uniqueResult();
+        Prescreen prescreen = (Prescreen) criteria.uniqueResult();
 
         return prescreen;
     }
 
-    public Prescreen findByWorkCasePrescreenId(long workCasePrescreenId){
+    public Prescreen findByWorkCasePrescreenId(long workCasePrescreenId) {
         log.info("findByWorkCasePrescreen ::: workCasePreScreenId : {}", workCasePrescreenId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
-        Prescreen prescreen = (Prescreen)criteria.uniqueResult();
+        Prescreen prescreen = (Prescreen) criteria.uniqueResult();
 
         return prescreen;
     }

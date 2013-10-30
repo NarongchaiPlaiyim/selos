@@ -14,34 +14,34 @@ public class CustomerDetail2 implements Serializable {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="app_ref_number")
+    @JoinColumn(name = "app_ref_number")
     private AppInProcess2 appInProcess2;
 
-    @Column(name="citizen_id", length=25)
+    @Column(name = "citizen_id", length = 25)
     private String citizenId;
 
-    @Column(name="title", length=3)
+    @Column(name = "title", length = 3)
     private String title;
 
-    @Column(name="firstname_th", length=25)
+    @Column(name = "firstname_th", length = 25)
     private String firstNameTh;
 
-    @Column(name="lastname_th", length=30)
+    @Column(name = "lastname_th", length = 30)
     private String lastNameTh;
 
-    @Column(name="borrower_order", length=5)
+    @Column(name = "borrower_order", length = 5)
     private String borrowerOrder;
 
-    @Column(name="spouse_citizen_id", length=25)
+    @Column(name = "spouse_citizen_id", length = 25)
     private String spouseCitizenId;
 
-    @Column(name="spouse_firstname_th", length=25)
+    @Column(name = "spouse_firstname_th", length = 25)
     private String spouseFirstNameTh;
 
-    @Column(name="spouse_lastname_th", length=30)
+    @Column(name = "spouse_lastname_th", length = 30)
     private String spouseLastNameTh;
 
-    @Column(name="is_spouse_coapplicant", length=1)
+    @Column(name = "is_spouse_coapplicant", length = 1)
     private String spouseCoApplicant;
 
     public CustomerDetail2() {

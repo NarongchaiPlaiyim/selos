@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankStatement5DAO extends GenericDAO<BankStatement5,Long> {
+public class BankStatement5DAO extends GenericDAO<BankStatement5, Long> {
     @Inject
     private Logger log;
 
@@ -19,16 +19,16 @@ public class BankStatement5DAO extends GenericDAO<BankStatement5,Long> {
     public BankStatement5DAO() {
     }
 
-    public BankStatement5 getByAccountNumber(String accountNumber){
-        log.debug("getByAccountNumber. (accountNumber: {})",accountNumber);
+    public BankStatement5 getByAccountNumber(String accountNumber) {
+        log.debug("getByAccountNumber. (accountNumber: {})", accountNumber);
         BankStatement5 bankStatement = null;
         List<BankStatement5> bankStatementList = new ArrayList<BankStatement5>();
-        if(!Util.isEmpty(accountNumber)){
+        if (!Util.isEmpty(accountNumber)) {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("accountNumber", accountNumber));
             bankStatementList = criteria.list();
 
-            if(bankStatementList!=null && bankStatementList.size()>0){
+            if (bankStatementList != null && bankStatementList.size() > 0) {
                 bankStatement = new BankStatement5();
                 bankStatement = bankStatementList.get(0);
 

@@ -49,25 +49,25 @@ public class AppInProcessService implements Serializable {
     Message exceptionMsg;
 
     @Inject
-    public AppInProcessService(){
+    public AppInProcessService() {
 
     }
 
-    public AppInProcessResult getAppInProcessData(List<String> citizenIdList){
-        log.debug("getAppInProcessData (citizenIdList : {})",citizenIdList);
+    public AppInProcessResult getAppInProcessData(List<String> citizenIdList) {
+        log.debug("getAppInProcessData (citizenIdList : {})", citizenIdList);
         AppInProcessResult appInProcessResult = new AppInProcessResult();
 
         //check which table is current
         SystemParameter systemParameter = systemParameterDAO.findByParameterName(sysParam);
 
-        if(systemParameter!=null){
+        if (systemParameter != null) {
             String value = systemParameter.getValue();
 
-            if(value.equalsIgnoreCase("1")){
+            if (value.equalsIgnoreCase("1")) {
                 //get from table 1
                 List<CustomerDetail1> customerDetail1List = customerDetail1DAO.getListCustomerByCitizenId(citizenIdList);
                 List<AppInProcess> appInProcessList = getAppInProcessList(customerDetail1List, null);
-                if(appInProcessList!=null && appInProcessList.size()>0){
+                if (appInProcessList != null && appInProcessList.size() > 0) {
                     appInProcessResult.setActionResult(ActionResult.SUCCESS);
                     appInProcessResult.setAppInProcessList(appInProcessList);
                 } else {
@@ -75,11 +75,11 @@ public class AppInProcessService implements Serializable {
                     appInProcessResult.setReason(exceptionMsg.get(ExceptionMapping.RLOS_DATA_NOT_FOUND));
                     appInProcessResult.setAppInProcessList(new ArrayList<AppInProcess>());
                 }
-            } else if(value.equalsIgnoreCase("2")){
+            } else if (value.equalsIgnoreCase("2")) {
                 //get from table 2
                 List<CustomerDetail2> customerDetail2List = customerDetail2DAO.getListCustomerByCitizenId(citizenIdList);
                 List<AppInProcess> appInProcessList = getAppInProcessList(null, customerDetail2List);
-                if(appInProcessList!=null && appInProcessList.size()>0){
+                if (appInProcessList != null && appInProcessList.size() > 0) {
                     appInProcessResult.setActionResult(ActionResult.SUCCESS);
                     appInProcessResult.setAppInProcessList(appInProcessList);
                 } else {
@@ -101,65 +101,65 @@ public class AppInProcessService implements Serializable {
         return appInProcessResult;
     }
 
-    private List<AppInProcess> getAppInProcessList(List<CustomerDetail1> customerDetail1List, List<CustomerDetail2> customerDetail2List){
+    private List<AppInProcess> getAppInProcessList(List<CustomerDetail1> customerDetail1List, List<CustomerDetail2> customerDetail2List) {
         List<AppInProcess> appInProcessList = new ArrayList<AppInProcess>();
 
-        if(customerDetail1List!=null && customerDetail1List.size()>0){
-            Map<String,AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
-            for(CustomerDetail1 customerDetail1 : customerDetail1List){
-                if(customerDetail1.getAppInProcess1()!=null && !Util.isEmpty(customerDetail1.getAppInProcess1().getAppRefNumber())){
-                    if(appInProcessHashMap.containsKey(customerDetail1.getAppInProcess1().getAppRefNumber())){
+        if (customerDetail1List != null && customerDetail1List.size() > 0) {
+            Map<String, AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
+            for (CustomerDetail1 customerDetail1 : customerDetail1List) {
+                if (customerDetail1.getAppInProcess1() != null && !Util.isEmpty(customerDetail1.getAppInProcess1().getAppRefNumber())) {
+                    if (appInProcessHashMap.containsKey(customerDetail1.getAppInProcess1().getAppRefNumber())) {
                         //get app in process for add new cus detail
                         AppInProcess appInProcess = appInProcessHashMap.get(customerDetail1.getAppInProcess1().getAppRefNumber());
                         //get customer detail
                         List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
-                        customerDetailList.add(transformCustomerDetail(customerDetail1,null));
+                        customerDetailList.add(transformCustomerDetail(customerDetail1, null));
                         //add new cus detail to list
                         appInProcess.setCustomerDetailList(customerDetailList);
                         //put app in process back to map
-                        appInProcessHashMap.put(customerDetail1.getAppInProcess1().getAppRefNumber(),appInProcess);
+                        appInProcessHashMap.put(customerDetail1.getAppInProcess1().getAppRefNumber(), appInProcess);
                     } else {
                         //add new app in process into map
-                        AppInProcess appInProcess = transformAppInProcess(customerDetail1,null);
+                        AppInProcess appInProcess = transformAppInProcess(customerDetail1, null);
                         //put app in process into map
-                        appInProcessHashMap.put(customerDetail1.getAppInProcess1().getAppRefNumber(),appInProcess);
+                        appInProcessHashMap.put(customerDetail1.getAppInProcess1().getAppRefNumber(), appInProcess);
                     }
                 }
             }
 
-            if(appInProcessHashMap!=null && appInProcessHashMap.size()>0){
+            if (appInProcessHashMap != null && appInProcessHashMap.size() > 0) {
                 //set app in process into return list
-                for (String key: appInProcessHashMap.keySet()) {
+                for (String key : appInProcessHashMap.keySet()) {
                     AppInProcess appInProcess = appInProcessHashMap.get(key);
                     appInProcessList.add(appInProcess);
                 }
             }
-        } else if(customerDetail2List!=null && customerDetail2List.size()>0){
-            Map<String,AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
-            for(CustomerDetail2 customerDetail2 : customerDetail2List){
-                if(customerDetail2.getAppInProcess2()!=null && !Util.isEmpty(customerDetail2.getAppInProcess2().getAppRefNumber())){
-                    if(appInProcessHashMap.containsKey(customerDetail2.getAppInProcess2().getAppRefNumber())){
+        } else if (customerDetail2List != null && customerDetail2List.size() > 0) {
+            Map<String, AppInProcess> appInProcessHashMap = new HashMap<String, AppInProcess>(); //(appRefNumber, appInProcess)
+            for (CustomerDetail2 customerDetail2 : customerDetail2List) {
+                if (customerDetail2.getAppInProcess2() != null && !Util.isEmpty(customerDetail2.getAppInProcess2().getAppRefNumber())) {
+                    if (appInProcessHashMap.containsKey(customerDetail2.getAppInProcess2().getAppRefNumber())) {
                         //get app in process for add new cus detail
                         AppInProcess appInProcess = appInProcessHashMap.get(customerDetail2.getAppInProcess2().getAppRefNumber());
                         //get customer detail
                         List<CustomerDetail> customerDetailList = appInProcess.getCustomerDetailList();
-                        customerDetailList.add(transformCustomerDetail(null,customerDetail2));
+                        customerDetailList.add(transformCustomerDetail(null, customerDetail2));
                         //add new cus detail to list
                         appInProcess.setCustomerDetailList(customerDetailList);
                         //put app in process back to map
-                        appInProcessHashMap.put(customerDetail2.getAppInProcess2().getAppRefNumber(),appInProcess);
+                        appInProcessHashMap.put(customerDetail2.getAppInProcess2().getAppRefNumber(), appInProcess);
                     } else {
                         //add new app in process into map
-                        AppInProcess appInProcess = transformAppInProcess(null,customerDetail2);
+                        AppInProcess appInProcess = transformAppInProcess(null, customerDetail2);
                         //put app in process into map
-                        appInProcessHashMap.put(customerDetail2.getAppInProcess2().getAppRefNumber(),appInProcess);
+                        appInProcessHashMap.put(customerDetail2.getAppInProcess2().getAppRefNumber(), appInProcess);
                     }
                 }
             }
 
-            if(appInProcessHashMap!=null && appInProcessHashMap.size()>0){
+            if (appInProcessHashMap != null && appInProcessHashMap.size() > 0) {
                 //set app in process into return list
-                for (String key: appInProcessHashMap.keySet()) {
+                for (String key : appInProcessHashMap.keySet()) {
                     AppInProcess appInProcess = appInProcessHashMap.get(key);
                     appInProcessList.add(appInProcess);
                 }
@@ -169,9 +169,9 @@ public class AppInProcessService implements Serializable {
         return appInProcessList;
     }
 
-    private CustomerDetail transformCustomerDetail(CustomerDetail1 customerDetail1, CustomerDetail2 customerDetail2){
+    private CustomerDetail transformCustomerDetail(CustomerDetail1 customerDetail1, CustomerDetail2 customerDetail2) {
         CustomerDetail customerDetail = new CustomerDetail();
-        if(customerDetail1!=null){
+        if (customerDetail1 != null) {
             customerDetail.setCitizenId(customerDetail1.getCitizenId());
             customerDetail.setTitle(customerDetail1.getTitle());
             customerDetail.setFirstNameTh(customerDetail1.getFirstNameTh());
@@ -181,7 +181,7 @@ public class AppInProcessService implements Serializable {
             customerDetail.setSpouseFirstNameTh(customerDetail1.getSpouseFirstNameTh());
             customerDetail.setSpouseLastNameTh(customerDetail1.getSpouseLastNameTh());
             customerDetail.setSpouseCoApplicant(customerDetail1.getSpouseCoApplicant());
-        } else if(customerDetail2!=null){
+        } else if (customerDetail2 != null) {
             customerDetail.setCitizenId(customerDetail2.getCitizenId());
             customerDetail.setTitle(customerDetail2.getTitle());
             customerDetail.setFirstNameTh(customerDetail2.getFirstNameTh());
@@ -195,17 +195,17 @@ public class AppInProcessService implements Serializable {
         return customerDetail;
     }
 
-    private AppInProcess transformAppInProcess(CustomerDetail1 customerDetail1, CustomerDetail2 customerDetail2){
+    private AppInProcess transformAppInProcess(CustomerDetail1 customerDetail1, CustomerDetail2 customerDetail2) {
         AppInProcess appInProcess = new AppInProcess();
         List<CustomerDetail> customerDetailList = new ArrayList<CustomerDetail>();
 
-        if(customerDetail1!=null){
+        if (customerDetail1 != null) {
             List<CreditDetail> creditDetails = new ArrayList<CreditDetail>();
-            CustomerDetail customerDetail = transformCustomerDetail(customerDetail1,null);
+            CustomerDetail customerDetail = transformCustomerDetail(customerDetail1, null);
             customerDetailList.add(customerDetail);
             AppInProcess1 appInProcessEntity = customerDetail1.getAppInProcess1();
             appInProcess.setAppNumber(appInProcessEntity.getAppRefNumber());
-            if(!Util.isEmpty(appInProcessEntity.getProductCode()) || !Util.isEmpty(appInProcessEntity.getProjectCode())) {
+            if (!Util.isEmpty(appInProcessEntity.getProductCode()) || !Util.isEmpty(appInProcessEntity.getProjectCode())) {
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode());
@@ -217,7 +217,7 @@ public class AppInProcessService implements Serializable {
                 creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment());
                 creditDetails.add(creditDetail);
             }
-            if(!Util.isEmpty(appInProcessEntity.getProductCode2()) || !Util.isEmpty(appInProcessEntity.getProjectCode2())) {
+            if (!Util.isEmpty(appInProcessEntity.getProductCode2()) || !Util.isEmpty(appInProcessEntity.getProjectCode2())) {
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode2());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode2());
@@ -232,13 +232,13 @@ public class AppInProcessService implements Serializable {
             appInProcess.setCreditDetailList(creditDetails);
             appInProcess.setStatus(appInProcessEntity.getStatus());
             appInProcess.setCustomerDetailList(customerDetailList);
-        } else if(customerDetail2!=null){
+        } else if (customerDetail2 != null) {
             List<CreditDetail> creditDetails = new ArrayList<CreditDetail>();
-            CustomerDetail customerDetail = transformCustomerDetail(null,customerDetail2);
+            CustomerDetail customerDetail = transformCustomerDetail(null, customerDetail2);
             customerDetailList.add(customerDetail);
             AppInProcess2 appInProcessEntity = customerDetail2.getAppInProcess2();
             appInProcess.setAppNumber(appInProcessEntity.getAppRefNumber());
-            if(appInProcessEntity.getProductCode()!=null && appInProcessEntity.getProjectCode()!=null) { //todo: wait for confirm codition
+            if (appInProcessEntity.getProductCode() != null && appInProcessEntity.getProjectCode() != null) { //todo: wait for confirm codition
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode());
@@ -250,7 +250,7 @@ public class AppInProcessService implements Serializable {
                 creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment());
                 creditDetails.add(creditDetail);
             }
-            if(appInProcessEntity.getProductCode2()!=null && appInProcessEntity.getProjectCode2()!=null) { //todo: wait for confirm codition
+            if (appInProcessEntity.getProductCode2() != null && appInProcessEntity.getProjectCode2() != null) { //todo: wait for confirm codition
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode2());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode2());

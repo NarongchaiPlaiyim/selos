@@ -19,7 +19,7 @@ public class JSFRedirectionStrategy implements InvalidSessionStrategy {
     @Override
     public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         boolean ajaxRedirect = "partial/ajax".equals(request.getHeader(FACES_REQUEST_HEADER));
-        if(ajaxRedirect) {
+        if (ajaxRedirect) {
             String contextPath = request.getContextPath();
             String redirectUrl = contextPath + invalidSessionUrl;
             log.debug("Session expired due to ajax request, redirecting to '{}'", redirectUrl);

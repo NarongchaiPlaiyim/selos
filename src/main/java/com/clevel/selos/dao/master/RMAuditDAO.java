@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class RMAuditDAO extends GenericDAO<RMAuditDAO,Long> {
+public class RMAuditDAO extends GenericDAO<RMAuditDAO, Long> {
     @Inject
     private Logger log;
 

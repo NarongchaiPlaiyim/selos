@@ -14,7 +14,7 @@ public class ChildrenView implements Serializable {
     private String firstName;
     private String lastName;
 
-    public ChildrenView(){
+    public ChildrenView() {
 
     }
 

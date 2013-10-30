@@ -15,9 +15,9 @@ public class BusinessGroup implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
-    @Column(name = "name",length = 100)
+    @Column(name = "name", length = 100)
     private String name;
-    @Column(name = "description",length = 100)
+    @Column(name = "description", length = 100)
     private String description;
     @Column(name = "active")
     private int active;

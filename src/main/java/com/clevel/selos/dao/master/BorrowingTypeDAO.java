@@ -15,10 +15,10 @@ public class BorrowingTypeDAO extends GenericDAO<BorrowingType, Integer> {
     private Logger log;
 
     @Inject
-    public BorrowingTypeDAO(){
+    public BorrowingTypeDAO() {
     }
 
-    public List<BorrowingType> findByCustomerEntity(CustomerEntity customerEntity){
+    public List<BorrowingType> findByCustomerEntity(CustomerEntity customerEntity) {
         log.info("findByCustomerEntity : {}", customerEntity);
 
         Criteria criteria = createCriteria();

@@ -1,19 +1,19 @@
 
 package com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * <p>Java class for TMBAccountsReportType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="TMBAccountsReportType">
  *   &lt;complexContent>
@@ -34,21 +34,19 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TMBAccountsReportType", propOrder = {
-    "id",
-    "maxNumTMBCreditCards",
-    "maxNumTMBAccounts",
-    "maxNumTMBHomeLoans",
-    "accountsNoDelinqFlag",
-    "num31DpdLast6Mths",
-    "neverBeenNPLFlag",
-    "tdrFlag",
-    "neverBeenWriteOffFlag",
-    "attribute"
+        "id",
+        "maxNumTMBCreditCards",
+        "maxNumTMBAccounts",
+        "maxNumTMBHomeLoans",
+        "accountsNoDelinqFlag",
+        "num31DpdLast6Mths",
+        "neverBeenNPLFlag",
+        "tdrFlag",
+        "neverBeenWriteOffFlag",
+        "attribute"
 })
 public class TMBAccountsReportType {
 
@@ -67,11 +65,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -79,11 +75,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -91,11 +85,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the maxNumTMBCreditCards property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getMaxNumTMBCreditCards() {
         return maxNumTMBCreditCards;
@@ -103,11 +95,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the maxNumTMBCreditCards property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setMaxNumTMBCreditCards(Integer value) {
         this.maxNumTMBCreditCards = value;
@@ -115,11 +105,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the maxNumTMBAccounts property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getMaxNumTMBAccounts() {
         return maxNumTMBAccounts;
@@ -127,11 +115,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the maxNumTMBAccounts property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setMaxNumTMBAccounts(Integer value) {
         this.maxNumTMBAccounts = value;
@@ -139,11 +125,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the maxNumTMBHomeLoans property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getMaxNumTMBHomeLoans() {
         return maxNumTMBHomeLoans;
@@ -151,11 +135,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the maxNumTMBHomeLoans property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setMaxNumTMBHomeLoans(Integer value) {
         this.maxNumTMBHomeLoans = value;
@@ -163,11 +145,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the accountsNoDelinqFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isAccountsNoDelinqFlag() {
         return accountsNoDelinqFlag;
@@ -175,11 +155,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the accountsNoDelinqFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setAccountsNoDelinqFlag(Boolean value) {
         this.accountsNoDelinqFlag = value;
@@ -187,11 +165,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the num31DpdLast6Mths property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getNum31DpdLast6Mths() {
         return num31DpdLast6Mths;
@@ -199,11 +175,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the num31DpdLast6Mths property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setNum31DpdLast6Mths(Integer value) {
         this.num31DpdLast6Mths = value;
@@ -211,11 +185,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the neverBeenNPLFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isNeverBeenNPLFlag() {
         return neverBeenNPLFlag;
@@ -223,11 +195,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the neverBeenNPLFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setNeverBeenNPLFlag(Boolean value) {
         this.neverBeenNPLFlag = value;
@@ -235,11 +205,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the tdrFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isTdrFlag() {
         return tdrFlag;
@@ -247,11 +215,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the tdrFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setTdrFlag(Boolean value) {
         this.tdrFlag = value;
@@ -259,11 +225,9 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the neverBeenWriteOffFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isNeverBeenWriteOffFlag() {
         return neverBeenWriteOffFlag;
@@ -271,11 +235,9 @@ public class TMBAccountsReportType {
 
     /**
      * Sets the value of the neverBeenWriteOffFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setNeverBeenWriteOffFlag(Boolean value) {
         this.neverBeenWriteOffFlag = value;
@@ -283,25 +245,23 @@ public class TMBAccountsReportType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

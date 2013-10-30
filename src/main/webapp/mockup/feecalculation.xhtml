@@ -14,19 +14,21 @@
     <h:body>
         <div id="main_container">
             <!-- Start Header Logo -->
-            <ui:include src="resources/header_logo.xhtml" />
+            <ui:include src="resources/header_logo.xhtml"/>
             <!-- End Header Logo -->
             <!-- Start Header Detail -->
-            <ui:include src="resources/header_detail.xhtml" />
+            <ui:include src="resources/header_detail.xhtml"/>
             <!-- End Header Detail -->
             <!-- Start Menu -->
-            <ui:include src="resources/menubar.xhtml" />
+            <ui:include src="resources/menubar.xhtml"/>
             <!-- End Menu -->
             <div id="content_container">
                 <div id="content_name">Fee Calculation</div>
                 <div id="content">
                     <table id="content_form">
-                        <tr><td colspan="100%"></td></tr>
+                        <tr>
+                            <td colspan="100%"></td>
+                        </tr>
                         <tr>
                             <td style="width: 100px;"><p:spacer width="5"/></td>
                             <td>
@@ -65,7 +67,9 @@
                                     <tr>
                                         <td class="center top">2</td>
                                         <td class="top">TCG Fee</td>
-                                        <td class="top">วงเงินให้ค้ำประกันสินเชื่อ * 1.75/100 <br/>*ยกเว้นโครงการ Start up ไม่คิดค่าธรรมเนียม</td>
+                                        <td class="top">วงเงินให้ค้ำประกันสินเชื่อ * 1.75/100
+                                            <br/>*ยกเว้นโครงการ Start up ไม่คิดค่าธรรมเนียม
+                                        </td>
                                         <td class="right top">1,050,000</td>
                                         <td class="right top">1.75%</td>
                                         <td class="right top">18,375.00</td>
@@ -75,7 +79,7 @@
                                     <tr>
                                         <td class="center top">3</td>
                                         <td class="top">Duty Stamp (อส.4ข) - สัญญาสินเชื่อ</td>
-                                        <td class="top">เรียกเก็บอัตรา 0.05% ของวงเงินสินเชื่อ สูงสุดไม่เกิน 10,000.00 บาท </td>
+                                        <td class="top">เรียกเก็บอัตรา 0.05% ของวงเงินสินเชื่อ สูงสุดไม่เกิน 10,000.00 บาท</td>
                                         <td class="right top">1,999,000</td>
                                         <td class="right top">0.05%</td>
                                         <td class="right top">1,000.00</td>
@@ -105,7 +109,10 @@
                                     <tr>
                                         <td class="center top">6</td>
                                         <td class="top">Comm. Service Mortgage Registration</td>
-                                        <td class="top">1. วงเงินจำนองไม่เกิน 5,000,000 บาท เรียกเก็บ 1,070 บาท <br/>2. วงเงินจำนอง 5,000,000 - 10,000,000 บาท เรียกเก็บ 1,600.00 บาท <br/>3. วงเงินจำนองมากกว่า 10,000,000 บาท เรียกเก็บ 2,140.00 บาท</td>
+                                        <td class="top">1. วงเงินจำนองไม่เกิน 5,000,000 บาท เรียกเก็บ 1,070 บาท
+                                            <br/>2. วงเงินจำนอง 5,000,000 - 10,000,000 บาท เรียกเก็บ 1,600.00 บาท
+                                            <br/>3. วงเงินจำนองมากกว่า 10,000,000 บาท เรียกเก็บ 2,140.00 บาท
+                                        </td>
                                         <td class="right top">-</td>
                                         <td class="right top">-</td>
                                         <td class="right top">1,070.00<br/>1,600.00<br/><br/>2,140.00</td>
@@ -148,7 +155,7 @@
             </div>
             <div class="clear"></div>
             <!-- Start Footer -->
-            <ui:include src="resources/footer.xhtml" />
+            <ui:include src="resources/footer.xhtml"/>
             <!-- End Footer -->
             <p:dialog id="feeDialog" widgetVar="feeDlg" modal="true">
                 <table class="content_form">
@@ -179,7 +186,8 @@
                         <td></td>
                         <td>
                             <input type="button" value="Save" class="greenButton medium"/>
-                            <input type="button" value="Cancel" class="greenButton medium" onclick="$('#feeDialog').dialog('close');"/>
+                            <input type="button" value="Cancel" class="greenButton medium"
+                                   onclick="$('#feeDialog').dialog('close');"/>
                         </td>
                     </tr>
                 </table>

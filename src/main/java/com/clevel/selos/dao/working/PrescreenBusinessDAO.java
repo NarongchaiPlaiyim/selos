@@ -16,26 +16,26 @@ public class PrescreenBusinessDAO extends GenericDAO<PrescreenBusiness, Long> {
     private Logger log;
 
     @Inject
-    public PrescreenBusinessDAO(){
+    public PrescreenBusinessDAO() {
 
     }
 
-    public List<PrescreenBusiness> findByPreScreen(Prescreen prescreen){
+    public List<PrescreenBusiness> findByPreScreen(Prescreen prescreen) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen", prescreen));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenBusiness> prescreenBusinessList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenBusinessList.size());
 
         return prescreenBusinessList;
     }
 
-    public List<PrescreenBusiness> findByPreScreenId(long prescreenId){
+    public List<PrescreenBusiness> findByPreScreenId(long prescreenId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("prescreen.id", prescreenId));
         criteria.addOrder(Order.asc("id"));
         List<PrescreenBusiness> prescreenBusinessList = criteria.list();
-        log.info("findByPreScreenId. (result size: {})",prescreenBusinessList.size());
+        log.info("findByPreScreenId. (result size: {})", prescreenBusinessList.size());
 
         return prescreenBusinessList;
     }

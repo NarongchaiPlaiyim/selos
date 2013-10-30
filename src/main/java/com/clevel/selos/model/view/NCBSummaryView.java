@@ -14,7 +14,7 @@ public class NCBSummaryView implements Serializable {
     private String tdrPaymentCondition;
 
 
-    public NCBSummaryView(){
+    public NCBSummaryView() {
     }
 
     public String getCusName() {

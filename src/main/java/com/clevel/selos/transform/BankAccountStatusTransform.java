@@ -11,12 +11,12 @@ public class BankAccountStatusTransform extends Transform {
     BankAccountTypeTransform bankAccountTypeTransform;
 
     @Inject
-    public BankAccountStatusTransform(){
+    public BankAccountStatusTransform() {
 
     }
 
-    public BankAccountStatusView getBankAccountStatusView(BankAccountStatus bankAccountStatus){
-        if(bankAccountStatus != null){
+    public BankAccountStatusView getBankAccountStatusView(BankAccountStatus bankAccountStatus) {
+        if (bankAccountStatus != null) {
             BankAccountStatusView bankAccountStatusView = new BankAccountStatusView();
             bankAccountStatusView.setId(bankAccountStatus.getId());
             bankAccountStatusView.setCode(bankAccountStatus.getCode());

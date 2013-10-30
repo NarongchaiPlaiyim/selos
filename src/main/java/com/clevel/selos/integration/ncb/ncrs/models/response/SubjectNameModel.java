@@ -8,43 +8,43 @@ import java.util.ArrayList;
 
 @XStreamAlias("name")
 public class SubjectNameModel implements Serializable {
-    
+
     @XStreamAlias("familyname")
     private String familyname;
-    
+
     @XStreamAlias("firstname")
     private String firstname;
-    
+
     @XStreamAlias("middle")
     private String middle;
-    
+
     @XStreamAlias("maritalstatus")
     private String maritalstatus;
-    
+
     @XStreamAlias("dateofbirth")
     private String dateofbirth;
-    
+
     @XStreamAlias("gender")
     private String gender;
-    
+
     @XStreamAlias("title")
     private String title;
-    
+
     @XStreamAlias("nationality")
     private String nationality;
-    
+
     @XStreamAlias("numberofchildren")
     private String numberofchildren;
-    
+
     @XStreamAlias("spousename")
     private String spousename;
-    
+
     @XStreamAlias("occupation")
     private String occupation;
-    
+
     @XStreamAlias("enqconsent")
     private String enqconsent;
-    
+
     @XStreamImplicit(itemFieldName = "dispute")
     private ArrayList<SubjectNameDisputeModel> dispute = new ArrayList<SubjectNameDisputeModel>();
 
@@ -115,6 +115,6 @@ public class SubjectNameModel implements Serializable {
     public ArrayList<SubjectNameDisputeModel> getDispute() {
         return dispute;
     }
-    
-    
+
+
 }

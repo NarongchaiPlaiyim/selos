@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 
-public abstract class EmailService implements EmailInterface,Serializable {
+public abstract class EmailService implements EmailInterface, Serializable {
     @Inject
     @Email
     Logger log;
@@ -60,9 +60,9 @@ public abstract class EmailService implements EmailInterface,Serializable {
     protected static String emailTemplate;
 
     @Override
-    public void sendMail(String toAddress,String subject,String ccAddress,Map<String,String> valuesMap) {
-        log.debug("sendMail. (toAddress: {}, subject: {}, ccAddress: {})",toAddress,subject,ccAddress);
-        log.debug("SMTP host : {}",host);
+    public void sendMail(String toAddress, String subject, String ccAddress, Map<String, String> valuesMap) {
+        log.debug("sendMail. (toAddress: {}, subject: {}, ccAddress: {})", toAddress, subject, ccAddress);
+        log.debug("SMTP host : {}", host);
 
         if (toAddress == null || "".equalsIgnoreCase(toAddress.trim())) {
             log.debug("empty email address!");
@@ -85,27 +85,27 @@ public abstract class EmailService implements EmailInterface,Serializable {
             }
 
             msg.setSubject(subject, FILE_ENCODE);
-            msg.setContent(replaceTemplate(valuesMap), "text/html; charset="+FILE_ENCODE);
+            msg.setContent(replaceTemplate(valuesMap), "text/html; charset=" + FILE_ENCODE);
             msg.setSentDate(now);
 
             Transport.send(msg);
-            emailAuditor.add(userId,"sendMail","",now, ActionResult.SUCCESS,"", Util.getLinkKey(userId));
+            emailAuditor.add(userId, "sendMail", "", now, ActionResult.SUCCESS, "", Util.getLinkKey(userId));
         } catch (AuthenticationFailedException e) {
-            log.error("[{}]",linkKey,e);
-            emailAuditor.add(userId,"sendMail","",now, ActionResult.EXCEPTION,e.getMessage(), linkKey);
-            throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_AUTHENTICATION_FAILED,msg.get(ExceptionMapping.EMAIL_AUTHENTICATION_FAILED));
+            log.error("[{}]", linkKey, e);
+            emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
+            throw new EmailInterfaceException(e, ExceptionMapping.EMAIL_AUTHENTICATION_FAILED, msg.get(ExceptionMapping.EMAIL_AUTHENTICATION_FAILED));
         } catch (AddressException e) {
-            log.error("[{}]",linkKey,e);
+            log.error("[{}]", linkKey, e);
             emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
-            throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_INVALID_ADDRESS,msg.get(ExceptionMapping.EMAIL_INVALID_ADDRESS));
+            throw new EmailInterfaceException(e, ExceptionMapping.EMAIL_INVALID_ADDRESS, msg.get(ExceptionMapping.EMAIL_INVALID_ADDRESS));
         } catch (MessagingException e) {
-            log.error("[{}]",linkKey,e);
+            log.error("[{}]", linkKey, e);
             emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
-            throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_COULD_NOT_BE_SENT,msg.get(ExceptionMapping.EMAIL_COULD_NOT_BE_SENT));
+            throw new EmailInterfaceException(e, ExceptionMapping.EMAIL_COULD_NOT_BE_SENT, msg.get(ExceptionMapping.EMAIL_COULD_NOT_BE_SENT));
         } catch (Exception e) {
-            log.error("[{}] Email Exception!",linkKey,e);
+            log.error("[{}] Email Exception!", linkKey, e);
             emailAuditor.add(userId, "sendMail", "", now, ActionResult.EXCEPTION, e.getMessage(), linkKey);
-            throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_EXCEPTION,msg.get(ExceptionMapping.EMAIL_EXCEPTION));
+            throw new EmailInterfaceException(e, ExceptionMapping.EMAIL_EXCEPTION, msg.get(ExceptionMapping.EMAIL_EXCEPTION));
         }
     }
 
@@ -114,16 +114,16 @@ public abstract class EmailService implements EmailInterface,Serializable {
         InputStreamReader isr = null;
         BufferedReader bf = null;
 
-        log.debug("Email template file: {}",templateFile);
+        log.debug("Email template file: {}", templateFile);
         try {
             fis = new FileInputStream(templateFile);
-            isr = new InputStreamReader(fis,FILE_ENCODE);
-            bf =  new BufferedReader(isr);
+            isr = new InputStreamReader(fis, FILE_ENCODE);
+            bf = new BufferedReader(isr);
         } catch (FileNotFoundException e) {
-            log.error("Email template not found (file: {})",templateFile, e);
-            throw new EmailInterfaceException(e,ExceptionMapping.EMAIL_TEMPLATE_NOT_FOUND,msg.get(ExceptionMapping.EMAIL_TEMPLATE_NOT_FOUND,templateFile));
+            log.error("Email template not found (file: {})", templateFile, e);
+            throw new EmailInterfaceException(e, ExceptionMapping.EMAIL_TEMPLATE_NOT_FOUND, msg.get(ExceptionMapping.EMAIL_TEMPLATE_NOT_FOUND, templateFile));
         } catch (UnsupportedEncodingException e) {
-            log.error("UnSupportEncoding! ({})",e.getMessage());
+            log.error("UnSupportEncoding! ({})", e.getMessage());
         }
         String line;
         StringBuilder body = new StringBuilder("");
@@ -132,10 +132,10 @@ public abstract class EmailService implements EmailInterface,Serializable {
                 body.append(line);
             }
             bf.close();
-            if (isr!=null) {
+            if (isr != null) {
                 isr.close();
             }
-            if (fis!=null) {
+            if (fis != null) {
                 fis.close();
             }
         } catch (IOException e) {
@@ -145,8 +145,8 @@ public abstract class EmailService implements EmailInterface,Serializable {
         return body.toString();
     }
 
-    protected String replaceTemplate(Map<String,String> valuesMap) {
+    protected String replaceTemplate(Map<String, String> valuesMap) {
         String messageBody = readTemplateFile(emailTemplate);
-        return StrSubstitutor.replace(messageBody,valuesMap);
+        return StrSubstitutor.replace(messageBody, valuesMap);
     }
 }

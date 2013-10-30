@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DBExecute implements Serializable{
+public class DBExecute implements Serializable {
     @Inject
     @RLOS
     Logger log;
@@ -44,15 +44,15 @@ public class DBExecute implements Serializable{
     transient ResultSet rs = null;
 
     @Inject
-    public DBExecute(){
+    public DBExecute() {
 
     }
 
-    public Map<String,CSIData> getWarningCodeListFullyMatched(DocumentType documentType, String idNumber) throws Exception{
-        log.debug("getWarningCodeFullyMatched DocumentType: {}, citizenId: {}",documentType.toString(),idNumber);
-        Map<String,CSIData> warningCodeMap = null;
+    public Map<String, CSIData> getWarningCodeListFullyMatched(DocumentType documentType, String idNumber) throws Exception {
+        log.debug("getWarningCodeFullyMatched DocumentType: {}, citizenId: {}", documentType.toString(), idNumber);
+        Map<String, CSIData> warningCodeMap = null;
         String clause;
-        switch (documentType){
+        switch (documentType) {
             case CITIZEN_ID:
                 clause = "ID_NO";
                 break;
@@ -67,14 +67,14 @@ public class DBExecute implements Serializable{
                 break;
         }
 
-        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
-                "FROM "+tableName+" WHERE "+clause+" = ?";
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE " +
+                "FROM " + tableName + " WHERE " + clause + " = ?";
 
         try {
             log.debug("open connection.");
-            log.debug("SQL_SELECT : {}",SQL_SELECT);
+            log.debug("SQL_SELECT : {}", SQL_SELECT);
             conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
-            log.debug("where clause : {}",clause);
+            log.debug("where clause : {}", clause);
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             statement.setString(1, idNumber);
             rs = statement.executeQuery();
@@ -90,41 +90,41 @@ public class DBExecute implements Serializable{
                 csiData.setSource(rs.getString(7));
                 csiData.setDataDate(rs.getString(8));
                 csiData.setDateWarningCode(rs.getString(9));
-                log.debug("csi data : {}",csiData.toString());
-                warningCodeMap.put(csiData.getWarningCode(),csiData);
+                log.debug("csi data : {}", csiData.toString());
+                warningCodeMap.put(csiData.getWarningCode(), csiData);
             }
             rs.close();
             conn.close();
             conn = null;
             log.debug("connection closed.");
         } catch (SQLException e) {
-            log.error("execute query exception!",e);
+            log.error("execute query exception!", e);
         } finally {
             closeConnection();
         }
         return warningCodeMap;
     }
 
-    public Map<String,CSIData> getWarningCodeListPartialMatched(String nameTh, String nameEn) throws Exception{
-        log.debug("getWarningCodeListPartialMatched nameTh: {}, nameEn: {}",nameTh,nameEn);
-        Map<String,CSIData> warningCodeMap = null;
+    public Map<String, CSIData> getWarningCodeListPartialMatched(String nameTh, String nameEn) throws Exception {
+        log.debug("getWarningCodeListPartialMatched nameTh: {}, nameEn: {}", nameTh, nameEn);
+        Map<String, CSIData> warningCodeMap = null;
 
-        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE "+
-                "FROM "+tableName+" WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
+        String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE " +
+                "FROM " + tableName + " WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
 
         try {
             log.debug("open connection.");
-            log.debug("SQL_SELECT : {}",SQL_SELECT);
+            log.debug("SQL_SELECT : {}", SQL_SELECT);
             conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
-            if(!Util.isEmpty(nameTh)){
-                nameTh = "%"+nameTh+"%";
+            if (!Util.isEmpty(nameTh)) {
+                nameTh = "%" + nameTh + "%";
             } else {
                 nameTh = null;
             }
 
-            if(!Util.isEmpty(nameEn)){
-                nameEn = "%"+nameEn+"%";
+            if (!Util.isEmpty(nameEn)) {
+                nameEn = "%" + nameEn + "%";
             } else {
                 nameEn = null;
             }
@@ -144,26 +144,26 @@ public class DBExecute implements Serializable{
                 csiData.setSource(rs.getString(7));
                 csiData.setDataDate(rs.getString(8));
                 csiData.setDateWarningCode(rs.getString(9));
-                log.debug("csi data : {}",csiData.toString());
-                warningCodeMap.put(csiData.getWarningCode(),csiData);
+                log.debug("csi data : {}", csiData.toString());
+                warningCodeMap.put(csiData.getWarningCode(), csiData);
             }
             rs.close();
             conn.close();
             conn = null;
             log.debug("connection closed.");
         } catch (SQLException e) {
-            log.error("execute query exception!",e);
+            log.error("execute query exception!", e);
         } finally {
             closeConnection();
         }
         return warningCodeMap;
     }
 
-    public List<CSIData> getCSIDataByDocumentType(RLOSInterface.DocumentType documentType, String idNumber) throws Exception{
-        log.debug("getCSIDataByDocumentType DocumentType: {}, citizenId: {}",documentType.toString(),idNumber);
+    public List<CSIData> getCSIDataByDocumentType(RLOSInterface.DocumentType documentType, String idNumber) throws Exception {
+        log.debug("getCSIDataByDocumentType DocumentType: {}, citizenId: {}", documentType.toString(), idNumber);
         List<CSIData> csiDataList = null;
         String clause;
-        switch (documentType){
+        switch (documentType) {
             case CITIZEN_ID:
                 clause = "CITIZEN_ID";
                 break;
@@ -179,15 +179,15 @@ public class DBExecute implements Serializable{
         }
 
         //String SQL_SELECT_CSI_BY_CID = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE";
-        String SQL_SELECT_CSI_BY_CID = "SELECT CITIZEN_ID, PASSPORT_NO, BUSINESS_REG_NO, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, DATE_WARNING_CODE "+
-                                        "FROM "+tableName+" WHERE "+clause+" = ?";
+        String SQL_SELECT_CSI_BY_CID = "SELECT CITIZEN_ID, PASSPORT_NO, BUSINESS_REG_NO, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, DATE_WARNING_CODE " +
+                "FROM " + tableName + " WHERE " + clause + " = ?";
 
         try {
             csiDataList = new ArrayList<CSIData>();
             log.debug("open connection.");
             conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
-            log.debug("get from table name : {}",tableName);
-            log.debug("where clause : {}",clause);
+            log.debug("get from table name : {}", tableName);
+            log.debug("where clause : {}", clause);
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT_CSI_BY_CID);
             statement.setString(1, idNumber);
             rs = statement.executeQuery();
@@ -208,9 +208,9 @@ public class DBExecute implements Serializable{
             conn.close();
             conn = null;
             log.debug("connection closed.");
-            log.debug("Finished executing csi query , data size. ({})",csiDataList.size());
+            log.debug("Finished executing csi query , data size. ({})", csiDataList.size());
         } catch (SQLException e) {
-            log.error("execute query exception!",e);
+            log.error("execute query exception!", e);
             csiDataList = null;
         } finally {
             closeConnection();
@@ -220,8 +220,8 @@ public class DBExecute implements Serializable{
     }
 
     private void closeConnection() {
-        if(rs != null){
-            try{
+        if (rs != null) {
+            try {
                 rs.close();
                 log.debug("result set closed. (in finally)");
             } catch (SQLException e) {

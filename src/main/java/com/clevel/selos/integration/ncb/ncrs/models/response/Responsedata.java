@@ -5,8 +5,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.io.Serializable;
 
 @XStreamAlias("responsedata")
-public class Responsedata  implements Serializable {
-    
+public class Responsedata implements Serializable {
+
     @XStreamAlias("texttuefresponse")
     private String texttuefresponse;
 
@@ -17,5 +17,5 @@ public class Responsedata  implements Serializable {
     public String getTexttuefresponse() {
         return texttuefresponse;
     }
-    
+
 }

@@ -20,31 +20,31 @@ public class BasicInfoAccountTransform extends Transform {
     public BasicInfoAccountTransform() {
     }
 
-    public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo){
+    public OpenAccount transformToModel(BasicInfoAccountView basicInfoAccountView, BasicInfo basicInfo) {
         OpenAccount openAccount = new OpenAccount();
 
         openAccount.setBasicInfo(basicInfo);
 
-        if(basicInfoAccountView.getId() != 0){
+        if (basicInfoAccountView.getId() != 0) {
             openAccount.setId(basicInfoAccountView.getId());
         }
 
         openAccount.setAccountName(basicInfoAccountView.getAccountName());
 
         openAccount.setAccountProduct(basicInfoAccountView.getProduct());
-        if(openAccount.getAccountProduct().getId() == 0){
+        if (openAccount.getAccountProduct().getId() == 0) {
             openAccount.setAccountProduct(null);
         }
 
         openAccount.setBankAccountType(bankAccountTypeTransform.getBankAccountType(basicInfoAccountView.getBankAccountTypeView()));
-        if(openAccount.getBankAccountType().getId() == 0){
+        if (openAccount.getBankAccountType().getId() == 0) {
             openAccount.setBankAccountType(null);
         }
 
         return openAccount;
     }
 
-    public BasicInfoAccountView transformToView(OpenAccount openAccount){
+    public BasicInfoAccountView transformToView(OpenAccount openAccount) {
         BasicInfoAccountView basicInfoAccountView = new BasicInfoAccountView();
 
         basicInfoAccountView.setId(openAccount.getId());
@@ -52,27 +52,27 @@ public class BasicInfoAccountTransform extends Transform {
         basicInfoAccountView.setAccountName(openAccount.getAccountName());
 
         basicInfoAccountView.setProduct(openAccount.getAccountProduct());
-        if(basicInfoAccountView.getProduct() == null){
+        if (basicInfoAccountView.getProduct() == null) {
             basicInfoAccountView.setProduct(new OpenAccountProduct());
         }
 
         basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
-        if(basicInfoAccountView.getBankAccountTypeView() == null){
+        if (basicInfoAccountView.getBankAccountTypeView() == null) {
             basicInfoAccountView.setBankAccountTypeView(new BankAccountTypeView());
         }
 
         BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();
-        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews =  basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());
+        List<BasicInfoAccountPurposeView> basicInfoAccountPurposeViews = basicInfoAccPurposeTransform.transformToViewList(openAccount.getOpenAccPurposeList());
 
         basicInfoAccountView.setBasicInfoAccountPurposeView(basicInfoAccountPurposeViews);
 
         //for show view
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i=0;i<basicInfoAccountView.getBasicInfoAccountPurposeView().size();i++){
-            if(i == 0){
+        for (int i = 0; i < basicInfoAccountView.getBasicInfoAccountPurposeView().size(); i++) {
+            if (i == 0) {
                 stringBuilder.append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
-            }else{
-                stringBuilder.append(", "+basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+            } else {
+                stringBuilder.append(", " + basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
             }
         }
         basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
@@ -80,10 +80,10 @@ public class BasicInfoAccountTransform extends Transform {
         return basicInfoAccountView;
     }
 
-    public List<BasicInfoAccountView> transformToViewList(List<OpenAccount> openAccountList){
+    public List<BasicInfoAccountView> transformToViewList(List<OpenAccount> openAccountList) {
         List<BasicInfoAccountView> basicInfoAccountViews = new ArrayList<BasicInfoAccountView>();
-        if(openAccountList != null){
-            for(OpenAccount op : openAccountList){
+        if (openAccountList != null) {
+            for (OpenAccount op : openAccountList) {
                 BasicInfoAccountView basicInfoAccountView = transformToView(op);
                 basicInfoAccountViews.add(basicInfoAccountView);
             }

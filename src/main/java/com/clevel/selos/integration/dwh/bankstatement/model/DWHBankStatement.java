@@ -116,7 +116,7 @@ public class DWHBankStatement implements Serializable {
     }
 
     public void setNumberOfDebitTxn(Integer numberOfDebitTxn) {
-        if(numberOfDebitTxn==null){
+        if (numberOfDebitTxn == null) {
             this.numberOfDebitTxn = 0;
         } else {
             this.numberOfDebitTxn = numberOfDebitTxn.intValue();
@@ -168,7 +168,7 @@ public class DWHBankStatement implements Serializable {
     }
 
     public void setNumberOfChequeReturn(Integer numberOfChequeReturn) {
-        if(numberOfChequeReturn==null){
+        if (numberOfChequeReturn == null) {
             this.numberOfChequeReturn = 0;
         } else {
             this.numberOfChequeReturn = numberOfChequeReturn.intValue();
@@ -188,7 +188,7 @@ public class DWHBankStatement implements Serializable {
     }
 
     public void setNumberOfTimesOD(Integer numberOfTimesOD) {
-        if(numberOfTimesOD==null){
+        if (numberOfTimesOD == null) {
             this.numberOfTimesOD = 0;
         } else {
             this.numberOfTimesOD = numberOfTimesOD.intValue();

@@ -1,15 +1,14 @@
 package com.clevel.selos.integration.corebanking.model.individualInfo;
 
 import java.io.Serializable;
-import java.util.List;
 
 
 public class IndividualModel implements Serializable {
-     private String reqId;
-     private String resCode;
-     private String resDesc;
-     private String searchResult;
-     private String lastPageFlag;
+    private String reqId;
+    private String resCode;
+    private String resDesc;
+    private String searchResult;
+    private String lastPageFlag;
 
     //personal Detail Section
 

@@ -16,12 +16,12 @@ public class PotentialColToTCGColDAO extends GenericDAO<PotentialColToTCGCol, In
     private Logger log;
 
     @Inject
-    PotentialColToTCGColDAO(){
+    PotentialColToTCGColDAO() {
 
     }
 
     @SuppressWarnings("unchecked")
-    public List<PotentialColToTCGCol> getListPotentialColToTCGCol(PotentialCollateral potentialCollateral ){
+    public List<PotentialColToTCGCol> getListPotentialColToTCGCol(PotentialCollateral potentialCollateral) {
         log.info("getListPotentialColToTCGCol. (PotentialCollateral: {})", potentialCollateral);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("potentialCollateral", potentialCollateral));

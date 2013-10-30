@@ -17,7 +17,7 @@ public class Bank implements Serializable {
     private int code;
     @Column(name = "name")
     private String name;
-    @Column(name = "shortName",length = 20)
+    @Column(name = "shortName", length = 20)
     private String shortName;
     @Column(name = "refinance")
     private int refinance;

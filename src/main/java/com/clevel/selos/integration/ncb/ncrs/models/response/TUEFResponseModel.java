@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 @XStreamAlias("tuefresponse")
 public class TUEFResponseModel implements Serializable {
-    
+
     @XStreamAlias("responsedata")
     private Responsedata responsedata;
-    
+
     @XStreamAlias("header")
     private TUEFResponseHeaderModel header;
-    
+
     @XStreamImplicit(itemFieldName = "subject")
     private ArrayList<SubjectModel> subject = new ArrayList<SubjectModel>();
 
-    public TUEFResponseModel(Responsedata responsedata, TUEFResponseHeaderModel header ,ArrayList<SubjectModel> subject) {
+    public TUEFResponseModel(Responsedata responsedata, TUEFResponseHeaderModel header, ArrayList<SubjectModel> subject) {
         this.responsedata = responsedata;
         this.header = header;
         this.subject = subject;
@@ -36,5 +36,5 @@ public class TUEFResponseModel implements Serializable {
         return subject;
     }
 
-    
+
 }

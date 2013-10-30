@@ -14,21 +14,25 @@
 <h:body>
 <div id="main_container">
 <!-- Start Header Logo -->
-<ui:include src="resources/header_logo.xhtml" />
+<ui:include src="resources/header_logo.xhtml"/>
 <!-- End Header Logo -->
 <!-- Start Header Detail -->
-<ui:include src="resources/header_detail_fullapp_bdm.xhtml" />
+<ui:include src="resources/header_detail_fullapp_bdm.xhtml"/>
 <!-- End Header Detail -->
 <!-- Start Menu -->
-<ui:include src="resources/menubar_fullapp.xhtml" />
+<ui:include src="resources/menubar_fullapp.xhtml"/>
 <!-- End Menu -->
 <div id="content_container">
 <div id="content_name">Credit Facility - Propose Line</div>
 <div id="content">
 <table id="content_form">
-<tr><td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39</td></tr>
 <tr>
-    <td colspan="2"><div class="separate"><!-- --></div></td>
+    <td colspan="100%" class="right" style="padding-right: 10px;">Last update by MR.BDM Maker , 06/06/2556 10:05:39</td>
+</tr>
+<tr>
+    <td colspan="2">
+        <div class="separate"><!-- --></div>
+    </td>
 </tr>
 <tr>
     <td><h2>W/C Requirement</h2></td>
@@ -67,7 +71,7 @@
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                             <td class="right" style="width: 200px">Core W/C 50%</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
-                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C </td>
+                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                         </tr>
                         <tr style="background-color: #fafafa;">
@@ -80,7 +84,7 @@
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                             <td class="right" style="width: 200px">Core W/C 50%</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
-                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C </td>
+                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                         </tr>
                         <tr style="background-color: #e6e6e6;">
@@ -93,17 +97,21 @@
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                             <td class="right" style="width: 200px">Core W/C 50%</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
-                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C </td>
+                            <td class="right" style="width: 230px">วงเงิน OD หลังหัก Core W/C</td>
                             <td><input type="text" class="small right" value="##,###,###.00"/> บาท</td>
                         </tr>
-                        <tr><td colspan="8"></td></tr>
+                        <tr>
+                            <td colspan="8"></td>
+                        </tr>
                     </table>
                 </td>
             </tr>
         </table>
     </td>
 </tr>
-<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2"><p:spacer width="2"/></td>
+</tr>
 <tr>
     <td colspan="2"><p:separator/></td>
 </tr>
@@ -115,13 +123,19 @@
     <td colspan="2">วัตถุประสงค์ของการขอสินเชื่อต้องเหมาะสมต่อธุรกิจและประเภทสินเชื่อ</td>
 </tr>
 <tr>
-    <td colspan="2">วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ) <p:spacer width="5px"/><input type="text" class="small"/><p:spacer width="5px"/>วงเงินสูงสุด<p:spacer width="5px"/><input type="text" class="small"/></td>
+    <td colspan="2">วงเงิน/ภาระสินเชื่อ SME เดิม (รวมกลุ่ม/กิจการในเครือ) <p:spacer width="5px"/><input type="text"
+                                                                                                        class="small"/><p:spacer
+            width="5px"/>วงเงินสูงสุด<p:spacer width="5px"/><input type="text" class="small"/></td>
 </tr>
 <tr>
-    <td colspan="2"><input type="radio" name="cusType" value="N"/> Normal <p:spacer width="5px"/><input type="radio" name="cusType" value="P"/> Prime </td>
+    <td colspan="2"><input type="radio" name="cusType" value="N"/> Normal <p:spacer width="5px"/><input type="radio"
+                                                                                                        name="cusType"
+                                                                                                        value="P"/> Prime
+    </td>
 </tr>
 <tr>
-    <td class="left middle">Tier: <input type="text" class="smallest" value=""/><p:spacer width="5px"/><p:commandButton value="Add" styleClass="small" onclick="proposeCreditDlg.show()"/></td>
+    <td class="left middle">Tier: <input type="text" class="smallest" value=""/><p:spacer width="5px"/><p:commandButton
+            value="Add" styleClass="small" onclick="proposeCreditDlg.show()"/></td>
     <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
 </tr>
 <tr>
@@ -164,26 +178,28 @@
                     <p:commandButton icon="ui-icon-trash" title="Remove"/></td>
             </tr>
             <tr class="top" style="background-color: #fafafa;">
-                <td class="left" colspan="11"><table class="table_noborder">
+                <td class="left" colspan="11">
+                    <table class="table_noborder">
                         <tr>
-                            <td class="title" style="line-height: 15px;">Purpose : </td>
+                            <td class="title" style="line-height: 15px;">Purpose :</td>
                             <td style="line-height: 15px;">Loan Purpose Example</td>
                         </tr>
                         <tr>
-                            <td class="title" style="line-height: 15px;">Remark : </td>
+                            <td class="title" style="line-height: 15px;">Remark :</td>
                             <td style="line-height: 15px;">Remark Example</td>
                         </tr>
                         <tr>
-                            <td class="title" style="line-height: 15px;">Disbursement : </td>
+                            <td class="title" style="line-height: 15px;">Disbursement :</td>
                             <td style="line-height: 15px;">Clean Loan 7 days</td>
                         </tr>
                         <tr>
-                            <td class="title" style="line-height: 15px;">One Bank One Day : </td>
+                            <td class="title" style="line-height: 15px;">One Bank One Day :</td>
                             <td style="line-height: 15px;">Yes</td>
                         </tr>
-                    </table></td>
+                    </table>
+                </td>
             </tr>
-            <tr  class="top" style="background-color: #e6e6e6">
+            <tr class="top" style="background-color: #e6e6e6">
                 <td class="center" rowspan="4">2</td>
                 <td class="center" rowspan="4">New</td>
                 <td class="center" rowspan="4">Y</td>
@@ -217,31 +233,34 @@
                 <td class="center">24</td>
             </tr>
             <tr class="top" style="background-color: #e6e6e6;">
-                <td class="left" colspan="11"><table class="table_noborder">
-                    <tr>
-                        <td class="title" style="line-height: 15px;">Purpose : </td>
-                        <td style="line-height: 15px;">Loan Purpose Example</td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="line-height: 15px;">Remark : </td>
-                        <td style="line-height: 15px;">Remark Example</td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="line-height: 15px;">Disbursement : </td>
-                        <td style="line-height: 15px;">Normal Disbursements</td>
-                    </tr>
-                    <tr>
-                        <td class="title" style="line-height: 15px;">One Bank One Day : </td>
-                        <td style="line-height: 15px;">No</td>
-                    </tr>
-                </table></td>
+                <td class="left" colspan="11">
+                    <table class="table_noborder">
+                        <tr>
+                            <td class="title" style="line-height: 15px;">Purpose :</td>
+                            <td style="line-height: 15px;">Loan Purpose Example</td>
+                        </tr>
+                        <tr>
+                            <td class="title" style="line-height: 15px;">Remark :</td>
+                            <td style="line-height: 15px;">Remark Example</td>
+                        </tr>
+                        <tr>
+                            <td class="title" style="line-height: 15px;">Disbursement :</td>
+                            <td style="line-height: 15px;">Normal Disbursements</td>
+                        </tr>
+                        <tr>
+                            <td class="title" style="line-height: 15px;">One Bank One Day :</td>
+                            <td style="line-height: 15px;">No</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr style="background-color: #ffffff;">
                 <td style="line-height: 10px; height: 10px; border-left: none; border-right: none" colspan="15"></td>
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
-                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Proposed Credit</td>
+                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Proposed Credit
+                </td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
                 <td style="border-left: none; border-right: none" colspan="7"></td>
             </tr>
@@ -250,7 +269,9 @@
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
-                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Borrower Exposure</td>
+                <td class="title left" colspan="6"
+                    style="border-right: none;border-left: none">Total Borrower Exposure
+                </td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
                 <td style="border-left: none; border-right: none" colspan="7"></td>
             </tr>
@@ -259,14 +280,17 @@
             </tr>
             <tr style="background-color: #e6e6e6;">
                 <td style="border-right: none;border-left: none"></td>
-                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Group Exposure</td>
+                <td class="title left" colspan="6" style="border-right: none;border-left: none">Total Group Exposure
+                </td>
                 <td class="title right" style="border-left: none">#,###,###.00</td>
                 <td style="border-left: none; border-right: none" colspan="7"></td>
             </tr>
         </table>
     </td>
 </tr>
-<tr><td colspan="2" style="height: 15px"><p:spacer width="2px"/></td></tr>
+<tr>
+    <td colspan="2" style="height: 15px"><p:spacer width="2px"/></td>
+</tr>
 <tr>
     <td class="title">ปรับลดราคาดอกเบี้ย/ค่าธรรมเนียม</td>
     <td style="text-align: right"><a style="cursor: pointer;" href="#">[View Change]</a></td>
@@ -289,7 +313,9 @@
         </table>
     </td>
 </tr>
-<tr><td colspan="2" style="height: 15px"><p:spacer width="2px"/></td></tr>
+<tr>
+    <td colspan="2" style="height: 15px"><p:spacer width="2px"/></td>
+</tr>
 <tr>
     <td colspan="2">
         <table class="table_content" cellpadding="0" cellspacing="0">
@@ -320,10 +346,14 @@
     <td colspan="2"><h2>Proposed Collateral</h2></td>
 </tr>
 <tr>
-    <td colspan="2" style="line-height: 11px;" class="left">เงื่อนไขการจำนอง/จำนำ หลักประกันต้องให้ครอบคลุมวงเงินสินเชื่อและเป็นไปตามวิธีปฏิบัติของธนาคารทั้งนี้ความถูกต้องของข้อมูลและเงื่อนไขการทำนิติกรรมเป็นหน้าที่ความรับผิดชอบของ BDM</td>
+    <td colspan="2" style="line-height: 11px;"
+        class="left">เงื่อนไขการจำนอง/จำนำ หลักประกันต้องให้ครอบคลุมวงเงินสินเชื่อและเป็นไปตามวิธีปฏิบัติของธนาคารทั้งนี้ความถูกต้องของข้อมูลและเงื่อนไขการทำนิติกรรมเป็นหน้าที่ความรับผิดชอบของ BDM
+    </td>
 </tr>
 <tr>
-    <td colspan="2" style="line-height: 11px;" class="left">(Mortgage condition has to cover facilities and complied with bank's policy, however, all collateral information and mortgage condition are under BDM's responsibility)</td>
+    <td colspan="2" style="line-height: 11px;"
+        class="left">(Mortgage condition has to cover facilities and complied with bank's policy, however, all collateral information and mortgage condition are under BDM's responsibility)
+    </td>
 </tr>
 <tr>
     <td class="left middle"><p:commandButton value="Add" styleClass="small" onclick="proposeCollateralDlg.show()"/></td>
@@ -337,16 +367,21 @@
         <table>
             <tr>
                 <td class="title" style="width:150px;">JOB ID :</td>
-                <td style="width: 200px;">#001<p:spacer width="20px;" height="20px;"/><input type="checkbox" value="Y" name="requestAppraisal"/><p:spacer width="5px;"/>Request Appraisal</td>
-                <td colspan="2"><p:spacer width="20px" height="10px;"/><p:commandButton value="Edit" styleClass="small"/><p:spacer width="20px" height="10px;"/><p:commandButton value="Delete" styleClass="small"/></td>
+                <td style="width: 200px;">#001<p:spacer width="20px;" height="20px;"/><input type="checkbox" value="Y"
+                                                                                             name="requestAppraisal"/><p:spacer
+                        width="5px;"/>Request Appraisal
+                </td>
+                <td colspan="2"><p:spacer width="20px" height="10px;"/><p:commandButton value="Edit"
+                                                                                        styleClass="small"/><p:spacer
+                        width="20px" height="10px;"/><p:commandButton value="Delete" styleClass="small"/></td>
             </tr>
             <tr>
                 <td class="title" style="width:150px;">AAD Decision :</td>
-                <td colspan="3" >Accept</td>
+                <td colspan="3">Accept</td>
             </tr>
             <tr>
                 <td class="title" style="width:150px;">Reason :</td>
-                <td colspan="3" >Reason Example</td>
+                <td colspan="3">Reason Example</td>
             </tr>
             <tr>
                 <td class="title" style="width:150px;">Remark :</td>
@@ -367,26 +402,28 @@
             </tr>
             <tr>
                 <td class="title" style="width:150px;">Credit Type :</td>
-                <td colspan="3"><table class="table_content" style="width: 100%;">
-                            <tr>
-                                <th></th>
-                                <th>Account</th>
-                                <th>Type</th>
-                                <th>Product Program</th>
-                                <th>Credit Facility</th>
-                                <th>Limit</th>
-                            </tr>
-                            <tr>
-                                <td class="center">1</td>
-                                <td class="left" style="line-height: 15px;">Mr. A Example<br/>
-                                    Acc No.: 012-3-45678-9 Suf. 001<br/>
-                                    Acc Status: 01-Normal</td>
-                                <td>New</td>
-                                <td>SmartBiz</td>
-                                <td>Loan</td>
-                                <td class="title right">###,###.00</td>
-                            </tr>
-                        </table>
+                <td colspan="3">
+                    <table class="table_content" style="width: 100%;">
+                        <tr>
+                            <th></th>
+                            <th>Account</th>
+                            <th>Type</th>
+                            <th>Product Program</th>
+                            <th>Credit Facility</th>
+                            <th>Limit</th>
+                        </tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td class="left" style="line-height: 15px;">Mr. A Example<br/>
+                                Acc No.: 012-3-45678-9 Suf. 001<br/>
+                                Acc Status: 01-Normal
+                            </td>
+                            <td>New</td>
+                            <td>SmartBiz</td>
+                            <td>Loan</td>
+                            <td class="title right">###,###.00</td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
 
@@ -483,22 +520,24 @@
                 <td class="center top">1</td>
                 <td class="top">บสย. Flood</td>
                 <td class="center top">##-#####</td>
-                <td><table class="table_noborder">
-                    <tr>
-                        <td style="widht:120px;line-height: 15px;" >Mr. A Example<br/>
-                            Acc No.: XXX-X-XXXXX-X Suf 000<br/>
-                            Acc. Status: 01-Normal<br/></td>
-                        <td style="line-height: 15px;">SmartBiz Loan</td>
-                        <td>#,###,###.00</td>
-                        <td>Guarantee Amt. #,###,###.00</td>
-                    </tr>
-                    <tr>
-                        <td style="widht:120px;line-height: 15px;">-</td>
-                        <td style="line-height: 15px;">SmartBiz OD</td>
-                        <td>#,###,###.00</td>
-                        <td>Guarantee Amt. #,###,###.00</td>
-                    </tr>
-                </table></td>
+                <td>
+                    <table class="table_noborder">
+                        <tr>
+                            <td style="widht:120px;line-height: 15px;">Mr. A Example<br/>
+                                Acc No.: XXX-X-XXXXX-X Suf 000<br/>
+                                Acc. Status: 01-Normal<br/></td>
+                            <td style="line-height: 15px;">SmartBiz Loan</td>
+                            <td>#,###,###.00</td>
+                            <td>Guarantee Amt. #,###,###.00</td>
+                        </tr>
+                        <tr>
+                            <td style="widht:120px;line-height: 15px;">-</td>
+                            <td style="line-height: 15px;">SmartBiz OD</td>
+                            <td>#,###,###.00</td>
+                            <td>Guarantee Amt. #,###,###.00</td>
+                        </tr>
+                    </table>
+                </td>
                 <td class="center top">##,###,###.00</td>
                 <td class="option top">
                     <p:commandButton icon="ui-icon-pencil" title="Edit"/>
@@ -515,14 +554,19 @@
         </table>
     </td>
 </tr>
-<tr><td colspan="2"><p:spacer width="2px"/></td></tr>
-<tr><td colspan="2"><p:separator/></td></tr>
+<tr>
+    <td colspan="2"><p:spacer width="2px"/></td>
+</tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
 
 <tr>
     <td colspan="2" style="line-height: 15px;" class="title">Proposed Condition</td>
 </tr>
 <tr>
-    <td class="title" style="width:820px;"><p:commandButton value="Add" styleClass="small" onclick="proposeConditionDlg.show()"/></td>
+    <td class="title" style="width:820px;"><p:commandButton value="Add" styleClass="small"
+                                                            onclick="proposeConditionDlg.show()"/></td>
     <td><a style="cursor: pointer;" href="#">[View Change]</a></td>
 </tr>
 <tr>
@@ -553,29 +597,37 @@
         </table>
     </td>
 </tr>
-<tr><td colspan="2"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2"><p:spacer width="2"/></td>
+</tr>
 <tr>
     <td colspan="2"><p:separator/></td>
 </tr>
 
 
-
-
-<tr><td class="title" colspan="2">หลักเกณฑ์การกำกับการปล่อยสินเชื่อให้กับลูกหนี้</td></tr>
+<tr>
+    <td class="title" colspan="2">หลักเกณฑ์การกำกับการปล่อยสินเชื่อให้กับลูกหนี้</td>
+</tr>
 <tr>
     <td colspan="2">
         <table class="table_content" style="width: 100%" cellpadding="0" cellspacing="0">
             <tr style="background-color: #fafafa">
                 <td>การให้สินเชื่อแก่ผู้ที่เกี่ยวข้องกับธนาคาร (Related Lending)</td>
-                <td><input type="radio" name="isBankRelated" value="Y"/> เกี่ยวข้อง <p:spacer width="5px"/><input type="radio" name="isBankRelated" value="N"/> ไม่เกี่ยวข้อง </td>
+                <td><input type="radio" name="isBankRelated" value="Y"/> เกี่ยวข้อง <p:spacer width="5px"/><input
+                        type="radio" name="isBankRelated" value="N"/> ไม่เกี่ยวข้อง
+                </td>
             </tr>
             <tr style="background-color: #e6e6e6">
                 <td>25% ของหนี้สินรวมทั้งหมดของผู้ถือหุ้นรายใหญ่หรือกิจการที่เกี่ยวข้องกับธนาคาร</td>
-                <td><input type="radio" name="is25Percent" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input type="radio" name="is25Percent" value="N"/> ไม่เกินเกณฑ์ </td>
+                <td><input type="radio" name="is25Percent" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input
+                        type="radio" name="is25Percent" value="N"/> ไม่เกินเกณฑ์
+                </td>
             </tr>
             <tr style="background-color: #fafafa">
                 <td>หลักเกณฑ์การกำกับลูกหนี้รายใหญ่ (Single Lending Limit)</td>
-                <td><input type="radio" name="isSingleLendingLimit" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input type="radio" name="isBankRelated" value="N"/> ไม่เกินเกณฑ์ </td>
+                <td><input type="radio" name="isSingleLendingLimit" value="Y"/> เกินเกณฑ์ <p:spacer width="5px"/><input
+                        type="radio" name="isBankRelated" value="N"/> ไม่เกินเกณฑ์
+                </td>
             </tr>
         </table>
     </td>
@@ -701,13 +753,21 @@
 <tr>
     <td colspan="2">ชื่อ-นามสกุลผู้รับหมาย (กรณีกรรมการเป็นชาวต่างชาติ) <input type="text" class="largest" value=""/></td>
 </tr-->
-<tr><td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td></tr>
-<tr><td colspan="2"><p:separator/></td></tr>
-<tr><td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td></tr>
+<tr>
+    <td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td>
+</tr>
+<tr>
+    <td colspan="2"><p:separator/></td>
+</tr>
+<tr>
+    <td colspan="2" style="line-height: 11px; height: 11px;"><p:spacer width="2"/></td>
+</tr>
 <tr>
     <td colspan="2" class="center">
-        <p:commandButton value="Save" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
-        <p:commandButton value="Cancel" styleClass="small" onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+        <p:commandButton value="Save" styleClass="small"
+                         onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
+        <p:commandButton value="Cancel" styleClass="small"
+                         onclick="document.location.replace('fullscrn_bizinfo_sum.jsf')"/>
     </td>
 </tr>
 </table>
@@ -716,32 +776,32 @@
 </div>
 <div class="clear"></div>
 <!-- Start Footer -->
-<ui:include src="resources/footer.xhtml" />
+<ui:include src="resources/footer.xhtml"/>
 <!-- End Footer -->
 <p:dialog id="proposeCredit" header="Propose Credit Information" widgetVar="proposeCreditDlg"
           modal="true" width="700px;">
-    <ui:include src="resources/dialog/addProposeCreditFacility.xhtml" />
+    <ui:include src="resources/dialog/addProposeCreditFacility.xhtml"/>
 </p:dialog>
 <p:dialog id="proposeCollateral" header="Propose Collateral Information" widgetVar="proposeCollateralDlg"
           modal="false" width="700px;">
-    <ui:include src="resources/dialog/addProposeCollateral.xhtml" />
+    <ui:include src="resources/dialog/addProposeCollateral.xhtml"/>
 </p:dialog>
 <p:dialog id="proposeGuarantor" header="Propose Guarantor Information" widgetVar="proposeGuarantorDlg"
           modal="true" width="700px;">
-    <ui:include src="resources/dialog/addProposeGuarantor.xhtml" />
+    <ui:include src="resources/dialog/addProposeGuarantor.xhtml"/>
 </p:dialog>
 <p:dialog id="proposeCondition" header="Propose Condition Information" widgetVar="proposeConditionDlg"
           modal="true" width="700px;">
-    <ui:include src="resources/dialog/addCondition.xhtml" />
+    <ui:include src="resources/dialog/addCondition.xhtml"/>
 </p:dialog>
 
 <p:dialog id="proposeLoanAccount" header=" Propose Loan Account Information" widgetVar="proposeLoanAccountDlg"
           modal="true" width="600px;">
-    <ui:include src="resources/dialog/addProposeAccount.xhtml" />
+    <ui:include src="resources/dialog/addProposeAccount.xhtml"/>
 </p:dialog>
 <p:dialog id="proposeSigned" header=" Propose Authorized Signatory Information" widgetVar="proposeSignedDlg"
           modal="true" width="600px;">
-    <ui:include src="resources/dialog/addProposeSignedCustomer.xhtml" />
+    <ui:include src="resources/dialog/addProposeSignedCustomer.xhtml"/>
 </p:dialog>
 
 </div>

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @XStreamAlias("credithistories")
 public class ClosedAccountsAccountCreditHistoriesModel {
-    
+
     @XStreamImplicit(itemFieldName = "credithist")
     ArrayList<ClosedAccountsAccountCreditHistModel> credithist = new ArrayList<ClosedAccountsAccountCreditHistModel>();
 

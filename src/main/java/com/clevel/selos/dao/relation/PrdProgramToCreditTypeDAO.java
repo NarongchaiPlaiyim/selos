@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType,Integer> {
+public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType, Integer> {
     @Inject
     private Logger log;
 
@@ -20,8 +20,8 @@ public class PrdProgramToCreditTypeDAO extends GenericDAO<PrdProgramToCreditType
     }
 
     @SuppressWarnings("unchecked")
-    public List<PrdProgramToCreditType> getListPrdProByPrdprogram(ProductProgram productProgram ){
-        log.info("getListPrdProByPrdprogram. (ProductProgram: {})",productProgram);
+    public List<PrdProgramToCreditType> getListPrdProByPrdprogram(ProductProgram productProgram) {
+        log.info("getListPrdProByPrdprogram. (ProductProgram: {})", productProgram);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("productProgram", productProgram));
         criteria.addOrder(Order.asc("creditType.id"));

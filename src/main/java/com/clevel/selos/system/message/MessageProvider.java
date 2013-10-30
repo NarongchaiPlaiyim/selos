@@ -33,13 +33,13 @@ public abstract class MessageProvider implements Message {
         }
         if (Language.TH == httpSession.getAttribute("language")) {
             if (messageTh == null) {
-                log.debug("Load resource: {} (Th)",resource);
+                log.debug("Load resource: {} (Th)", resource);
                 messageTh = ResourceBundle.getBundle(resource, new Locale("th", "TH"));
             }
             return messageTh;
         }
         if (messageEn == null) {
-            log.debug("Load resource: {} (En)",resource);
+            log.debug("Load resource: {} (En)", resource);
             messageEn = ResourceBundle.getBundle(resource, new Locale("en", "US"));
         }
         return messageEn;
@@ -56,12 +56,12 @@ public abstract class MessageProvider implements Message {
     }
 
     @SuppressWarnings("unchecked")
-    public String get(String key,String... vars) {
+    public String get(String key, String... vars) {
         String text = get(key);
         Map valuesMap = new HashMap();
         int index = 0;
         for (String var : vars) {
-            valuesMap.put(""+(index++), var);
+            valuesMap.put("" + (index++), var);
         }
         return StrSubstitutor.replace(text, valuesMap);
     }

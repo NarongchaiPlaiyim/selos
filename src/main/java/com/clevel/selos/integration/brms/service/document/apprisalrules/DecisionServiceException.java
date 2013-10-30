@@ -1,18 +1,14 @@
 
 package com.clevel.selos.integration.brms.service.document.apprisalrules;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -24,12 +20,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "exception"
+        "exception"
 })
 @XmlRootElement(name = "DecisionServiceException", namespace = "http://www.ilog.com/rules/DecisionService")
 public class DecisionServiceException {
@@ -39,11 +33,9 @@ public class DecisionServiceException {
 
     /**
      * Gets the value of the exception property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getException() {
         return exception;
@@ -51,11 +43,9 @@ public class DecisionServiceException {
 
     /**
      * Sets the value of the exception property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setException(String value) {
         this.exception = value;

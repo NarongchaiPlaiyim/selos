@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
+public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail, Long> {
     @Inject
     private Logger log;
 
@@ -20,7 +20,7 @@ public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
     public BizInfoDetailDAO() {
     }
 
-    public List<BizInfoDetail> findByWorkCasePreScreen(WorkCasePrescreen workCasePrescreen){
+    public List<BizInfoDetail> findByWorkCasePreScreen(WorkCasePrescreen workCasePrescreen) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen", workCasePrescreen));
         criteria.addOrder(Order.asc("id"));
@@ -30,7 +30,7 @@ public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
         return bizInfoDetailList;
     }
 
-    public List<BizInfoDetail> findByWorkCasePreScreenId(long workCasePrescreenId){
+    public List<BizInfoDetail> findByWorkCasePreScreenId(long workCasePrescreenId) {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCasePrescreen.id", workCasePrescreenId));
         criteria.addOrder(Order.asc("id"));
@@ -40,7 +40,7 @@ public class BizInfoDetailDAO extends GenericDAO<BizInfoDetail,Long> {
         return bizInfoDetailList;
     }
 
-    public List<BizInfoDetail> findByBizInfoSummaryId(BizInfoSummary bizInfoSummary){
+    public List<BizInfoDetail> findByBizInfoSummaryId(BizInfoSummary bizInfoSummary) {
         log.info("findByBizInfoSummaryId begin ");
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("bizInfoSummary", bizInfoSummary));

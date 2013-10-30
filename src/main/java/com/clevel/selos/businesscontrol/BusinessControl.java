@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.inject.Inject;
 import java.io.Serializable;
 
-public abstract class BusinessControl implements Serializable{
+public abstract class BusinessControl implements Serializable {
 
     @Inject
     Logger log;
@@ -17,17 +17,17 @@ public abstract class BusinessControl implements Serializable{
     @Inject
     UserDAO userDAO;
 
-    protected String getCurrentUserID(){
+    protected String getCurrentUserID() {
         UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(userDetail != null)
+        if (userDetail != null)
             return userDetail.getUserName();
         return null;
     }
 
-    protected User getCurrentUser(){
-        try{
+    protected User getCurrentUser() {
+        try {
             return userDAO.findByUserName(getCurrentUserID());
-        } catch(Exception ex){
+        } catch (Exception ex) {
             log.error("User Not found", ex);
             return null;
         }

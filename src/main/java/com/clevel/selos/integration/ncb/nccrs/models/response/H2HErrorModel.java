@@ -5,7 +5,6 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
 /**
- *
  * @author Chai
  */
 public class H2HErrorModel {

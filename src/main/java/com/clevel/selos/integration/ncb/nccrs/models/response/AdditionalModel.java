@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 @XStreamAlias("additional")
 public class AdditionalModel {
-    
+
     @XStreamImplicit(itemFieldName = "id")
     private ArrayList<ProfileIdModel> id = new ArrayList<ProfileIdModel>();
-    
+
     @XStreamImplicit(itemFieldName = "name")
     private ArrayList<ProfileNameModel> name = new ArrayList<ProfileNameModel>();
-    
+
     @XStreamImplicit(itemFieldName = "address")
     private ArrayList<ProfileAddressModel> address = new ArrayList<ProfileAddressModel>();
 

@@ -1,22 +1,18 @@
 
 package com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for PricingTierType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="PricingTierType">
  *   &lt;complexContent>
@@ -44,28 +40,26 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PricingTierType", propOrder = {
-    "id",
-    "code",
-    "interestRate",
-    "waivedFlag",
-    "startDate",
-    "endDate",
-    "billingCycleStart",
-    "billingCyclleEnd",
-    "yearFrom",
-    "yearTo",
-    "monthFrom",
-    "monthTo",
-    "rateType",
-    "minRate",
-    "rateVariance",
-    "spread",
-    "attribute"
+        "id",
+        "code",
+        "interestRate",
+        "waivedFlag",
+        "startDate",
+        "endDate",
+        "billingCycleStart",
+        "billingCyclleEnd",
+        "yearFrom",
+        "yearTo",
+        "monthFrom",
+        "monthTo",
+        "rateType",
+        "minRate",
+        "rateVariance",
+        "spread",
+        "attribute"
 })
 public class PricingTierType {
 
@@ -92,11 +86,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getID() {
         return id;
@@ -104,11 +96,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setID(String value) {
         this.id = value;
@@ -116,11 +106,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the code property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getCode() {
         return code;
@@ -128,11 +116,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the code property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setCode(String value) {
         this.code = value;
@@ -140,11 +126,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the interestRate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getInterestRate() {
         return interestRate;
@@ -152,11 +136,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the interestRate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setInterestRate(BigDecimal value) {
         this.interestRate = value;
@@ -164,11 +146,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the waivedFlag property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
+     *
+     * @return possible object is
+     *         {@link Boolean }
      */
     public Boolean isWaivedFlag() {
         return waivedFlag;
@@ -176,11 +156,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the waivedFlag property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Boolean }
      */
     public void setWaivedFlag(Boolean value) {
         this.waivedFlag = value;
@@ -188,11 +166,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the startDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getStartDate() {
         return startDate;
@@ -200,11 +176,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the startDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setStartDate(XMLGregorianCalendar value) {
         this.startDate = value;
@@ -212,11 +186,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the endDate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getEndDate() {
         return endDate;
@@ -224,11 +196,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the endDate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setEndDate(XMLGregorianCalendar value) {
         this.endDate = value;
@@ -236,11 +206,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the billingCycleStart property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getBillingCycleStart() {
         return billingCycleStart;
@@ -248,11 +216,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the billingCycleStart property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setBillingCycleStart(Integer value) {
         this.billingCycleStart = value;
@@ -260,11 +226,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the billingCyclleEnd property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getBillingCyclleEnd() {
         return billingCyclleEnd;
@@ -272,11 +236,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the billingCyclleEnd property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setBillingCyclleEnd(Integer value) {
         this.billingCyclleEnd = value;
@@ -284,11 +246,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the yearFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getYearFrom() {
         return yearFrom;
@@ -296,11 +256,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the yearFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setYearFrom(Integer value) {
         this.yearFrom = value;
@@ -308,11 +266,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the yearTo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getYearTo() {
         return yearTo;
@@ -320,11 +276,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the yearTo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setYearTo(Integer value) {
         this.yearTo = value;
@@ -332,11 +286,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the monthFrom property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getMonthFrom() {
         return monthFrom;
@@ -344,11 +296,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the monthFrom property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setMonthFrom(Integer value) {
         this.monthFrom = value;
@@ -356,11 +306,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the monthTo property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
+     *
+     * @return possible object is
+     *         {@link Integer }
      */
     public Integer getMonthTo() {
         return monthTo;
@@ -368,11 +316,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the monthTo property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Integer }
      */
     public void setMonthTo(Integer value) {
         this.monthTo = value;
@@ -380,11 +326,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the rateType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getRateType() {
         return rateType;
@@ -392,11 +336,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the rateType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRateType(String value) {
         this.rateType = value;
@@ -404,11 +346,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the minRate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getMinRate() {
         return minRate;
@@ -416,11 +356,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the minRate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setMinRate(BigDecimal value) {
         this.minRate = value;
@@ -428,11 +366,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the rateVariance property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @return possible object is
+     *         {@link java.math.BigDecimal }
      */
     public BigDecimal getRateVariance() {
         return rateVariance;
@@ -440,11 +376,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the rateVariance property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link java.math.BigDecimal }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link java.math.BigDecimal }
      */
     public void setRateVariance(BigDecimal value) {
         this.rateVariance = value;
@@ -452,11 +386,9 @@ public class PricingTierType {
 
     /**
      * Gets the value of the spread property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getSpread() {
         return spread;
@@ -464,11 +396,9 @@ public class PricingTierType {
 
     /**
      * Sets the value of the spread property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSpread(String value) {
         this.spread = value;
@@ -476,25 +406,23 @@ public class PricingTierType {
 
     /**
      * Gets the value of the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the attribute property.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAttribute().add(newItem);
      * </pre>
-     * 
-     * 
-     * <p>
+     * <p/>
+     * <p/>
+     * <p/>
      * Objects of the following type(s) are allowed in the list
      * {@link AttributeType }
-     * 
-     * 
      */
     public List<AttributeType> getAttribute() {
         if (attribute == null) {

@@ -11,65 +11,65 @@ import java.io.Serializable;
 @Table(name = "wrk_address")
 public class Address implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_ADDRESS_ID", sequenceName="SEQ_WRK_ADDRESS_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_ADDRESS_ID")
+    @SequenceGenerator(name = "SEQ_WRK_ADDRESS_ID", sequenceName = "SEQ_WRK_ADDRESS_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_ADDRESS_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     Customer customer;
 
     @OneToOne
-    @JoinColumn(name="address_type_id")
+    @JoinColumn(name = "address_type_id")
     AddressType addressType;
 
-    @Column(name="address_no")
+    @Column(name = "address_no")
     private String addressNo;
 
-    @Column(name="moo")
+    @Column(name = "moo")
     private String moo;
 
-    @Column(name="building")
+    @Column(name = "building")
     private String building;
 
-    @Column(name="road")
+    @Column(name = "road")
     private String road;
 
     @OneToOne
-    @JoinColumn(name="province_id")
+    @JoinColumn(name = "province_id")
     private Province province;
 
     @OneToOne
-    @JoinColumn(name="district_id")
+    @JoinColumn(name = "district_id")
     private District district;
 
     @OneToOne
-    @JoinColumn(name="subdistrict_id")
+    @JoinColumn(name = "subdistrict_id")
     private SubDistrict subDistrict;
 
-    @Column(name="postal_code")
+    @Column(name = "postal_code")
     private String postalCode;
 
     @OneToOne
-    @JoinColumn(name="country_id")
+    @JoinColumn(name = "country_id")
     private Country country;
 
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name="phone_extension")
+    @Column(name = "phone_extension")
     private String extension;
 
-    @Column(name="contact_name")
+    @Column(name = "contact_name")
     private String contactName;
 
-    @Column(name="contact_phone")
+    @Column(name = "contact_phone")
     private String contactPhone;
 
-    @Column(name="address")
+    @Column(name = "address")
     private String address;
 
-    public Address(){
+    public Address() {
 
     }
 

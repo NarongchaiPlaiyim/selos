@@ -1,19 +1,15 @@
 
 package com.clevel.selos.integration.brms.service.standardpricing.feerules;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
  * <p>Java class for UnderwritingApprovalRequestType complex type.
- * 
+ * <p/>
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ * <p/>
  * <pre>
  * &lt;complexType name="UnderwritingApprovalRequestType">
  *   &lt;complexContent>
@@ -27,14 +23,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "UnderwritingApprovalRequestType", propOrder = {
-    "application",
-    "stage",
-    "timeOfRequest"
+        "application",
+        "stage",
+        "timeOfRequest"
 })
 public class UnderwritingApprovalRequestType {
 
@@ -46,11 +40,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Gets the value of the application property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ApplicationType }
-     *     
+     *
+     * @return possible object is
+     *         {@link ApplicationType }
      */
     public ApplicationType getApplication() {
         return application;
@@ -58,11 +50,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Sets the value of the application property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ApplicationType }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ApplicationType }
      */
     public void setApplication(ApplicationType value) {
         this.application = value;
@@ -70,11 +60,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Gets the value of the stage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     *         {@link String }
      */
     public String getStage() {
         return stage;
@@ -82,11 +70,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Sets the value of the stage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setStage(String value) {
         this.stage = value;
@@ -94,11 +80,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Gets the value of the timeOfRequest property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     *         {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getTimeOfRequest() {
         return timeOfRequest;
@@ -106,11 +90,9 @@ public class UnderwritingApprovalRequestType {
 
     /**
      * Sets the value of the timeOfRequest property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link javax.xml.datatype.XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link javax.xml.datatype.XMLGregorianCalendar }
      */
     public void setTimeOfRequest(XMLGregorianCalendar value) {
         this.timeOfRequest = value;

@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class UserDetail implements Serializable{
+public class UserDetail implements Serializable {
     private String userName;
     private String password;
     private String role;
@@ -65,7 +65,7 @@ public class UserDetail implements Serializable{
     public boolean equals(final Object obj) {
         if (obj instanceof UserDetail) {
             final UserDetail other = (UserDetail) obj;
-            return new EqualsBuilder().append(userName,other.userName).isEquals();
+            return new EqualsBuilder().append(userName, other.userName).isEquals();
         } else {
             return false;
         }

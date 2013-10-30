@@ -22,7 +22,7 @@ public class KYCLevel implements Serializable {
     @Column(name = "active")
     private int active;
 
-    public KYCLevel(){
+    public KYCLevel() {
     }
 
     public int getId() {

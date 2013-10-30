@@ -9,117 +9,117 @@ import java.util.Date;
 
 @Entity
 @Table(name = "wrk_ncb")
-public class NCB implements Serializable{
+public class NCB implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_NCB_ID", sequenceName="SEQ_WRK_NCB_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_NCB_ID")
+    @SequenceGenerator(name = "SEQ_WRK_NCB_ID", sequenceName = "SEQ_WRK_NCB_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_NCB_ID")
     private long id;
 
     @OneToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @Column(name="checking_date")
+    @Column(name = "checking_date")
     private Date checkingDate;
 
-    @Column(name="check_in_6_month")
+    @Column(name = "check_in_6_month")
     private int checkIn6Month;
 
-    @Column(name="payment_class")
+    @Column(name = "payment_class")
     private String paymentClass;
 
-    @Column(name="personal_id")
+    @Column(name = "personal_id")
     private String personalId;
 
-    @Column(name="current_payment_type")
+    @Column(name = "current_payment_type")
     private String currentPaymentType;
 
-    @Column(name="history_payment_type")
+    @Column(name = "history_payment_type")
     private String historyPaymentType;
 
-    @Column(name="npl_flag")
+    @Column(name = "npl_flag")
     private int nplFlag;
 
-    @Column(name="npl_tmb_flag")
+    @Column(name = "npl_tmb_flag")
     private int nplTMBFlag;
 
-    @Column(name="npl_tmb_month")
+    @Column(name = "npl_tmb_month")
     private int nplTMBMonth;
 
-    @Column(name="npl_tmb_year")
+    @Column(name = "npl_tmb_year")
     private int nplTMBYear;
 
-    @Column(name="npl_other_flag")
+    @Column(name = "npl_other_flag")
     private int nplOtherFlag;
 
-    @Column(name="npl_other_month")
+    @Column(name = "npl_other_month")
     private int nplOtherMonth;
 
-    @Column(name="npl_other_year")
+    @Column(name = "npl_other_year")
     private int nplOtherYear;
 
-    @Column(name="tdr_flag")
+    @Column(name = "tdr_flag")
     private int tdrFlag;
 
-    @Column(name="tdr_tmb_flag")
+    @Column(name = "tdr_tmb_flag")
     private int tdrTMBFlag;
 
-    @Column(name="tdr_tmb_month")
+    @Column(name = "tdr_tmb_month")
     private int tdrTMBMonth;
 
-    @Column(name="tdr_tmb_year")
+    @Column(name = "tdr_tmb_year")
     private int tdrTMBYear;
 
-    @Column(name="tdr_other_flag")
+    @Column(name = "tdr_other_flag")
     private int tdrOhterFlag;
 
-    @Column(name="tdr_other_month")
+    @Column(name = "tdr_other_month")
     private int tdrOtherMonth;
 
-    @Column(name="tdr_other_year")
+    @Column(name = "tdr_other_year")
     private int tdrOtherYear;
 
     @OneToOne
-    @JoinColumn(name="tdr_condition_id")
+    @JoinColumn(name = "tdr_condition_id")
     private TDRCondition tdrCondition;
 
-    @Column(name="remark")
+    @Column(name = "remark")
     private String remark;
 
-    @Column (name="cus_marriage_status")
+    @Column(name = "cus_marriage_status")
     private String ncbCusMarriageStatus;
 
 
-    @Column (name="last_info_as_of_date")
+    @Column(name = "last_info_as_of_date")
     private String ncbLastInfoAsOfDate;
 
 
-    @Column (name="enquiry")
+    @Column(name = "enquiry")
     private String enquiry;
 
-    @Column (name="ncb_cus_name")
+    @Column(name = "ncb_cus_name")
     private String ncbCusName;
 
-    @Column (name="ncb_cus_address")
+    @Column(name = "ncb_cus_address")
     private String ncbCusAddress;
 
-    @Column(name="active")
+    @Column(name = "active")
     private boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
 
@@ -219,7 +219,6 @@ public class NCB implements Serializable{
     public void setNplOtherYear(int nplOtherYear) {
         this.nplOtherYear = nplOtherYear;
     }
-
 
 
     public int getTdrTMBMonth() {

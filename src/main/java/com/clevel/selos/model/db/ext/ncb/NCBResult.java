@@ -12,30 +12,30 @@ import java.util.Date;
 @Table(name = "ext_ncb_result")
 public class NCBResult implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_EXT_NCB_RESULT_ID", sequenceName="SEQ_EXT_NCB_RESULT_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_EXT_NCB_RESULT_ID")
+    @SequenceGenerator(name = "SEQ_EXT_NCB_RESULT_ID", sequenceName = "SEQ_EXT_NCB_RESULT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_EXT_NCB_RESULT_ID")
     private long id;
 
-    @Column(name="appNumber", length = 16)
+    @Column(name = "appNumber", length = 16)
     private String appNumber;
 
-    @Column(name="customer_type", length = 7)
+    @Column(name = "customer_type", length = 7)
     private String customerType;
 
-    @Column(name="customer_id", length = 500)
+    @Column(name = "customer_id", length = 500)
     private String customerId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="inquiry_date", nullable=false)
+    @Column(name = "inquiry_date", nullable = false)
     private Date inquiryDate;
 
-    @Column(name="result", length = 20)
+    @Column(name = "result", length = 20)
     private String result;
 
-    @Column(name="reason", length = 500)
+    @Column(name = "reason", length = 500)
     private String reason;
 
-    @Column(name="request_no", length = 20)
+    @Column(name = "request_no", length = 20)
     private String requestNo;
 
     public NCBResult() {

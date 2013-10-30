@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @XStreamAlias("inquiryhistories")
 public class InquiryHistoriesModel {
-    
+
     @XStreamImplicit(itemFieldName = "inqhist")
     private ArrayList<InqHistModel> inqhist = new ArrayList<InqHistModel>();
 

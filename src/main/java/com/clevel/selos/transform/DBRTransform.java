@@ -19,11 +19,10 @@ public class DBRTransform extends Transform {
     DBRDAO dbrdao;
 
 
-
-    public DBRView getDBRView(DBR dbr){
+    public DBRView getDBRView(DBR dbr) {
         DBRView dbrView = new DBRView();
-        if(dbr == null){
-         return dbrView;
+        if (dbr == null) {
+            return dbrView;
         }
         dbrView.setId(dbr.getId());
         dbrView.setDbrInterest(dbr.getDbrInterest());
@@ -38,21 +37,21 @@ public class DBRTransform extends Transform {
         return dbrView;
     }
 
-    public DBR getDBRInfoModel(DBRView dbrView, WorkCase workCase, User user){
+    public DBR getDBRInfoModel(DBRView dbrView, WorkCase workCase, User user) {
         DBR dbr = new DBR();
-        if(dbrView == null){
+        if (dbrView == null) {
             return dbr;
         }
         Date now = new Date();
-        if(dbrView.getId() == 0){
+        if (dbrView.getId() == 0) {
             dbr.setCreateBy(user);
             dbr.setCreateDate(now);
-        }else{
+        } else {
             dbr = dbrdao.findById(dbrView.getId());
-            if(dbr == null){
+            if (dbr == null) {
                 dbr.setCreateBy(user);
                 dbr.setCreateDate(now);
-            }else{
+            } else {
                 dbr.setId(dbrView.getId());
             }
         }

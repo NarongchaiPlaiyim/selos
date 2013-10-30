@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class AccountStatusDAO extends GenericDAO<AccountStatus,Integer> {
+public class AccountStatusDAO extends GenericDAO<AccountStatus, Integer> {
     @Inject
     private Logger log;
 
@@ -17,28 +17,28 @@ public class AccountStatusDAO extends GenericDAO<AccountStatus,Integer> {
     public AccountStatusDAO() {
     }
 
-    public AccountStatus getIndividualByCode(String code){
-        log.debug("getIndividualByCode. (code: {}",code);
+    public AccountStatus getIndividualByCode(String code) {
+        log.debug("getIndividualByCode. (code: {}", code);
         AccountStatus accountStatus = new AccountStatus();
-        if(!Util.isEmpty(code)){
+        if (!Util.isEmpty(code)) {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("ncbCodeInd", code.trim()));
             accountStatus = (AccountStatus) criteria.uniqueResult();
 
-            log.debug("getIndividualByCode. (accountStatus: {})",accountStatus);
+            log.debug("getIndividualByCode. (accountStatus: {})", accountStatus);
         }
         return accountStatus;
     }
 
-    public AccountStatus getJuristicByCode(String code){
-        log.debug("getJuristicByCode. (code: {}",code);
+    public AccountStatus getJuristicByCode(String code) {
+        log.debug("getJuristicByCode. (code: {}", code);
         AccountStatus accountStatus = new AccountStatus();
-        if(!Util.isEmpty(code)){
+        if (!Util.isEmpty(code)) {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.eq("ncbCodeJur", code.trim()));
             accountStatus = (AccountStatus) criteria.uniqueResult();
 
-            log.debug("getJuristicByCode. (accountStatus: {})",accountStatus);
+            log.debug("getJuristicByCode. (accountStatus: {})", accountStatus);
         }
         return accountStatus;
     }

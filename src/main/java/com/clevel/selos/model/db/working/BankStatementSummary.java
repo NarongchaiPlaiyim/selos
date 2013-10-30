@@ -11,81 +11,81 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_bankstatement_summary")
+@Table(name = "wrk_bankstatement_summary")
 public class BankStatementSummary implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BANKSTMT_SUM_ID", sequenceName="SEQ_WRK_BANKSTMT_SUM_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BANKSTMT_SUM_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BANKSTMT_SUM_ID", sequenceName = "SEQ_WRK_BANKSTMT_SUM_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BANKSTMT_SUM_ID")
     private long id;
 
-    @Column(name="seasonal_flag")
+    @Column(name = "seasonal_flag")
     private int seasonal;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="expected_submit_date")
+    @Column(name = "expected_submit_date")
     private Date expectedSubmitDate;
 
-    @Column(name="tmb_total_income_gross")
+    @Column(name = "tmb_total_income_gross")
     private BigDecimal TMBTotalIncomeGross;
 
-    @Column(name="tmb_total_income_bdm")
+    @Column(name = "tmb_total_income_bdm")
     private BigDecimal TMBTotalIncomeNetBDM;
 
-    @Column(name="tmb_total_income_uw")
+    @Column(name = "tmb_total_income_uw")
     private BigDecimal TMBTotalIncomeNetUW;
 
-    @Column(name="other_total_income_gross")
+    @Column(name = "other_total_income_gross")
     private BigDecimal othTotalIncomeGross;
 
-    @Column(name="other_total_income_bdm")
+    @Column(name = "other_total_income_bdm")
     private BigDecimal othTotalIncomeNetBDM;
 
-    @Column(name="other_total_income_uw")
+    @Column(name = "other_total_income_uw")
     private BigDecimal othTotalIncomeNetUW;
 
-    @Column(name="grand_total_income_gross")
+    @Column(name = "grand_total_income_gross")
     private BigDecimal grdTotalIncomeGross;
 
-    @Column(name="grand_total_income_bdm")
+    @Column(name = "grand_total_income_bdm")
     private BigDecimal grdTotalIncomeNetBDM;
 
-    @Column(name="grand_total_income_uw")
+    @Column(name = "grand_total_income_uw")
     private BigDecimal grdTotalIncomeNetUW;
 
-    @Column(name="grand_td_chq_return_amt")
+    @Column(name = "grand_td_chq_return_amt")
     private BigDecimal grdTotalTDChqRetAmount;
 
-    @Column(name="grand_td_chq_return_percent")
+    @Column(name = "grand_td_chq_return_percent")
     private BigDecimal grdTotalTDChqRetPercent;
 
-    @Column(name="grand_avg_os_balance_amt")
+    @Column(name = "grand_avg_os_balance_amt")
     private BigDecimal grdTotalAvgOSBalanceAmount;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
     @ManyToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @ManyToOne
-    @JoinColumn(name="workcase_prescreen_id")
+    @JoinColumn(name = "workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
-    @OneToMany(mappedBy="bankStatementSummary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bankStatementSummary", cascade = CascadeType.ALL)
     private List<BankStatement> bankStmtList;
 
     public long getId() {

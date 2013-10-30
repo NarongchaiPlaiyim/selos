@@ -31,11 +31,12 @@
 <div id="content">
 <div id="content_info">
     <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText value="#{ncbInfo.ncbInfoView.modifyBy.userName}"/>, <h:outputText value="#{ncbInfo.ncbInfoView.modifyDate}"/></div>
+    <div id="content_lastupdate">Last update by <h:outputText value="#{ncbInfo.ncbInfoView.modifyBy.userName}"/>,
+        <h:outputText value="#{ncbInfo.ncbInfoView.modifyDate}"/></div>
 </div>
 <div id="content_form">
 <!-- start content -->
-<table class="content_table_form" >
+<table class="content_table_form">
 
 <tr>
     <td style="width: 50px" class="title">
@@ -49,7 +50,9 @@
         <h:outputText value="#{msg.get('app.ncbCheckingDate')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;">
+            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        </p:inputText>
     </td>
 </tr>
 
@@ -58,7 +61,7 @@
         <h:outputText value="#{msg.get('app.noOfNCBCheckIn6months')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: right"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.checkIn6Month}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>
@@ -66,7 +69,7 @@
         <h:outputText value="#{msg.get('app.paymentClass')}"/>
     </td>
     <td>
-        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;"/>
+        <p:inputText value="#{ncbInfo.ncbInfoView.paymentClass}" disabled="true" style="width:200px;text-align: left"/>
     </td>
 </tr>
 <tr>
@@ -102,31 +105,31 @@
                     <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplTMBFlag}"/>
                     <h:outputText value="#{msg.get('app.isNPLwithTMB')}"></h:outputText>
                     <p:spacer width="5px;"/>
+
+                    <!-- <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
+                        <f:selectItems value="#{ncbInfo.statMonthLists}" />
+                    </h:selectOneMenu>-->
+
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
-                        <f:selectItem itemLabel="January" itemValue="1"/>
-                        <f:selectItem itemLabel="February" itemValue="2"/>
+                        <f:selectItems value="#{ncbInfo.statMonths}" var="MonthList"
+                                   itemValue="#{MonthList.value}" itemLabel="#{MonthList}" />
                     </h:selectOneMenu>
+
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBYear}">
-                        <f:selectItem itemLabel="2010" itemValue="2010"/>
-                        <f:selectItem itemLabel="2011" itemValue="2011"/>
-                        <f:selectItem itemLabel="2012" itemValue="2012"/>
-                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                        <f:selectItems value="#{ncbInfo.yearList}"  />
                     </h:selectOneMenu>
                     <p:spacer width="5px;"/>
                     <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.nplOtherFlag}"/><h:outputText
                         value="#{msg.get('app.isNPLwithOther')}"/>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherMonth}">
-                        <f:selectItem itemLabel="January" itemValue="1"/>
-                        <f:selectItem itemLabel="February" itemValue="2"/>
+                        <f:selectItems value="#{ncbInfo.statMonths}" var="MonthList"
+                              itemValue="#{MonthList.value}" itemLabel="#{MonthList}" />
                     </h:selectOneMenu>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplOtherYear}">
-                        <f:selectItem itemLabel="2010" itemValue="2010"/>
-                        <f:selectItem itemLabel="2011" itemValue="2011"/>
-                        <f:selectItem itemLabel="2012" itemValue="2012"/>
-                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                        <f:selectItems value="#{ncbInfo.yearList}"  />
                     </h:selectOneMenu>
                 </td>
             </tr>
@@ -160,30 +163,24 @@
                     <h:outputText value="#{msg.get('app.isTDRwithTMB')}"></h:outputText>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBMonth}">
-                        <f:selectItem itemLabel="January" itemValue="1"/>
-                        <f:selectItem itemLabel="February" itemValue="2"/>
+                        <f:selectItems value="#{ncbInfo.statMonths}" var="MonthList"
+                                       itemValue="#{MonthList.value}" itemLabel="#{MonthList}" />
                     </h:selectOneMenu>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrTMBYear}">
-                        <f:selectItem itemLabel="2010" itemValue="2010"/>
-                        <f:selectItem itemLabel="2011" itemValue="2011"/>
-                        <f:selectItem itemLabel="2012" itemValue="2012"/>
-                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                        <f:selectItems value="#{ncbInfo.yearList}"/>
                     </h:selectOneMenu>
                     <p:spacer width="5px;"/>
                     <h:selectBooleanCheckbox value="#{ncbInfo.ncbInfoView.tdrOtherFlag}"/><h:outputText
                         value="#{msg.get('app.isTDRwithOther')}"/>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherMonth}">
-                        <f:selectItem itemLabel="January" itemValue="1"/>
-                        <f:selectItem itemLabel="February" itemValue="2"/>
+                        <f:selectItems value="#{ncbInfo.statMonths}" var="MonthList"
+                                       itemValue="#{MonthList.value}" itemLabel="#{MonthList}" />
                     </h:selectOneMenu>
                     <p:spacer width="5px;"/>
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.tdrOtherYear}">
-                        <f:selectItem itemLabel="2010" itemValue="2010"/>
-                        <f:selectItem itemLabel="2011" itemValue="2011"/>
-                        <f:selectItem itemLabel="2012" itemValue="2012"/>
-                        <f:selectItem itemLabel="2013" itemValue="2013"/>
+                        <f:selectItems value="#{ncbInfo.yearList}"  />
                     </h:selectOneMenu>
                 </td>
             </tr>

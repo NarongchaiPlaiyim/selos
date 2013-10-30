@@ -14,11 +14,11 @@ public class DBRDetailView implements Serializable {
     private BigDecimal debtForCalculate;
     private LoanTypeView loanTypeView;
 
-    public DBRDetailView(){
+    public DBRDetailView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.id = 0;
         this.accountName = "";
         this.limit = BigDecimal.ZERO;

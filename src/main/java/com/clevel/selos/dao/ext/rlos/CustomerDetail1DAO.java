@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDetail1DAO extends GenericDAO<CustomerDetail1,Long> {
+public class CustomerDetail1DAO extends GenericDAO<CustomerDetail1, Long> {
     @Inject
     private Logger log;
 
@@ -18,15 +18,15 @@ public class CustomerDetail1DAO extends GenericDAO<CustomerDetail1,Long> {
     public CustomerDetail1DAO() {
     }
 
-    public List<CustomerDetail1> getListCustomerByCitizenId(List<String> citizenIdList){
-        log.debug("getListCustomerByCitizenId (citizenId : {})",citizenIdList);
+    public List<CustomerDetail1> getListCustomerByCitizenId(List<String> citizenIdList) {
+        log.debug("getListCustomerByCitizenId (citizenId : {})", citizenIdList);
         List<CustomerDetail1> customerDetail1List = new ArrayList<CustomerDetail1>();
-        if(citizenIdList!=null && citizenIdList.size()>0){
+        if (citizenIdList != null && citizenIdList.size() > 0) {
             Criteria criteria = createCriteria();
             criteria.add(Restrictions.in("citizenId", citizenIdList));
             customerDetail1List = criteria.list();
 
-            log.debug("getListCustomerByCitizenId , result (customerDetail1List : {})",customerDetail1List);
+            log.debug("getListCustomerByCitizenId , result (customerDetail1List : {})", customerDetail1List);
         }
 
         return customerDetail1List;

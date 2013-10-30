@@ -10,29 +10,29 @@ import java.util.ArrayList;
 public class SubjectModel implements Serializable {
     @XStreamImplicit(itemFieldName = "name")
     private ArrayList<SubjectNameModel> name = new ArrayList<SubjectNameModel>();
-    
+
     @XStreamImplicit(itemFieldName = "id")
     private ArrayList<SubjectIdModel> id = new ArrayList<SubjectIdModel>();
-    
+
     @XStreamImplicit(itemFieldName = "address")
     private ArrayList<SubjectAddressModel> address = new ArrayList<SubjectAddressModel>();
-    
+
     @XStreamImplicit(itemFieldName = "account")
     private ArrayList<SubjectAccountModel> account = new ArrayList<SubjectAccountModel>();
-    
+
     @XStreamImplicit(itemFieldName = "enquiry")
     private ArrayList<EnquiryModel> enquiry = new ArrayList<EnquiryModel>();
-    
+
     @XStreamImplicit(itemFieldName = "dispute")
     private ArrayList<SubjectDisputeModel> dispute = new ArrayList<SubjectDisputeModel>();
-    
+
     public SubjectModel(ArrayList<SubjectNameModel> name
-                       ,ArrayList<SubjectIdModel> id
-                       ,ArrayList<SubjectAddressModel> address
-                       ,ArrayList<SubjectAccountModel> account
-                       ,ArrayList<EnquiryModel> enquiry
-                       ,ArrayList<SubjectDisputeModel> dispute
-            ) {
+            , ArrayList<SubjectIdModel> id
+            , ArrayList<SubjectAddressModel> address
+            , ArrayList<SubjectAccountModel> account
+            , ArrayList<EnquiryModel> enquiry
+            , ArrayList<SubjectDisputeModel> dispute
+    ) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -64,6 +64,6 @@ public class SubjectModel implements Serializable {
     public ArrayList<SubjectDisputeModel> getDispute() {
         return dispute;
     }
-    
-    
+
+
 }

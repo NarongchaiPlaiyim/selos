@@ -11,7 +11,7 @@ public class ReferredExperienceDAO extends GenericDAO<ReferredExperience, Intege
     private Logger log;
 
     @Inject
-    public ReferredExperienceDAO(){
+    public ReferredExperienceDAO() {
 
     }
 }

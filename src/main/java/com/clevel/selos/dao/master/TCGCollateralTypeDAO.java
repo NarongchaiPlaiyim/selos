@@ -11,7 +11,7 @@ public class TCGCollateralTypeDAO extends GenericDAO<TCGCollateralType, Integer>
     private Logger log;
 
     @Inject
-    TCGCollateralTypeDAO(){
+    TCGCollateralTypeDAO() {
 
     }
 }

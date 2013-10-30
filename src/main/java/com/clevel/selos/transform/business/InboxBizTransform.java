@@ -25,15 +25,15 @@ public class InboxBizTransform extends BusinessTransform {
     @Inject
     StepDAO stepDAO;
 
-    public List<InboxView> transformToView(List<CaseDTO> caseDTOs){
+    public List<InboxView> transformToView(List<CaseDTO> caseDTOs) {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
-        for(CaseDTO item : caseDTOs){
+        for (CaseDTO item : caseDTOs) {
             InboxView inboxView = new InboxView();
 
-            if(item.getCaseData().containsKey("F_WobNum")){
+            if (item.getCaseData().containsKey("F_WobNum")) {
                 inboxView.setFnWobNum(item.getCaseData().get("F_WobNum"));
                 WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findByWobNumber(inboxView.getFnWobNum());
-                if(workCasePrescreen != null){
+                if (workCasePrescreen != null) {
                     inboxView.setWorkCasePreScreenId(workCasePrescreen.getId());
                     inboxView.setCaNo(workCasePrescreen.getCaNumber());
                     inboxView.setBdmId(workCasePrescreen.getCreateBy().getId());
@@ -43,31 +43,31 @@ public class InboxBizTransform extends BusinessTransform {
                     inboxView.setBdmId("");
                 }
                 WorkCase workCase = workCaseDAO.findByWobNumber(inboxView.getFnWobNum());
-                if(workCase != null){
+                if (workCase != null) {
                     inboxView.setWorkCaseId(workCase.getId());
                     inboxView.setCaNo(workCase.getCaNumber());
                     inboxView.setBdmId(workCase.getCreateBy().getId());
                 }
 
             }
-            if(item.getCaseData().containsKey("F_StepName")){
+            if (item.getCaseData().containsKey("F_StepName")) {
                 inboxView.setFnStepName(item.getCaseData().get("F_StepName"));
             }
-            if(item.getCaseData().containsKey("Step_Code")){
+            if (item.getCaseData().containsKey("Step_Code")) {
                 inboxView.setStepCode(item.getCaseData().get("Step_Code"));
                 Step step = stepDAO.findById(Long.parseLong(inboxView.getStepCode().toString()));
                 inboxView.setStepId(step.getId());
             }
 
-            if(item.getCaseData().containsKey("Lock_Status")){
+            if (item.getCaseData().containsKey("Lock_Status")) {
                 inboxView.setLockStatus(item.getCaseData().get("Lock_Status"));
             }
 
-            if(item.getCaseData().containsKey("Locked_User")){
+            if (item.getCaseData().containsKey("Locked_User")) {
                 inboxView.setLockedUser(item.getCaseData().get("Locked_User"));
             }
 
-            if(item.getCaseData().containsKey("QUEUE_NAME")){
+            if (item.getCaseData().containsKey("QUEUE_NAME")) {
                 inboxView.setQueueName(item.getCaseData().get("QUEUE_NAME"));
             }
 

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.util.List;
 
-public class OpenAccountProductDAO extends GenericDAO<OpenAccountProduct,Integer> {
+public class OpenAccountProductDAO extends GenericDAO<OpenAccountProduct, Integer> {
     @Inject
     private Logger log;
 
@@ -25,13 +25,13 @@ public class OpenAccountProductDAO extends GenericDAO<OpenAccountProduct,Integer
         return list;
     }
 
-    public List<OpenAccountProduct> findByBankAccountTypeId(int bankAccountTypeId){
+    public List<OpenAccountProduct> findByBankAccountTypeId(int bankAccountTypeId) {
         log.info("findByOpenAccountTypeId. (accountTypeId: {})", bankAccountTypeId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("bankAccountType.id", bankAccountTypeId));
-        criteria.add(Restrictions.eq("active",1));
+        criteria.add(Restrictions.eq("active", 1));
         List<OpenAccountProduct> accountProductList = criteria.list();
-        log.info("findByOpenAccountTypeId. (result size: {})",accountProductList.size());
+        log.info("findByOpenAccountTypeId. (result size: {})", accountProductList.size());
 
         return accountProductList;
     }

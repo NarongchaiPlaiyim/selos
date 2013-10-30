@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
+import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
@@ -12,6 +13,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -21,6 +23,8 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -81,6 +85,8 @@ public class NCBInfo implements Serializable {
     private Long customerId;
     private User user;
 
+    private List<String> yearList;
+
     @Inject
     private AccountStatusDAO accountStatusDAO;
     @Inject
@@ -98,8 +104,13 @@ public class NCBInfo implements Serializable {
     @Inject
     private NCBDAO ncbDAO;
 
+
     public NCBInfo() {
 
+    }
+
+    public Month[] getStatMonths(){
+        return Month.values();
     }
 
     @PostConstruct
@@ -111,23 +122,31 @@ public class NCBInfo implements Serializable {
         noOfmonthsPaymentFlag = false;
 
         HttpSession session = FacesUtil.getSession(true);
-        user = (User)session.getAttribute("user");
+        user = (User) session.getAttribute("user");
 
-        if(session.getAttribute("customerId") != null){
+        if (session.getAttribute("customerId") != null) {
             customerId = Long.parseLong(session.getAttribute("customerId").toString());
-            log.info("customerId :: {} ",customerId);
+            log.info("customerId :: {} ", customerId);
 
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
-            log.info("ncbCusMarriageStatus :: {}",ncbInfoView.getNcbCusMarriageStatus());
-            log.info("enquiry :: {}",ncbInfoView.getEnquiry());
-            log.info("ncbLastInfoAsOfDate :: {}",ncbInfoView.getNcbLastInfoAsOfDate());
-            log.info("ncbCusAddress :: {}",ncbInfoView.getNcbCusAddress());
+            log.info("ncbCusMarriageStatus :: {}", ncbInfoView.getNcbCusMarriageStatus());
+            log.info("enquiry :: {}", ncbInfoView.getEnquiry());
+            log.info("ncbLastInfoAsOfDate :: {}", ncbInfoView.getNcbLastInfoAsOfDate());
+            log.info("ncbCusAddress :: {}", ncbInfoView.getNcbCusAddress());
 
-            if(ncbInfoView != null){
+            if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
 
+            }
+        }else{
+            try {
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/site/NCBSummary.jsf");
+                return;
+            } catch (Exception ex) {
+                log.info("Exception :: {}", ex);
             }
         }
 
@@ -194,6 +213,9 @@ public class NCBInfo implements Serializable {
         monthRender6 = false;
 
         ncbDetailView.reset();
+
+        yearList = DateTimeUtil.getPreviousHundredYearTH();
+
     }
 
 
@@ -247,21 +269,21 @@ public class NCBInfo implements Serializable {
             ncbDetailView.setMonth5(selectNcbRecordItem.getMonth5());
             ncbDetailView.setMonth6(selectNcbRecordItem.getMonth6());
 
-            if(selectNcbRecordItem.isRefinance() == true){
+            if (selectNcbRecordItem.isRefinance() == true) {
                 ncbDetailView.setRefinanceFlag(1);
-            }else{
+            } else {
                 ncbDetailView.setRefinanceFlag(0);
             }
 
-            if(selectNcbRecordItem.isTMB() == true){
+            if (selectNcbRecordItem.isTMB() == true) {
                 ncbDetailView.setTMBAccount(1);
-            }else{
+            } else {
                 ncbDetailView.setTMBAccount(0);
             }
 
-            if(selectNcbRecordItem.isWc() == true){
+            if (selectNcbRecordItem.isWc() == true) {
                 ncbDetailView.setWcFlag(1);
-            }else{
+            } else {
                 ncbDetailView.setWcFlag(0);
             }
 
@@ -287,7 +309,7 @@ public class NCBInfo implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         boolean complete = false;
         String moneyTotal = "";
-        List<BigDecimal>  moneys;
+        List<BigDecimal> moneys;
 
         if (ncbDetailView.getAccountType().getId() != 0 && ncbDetailView.getAccountStatus().getId() != 0 && ncbDetailView.getCurrentPayment().getId() != 0 && ncbDetailView.getHistoryPayment().getId() != 0) {
             if (modeForButton != null && modeForButton.equalsIgnoreCase("add")) {
@@ -322,21 +344,21 @@ public class NCBInfo implements Serializable {
                 ncbAdd.setRefinance(ncbDetailView.isRefinance());
                 ncbAdd.setWc(ncbDetailView.isWc());
 
-                if(ncbDetailView.isTMB() == true){
+                if (ncbDetailView.isTMB() == true) {
                     ncbAdd.setTMBAccount(1);
-                }else{
+                } else {
                     ncbAdd.setTMBAccount(0);
                 }
 
-                if(ncbDetailView.isWc() == true){
+                if (ncbDetailView.isWc() == true) {
                     ncbAdd.setWcFlag(1);
-                }else{
+                } else {
                     ncbAdd.setWcFlag(0);
                 }
 
-                if(ncbDetailView.isRefinance() == true){
+                if (ncbDetailView.isRefinance() == true) {
                     ncbAdd.setRefinanceFlag(1);
-                }else{
+                } else {
                     ncbAdd.setRefinanceFlag(0);
                 }
 
@@ -353,9 +375,9 @@ public class NCBInfo implements Serializable {
                 if ((ncbDetailView.getNoOfmonthsPayment() != 0)) {
                     ncbAdd.setMonthsPaymentFlag(true);
 
-                    for(int i = 0 ; i<moneys.size() ; i ++){
-                        if(i < ncbDetailView.getNoOfmonthsPayment()){
-                            moneyTotal += msg.get("app.ncbDetail.table.monthNo")+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + msg.get("app.ncbDetail.table.bath");
+                    for (int i = 0; i < moneys.size(); i++) {
+                        if (i < ncbDetailView.getNoOfmonthsPayment()) {
+                            moneyTotal += msg.get("app.ncbDetail.table.monthNo") + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + msg.get("app.ncbDetail.table.bath");
                             ncbAdd.setMoneyTotal(moneyTotal);
                         }
                     }
@@ -421,10 +443,10 @@ public class NCBInfo implements Serializable {
                     if ((ncbDetailView.getNoOfmonthsPayment() != 0)) {
                         ncbDetailViewList.get(rowIndex).setMonthsPaymentFlag(true);
 
-                        for(int i = 0 ; i<moneys.size() ; i ++){
-                            if(i < ncbDetailView.getNoOfmonthsPayment()){
+                        for (int i = 0; i < moneys.size(); i++) {
+                            if (i < ncbDetailView.getNoOfmonthsPayment()) {
 
-                                moneyTotal +=  msg.get("app.ncbDetail.table.monthNo")+ (i+1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + "  "+ msg.get("app.ncbDetail.table.bath");
+                                moneyTotal += msg.get("app.ncbDetail.table.monthNo") + (i + 1) + " : " + Util.formatNumber(moneys.get(i).doubleValue()) + "  " + msg.get("app.ncbDetail.table.bath");
                                 ncbDetailViewList.get(rowIndex).setMoneyTotal(moneyTotal);
                             }
                         }
@@ -464,7 +486,7 @@ public class NCBInfo implements Serializable {
         }
     }
 
-    public void toSetRenderedFlag(int noOfMonth){
+    public void toSetRenderedFlag(int noOfMonth) {
 
         ArrayList<Boolean> rendered = new ArrayList<Boolean>();
 
@@ -487,11 +509,11 @@ public class NCBInfo implements Serializable {
     }
 
     //for rendered จำนวนเดือนที่หาร
-    public void onChangeAccountType(){
+    public void onChangeAccountType() {
         log.info("onChangeAccountType::");
-        log.info("ncbDetailView.getAccountType().getId :: {}",ncbDetailView.getAccountType().getId());
-        log.info("ncbDetailView.getMonthFlag() :: {}" ,ncbDetailView.getAccountType().getMonthFlag());
-        log.info("ncbDetailView.monthFlagPage() :: {}" ,ncbDetailView.isMonthFlagPage());
+        log.info("ncbDetailView.getAccountType().getId :: {}", ncbDetailView.getAccountType().getId());
+        log.info("ncbDetailView.getMonthFlag() :: {}", ncbDetailView.getAccountType().getMonthFlag());
+        log.info("ncbDetailView.monthFlagPage() :: {}", ncbDetailView.isMonthFlagPage());
 
     }
 
@@ -499,9 +521,9 @@ public class NCBInfo implements Serializable {
     public void onSaveNcb() {    // call transform  and then call businessControl
         log.info("onSaveNcb::::");
         log.info("ncbDetailViewList.size() ::: {} ", ncbDetailViewList.size());
-        try{
-            if(ncbDetailViewList.size() > 0){
-                if(ncbInfoView.getId() == 0){
+        try {
+            if (ncbDetailViewList.size() > 0) {
+                if (ncbInfoView.getId() == 0) {
                     ncbInfoView.setCreateBy(user);
                     ncbInfoView.setCreateDate(DateTime.now().toDate());
                 }
@@ -514,19 +536,19 @@ public class NCBInfo implements Serializable {
                 message = msg.get("app.ncb.response.save.success");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else{
+            } else {
                 messageHeader = msg.get("app.ncb.response.cannot.save");
                 message = msg.get("app.ncb.response.desc.cannot.save");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
 
-         } catch(Exception ex){
+        } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.header.save.failed");
 
-            if(ex.getCause() != null){
-                message = msg.get("app.header.save.failed") + " cause : "+ ex.getCause().toString();
+            if (ex.getCause() != null) {
+                message = msg.get("app.header.save.failed") + " cause : " + ex.getCause().toString();
             } else {
                 message = msg.get("app.header.save.failed") + ex.getMessage();
             }
@@ -538,7 +560,7 @@ public class NCBInfo implements Serializable {
     }
 
 
-    public void onCancelNcbInfo(){
+    public void onCancelNcbInfo() {
         log.info("onCancelNcbInfo::::  ");
         onCreation();
     }
@@ -751,4 +773,11 @@ public class NCBInfo implements Serializable {
         this.messageErr = messageErr;
     }
 
+    public List<String> getYearList() {
+        return yearList;
+    }
+
+    public void setYearList(List<String> yearList) {
+        this.yearList = yearList;
+    }
 }

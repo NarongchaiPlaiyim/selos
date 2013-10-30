@@ -11,180 +11,180 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="wrk_biz_info_summary")
+@Table(name = "wrk_biz_info_summary")
 public class BizInfoSummary implements Serializable {
     @Id
-    @SequenceGenerator(name="SEQ_WRK_BIZ_INFO_SUM_ID", sequenceName="SEQ_WRK_BIZ_INFO_SUM_ID", allocationSize=1)
-    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_BIZ_INFO_SUM_ID")
+    @SequenceGenerator(name = "SEQ_WRK_BIZ_INFO_SUM_ID", sequenceName = "SEQ_WRK_BIZ_INFO_SUM_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_BIZ_INFO_SUM_ID")
     private long id;
 
-    @Column(name="bizLocationName")
+    @Column(name = "bizLocationName")
     private String bizLocationName;
 
-    @Column(name="is_rental")
+    @Column(name = "is_rental")
     private int isRental;
 
-    @Column(name="owner_name")
+    @Column(name = "owner_name")
     private String ownerName;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="expiry_date")
+    @Column(name = "expiry_date")
     private Date expiryDate;
 
-    @Column(name="address_no")
+    @Column(name = "address_no")
     private String addressNo;
 
-    @Column(name="address_moo")
+    @Column(name = "address_moo")
     private String addressMoo;
 
-    @Column(name="address_building")
+    @Column(name = "address_building")
     private String addressBuilding;
 
-    @Column(name="address_street")
+    @Column(name = "address_street")
     private String addressStreet;
 
     @OneToOne
-    @JoinColumn(name="province_id")
+    @JoinColumn(name = "province_id")
     private Province province;
 
     @OneToOne
-    @JoinColumn(name="district_id")
+    @JoinColumn(name = "district_id")
     private District district;
 
     @OneToOne
-    @JoinColumn(name="subdistrict_id")
+    @JoinColumn(name = "subdistrict_id")
     private SubDistrict subDistrict;
 
-    @Column(name="post_code")
+    @Column(name = "post_code")
     private String postCode;
 
     @OneToOne
-    @JoinColumn(name="country_id")
+    @JoinColumn(name = "country_id")
     private Country country;
 
-    @Column(name="address_eng")
+    @Column(name = "address_eng")
     private String addressEng;
 
-    @Column(name="phone_no")
+    @Column(name = "phone_no")
     private String phoneNo;
 
-    @Column(name="extension")
+    @Column(name = "extension")
     private String extension;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="registration_date")
+    @Column(name = "registration_date")
     private Date registrationDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="establish_date")
+    @Column(name = "establish_date")
     private Date establishDate;
 
     @OneToOne
-    @JoinColumn(name="refer_exp_id")
+    @JoinColumn(name = "refer_exp_id")
     private ReferredExperience referredExperience;
 
-    @Column(name="biz_interview_info")
+    @Column(name = "biz_interview_info")
     private String bizInterviewInfo;
 
-    @Column(name="circulation_amount")
+    @Column(name = "circulation_amount")
     private BigDecimal circulationAmount;
 
-    @Column(name="circulation_percentage")
+    @Column(name = "circulation_percentage")
     private BigDecimal circulationPercentage;
 
-    @Column(name="production_costs_amount")
+    @Column(name = "production_costs_amount")
     private BigDecimal productionCostsAmount;
 
-    @Column(name="production_costs_percentage")
+    @Column(name = "production_costs_percentage")
     private BigDecimal productionCostsPercentage;
 
-    @Column(name="profit_margin_amount")
+    @Column(name = "profit_margin_amount")
     private BigDecimal profitMarginAmount;
 
-    @Column(name="profit_margin_percentage")
+    @Column(name = "profit_margin_percentage")
     private BigDecimal profitMarginPercentage;
 
-    @Column(name="operating_expense_amount")
+    @Column(name = "operating_expense_amount")
     private BigDecimal operatingExpenseAmount;
 
-    @Column(name="operating_expense_percentage")
+    @Column(name = "operating_expense_percentage")
     private BigDecimal operatingExpensePercentage;
 
-    @Column(name="earning_befor_tax_amount")
+    @Column(name = "earning_befor_tax_amount")
     private BigDecimal earningsBeforeTaxAmount;
 
-    @Column(name="earning_befor_tax_percentage")
+    @Column(name = "earning_befor_tax_percentage")
     private BigDecimal earningsBeforeTaxPercentage;
 
-    @Column(name="reduce_interest_amount")
+    @Column(name = "reduce_interest_amount")
     private BigDecimal reduceInterestAmount;
 
-    @Column(name="reduce_interest_percentage")
+    @Column(name = "reduce_interest_percentage")
     private BigDecimal reduceInterestPercentage;
 
-    @Column(name="reduce_tax_amount")
+    @Column(name = "reduce_tax_amount")
     private BigDecimal reduceTaxAmount;
 
-    @Column(name="reduce_tax_percentage")
+    @Column(name = "reduce_tax_percentage")
     private BigDecimal reduceTaxPercentage;
 
-    @Column(name="net_margin_amount")
+    @Column(name = "net_margin_amount")
     private BigDecimal netMarginAmount;
 
-    @Column(name="net_margin_percentage")
+    @Column(name = "net_margin_percentage")
     private BigDecimal netMarginPercentage;
 
-    @Column(name="net_fix_asset")
+    @Column(name = "net_fix_asset")
     private BigDecimal netFixAsset;
 
-    @Column(name="no_of_employee")
+    @Column(name = "no_of_employee")
     private int noOfEmployee;
 
-    @Column(name="sum_income_amount")
-    private BigDecimal  sumIncomeAmount;
+    @Column(name = "sum_income_amount")
+    private BigDecimal sumIncomeAmount;
 
-    @Column(name="sum_income_percent")
+    @Column(name = "sum_income_percent")
     private BigDecimal sumIncomePercent;
 
-    @Column(name="weight_sum_income_factor")
+    @Column(name = "weight_sum_income_factor")
     private BigDecimal weightIncomeFactor;
 
-    @Column(name="sum_weight_intv_income")
-    private BigDecimal  sumWeightInterviewedIncomeFactorPercent;
+    @Column(name = "sum_weight_intv_income")
+    private BigDecimal sumWeightInterviewedIncomeFactorPercent;
 
-    @Column(name="sum_weight_ar")
-    private BigDecimal  sumWeightAR;
+    @Column(name = "sum_weight_ar")
+    private BigDecimal sumWeightAR;
 
-    @Column(name="sum_weight_ap")
+    @Column(name = "sum_weight_ap")
     private BigDecimal sumWeightAP;
 
-    @Column(name="sum_weight_inv")
+    @Column(name = "sum_weight_inv")
     private BigDecimal sumWeightINV;
 
     @OneToOne
-    @JoinColumn(name="workcase_id")
+    @JoinColumn(name = "workcase_id")
     private WorkCase workCase;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="modify_date")
+    @Column(name = "modify_date")
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name="create_user_id")
+    @JoinColumn(name = "create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name="modify_user_id")
+    @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
-    @OneToMany(mappedBy="bizInfoSummary")
+    @OneToMany(mappedBy = "bizInfoSummary")
     private List<BizInfoDetail> bizInfoDetailList;
 
-    public BizInfoSummary(){
+    public BizInfoSummary() {
 
     }
 

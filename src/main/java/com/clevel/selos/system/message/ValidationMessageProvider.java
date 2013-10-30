@@ -30,9 +30,9 @@ public class ValidationMessageProvider extends MessageProvider implements Valida
     public String get(String key) {
         String message;
         try {
-            message = getBundle().getString("validation."+key);
+            message = getBundle().getString("validation." + key);
         } catch (MissingResourceException e) {
-            log.error("Missing resource! (key: {})",key,e);
+            log.error("Missing resource! (key: {})", key, e);
             message = "???";
         }
         return message;

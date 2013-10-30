@@ -5,8 +5,8 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import java.io.Serializable;
 
 @XStreamAlias("body")
-public class BodyModel implements Serializable{
-    
+public class BodyModel implements Serializable {
+
     @XStreamAlias("tuefenquiry")
     private TUEFEnquiryModel tuefenquiry;
 

@@ -6,19 +6,19 @@ import java.io.Serializable;
 
 @XStreamAlias("header")
 public class TUEFEnquiryHeaderModel implements Serializable {
-    
+
     @XStreamAlias("memberref")
     private String memberref;
-    
+
     @XStreamAlias("enqpurpose")
     private String enqpurpose;
-    
+
     @XStreamAlias("enqamount")
     private String enqamount;
-    
+
     @XStreamAlias("consent")
     private String consent;
-    
+
     @XStreamAlias("disputeenquiry")
     private String disputeenquiry;
 
@@ -49,5 +49,5 @@ public class TUEFEnquiryHeaderModel implements Serializable {
     public String getDisputeenquiry() {
         return disputeenquiry;
     }
-    
+
 }

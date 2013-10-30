@@ -22,11 +22,11 @@ public class DBRView implements Serializable {
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
 
-    public DBRView(){
+    public DBRView() {
         reset();
     }
 
-    public void reset(){
+    public void reset() {
         this.id = 0;
         this.incomeFactor = 0;
         this.workCase = new WorkCase();
@@ -38,7 +38,7 @@ public class DBRView implements Serializable {
         this.currentDBR = BigDecimal.ZERO;
         this.dbrBeforeRequest = BigDecimal.ZERO;
         this.dbrInterest = BigDecimal.ZERO;
-     }
+    }
 
 
     public long getId() {

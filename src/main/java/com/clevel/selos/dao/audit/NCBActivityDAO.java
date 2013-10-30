@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 
 import javax.inject.Inject;
 
-public class NCBActivityDAO extends GenericDAO<NCBActivity,Long> {
+public class NCBActivityDAO extends GenericDAO<NCBActivity, Long> {
     @Inject
     private Logger log;
 
