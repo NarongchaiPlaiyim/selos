@@ -89,8 +89,6 @@ public class BizInfoSummary implements Serializable {
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    private UserDAO userDAO;
-    @Inject
     private CountryDAO countryDAO;
 
     @Inject
@@ -109,6 +107,8 @@ public class BizInfoSummary implements Serializable {
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
+        HttpSession session = FacesUtil.getSession(true);
+        user = (User)session.getAttribute("user");
 
         if (bizInfoSummaryView == null) {
 
