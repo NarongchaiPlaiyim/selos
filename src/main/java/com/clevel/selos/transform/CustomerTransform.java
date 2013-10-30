@@ -149,6 +149,9 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setValidId(2);
 
+        customerInfoView.setSearchBy(customer.getSearchBy());
+        customerInfoView.setSearchId(customer.getSearchId());
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
@@ -162,10 +165,22 @@ public class CustomerTransform extends Transform {
                 addressView.setBuilding(address.getBuilding());
                 addressView.setRoad(address.getRoad());
                 addressView.setProvince(address.getProvince());
+                if(addressView.getProvince() == null){
+                    addressView.setProvince(new Province());
+                }
                 addressView.setDistrict(address.getDistrict());
+                if(addressView.getDistrict() == null){
+                    addressView.setDistrict(new District());
+                }
                 addressView.setSubDistrict(address.getSubDistrict());
-                addressView.setPostalCode(address.getPostalCode());
+                if(addressView.getSubDistrict() == null){
+                    addressView.setSubDistrict(new SubDistrict());
+                }
                 addressView.setCountry(address.getCountry());
+                if(addressView.getCountry() == null){
+                    addressView.setCountry(new Country());
+                }
+                addressView.setPostalCode(address.getPostalCode());
                 addressView.setPhoneNumber(address.getPhoneNumber());
                 addressView.setExtension(address.getExtension());
                 addressView.setContactName(address.getContactName());
@@ -383,6 +398,9 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setMailingAddressType(null);
         }
+
+        customer.setSearchBy(customerInfoView.getSearchBy());
+        customer.setSearchId(customerInfoView.getSearchId());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 

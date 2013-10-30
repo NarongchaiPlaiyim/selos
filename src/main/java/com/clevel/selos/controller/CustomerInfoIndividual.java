@@ -128,6 +128,7 @@ public class CustomerInfoIndividual implements Serializable {
     //*** View ***//
     private CustomerInfoView customerInfoView;
     private CustomerInfoView customerInfoSearch;
+    private CustomerInfoView customerInfoSearchSpouse;
 
     private String messageHeader;
     private String message;
@@ -240,6 +241,9 @@ public class CustomerInfoIndividual implements Serializable {
     private boolean reqSpoMobNo;
     private boolean reqSpoKYCLev;
 
+    //onEdit
+    private long customerId;
+
     public CustomerInfoIndividual(){
     }
 
@@ -274,20 +278,23 @@ public class CustomerInfoIndividual implements Serializable {
 
     @PostConstruct
     public void onCreation() {
-        preRender();
 
-        long customerId;
+        preRender();
 
         Flash flash = FacesUtil.getFlash();
         Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
         if (cusInfoParams != null) {
             customerId = (Long) cusInfoParams.get("customerId");
-        } else {
-            //Return to Bank statement summary if parameter is null
-            FacesUtil.redirect("/site/customerInfoSummary.jsf");
-            return;
         }
 
+        onAddNewIndividual();
+
+        if(customerId != 0){ // Go to edit
+            onEditIndividual();
+        }
+    }
+
+    public void onAddNewIndividual(){
         customerInfoView = new CustomerInfoView();
         customerInfoView.reset();
         customerInfoView.getSpouse().reset();
@@ -332,14 +339,43 @@ public class CustomerInfoIndividual implements Serializable {
 
         enableDocumentType = true;
         enableCitizenId = true;
+    }
 
-        onChangeReference();
-
+    public void onEditIndividual(){
         customerInfoView = customerInfoControl.getCustomerIndividualById(customerId);
+        onChangeRelation();
+        onChangeReference();
+        onChangeMaritalStatus();
+        onChangeProvinceEditForm1();
+        onChangeDistrictEditForm1();
+        onChangeProvinceEditForm2();
+        onChangeDistrictEditForm2();
+        onChangeProvinceEditForm3();
+        onChangeDistrictEditForm3();
+
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){ // have spouse
+            onChangeRelationSpouse();
+            onChangeReferenceSpouse();
+            onChangeProvinceEditForm4();
+            onChangeDistrictEditForm4();
+            onChangeProvinceEditForm5();
+            onChangeDistrictEditForm5();
+            onChangeProvinceEditForm6();
+            onChangeDistrictEditForm6();
+        }
+
+        if(customerInfoView.getSearchFromRM() == 1){
+            enableDocumentType = false;
+            enableCitizenId = false;
+        }
     }
 
     public void onChangeRelation(){
         referenceIndividualList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
+        System.out.println("Con Flag : "+customerInfoView.getConvenantFlag());
+        System.out.println("Rew Flag : "+customerInfoView.getReviewFlag());
+        System.out.println("Worthiness : "+customerInfoView.getWorthiness());
+        System.out.println("Collateral : "+customerInfoView.getCollateralOwner());
     }
 
     public void onChangeRelationSpouse(){
@@ -478,67 +514,128 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
-    public void onChangeMaritalStatus(){
-        customerInfoView.setMaritalStatus(maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId()));
+    public void onChangeProvinceEditForm1(){
+        if(customerInfoView.getCurrentAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
+            districtForm1List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm1List = provinceDAO.getListOrderByParameter("name");
+            districtForm1List = new ArrayList<District>();
+            subDistrictForm1List = new ArrayList<SubDistrict>();
+        }
     }
 
-    public void onSearchCustomerInfo() {
-        log.debug("onSearchCustomerInfo :::");
-        log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoView);
-        CustomerInfoResultView customerInfoResultView = new CustomerInfoResultView();
-//        messageHeader = "Please wait...";
-//        message = "Waiting for search customer from RM";
-        try{
-            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView, user);
-            log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
-            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
-                if(customerInfoResultView.getCustomerInfoView() != null){
-                    log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                    customerInfoView = customerInfoResultView.getCustomerInfoView();
-
-                    customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
-
-                    customerInfoView.setSearchFromRM(1);
-
-                    enableDocumentType = false;
-                    enableCitizenId = false;
-
-                    messageHeader = "Customer search complete.";
-                    message = "Customer found.";
-                }else{
-                    log.debug("onSearchCustomerInfo ::: customer not found.");
-                    if(customerInfoView.getSearchBy() == 2){
-                        enableDocumentType = true;
-                    }else{
-                        enableDocumentType = false;
-                    }
-                    enableDocumentType = true;
-                    enableCitizenId = true;
-
-                    CustomerEntity customerEntity = new CustomerEntity();
-                    customerEntity.setId(0);
-                    customerInfoView.setCustomerEntity(customerEntity);
-
-                    messageHeader = customerInfoResultView.getActionResult().toString();
-                    message = "Search customer not found.";
-                }
-            } else {
-                enableDocumentType = true;
-                enableCitizenId = true;
-                messageHeader = "Customer search failed.";
-                message = customerInfoResultView.getReason();
-
-            }
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        }catch (Exception ex){
-            enableDocumentType = true;
-            enableCitizenId = true;
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
-            messageHeader = "Customer search failed.";
-            message = ex.getMessage();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+    public void onChangeDistrictEditForm1(){
+        if(customerInfoView.getCurrentAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getCurrentAddress().getDistrict().getId());
+            subDistrictForm1List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm1List = new ArrayList<SubDistrict>();
         }
+    }
+
+    public void onChangeProvinceEditForm2() {
+        if(customerInfoView.getRegisterAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
+            districtForm2List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm2List = provinceDAO.getListOrderByParameter("name");
+            districtForm2List = new ArrayList<District>();
+            subDistrictForm2List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEditForm2() {
+        if(customerInfoView.getRegisterAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getRegisterAddress().getDistrict().getId());
+            subDistrictForm2List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm2List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEditForm3() {
+        if(customerInfoView.getWorkAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
+            districtForm3List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm3List = provinceDAO.getListOrderByParameter("name");
+            districtForm3List = new ArrayList<District>();
+            subDistrictForm3List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEditForm3() {
+        if(customerInfoView.getWorkAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getWorkAddress().getDistrict().getId());
+            subDistrictForm3List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm3List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEditForm4() {
+        if(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
+            districtForm4List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm4List = provinceDAO.getListOrderByParameter("name");
+            districtForm4List = new ArrayList<District>();
+            subDistrictForm4List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEditForm4() {
+        if(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getDistrict().getId());
+            subDistrictForm4List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm4List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEditForm5() {
+        if(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
+            districtForm5List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm5List = provinceDAO.getListOrderByParameter("name");
+            districtForm5List = new ArrayList<District>();
+            subDistrictForm5List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEditForm5() {
+        if(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getDistrict().getId());
+            subDistrictForm5List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm5List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeProvinceEditForm6() {
+        if(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode() != 0){
+            Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
+            districtForm6List = districtDAO.getListByProvince(province);
+        }else{
+            provinceForm6List = provinceDAO.getListOrderByParameter("name");
+            districtForm6List = new ArrayList<District>();
+            subDistrictForm6List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeDistrictEditForm6() {
+        if(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId() != 0){
+            District district = districtDAO.findById(customerInfoView.getSpouse().getWorkAddress().getDistrict().getId());
+            subDistrictForm6List = subDistrictDAO.getListByDistrict(district);
+        }else{
+            subDistrictForm6List = new ArrayList<SubDistrict>();
+        }
+    }
+
+    public void onChangeMaritalStatus(){
+        customerInfoView.setMaritalStatus(maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId()));
     }
 
     public void onChangeReference(){
@@ -638,6 +735,141 @@ public class CustomerInfoIndividual implements Serializable {
 //        reqSpoKYCLev =
     }
 
+    public void onSearchCustomerInfo() {
+        log.debug("onSearchCustomerInfo :::");
+        log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
+        CustomerInfoResultView customerInfoResultView;
+//        messageHeader = "Please wait...";
+//        message = "Waiting for search customer from RM";
+        try{
+            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+            log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
+                if(customerInfoResultView.getCustomerInfoView() != null){
+                    log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                    customerInfoView = customerInfoResultView.getCustomerInfoView();
+
+                    customerInfoView.getDocumentType().setId(customerInfoSearch.getDocumentType().getId());
+                    customerInfoView.setSearchFromRM(1);
+                    customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
+                    customerInfoView.setSearchId(customerInfoSearch.getSearchId());
+
+                    enableDocumentType = false;
+                    enableCitizenId = false;
+
+                    messageHeader = "Customer search complete.";
+                    message = "Customer found.";
+                }else{
+                    log.debug("onSearchCustomerInfo ::: customer not found.");
+                    enableDocumentType = true;
+                    enableCitizenId = true;
+
+                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    message = "Search customer not found.";
+                }
+            } else {
+                enableDocumentType = true;
+                enableCitizenId = true;
+                messageHeader = "Customer search failed.";
+                message = customerInfoResultView.getReason();
+
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            enableDocumentType = true;
+            enableCitizenId = true;
+            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            messageHeader = "Customer search failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onRefreshInterfaceInfo(){
+        if(customerInfoView.getSearchFromRM() == 1){
+            log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
+            CustomerInfoResultView customerInfoResultView;
+            try{
+                customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView, user);
+                log.debug("refreshInterfaceInfo ::: customerInfoResultView : {}", customerInfoResultView);
+                if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                    log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
+                    if(customerInfoResultView.getCustomerInfoView() != null){
+                        log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                        customerInfoView = customerInfoResultView.getCustomerInfoView();
+                        messageHeader = "Refresh Interface Info complete.";
+                        message = "Customer found.";
+                    }else{
+                        log.debug("refreshInterfaceInfo ::: customer not found.");
+                        messageHeader = customerInfoResultView.getActionResult().toString();
+                        message = "Refresh Interface Info Customer not found.";
+                    }
+                } else {
+                    messageHeader = "Refresh Interface Info Failed.";
+                    message = customerInfoResultView.getReason();
+                }
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }catch (Exception ex){
+                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                messageHeader = "Refresh Interface Info Failed.";
+                message = ex.getMessage();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        }
+    }
+
+    public void onSearchSpouseCustomerInfo() {
+        log.debug("onSearchCustomerInfo :::");
+        log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearchSpouse);
+        CustomerInfoResultView customerInfoResultView;
+//        messageHeader = "Please wait...";
+//        message = "Waiting for search customer from RM";
+        try{
+            customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearchSpouse, user);
+            log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
+                if(customerInfoResultView.getCustomerInfoView() != null){
+                    log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                    customerInfoView = customerInfoResultView.getCustomerInfoView();
+
+                    customerInfoView.getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
+                    customerInfoView.setSearchFromRM(1);
+                    customerInfoView.setSearchBy(customerInfoSearchSpouse.getSearchBy());
+                    customerInfoView.setSearchId(customerInfoSearchSpouse.getSearchId());
+
+                    enableDocumentType = false;
+                    enableCitizenId = false;
+
+                    messageHeader = "Customer search complete.";
+                    message = "Customer found.";
+                }else{
+                    log.debug("onSearchCustomerInfo ::: customer not found.");
+                    enableDocumentType = true;
+                    enableCitizenId = true;
+
+                    messageHeader = customerInfoResultView.getActionResult().toString();
+                    message = "Search customer not found.";
+                }
+            } else {
+                enableDocumentType = true;
+                enableCitizenId = true;
+                messageHeader = "Customer search failed.";
+                message = customerInfoResultView.getReason();
+
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            enableDocumentType = true;
+            enableCitizenId = true;
+            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            messageHeader = "Customer search failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
     public void onSave(){
         if(addressFlagForm2 == 1){ //dup address 1 to address 2
             customerInfoView.setRegisterAddress(customerInfoView.getCurrentAddress());
@@ -659,11 +891,16 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getRegisterAddress());
         }
 
-        try{
+        System.out.println("Con Flag : "+customerInfoView.getConvenantFlag());
+        System.out.println("Rew Flag : "+customerInfoView.getReviewFlag());
+        System.out.println("Worthiness : "+customerInfoView.getWorthiness());
+        System.out.println("Collateral : "+customerInfoView.getCollateralOwner());
+
+        /*try{
             customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             messageHeader = "Save Customer Info Individual Success.";
             message = "Save Customer Info Individual data success.";
-            onCreation();
+//            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
             messageHeader = "Save Customer Info Individual Failed.";
@@ -673,8 +910,8 @@ public class CustomerInfoIndividual implements Serializable {
                 message = "Save Customer Info Individual failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            onCreation();
-        }
+//            onCreation();
+        }*/
     }
 
     //Get Set
@@ -1740,5 +1977,13 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setReqSpoKYCLev(boolean reqSpoKYCLev) {
         this.reqSpoKYCLev = reqSpoKYCLev;
+    }
+
+    public CustomerInfoView getCustomerInfoSearchSpouse() {
+        return customerInfoSearchSpouse;
+    }
+
+    public void setCustomerInfoSearchSpouse(CustomerInfoView customerInfoSearchSpouse) {
+        this.customerInfoSearchSpouse = customerInfoSearchSpouse;
     }
 }

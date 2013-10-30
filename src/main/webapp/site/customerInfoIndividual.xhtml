@@ -46,7 +46,8 @@
                                 <td>
                                     <p:selectOneMenu size="1" style="width: 200px;"
                                                      value="#{custInfoSumIndi.customerInfoSearch.documentType.id}"
-                                                     required="#{not empty param[searchButton.clientId]}">
+                                                     required="#{not empty param[searchButton.clientId]}"
+                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
                                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                         <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                        var="docType"
@@ -59,7 +60,8 @@
                                 <td class="title" style="width: 180px;">#{msg.get('app.custInfoIndi.content.search.by')}</td>
                                 <td style="width: 250px;">
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearch.searchBy}"
-                                                      required="#{not empty param[searchButton.clientId]}">
+                                                      required="#{not empty param[searchButton.clientId]}"
+                                                      disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
                                     </p:selectOneRadio>
@@ -67,14 +69,16 @@
                                 <td style="width: 150px;">
                                     <p:inputText value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
                                                  onkeydown="return numberOnly(event);"
-                                                 required="#{not empty param[searchButton.clientId]}"/>
+                                                 required="#{not empty param[searchButton.clientId]}"
+                                                 disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
                                 </td>
                                 <td>
                                     <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch"
                                                      binding="#{searchButton}"
                                                      process="@form"
-                                                     actionListener="#{custInfoSumIndi.onSearchCustomerInfo}"
-                                                     update=":msgBoxSystemMessagePanel :frmMain" />
+                                                     actionListener="#{custInfoSumIndi.onSearchCustomerInfo()}"
+                                                     update=":msgBoxSystemMessagePanel :frmMain"
+                                                     disabled="#{custInfoSumIndi.customerInfoView.searchFromRM == 1}"/>
                                 </td>
                             </tr>
 
@@ -86,7 +90,10 @@
 
                             <tr>
                                 <td style="padding-bottom: 20px;" colspan="4">
-                                    <p:commandButton type="button" value="#{msg.get('app.custInfoIndi.content.button.refresh')}" styleClass="largest"/>
+                                    <p:commandButton type="button" styleClass="largest"
+                                                     value="#{msg.get('app.custInfoIndi.content.button.refresh')}"
+                                                     actionListener="#{custInfoSumIndi.onRefreshInterfaceInfo()}"
+                                                     update=":msgBoxSystemMessagePanel :frmMain" />
                                 </td>
                             </tr>
                             <tr>
@@ -452,7 +459,7 @@
                                                        var="maritalStatus"
                                                        itemLabel="#{maritalStatus.name}"
                                                        itemValue="#{maritalStatus.id}"/>
-                                        <p:ajax event="change" update=":frmMain" listener="#{custInfoSumIndi.onChangeMaritalStatus()}"/>
+                                        <p:ajax event="change" update=":frmMain" process="@form" listener="#{custInfoSumIndi.onChangeMaritalStatus()}"/>
                                     </p:selectOneMenu>
                                 </td>
                             </tr>
@@ -1031,7 +1038,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.convenantFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
                                     </p:selectOneRadio>
                                 </td>
                                 <td class="title">
@@ -1040,7 +1047,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.reviewFlag}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
                                     </p:selectOneRadio>
                                 </td>
                             </tr>
@@ -1059,7 +1066,7 @@
                                 <td>
                                     <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.worthiness}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="1"/>
-                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue=""/>
+                                        <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="3"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="2"/>
                                     </p:selectOneRadio>
                                 </td>
@@ -1131,7 +1138,9 @@
                                     </td>
                                     <td>
                                         <p:selectOneMenu size="1" style="width: 200px;"
-                                                         value="#{custInfoSumIndi.customerInfoSearch.documentType.id}">
+                                                         value="#{custInfoSumIndi.customerInfoSearchSpouse.documentType.id}"
+                                                         required="#{not empty param[searchSpouseButton.clientId]}"
+                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
                                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                             <f:selectItems value="#{custInfoSumIndi.documentTypeList}"
                                                            var="docType"
@@ -1143,27 +1152,26 @@
                                 <tr>
                                     <td class="title" style="width: 180px;">#{msg.get('app.custInfoIndi.content.search.by')}</td>
                                     <td style="width: 250px;">
-                                        <p:selectOneRadio id="dlgRadioBrSearchBy2"
-                                                          value="#{custInfoSumIndi.customerInfoSearch.searchBy}">
-                                            <!--required="#{not empty param[searchButton.clientId]}">-->
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoSearchSpouse.searchBy}"
+                                                          required="#{not empty param[searchSpouseButton.clientId]}"
+                                                          disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.citizenId')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.search.tmbCusId')}" itemValue="2"/>
-                                            <!--<p:ajax event="change" process="@form"-->
-                                            <!--listener="#{prescreenMaker.onDisableDocType}"-->
-                                            <!--update=":customerDlgForm:dlgSelBrDocType" />-->
                                         </p:selectOneRadio>
                                     </td>
                                     <td style="width: 150px;">
-                                        <p:inputText id="dlgInputBrSearchText2" value="#{custInfoSumIndi.customerInfoSearch.searchId}" maxlength="15"
-                                                     onkeydown="return numberOnly(event);" />
-                                        <!--required="#{not empty param[searchButton.clientId]}"-->
+                                        <p:inputText value="#{custInfoSumIndi.customerInfoSearchSpouse.searchId}" maxlength="15"
+                                                     onkeydown="return numberOnly(event);"
+                                                     required="#{not empty param[searchSpouseButton.clientId]}"
+                                                     disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
                                     </td>
                                     <td>
-                                        <!--<h:outputText value="#{param[searchButton]}"/>-->
-                                        <p:commandButton id="dlgSearchBrBtn2" value="#{msg.get('app.button.search')}"
+                                        <p:commandButton value="#{msg.get('app.button.search')}" id="btnSearch2"
+                                                         binding="#{searchSpouseButton}"
                                                          process="@form"
-                                                         actionListener="#{prescreenMaker.onSearchCustomerInfo}"/>
-                                        <!--update=":msgBoxSystemMessagePanel :customerDlgForm" />-->
+                                                         actionListener="#{custInfoSumIndi.onSearchSpouseCustomerInfo()}"
+                                                         update=":msgBoxSystemMessagePanel :frmMain"
+                                                         disabled="#{custInfoSumIndi.customerInfoView.spouse.searchFromRM == 1}"/>
                                     </td>
                                 </tr>
 
@@ -1990,7 +1998,7 @@
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.convenantFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue=""/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
                                         </p:selectOneRadio>
                                     </td>
                                     <td class="title">
@@ -1999,7 +2007,7 @@
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.reviewFlag}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue=""/>
+                                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
                                         </p:selectOneRadio>
                                     </td>
                                 </tr>
@@ -2018,7 +2026,7 @@
                                     <td>
                                         <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.worthiness}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.pass')}" itemValue="1"/>
-                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue=""/>
+                                            <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.fail')}" itemValue="0"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.na')}" itemValue="2"/>
                                         </p:selectOneRadio>
                                     </td>
@@ -2084,7 +2092,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

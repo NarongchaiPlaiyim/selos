@@ -155,6 +155,13 @@ public class Customer implements Serializable {
     @JoinColumn(name="mailing_address_id")
     private AddressType mailingAddressType;
 
+    @Column(name="search_by")
+    private int searchBy;
+
+    @Column(name="search_id")
+    private String searchId;
+
+
     public Customer() {
     }
 
@@ -502,6 +509,22 @@ public class Customer implements Serializable {
         this.titleEn = titleEn;
     }
 
+    public int getSearchBy() {
+        return searchBy;
+    }
+
+    public void setSearchBy(int searchBy) {
+        this.searchBy = searchBy;
+    }
+
+    public String getSearchId() {
+        return searchId;
+    }
+
+    public void setSearchId(String searchId) {
+        this.searchId = searchId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -515,9 +538,10 @@ public class Customer implements Serializable {
                 append("collateralOwner", collateralOwner).
                 append("percentShare", percentShare).
                 append("approxIncome", approxIncome).
-                append("idNumber", tmbCustomerId).
-                append("expireDate", documentExpiredDate).
-                append("title", titleTh).
+                append("tmbCustomerId", tmbCustomerId).
+                append("documentExpiredDate", documentExpiredDate).
+                append("titleTh", titleTh).
+                append("titleEn", titleEn).
                 append("nameEn", nameEn).
                 append("nameTh", nameTh).
                 append("lastNameTh", lastNameTh).
@@ -545,8 +569,9 @@ public class Customer implements Serializable {
                 append("reviewFlag", reviewFlag).
                 append("reason", reason).
                 append("kycLevel", kycLevel).
-                append("businessType", businessType).
                 append("mailingAddressType", mailingAddressType).
+                append("searchBy", searchBy).
+                append("searchId", searchId).
                 toString();
     }
 }
