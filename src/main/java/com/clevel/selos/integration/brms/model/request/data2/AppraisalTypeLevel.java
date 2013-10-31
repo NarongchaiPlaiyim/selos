@@ -8,20 +8,20 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class AppraisalTypeLevel implements Serializable {
-    private List<AttributeTypeLevelAppraisal> attributeType;
+    private AttributeTypeLevelAppraisal attributeType;
 
     public AppraisalTypeLevel() {
     }
 
-    public AppraisalTypeLevel(List<AttributeTypeLevelAppraisal> attributeType) {
+    public AppraisalTypeLevel(AttributeTypeLevelAppraisal attributeType) {
         this.attributeType = attributeType;
     }
 
-    public List<AttributeTypeLevelAppraisal> getAttributeType() {
+    public AttributeTypeLevelAppraisal getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelAppraisal> attributeType) {
+    public void setAttributeType(AttributeTypeLevelAppraisal attributeType) {
         this.attributeType = attributeType;
     }
 
