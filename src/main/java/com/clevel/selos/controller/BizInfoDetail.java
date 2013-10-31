@@ -59,6 +59,7 @@ public class BizInfoDetail implements Serializable {
     private String descType;
     private Date currentDate;
 
+
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
     private List<BizStakeHolderDetailView> buyerDetailList;
@@ -771,5 +772,24 @@ public class BizInfoDetail implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    BigDecimal aCal;
+    BigDecimal bCal;
+
+    public BigDecimal getaCal() {
+        return aCal;
+    }
+
+    public void setaCal(BigDecimal aCal) {
+        this.aCal = aCal;
+    }
+
+    public BigDecimal getbCal() {
+        return bCal;
+    }
+
+    public void setbCal(BigDecimal bCal) {
+        this.bCal = bCal;
     }
 }

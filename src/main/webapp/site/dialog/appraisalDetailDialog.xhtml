@@ -1,0 +1,71 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <p:panel id="appraisalDetailDlgPanel" styleClass="panel-dialog">
+    <h:form id="appraisalDetailDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.titleDeed')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{appraisalRequest.appraisalDetailView.titleDeed}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.purpose')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeReviewAppraisalB}"/>
+                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewAppraisal')}"/>
+                     <br/>
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeNewAppraisalB}"/>
+                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeNewAppraisal')}"/>
+                    <br/>
+                    <h:selectBooleanCheckbox value="#{appraisalRequest.appraisalDetailView.purposeReviewBuildingB}"/>
+                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.label.purposeReviewBuilding')}"/>
+
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.characteristic')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:selectOneRadio id="characteristicRadio" value="#{appraisalRequest.appraisalDetailView.characteristic}">
+                        <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.noBuilding')}"  itemValue="0" />
+                        <f:selectItem itemLabel="#{msg.get('app.appraisal.appraisalDetail.label.haveBuilding')}" itemValue="1" />
+                    </p:selectOneRadio>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalDetail.dialog.numberOfDocuments')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{appraisalRequest.appraisalDetailView.numberOfDocuments}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="center" colspan="2" style="margin-top: 20px;">
+                    <p:commandButton id="btnSaveAppraisalDetail"
+                                     value="#{msg.get('app.button.save')}"
+                                     actionListener="#{appraisalRequest.onSaveAppraisalDetailView()}"
+                                     process="@form"
+                                     update=":frmMain:appraisalDetailViewTable"
+                                     oncomplete="handleAppraisalDetailRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalDetailViewDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+    </p:panel>
+    <p:blockUI widgetVar="blockAppraisalDetailDlgForm" block="appraisalDetailDlgPanel" trigger=":appraisalDetailDlgForm:btnSaveAppraisalDetail">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</ui:composition>

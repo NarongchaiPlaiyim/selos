@@ -60,11 +60,11 @@
                                         <col style="width: auto"/>
                                     </colgroup>
                                     <tr>
-                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
+                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.businessLocationName')}"/></td>
                                         <td><p:inputText id="bizLocationName" value="#{bizInfoSummary.bizInfoSummaryView.bizLocationName}"/></td>
                                     </tr>
                                     <tr>
-                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
+                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.isRental')}"/> : </td>
                                         <td>
                                             <p:selectOneRadio id="isRentRadio" value="#{bizInfoSummary.bizInfoSummaryView.rental}" layout="custom">
                                                 <f:selectItem itemLabel="No"  itemValue="0" />
@@ -74,7 +74,7 @@
                                             <p:radioButton id="Peropt1" for="isRentRadio" itemIndex="0"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt1" value="NO" />
                                         </td>
-                                        <td>
+                                        <td class="title">
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.ownerName')}"/> :
                                         </td>
                                         <td>
@@ -87,10 +87,10 @@
                                             <p:radioButton id="Peropt2" for="isRentRadio" itemIndex="1"/> <p:spacer width="8px" />
                                             <h:outputLabel for="Peropt2" value="Yes" />
                                         </td>
-                                        <td>
+                                        <td class="title">
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
-                                        <td>
+                                        <td class="title">
                                             <p:calendar size="10" id="expiryDate" showOn="button" navigator="true"
                                                         value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
                                                         pattern="dd/MM/yyyy"
@@ -102,21 +102,21 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="vertical-align: top;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
+                                        <td class="title" style="vertical-align: top;"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizLocationAddress')}"/> : </td>
                                         <td colspan="3">
                                             <table>
                                                 <colgroup>
                                                     <col style="width: 150px"/>
                                                     <col style="width: 100px"/>
                                                     <col style="width: 130px"/>
-                                                    <col style="width: 200px"/>
+                                                    <col style="width: 250px"/>
                                                 </colgroup>
                                                 <tr>
-                                                    <td class="title left"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
-                                                    <td class="left" colspan="3">
+                                                    <td class="left title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressNo')}"/> : </td>
+                                                    <td class="left title" colspan="3">
                                                         <p:inputText styleClass="smallest" id="addressNo" value="#{bizInfoSummary.bizInfoSummaryView.addressNo}"/>
                                                         <p:spacer width="30px"/>
-                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}"/> :
+                                                        <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.addressMoo')}" styleClass="title"/> :
                                                         <p:spacer width="30px"/>
                                                         <p:inputText styleClass="smallest" id="addressMoo" value="#{bizInfoSummary.bizInfoSummaryView.addressMoo}"/>
                                                         <p:spacer width="30px"/>
@@ -191,7 +191,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
+                                        <td class="title"><p:outputLabel value="#{msg.get('app.bizInfoSummary.label.phoneNo')}"/> : </td>
                                         <td>
                                             <p:inputText styleClass="large"  id="phoneNo" value="#{bizInfoSummary.bizInfoSummaryView.phoneNo}" />
                                         </td>
@@ -216,7 +216,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td class="title">
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
                             </td>
                             <td colspan="4">
@@ -231,7 +231,7 @@
                             </td>
                         </tr>
                         <tr >
-                            <td>
+                            <td class="title">
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
                             </td>
                             <td>
@@ -244,7 +244,7 @@
                                     <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </p:calendar>
                             </td>
-                            <td>
+                            <td class="title">
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.referredExp')}"/>
                             </td>
                             <td>
@@ -265,12 +265,12 @@
                             <td colspan="5"><p:separator/></td>
                         </tr>
                         <tr>
-                            <td class="left" colspan="5">
-                                <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.bizInterviewInfo')}"/>
+                            <td class="left title" colspan="5">
+                                <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.bizInterviewInfo')}"/>
                             </td>
                         </tr>
                         <tr>
-                            <td class="left" colspan="5">
+                            <td class="left title" colspan="5">
                                 <table class="table_content" style="padding: 0%" >
                                     <tr>
                                         <th>
@@ -301,7 +301,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.productionCosts')}"/>
                                         </td>
                                         <td>
@@ -318,7 +318,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.profitMargin')}"/>
                                         </td>
                                         <td>
@@ -335,7 +335,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.operatingExpense')}"/>
                                         </td>
                                         <td>
@@ -352,7 +352,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.earningsBeforeTax')}"/>
                                         </td>
                                         <td>
@@ -369,7 +369,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceInterest')}"/>
                                         </td>
                                         <td>
@@ -386,7 +386,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.reduceTax')}"/>
                                         </td>
                                         <td>
@@ -403,7 +403,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>
+                                        <td class="title" >
                                             <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netMargin')}"/>
                                         </td>
                                         <td>
@@ -427,7 +427,7 @@
                         </tr>
 
                         <tr>
-                            <td class="left">
+                            <td class="left title">
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.netFixAsset')}"/>
                             </td>
                             <td class="left">
@@ -438,7 +438,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="left">
+                            <td class="left title">
                                 <h:outputLabel value="#{msg.get('app.bizInfoSummary.label.noOfEmployee')}"/>
                             </td>
                             <td class="left">
@@ -578,7 +578,7 @@
                                                       style="background-color:#f8d0b6; text-align:right;"/>
 
                                             <p:column footerText="-"
-                                                      style="background-color:#f8d0b6; text-align:right;"/>
+                                                      style="background-color:#f8d0b6; text-align:center;"/>
 
                                             <p:column style="background-color:#f8d0b6;"/>
                                         </p:row>

@@ -1,0 +1,47 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+    <h:form id="appraisalContactDetailDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalContactDetail.dialog.customerName')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{appraisalAppointment.appraisalContactDetailView.customerName}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title" style="width: 200px;">
+                    <h:outputText value="#{msg.get('app.appraisal.appraisalContactDetail.dialog.contactNo')}"/>
+                </td>
+                <td style="width: 200px;">
+                    <p:inputText value="#{appraisalAppointment.appraisalContactDetailView.contactNo}" styleClass="larger"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                   <p:spacer/>
+                </td>
+            </tr>
+            <tr>
+                <td class="center" colspan="2" style="margin-top: 20px;">
+                    <p:commandButton id="btnSaveAppraisalContactDetail"
+                                     value="#{msg.get('app.button.save')}"
+                                     actionListener="#{appraisalAppointment.onSaveAppraisalContactDetailView()}"
+                                     process="@form"
+                                     update=":appraisalContactDetailDlgForm :frmMain:appraisalContactDetailViewTable"
+                                     oncomplete="handleAppraisalContactDetailRequest(xhr, status, args)"/>
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="appraisalContactDetailViewDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+    <p:blockUI widgetVar="blockAppraisalContactDetailDlgForm" block="appraisalContactDetailDlgForm" trigger=":appraisalContactDetailDlgForm:btnSaveAppraisalContactDetail">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</ui:composition>

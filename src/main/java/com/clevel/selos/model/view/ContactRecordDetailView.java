@@ -11,10 +11,6 @@ import javax.inject.Inject;
 import java.util.Date;
 
 public class ContactRecordDetailView {
-    @Inject
-    @NormalMessage
-    Message msg;
-
     private long id;
     private int no;
     private Date callingDate;
@@ -27,6 +23,7 @@ public class ContactRecordDetailView {
     private String nextCallingTime;
     private Reason reason;
     private String remark;
+    private String status;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -151,6 +148,14 @@ public class ContactRecordDetailView {
         this.remark = remark;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -194,7 +199,6 @@ public class ContactRecordDetailView {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("msg", msg)
                 .append("id", id)
                 .append("no", no)
                 .append("callingDate", callingDate)
@@ -207,6 +211,7 @@ public class ContactRecordDetailView {
                 .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
                 .append("remark", remark)
+                .append("status", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

@@ -45,6 +45,9 @@ public class ContactRecordDetail {
     @Column(name="remark")
     private String remark;
 
+    @Column(name="status")
+    private String status;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
     private Date createDate;
@@ -150,6 +153,14 @@ public class ContactRecordDetail {
         this.remark = remark;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -211,6 +222,7 @@ public class ContactRecordDetail {
                 .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
                 .append("remark", remark)
+                .append("remark", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)

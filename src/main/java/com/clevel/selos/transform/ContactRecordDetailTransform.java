@@ -17,7 +17,6 @@ public class ContactRecordDetailTransform extends Transform  {
 
             ContactRecordDetail ContactRecordDetail = new ContactRecordDetail();
             ContactRecordDetail.setCustomerAcceptance(customerAcceptance);
-
             ContactRecordDetail.setCreateBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setCreateDate(DateTime.now().toDate());
             ContactRecordDetail.setNo(contactRecordDetailView.getNo());
@@ -29,6 +28,7 @@ public class ContactRecordDetailTransform extends Transform  {
             ContactRecordDetail.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
             ContactRecordDetail.setReason(contactRecordDetailView.getReason());
             ContactRecordDetail.setRemark(contactRecordDetailView.getRemark());
+            ContactRecordDetail.setStatus(contactRecordDetailView.getStatus());
             ContactRecordDetail.setModifyBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setModifyDate(DateTime.now().toDate());
             contactRecordDetailList.add(ContactRecordDetail);
@@ -42,7 +42,6 @@ public class ContactRecordDetailTransform extends Transform  {
 
             ContactRecordDetail ContactRecordDetail = new ContactRecordDetail();
             ContactRecordDetail.setAppraisal(appraisal);
-
             ContactRecordDetail.setCreateBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setCreateDate(DateTime.now().toDate());
             ContactRecordDetail.setNo(contactRecordDetailView.getNo());
@@ -54,13 +53,13 @@ public class ContactRecordDetailTransform extends Transform  {
             ContactRecordDetail.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
             ContactRecordDetail.setReason(contactRecordDetailView.getReason());
             ContactRecordDetail.setRemark(contactRecordDetailView.getRemark());
+            ContactRecordDetail.setStatus(contactRecordDetailView.getStatus());
             ContactRecordDetail.setModifyBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setModifyDate(DateTime.now().toDate());
             contactRecordDetailList.add(ContactRecordDetail);
         }
         return contactRecordDetailList;
     }
-
 
     public List<ContactRecordDetailView> transformToView(List<ContactRecordDetail> contactRecordDetailList){
         List<ContactRecordDetailView> contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
@@ -76,6 +75,7 @@ public class ContactRecordDetailTransform extends Transform  {
             contactRecordDetailView.setNextCallingTime(ContactRecordDetail.getNextCallingTime());
             contactRecordDetailView.setReason(ContactRecordDetail.getReason());
             contactRecordDetailView.setRemark(ContactRecordDetail.getRemark());
+            contactRecordDetailView.setStatus(ContactRecordDetail.getStatus());
             contactRecordDetailView.setCreateBy(ContactRecordDetail.getCreateBy());
             contactRecordDetailView.setCreateDate(ContactRecordDetail.getCreateDate());
             contactRecordDetailView.setModifyBy(ContactRecordDetail.getModifyBy());
