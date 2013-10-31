@@ -10,10 +10,13 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.callingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar id="callingDate" showOn="button" navigator="true" size="10"
+                    <p:calendar size="10" id="callingDate" showOn="button" navigator="true"
                                 value="#{customerAcceptance.contactRecordDetailView.callingDate}"
-                                pattern="dd/MM/yyyy">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                pattern="dd/MM/yyyy"
+                                locale="th_TH"
+                                timeZone="Asia/Bangkok"
+                                yearRange="2440:3000">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:calendar>
                     <p:spacer width="10"/>
                     <p:inputMask id="callingTime" size="5" value="#{customerAcceptance.contactRecordDetailView.callingTime}"  mask="99:99"  />
@@ -43,10 +46,13 @@
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.nextCallingDate')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:calendar id="nextCallingDate" showOn="button" navigator="true" size="10"
+                    <p:calendar size="10" id="nextCallingDate" mindate="#{customerAcceptance.currentDate}" showOn="button" navigator="true"
                                 value="#{customerAcceptance.contactRecordDetailView.nextCallingDate}"
-                                pattern="dd/MM/yyyy">
-                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                pattern="dd/MM/yyyy"
+                                locale="th_TH"
+                                timeZone="Asia/Bangkok"
+                                yearRange="2440:3000">
+                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                     </p:calendar>
                     <p:spacer width="10"/>
                     <p:inputMask id="nextCallingTime" size="5" value="#{customerAcceptance.contactRecordDetailView.nextCallingTime}"  mask="99:99"  />

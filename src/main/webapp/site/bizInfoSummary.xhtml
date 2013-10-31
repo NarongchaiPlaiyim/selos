@@ -91,10 +91,13 @@
                                             <p:outputLabel value="#{msg.get('app.bizInfoSummary.label.expiryDate')}"/> :
                                         </td>
                                         <td>
-                                            <p:calendar id="expiryDate" showOn="button" navigator="true"
+                                            <p:calendar size="10" id="expiryDate" showOn="button" navigator="true"
                                                         value="#{bizInfoSummary.bizInfoSummaryView.expiryDate}"
-                                                        pattern="dd/MM/yyyy">
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                        pattern="dd/MM/yyyy"
+                                                        locale="th_TH"
+                                                        timeZone="Asia/Bangkok"
+                                                        yearRange="2440:3000">
+                                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                             </p:calendar>
                                         </td>
                                     </tr>
@@ -217,23 +220,28 @@
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.registrationDate')}"/>
                             </td>
                             <td colspan="4">
-                                <p:calendar id="registrationDate" showOn="button" navigator="true"
+                                <p:calendar size="10" id="registrationDate" showOn="button" navigator="true"
                                             value="#{bizInfoSummary.bizInfoSummaryView.registrationDate}"
-                                            pattern="dd/MM/yyyy">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            pattern="dd/MM/yyyy"
+                                            locale="th_TH"
+                                            timeZone="Asia/Bangkok"
+                                            yearRange="2440:3000">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </p:calendar>
                             </td>
-
                         </tr>
                         <tr >
                             <td>
                                 <h:outputLabel  class="title" value="#{msg.get('app.bizInfoSummary.label.establishDate')}"/>
                             </td>
                             <td>
-                                <p:calendar id="establishDate" showOn="button" navigator="true"
+                                <p:calendar size="10" id="establishDate" maxdate="#{bizInfoSummary.currentDate}" showOn="button" navigator="true"
                                             value="#{bizInfoSummary.bizInfoSummaryView.establishDate}"
-                                            pattern="dd/MM/yyyy">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            pattern="dd/MM/yyyy"
+                                            locale="th_TH"
+                                            timeZone="Asia/Bangkok"
+                                            yearRange="2440:3000">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </p:calendar>
                             </td>
                             <td>
@@ -482,37 +490,37 @@
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.bizDesc')}" styleClass="center" style="width: 140px;">
                                         <h:outputText value="#{bizInfoDetailx.bizDesc.name}"/>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeAmount')}" styleClass="right" style="width: 140px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.buyerUWAdjustCreditTerm}" >
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="center" style="width: 140px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomePercent')}" styleClass="right" style="width: 140px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.percentBiz}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="center" style="width: 100px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.incomeFactorPercent')}" styleClass="right" style="width: 100px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.incomeFactor}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="center" style="width: 100px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.InterviewedIncomeFactorPercent')}" styleClass="right" style="width: 100px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.adjustedIncomeFactor}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="center" style="width: 50px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AR')}" styleClass="right" style="width: 50px;">
                                         <h:outputText styleClass="right"  value="#{bizInfoDetailx.bizDesc.ar}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="center" style="width: 50px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.AP')}" styleClass="right" style="width: 50px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.ap}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="center" style="width: 50px;">
+                                    <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.INV')}" styleClass="right" style="width: 50px;">
                                         <h:outputText styleClass="right" value="#{bizInfoDetailx.bizDesc.inv}">
                                             <f:convertNumber pattern="#,##0"  minFractionDigits="2" maxFractionDigits="2"/>
                                         </h:outputText>
@@ -520,7 +528,7 @@
                                     <p:column headerText="#{msg.get('app.bizInfoSummary.table.column.business.IndustryComment')}" styleClass="center" style="width: 100px;">
                                         <h:outputText value="#{bizInfoDetailx.bizComment}"/>
                                     </p:column>
-                                    <p:column headerText="" styleClass="center" style="width:80px;">
+                                    <p:column headerText="" styleClass="left" style="width:100px;">
 
                                         <p:commandButton icon="ui-icon-pencil"
                                                          title="Edit" process="@this"
@@ -529,13 +537,11 @@
                                             <f:setPropertyActionListener value="viewDetail" target="#{bizInfoSummary.redirect}"/>
                                         </p:commandButton>
 
-                                        <p:panel rendered="#{rowIndex!=0}" styleClass="panel" style="display: inline">
-                                            <p:commandButton icon="ui-icon-trash"
-                                                             title="Remove" process="@this"
-                                                             oncomplete="confirmDeleteBizInfoDetailDlg.show();" >
-                                                <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
-                                            </p:commandButton>
-                                        </p:panel>
+                                        <p:commandButton icon="ui-icon-trash"          rendered="#{rowIndex!=0}"
+                                                         title="Remove" process="@this"
+                                                         oncomplete="confirmDeleteBizInfoDetailDlg.show();" >
+                                            <f:setPropertyActionListener value="#{bizInfoDetailx}" target="#{bizInfoSummary.selectBizInfoDetailView}"/>
+                                        </p:commandButton>
                                     </p:column>
 
                                     <p:columnGroup type="footer">

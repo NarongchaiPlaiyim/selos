@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -53,9 +54,10 @@ public class BizInfoDetail implements Serializable {
     private String modeForButton;
     private String dlgStakeName;
     private String dlgStakeSaleType;
-    long bizInfoSummaryId;
-    long bizInfoDetailViewId;
+    private long bizInfoSummaryId;
+    private long bizInfoDetailViewId;
     private String descType;
+    private Date currentDate;
 
     private BizStakeHolderDetailView bizStakeHolderDetailView;
     private List<BizStakeHolderDetailView> supplierDetailList;
@@ -544,8 +546,8 @@ public class BizInfoDetail implements Serializable {
             if(bizInfoDetailView.getId() == 0){
                 bizInfoDetailView.setCreateBy(user);
                 bizInfoDetailView.setCreateDate(DateTime.now().toDate());
-                bizInfoDetailView.setModifyBy(user);
             }
+            bizInfoDetailView.setModifyBy(user);
             bizInfoDetailView = bizInfoDetailControl.onSaveBizInfoToDB(bizInfoDetailView, bizInfoSummaryId);
             messageHeader = msg.get("app.bizInfoDetail.message.header.save.success");
             message = msg.get("app.bizInfoDetail.message.body.save.success");
@@ -761,5 +763,13 @@ public class BizInfoDetail implements Serializable {
 
     public void setSumBizPercent(double sumBizPercent) {
         this.sumBizPercent = sumBizPercent;
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -48,7 +49,7 @@ public class CustomerAcceptance implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
-
+    private Date currentDate;
 
     private User user;
 
@@ -243,6 +244,7 @@ public class CustomerAcceptance implements Serializable {
                     customerAcceptanceView.setCreateBy(user);
                     customerAcceptanceView.setCreateDate(DateTime.now().toDate());
                 }
+                customerAcceptanceView.setModifyBy(user);
                 customerAcceptanceControl.onSaveCustomerAcceptance(customerAcceptanceView, contactRecordDetailViewList, workCaseId);
                 messageHeader = msg.get("app.contactRecordDetail.message.header.save.success");
                 message = msg.get("app.contactRecordDetail.message.body.save.success");
@@ -345,5 +347,13 @@ public class CustomerAcceptance implements Serializable {
 
     public void setReasonList(List<Reason> reasonList) {
         this.reasonList = reasonList;
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

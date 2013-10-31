@@ -81,10 +81,36 @@
                                                  paginator="false"
                                                  rowKey="#{contactRecordDetailView.id}"
                                                  rowIndexVar="rowIndex" >
+
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column colspan="8" style="width:100%;"
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.header')}" />
+                                            </p:row>
+                                            <p:row>
+                                                <p:column 
+                                                          headerText=""/>
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}"/>
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}"/>
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.acceptResult')}"/>
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}"/>
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.reason')}" />
+                                                <p:column 
+                                                          headerText="#{msg.get('app.contactRecordDetail.table.remark')}"/>
+                                                <p:column 
+                                                          headerText=""/>
+                                            </p:row>
+                                        </p:columnGroup>
+
                                         <p:column headerText="" styleClass="center" style="width:4%;">
                                             <p:outputLabel value="#{contactRecordDetailView.no}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.callingDate')}" styleClass="center" >
+                                        <p:column  styleClass="left" style="width:120px;" >
                                             <p:outputLabel value="#{contactRecordDetailView.callingDate}" >
                                                 <f:convertDateTime pattern="dd/MM/yyy"  />
                                              </p:outputLabel>
@@ -93,13 +119,13 @@
                                                 <f:convertDateTime pattern="HH:mm"  />
                                             </p:outputLabel>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.callingResult')}" styleClass="center">
+                                        <p:column styleClass="left" style="width:100px;">
                                             <p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.acceptResult')}" styleClass="center">
+                                        <p:column  styleClass="left" style="width:100px;">
                                             <p:outputLabel value="#{contactRecordDetailView.acceptResultStr}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.nextCallingDate')}" styleClass="center">
+                                        <p:column styleClass="left" style="width:120px;" >
                                             <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
                                                 <f:convertDateTime pattern="dd/MM/yyy"  />
                                             </p:outputLabel>
@@ -108,10 +134,10 @@
                                                 <f:convertDateTime pattern="HH:mm"  />
                                             </p:outputLabel>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.reason')}" styleClass="center">
+                                        <p:column styleClass="left" style="width:150px;">
                                             <p:outputLabel value="#{contactRecordDetailView.reason.description}"/>
                                         </p:column>
-                                        <p:column headerText="#{msg.get('app.contactRecordDetail.table.remark')}" styleClass="center">
+                                        <p:column  styleClass="left" style="width:200px;">
                                             <p:outputLabel value="#{contactRecordDetailView.remark}"/>
                                         </p:column>
                                         <p:column headerText="" styleClass="center" style="width:8%;">
