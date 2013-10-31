@@ -19,10 +19,10 @@ public class QualitativeTransform extends Transform {
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");
         QualitativeA qualitativeA = new QualitativeA();
-//        Date createDate = DateTime.now().toDate();
-//        Date modifyDate = DateTime.now().toDate();
-//        log.info("transformQualitativeAToModel createDate  :: {} ",createDate);
-//        log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
+        Date createDate = DateTime.now().toDate();
+        Date modifyDate = DateTime.now().toDate();
+        log.info("transformQualitativeAToModel createDate  :: {} ",createDate);
+        log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeAView.getId() != 0) {
             qualitativeA.setId(qualitativeAView.getId());
@@ -30,12 +30,10 @@ public class QualitativeTransform extends Transform {
 
         qualitativeA.setActive(true);
         qualitativeA.setWorkCase(workCase);
-
-
         qualitativeA.setCreateBy(user);
         qualitativeA.setModifyBy(user);
-        qualitativeA.setCreateDate(qualitativeAView.getCreateDate());
-        qualitativeA.setModifyDate(qualitativeAView.getModifyDate());
+        qualitativeA.setCreateDate(createDate);
+        qualitativeA.setModifyDate(modifyDate);
         qualitativeA.setProperties_p1(convertToDB(qualitativeAView.isProperties_p1()));
         qualitativeA.setProperties_p2(convertToDB(qualitativeAView.isProperties_p2()));
         qualitativeA.setProperties_p3(convertToDB(qualitativeAView.isProperties_p3()));
@@ -198,6 +196,8 @@ public class QualitativeTransform extends Transform {
         QualitativeB qualitativeB = new QualitativeB();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
+        log.info("transformQualitativeBToModel createDate  :: {} ",createDate);
+        log.info("transformQualitativeBToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeBView.getId() != 0) {
             qualitativeB.setId(qualitativeBView.getId());

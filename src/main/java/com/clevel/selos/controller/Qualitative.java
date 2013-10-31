@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.QualitativeView;
@@ -13,7 +14,6 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
-import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -23,7 +23,6 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -65,22 +64,24 @@ public class Qualitative {
     private String messageHeader;
     private String message;
     private boolean messageErr;
-    private Date date;
-    private String dateToShow;
     private  int result;
-    public Qualitative(){
-    }
+    private boolean validate;
+
+    public Qualitative(){}
+
+
 
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
+//        validate = true;
 
         HttpSession session = FacesUtil.getSession(true);
         user = (User)session.getAttribute("user");
-        result = 0;
 
         String page = Util.getCurrentPage();
         log.info("this page :: {} ",page);
+
         if(page.equals("qualitativeA.jsf")){
             session.setAttribute("workCaseId", new Long(3)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
 
@@ -105,8 +106,12 @@ public class Qualitative {
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
+            result = 0;
+
         } else{
             modeForButton = ModeForButton.EDIT;
+            log.info("qualitativeView  EDIT result :: {}", qualitativeView.getQualityResult());
+            onSetQualityToValue(qualitativeView.getQualityResult());
         }
 
         onLoadSelectList();
@@ -126,33 +131,52 @@ public class Qualitative {
     }
 
     public void onClickQuality(int clickResult){
-
         if(clickResult > result){
             result = clickResult;
-            onSetQuality(result);
         }else{
             result = result;
-            onSetQuality(result);
         }
 
       log.info("result :: {}" , result);
     }
 
-    public void onSetQuality(int clickResult){
-         if(clickResult == 1){
-             qualitativeView.setQualityResult("P");
-         }else if(clickResult == 2){
-             qualitativeView.setQualityResult("SM");
-         }else if(clickResult == 3){
-             qualitativeView.setQualityResult("SS");
-         }else if(clickResult == 4){
-             qualitativeView.setQualityResult("D");
-         }else if(clickResult == 5){
-            qualitativeView.setQualityResult("DL");
-         }
+   public void onSetQualityToSave(){
 
+        if(result == QualitativeClass.P.getValue()){
+            qualitativeView.setQualityResult(QualitativeClass.P.toString());
+        }else if(result == QualitativeClass.SM.getValue()){
+            qualitativeView.setQualityResult(QualitativeClass.SM.toString());
+        }else if(result == QualitativeClass.SS.getValue()){
+            qualitativeView.setQualityResult(QualitativeClass.SS.toString());
+        }else if(result == QualitativeClass.D.getValue()){
+            qualitativeView.setQualityResult(QualitativeClass.D.toString());
+        }else if(result == QualitativeClass.DL.getValue()){
+            qualitativeView.setQualityResult(QualitativeClass.DL.toString());
+        }
+        /*else{
+            validate = false;
+        }*/
 
         log.info("qualitativeView.getQualityResult :: {}" , qualitativeView.getQualityResult());
+    }
+
+    public void onSetQualityToValue(String quality){
+        log.info("onSetQualityToValue ::: quality  {}",quality);
+        if(quality.equals("P")){
+            result = 1;
+        }else  if(quality.equals("SM")){
+            result = 2;
+        }else  if(quality.equals("SS")){
+            result = 3;
+        }else  if(quality.equals("D")){
+            result = 4;
+        }else  if(quality.equals("DL")){
+            result = 5;
+        }else{
+            result = 0;
+        }
+
+        log.info("result in mode edit :: {}" , result);
     }
 
     public void onSaveQualitativeA(){
@@ -160,30 +184,18 @@ public class Qualitative {
         log.info("modeForButton :: {} ",modeForButton);
 
         try{
-            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                if(qualitativeView.getId() == 0){
-                    qualitativeView.setCreateBy(user);
-                    qualitativeView.setCreateDate(DateTime.now().toDate());
-//                    date = new Date();
-//                    log.info("DateTime.now().toDate() ;; {}", DateTimeUtil.getDateTimeStr(date));
-//                    dateToShow = DateTimeUtil.getDateTimeStr(date);
-                }
+            onSetQualityToSave();
+
+//            if(validate == false){
+//               return ;
+//            }else  if(validate == true){
                 qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
                 modeForButton = ModeForButton.EDIT;
-
-
-            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                qualitativeView.setModifyBy(user);
-                qualitativeView.setModifyDate(DateTime.now().toDate());
-                qualitativeControl.saveQualitativeA(qualitativeView,workCaseId,user);
-
-            }
-
-            messageHeader = msg.get("app.header.save.success");
-            message =  msg.get("app.qualitativeA.response.save.success");
-            onCreation();
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
+                messageHeader = msg.get("app.header.save.success");
+                message =  msg.get("app.qualitativeA.response.save.success");
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                onCreation();
+//            }
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader =  msg.get("app.header.save.failed");
@@ -213,19 +225,12 @@ public class Qualitative {
         log.info("modeForButton :: {} ",modeForButton);
 
         try{
-            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
-                modeForButton = ModeForButton.EDIT;
-
-            }else  if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)) {
-                qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
-            }
-
+            onSetQualityToSave();
+            qualitativeControl.saveQualitativeB(qualitativeView, workCaseId,user);
             messageHeader = msg.get("app.header.save.success");
             message =  msg.get("app.qualitativeB.response.save.success");
-            onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
+            onCreation();
         }catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader =  msg.get("app.header.save.failed");
@@ -290,11 +295,4 @@ public class Qualitative {
         this.messageHeader = messageHeader;
     }
 
-    public String getDateToShow() {
-        return dateToShow;
-    }
-
-    public void setDateToShow(String dateToShow) {
-        this.dateToShow = dateToShow;
-    }
 }

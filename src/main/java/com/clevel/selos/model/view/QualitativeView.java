@@ -91,7 +91,6 @@ public class QualitativeView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-
     public QualitativeView() {
         qualityLevel = new QualityLevel();
     }
@@ -730,13 +729,28 @@ public class QualitativeView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
+
     public String getQualityResult() {
+//        if(result == QualitativeClass.P.getValue()){
+//            this.qualityResult = QualitativeClass.P.toString();
+//        }else if(result == QualitativeClass.SM.getValue()){
+//            this.qualityResult = QualitativeClass.SM.toString();
+//        }else if(result == QualitativeClass.SS.getValue()){
+//            this.qualityResult = QualitativeClass.SS.toString();
+//        }else if(result == QualitativeClass.D.getValue()){
+//            this.qualityResult = QualitativeClass.D.toString();
+//        }else if(result == QualitativeClass.DL.getValue()){
+//            this.qualityResult = QualitativeClass.DL.toString();
+//        }else{
+//            this.qualityResult = "";
+//        }
         return qualityResult;
     }
 
     public void setQualityResult(String qualityResult) {
         this.qualityResult = qualityResult;
     }
+
 
     @Override
     public String toString() {
