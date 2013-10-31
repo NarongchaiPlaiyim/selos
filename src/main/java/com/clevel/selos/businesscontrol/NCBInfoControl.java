@@ -10,6 +10,7 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.db.working.NCBDetail;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
+import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
 import org.hibernate.criterion.Conjunction;
@@ -38,6 +39,9 @@ public class NCBInfoControl extends BusinessControl {
     WorkCaseDAO workCaseDAO;
     @Inject
     private CustomerDAO customerDAO;
+
+    @Inject
+    private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
     public void NCBInfoControl() {
@@ -101,27 +105,36 @@ public class NCBInfoControl extends BusinessControl {
         return ncbDetailViewList;
     }
 
-    public List<NCBInfoView> getNCBForCalDBR(long workcaseId){
-        List<NCBInfoView> ncbInfoViews = new ArrayList<NCBInfoView>();
+    public List<NCBDetailView> getNCBForCalDBR(long workcaseId){
+        List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.info("Begin getNCBForCalDBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
 
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         log.info("ncbs :{}", ncbs.size());
         for(NCB ncb : ncbs){
+            Customer customer = ncb.getCustomer();
             List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
             AccountType accountType;
             for(NCBDetail ncbDetail : ncbDetails){
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
                 if(accountType.getDbrFlag() == 1){
-                    NCBInfoView ncbInfoView = new NCBInfoView();
-                    ncbInfoView = ncbTransform.transformToView(ncb);
-                    ncbDetailTransform.transformToView(ncbDetail);
-                    ncbInfoViews.add(ncbInfoView);
+                    NCBDetailView ncbDetailView = new NCBDetailView();
+                    ncbDetailView.setId(ncbDetail.getId());
+                    ncbDetailView.setLimit(ncbDetail.getLimit());
+                    ncbDetailView.setInstallment(ncbDetail.getInstallment());
+                    ncbDetailView.setOutstanding(ncbDetail.getOutstanding());
+                    StringBuilder accountName = new StringBuilder();
+                    accountName.append(customer.getTitle().getTitleTh())
+                            .append(" ").append(customer.getNameTh())
+                            .append(" ").append(customer.getLastNameTh());
+                    ncbDetailView.setAccountName(accountName.toString());
+                    ncbDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(ncbDetail.getAccountType()));
+                    ncbDetailViews.add(ncbDetailView);
                 }
             }
         }
-        return null;
+        return ncbDetailViews;
     }
 }

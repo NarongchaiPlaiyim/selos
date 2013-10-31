@@ -3,10 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
-import com.clevel.selos.model.view.DBRDetailView;
-import com.clevel.selos.model.view.DBRView;
-import com.clevel.selos.model.view.LoanAccountTypeView;
-import com.clevel.selos.model.view.NcbView;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -23,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class DBRInfo implements Serializable {
     private DBRView dbr;
     private List<DBRDetailView> dbrDetails;
     private List<LoanAccountTypeView> loanAccountTypes;
-    private List<NcbView> ncbViews;
+    private List<NCBDetailView> ncbDetails;
 
     //**DBR Detail
     private DBRDetailView selectedItem;
@@ -120,8 +118,9 @@ public class DBRInfo implements Serializable {
             }
             loanAccountTypes = new ArrayList<LoanAccountTypeView>();
             loanAccountTypes = loanAccountTypeControl.getListLoanTypeByCus(1);
-            ncbViews = new ArrayList<NcbView>(); // HardCode
-            ncbInfoControl.getNCBForCalDBR(workCaseId);
+            ncbDetails = new ArrayList<NCBDetailView>();
+            ncbDetails = ncbInfoControl.getNCBForCalDBR(workCaseId);
+
         }catch (Exception e){
 
         }
@@ -202,7 +201,26 @@ public class DBRInfo implements Serializable {
                 message = "Save Basic Info data failed. Cause : " + e.getMessage();
             }
         }
+    }
 
+    public BigDecimal getOutStandingNCBTotal(){
+        BigDecimal outStandingNCB = BigDecimal.ZERO;
+        if(ncbDetails != null && !ncbDetails.isEmpty()){
+            for(NCBDetailView ncbDetailView : ncbDetails){
+                outStandingNCB = outStandingNCB.add(ncbDetailView.getOutstanding());
+            }
+        }
+        return outStandingNCB;
+    }
+
+    public BigDecimal getOutStandingDBRTotal(){
+        BigDecimal outStandingDBR = BigDecimal.ZERO;
+        if(dbrDetails != null && !dbrDetails.isEmpty()){
+            for(DBRDetailView dbrDetailView : dbrDetails){
+                outStandingDBR = outStandingDBR.add(dbrDetailView.getDebtForCalculate());
+            }
+        }
+        return outStandingDBR;
     }
 
     public DBRView getDbr() {
@@ -237,12 +255,12 @@ public class DBRInfo implements Serializable {
         this.loanAccountTypes = loanAccountTypes;
     }
 
-    public List<NcbView> getNcbViews() {
-        return ncbViews;
+    public List<NCBDetailView> getNcbDetails() {
+        return ncbDetails;
     }
 
-    public void setNcbViews(List<NcbView> ncbViews) {
-        this.ncbViews = ncbViews;
+    public void setNcbDetails(List<NCBDetailView> ncbDetails) {
+        this.ncbDetails = ncbDetails;
     }
 
     public int getRowIndex() {
