@@ -13,7 +13,9 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import com.clevel.selos.util.ValidationUtil;
+import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -76,10 +78,12 @@ public class BankStatementDetail implements Serializable {
     private boolean isTmbBank;
     private int seasonal;
     private Date expectedSubmissionDate;
+    private BankStmtSummaryView summaryView;
 
     //View form
     private BankStmtView bankStmtView;
     private int numberOfMonths;
+    private Date currentDate;
 
     //Select items list
     private List<BankView> bankViewList;
@@ -94,6 +98,7 @@ public class BankStatementDetail implements Serializable {
 
     //Session
     private long workCaseId;
+    private long workCasePrescreenId;
     private long stepId;
     private String userId;
 
@@ -102,8 +107,8 @@ public class BankStatementDetail implements Serializable {
 
     private void preRender() {
         HttpSession session = FacesUtil.getSession(false);
-        session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1006);
+        session.setAttribute("workCaseId", 2);
+        session.setAttribute("stepId", 1001);
         session.setAttribute("userId", 10001);
 
         log.info("preRender ::: setSession ");
@@ -112,6 +117,7 @@ public class BankStatementDetail implements Serializable {
 
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
+            workCasePrescreenId = 21;
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
         } else {
@@ -130,9 +136,11 @@ public class BankStatementDetail implements Serializable {
         Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParams");
         if (bankStmtSumParams != null) {
             isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
-            seasonal = (Integer) bankStmtSumParams.get("seasonal");
-            expectedSubmissionDate = (Date) bankStmtSumParams.get("expectedSubmissionDate");
-
+            summaryView = (BankStmtSummaryView) bankStmtSumParams.get("bankStmtSumView");
+            if (summaryView != null) {
+                seasonal = summaryView.getSeasonal();
+                expectedSubmissionDate = summaryView.getExpectedSubmitDate();
+            }
             log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, seasonal: {}, expectedSubmissionDate: {}}",
                     isTmbBank, seasonal, expectedSubmissionDate);
         } else {
@@ -193,7 +201,7 @@ public class BankStatementDetail implements Serializable {
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
         try {
-            bankStmtControl.saveBankStmt(null, bankStmtView, workCaseId, userId);
+            bankStmtControl.saveBankStmt(summaryView, bankStmtView, workCaseId, workCasePrescreenId, userId);
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -217,147 +225,31 @@ public class BankStatementDetail implements Serializable {
     //********** Calculate Average **********//
     public void calAverages() {
         log.debug("calAverages()");
-
-        // avgIncomeGross = SUM(grossCreditBalance) / numberOfMonths
-        // avgIncomeNetBDM = SUM(creditAmountBDM) / numberOfMonths
-        // avgIncomeNetUW = SUM(creditAmountUW) / numberOfMonths
-
-        BigDecimal sumGrossCreditBalance = BigDecimal.ZERO;
-        BigDecimal sumCreditAmountBDM = BigDecimal.ZERO;
-        BigDecimal sumCreditAmountUW = BigDecimal.ZERO;
-
-        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
-            sumGrossCreditBalance = sumGrossCreditBalance.add(detailView.getGrossCreditBalance());
-
-            // creditAmountBDM = grossCreditBalance - excludeListBDM - chequeReturnAmount
-            detailView.setCreditAmountBDM(
-                    detailView.getGrossCreditBalance().subtract(detailView.getExcludeListBDM()).subtract(detailView.getChequeReturnAmount()));
-            log.debug("creditAmountBDM: {} = grossCreditBalance: {} - excludeListBDM: {} - chequeReturnAmount: {}",
-                    detailView.getCreditAmountBDM(), detailView.getGrossCreditBalance(), detailView.getExcludeListBDM(), detailView.getChequeReturnAmount());
-            sumCreditAmountBDM = sumCreditAmountBDM.add(detailView.getCreditAmountBDM());
-
-            // creditAmountUW = grossCreditBalance - excludeListUW - chequeReturnAmount
-            detailView.setCreditAmountUW(
-                    detailView.getGrossCreditBalance().subtract(detailView.getExcludeListUW()).subtract(detailView.getChequeReturnAmount()));
-            log.debug("creditAmountUW: {} = grossCreditBalance: {} - excludeListUW: {} - chequeReturnAmount: {}",
-                    detailView.getCreditAmountUW(), detailView.getGrossCreditBalance(), detailView.getExcludeListUW(), detailView.getChequeReturnAmount());
-            sumCreditAmountUW = sumCreditAmountUW.add(detailView.getCreditAmountUW());
-        }
-
-        bankStmtView.setAvgIncomeGross(sumGrossCreditBalance.divide(BigDecimal.valueOf(numberOfMonths), 2, RoundingMode.HALF_UP));
-        log.debug("avgIncomeGross: {} = SUM(grossCreditBalance): {} / numberOfMonths: {}",
-                bankStmtView.getAvgIncomeGross(), sumGrossCreditBalance, numberOfMonths);
-
-        bankStmtView.setAvgIncomeNetBDM(sumCreditAmountBDM.divide(BigDecimal.valueOf(numberOfMonths), 2, RoundingMode.HALF_UP));
-        log.debug("avgIncomeNetBDM: {} = SUM(creditAmountBDM): {} / numberOfMonths: {}",
-                bankStmtView.getAvgIncomeNetBDM(), sumCreditAmountBDM, numberOfMonths);
-
-        bankStmtView.setAvgIncomeNetUW(sumCreditAmountUW.divide(BigDecimal.valueOf(numberOfMonths), 2, RoundingMode.HALF_UP));
-        log.debug("avgIncomeNetUW: {} = SUM(CreditAmountUW): {} / numberOfMonths: {}",
-                bankStmtView.getAvgIncomeNetUW(), sumCreditAmountUW, numberOfMonths);
-
-        BigDecimal sumTrdChequeReturnAmount = BigDecimal.ZERO;
-        for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails()) {
-            sumTrdChequeReturnAmount = sumTrdChequeReturnAmount.add(detailView.getChequeReturnAmount());
-        }
-        bankStmtView.setTrdChequeReturnAmount(sumTrdChequeReturnAmount);
-        log.debug("SUM(chequeReturnAmount) = {}", sumTrdChequeReturnAmount);
-
-        // *** Remark ***
-        // 1. if(creditAmountUW is non value) -> timesOfAvgCredit = creditAmountBDM / avgIncomeNetBDM
-        // 2. if(excludeListUW is available) -> timesOfAvgCredit = creditAmountUW / avgIncomeNetUW
-        log.debug("Calculate timesOfAvgCredit(BDM/UW)");
-        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
-            try {
-                if (ValidationUtil.isValueEqualZero(detailView.getCreditAmountUW())) {
-                    detailView.setTimesOfAvgCreditBDM(detailView.getCreditAmountBDM().divide(bankStmtView.getAvgIncomeNetBDM(), 2, RoundingMode.HALF_UP));
-                    log.debug("timesOfAvgCreditBDM: {} = creditAmountBDM: {} / avgIncomeNetBDM: {}",
-                            detailView.getTimesOfAvgCreditBDM(), detailView.getCreditAmountBDM(), bankStmtView.getAvgIncomeNetBDM());
-                } else {
-                    detailView.setTimesOfAvgCreditUW(detailView.getCreditAmountUW().divide(bankStmtView.getAvgIncomeNetUW(), 2, RoundingMode.HALF_UP));
-                    log.debug("timesOfAvgCreditUW: {} = creditAmountUW: {} / avgIncomeNetUW: {}",
-                            detailView.getTimesOfAvgCreditUW(), detailView.getCreditAmountUW(), bankStmtView.getAvgIncomeNetUW());
-                }
-            } catch (ArithmeticException ae) {
-                log.error("", ae.getMessage());
-            }
-        }
+        bankStmtControl.calAverages(bankStmtView, numberOfMonths);
     }
 
     public void calAvgWithdrawAmount() {
         log.debug("calAvgWithdrawAmount()");
-        // avgWithDrawAmount = SUM(debitAmount) / numberOfMonths
-        BigDecimal sumDebitAmount = BigDecimal.ZERO;
-        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
-            sumDebitAmount = sumDebitAmount.add(detailView.getDebitAmount());
-        }
-        bankStmtView.setAvgWithDrawAmount(sumDebitAmount.divide(BigDecimal.valueOf(numberOfMonths), 2, RoundingMode.HALF_UP));
-        log.debug("avgWithDrawAmount: {} = SUM(debitAmount): {} / numberOfMonths: {}",
-                bankStmtView.getAvgWithDrawAmount(), sumDebitAmount, numberOfMonths);
+        bankStmtControl.calAvgWithdrawAmount(bankStmtView, numberOfMonths);
     }
 
     public void calAvgGrossInflowPerLimit() {
         log.debug("calAvgGrossInflowPerLimit()");
-        // avgGrossInflowPerLimit = SUM(grossInflowPerLimit) / numberOfMonths
-        BigDecimal sumGrossInflowPerLimit = BigDecimal.ZERO;
-        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
-            sumGrossInflowPerLimit = sumGrossInflowPerLimit.add(detailView.getGrossInflowPerLimit());
-        }
-        bankStmtView.setAvgGrossInflowPerLimit(sumGrossInflowPerLimit.divide(BigDecimal.valueOf(numberOfMonths), 2, RoundingMode.HALF_UP));
-        log.debug("avgGrossInflowPerLimit: {} = SUM(grossInflowPerLimit): {} / numberOfMonths: {}",
-                bankStmtView.getAvgWithDrawAmount(), sumGrossInflowPerLimit, numberOfMonths);
+        bankStmtControl.calAvgGrossInflowPerLimit(bankStmtView, numberOfMonths);
     }
 
     //********** Swing & Utilization **********//
     public void calSwingAndUtilization() {
         log.debug("calSwingAndUtilization()");
-        // swingPercent = Absolute(highestBalance - lowestBalance) / overLimitAmount
-        // utilizationPercent = (monthEndBalance * (-1)) / overLimitAmount
-        //*** Remark ***
-        // 1. if(overLimitAmount == 0) -> (swingPercent & utilizationPercent) = 0
-        // 2. if(monthEndBalance > 0) -> utilizationPercent = 0
-        for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
-            if (ValidationUtil.isValueEqualZero(detailView.getOverLimitAmount())) {
-                detailView.setSwingPercent(BigDecimal.ZERO);
-                detailView.setUtilizationPercent(BigDecimal.ZERO);
-            } else {
-                detailView.setSwingPercent(detailView.getHighestBalance().subtract(detailView.getLowestBalance()).abs()
-                        .divide(detailView.getOverLimitAmount(), 2, RoundingMode.HALF_UP));
-
-                if (ValidationUtil.isValueGreaterThanZero(detailView.getMonthEndBalance())) {
-                    detailView.setUtilizationPercent(BigDecimal.ZERO);
-                } else {
-                    detailView.setUtilizationPercent(detailView.getMonthEndBalance().multiply(BigDecimal.valueOf(-1))
-                            .divide(detailView.getOverLimitAmount(), 2, RoundingMode.HALF_UP));
-                }
-            }
-        }
-
-        // avgSwingPercent = SUM(swingPercent[lastSixMonth]) / numberOfLastSixMonth(overLimitAmount > 0)
-        // avgUtilizationPercent = SUM(utilizationPercent[lastSixMonth]) / numberOfLastSixMonth(overLimitAmount > 0)
-        int numberOfOverLimitAmountMonth = 0;
-        BigDecimal sumSwingPercent = BigDecimal.ZERO;
-        BigDecimal sumUtilizePercent = BigDecimal.ZERO;
-        for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails()) {
-            sumSwingPercent = sumSwingPercent.add(detailView.getSwingPercent());
-            sumUtilizePercent = sumUtilizePercent.add(detailView.getUtilizationPercent());
-
-            if (ValidationUtil.isValueGreaterThanZero(detailView.getOverLimitAmount()))
-                numberOfOverLimitAmountMonth += 1;
-        }
-        try {
-            bankStmtView.setSwingPercent(sumSwingPercent.divide(BigDecimal.valueOf(numberOfOverLimitAmountMonth), 2, RoundingMode.HALF_UP));
-            bankStmtView.setUtilizationPercent(sumUtilizePercent.divide(BigDecimal.valueOf(numberOfOverLimitAmountMonth), 2, RoundingMode.HALF_UP));
-        } catch (ArithmeticException ae) {
-            log.error("", ae.getMessage());
-        }
+        bankStmtControl.calSwingAndUtilization(bankStmtView);
     }
 
     //********** SUM , MAX **********//
     public void sumNumberOfChequeReturn() {
         log.debug("sumNumberOfChequeReturn()");
         int sumNumOfChequeReturn = 0;
-        for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails()) {
+        for (BankStmtDetailView detailView :
+                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
             sumNumOfChequeReturn += detailView.getNumberOfChequeReturn();
         }
         bankStmtView.setChequeReturn(BigDecimal.valueOf(sumNumOfChequeReturn));
@@ -366,7 +258,8 @@ public class BankStatementDetail implements Serializable {
     public void sumOverLimitTimes() {
         log.debug("sumOverLimitTimes()");
         int sumOverLimitTimes = 0;
-        for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails()) {
+        for (BankStmtDetailView detailView :
+                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
             sumOverLimitTimes += detailView.getOverLimitTimes();
         }
         bankStmtView.setOverLimitTimes(BigDecimal.valueOf(sumOverLimitTimes));
@@ -375,27 +268,12 @@ public class BankStatementDetail implements Serializable {
     public void maxOverLimitDays() {
         log.debug("maxOverLimitDays()");
         int maxOverLimitDays = 0;
-        for (BankStmtDetailView detailView : getLastSixMonthBankStmtDetails()) {
+        for (BankStmtDetailView detailView :
+                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
             if (detailView.getOverLimitDays() > maxOverLimitDays)
                 maxOverLimitDays = detailView.getOverLimitDays();
         }
         bankStmtView.setOverLimitDays(BigDecimal.valueOf(maxOverLimitDays));
-    }
-
-    private List<BankStmtDetailView> getLastSixMonthBankStmtDetails() {
-        log.debug("getLastSixMonthBankStmtDetails()");
-        List<BankStmtDetailView> bankStmtDetailViewList = bankStmtView.getBankStmtDetailViewList();
-        if (bankStmtDetailViewList == null || bankStmtDetailViewList.size() < 6) {
-            log.debug("bankStmtDetailViewList is null! or size is less than 6");
-            return new ArrayList<BankStmtDetailView>();
-        } else {
-            // 12 Month
-            if (bankStmtDetailViewList.size() > 6)
-                return bankStmtDetailViewList.subList(6, 12);
-                // 6 Month
-            else
-                return bankStmtDetailViewList;
-        }
     }
 
     //-------------------- Getter/Setter --------------------
@@ -469,5 +347,13 @@ public class BankStatementDetail implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

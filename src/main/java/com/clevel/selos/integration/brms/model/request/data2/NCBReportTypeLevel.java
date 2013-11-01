@@ -11,11 +11,11 @@ public class NCBReportTypeLevel implements Serializable {
     private boolean ncbNPLFlag;
 
     private List<AccountTypeLevelNCBReport> ncbAccountType;
-    private List<NCBEnquiryType> ncbEnquiryTypes;
+    private List<NCBEnquiryTypeLevel> ncbEnquiryTypes;
     public NCBReportTypeLevel() {
     }
 
-    public NCBReportTypeLevel(boolean ncbNPLFlag, List<AccountTypeLevelNCBReport> ncbAccountType, List<NCBEnquiryType> ncbEnquiryTypes) {
+    public NCBReportTypeLevel(boolean ncbNPLFlag, List<AccountTypeLevelNCBReport> ncbAccountType, List<NCBEnquiryTypeLevel> ncbEnquiryTypes) {
         this.ncbNPLFlag = ncbNPLFlag;
         this.ncbAccountType = ncbAccountType;
         this.ncbEnquiryTypes = ncbEnquiryTypes;
@@ -37,11 +37,11 @@ public class NCBReportTypeLevel implements Serializable {
         this.ncbAccountType = ncbAccountType;
     }
 
-    public List<NCBEnquiryType> getNcbEnquiryTypes() {
+    public List<NCBEnquiryTypeLevel> getNcbEnquiryTypes() {
         return ncbEnquiryTypes;
     }
 
-    public void setNcbEnquiryTypes(List<NCBEnquiryType> ncbEnquiryTypes) {
+    public void setNcbEnquiryTypes(List<NCBEnquiryTypeLevel> ncbEnquiryTypes) {
         this.ncbEnquiryTypes = ncbEnquiryTypes;
     }
 

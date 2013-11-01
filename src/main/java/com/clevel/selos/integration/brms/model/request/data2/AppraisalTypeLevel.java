@@ -7,21 +7,21 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class AppraisalType implements Serializable {
-    private List<AttributeTypeLevelAppraisal> attributeType;
+public class AppraisalTypeLevel implements Serializable {
+    private AttributeTypeLevelAppraisal attributeType;
 
-    public AppraisalType() {
+    public AppraisalTypeLevel() {
     }
 
-    public AppraisalType(List<AttributeTypeLevelAppraisal> attributeType) {
+    public AppraisalTypeLevel(AttributeTypeLevelAppraisal attributeType) {
         this.attributeType = attributeType;
     }
 
-    public List<AttributeTypeLevelAppraisal> getAttributeType() {
+    public AttributeTypeLevelAppraisal getAttributeType() {
         return attributeType;
     }
 
-    public void setAttributeType(List<AttributeTypeLevelAppraisal> attributeType) {
+    public void setAttributeType(AttributeTypeLevelAppraisal attributeType) {
         this.attributeType = attributeType;
     }
 
