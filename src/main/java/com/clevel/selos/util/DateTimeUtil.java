@@ -29,6 +29,15 @@ public class DateTimeUtil {
         return targetDateTime.compareTo(referenceDateTime);
     }
 
+    public static Date checkMaxDate(Date targetDate){
+        Date maxDate = DateTime.now().toDate();
+        if(compareDate(targetDate, maxDate) > 0){
+            return maxDate;
+        } else {
+            return targetDate;
+        }
+    }
+
     public static Date convertToDateUS(Date date){
         DateTime dateConvert = new DateTime(date, ISOChronology.getInstance());
         return dateConvert.toDate();

@@ -314,6 +314,16 @@ public class PrescreenMaker implements Serializable {
         }
     }
 
+    public void onCheckMaxDate(String type){
+        if(type.equalsIgnoreCase("dateOfexpected")){
+            prescreenView.setExpectedSubmitDate(DateTimeUtil.checkMaxDate(prescreenView.getExpectedSubmitDate()));
+        }else if(type.equalsIgnoreCase("dateOfregister")){
+            prescreenView.setRegisterDate(DateTimeUtil.checkMaxDate(prescreenView.getRegisterDate()));
+        }else if(type.equalsIgnoreCase("dateOfrefer")){
+            prescreenView.setReferDate(DateTimeUtil.checkMaxDate(prescreenView.getReferDate()));
+        }
+    }
+
     public void onClearObjectList(){
         // *** Clear Variable for result list *** //
         prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);

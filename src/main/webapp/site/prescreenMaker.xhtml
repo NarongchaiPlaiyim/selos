@@ -141,25 +141,15 @@
                             <tr>
                                 <td class="title">Expected submission date :</td>
                                 <td>
-                                    <p:calendar id="dlgCalBrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
-                                                disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy"
-                                                locale="th_TH"
-                                                yearRange="2440:3000">
-                                        <p:ajax event="change"
-                                                listener="#{prescreenMaker.onChangeDate('borrower')}"
-                                                process="@form"
-                                                update=":customerDlgForm"/>
-                                        <p:ajax event="dateSelect"
-                                                listener="#{prescreenMaker.onChangeDate('borrower')}"
-                                                process="@form"
-                                                update=":customerDlgForm"/>
-                                    </p:calendar>
                                     <p:calendar id="expectSumitDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
                                                 value="#{prescreenMaker.prescreenView.expectedSubmitDate}"
                                                 locale="th_TH"
                                                 yearRange="2440:3000"
                                                 pattern="dd/MM/yyyy">
+                                        <p:ajax event="change"
+                                                listener="#{prescreenMaker.onCheckMaxDate('dateOfexpected')}"
+                                                process="@form"
+                                                update=":frmMain"/>
                                     </p:calendar>
                                 </td>
                             </tr>
@@ -435,9 +425,14 @@
                                 <td class="title">Date of register :</td>
                                 <td>
                                     <p:calendar id="registerDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                locale="th_TH"
                                                 value="#{prescreenMaker.prescreenView.registerDate}"
+                                                locale="th_TH"
+                                                yearRange="2440:3000"
                                                 pattern="dd/MM/yyyy">
+                                        <p:ajax event="change"
+                                                listener="#{prescreenMaker.onCheckMaxDate('dateOfregister')}"
+                                                process="@form"
+                                                update=":frmMain"/>
                                     </p:calendar>
                                 </td>
                             </tr>
@@ -448,9 +443,14 @@
                                         <tr>
                                             <td style="width: 180px;">
                                                 <p:calendar id="referredDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                            locale="th_TH"
                                                             value="#{prescreenMaker.prescreenView.referDate}"
+                                                            locale="th_TH"
+                                                            yearRange="2440:3000"
                                                             pattern="dd/MM/yyyy">
+                                                    <p:ajax event="change"
+                                                            listener="#{prescreenMaker.onCheckMaxDate('dateOfrefer')}"
+                                                            process="@form"
+                                                            update=":frmMain"/>
                                                 </p:calendar>
                                             </td>
                                             <td>
