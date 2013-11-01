@@ -48,7 +48,7 @@
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" >
+                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="0"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="1"/>
                                                     </h:selectOneRadio>
@@ -170,7 +170,6 @@
                                                             <p:commandButton icon="ui-icon-pencil"
                                                                              action="#{tcgInfo.onEditCollateralDetail()}"
                                                                              update=":tcgDlgForm"
-                                                                             process="@this"
                                                                              oncomplete="tcgDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{tcgInfo.selectCollateralItem}"/>
@@ -299,7 +298,7 @@
     </p:panel>
 
     <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-              modal="true" width="700" height="200">
+              modal="true" width="650" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 

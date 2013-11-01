@@ -103,6 +103,7 @@ public class Qualitative {
             qualitativeView = qualitativeControl.getQualitativeB(workCaseId);
         }
 
+//        log.info("Date :: {} ",qualitativeView.getCreateDate().toString());
         if(qualitativeView == null){
             qualitativeView = new QualitativeView();
             modeForButton = ModeForButton.ADD;
