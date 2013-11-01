@@ -233,10 +233,10 @@
             <tr>
                 <td>
                     <!-- <div class="div_highlighter">-->
-                        <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
+                    <p:dataTable id="resultNcbDetail" var="item" value="#{ncbInfo.ncbDetailViewList}"
                                  rowKey="#{item.ncbDetailView}" rowIndexVar="rowIndex"  >
                         <p:columnGroup type="header">
-                            <p:row>
+                              <p:row>
                                 <p:column>
                                     <f:facet style="width:20px"
                                              name="header">#{msg.get('app.ncbDetail.table.label.no')}</f:facet>
@@ -253,13 +253,13 @@
                                     <f:facet style="width:60px"
                                              name="header">#{msg.get('app.ncbDetail.table.label.loanAccountStatus')}</f:facet>
                                 </p:column>
-                                <p:column>
-                                    <f:facet style="width:90px"
-                                             name="header">ข้อมูล ณ วันที<br/>(วัน/เดือน/ปี)</f:facet>
+                                <p:column style="max-width: 20px;">
+                                    <f:facet
+                                             name="header">#{msg.get('app.ncbDetail.table.label.InfoAsOfDate')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:90px"
-                                             name="header">วันที่เปิดบัญชี<br/>(วัน/เดือน/ปี)</f:facet>
+                                             name="header">#{msg.get('app.ncbDetail.table.label.accountOpenDate')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:120px"
@@ -267,30 +267,29 @@
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:120px"
-                                             name="header">ภาระคงค้าง/ยอดใช้<br/>(หน่วย:บาท)</f:facet>
+                                             name="header">#{msg.get('app.ncbDetail.table.label.outstanding')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:120px" name="header">ยอดชำระต่อเดือน<br/>(หน่วย:บาท)</f:facet>
+                                    <f:facet style="width:120px" name="header">#{msg.get('app.ncbDetail.table.label.installment')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:60px" name="header">วันที่ปรับปรุงโครงสร้างหนี้<br/>(วัน/เดือน/ปี)</f:facet>
+                                    <f:facet style="width:60px" name="header">#{msg.get('app.ncbDetail.table.label.dateOfDebtRestructuring')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:60px" name="header">ลักษณะการชำระหนี้
-                                        <br/>ณ ปัจจุบัน</f:facet>
+                                    <f:facet style="width:60px" name="header">#{msg.get('app.ncbDetail.table.label.typeOfCurrentPayment')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:60px" name="header">ลักษณะการชำระหนี้<br/>ที่ผ่านมา</f:facet>
+                                    <f:facet style="width:60px" name="header">#{msg.get('app.ncbDetail.table.label.typeOfHistoryPayment')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:50px"
-                                             name="header">จำนวนการค้างชำระ<br/>ในรอบ 12 เดือน</f:facet>
+                                             name="header">#{msg.get('app.ncbDetail.table.label.noOfOutstandingPaymentIn12months')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:50px" name="header">Over Limit<br/> (Times)</f:facet>
+                                    <f:facet style="width:50px" name="header">#{msg.get('app.ncbDetail.table.label.noOfOverLimit')}</f:facet>
                                 </p:column>
                                 <p:column>
-                                    <f:facet style="width:50px" name="header">Refinance/<br/>ชำระปิดบัญชี</f:facet>
+                                    <f:facet style="width:50px" name="header">#{msg.get('app.ncbDetail.table.label.refinanceFlag')}</f:facet>
                                 </p:column>
                                 <p:column>
                                     <f:facet style="width:30px"
