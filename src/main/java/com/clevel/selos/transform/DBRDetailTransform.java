@@ -14,7 +14,7 @@ import java.util.List;
 public class DBRDetailTransform extends Transform {
 
     @Inject
-    LoanTypeTransform loanTypeTransform;
+    LoanAccountTypeTransform loanAccountTypeTransform;
     @Inject
     DBRDetailDAO dbrDetailDAO;
 
@@ -28,7 +28,7 @@ public class DBRDetailTransform extends Transform {
         dbrDetailView.setDebtForCalculate(dbrDetail.getDebtForCalculate());
         dbrDetailView.setInstallment(dbrDetail.getInstallment());
         dbrDetailView.setLimit(dbrDetail.getLimit());
-        dbrDetailView.setLoanTypeView(loanTypeTransform.getLoanTypeView(dbrDetail.getLoanType()));
+        dbrDetailView.setLoanAccountTypeView(loanAccountTypeTransform.getLoanAccountTypeView(dbrDetail.getLoanType()));
         return dbrDetailView;
     }
 
@@ -66,7 +66,7 @@ public class DBRDetailTransform extends Transform {
         dbrDetail.setAccountName(dbrDetailView.getAccountName());
         dbrDetail.setDebtForCalculate(dbrDetailView.getDebtForCalculate());
         dbrDetail.setInstallment(dbrDetailView.getInstallment());
-        dbrDetail.setLoanType(loanTypeTransform.getLoanType(dbrDetailView.getLoanTypeView()));
+        dbrDetail.setLoanType(loanAccountTypeTransform.getLoanType(dbrDetailView.getLoanAccountTypeView()));
         dbrDetail.setModifyDate(now);
         dbrDetail.setModifyBy(user);
         dbrDetail.setDbr(dbr);

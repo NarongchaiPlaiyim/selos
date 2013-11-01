@@ -15,10 +15,7 @@ import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
-import com.clevel.selos.model.AccountInfoId;
-import com.clevel.selos.model.AccountInfoName;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.DocumentType;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -254,6 +251,26 @@ public class WelcomePage implements Serializable {
     public void testEmail() {
         log.debug("testEmail.");
         email.sendMail("user1@test.local", "test subject", "", new HashMap<String, String>());
+    }
+
+    RadioValue radioValue;
+
+    public RadioValue getRadioValue() {
+        return radioValue;
+    }
+
+    UserStatus userStatus;
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public void setRadioValue(RadioValue radioValue) {
+        this.radioValue = radioValue;
     }
 
     public void reloadConfig() {

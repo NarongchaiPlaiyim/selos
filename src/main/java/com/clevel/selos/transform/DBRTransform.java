@@ -11,8 +11,7 @@ import javax.inject.Inject;
 import java.util.Date;
 
 public class DBRTransform extends Transform {
-    @Inject
-    Logger log;
+
     @Inject
     DBRDetailTransform dbrDetailTransform;
     @Inject

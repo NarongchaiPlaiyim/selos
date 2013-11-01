@@ -4,11 +4,13 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
+import com.clevel.selos.model.view.PrescreenView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -51,7 +53,11 @@ public class PrescreenResult implements Serializable {
     private String queueName;
     private User user;
 
+    private String message;
+    private String messageHeader;
+
     private PrescreenResultView prescreenResultView;
+    private PrescreenView prescreenView;
 
     public PrescreenResult() {
 
@@ -101,6 +107,7 @@ public class PrescreenResult implements Serializable {
             user = (User) session.getAttribute("user");
 
             prescreenResultView = prescreenBusinessControl.getPrescreenResult(workCasePreScreenId);
+            prescreenView = prescreenBusinessControl.getPreScreen(workCasePreScreenId);
         }
     }
 
@@ -115,6 +122,12 @@ public class PrescreenResult implements Serializable {
     public void onSave() {
         log.info("Start onSave {}", prescreenResultView);
         prescreenBusinessControl.savePrescreenResult(prescreenResultView, workCasePreScreenId);
+
+        messageHeader = "Save PreScreen Result Success.";
+        message = "Save PreScreen Result data success.";
+
+        onCreation();
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public void onCloseSale() {
@@ -127,5 +140,29 @@ public class PrescreenResult implements Serializable {
 
     public void setPrescreenResultView(PrescreenResultView prescreenResultView) {
         this.prescreenResultView = prescreenResultView;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
+    }
+
+    public PrescreenView getPrescreenView() {
+        return prescreenView;
+    }
+
+    public void setPrescreenView(PrescreenView prescreenView) {
+        this.prescreenView = prescreenView;
     }
 }

@@ -70,6 +70,18 @@
                 <p:calendar value="#{welcomePage.dateEn}" id="popupButtonCalEn" showOn="button" pattern="dd/MM/yyyy" />
 
                 <p:commandButton value="test Calendar" action="#{welcomePage.testCalendar()}"/>
+
+                <h:outputText value="xxxx: " />
+                <h:outputText value="#{welcomePage.radioValue}"  />
+
+                <p:selectOneMenu id="userStatus" value="#{welcomePage.userStatus}" >
+                    <f:selectItem itemLabel="Select Value" itemValue="" />
+                    <f:selectItems value="#{app.userStatuses}" />
+                </p:selectOneMenu>
+
+                <p:selectOneRadio  id="radioValue" value="#{welcomePage.radioValue}" >
+                    <f:selectItems value="#{app.getRadioValues('YES|NO')}" />
+                </p:selectOneRadio>
             </h:form>
         </p:panel>
     </h:body>

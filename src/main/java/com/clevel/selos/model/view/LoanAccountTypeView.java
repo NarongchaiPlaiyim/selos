@@ -6,11 +6,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class LoanTypeView implements Serializable {
+public class LoanAccountTypeView implements Serializable {
     private int id;
     private String name;
 
-    public LoanTypeView() {
+    public LoanAccountTypeView() {
         reset();
     }
 

@@ -3,6 +3,8 @@ package com.clevel.selos.model.db.working;
 import com.clevel.selos.model.db.master.AccountStatus;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.master.SettlementStatus;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -292,5 +294,36 @@ public class NCBDetail implements Serializable {
 
     public void setCanToEdit(boolean canToEdit) {
         this.canToEdit = canToEdit;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("ncb", ncb)
+                .append("accountType", accountType)
+                .append("accountTMBFlag", accountTMBFlag)
+                .append("accountStatus", accountStatus)
+                .append("asOfDate", asOfDate)
+                .append("accountOpenDate", accountOpenDate)
+                .append("limit", limit)
+                .append("outstanding", outstanding)
+                .append("installment", installment)
+                .append("lastReStructureDate", lastReStructureDate)
+                .append("currentPayment", currentPayment)
+                .append("historyPayment", historyPayment)
+                .append("outstandingIn12Month", outstandingIn12Month)
+                .append("overLimit", overLimit)
+                .append("refinanceFlag", refinanceFlag)
+                .append("noOfMonthPayment", noOfMonthPayment)
+                .append("month1", month1)
+                .append("month2", month2)
+                .append("month3", month3)
+                .append("month4", month4)
+                .append("month5", month5)
+                .append("month6", month6)
+                .append("wcFlag", wcFlag)
+                .append("canToEdit", canToEdit)
+                .toString();
     }
 }

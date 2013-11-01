@@ -12,7 +12,7 @@ public class DBRDetailView implements Serializable {
     private BigDecimal limit;
     private BigDecimal installment;
     private BigDecimal debtForCalculate;
-    private LoanTypeView loanTypeView;
+    private LoanAccountTypeView loanAccountTypeView;
 
     public DBRDetailView() {
         reset();
@@ -24,7 +24,7 @@ public class DBRDetailView implements Serializable {
         this.limit = BigDecimal.ZERO;
         this.installment = BigDecimal.ZERO;
         this.debtForCalculate = BigDecimal.ZERO;
-        this.loanTypeView = new LoanTypeView();
+        this.loanAccountTypeView = new LoanAccountTypeView();
     }
 
     public long getId() {
@@ -67,12 +67,12 @@ public class DBRDetailView implements Serializable {
         this.debtForCalculate = debtForCalculate;
     }
 
-    public LoanTypeView getLoanTypeView() {
-        return loanTypeView;
+    public LoanAccountTypeView getLoanAccountTypeView() {
+        return loanAccountTypeView;
     }
 
-    public void setLoanTypeView(LoanTypeView loanTypeView) {
-        this.loanTypeView = loanTypeView;
+    public void setLoanAccountTypeView(LoanAccountTypeView loanAccountTypeView) {
+        this.loanAccountTypeView = loanAccountTypeView;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class DBRDetailView implements Serializable {
                 .append("limit", limit)
                 .append("installment", installment)
                 .append("debtForCalculate", debtForCalculate)
-                .append("loanTypeView", loanTypeView)
+                .append("loanAccountTypeView", loanAccountTypeView)
                 .toString();
     }
 }

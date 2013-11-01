@@ -49,7 +49,11 @@ public class NCBDetailView implements Serializable {
     private boolean refinance;
     private boolean wc;
 
+    private String accountName;
+    private LoanAccountTypeView loanAccountTypeView;
+
     public NCBDetailView() {
+        reset();
     }
 
     public void reset() {
@@ -80,6 +84,8 @@ public class NCBDetailView implements Serializable {
 //        this.wcFlag = -1;
         this.canToEdit = false;
         this.monthFlagPage = false;
+        this.loanAccountTypeView = new LoanAccountTypeView();
+        this.accountName = "";
     }
 
     public long getId() {
@@ -395,6 +401,22 @@ public class NCBDetailView implements Serializable {
 
     public void setMonthFlagPage(boolean monthFlagPage) {
         this.monthFlagPage = monthFlagPage;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public LoanAccountTypeView getLoanAccountTypeView() {
+        return loanAccountTypeView;
+    }
+
+    public void setLoanAccountTypeView(LoanAccountTypeView loanAccountTypeView) {
+        this.loanAccountTypeView = loanAccountTypeView;
     }
 
     @Override

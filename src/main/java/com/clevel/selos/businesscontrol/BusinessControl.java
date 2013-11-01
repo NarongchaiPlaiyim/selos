@@ -26,7 +26,7 @@ public abstract class BusinessControl implements Serializable {
 
     protected User getCurrentUser() {
         try {
-            return userDAO.findByUserName(getCurrentUserID());
+            return userDAO.findById(getCurrentUserID());
         } catch (Exception ex) {
             log.error("User Not found", ex);
             return null;

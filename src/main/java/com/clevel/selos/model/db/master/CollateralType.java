@@ -15,6 +15,8 @@ public class CollateralType implements Serializable {
     @Id
     @Column(name = "id")
     private int id;
+    @Column(name = "code")
+    private String code;
     @Column(name = "description")
     private String description;
     @Column(name = "active")
@@ -29,6 +31,14 @@ public class CollateralType implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
@@ -49,10 +59,11 @@ public class CollateralType implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("active", active).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("code", code)
+                .append("description", description)
+                .append("active", active)
+                .toString();
     }
 }
