@@ -31,6 +31,7 @@ public class PrescreenView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+    private int modifyFlag;
 
     public PrescreenView() {
 
@@ -214,6 +215,14 @@ public class PrescreenView implements Serializable {
 
     public void setBorrowingType(BorrowingType borrowingType) {
         this.borrowingType = borrowingType;
+    }
+
+    public int getModifyFlag() {
+        return modifyFlag;
+    }
+
+    public void setModifyFlag(int modifyFlag) {
+        this.modifyFlag = modifyFlag;
     }
 
     @Override

@@ -73,6 +73,7 @@ public class PrescreenTransform extends Transform {
         }
         prescreen.setModifyDate(new DateTime().now().toDate());
         prescreen.setModifyBy(user);
+        prescreen.setModifyFlag(prescreenView.getModifyFlag());
         return prescreen;
     }
 
@@ -109,6 +110,7 @@ public class PrescreenTransform extends Transform {
         prescreenView.setCreateBy(prescreen.getCreateBy());
         prescreenView.setModifyDate(prescreen.getModifyDate());
         prescreenView.setModifyBy(prescreen.getModifyBy());
+        prescreenView.setModifyFlag(prescreen.getModifyFlag());
 
         return prescreenView;
     }

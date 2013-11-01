@@ -4,7 +4,6 @@ import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGView;
 
-
 public class TCGTransform extends Transform {
 
     public TCG transformTCGViewToModel(TCGView tcgView, WorkCase workCase) {

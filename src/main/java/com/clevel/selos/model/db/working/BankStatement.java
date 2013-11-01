@@ -75,6 +75,9 @@ public class BankStatement implements Serializable {
     @Column(name = "avg_gross_inflow_per_limit")
     private BigDecimal avgGrossInflowPerLimit;
 
+    @Column(name = "avg_os_balance_amount")
+    private BigDecimal avgOSBalanceAmount;
+
     @Column(name = "td_chq_return_times")
     private BigDecimal chequeReturn;
 
@@ -115,6 +118,9 @@ public class BankStatement implements Serializable {
 
     @OneToMany(mappedBy = "bankStatement", cascade = CascadeType.ALL)
     private List<BankStatementDetail> bankStatementDetailList;
+
+    @OneToMany(mappedBy = "bankStatement", cascade = CascadeType.ALL)
+    private List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList;
 
     public long getId() {
         return id;
@@ -356,6 +362,22 @@ public class BankStatement implements Serializable {
         this.bankStatementSummary = bankStatementSummary;
     }
 
+    public BigDecimal getAvgOSBalanceAmount() {
+        return avgOSBalanceAmount;
+    }
+
+    public void setAvgOSBalanceAmount(BigDecimal avgOSBalanceAmount) {
+        this.avgOSBalanceAmount = avgOSBalanceAmount;
+    }
+
+    public List<BankStmtSrcOfCollateralProof> getSrcOfCollateralProofList() {
+        return srcOfCollateralProofList;
+    }
+
+    public void setSrcOfCollateralProofList(List<BankStmtSrcOfCollateralProof> srcOfCollateralProofList) {
+        this.srcOfCollateralProofList = srcOfCollateralProofList;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -377,6 +399,7 @@ public class BankStatement implements Serializable {
                 .append("swingPercent", swingPercent)
                 .append("utilizationPercent", utilizationPercent)
                 .append("avgGrossInflowPerLimit", avgGrossInflowPerLimit)
+                .append("avgOSBalanceAmount", avgOSBalanceAmount)
                 .append("chequeReturn", chequeReturn)
                 .append("tdChequeReturnAmount", tdChequeReturnAmount)
                 .append("tdChequeReturnPercent", tdChequeReturnPercent)
@@ -387,6 +410,9 @@ public class BankStatement implements Serializable {
                 .append("createDate", createDate)
                 .append("modifyBy", modifyBy)
                 .append("modifyDate", modifyDate)
+                .append("bankStatementSummary", bankStatementSummary)
+                .append("bankStatementDetailList", bankStatementDetailList)
+                .append("srcOfCollateralProofList", srcOfCollateralProofList)
                 .toString();
     }
 }
