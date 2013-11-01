@@ -163,9 +163,11 @@
             </p:column>
 
             <p:column headerText="Customer Name" styleClass="center">
-                <h:outputText value="#{borrowerItem.titleTh.titleTh}"/><p:spacer width="2"/>
-                <h:outputText value="#{borrowerItem.firstNameTh}"/><p:spacer width="3"/>
-                <h:outputText value="#{borrowerItem.lastNameTh}"/>
+                <div class="left">
+                    <h:outputText value="#{borrowerItem.titleTh.titleTh}"/><p:spacer width="2"/>
+                    <h:outputText value="#{borrowerItem.firstNameTh}"/><p:spacer width="3"/>
+                    <h:outputText value="#{borrowerItem.lastNameTh}"/>
+                </div>
             </p:column>
 
             <p:column headerText="Customer Type" styleClass="center">

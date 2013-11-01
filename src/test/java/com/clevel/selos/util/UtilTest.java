@@ -47,11 +47,4 @@ public class UtilTest {
 
         assertFalse("expected false", Util.isTrue("0"));
     }
-
-    @Test
-    public void testDate() throws Exception {
-        Date dt = DateTimeUtil.getCurrentDateTH();
-        log.debug("current date : {}", dt);
-        log.debug("convert to EN : {}", DateTimeUtil.convertToDateUS(dt));
-    }
 }

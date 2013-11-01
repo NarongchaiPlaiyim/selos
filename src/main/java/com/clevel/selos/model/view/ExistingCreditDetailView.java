@@ -14,7 +14,7 @@ public class ExistingCreditDetailView implements Serializable {
     private String accountSuf;
     private String accountNumber;
     private int accountStatusID;
-    private String accountStatus;
+    private BankAccountStatusView accountStatus;
 
     private String productCode;
     private String projectCode;
@@ -70,11 +70,11 @@ public class ExistingCreditDetailView implements Serializable {
         this.accountStatusID = accountStatusID;
     }
 
-    public String getAccountStatus() {
+    public BankAccountStatusView getAccountStatus() {
         return accountStatus;
     }
 
-    public void setAccountStatus(String accountStatus) {
+    public void setAccountStatus(BankAccountStatusView accountStatus) {
         this.accountStatus = accountStatus;
     }
 

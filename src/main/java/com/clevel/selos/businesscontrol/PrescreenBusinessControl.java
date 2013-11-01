@@ -28,6 +28,7 @@ import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
 import com.clevel.selos.transform.business.NCBBizTransform;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -142,19 +143,19 @@ public class PrescreenBusinessControl extends BusinessControl {
     // *** Function for RM *** //
     public CustomerInfoResultView getCustomerInfoFromRM(CustomerInfoView customerInfoView, User user){
         CustomerInfoResultView customerInfoResultSearch = new CustomerInfoResultView();
-        log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchBy : {}", customerInfoView.getSearchBy());
-        log.info("getCustomerInfoFromRM ::: customerInfoView.getSearchId : {}", customerInfoView.getSearchId());
+        log.info("getCustomerInfoFromRM ::: SearchBy : {}", customerInfoView.getSearchBy());
+        log.info("getCustomerInfoFromRM ::: SearchId : {}", customerInfoView.getSearchId());
 
         DocumentType masterDocumentType = new DocumentType();
 
         RMInterface.SearchBy searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
         if(customerInfoView.getSearchBy() == 1){
             searcyBy = RMInterface.SearchBy.CUSTOMER_ID;
-            masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
         }else if(customerInfoView.getSearchBy() == 2){
             searcyBy = RMInterface.SearchBy.TMBCUS_ID;
-            masterDocumentType = documentTypeDAO.findById(1);
         }
+
+        masterDocumentType = documentTypeDAO.findById(customerInfoView.getDocumentType().getId());
 
         String userId = user.getId();
         String documentTypeCode = masterDocumentType.getDocumentTypeCode();
@@ -180,10 +181,6 @@ public class PrescreenBusinessControl extends BusinessControl {
             customerEntity.setId(2);
             customerInfoView.setCustomerEntity(customerEntity);
         }
-
-        log.info("getCustomerInfoFromRM ::: searchBy : {}", searcyBy);
-        log.info("getCustomerInfoFromRM ::: documentType : {}", documentType);
-
 
         if(customerInfoView.getCustomerEntity().getId() == 1) {
             IndividualResult individualResult = rmInterface.getIndividualInfo(userId, customerInfoView.getSearchId(), documentType, searcyBy);
@@ -255,6 +252,7 @@ public class PrescreenBusinessControl extends BusinessControl {
 
     public void savePrescreenResult(PrescreenResultView prescreenResultView, long workCasePrescreenId){
         Prescreen prescreen = prescreenTransform.getPrescreen(prescreenResultView, getCurrentUser());
+        prescreen.setModifyFlag(0);
         prescreenDAO.persist(prescreen);
 
         try{
@@ -696,7 +694,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     customerDAO.persist(customer);
 
                     if(spouse.getAddressesList() != null){
-                        //addressDAO.persist(customer.getAddressesList());
+                        addressDAO.persist(spouse.getAddressesList());
                     }
 
                     Individual individual = spouse.getIndividual();
@@ -707,10 +705,67 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
     }
 
-    public void savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, User user){
+    public int checkModifyValue(PrescreenView currentPrescreenView, long workCasePrescreenId){
+        int modifyCount = 0;
+
+        Prescreen tmpPrescreen = prescreenDAO.findByWorkCasePrescreenId(workCasePrescreenId);
+        if(tmpPrescreen != null){
+            PrescreenView tmpPrescreenView = prescreenTransform.transformToView(tmpPrescreen);
+            tmpPrescreen = null;
+            if(tmpPrescreenView.getProductGroup().getId() != currentPrescreenView.getProductGroup().getId()){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.getBusinessLocation() != null && currentPrescreenView.getBusinessLocation() != null){
+                if(tmpPrescreenView.getBusinessLocation().getCode() != currentPrescreenView.getBusinessLocation().getCode()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+            if(DateTimeUtil.compareDate(tmpPrescreenView.getRegisterDate(),currentPrescreenView.getRegisterDate()) != 0 ){
+                modifyCount = modifyCount + 1;
+            }
+            if(DateTimeUtil.compareDate(tmpPrescreenView.getReferDate(),currentPrescreenView.getReferDate()) != 0){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.getReferredExperience() != null && currentPrescreenView.getReferredExperience() != null){
+                if(tmpPrescreenView.getReferredExperience().getId() != currentPrescreenView.getReferredExperience().getId()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+            if(tmpPrescreenView.isTcg() != currentPrescreenView.isTcg()){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.isRefinance() != currentPrescreenView.isRefinance()){
+                modifyCount = modifyCount + 1;
+            }
+            if(tmpPrescreenView.getRefinanceBank() != null && currentPrescreenView.getRefinanceBank() != null){
+                if(tmpPrescreenView.getRefinanceBank().getCode() != currentPrescreenView.getRefinanceBank().getCode()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+            if(tmpPrescreenView.getBorrowingType() != null && currentPrescreenView.getBorrowingType() != null){
+                if(tmpPrescreenView.getBorrowingType().getId() != currentPrescreenView.getBorrowingType().getId()){
+                    modifyCount = modifyCount + 1;
+                }
+            }
+        }
+
+        return modifyCount;
+    }
+
+    public boolean savePreScreen(PrescreenView prescreenView, List<FacilityView> facilityViewList, List<CustomerInfoView> customerInfoViewList, List<CustomerInfoView> customerInfoDeleteList, List<BizInfoDetailView> bizInfoViewList, List<PrescreenCollateralView> prescreenCollateralViewList, long workCasePreScreenId, int customerModifyFlag, User user){
+        boolean modifyFlag = false;
+
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
 
         Prescreen prescreen = prescreenTransform.transformToModel(prescreenView, workCasePrescreen, user);
+
+        if(customerModifyFlag > 0){
+            prescreen.setModifyFlag(1);
+            modifyFlag = true;
+        }else{
+            prescreen.setModifyFlag(0);
+            modifyFlag = false;
+        }
         prescreenDAO.persist(prescreen);
 
         //Remove all Facility before add new
@@ -769,7 +824,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                     customerDAO.persist(customer);
 
                     if(spouse.getAddressesList() != null){
-                        addressDAO.persist(customer.getAddressesList());
+                        addressDAO.persist(spouse.getAddressesList());
                     }
 
                     Individual individual = spouse.getIndividual();
@@ -796,6 +851,8 @@ public class PrescreenBusinessControl extends BusinessControl {
 
         List<PrescreenCollateral> prescreenCollateralList = prescreenCollateralTransform.transformToModelList(prescreenCollateralViewList, prescreen);
         prescreenCollateralDAO.persist(prescreenCollateralList);
+
+        return modifyFlag;
     }
 
     public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId){

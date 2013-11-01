@@ -9,6 +9,7 @@ import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
+import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import com.clevel.selos.model.db.relation.PrdProgramToCreditType;
@@ -145,6 +146,8 @@ public class PrescreenMaker implements Serializable {
     private String message;
     private int rowIndex;
     private boolean disableAssignButton;
+    private RadioValue radioValue;
+    private int customerModifyFlag;
 
     // ***Boolean CustomerDialog*** //
     private boolean enableCustomerForm;
@@ -152,6 +155,7 @@ public class PrescreenMaker implements Serializable {
     private boolean enableTMBCustomerId;
     private boolean enableCitizenId;
     private boolean enableCustomerEntity;
+    private boolean enableSearchForm;
 
     @Inject
     private CollateralTypeDAO collateralTypeDAO;
@@ -293,6 +297,7 @@ public class PrescreenMaker implements Serializable {
             user = (User)session.getAttribute("user");
 
             modeForButton = ModeForButton.ADD;
+            customerModifyFlag = 0;
 
             onClearObjectList();
             onLoadSelectList();
@@ -362,6 +367,8 @@ public class PrescreenMaker implements Serializable {
 
 
         }
+
+        deleteCustomerInfoViewList = new ArrayList<CustomerInfoView>();
 
         customerInfoViewList = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         generateCustomerInfoList(customerInfoViewList);
@@ -704,21 +711,25 @@ public class PrescreenMaker implements Serializable {
             //TODO Check caseBorrowerType;
             if(caseBorrowerTypeId == BorrowerType.INDIVIDUAL.value()){    //case borrower type = individual
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
-                documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+                documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
             } else if (caseBorrowerTypeId == BorrowerType.JURISTIC.value()){
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
-                documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
+                documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.JURISTIC.value());
             } else { // if case borrower type = 0 check borrowerList
                 if(borrowerInfoViewList != null && borrowerInfoViewList.size() > 0){
                     int borrowerType = 0;
                     borrowerType = borrowerInfoViewList.get(0).getRelation().getId();
                     if(borrowerType == BorrowerType.INDIVIDUAL.value()){
                         borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
-                        documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.INDIVIDUAL.value());
+                        documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
                     }else if(borrowerType == BorrowerType.JURISTIC.value()){
                         borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
-                        documentTypeList = documentTypeDAO.findByCustomerEntityId(BorrowerType.JURISTIC.value());
+                        documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.JURISTIC.value());
+                    } else {
+                        documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(0);
                     }
+                } else {
+                    documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(0);
                 }
             }
         } else {
@@ -749,6 +760,7 @@ public class PrescreenMaker implements Serializable {
         /*enableCustomerEntity = true;*/
         enableTMBCustomerId = false;
         enableCitizenId = false;
+        enableSearchForm = true;
     }
 
     public void onEditCustomerInfo() {
@@ -814,6 +826,9 @@ public class PrescreenMaker implements Serializable {
 
         this.customerEntity = borrowerInfo.getCustomerEntity();
         onChangeRelation();
+        if(borrowerInfo.getCustomerEntity().getId() == 1){
+            onChangeSpouseRelation();
+        }
 
         //TODO Get district list, subDistrict
         onChangeProvinceBorrower();
@@ -838,11 +853,13 @@ public class PrescreenMaker implements Serializable {
                 enableCitizenId = false;
                 enableTMBCustomerId = false;
             } else {
-                enableDocumentType = true;
+                enableDocumentType = false;
                 enableCitizenId = true;
                 enableTMBCustomerId = true;
             }
         }
+
+        enableSearchForm = false;
     }
 
     public void onChangeProvinceBorrower(){
@@ -958,6 +975,8 @@ public class PrescreenMaker implements Serializable {
                             if(caseBorrowerTypeId == 0){
                                 caseBorrowerTypeId = BorrowerType.INDIVIDUAL.value();
                             }
+                            //Add flag for popup when save
+                            customerModifyFlag = customerModifyFlag + 1;
                         }else if(borrowerInfo.getRelation().getId() == 2){
                             //Guarantor
                             borrowerInfo.setListName("GUARANTOR");
@@ -965,6 +984,8 @@ public class PrescreenMaker implements Serializable {
                             borrowerInfo.setIsSpouse(0);
                             guarantorInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
+                            //Add flag for popup when save
+                            customerModifyFlag = customerModifyFlag + 1;
                         }else if(borrowerInfo.getRelation().getId() == 3 || borrowerInfo.getRelation().getId() == 4){
                             //Relate Person
                             borrowerInfo.setListName("RELATED");
@@ -972,6 +993,8 @@ public class PrescreenMaker implements Serializable {
                             borrowerInfo.setIsSpouse(0);
                             relatedInfoViewList.add(borrowerInfo);
                             customerInfoViewList.add(borrowerInfo);
+                            //Add flag for popup when save
+                            customerModifyFlag = customerModifyFlag + 1;
                         }else{
                             //customerInfoViewList.add(borrowerInfo);
                             complete = false;
@@ -1624,17 +1647,35 @@ public class PrescreenMaker implements Serializable {
     public void onChangeDate(String borrowerType){
         log.debug("onChangeDate :::");
         if(borrowerType.equalsIgnoreCase("borrower")){
+            log.debug("onChangeDate ::: compare date : {}", DateTimeUtil.compareDate(borrowerInfo.getDateOfBirth(), getCurrentDate()));
+            if(DateTimeUtil.compareDate(borrowerInfo.getDateOfBirth(), getCurrentDate()) >= 1){
+                borrowerInfo.setDateOfBirth(getCurrentDate());
+            }
             log.debug("onChangeDate : borrowerInfo.dateOfBirth : {}", borrowerInfo.getDateOfBirth());
-            int age = Util.calAge(borrowerInfo.getDateOfBirth());
-            borrowerInfo.setAge(age);
+            if(borrowerInfo.getDateOfBirth() != null){
+                int age = Util.calAge(borrowerInfo.getDateOfBirth());
+                borrowerInfo.setAge(age);
+            }
         } else if(borrowerType.equalsIgnoreCase("spouse")){
+            log.debug("onChangeDate ::: compare date : {}", DateTimeUtil.compareDate(borrowerInfo.getSpouse().getDateOfBirth(), getCurrentDate()));
+            if(DateTimeUtil.compareDate(borrowerInfo.getSpouse().getDateOfBirth(), getCurrentDate()) >= 1){
+                borrowerInfo.setDateOfBirth(getCurrentDate());
+            }
             log.debug("onChangeDate : spouseInfo.dateOfBirth : {}", borrowerInfo.getSpouse().getDateOfBirth());
-            int age = Util.calAge(borrowerInfo.getSpouse().getDateOfBirth());
-            borrowerInfo.getSpouse().setAge(age);
+            if(borrowerInfo.getSpouse().getDateOfBirth() != null){
+                int age = Util.calAge(borrowerInfo.getSpouse().getDateOfBirth());
+                borrowerInfo.getSpouse().setAge(age);
+            }
         } else if(borrowerType.equalsIgnoreCase("juristic")){
+            log.debug("onChangeDate ::: compare date : {}", DateTimeUtil.compareDate(borrowerInfo.getDateOfRegister(), getCurrentDate()));
+            if(DateTimeUtil.compareDate(borrowerInfo.getDateOfRegister(), getCurrentDate()) >= 1){
+                borrowerInfo.setDateOfBirth(getCurrentDate());
+            }
             log.debug("onChangeDate : juristicInfo.dateOfRegister : {}", borrowerInfo.getDateOfRegister());
-            int age = Util.calAge(borrowerInfo.getDateOfRegister());
-            borrowerInfo.setAge(age);
+            if(borrowerInfo.getDateOfRegister() != null){
+                int age = Util.calAge(borrowerInfo.getDateOfRegister());
+                borrowerInfo.setAge(age);
+            }
         }
 
     }
@@ -1682,13 +1723,21 @@ public class PrescreenMaker implements Serializable {
                     enableTMBCustomerId = false;
                     enableCitizenId = false;
 
+                    enableSearchForm = false;
+
                     if(borrowerInfo.getCustomerEntity() != null && borrowerInfo.getCustomerEntity().getId() != 0){
                         onChangeProvinceBorrower();
                         onChangeDistrictBorrower();
+                        if(borrowerInfo.getCustomerEntity().getId() == 1){
+                            onChangeDate("borrower");
+                        } else if (borrowerInfo.getCustomerEntity().getId() == 2){
+                            onChangeDate("juristic");
+                        }
                         if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                             if(borrowerInfo.getSpouse() != null){
                                 onChangeProvinceSpouse();
                                 onChangeDistrictSpouse();
+                                onChangeDate("spouse");
                             }
                         }
                     }
@@ -1698,40 +1747,65 @@ public class PrescreenMaker implements Serializable {
                 }else{
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     if(borrowerInfo.getSearchBy() == 2){
-                        enableDocumentType = true;
+                        //enableDocumentType = true;
+                        borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
                     }else{
-                        enableDocumentType = false;
+                        //enableDocumentType = false;
+                        borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
                     }
                     enableCustomerForm = true;
-                    enableDocumentType = true;
+                    enableDocumentType = false;
                     enableCustomerEntity = true;
                     enableTMBCustomerId = true;
                     enableCitizenId = true;
+                    enableSearchForm = false;
 
                     CustomerEntity customerEntity = new CustomerEntity();
                     customerEntity.setId(0);
                     borrowerInfo.setCustomerEntity(customerEntity);
 
+                    //Assign value after search not found
+
+
                     messageHeader = customerInfoResultView.getActionResult().toString();
                     message = "Search customer not found.";
                 }
             } else {
-                enableDocumentType = true;
+                if(borrowerInfo.getSearchBy() == 2){
+                    //enableDocumentType = true;
+                    borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+                }else{
+                    //enableDocumentType = false;
+                    borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
+                }
+
+                enableDocumentType = false;
                 enableCustomerForm = true;
                 enableCustomerEntity = true;
                 enableTMBCustomerId = true;
                 enableCitizenId = true;
+                enableSearchForm = false;
+
                 messageHeader = "Customer search failed.";
                 message = customerInfoResultView.getReason();
 
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
-            enableDocumentType = true;
+            if(borrowerInfo.getSearchBy() == 2){
+                //enableDocumentType = true;
+                borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+            }else{
+                //enableDocumentType = false;
+                borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
+            }
+
+            enableDocumentType = false;
             enableCustomerForm = true;
             enableCustomerEntity = true;
             enableTMBCustomerId = true;
             enableCitizenId = true;
+            enableSearchForm = false;
             log.debug("onSearchCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
@@ -2017,14 +2091,21 @@ public class PrescreenMaker implements Serializable {
     // *** Function for Prescreen Maker ***//
     public void onSavePrescreen(){
         //*** validate forms ***//
-
         log.debug("onSavePrescreen ::: prescreenView : {}", prescreenView);
         try{
-            //prescreenBusinessControl.savePreScreenInitial(prescreenView, facilityViewList, customerInfoViewList, workCasePreScreenId, user);
-            prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, bizInfoViewList, proposePrescreenCollateralViewList, workCasePreScreenId, user);
-            //TODO show messageBox success
+            customerModifyFlag = customerModifyFlag + prescreenBusinessControl.checkModifyValue(prescreenView, workCasePreScreenId);
+            boolean modifyFlag = prescreenBusinessControl.savePreScreen(prescreenView, facilityViewList, customerInfoViewList, deleteCustomerInfoViewList, bizInfoViewList, proposePrescreenCollateralViewList, workCasePreScreenId, customerModifyFlag, user);
+
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
+            if(modifyFlag){
+//                PrescreenResult prescreenResult = new PrescreenResult();
+//                prescreenResult.onCreation();
+//                prescreenResult.onRetrieveInterfaceInfo();
+//                prescreenResult.onSave();
+                message = message + "<br/><br/>Prescreen data has been modified.<br/>Please refresh interface info.";
+            }
+
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
@@ -2537,7 +2618,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public Date getCurrentDate() {
-        log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDateTH());
+        //log.debug("++++++++++++++++++++++++++++++++++=== Current Date : {}", DateTimeUtil.getCurrentDateTH());
         return DateTime.now().toDate();
         //return DateTimeUtil.getCurrentDate();
     }
@@ -2704,5 +2785,21 @@ public class PrescreenMaker implements Serializable {
 
     public void setSpouseDocumentTypeList(List<DocumentType> spouseDocumentTypeList) {
         this.spouseDocumentTypeList = spouseDocumentTypeList;
+    }
+
+    public RadioValue getRadioValue() {
+        return radioValue;
+    }
+
+    public void setRadioValue(RadioValue radioValue) {
+        this.radioValue = radioValue;
+    }
+
+    public boolean isEnableSearchForm() {
+        return enableSearchForm;
+    }
+
+    public void setEnableSearchForm(boolean enableSearchForm) {
+        this.enableSearchForm = enableSearchForm;
     }
 }

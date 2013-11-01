@@ -217,11 +217,16 @@ public class PrescreenChecker implements Serializable {
         //To Get NCB Data and submit to MAKER
         log.debug("onCheckNCB :::");
         boolean success = false;
+
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
-            List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
-            log.debug("onCheckNCB ::: customerInfoView size : {}", customerInfoViews.size());
+            List<CustomerInfoView> customerInfoViews = new ArrayList<CustomerInfoView>();
+            List<CustomerInfoView> tmpCustomerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+            log.debug("onCheckNCB ::: customerInfoView size : {}", tmpCustomerInfoViews.size());
+            if(tmpCustomerInfoViews != null){
+                customerInfoViews = generateCustomerInfoList(tmpCustomerInfoViews);
+            }
             List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
             log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
