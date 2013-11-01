@@ -94,7 +94,26 @@ function onKeyAddress(evt) {
     }
 }
 
-function onKeyText(evt) {
+function onKeyName(evt){
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
+
+    /*
+     33 = !, 34=", 35 = #, 36 = $, 37=%, 38=&, 39=', 40=(, 41=), 42=*, 45=-, 47=/,
+     58=:, 59=;, 60=<, 62=<, 63=?, 64 = @,
+     91=[, 93=], 94=^, 95=_,
+     123={,  125=}
+     */
+
+    if( (evt.keyCode > 32 && evt.keyCode < 43) || evt.keyCode == 45 || evt.keyCode == 47 ||
+        (evt.keyCode > 57 && evt.keyCode < 61) || (evt.keyCode > 61 && evt.keyCode < 65) ||
+        evt.keyCode == 91 || evt.keyCode == 93 || evt.keyCode == 94 || evt.keyCode == 95 || evt.keyCode == 123 || evt.keyCode == 125 ){
+        return false;
+    }
+
+    return true;
+}
+
+function onKeyText(evt){
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
     /*

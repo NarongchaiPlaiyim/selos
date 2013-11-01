@@ -1,5 +1,6 @@
 package com.clevel.selos.model.db.working;
 
+import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -87,6 +88,10 @@ public class ExistingCreditDetail {
     @ManyToOne
     @JoinColumn(name = "existing_credit_id")
     private ExistingCreditSummary existingCreditSummary;
+
+    @OneToOne
+    @JoinColumn(name = "account_status_id")
+    private BankAccountStatus accountstatus;
 
     public long getId() {
         return id;
@@ -270,6 +275,14 @@ public class ExistingCreditDetail {
 
     public void setExistingCreditSummary(ExistingCreditSummary existingCreditSummary) {
         this.existingCreditSummary = existingCreditSummary;
+    }
+
+    public BankAccountStatus getAccountstatus() {
+        return accountstatus;
+    }
+
+    public void setAccountstatus(BankAccountStatus accountstatus) {
+        this.accountstatus = accountstatus;
     }
 
     @Override

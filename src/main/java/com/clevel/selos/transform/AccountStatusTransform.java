@@ -11,9 +11,6 @@ import java.util.List;
 public class AccountStatusTransform extends Transform {
 
     @Inject
-    Logger log;
-
-    @Inject
     public AccountStatusTransform() {
     }
 
