@@ -85,6 +85,9 @@ public class Prescreen implements Serializable {
     @JoinColumn(name = "modify_user_id")
     private User modifyBy;
 
+    @Column(name = "modify_flag")
+    private int modifyFlag;
+
     public Prescreen() {
 
     }
@@ -239,6 +242,14 @@ public class Prescreen implements Serializable {
 
     public void setBorrowingType(BorrowingType borrowingType) {
         this.borrowingType = borrowingType;
+    }
+
+    public int getModifyFlag() {
+        return modifyFlag;
+    }
+
+    public void setModifyFlag(int modifyFlag) {
+        this.modifyFlag = modifyFlag;
     }
 
     @Override

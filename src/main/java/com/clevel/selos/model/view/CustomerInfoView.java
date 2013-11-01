@@ -56,6 +56,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     //*** Var for Individual ***//
     private Date dateOfBirth;
     private String citizenId;
+    private String passportId;
     private Gender gender;
     private int numberOfChild;
     private Education education;
@@ -738,5 +739,13 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setWorthiness(int worthiness) {
         this.worthiness = worthiness;
+    }
+
+    public String getPassportId() {
+        return passportId;
+    }
+
+    public void setPassportId(String passportId) {
+        this.passportId = passportId;
     }
 }

@@ -13,8 +13,8 @@ public class AttributeTypeLevelBorrower implements Serializable {
     private String custToAccountRelationship; //todo : to be enum
     private BigDecimal numberOfMonthPrincipalAndInterestPastDue;
     private BigDecimal numberOfMonthPrincipalAndInterestPastDueOfTDRAccount;
-    private BigDecimal numberODayPrincipalPastDue;
-    private BigDecimal numberODayInterestPastDue;
+    private BigDecimal numberOfDayPrincipalPastDue;
+    private BigDecimal numberOfDayInterestPastDue;
     private String cardBlockCode; //todo : to be enum
 
 
@@ -28,8 +28,8 @@ public class AttributeTypeLevelBorrower implements Serializable {
         this.custToAccountRelationship = custToAccountRelationship;
         this.numberOfMonthPrincipalAndInterestPastDue = numberOfMonthPrincipalAndInterestPastDue;
         this.numberOfMonthPrincipalAndInterestPastDueOfTDRAccount = numberOfMonthPrincipalAndInterestPastDueOfTDRAccount;
-        this.numberODayPrincipalPastDue = numberODayPrincipalPastDue;
-        this.numberODayInterestPastDue = numberODayInterestPastDue;
+        this.numberOfDayPrincipalPastDue = numberODayPrincipalPastDue;
+        this.numberOfDayInterestPastDue = numberODayInterestPastDue;
         this.cardBlockCode = cardBlockCode;
     }
 
@@ -81,20 +81,20 @@ public class AttributeTypeLevelBorrower implements Serializable {
         this.numberOfMonthPrincipalAndInterestPastDueOfTDRAccount = numberOfMonthPrincipalAndInterestPastDueOfTDRAccount;
     }
 
-    public BigDecimal getNumberODayPrincipalPastDue() {
-        return numberODayPrincipalPastDue;
+    public BigDecimal getNumberOfDayPrincipalPastDue() {
+        return numberOfDayPrincipalPastDue;
     }
 
-    public void setNumberODayPrincipalPastDue(BigDecimal numberODayPrincipalPastDue) {
-        this.numberODayPrincipalPastDue = numberODayPrincipalPastDue;
+    public void setNumberOfDayPrincipalPastDue(BigDecimal numberODayPrincipalPastDue) {
+        this.numberOfDayPrincipalPastDue = numberODayPrincipalPastDue;
     }
 
-    public BigDecimal getNumberODayInterestPastDue() {
-        return numberODayInterestPastDue;
+    public BigDecimal getNumberOfDayInterestPastDue() {
+        return numberOfDayInterestPastDue;
     }
 
-    public void setNumberODayInterestPastDue(BigDecimal numberODayInterestPastDue) {
-        this.numberODayInterestPastDue = numberODayInterestPastDue;
+    public void setNumberOfDayInterestPastDue(BigDecimal numberODayInterestPastDue) {
+        this.numberOfDayInterestPastDue = numberODayInterestPastDue;
     }
 
     public String getCardBlockCode() {
@@ -114,8 +114,8 @@ public class AttributeTypeLevelBorrower implements Serializable {
                 .append("custToAccountRelationship", custToAccountRelationship)
                 .append("numberOfMonthPrincipalAndInterestPastDue", numberOfMonthPrincipalAndInterestPastDue)
                 .append("numberOfMonthPrincipalAndInterestPastDueOfTDRAccount", numberOfMonthPrincipalAndInterestPastDueOfTDRAccount)
-                .append("numberODayPrincipalPastDue", numberODayPrincipalPastDue)
-                .append("numberODayInterestPastDue", numberODayInterestPastDue)
+                .append("numberOfDayPrincipalPastDue", numberOfDayPrincipalPastDue)
+                .append("numberOfDayInterestPastDue", numberOfDayInterestPastDue)
                 .append("cardBlockCode", cardBlockCode)
                 .toString();
     }

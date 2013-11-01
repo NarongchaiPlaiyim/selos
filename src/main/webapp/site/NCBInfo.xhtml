@@ -51,7 +51,7 @@
     </td>
     <td>
         <p:inputText value="#{ncbInfo.ncbInfoView.checkingDate}" id="checkingDate" disabled="true" style="width:200px;">
-            <f:convertDateTime pattern="dd/MM/yyyy"/>
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </p:inputText>
     </td>
 </tr>
@@ -106,9 +106,6 @@
                     <h:outputText value="#{msg.get('app.isNPLwithTMB')}"></h:outputText>
                     <p:spacer width="5px;"/>
 
-                    <!-- <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
-                        <f:selectItems value="#{ncbInfo.statMonthLists}" />
-                    </h:selectOneMenu>-->
 
                     <h:selectOneMenu value="#{ncbInfo.ncbInfoView.nplTMBMonth}">
                         <f:selectItems value="#{ncbInfo.statMonths}" var="MonthList"
@@ -328,13 +325,13 @@
 
                             <p:column styleClass="center">
                                 <h:outputText value="#{item.dateOfInfo}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </h:outputText>
                             </p:column>
 
                             <p:column styleClass="center">
                                 <h:outputText value="#{item.accountOpenDate}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </h:outputText>
                             </p:column>
 
@@ -358,7 +355,7 @@
 
                             <p:column styleClass="center">
                                 <h:outputText value="#{item.dateOfDebtRestructuring}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
                                 </h:outputText>
                             </p:column>
 
@@ -379,12 +376,10 @@
                             </p:column>
 
                             <p:column styleClass="center">
-                                <!--<h:outputText value="#{item.refinance}"/>-->
                                 <h:selectBooleanCheckbox value="#{item.refinance}"/>
                             </p:column>
 
                             <p:column styleClass="center">
-                               <!-- <h:outputText value="#{item.wc}"/>-->
                                 <h:selectBooleanCheckbox value="#{item.wc}"/>
                             </p:column>
 

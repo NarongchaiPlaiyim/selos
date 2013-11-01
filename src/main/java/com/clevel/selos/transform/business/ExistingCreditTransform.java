@@ -1,5 +1,8 @@
 package com.clevel.selos.transform.business;
 
+import com.clevel.selos.dao.master.BankAccountStatusDAO;
+import com.clevel.selos.dao.master.BankAccountTypeDAO;
+import com.clevel.selos.dao.master.DWHBankDataSourceDAO;
 import com.clevel.selos.dao.working.ExistingCreditDetailDAO;
 import com.clevel.selos.dao.working.ExistingCreditSummaryDAO;
 import com.clevel.selos.integration.dwh.obligation.model.Obligation;
@@ -8,12 +11,18 @@ import com.clevel.selos.integration.rlos.appin.model.CreditDetail;
 import com.clevel.selos.integration.rlos.appin.model.CustomerDetail;
 import com.clevel.selos.model.CreditCategory;
 import com.clevel.selos.model.CreditRelationType;
+import com.clevel.selos.model.db.master.BankAccountStatus;
+import com.clevel.selos.model.db.master.BankAccountType;
+import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.ExistingCreditDetail;
 import com.clevel.selos.model.db.working.ExistingCreditSummary;
+import com.clevel.selos.model.view.BankAccountStatusView;
 import com.clevel.selos.model.view.ExistingCreditDetailView;
 import com.clevel.selos.model.view.ExistingCreditView;
+import com.clevel.selos.transform.BankAccountStatusTransform;
 import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -31,6 +40,18 @@ public class ExistingCreditTransform extends BusinessTransform {
     ExistingCreditDetailDAO existingCreditDetailDAO;
 
     @Inject
+    DWHBankDataSourceDAO dwhBankDataSourceDAO;
+
+    @Inject
+    BankAccountStatusDAO bankAccountStatusDAO;
+
+    @Inject
+    BankAccountStatusTransform bankAccountStatusTransform;
+
+    @Inject
+    BankAccountTypeDAO bankAccountTypeDAO;
+
+    @Inject
     public ExistingCreditTransform() {
 
     }
@@ -38,7 +59,16 @@ public class ExistingCreditTransform extends BusinessTransform {
     public ExistingCreditDetailView getExistingCredit(Obligation obligation) {
         ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
         existingCreditDetailView.setAccountName(obligation.getAccountName());
-        existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());
+        //existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());   //code
+        //use dataSource to find bankAccountType
+        /*if(!Util.isEmpty(obligation.getDataSource())){
+            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource());
+            String code = obligation.getAccountStatus();
+            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
+            BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+            existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+        }*/
+        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
         existingCreditDetailView.setAccountNumber(obligation.getAccountNumber());
         existingCreditDetailView.setAccountSuf(obligation.getAccountSuffix());
         existingCreditDetailView.setProductCode(obligation.getProductCode());
@@ -69,7 +99,13 @@ public class ExistingCreditTransform extends BusinessTransform {
                 ExistingCreditDetailView existingCreditDetailView = new ExistingCreditDetailView();
                 existingCreditDetailView.setAccountName(accountName.toString());
                 existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
-                existingCreditDetailView.setAccountStatus(appInProcess.getStatus());
+                //existingCreditDetailView.setAccountStatus(appInProcess.getStatus());  delete
+                /*if(!Util.isEmpty(appInProcess.getStatus())){
+                    BankAccountType bankAccountType = bankAccountTypeDAO.getAccountTypeRLOS();
+                    BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
+                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                }*/
                 existingCreditDetailView.setAccountSuf("-");
                 existingCreditDetailView.setProductCode(creditDetail.getProductCode());
                 existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());
@@ -222,7 +258,10 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setAccountName(existingCreditDetail.getAccountName());
         existingCreditDetailView.setProductCode(existingCreditDetail.getProductCode());
         existingCreditDetailView.setAccountNumber(existingCreditDetail.getAccountNumber());
+
         //existingCreditDetailView.setAccountStatus();
+        //existingCreditDetailView.setAccountStatus(bankAccountStatusTransform.getBankAccountStatusView(existingCreditDetail.getAccountstatus()));
+        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());     //TODO Remove this line
         existingCreditDetailView.setAccountSuf(existingCreditDetail.getAccountSuf());
         existingCreditDetailView.setIntFeePercent(existingCreditDetail.getIntFee());
         existingCreditDetailView.setOutstanding(existingCreditDetail.getOutstanding());

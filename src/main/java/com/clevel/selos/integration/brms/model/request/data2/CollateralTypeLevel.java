@@ -6,16 +6,16 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.List;
 
-public class CollateralType implements Serializable {
+public class CollateralTypeLevel implements Serializable {
     private String collateralType;
 
-    private List<AppraisalType> appraisalType;
+    private List<AppraisalTypeLevel> appraisalType;
     private AttributeTypeLevelCollateral attributeType;
 
-    public CollateralType() {
+    public CollateralTypeLevel() {
     }
 
-    public CollateralType(String collateralType, List<AppraisalType> appraisalType, AttributeTypeLevelCollateral attributeType) {
+    public CollateralTypeLevel(String collateralType, List<AppraisalTypeLevel> appraisalType, AttributeTypeLevelCollateral attributeType) {
         this.collateralType = collateralType;
         this.appraisalType = appraisalType;
         this.attributeType = attributeType;
@@ -29,11 +29,11 @@ public class CollateralType implements Serializable {
         this.collateralType = collateralType;
     }
 
-    public List<AppraisalType> getAppraisalType() {
+    public List<AppraisalTypeLevel> getAppraisalType() {
         return appraisalType;
     }
 
-    public void setAppraisalType(List<AppraisalType> appraisalType) {
+    public void setAppraisalType(List<AppraisalTypeLevel> appraisalType) {
         this.appraisalType = appraisalType;
     }
 
