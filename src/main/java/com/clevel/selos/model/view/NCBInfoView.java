@@ -48,6 +48,11 @@ public class NCBInfoView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    //** dbr **//
+    private NCBDetailView ncbDetailView;
+    private CustomerInfoView customerInfoView;
+    private LoanAccountTypeView loanAccountTypeView;
+
 
     public NCBInfoView() {
     }
@@ -78,6 +83,7 @@ public class NCBInfoView implements Serializable {
         this.customer = new Customer();
         this.ncbCusName = "";
         this.ncbCusAddress = "";
+        this.ncbDetailView = new NCBDetailView();
     }
 
     public long getId() {
@@ -353,6 +359,46 @@ public class NCBInfoView implements Serializable {
         this.tdrOtherFlag = tdrOtherFlag;
     }
 
+    public String getNplFlagText() {
+        return (this.nplFlag == 1) ? "Y" : "N";
+    }
+
+    public void setNplFlagText(String nplFlagText) {
+        this.nplFlagText = nplFlagText;
+    }
+
+    public String getTdrFlagText() {
+        return (this.tdrFlag == 1) ? "Y" : "N";
+    }
+
+    public void setTdrFlagText(String tdrFlagText) {
+        this.tdrFlagText = tdrFlagText;
+    }
+
+    public NCBDetailView getNcbDetailView() {
+        return ncbDetailView;
+    }
+
+    public void setNcbDetailView(NCBDetailView ncbDetailView) {
+        this.ncbDetailView = ncbDetailView;
+    }
+
+    public CustomerInfoView getCustomerInfoView() {
+        return customerInfoView;
+    }
+
+    public void setCustomerInfoView(CustomerInfoView customerInfoView) {
+        this.customerInfoView = customerInfoView;
+    }
+
+    public LoanAccountTypeView getLoanAccountTypeView() {
+        return loanAccountTypeView;
+    }
+
+    public void setLoanAccountTypeView(LoanAccountTypeView loanAccountTypeView) {
+        this.loanAccountTypeView = loanAccountTypeView;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -367,6 +413,7 @@ public class NCBInfoView implements Serializable {
                 .append("currentPaymentType", currentPaymentType)
                 .append("historyPaymentType", historyPaymentType)
                 .append("nplFlag", nplFlag)
+                .append("nplFlagText", nplFlagText)
                 .append("nplTMBFlag", nplTMBFlag)
                 .append("nplTMBMonth", nplTMBMonth)
                 .append("nplTMBYear", nplTMBYear)
@@ -374,6 +421,7 @@ public class NCBInfoView implements Serializable {
                 .append("nplOtherMonth", nplOtherMonth)
                 .append("nplOtherYear", nplOtherYear)
                 .append("tdrFlag", tdrFlag)
+                .append("tdrFlagText", tdrFlagText)
                 .append("tdrTMBFlag", tdrTMBFlag)
                 .append("tdrTMBMonth", tdrTMBMonth)
                 .append("tdrTMBYear", tdrTMBYear)
@@ -390,22 +438,7 @@ public class NCBInfoView implements Serializable {
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
+                .append("ncbDetailView", ncbDetailView)
                 .toString();
-    }
-
-    public String getNplFlagText() {
-        return (this.nplFlag == 1) ? "Y" : "N";
-    }
-
-    public void setNplFlagText(String nplFlagText) {
-        this.nplFlagText = nplFlagText;
-    }
-
-    public String getTdrFlagText() {
-        return (this.tdrFlag == 1) ? "Y" : "N";
-    }
-
-    public void setTdrFlagText(String tdrFlagText) {
-        this.tdrFlagText = tdrFlagText;
     }
 }

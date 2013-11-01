@@ -17,10 +17,10 @@ public class QualitativeTransform extends Transform {
     public QualitativeA transformQualitativeAToModel(QualitativeView qualitativeAView, WorkCase workCase, User user) {
         log.info("transformQualitativeAToModel ::: ");
         QualitativeA qualitativeA = new QualitativeA();
-//        Date createDate = DateTime.now().toDate();
-//        Date modifyDate = DateTime.now().toDate();
-//        log.info("transformQualitativeAToModel createDate  :: {} ",createDate);
-//        log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
+        Date createDate = DateTime.now().toDate();
+        Date modifyDate = DateTime.now().toDate();
+        log.info("transformQualitativeAToModel createDate  :: {} ",createDate);
+        log.info("transformQualitativeAToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeAView.getId() != 0) {
             qualitativeA.setId(qualitativeAView.getId());
@@ -28,13 +28,10 @@ public class QualitativeTransform extends Transform {
 
         qualitativeA.setActive(true);
         qualitativeA.setWorkCase(workCase);
-
-        if (qualitativeA.getId() == 0) {
-            qualitativeA.setCreateBy(user);
-            qualitativeA.setCreateDate(qualitativeAView.getCreateDate());
-        }
-        qualitativeA.setModifyDate(qualitativeAView.getModifyDate());
+        qualitativeA.setCreateBy(user);
         qualitativeA.setModifyBy(user);
+        qualitativeA.setCreateDate(createDate);
+        qualitativeA.setModifyDate(modifyDate);
         qualitativeA.setProperties_p1(convertToDB(qualitativeAView.isProperties_p1()));
         qualitativeA.setProperties_p2(convertToDB(qualitativeAView.isProperties_p2()));
         qualitativeA.setProperties_p3(convertToDB(qualitativeAView.isProperties_p3()));
@@ -197,6 +194,8 @@ public class QualitativeTransform extends Transform {
         QualitativeB qualitativeB = new QualitativeB();
         Date createDate = DateTime.now().toDate();
         Date modifyDate = DateTime.now().toDate();
+        log.info("transformQualitativeBToModel createDate  :: {} ",createDate);
+        log.info("transformQualitativeBToModel modifyDate  :: {} ",modifyDate);
 
         if (qualitativeBView.getId() != 0) {
             qualitativeB.setId(qualitativeBView.getId());
@@ -205,12 +204,9 @@ public class QualitativeTransform extends Transform {
         qualitativeB.setActive(true);
         qualitativeB.setWorkCase(workCase);
 
-        if (qualitativeB.getId() == 0) {
-            qualitativeB.setCreateBy(user);
-            qualitativeB.setCreateDate(createDate);
-        }
-
+        qualitativeB.setCreateDate(createDate);
         qualitativeB.setModifyDate(modifyDate);
+        qualitativeB.setCreateBy(user);
         qualitativeB.setModifyBy(user);
         qualitativeB.setProperties_p1(convertToDB(qualitativeBView.isProperties_p1()));
         qualitativeB.setProperties_p2(convertToDB(qualitativeBView.isProperties_p2()));

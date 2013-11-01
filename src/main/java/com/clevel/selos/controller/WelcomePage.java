@@ -15,10 +15,7 @@ import com.clevel.selos.integration.email.Template1;
 import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
-import com.clevel.selos.model.AccountInfoId;
-import com.clevel.selos.model.AccountInfoName;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.DocumentType;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.audit.SystemAuditor;
@@ -27,6 +24,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -214,6 +212,8 @@ public class WelcomePage implements Serializable {
         normalStr = normalMsg.get("app.name");
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
+        dateTh = new Date();
+        dateEn = new Date();
     }
 
     public void on001() {
@@ -251,6 +251,26 @@ public class WelcomePage implements Serializable {
     public void testEmail() {
         log.debug("testEmail.");
         email.sendMail("user1@test.local", "test subject", "", new HashMap<String, String>());
+    }
+
+    RadioValue radioValue;
+
+    public RadioValue getRadioValue() {
+        return radioValue;
+    }
+
+    UserStatus userStatus;
+
+    public UserStatus getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public void setRadioValue(RadioValue radioValue) {
+        this.radioValue = radioValue;
     }
 
     public void reloadConfig() {
@@ -362,6 +382,33 @@ public class WelcomePage implements Serializable {
         log.debug("testBPM");
 //        UserDTO userDTO = bpmInterface.getUserDTO();
 //        log.debug("user: {}, password: {}",userDTO.getUserName(),userDTO.getPassword());
+    }
+
+    Date dateTh;
+    Date dateEn;
+
+    public void testCalendar() {
+        log.debug("test Calendar.");
+        log.debug("dateTh: {}, dateEn: {}",dateTh,dateEn);
+
+        log.debug("getDateTimeString dateTh: {}",DateTimeUtil.getDateTimeStr(dateTh));
+        log.debug("getDateTimeString dateEn: {}",DateTimeUtil.getDateTimeStr(dateEn));
+    }
+
+    public Date getDateTh() {
+        return dateTh;
+    }
+
+    public void setDateTh(Date dateTh) {
+        this.dateTh = dateTh;
+    }
+
+    public Date getDateEn() {
+        return dateEn;
+    }
+
+    public void setDateEn(Date dateEn) {
+        this.dateEn = dateEn;
     }
 
     public List<BusinessGroup> getBusinessGroups() {

@@ -229,4 +229,17 @@ public class DateTimeUtil {
         }
         return stringList;
     }
+
+    public static List<String> getPreviousHundredYearTH() {
+        Date now = new Date();
+        Calendar c = Calendar.getInstance(new Locale("th", "TH"));
+        List<String> stringList = new ArrayList<String>();
+        for (int i = 0; i < 100; i++) {
+            Date d = getOnlyDatePlusYear(now, -i);
+            c.setTime(d);
+            int year = c.get(Calendar.YEAR);
+            stringList.add(String.valueOf(year));
+        }
+        return stringList;
+    }
 }

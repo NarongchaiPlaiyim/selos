@@ -5,6 +5,7 @@ import com.clevel.selos.businesscontrol.NCBInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
+import com.clevel.selos.model.Month;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
@@ -12,6 +13,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import com.clevel.selos.util.Util;
 import org.joda.time.DateTime;
@@ -83,6 +85,8 @@ public class NCBInfo implements Serializable {
     private Long customerId;
     private User user;
 
+    private List<String> yearList;
+
     @Inject
     private AccountStatusDAO accountStatusDAO;
     @Inject
@@ -100,8 +104,13 @@ public class NCBInfo implements Serializable {
     @Inject
     private NCBDAO ncbDAO;
 
+
     public NCBInfo() {
 
+    }
+
+    public Month[] getStatMonths(){
+        return Month.values();
     }
 
     @PostConstruct
@@ -204,6 +213,9 @@ public class NCBInfo implements Serializable {
         monthRender6 = false;
 
         ncbDetailView.reset();
+
+        yearList = DateTimeUtil.getPreviousHundredYearTH();
+
     }
 
 
@@ -761,4 +773,11 @@ public class NCBInfo implements Serializable {
         this.messageErr = messageErr;
     }
 
+    public List<String> getYearList() {
+        return yearList;
+    }
+
+    public void setYearList(List<String> yearList) {
+        this.yearList = yearList;
+    }
 }

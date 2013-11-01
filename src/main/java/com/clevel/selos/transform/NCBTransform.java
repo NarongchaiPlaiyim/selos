@@ -3,8 +3,18 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class NCBTransform extends Transform {
+
+
+    @Inject
+    LoanAccountTypeTransform loanAccountTypeTransform;
+    @Inject
+    CustomerTransform customerTransform;
 
     public NCB transformToModel(NCBInfoView NCBInfoView) {
         NCB ncb = new NCB();
@@ -56,7 +66,6 @@ public class NCBTransform extends Transform {
 
     public NCBInfoView transformToView(NCB ncb) {
         NCBInfoView NCBInfoView = new NCBInfoView();
-
         NCBInfoView.setId(ncb.getId());
         NCBInfoView.setActive(true);
         NCBInfoView.setCreateBy(ncb.getCreateBy());
@@ -92,6 +101,8 @@ public class NCBTransform extends Transform {
         NCBInfoView.setNcbCusAddress(ncb.getNcbCusAddress());
         return NCBInfoView;
     }
+
+
 
     // convert value for checkbox boolean
 
