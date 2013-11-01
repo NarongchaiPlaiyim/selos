@@ -57,6 +57,8 @@ public class CustomerTransform extends Transform {
     WarningCodeDAO warningCodeDAO;
     @Inject
     KYCLevelDAO kycLevelDAO;
+    @Inject
+    RaceDAO raceDAO;
 
     public CustomerInfoView transformToView(Customer customer){
 
@@ -261,6 +263,12 @@ public class CustomerTransform extends Transform {
                 } else {
                     customerInfoView.setCitizenCountry(new Country());
                 }
+
+                if(individual.getRace() != null){
+                    customerInfoView.setOrigin(individual.getRace());
+                } else {
+                    customerInfoView.setOrigin(new Race());
+                }
             } else {
                 customerInfoView.setEducation(new Education());
                 customerInfoView.setMaritalStatus(new MaritalStatus());
@@ -268,6 +276,7 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setSndNationality(new Nationality());
                 customerInfoView.setOccupation(new Occupation());
                 customerInfoView.setCitizenCountry(new Country());
+                customerInfoView.setOrigin(new Race());
             }
         } else {
             //Juristic
@@ -617,6 +626,13 @@ public class CustomerTransform extends Transform {
             } else {
                 individual.setCitizenCountry(null);
             }
+
+            if(customerInfoView.getOrigin() != null && customerInfoView.getOrigin().getId() != 0){
+                individual.setRace(raceDAO.findById(customerInfoView.getOrigin().getId()));
+            } else {
+                individual.setRace(null);
+            }
+
             customer.setIndividual(individual);
         } else {
             //Juristic

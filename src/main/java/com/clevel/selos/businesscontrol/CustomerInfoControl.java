@@ -14,6 +14,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.Address;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.Individual;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -22,6 +23,7 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -85,7 +87,7 @@ public class CustomerInfoControl extends BusinessControl {
         return caseBorrowerTypeId;
     }
 
-    public void saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
+    public long saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         customerInfoView.getCustomerEntity().setId(1);
@@ -111,13 +113,46 @@ public class CustomerInfoControl extends BusinessControl {
 
                 individualDAO.persist(spouse.getIndividual());
                 addressDAO.persist(spouse.getAddressesList());
+            }else if(customer.getIndividual().getMaritalStatus() != null
+                    && customer.getIndividual().getMaritalStatus().getSpouseFlag() != 1){
+                if(customer.getSpouseId() != 0){
+                    Customer cus = customerDAO.findById(customer.getSpouseId());
+                    if(cus != null){
+                        List<Address> addressList = addressDAO.findByCriteria(Restrictions.eq("customer.id", cus.getId()));
+                        if(addressList != null){
+                            addressDAO.delete(addressList);
+                        }
+
+                        List<Individual> individualList = individualDAO.findByCriteria(Restrictions.eq("customer.id", cus.getId()));
+                        if(individualList != null){
+                            individualDAO.delete(individualList);
+                        }
+//                        if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
+//                            addressDAO.delete(cus.getAddressesList());
+//                        }
+//                        if(cus.getIndividual() != null){
+//                            individualDAO.delete(cus.getIndividual());
+//                        }
+                        customerDAO.delete(cus);
+                    }
+
+                    customer.setSpouseId(0);
+                    customerDAO.persist(customer);
+                }
             }
         }
+
+        return customer.getId();
     }
 
     public CustomerInfoView getCustomerIndividualById(long id){
         Customer customer = customerDAO.findById(id);
         CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
+        if(customer.getSpouseId() != 0){
+            Customer spouse = customerDAO.findById(customer.getSpouseId());
+            CustomerInfoView spouseInfoView = customerTransform.transformToView(spouse);
+            customerInfoView.setSpouse(spouseInfoView);
+        }
         return customerInfoView;
     }
 

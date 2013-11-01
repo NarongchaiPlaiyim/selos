@@ -2,7 +2,9 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -45,6 +47,8 @@ public class CustomerInfoSummary implements Serializable {
 
     @Inject
     private CustomerEntityDAO customerEntityDAO;
+    @Inject
+    private CustomerDAO customerDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -106,12 +110,19 @@ public class CustomerInfoSummary implements Serializable {
     }
 
     public String onLinkToEditBorrower() {
-//        passParamsToBankStmtDetail(false, summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
+        long customerId;
+        if(selectEditCustomerBorrower.getIsSpouse() == 1){
+            Customer customer = customerDAO.findCustomerBySpouseId(selectEditCustomerBorrower.getId());
+            customerId = customer.getId();
+        }else{
+            customerId = selectEditCustomerBorrower.getId();
+        }
+
         if(selectEditCustomerBorrower.getCustomerEntity().getId() == 1){ // Individual
-            passParamsToIndividual(selectEditCustomerBorrower.getId());
+            passParamsToIndividual(customerId);
             return "customerInfoIndividual?faces-redirect=true";
         }else{
-            passParamsToJuristic(selectEditCustomerBorrower.getId());
+            passParamsToJuristic(customerId);
             return "customerInfoJuristic?faces-redirect=true";
         }
     }

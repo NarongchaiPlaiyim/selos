@@ -88,4 +88,14 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
 
         return customerList;
     }
+
+    public Customer findCustomerBySpouseId(long spouseId) {
+        log.debug("findSpouseById ::: spouseId : {}", spouseId);
+        Customer customer = new Customer();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("spouseId", spouseId));
+        customer = (Customer) criteria.uniqueResult();
+
+        return customer;
+    }
 }

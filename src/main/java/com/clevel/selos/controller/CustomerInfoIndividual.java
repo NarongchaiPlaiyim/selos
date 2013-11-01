@@ -23,10 +23,7 @@ import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSumIndi")
@@ -149,6 +146,8 @@ public class CustomerInfoIndividual implements Serializable {
     // Boolean for search customer //
     private boolean enableDocumentType;
     private boolean enableCitizenId;
+    private boolean enableSpouseDocumentType;
+    private boolean enableSpouseCitizenId;
 
     // Mandate boolean for change Reference
     private boolean reqIndRelation;
@@ -243,6 +242,8 @@ public class CustomerInfoIndividual implements Serializable {
 
     //onEdit
     private long customerId;
+    private boolean isEditBorrower;
+    private boolean isEditSpouseBorrower;
 
     public CustomerInfoIndividual(){
     }
@@ -275,7 +276,6 @@ public class CustomerInfoIndividual implements Serializable {
         }
     }
 
-
     @PostConstruct
     public void onCreation() {
 
@@ -290,6 +290,7 @@ public class CustomerInfoIndividual implements Serializable {
         onAddNewIndividual();
 
         if(customerId != 0){ // Go to edit
+            System.out.println("################## TEST CREATE NEW ##################");
             onEditIndividual();
         }
     }
@@ -302,9 +303,13 @@ public class CustomerInfoIndividual implements Serializable {
         customerInfoSearch = new CustomerInfoView();
         customerInfoSearch.reset();
 
+        customerInfoSearchSpouse = new CustomerInfoView();
+        customerInfoSearchSpouse.reset();
+
         documentTypeList = documentTypeDAO.findAll();
-        relationIndividualList = relationDAO.findAll();
-        relationSpouseList = relationDAO.findAll();
+        relationIndividualList = relationDAO.getOtherRelationList();
+        relationSpouseList = relationDAO.getOtherRelationList();
+
         titleEnList = titleDAO.findAll();
         titleThList = titleDAO.findAll();
         raceList = raceDAO.findAll();
@@ -339,10 +344,22 @@ public class CustomerInfoIndividual implements Serializable {
 
         enableDocumentType = true;
         enableCitizenId = true;
+        enableSpouseDocumentType = true;
+        enableSpouseCitizenId = true;
+
+        isEditBorrower = false;
+        isEditSpouseBorrower = false;
+
+        customerInfoView.setCollateralOwner(99);
+        customerInfoView.getSpouse().setCollateralOwner(99);
+
+        onChangeReference();
+        onChangeReferenceSpouse();
     }
 
     public void onEditIndividual(){
         customerInfoView = customerInfoControl.getCustomerIndividualById(customerId);
+
         onChangeRelation();
         onChangeReference();
         onChangeMaritalStatus();
@@ -368,14 +385,29 @@ public class CustomerInfoIndividual implements Serializable {
             enableDocumentType = false;
             enableCitizenId = false;
         }
+
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
+            enableSpouseDocumentType = false;
+            enableSpouseCitizenId = false;
+        }
+
+        if(customerInfoView.getRelation().getId() == 1){
+            isEditBorrower = true;
+            relationIndividualList = relationDAO.findAll();
+        }else{
+            relationIndividualList = relationDAO.getOtherRelationList();
+        }
+
+        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getRelation().getId() == 1){
+            isEditSpouseBorrower = true;
+            relationSpouseList = relationDAO.findAll();
+        }else{
+            relationSpouseList = relationDAO.getOtherRelationList();
+        }
     }
 
     public void onChangeRelation(){
         referenceIndividualList = referenceDAO.findByCustomerEntityId(1, caseBorrowerTypeId, customerInfoView.getRelation().getId());
-        System.out.println("Con Flag : "+customerInfoView.getConvenantFlag());
-        System.out.println("Rew Flag : "+customerInfoView.getReviewFlag());
-        System.out.println("Worthiness : "+customerInfoView.getWorthiness());
-        System.out.println("Collateral : "+customerInfoView.getCollateralOwner());
     }
 
     public void onChangeRelationSpouse(){
@@ -387,6 +419,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getCurrentAddress().getProvince().getCode());
             districtForm1List = districtDAO.getListByProvince(province);
             customerInfoView.getCurrentAddress().setDistrict(new District());
+            subDistrictForm1List = new ArrayList<SubDistrict>();
         }else{
             provinceForm1List = provinceDAO.getListOrderByParameter("name");
             districtForm1List = new ArrayList<District>();
@@ -409,6 +442,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getRegisterAddress().getProvince().getCode());
             districtForm2List = districtDAO.getListByProvince(province);
             customerInfoView.getRegisterAddress().setDistrict(new District());
+            subDistrictForm2List = new ArrayList<SubDistrict>();
         }else{
             provinceForm2List = provinceDAO.getListOrderByParameter("name");
             districtForm2List = new ArrayList<District>();
@@ -431,6 +465,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getWorkAddress().getProvince().getCode());
             districtForm3List = districtDAO.getListByProvince(province);
             customerInfoView.getWorkAddress().setDistrict(new District());
+            subDistrictForm3List = new ArrayList<SubDistrict>();
         }else{
             provinceForm3List = provinceDAO.getListOrderByParameter("name");
             districtForm3List = new ArrayList<District>();
@@ -453,6 +488,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getCurrentAddress().getProvince().getCode());
             districtForm4List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getCurrentAddress().setDistrict(new District());
+            subDistrictForm4List = new ArrayList<SubDistrict>();
         }else{
             provinceForm4List = provinceDAO.getListOrderByParameter("name");
             districtForm4List = new ArrayList<District>();
@@ -475,6 +511,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getRegisterAddress().getProvince().getCode());
             districtForm5List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getRegisterAddress().setDistrict(new District());
+            subDistrictForm5List = new ArrayList<SubDistrict>();
         }else{
             provinceForm5List = provinceDAO.getListOrderByParameter("name");
             districtForm5List = new ArrayList<District>();
@@ -497,6 +534,7 @@ public class CustomerInfoIndividual implements Serializable {
             Province province = provinceDAO.findById(customerInfoView.getSpouse().getWorkAddress().getProvince().getCode());
             districtForm6List = districtDAO.getListByProvince(province);
             customerInfoView.getSpouse().getWorkAddress().setDistrict(new District());
+            subDistrictForm6List = new ArrayList<SubDistrict>();
         }else{
             provinceForm6List = provinceDAO.getListOrderByParameter("name");
             districtForm6List = new ArrayList<District>();
@@ -635,7 +673,9 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeMaritalStatus(){
+        System.out.println("############################# Before ########################################## "+customerInfoView.getMaritalStatus().getId());
         customerInfoView.setMaritalStatus(maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId()));
+        System.out.println("############################# After ########################################## "+customerInfoView.getMaritalStatus().getId());
     }
 
     public void onChangeReference(){
@@ -739,8 +779,6 @@ public class CustomerInfoIndividual implements Serializable {
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
         CustomerInfoResultView customerInfoResultView;
-//        messageHeader = "Please wait...";
-//        message = "Waiting for search customer from RM";
         try{
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
             log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
@@ -754,6 +792,30 @@ public class CustomerInfoIndividual implements Serializable {
                     customerInfoView.setSearchFromRM(1);
                     customerInfoView.setSearchBy(customerInfoSearch.getSearchBy());
                     customerInfoView.setSearchId(customerInfoSearch.getSearchId());
+
+                    //for spouse
+                    if(customerInfoView.getSpouse() != null && !customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase("")){
+                        customerInfoView.getSpouse().setSearchBy(1);
+                        customerInfoView.getSpouse().setSearchId(customerInfoView.getSpouse().getCitizenId());
+                        try {
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearch, user);
+                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                                if(cusSpouseResultView.getCustomerInfoView() != null){
+                                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
+                                    enableSpouseDocumentType = false;
+                                    enableSpouseCitizenId = false;
+                                } else {
+                                    log.debug("onSearchCustomerInfo ( spouse ) ::: customer not found.");
+                                    enableSpouseDocumentType = true;
+                                    enableSpouseCitizenId = true;
+                                }
+                            }
+                        } catch (Exception ex) {
+                            enableSpouseDocumentType = true;
+                            enableSpouseCitizenId = true;
+                            log.debug("onSearchCustomerInfo ( spouse ) Exception : {}", ex);
+                        }
+                    }
 
                     enableDocumentType = false;
                     enableCitizenId = false;
@@ -798,6 +860,18 @@ public class CustomerInfoIndividual implements Serializable {
                     if(customerInfoResultView.getCustomerInfoView() != null){
                         log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
                         customerInfoView = customerInfoResultView.getCustomerInfoView();
+
+                        if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1){
+                            CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse(), user);
+                            if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                                log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
+                                if(cusSpouseResultView.getCustomerInfoView() != null){
+                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                                    customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
+                                }
+                            }
+                        }
+
                         messageHeader = "Refresh Interface Info complete.";
                         message = "Customer found.";
                     }else{
@@ -820,24 +894,32 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSearchSpouseCustomerInfo() {
-        log.debug("onSearchCustomerInfo :::");
-        log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearchSpouse);
+        log.debug("onSearchSpouseCustomerInfo :::");
+        log.debug("onSearchSpouseCustomerInfo ::: customerInfoSearchSpouse : {}", customerInfoSearchSpouse);
         CustomerInfoResultView customerInfoResultView;
-//        messageHeader = "Please wait...";
-//        message = "Waiting for search customer from RM";
         try{
             customerInfoResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoSearchSpouse, user);
-            log.debug("onSearchCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
+            log.debug("onSearchSpouseCustomerInfo ::: customerInfoResultView : {}", customerInfoResultView);
             if(customerInfoResultView.getActionResult().equals(ActionResult.SUCCESS)){
-                log.debug("onSearchCustomerInfo ActionResult.SUCCESS");
+                log.debug("onSearchSpouseCustomerInfo ActionResult.SUCCESS");
                 if(customerInfoResultView.getCustomerInfoView() != null){
-                    log.debug("onSearchCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
-                    customerInfoView = customerInfoResultView.getCustomerInfoView();
+                    log.debug("onSearchSpouseCustomerInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                    customerInfoView.setSpouse(customerInfoResultView.getCustomerInfoView());
 
-                    customerInfoView.getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
-                    customerInfoView.setSearchFromRM(1);
-                    customerInfoView.setSearchBy(customerInfoSearchSpouse.getSearchBy());
-                    customerInfoView.setSearchId(customerInfoSearchSpouse.getSearchId());
+                    if(customerInfoView.getSpouse() != null){
+                        customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
+                        customerInfoView.getSpouse().setSearchFromRM(1);
+                        customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
+                        customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
+                    }else{
+                        CustomerInfoView cusView = new CustomerInfoView();
+                        cusView.reset();
+                        customerInfoView.setSpouse(cusView);
+                        customerInfoView.getSpouse().getDocumentType().setId(customerInfoSearchSpouse.getDocumentType().getId());
+                        customerInfoView.getSpouse().setSearchFromRM(1);
+                        customerInfoView.getSpouse().setSearchBy(customerInfoSearchSpouse.getSearchBy());
+                        customerInfoView.getSpouse().setSearchId(customerInfoSearchSpouse.getSearchId());
+                    }
 
                     enableDocumentType = false;
                     enableCitizenId = false;
@@ -845,7 +927,7 @@ public class CustomerInfoIndividual implements Serializable {
                     messageHeader = "Customer search complete.";
                     message = "Customer found.";
                 }else{
-                    log.debug("onSearchCustomerInfo ::: customer not found.");
+                    log.debug("onSearchSpouseCustomerInfo ::: customer not found.");
                     enableDocumentType = true;
                     enableCitizenId = true;
 
@@ -863,7 +945,7 @@ public class CustomerInfoIndividual implements Serializable {
         }catch (Exception ex){
             enableDocumentType = true;
             enableCitizenId = true;
-            log.debug("onSearchCustomerInfo Exception : {}", ex);
+            log.debug("onSearchSpouseCustomerInfo Exception : {}", ex);
             messageHeader = "Customer search failed.";
             message = ex.getMessage();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -881,27 +963,31 @@ public class CustomerInfoIndividual implements Serializable {
             customerInfoView.setWorkAddress(customerInfoView.getRegisterAddress());
         }
 
-        if(addressFlagForm5 == 1){ //dup address 1 to address 2
-            customerInfoView.getSpouse().setRegisterAddress(customerInfoView.getSpouse().getCurrentAddress());
+        if(customerInfoView.getMaritalStatus().getSpouseFlag() == 1){
+            if(addressFlagForm5 == 1){ //dup address 1 to address 2
+                customerInfoView.getSpouse().setRegisterAddress(customerInfoView.getSpouse().getCurrentAddress());
+            }
+
+            if(addressFlagForm6 == 1){
+                customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getCurrentAddress());
+            }else if(addressFlagForm6 == 2){
+                customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getRegisterAddress());
+            }
         }
 
-        if(addressFlagForm6 == 1){
-            customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getCurrentAddress());
-        }else if(addressFlagForm6 == 2){
-            customerInfoView.getSpouse().setWorkAddress(customerInfoView.getSpouse().getRegisterAddress());
-        }
-
-        System.out.println("Con Flag : "+customerInfoView.getConvenantFlag());
-        System.out.println("Rew Flag : "+customerInfoView.getReviewFlag());
-        System.out.println("Worthiness : "+customerInfoView.getWorthiness());
-        System.out.println("Collateral : "+customerInfoView.getCollateralOwner());
-
-        /*try{
-            customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
+        try{
+            long cusId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             messageHeader = "Save Customer Info Individual Success.";
             message = "Save Customer Info Individual data success.";
-//            onCreation();
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("customerId", cusId);
+            FacesUtil.getFlash().put("cusInfoParams", map);
+
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
+            onCreation();
+
         } catch(Exception ex){
             messageHeader = "Save Customer Info Individual Failed.";
             if(ex.getCause() != null){
@@ -910,8 +996,7 @@ public class CustomerInfoIndividual implements Serializable {
                 message = "Save Customer Info Individual failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-//            onCreation();
-        }*/
+        }
     }
 
     //Get Set
@@ -1985,5 +2070,37 @@ public class CustomerInfoIndividual implements Serializable {
 
     public void setCustomerInfoSearchSpouse(CustomerInfoView customerInfoSearchSpouse) {
         this.customerInfoSearchSpouse = customerInfoSearchSpouse;
+    }
+
+    public boolean isEnableSpouseCitizenId() {
+        return enableSpouseCitizenId;
+    }
+
+    public void setEnableSpouseCitizenId(boolean enableSpouseCitizenId) {
+        this.enableSpouseCitizenId = enableSpouseCitizenId;
+    }
+
+    public boolean isEnableSpouseDocumentType() {
+        return enableSpouseDocumentType;
+    }
+
+    public void setEnableSpouseDocumentType(boolean enableSpouseDocumentType) {
+        this.enableSpouseDocumentType = enableSpouseDocumentType;
+    }
+
+    public boolean isEditBorrower() {
+        return isEditBorrower;
+    }
+
+    public void setEditBorrower(boolean editBorrower) {
+        isEditBorrower = editBorrower;
+    }
+
+    public boolean isEditSpouseBorrower() {
+        return isEditSpouseBorrower;
+    }
+
+    public void setEditSpouseBorrower(boolean editSpouseBorrower) {
+        isEditSpouseBorrower = editSpouseBorrower;
     }
 }
