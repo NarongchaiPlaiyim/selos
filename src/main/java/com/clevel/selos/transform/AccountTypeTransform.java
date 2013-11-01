@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountTypeTransform extends Transform {
-    @Inject
-    Logger log;
 
     @Inject
     public AccountTypeTransform() {

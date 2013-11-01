@@ -5,13 +5,6 @@ import com.clevel.selos.model.db.working.BizProductDetail;
 import com.clevel.selos.model.view.BizProductDetailView;
 import org.joda.time.DateTime;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Rangsun
- * Date: 25/9/2556
- * Time: 14:59 น.
- * To change this template use File | Settings | File Templates.
- */
 public class BizProductDetailTransform extends Transform {
 
     public BizProductDetailView transformToView(BizProductDetail bizProductDetail) {

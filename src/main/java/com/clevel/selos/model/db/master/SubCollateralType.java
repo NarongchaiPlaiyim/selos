@@ -1,15 +1,29 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.io.Serializable;
+import javax.persistence.*;
 
-public class BankAccountStatusView implements Serializable {
+@Entity
+@Table(name = "mst_sub_collateral_type")
+public class SubCollateralType {
+
+    @Id
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "code")
     private String code;
+
+    @Column(name = "description")
     private String description;
-    private BankAccountTypeView bankAccountTypeView;
+
+    @OneToOne
+    @JoinColumn(name = "collateral_type_id")
+    private CollateralType collateralType;
+
+    @Column(name = "active")
     private int active;
 
     public int getId() {
@@ -36,12 +50,12 @@ public class BankAccountStatusView implements Serializable {
         this.description = description;
     }
 
-    public BankAccountTypeView getBankAccountTypeView() {
-        return bankAccountTypeView;
+    public CollateralType getCollateralType() {
+        return collateralType;
     }
 
-    public void setBankAccountTypeView(BankAccountTypeView bankAccountTypeView) {
-        this.bankAccountTypeView = bankAccountTypeView;
+    public void setCollateralType(CollateralType collateralType) {
+        this.collateralType = collateralType;
     }
 
     public int getActive() {
@@ -58,7 +72,7 @@ public class BankAccountStatusView implements Serializable {
                 .append("id", id)
                 .append("code", code)
                 .append("description", description)
-                .append("bankAccountTypeView", bankAccountTypeView)
+                .append("collateralType", collateralType)
                 .append("active", active)
                 .toString();
     }

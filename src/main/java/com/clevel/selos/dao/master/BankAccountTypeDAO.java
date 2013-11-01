@@ -25,4 +25,14 @@ public class BankAccountTypeDAO extends GenericDAO<BankAccountType, Integer> {
         List<BankAccountType> list = criteria.list();
         return list;
     }
+
+    public BankAccountType getAccountTypeRLOS(){
+        Criteria criteria = createCriteria()
+                .add(Restrictions.eq("bankStatementFlag", 0))
+                .add(Restrictions.eq("active", 1));
+
+        BankAccountType bankAccountType = (BankAccountType)criteria.uniqueResult();
+
+        return bankAccountType;
+    }
 }

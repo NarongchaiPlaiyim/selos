@@ -5,49 +5,48 @@
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:p="http://primefaces.org/ui">
 
-    <p:panel id="proposeCollateralDlgPanel" styleClass="panel-dialog">
-        <h:form id="proposeCollateralDlgForm">
-            <table id="proposeCollateralDialogTable" class="content_form">
-                <tr>
-                    <td class="title" style="width:145px;">Type Of Collateral :</td>
-                    <td>
-                        <p:selectOneMenu id="collateralTypeId" size="1" styleClass="largest"
-                                         value="#{prescreenMaker.proposeCollateral.potentialCollateral.id}"
-                                         required="true">
-                            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                            <f:selectItems value="#{prescreenMaker.potentialCollateralList}" var="collateralTypeItem"
-                                           itemLabel="#{collateralTypeItem.description}"
-                                           itemValue="#{collateralTypeItem.id}"/>
-                        </p:selectOneMenu>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><!-- --></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="center">
-                        <p:commandButton
-                                id="dlgSaveColBtn"
-                                value="#{msg.get('app.button.ok')}"
-                                styleClass="small"
-                                action="#{prescreenMaker.onSaveProposeCollateral}"
-                                process="@form"
-                                update=":proposeCollateralDlgForm, :frmMain:resultTableProposeCollateral"
-                                oncomplete="handlePrescreenProposeCreditRequest(xhr, status, args)"/>
-                        <p:commandButton
-                                type="button"
-                                value="#{msg.get('app.button.cancel')}"
-                                styleClass="small"
-                                onclick="proposeCollateralDlg.hide()"
-                                update=":proposeCollateralDlgForm"/>
-                    </td>
-                </tr>
-            </table>
-        </h:form>
-    </p:panel>
-    <p:blockUI widgetVar="blockCollateralDlg" block="proposeCollateralDlgPanel"
-               trigger=":proposeCollateralDlgForm:dlgSaveColBtn">
-        LOADING<br/>
-        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-    </p:blockUI>
+<p:panel id="proposeCollateralDlgPanel" styleClass="panel-dialog">
+    <h:form id="proposeCollateralDlgForm">
+        <table id="proposeCollateralDialogTable" class="content_form" style="width: 380px;">
+            <tr>
+                <td class="title" style="width:145px;">Type Of Collateral :</td>
+                <td>
+                    <p:selectOneMenu id="collateralTypeId" size="1" styleClass="largest"
+                                     value="#{prescreenMaker.proposeCollateral.potentialCollateral.id}"
+                                     required="true">
+                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                    <f:selectItems value="#{prescreenMaker.potentialCollateralList}" var="collateralTypeItem"
+                                   itemLabel="#{collateralTypeItem.description}"
+                                   itemValue="#{collateralTypeItem.id}"/>
+                    </p:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><p:spacer width="5px"></p:spacer></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="dlgSaveColBtn"
+                            value="#{msg.get('app.button.ok')}"
+                            styleClass="small"
+                            action="#{prescreenMaker.onSaveProposeCollateral}"
+                            process="@form"
+                            update=":proposeCollateralDlgForm, :frmMain:resultTableProposeCollateral"
+                            oncomplete="handlePrescreenProposeCreditRequest(xhr, status, args)"/>
+                    <p:commandButton
+                            type="button"
+                            value="#{msg.get('app.button.cancel')}"
+                            styleClass="small"
+                            onclick="proposeCollateralDlg.hide()"
+                            update=":proposeCollateralDlgForm"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</p:panel>
+<p:blockUI widgetVar="blockCollateralDlg" block="proposeCollateralDlgPanel" trigger=":proposeCollateralDlgForm:dlgSaveColBtn">
+    LOADING<br />
+    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+</p:blockUI>
 </ui:composition>

@@ -1,13 +1,18 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.TCG;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.TCGView;
+import org.joda.time.DateTime;
 
+import java.util.Date;
 
 public class TCGTransform extends Transform {
 
-    public TCG transformTCGViewToModel(TCGView tcgView, WorkCase workCase) {
+    public TCG transformTCGViewToModel(TCGView tcgView, WorkCase workCase,User user) {
+        Date createDate = DateTime.now().toDate();
+        Date modifyDate = DateTime.now().toDate();
 
         TCG tcg = new TCG();
 
@@ -16,10 +21,10 @@ public class TCGTransform extends Transform {
         }
         tcg.setWorkCase(workCase);
         tcg.setActive(true);
-        tcg.setCreateBy(tcgView.getCreateBy());
-        tcg.setCreateDate(tcgView.getCreateDate());
-        tcg.setModifyBy(tcgView.getModifyBy());
-        tcg.setModifyDate(tcgView.getModifyDate());
+        tcg.setCreateBy(user);
+        tcg.setCreateDate(createDate);
+        tcg.setModifyBy(user);
+        tcg.setModifyDate(modifyDate);
         tcg.setCollateralRuleResult(tcgView.getCollateralRuleResult());
         tcg.setExistingLoanRatioUnderSameCollateral(tcgView.getExistingLoanRatioUnderSameCollateral());
         tcg.setExistingLoanRatioNotUnderSameCollateral(tcgView.getExistingLoanRatioNotUnderSameCollateral());

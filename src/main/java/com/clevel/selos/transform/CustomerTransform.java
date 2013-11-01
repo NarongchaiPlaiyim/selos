@@ -97,8 +97,17 @@ public class CustomerTransform extends Transform {
                 addressView.setBuilding(address.getBuilding());
                 addressView.setRoad(address.getRoad());
                 addressView.setProvince(address.getProvince());
+                if(addressView.getProvince() == null){
+                    addressView.setProvince(new Province());
+                }
                 addressView.setDistrict(address.getDistrict());
+                if(addressView.getDistrict() == null){
+                    addressView.setDistrict(new District());
+                }
                 addressView.setSubDistrict(address.getSubDistrict());
+                if(addressView.getSubDistrict() == null){
+                    addressView.setSubDistrict(new SubDistrict());
+                }
                 addressView.setPostalCode(address.getPostalCode());
                 addressView.setCountry(address.getCountry());
                 addressView.setPhoneNumber(address.getPhoneNumber());

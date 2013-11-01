@@ -49,6 +49,9 @@ public class NCBDetailView implements Serializable {
     private boolean refinance;
     private boolean wc;
 
+    private String accountName;
+    private LoanAccountTypeView loanAccountTypeView;
+
     public NCBDetailView() {
         reset();
     }
@@ -57,11 +60,11 @@ public class NCBDetailView implements Serializable {
 //        this.isTMBAccount = -1;
         this.dateOfInfo = new Date();
         this.accountOpenDate = new Date();
-        this.limit = new BigDecimal(0);
-        this.outstanding = new BigDecimal(0);
-        this.installment = new BigDecimal(0);
+        this.limit = BigDecimal.ZERO;
+        this.outstanding = BigDecimal.ZERO;
+        this.installment = BigDecimal.ZERO;
         this.dateOfDebtRestructuring = new Date();
-        this.noOfOutstandingPaymentIn12months = new BigDecimal(0);
+        this.noOfOutstandingPaymentIn12months = BigDecimal.ZERO;
         this.noOfOverLimit = 0;
 //        this.refinanceFlag = -1;
         this.monthsPaymentFlag = false;
@@ -72,15 +75,17 @@ public class NCBDetailView implements Serializable {
         this.historyPayment = new SettlementStatus();
         this.noOfmonthsPayment = 0;
         this.moneyTotal = "";
-        this.month1 = new BigDecimal(0);
-        this.month2 = new BigDecimal(0);
-        this.month3 = new BigDecimal(0);
-        this.month4 = new BigDecimal(0);
-        this.month5 = new BigDecimal(0);
-        this.month6 = new BigDecimal(0);
+        this.month1 = BigDecimal.ZERO;
+        this.month2 = BigDecimal.ZERO;
+        this.month3 = BigDecimal.ZERO;
+        this.month4 = BigDecimal.ZERO;
+        this.month5 = BigDecimal.ZERO;
+        this.month6 = BigDecimal.ZERO;
 //        this.wcFlag = -1;
         this.canToEdit = false;
         this.monthFlagPage = false;
+        this.loanAccountTypeView = new LoanAccountTypeView();
+        this.accountName = "";
     }
 
     public long getId() {
@@ -396,6 +401,22 @@ public class NCBDetailView implements Serializable {
 
     public void setMonthFlagPage(boolean monthFlagPage) {
         this.monthFlagPage = monthFlagPage;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public LoanAccountTypeView getLoanAccountTypeView() {
+        return loanAccountTypeView;
+    }
+
+    public void setLoanAccountTypeView(LoanAccountTypeView loanAccountTypeView) {
+        this.loanAccountTypeView = loanAccountTypeView;
     }
 
     @Override

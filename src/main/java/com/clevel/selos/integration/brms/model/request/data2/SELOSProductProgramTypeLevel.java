@@ -6,14 +6,14 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.List;
 
-public class SELOSProductProgramType implements Serializable {
+public class SELOSProductProgramTypeLevel implements Serializable {
     private String productProgram; //todo : to be enum
-    private List<CreditFacilityType> creditFacilityType;
+    private List<CreditFacilityTypeLevel> creditFacilityType;
 
-    public SELOSProductProgramType() {
+    public SELOSProductProgramTypeLevel() {
     }
 
-    public SELOSProductProgramType(String productProgram, List<CreditFacilityType> creditFacilityType) {
+    public SELOSProductProgramTypeLevel(String productProgram, List<CreditFacilityTypeLevel> creditFacilityType) {
         this.productProgram = productProgram;
         this.creditFacilityType = creditFacilityType;
     }
@@ -26,11 +26,11 @@ public class SELOSProductProgramType implements Serializable {
         this.productProgram = productProgram;
     }
 
-    public List<CreditFacilityType> getCreditFacilityType() {
+    public List<CreditFacilityTypeLevel> getCreditFacilityType() {
         return creditFacilityType;
     }
 
-    public void setCreditFacilityType(List<CreditFacilityType> creditFacilityType) {
+    public void setCreditFacilityType(List<CreditFacilityTypeLevel> creditFacilityType) {
         this.creditFacilityType = creditFacilityType;
     }
 
