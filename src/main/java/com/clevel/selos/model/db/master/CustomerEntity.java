@@ -70,12 +70,12 @@ public class CustomerEntity implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("description", description).
-                append("active", active).
-                append("defaultQualitative", defaultQualitative).
-                append("changeQualtiEnable", changeQualtiEnable).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("description", description)
+                .append("active", active)
+                .append("defaultQualitative", defaultQualitative)
+                .append("changeQualtiEnable", changeQualtiEnable)
+                .toString();
     }
 }

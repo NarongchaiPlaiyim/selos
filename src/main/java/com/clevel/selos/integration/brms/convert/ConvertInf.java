@@ -7,11 +7,11 @@ public interface ConvertInf {
 
     public void convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception;
 
-    public void convertInputModelToRequestModel(DocCustomerRequest inputModel) throws Exception;
+    public com.clevel.selos.integration.brms.service.document.customerrules.DecisionServiceRequest convertInputModelToRequestModel(DocCustomerRequest inputModel) throws Exception;
 
-    public void convertInputModelToRequestModel(DocAppraisalRequest inputModel) throws Exception;
+    public com.clevel.selos.integration.brms.service.document.apprisalrules.DecisionServiceRequest convertInputModelToRequestModel(DocAppraisalRequest inputModel) throws Exception;
 
-    public void convertInputModelToRequestModel(StandardPricingIntRequest inputModel) throws Exception;
+    public com.clevel.selos.integration.brms.service.standardpricing.interestrules.DecisionServiceRequest convertInputModelToRequestModel(StandardPricingIntRequest inputModel) throws Exception;
 
-    public void convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception;
+    public com.clevel.selos.integration.brms.service.standardpricing.feerules.DecisionServiceRequest convertInputModelToRequestModel(StandardPricingFeeRequest inputModel) throws Exception;
 }

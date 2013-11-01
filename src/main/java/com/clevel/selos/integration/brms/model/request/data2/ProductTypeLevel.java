@@ -7,18 +7,18 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class ProductType implements Serializable {
+public class ProductTypeLevel implements Serializable {
     private String productGroup; //todo : to be enum
     private BigDecimal totalProposedCreditLimit;
 
     private AttributeTypeLevelProductType attributeType;
-    private List<CollateralType> collateralTypes;
-    private List<SELOSProductProgramType> selosProductProgramTypes;
+    private List<CollateralTypeLevel> collateralTypes;
+    private List<SELOSProductProgramTypeLevel> selosProductProgramTypes;
 
-    public ProductType() {
+    public ProductTypeLevel() {
     }
 
-    public ProductType(String productGroup, BigDecimal totalProposedCreditLimit, AttributeTypeLevelProductType attributeType, List<CollateralType> collateralTypes, List<SELOSProductProgramType> selosProductProgramTypes) {
+    public ProductTypeLevel(String productGroup, BigDecimal totalProposedCreditLimit, AttributeTypeLevelProductType attributeType, List<CollateralTypeLevel> collateralTypes, List<SELOSProductProgramTypeLevel> selosProductProgramTypes) {
         this.productGroup = productGroup;
         this.totalProposedCreditLimit = totalProposedCreditLimit;
         this.attributeType = attributeType;
@@ -50,19 +50,19 @@ public class ProductType implements Serializable {
         this.attributeType = attributeType;
     }
 
-    public List<CollateralType> getCollateralTypes() {
+    public List<CollateralTypeLevel> getCollateralTypes() {
         return collateralTypes;
     }
 
-    public void setCollateralTypes(List<CollateralType> collateralTypes) {
+    public void setCollateralTypes(List<CollateralTypeLevel> collateralTypes) {
         this.collateralTypes = collateralTypes;
     }
 
-    public List<SELOSProductProgramType> getSelosProductProgramTypes() {
+    public List<SELOSProductProgramTypeLevel> getSelosProductProgramTypes() {
         return selosProductProgramTypes;
     }
 
-    public void setSelosProductProgramTypes(List<SELOSProductProgramType> selosProductProgramTypes) {
+    public void setSelosProductProgramTypes(List<SELOSProductProgramTypeLevel> selosProductProgramTypes) {
         this.selosProductProgramTypes = selosProductProgramTypes;
     }
 

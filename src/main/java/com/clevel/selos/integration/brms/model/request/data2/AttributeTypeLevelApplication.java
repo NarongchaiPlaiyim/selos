@@ -10,7 +10,8 @@ import java.util.Date;
 
 public class AttributeTypeLevelApplication implements Serializable{
 
-    private BigDecimal monthlyIncome;               //3
+    private Date appInDate;
+    private BigDecimal monthlyIncome;
     private Date expectedSubmitDate;                //4
     private String customerEntity;                  //5
     private boolean existingSMECustomer;            //6
@@ -62,7 +63,8 @@ public class AttributeTypeLevelApplication implements Serializable{
     public AttributeTypeLevelApplication() {
     }
 
-    public AttributeTypeLevelApplication(BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, boolean topUpBAFlag, boolean SBCGFlag, boolean aadFlag, BigDecimal numberOfYearFromLatestFinancialStatement, BigDecimal netWorth, BigDecimal finalDBR, BigDecimal borrowerGroupSale, BigDecimal totalGroupSale, BigDecimal existingGroupExposure, boolean lgCapability, boolean everLgClaim, boolean abandonProject, boolean projectDelay, boolean sufficientSourceOfFund, String primeCustomer, BigDecimal numOfTotalFacility, BigDecimal numOfContingentFacility, BigDecimal numberOfExistiongOD, BigDecimal numberOfRequestedOD, BigDecimal numberOfCoreAsset, BigDecimal numOfNonCoreAsset, BigDecimal totalFixAssetValue, BigDecimal existingODLimit, BigDecimal totalCollOfExposure, BigDecimal totalWCRequirement, BigDecimal netWCRequirement125x, BigDecimal netWCRequirement15x, BigDecimal netWCRequirement35, BigDecimal existingWCRCreditLimitWithTMB, BigDecimal existingCoreWCLoanCreditLimitWithTMB, String businessLocation, int yearInBusiness, Country countryOfRegistration, BigDecimal tradeChequeReturn, BigDecimal maxWCCreditLimit, BigDecimal totalRequestedWCCreditLimit, BigDecimal maxCoreWCLoanLimit, BigDecimal totalRequestedCoreWCLoanCreditLimit, BigDecimal totalRequestedODCreditLimit) {
+    public AttributeTypeLevelApplication(Date appInDate, BigDecimal monthlyIncome, Date expectedSubmitDate, String customerEntity, boolean existingSMECustomer, boolean sameSetOfBorrower, boolean refinanceInFlag, boolean refinanceOutFlag, String lendingReferType, boolean BAFlag, boolean topUpBAFlag, boolean SBCGFlag, boolean aadFlag, BigDecimal numberOfYearFromLatestFinancialStatement, BigDecimal netWorth, BigDecimal finalDBR, BigDecimal borrowerGroupSale, BigDecimal totalGroupSale, BigDecimal existingGroupExposure, boolean lgCapability, boolean everLgClaim, boolean abandonProject, boolean projectDelay, boolean sufficientSourceOfFund, String primeCustomer, BigDecimal numOfTotalFacility, BigDecimal numOfContingentFacility, BigDecimal numberOfExistiongOD, BigDecimal numberOfRequestedOD, BigDecimal numberOfCoreAsset, BigDecimal numOfNonCoreAsset, BigDecimal totalFixAssetValue, BigDecimal existingODLimit, BigDecimal totalCollOfExposure, BigDecimal totalWCRequirement, BigDecimal netWCRequirement125x, BigDecimal netWCRequirement15x, BigDecimal netWCRequirement35, BigDecimal existingWCRCreditLimitWithTMB, BigDecimal existingCoreWCLoanCreditLimitWithTMB, String businessLocation, int yearInBusiness, Country countryOfRegistration, BigDecimal tradeChequeReturn, BigDecimal maxWCCreditLimit, BigDecimal totalRequestedWCCreditLimit, BigDecimal maxCoreWCLoanLimit, BigDecimal totalRequestedCoreWCLoanCreditLimit, BigDecimal totalRequestedODCreditLimit) {
+        this.appInDate = appInDate;
         this.monthlyIncome = monthlyIncome;
         this.expectedSubmitDate = expectedSubmitDate;
         this.customerEntity = customerEntity;
@@ -111,6 +113,14 @@ public class AttributeTypeLevelApplication implements Serializable{
         this.maxCoreWCLoanLimit = maxCoreWCLoanLimit;
         this.totalRequestedCoreWCLoanCreditLimit = totalRequestedCoreWCLoanCreditLimit;
         this.totalRequestedODCreditLimit = totalRequestedODCreditLimit;
+    }
+
+    public Date getAppInDate() {
+        return appInDate;
+    }
+
+    public void setAppInDate(Date appInDate) {
+        this.appInDate = appInDate;
     }
 
     public BigDecimal getMonthlyIncome() {
