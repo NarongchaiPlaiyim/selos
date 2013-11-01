@@ -3,6 +3,8 @@ package com.clevel.selos.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.*;
 import java.util.*;
 
@@ -237,5 +239,32 @@ public class Util {
             return str.split(" ");
         }
         return null;
+    }
+
+    public static BigDecimal divide(BigDecimal value, BigDecimal divisor) {
+        if (BigDecimal.ZERO.compareTo(divisor) == 0 || BigDecimal.valueOf(0.00).compareTo(divisor) == 0) {
+            log.debug("divide() divisor is zero!");
+            return BigDecimal.ZERO;
+        }
+        try {
+            value = value.divide(divisor, 2, RoundingMode.HALF_UP);
+        } catch (ArithmeticException ae) {
+            log.error("", ae);
+        }
+        return value;
+    }
+
+    public static BigDecimal divide(BigDecimal value, int divisor) {
+        if (divisor == 0) {
+            log.debug("divide() divisor is zero!");
+            return BigDecimal.ZERO;
+        }
+        try {
+            BigDecimal divisorBD = BigDecimal.valueOf(divisor);
+            value = value.divide(divisorBD, 2, RoundingMode.HALF_UP);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+        return value;
     }
 }

@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class BankStmtView implements Serializable {
+
     private long id;
     private int isNotCountIncome;
     private BankView bankView;
@@ -36,10 +37,8 @@ public class BankStmtView implements Serializable {
     private String remark;
 
     private List<BankStmtDetailView> bankStmtDetailViewList;
-    private List<BankStmtSrcCollateralProof> bankStmtSrcCollateralProofList;
-
-    //Average = (Sum of bankStmtSrcCollateralProofList[i].OSBalanceAmount) / bankStmtSrcCollateralProofList.size()
-    private BigDecimal averageOSBalanceAmount;
+    private List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList;
+    private BigDecimal avgOSBalanceAmount;
 
     public BankStmtView() {
         reset();
@@ -66,6 +65,7 @@ public class BankStmtView implements Serializable {
         this.overLimitTimes = BigDecimal.ZERO;
         this.overLimitDays = BigDecimal.ZERO;
         this.remark = "";
+        this.avgOSBalanceAmount = BigDecimal.ZERO;
     }
 
     public long getId() {
@@ -284,20 +284,20 @@ public class BankStmtView implements Serializable {
         this.bankStmtDetailViewList = bankStmtDetailViewList;
     }
 
-    public List<BankStmtSrcCollateralProof> getBankStmtSrcCollateralProofList() {
-        return bankStmtSrcCollateralProofList;
+    public List<BankStmtSrcOfCollateralProofView> getSrcOfCollateralProofViewList() {
+        return srcOfCollateralProofViewList;
     }
 
-    public void setBankStmtSrcCollateralProofList(List<BankStmtSrcCollateralProof> bankStmtSrcCollateralProofList) {
-        this.bankStmtSrcCollateralProofList = bankStmtSrcCollateralProofList;
+    public void setSrcOfCollateralProofViewList(List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList) {
+        this.srcOfCollateralProofViewList = srcOfCollateralProofViewList;
     }
 
-    public BigDecimal getAverageOSBalanceAmount() {
-        return averageOSBalanceAmount;
+    public BigDecimal getAvgOSBalanceAmount() {
+        return avgOSBalanceAmount;
     }
 
-    public void setAverageOSBalanceAmount(BigDecimal averageOSBalanceAmount) {
-        this.averageOSBalanceAmount = averageOSBalanceAmount;
+    public void setAvgOSBalanceAmount(BigDecimal avgOSBalanceAmount) {
+        this.avgOSBalanceAmount = avgOSBalanceAmount;
     }
 
     @Override
@@ -329,8 +329,8 @@ public class BankStmtView implements Serializable {
                 .append("overLimitDays", overLimitDays)
                 .append("remark", remark)
                 .append("bankStmtDetailViewList", bankStmtDetailViewList)
-                .append("bankStmtSrcCollateralProofList", bankStmtSrcCollateralProofList)
-                .append("averageOSBalanceAmount", averageOSBalanceAmount)
+                .append("srcOfCollateralProofViewList", srcOfCollateralProofViewList)
+                .append("avgOSBalanceAmount", avgOSBalanceAmount)
                 .toString();
     }
 }

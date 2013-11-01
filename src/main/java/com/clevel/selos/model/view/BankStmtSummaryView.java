@@ -30,7 +30,8 @@ public class BankStmtSummaryView implements Serializable {
     private BigDecimal grdTotalTDChqRetPercent;
     private BigDecimal grdTotalAvgOSBalanceAmount;
 
-    private List<BankStmtView> bankStmtViewList;
+    private List<BankStmtView> tmbBankStmtViewList;
+    private List<BankStmtView> othBankStmtViewList;
 
     public BankStmtSummaryView() {
         reset();
@@ -174,12 +175,20 @@ public class BankStmtSummaryView implements Serializable {
         this.grdTotalTDChqRetPercent = grdTotalTDChqRetPercent;
     }
 
-    public List<BankStmtView> getBankStmtViewList() {
-        return bankStmtViewList;
+    public List<BankStmtView> getTmbBankStmtViewList() {
+        return tmbBankStmtViewList;
     }
 
-    public void setBankStmtViewList(List<BankStmtView> bankStmtViewList) {
-        this.bankStmtViewList = bankStmtViewList;
+    public void setTmbBankStmtViewList(List<BankStmtView> tmbBankStmtViewList) {
+        this.tmbBankStmtViewList = tmbBankStmtViewList;
+    }
+
+    public List<BankStmtView> getOthBankStmtViewList() {
+        return othBankStmtViewList;
+    }
+
+    public void setOthBankStmtViewList(List<BankStmtView> othBankStmtViewList) {
+        this.othBankStmtViewList = othBankStmtViewList;
     }
 
     public BigDecimal getGrdTotalAvgOSBalanceAmount() {
@@ -209,7 +218,8 @@ public class BankStmtSummaryView implements Serializable {
                 .append("grdTotalTDChqRetAmount", grdTotalTDChqRetAmount)
                 .append("grdTotalTDChqRetPercent", grdTotalTDChqRetPercent)
                 .append("grdTotalAvgOSBalanceAmount", grdTotalAvgOSBalanceAmount)
-                .append("bankStmtViewList", bankStmtViewList)
+                .append("tmbBankStmtViewList", tmbBankStmtViewList)
+                .append("othBankStmtViewList", othBankStmtViewList)
                 .toString();
     }
 }

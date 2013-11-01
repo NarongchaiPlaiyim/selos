@@ -303,9 +303,15 @@
     <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
         <td class="center"
             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-            <p:calendar value="#{item.highestBalanceDate}" pattern="dd/MM/yyyy"
-                        navigator="true" showButtonPanel="true"
-                        styleClass="calendar_right"/>
+            <p:calendar id="calendarId" maxdate="#{bankStatementDetail.currentDate}" navigator="true" showButtonPanel="true"
+                        value="#{item.highestBalanceDate}"
+                        pattern="dd/MM/yyyy"
+                        locale="th_TH"
+                        timeZone="Asia/Bangkok"
+                        yearRange="2440:3000"
+                        styleClass="calendar_right">
+                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+            </p:calendar>
         </td>
     </ui:repeat>
 </tr>
@@ -327,9 +333,15 @@
     <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
         <td class="center"
             style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-            <p:calendar value="#{item.lowestBalanceDate}" pattern="dd/MM/yyyy"
-                        navigator="true" showButtonPanel="true"
-                        styleClass="calendar_right"/>
+            <p:calendar id="calendarId" maxdate="#{bankStatementDetail.currentDate}" navigator="true" showButtonPanel="true"
+                        value="#{item.lowestBalanceDate}"
+                        pattern="dd/MM/yyyy"
+                        locale="th_TH"
+                        timeZone="Asia/Bangkok"
+                        yearRange="2440:3000"
+                        styleClass="calendar_right">
+                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+            </p:calendar>
         </td>
     </ui:repeat>
 </tr>

@@ -8,11 +8,13 @@ import com.clevel.selos.dao.working.BankStatementDAO;
 import com.clevel.selos.dao.working.BankStatementDetailDAO;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
+import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.DWHBankDataSource;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.BankStatement;
 import com.clevel.selos.model.db.working.BankStatementDetail;
 import com.clevel.selos.model.db.working.BankStatementSummary;
+import com.clevel.selos.model.db.working.BankStmtSrcOfCollateralProof;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.DateTimeUtil;
 
@@ -40,6 +42,8 @@ public class BankStmtTransform extends Transform {
 
     //Transform
     @Inject
+    AccountStatusTransform accountStatusTransform;
+    @Inject
     BankTransform bankTransform;
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
@@ -48,6 +52,7 @@ public class BankStmtTransform extends Transform {
     public BankStmtTransform() {
     }
 
+    //================================================== Get View ==================================================//
     public BankStmtView getBankStmtView(DWHBankStatement dwhBankStatement) {
         log.info("Transform BankStmtView with DWHBankStatement : {}", dwhBankStatement);
         BankStmtView bankStmtView = new BankStmtView();
@@ -90,9 +95,144 @@ public class BankStmtTransform extends Transform {
 
         log.info("Return BankStmtView : {}", bankStmtDetailView);
         return bankStmtDetailView;
-
     }
 
+    public BankStmtSummaryView getBankStmtSummaryView(BankStatementSummary bankStatementSummary) {
+        BankStmtSummaryView bankStmtSummaryView = new BankStmtSummaryView();
+        if (bankStatementSummary == null) {
+            log.debug("getBankStmtSummaryView() bankStatementSummary is null!");
+            return bankStmtSummaryView;
+        }
+        bankStmtSummaryView.setId(bankStatementSummary.getId());
+        bankStmtSummaryView.setSeasonal(bankStatementSummary.getSeasonal());
+        bankStmtSummaryView.setExpectedSubmitDate(bankStatementSummary.getExpectedSubmitDate());
+        bankStmtSummaryView.setTMBTotalIncomeGross(bankStatementSummary.getTMBTotalIncomeGross());
+        bankStmtSummaryView.setTMBTotalIncomeNetBDM(bankStatementSummary.getTMBTotalIncomeNetBDM());
+        bankStmtSummaryView.setTMBTotalIncomeNetUW(bankStatementSummary.getTMBTotalIncomeNetUW());
+
+        bankStmtSummaryView.setOthTotalIncomeGross(bankStatementSummary.getOthTotalIncomeGross());
+        bankStmtSummaryView.setOthTotalIncomeNetBDM(bankStatementSummary.getOthTotalIncomeNetBDM());
+        bankStmtSummaryView.setOthTotalIncomeNetUW(bankStatementSummary.getOthTotalIncomeNetUW());
+
+        bankStmtSummaryView.setGrdTotalIncomeGross(bankStatementSummary.getGrdTotalIncomeGross());
+        bankStmtSummaryView.setGrdTotalIncomeNetBDM(bankStatementSummary.getGrdTotalIncomeNetBDM());
+        bankStmtSummaryView.setGrdTotalIncomeNetUW(bankStatementSummary.getGrdTotalIncomeNetUW());
+        bankStmtSummaryView.setGrdTotalTDChqRetAmount(bankStatementSummary.getGrdTotalTDChqRetAmount());
+        bankStmtSummaryView.setGrdTotalTDChqRetPercent(bankStatementSummary.getGrdTotalTDChqRetPercent());
+        bankStmtSummaryView.setGrdTotalAvgOSBalanceAmount(bankStatementSummary.getGrdTotalAvgOSBalanceAmount());
+
+        List<BankStmtView> tmbBankStmtViewList = new ArrayList<BankStmtView>();
+        List<BankStmtView> othBankStmtViewList = new ArrayList<BankStmtView>();
+
+        Bank tmbBank = bankDAO.getTMBBank();
+        for (BankStatement bankStmt : bankStatementSummary.getBankStmtList()) {
+            if (tmbBank.getCode() == bankStmt.getBank().getCode()) {
+                tmbBankStmtViewList.add(getBankStmtView(bankStmt));
+            } else {
+                othBankStmtViewList.add(getBankStmtView(bankStmt));
+            }
+        }
+        bankStmtSummaryView.setTmbBankStmtViewList(tmbBankStmtViewList);
+        bankStmtSummaryView.setOthBankStmtViewList(othBankStmtViewList);
+        return bankStmtSummaryView;
+    }
+
+    public BankStmtView getBankStmtView(BankStatement bankStatement) {
+        BankStmtView bankStmtView = new BankStmtView();
+        if (bankStatement == null) {
+            log.debug("getBankStmtView() bankStatement is null!");
+            return bankStmtView;
+        }
+        bankStmtView.setId(bankStatement.getId());
+        //todo: bankStmtView.setNotCountIncome();
+        //bankStmtView.setNotCountIncome();
+        bankStmtView.setBankView(bankTransform.getBankView(bankStatement.getBank()));
+        bankStmtView.setBranchName(bankStatement.getBranch());
+        bankStmtView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankStatement.getBankAccountType()));
+        bankStmtView.setOtherAccountType(bankStatement.getOtherAccountType());
+        bankStmtView.setAccountNumber(bankStatement.getAccountNo());
+        bankStmtView.setAccountName(bankStatement.getAccountName());
+        bankStmtView.setAccountStatusView(accountStatusTransform.transformToView(bankStatement.getAccountStatus()));
+        bankStmtView.setMainAccount(bankStatement.getMainAccount());
+        bankStmtView.setAccountCharacteristic(bankStatement.getAccountCharacteristic());
+        bankStmtView.setLimit(bankStatement.getLimit());
+        bankStmtView.setAvgIncomeGross(bankStatement.getAvgIncomeGross());
+        bankStmtView.setAvgIncomeNetBDM(bankStatement.getAvgIncomeNetBDM());
+        bankStmtView.setAvgIncomeNetUW(bankStatement.getAvgIncomeNetUW());
+        bankStmtView.setAvgWithDrawAmount(bankStatement.getAvgDrawAmount());
+        bankStmtView.setSwingPercent(bankStatement.getSwingPercent());
+        bankStmtView.setUtilizationPercent(bankStatement.getUtilizationPercent());
+        bankStmtView.setAvgGrossInflowPerLimit(bankStatement.getAvgGrossInflowPerLimit());
+        bankStmtView.setChequeReturn(bankStatement.getChequeReturn());
+        bankStmtView.setTrdChequeReturnAmount(bankStatement.getTdChequeReturnAmount());
+        bankStmtView.setTrdChequeReturnPercent(bankStatement.getTdChequeReturnPercent());
+        bankStmtView.setOverLimitTimes(bankStatement.getOverLimitTimes());
+        bankStmtView.setOverLimitDays(bankStatement.getOverLimitDays());
+        bankStmtView.setRemark(bankStatement.getRemark());
+        bankStmtView.setAvgOSBalanceAmount(bankStatement.getAvgOSBalanceAmount());
+
+        List<BankStmtDetailView> bankStmtDetailViewList = new ArrayList<BankStmtDetailView>();
+        for (BankStatementDetail detail : bankStatement.getBankStatementDetailList()) {
+            bankStmtDetailViewList.add(getBankStmtDetailView(detail));
+        }
+        bankStmtView.setBankStmtDetailViewList(bankStmtDetailViewList);
+
+        List<BankStmtSrcOfCollateralProofView> srcCollateralProofList = new ArrayList<BankStmtSrcOfCollateralProofView>();
+        for (BankStmtSrcOfCollateralProof srcOfCollateralProof : bankStatement.getSrcOfCollateralProofList()) {
+            srcCollateralProofList.add(getSrcOfCollateralProofView(srcOfCollateralProof));
+        }
+        bankStmtView.setSrcOfCollateralProofViewList(srcCollateralProofList);
+        return bankStmtView;
+    }
+
+    public BankStmtDetailView getBankStmtDetailView(BankStatementDetail bankStatementDetail) {
+        BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
+        if (bankStatementDetail == null) {
+            log.debug("getBankStmtDetailView() bankStatementDetail is null!");
+            return bankStmtDetailView;
+        }
+        bankStmtDetailView.setId(bankStatementDetail.getId());
+        bankStmtDetailView.setOverLimitAmount(bankStatementDetail.getOverLimitAmount());
+        bankStmtDetailView.setGrossCreditBalance(bankStatementDetail.getGrossCreditBalance());
+        bankStmtDetailView.setNumberOfCreditTxn(bankStatementDetail.getNumberOfCreditTxn());
+        bankStmtDetailView.setExcludeListBDM(bankStatementDetail.getExcludeListBDM());
+        bankStmtDetailView.setExcludeListUW(bankStatementDetail.getExcludeListUW());
+        bankStmtDetailView.setCreditAmountBDM(bankStatementDetail.getCreditAmountBDM());
+        bankStmtDetailView.setCreditAmountUW(bankStatementDetail.getCreditAmountUW());
+        bankStmtDetailView.setTimesOfAvgCreditBDM(bankStatementDetail.getTimesOfAverageCreditBDM());
+        bankStmtDetailView.setTimesOfAvgCreditUW(bankStatementDetail.getTimesOfAverageCreditUW());
+        bankStmtDetailView.setDebitAmount(bankStatementDetail.getDebitAmount());
+        bankStmtDetailView.setNumberOfDebitTxn(bankStatementDetail.getNumberOfDebitTxn());
+        bankStmtDetailView.setHighestBalanceDate(bankStatementDetail.getHighestBalanceDate());
+        bankStmtDetailView.setHighestBalance(bankStatementDetail.getHighestBalance());
+        bankStmtDetailView.setLowestBalanceDate(bankStatementDetail.getLowestBalanceDate());
+        bankStmtDetailView.setLowestBalance(bankStatementDetail.getLowestBalance());
+        bankStmtDetailView.setMonthEndBalance(bankStatementDetail.getMonthEndBalance());
+        bankStmtDetailView.setNumberOfChequeReturn(bankStatementDetail.getNumberOfChequeReturn());
+        bankStmtDetailView.setChequeReturnAmount(bankStatementDetail.getChequeReturnAmount());
+        bankStmtDetailView.setOverLimitTimes(bankStatementDetail.getOverLimitTimes());
+        bankStmtDetailView.setOverLimitDays(bankStatementDetail.getOverLimitDays());
+        bankStmtDetailView.setSwingPercent(bankStatementDetail.getSwingPercent());
+        bankStmtDetailView.setUtilizationPercent(bankStatementDetail.getUtilizationPercent());
+        bankStmtDetailView.setGrossInflowPerLimit(bankStatementDetail.getGrossInflowPerLimit());
+        bankStmtDetailView.setTotalTransaction(bankStatementDetail.getTotalTransaction());
+        bankStmtDetailView.setAsOfDate(bankStatementDetail.getAsOfDate());
+        return bankStmtDetailView;
+    }
+
+    public BankStmtSrcOfCollateralProofView getSrcOfCollateralProofView(BankStmtSrcOfCollateralProof srcOfCollateralProof) {
+        BankStmtSrcOfCollateralProofView srcOfCollateralProofView = new BankStmtSrcOfCollateralProofView();
+        if (srcOfCollateralProof == null) {
+            log.debug("getSrcOfCollateralProofView() srcOfCollateralProof is null!");
+            return srcOfCollateralProofView;
+        }
+        srcOfCollateralProofView.setId(srcOfCollateralProof.getId());
+        srcOfCollateralProofView.setDateOfMaxBalance(srcOfCollateralProof.getDateOfMaxBalance());
+        srcOfCollateralProofView.setMaxBalance(srcOfCollateralProof.getMaxBalance());
+        return srcOfCollateralProofView;
+    }
+
+    //================================================== Get Model ==================================================//
     public BankStatementSummary getBankStatementSummary(BankStmtSummaryView bankStmtSummaryView, User user) {
         BankStatementSummary bankStatementSummary = null;
         Date now = new Date();
@@ -122,21 +262,20 @@ public class BankStmtTransform extends Transform {
             bankStatementSummary.setGrdTotalIncomeNetBDM(bankStmtSummaryView.getGrdTotalIncomeNetBDM());
             bankStatementSummary.setGrdTotalIncomeNetUW(bankStmtSummaryView.getGrdTotalIncomeNetUW());
 
-            bankStatementSummary.setGrdTotalAvgOSBalanceAmount(bankStmtSummaryView.getGrdTotalAvgOSBalanceAmount());
             bankStatementSummary.setGrdTotalTDChqRetAmount(bankStmtSummaryView.getGrdTotalTDChqRetAmount());
             bankStatementSummary.setGrdTotalTDChqRetPercent(bankStmtSummaryView.getGrdTotalTDChqRetPercent());
+            bankStatementSummary.setGrdTotalAvgOSBalanceAmount(bankStmtSummaryView.getGrdTotalAvgOSBalanceAmount());
 
             List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
-            List<BankStmtView> bankStmtViewList = bankStmtSummaryView.getBankStmtViewList();
-            for (BankStmtView bankStmtView : bankStmtViewList) {
-                bankStatementList.add(getBankStatement(bankStmtView, bankStatementSummary, user));
-            }
+            for (BankStmtView tmbBankStmtView : bankStmtSummaryView.getTmbBankStmtViewList())
+                bankStatementList.add(getBankStatement(tmbBankStmtView, bankStatementSummary, user));
+
+            for (BankStmtView othBankStmtView : bankStmtSummaryView.getOthBankStmtViewList())
+                bankStatementList.add(getBankStatement(othBankStmtView, bankStatementSummary, user));
+
             bankStatementSummary.setBankStmtList(bankStatementList);
-            bankStatementSummary.setId(bankStmtSummaryView.getId());
-
         }
-
-        return null;
+        return bankStatementSummary;
     }
 
     public BankStatement getBankStatement(BankStmtView bankStmtView, BankStatementSummary bankStatementSummary, User user) {
@@ -176,6 +315,8 @@ public class BankStmtTransform extends Transform {
             bankStatement.setOverLimitTimes(bankStmtView.getOverLimitTimes());
             bankStatement.setOverLimitDays(bankStmtView.getOverLimitDays());
             bankStatement.setRemark(bankStmtView.getRemark());
+            //set parent
+            bankStatement.setBankStatementSummary(bankStatementSummary);
         }
         return bankStatement;
     }
@@ -188,7 +329,6 @@ public class BankStmtTransform extends Transform {
             } else {
                 bankStatementDetail = new BankStatementDetail();
             }
-
             bankStatementDetail.setOverLimitAmount(bankStmtDetailView.getOverLimitAmount());
             bankStatementDetail.setGrossCreditBalance(bankStmtDetailView.getGrossCreditBalance());
             bankStatementDetail.setNumberOfCreditTxn(bankStmtDetailView.getNumberOfCreditTxn());
@@ -214,8 +354,10 @@ public class BankStmtTransform extends Transform {
             bankStatementDetail.setGrossInflowPerLimit(bankStmtDetailView.getGrossInflowPerLimit());
             bankStatementDetail.setTotalTransaction(bankStmtDetailView.getTotalTransaction());
             bankStatementDetail.setAsOfDate(bankStmtDetailView.getAsOfDate());
+            //set parent
             bankStatementDetail.setBankStatement(bankStatement);
         }
         return bankStatementDetail;
     }
+
 }
