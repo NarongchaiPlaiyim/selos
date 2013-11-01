@@ -673,3 +673,16 @@ td .cell_spacer {
     line-height: 20px;
     padding-left: 5px;
 }
+
+.isa_searchColumn1{
+     width: 250px;
+}
+.isa_searchColumn2{
+     width: 580px;
+}
+.isaPanelGridSearch table,tr{
+    background: transparent !important;
+    /*border: none !important;*/
+
+}
+

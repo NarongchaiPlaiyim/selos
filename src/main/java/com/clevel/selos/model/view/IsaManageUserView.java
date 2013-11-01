@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
-public class IsaCreateUserView implements Serializable {
+public class IsaManageUserView implements Serializable {
 
     private String id;
     private String username;

@@ -15,7 +15,8 @@
     </h:head>
     <h:body>
         <p:panel id="pnl_maincontainer">
-           <!-- ssssssssssssssssss  -->
+
+            <h:form id="userTableData">
             <div id="main_container">
 
                 <ui:include src="site/include/header_logo.xhtml"/>
@@ -24,78 +25,77 @@
                     <!-- L pane-->
                     <div class="body_lpane">
                        <label class="subject">Manage User</label>
-                        <a class="step_border_select" href="manageUser.jsf">User Profile</a>
-                        <a class="step_border" href="userProfileUpload.jsf">Upload User Profile</a>
+                        <a class="step_border_select" href="manageUser.xhtml">User Profile</a>
+                        <a class="step_border" href="userProfileUpload.xhtml">Upload User Profile</a>
                     </div>
                     <!--R pane-->
                     <div class="body_rpane">
-                        <h:form id="userTableData">
                         <label class="subject">User Profile</label>
 
 
-                            <p:panelGrid id="search" columns="2" >
+                            <p:panelGrid id="search" columns="2" columnClasses="isa_searchColumn1,isa_searchColumn2" styleClass="isaPanelGridSearch">
                                 <h:outputText value="เลขที่ผู้ใช้:" />
-                                <h:inputText value=""/>
+                                <h:inputText value="#{isa.isaSearchView.id}"/>
                                 <h:outputText value="ชื่อผู้ใช้:"/>
-                                <h:inputText value=""/>
-                                <h:outputText value="Role"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:inputText value="#{isa.isaSearchView.username}"/>
+                                <h:outputText value="Role:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.roleId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userRoleList}"
                                                    var="roleItem"
                                                    itemLabel="#{roleItem.name}"
                                                    itemValue="#{roleItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Department"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Department:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.departmentId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userDepartmentList}"
                                                    var="departmentItem"
                                                    itemLabel="#{departmentItem.name}"
                                                    itemValue="#{departmentItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Division"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Division:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.divisionId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userDivisionList}"
                                                    var="divisionItem"
                                                    itemLabel="#{divisionItem.name}"
                                                    itemValue="#{divisionItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Region"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Region:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.regionId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userRegionList}"
                                                    var="regionItem"
                                                    itemLabel="#{regionItem.name}"
                                                    itemValue="#{regionItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Team"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Team:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.teamId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userTeamList}"
                                                    var="teamItem"
                                                    itemLabel="#{teamItem.name}"
                                                    itemValue="#{teamItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Title"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Title:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.titleId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userTitleList}"
                                                    var="titleItem"
                                                    itemLabel="#{titleItem.name}"
                                                    itemValue="#{titleItem.id}"/>
                                 </p:selectOneMenu>
-                                <h:outputText value="Zone"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+                                <h:outputText value="Zone:"/>
+                                <p:selectOneMenu value="#{isa.isaSearchView.zoneId.id}">
+                                    <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                                     <f:selectItems value="#{isa.userZoneList}"
                                                    var="zoneItem"
                                                    itemLabel="#{zoneItem.name}"
                                                    itemValue="#{zoneItem.id}"/>
                                 </p:selectOneMenu>
                                 <h:inputHidden/>
-                                <p:commandButton value="ค้นหา" />
+                                <p:commandButton value="ค้นหา" actionListener="#{isa.onSearchUser()}" update=":userTableData,:msgBoxSystemMessagePanel"/>
                             </p:panelGrid>
 
 
@@ -106,6 +106,13 @@
                                 <p:commandButton value="Add New User" actionListener="#{isa.onOpenNewUserForm()}"
                                                  oncomplete="PF('manageUserDlg').show()"
                                                  update=":manageDialogForm"/>
+
+                                <p:commandButton value="เปิดการใช้งาน" action="#{isa.onEditUserActive}" update=":userTableData">
+                                    <f:setPropertyActionListener value="1" target="#{isa.active}"/>
+                                </p:commandButton>
+                                <p:commandButton value="ปิดการใช้งาน" action="#{isa.onEditUserActive}" update=":userTableData">
+                                    <f:setPropertyActionListener value="0" target="#{isa.active}"/>
+                                </p:commandButton>
 
                                 <p:commandButton value="Delete" actionListener="#{isa.onDeleteUserList()}"
                                                  update=":msgBoxSystemMessagePanel"/>
@@ -123,24 +130,24 @@
                             <p:column headerText="Username">
                                 <h:outputText value="#{c.userName}"/>
                             </p:column>
-                            <p:column headerText="EmailAddress">
-                                <h:outputText value="#{c.emailAddress}"/>
-                            </p:column>
+                            <!--<p:column headerText="EmailAddress">-->
+                                <!--<h:outputText value="#{c.emailAddress}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Active">
                                 <h:outputText value="#{c.active}"/>
                             </p:column>
-                            <p:column headerText="BuCode">
-                                <h:outputText value="#{c.buCode}"/>
-                            </p:column>
-                            <p:column headerText="LastIp">
-                                <h:outputText value="#{c.lastIP}"/>
-                            </p:column>
-                            <p:column headerText="LastLogon">
-                                <h:outputText value="#{c.lastLogon}"/>
-                            </p:column>
-                            <p:column headerText="PhoneNumber">
-                                <h:outputText value="#{c.phoneNumber}"/>
-                            </p:column>
+                            <!--<p:column headerText="BuCode">-->
+                                <!--<h:outputText value="#{c.buCode}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column headerText="LastIp">-->
+                                <!--<h:outputText value="#{c.lastIP}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column headerText="LastLogon">-->
+                                <!--<h:outputText value="#{c.lastLogon}"/>-->
+                            <!--</p:column>-->
+                            <!--<p:column headerText="PhoneNumber">-->
+                                <!--<h:outputText value="#{c.phoneNumber}"/>-->
+                            <!--</p:column>-->
                             <p:column headerText="Role">
                                 <h:outputText value="#{c.role.name}"/>
                             </p:column>
@@ -186,17 +193,19 @@
 
                             </p:column>
                         </p:dataTable>
-                        </h:form>
+
                     </div>         <!-- R pane -->
                 </div>
             </div>  <!-- main Contianenr -->
+        </h:form>
+
 
         </p:panel>
 
 
 
 
-        <p:dialog id="manageUserDialog" widgetVar="manageUserDlg" header="Manage User !"
+    <p:dialog id="manageUserDialog" widgetVar="manageUserDlg" header="Manage User !"
                                    onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
                                    modal="true" width="600" height="450">
         <ui:include src="site/dialog/isaManageDialog.xhtml"/>
@@ -230,6 +239,15 @@
             <ui:param name="formId" value="frmConfirmDeleteUserList"/>
             <ui:param name="controller" value="#{isa}"/>
             <ui:param name="action" value="deleteUserList"/>
+            <ui:param name="update" value=":userTableData"/>
+        </ui:include>
+
+        <ui:include src="site/dialog/confirmEditDlg.xhtml">
+            <ui:param name="id" value="confirmEditUserDialog"/>
+            <ui:param name="name" value="confirmEditUserDlg"/>
+            <ui:param name="formId" value="frmConfirmEditUser"/>
+            <ui:param name="controller" value="#{isa}"/>
+            <ui:param name="action" value="editUser"/>
             <ui:param name="update" value=":userTableData"/>
         </ui:include>
 

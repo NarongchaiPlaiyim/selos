@@ -9,74 +9,74 @@
         <h:panelGrid columns="2">
 
             <h:outputText value="userId :"/>
-            <p:inputText value="#{isa.createUserView.id}" required="true" />
+            <p:inputText value="#{isa.isaManageUserView.id}" required="true" />
 
             <h:outputText value="Username :"/>
-            <p:inputText value="#{isa.createUserView.username}"/>
+            <p:inputText value="#{isa.isaManageUserView.username}"/>
 
             <h:outputText value="EmailAddress :"/>
-            <p:inputText value="#{isa.createUserView.emailAddress}"/>
+            <p:inputText value="#{isa.isaManageUserView.emailAddress}"/>
 
             <h:outputText value="BuCode :"/>
-            <p:inputText value="#{isa.createUserView.buCode}"/>
+            <p:inputText value="#{isa.isaManageUserView.buCode}"/>
 
             <h:outputText value="PhoneExt :"/>
-            <p:inputText value="#{isa.createUserView.phoneExt}"/>
+            <p:inputText value="#{isa.isaManageUserView.phoneExt}"/>
 
             <h:outputText value="PhoneNumber :"/>
-            <p:inputText value="#{isa.createUserView.phoneNumber}"/>
+            <p:inputText value="#{isa.isaManageUserView.phoneNumber}"/>
 
             <h:outputText value="Role"/>
-            <p:selectOneMenu value="#{isa.createUserView.role.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.role.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userRoleList}"
                                var="roleItem"
                                itemLabel="#{roleItem.name}"
                                itemValue="#{roleItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Department"/>
-            <p:selectOneMenu value="#{isa.createUserView.userDepartment.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userDepartment.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userDepartmentList}"
                                var="departmentItem"
                                itemLabel="#{departmentItem.name}"
                                itemValue="#{departmentItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Division"/>
-            <p:selectOneMenu value="#{isa.createUserView.userDivision.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userDivision.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userDivisionList}"
                                var="divisionItem"
                                itemLabel="#{divisionItem.name}"
                                itemValue="#{divisionItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Region"/>
-            <p:selectOneMenu value="#{isa.createUserView.userRegion.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userRegion.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userRegionList}"
                                var="regionItem"
                                itemLabel="#{regionItem.name}"
                                itemValue="#{regionItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Team"/>
-            <p:selectOneMenu value="#{isa.createUserView.userTeam.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userTeam.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userTeamList}"
                                var="teamItem"
                                itemLabel="#{teamItem.name}"
                                itemValue="#{teamItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Title"/>
-            <p:selectOneMenu value="#{isa.createUserView.userTitle.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userTitle.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userTitleList}"
                                var="titleItem"
                                itemLabel="#{titleItem.name}"
                                itemValue="#{titleItem.id}"/>
             </p:selectOneMenu>
             <h:outputText value="Zone"/>
-            <p:selectOneMenu value="#{isa.createUserView.userZone.id}">
-                <f:selectItem itemLabel=" - Please Select Item! - " itemValue="-1"/>
+            <p:selectOneMenu value="#{isa.isaManageUserView.userZone.id}" required="true">
+                <f:selectItem itemLabel=" - Please Select Item! - " itemValue=""/>
                 <f:selectItems value="#{isa.userZoneList}"
                                var="zoneItem"
                                itemLabel="#{zoneItem.name}"
@@ -84,13 +84,14 @@
             </p:selectOneMenu>
 
             <h:outputText value="Active"/>
-            <h:selectOneRadio value="#{isa.createUserView.active}">
+            <h:selectOneRadio value="#{isa.isaManageUserView.active}">
                 <f:selectItem itemLabel="Active" itemValue="1"/>
                 <f:selectItem itemLabel="InActive" itemValue="0"/>
             </h:selectOneRadio>
 
 
             <p:commandButton value="OK"
+
                              actionListener="#{isa.onManageUserAction()}"
                              update=":userTableData,:msgBoxSystemMessagePanel,:manageDialogForm"
                              oncomplete="handleManageUserDialogRequest(xhr,status, args)"/>
@@ -98,6 +99,7 @@
                              process="@this"
                              onclick="manageUserDlg.hide()"
                              styleClass="small"
+                             update=":manageDialogForm"
                              type="button"/>
         </h:panelGrid>
     </h:form>
