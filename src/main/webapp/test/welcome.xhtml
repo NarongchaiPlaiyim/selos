@@ -59,6 +59,9 @@
                 <p:commandButton value="test Exception" action="#{welcomePage.testException}"/>
                 <p:commandButton value="test Email" action="#{welcomePage.testEmail}"/>
                 <p:commandButton value="load discription" action="#{welcomePage.onLoadDescription()}"/>
+                <p:commandButton value="test report" ajax="false">
+                    <p:fileDownload value="#{welcomePage.genReport()}" />
+                </p:commandButton>
 
             </h:form>
         </p:panel>
