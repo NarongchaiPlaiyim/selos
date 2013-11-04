@@ -7,6 +7,21 @@ body {
     font-family: Verdana, Arial, sans-serif;
 }
 
+.body_lpane {
+    display: inline;
+    float: left;
+    padding: 10px 0px 0px 0px;
+    width: 150px;
+}
+
+.body_rpane {
+    border-left: 1px solid #dedede;
+    display: inline;
+    float: left;
+    width: 830px;
+    padding: 10px 0px 0px 0px;
+}
+
 html {
     height: 100%;
     margin: 0;
@@ -609,3 +624,65 @@ td .cell_spacer {
     max-width: 450px !important;
     width: auto;
 }
+
+
+/*////////////////////////////////////////////////////////// ISA    */
+
+.subject {
+    color: #005895;
+    display: inline;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 20px;
+    padding-left: 5px;
+    /*width: auto !important;*/
+}
+
+.step_border {
+    border-top: 1px solid #FFF;
+    color: #0077c0;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 20px;
+    padding-left: 5px;
+    width: 96%;
+}
+.step_border:hover {
+    background: #CEE5F3;
+    border-top: 1px solid white;
+    color: #0077c0;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 20px;
+    padding-left: 5px;
+    width: 96%;
+}
+.step_border_select, .step_border_select:hover {
+    background-color: #CEE5F3;
+    border-top: 1px solid #FFF;
+    color: #0077c0;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 20px;
+    padding-left: 5px;
+    width: 96%;
+}
+.step_label {
+    color: #0077c0;
+    cursor: pointer;
+    line-height: 20px;
+    padding-left: 5px;
+}
+
+.isa_searchColumn1{
+     width: 250px;
+}
+.isa_searchColumn2{
+     width: 580px;
+}
+.isaPanelGridSearch table,tr{
+    background: transparent !important;
+    /*border: none !important;*/
+
+}
+
