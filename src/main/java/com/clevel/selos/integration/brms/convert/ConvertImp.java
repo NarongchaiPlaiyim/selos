@@ -21,8 +21,10 @@ public class ConvertImp implements ConvertInf, Serializable {
     private List<BorrowerTypeLevel> borrowerTypeLevelList;
     private List<AccountTypeLevelBorrower> accountTypeLevelBorrowerList = null;
     private NCBReportTypeLevel ncbReportTypeLevel = null;
-    private List<AccountTypeLevelNCBReport> ncbAccountType = null;
+    private List<AccountTypeLevelNCBReport> ncbAccountTypeLevelList = null;
     private List<NCBEnquiryTypeLevel> ncbEnquiryTypesTypeLevelList = null;
+    private List<WarningCodeFullMatched> warningCodeFullMatchedLevelList = null;
+    private List<WarningCodePartialMatched> warningCodePartialMatchedLevelList = null;
     private List<AccountTypeLevel> accountTypeLevelList = null;
     private List<BusinessTypeLevel> businessTypeLevelList = null;
     private List<ProductTypeLevel> productTypeLevelList = null;
@@ -40,99 +42,366 @@ public class ConvertImp implements ConvertInf, Serializable {
     }
 
     @Override
-    public void convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception {
+    public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(PreScreenRequest : {})", inputModel.toString());
-        String applicationNumber = null;            //1
-        Date processDate = null;                    //2
-        Date appInDate = null;                      //3
-        Date expectedSubmitDate = null;             //4
-        String customerEntity = null;               //5
-        boolean existingSMECustomer;                //6
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest request = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ApplicationType applicationType = null;
+        GregorianCalendar gregory = null;
+        XMLGregorianCalendar calendar = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType> attributeTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType attributeType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BorrowerType> borrowerTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BorrowerType borrowerType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AccountType> accountTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AccountType accountType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBAccountType> ncbAccountTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBAccountType ncbAccountType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBReportType> ncbReportTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBReportType ncbReportType = null;
+
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBEnquiryType> ncbEnquiryTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.NCBEnquiryType ncbEnquiryType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodeFullMatchedType warningCodeFullMatchedType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodePartialMatchedType warningCodePartialMatchedType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BusinessType> businessTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BusinessType businessType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ProductType> productTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ProductType productType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.SELOSProductProgramType> selosProductProgramTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.SELOSProductProgramType selosProductProgramType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CreditFacilityType> creditFacilityTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CreditFacilityType creditFacilityType = null;
+        List<com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CollateralType> collateralTypeList = null;
+        com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CollateralType collateralType = null;
 
         try {
             applicationTypeLevel = inputModel.getApplicationType();
 
-            applicationNumber = applicationTypeLevel.getApplicationNumber();                            //1
-            log.debug("Application Number is {}", applicationNumber);
-            processDate = applicationTypeLevel.getProcessDate();                                        //2
-            log.debug("Process Date is {}", processDate);
-            appInDate = applicationTypeLevel.getAttribute().getAppInDate();                             //3
-            log.debug("App in Date is {}", appInDate);
+            request = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest();
+            applicationType = request.getUnderwritingRequest().getUnderwritingApprovalRequest().getApplication();
+            applicationTypeLevel = inputModel.getApplicationType();
 
-            expectedSubmitDate = applicationTypeLevel.getAttribute().getExpectedSubmitDate();           //4
-            log.debug("Expected Submit Date is {}", expectedSubmitDate);
-            customerEntity = applicationTypeLevel.getAttribute().getCustomerEntity();                   //5
-            log.debug("Customer Entity is {}", customerEntity);
-            existingSMECustomer = applicationTypeLevel.getAttribute().isExistingSMECustomer();          //6
-            log.debug("Existing SME Customer is {}", existingSMECustomer);
+            applicationType.setApplicationNumber(applicationTypeLevel.getApplicationNumber());  //1
 
-            borrowerTypeLevelList = applicationTypeLevel.getBorrowerType();
-            for (BorrowerTypeLevel borrowerTypeLevel : borrowerTypeLevelList) {
-                borrowerTypeLevel.getCustomerEntity();                                                  //5
-                borrowerTypeLevel.isExistingSMECustomer();                                              //6
-                borrowerTypeLevel.getRelationshipType();//51
-                borrowerTypeLevel.getReference();           //52
-                borrowerTypeLevel.getNationality();//53
-                borrowerTypeLevel.getNumberOfMonthFromLastSetUpDate();//54
-                borrowerTypeLevel.getNewQualitative();//55
-                accountTypeLevelBorrowerList = borrowerTypeLevel.getAccountType();
-                for (AccountTypeLevelBorrower accountTypeLevelBorrower : accountTypeLevelBorrowerList) {
-                    accountTypeLevelBorrower.getAttributeType().getBotClass(); //56
-                    accountTypeLevelBorrower.getAttributeType().isActiveFlag();//72
-                    accountTypeLevelBorrower.getDataSource();        //73
-                    accountTypeLevelBorrower.getAttributeType().getAccountRef();//74
-                    accountTypeLevelBorrower.getAttributeType().getCustToAccountRelationship();//75
-                    accountTypeLevelBorrower.getAttributeType().getNumberOfDayPrincipalPastDue();//76
-                    accountTypeLevelBorrower.getAttributeType().getNumberOfDayInterestPastDue();//77
-                    accountTypeLevelBorrower.getAttributeType().getCardBlockCode();//78
-                }
-                borrowerTypeLevel.getNextReviewDate();        //57
-                borrowerTypeLevel.isNextReviewDateFlag(); //58
-                borrowerTypeLevel.getExtendedReviewDate();//59
-                borrowerTypeLevel.isExtendedReviewDateFlag();//60
-                borrowerTypeLevel.getRatingFinal();//61
-                borrowerTypeLevel.isUnpaidFeePaid();//62
-                borrowerTypeLevel.isClaimedLGFlag();//63
-                borrowerTypeLevel.getIndividualType().getPersonalId();//69
-                borrowerTypeLevel.getIndividualType().getAge();       //70
-                borrowerTypeLevel.getDayAnnualReviewOverdue();//#N/A
-
-                ncbReportTypeLevel = borrowerTypeLevel.getNcbReportType();
-                ncbAccountType = ncbReportTypeLevel.getNcbAccountType();
-                for (AccountTypeLevelNCBReport accountTypeLevelNCBReport : ncbAccountType) {
-                    accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag(); //79
-                    accountTypeLevelNCBReport.getNcbAccountStatus();//80
-                    accountTypeLevelNCBReport.getAttributeType().isTmbBankFlag();//81
-                    accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag();//82
-                    accountTypeLevelNCBReport.getCreditAmountFirstNPL();//83
-                    accountTypeLevelNCBReport.isNcbTDRFlag(); //84
-                    accountTypeLevelNCBReport.getCurrentPayment(); //86
-                    accountTypeLevelNCBReport.getPaymentPattern6M();   //87
-                    accountTypeLevelNCBReport.getPaymentPattern12M();     //88
-                    accountTypeLevelNCBReport.getOverDue31to60DaysWithinLast12Months();//89
-
-                }
-                ncbEnquiryTypesTypeLevelList = ncbReportTypeLevel.getNcbEnquiryTypes();
-                for (NCBEnquiryTypeLevel ncbEnquiryTypeLevel : ncbEnquiryTypesTypeLevelList) {
-                    ncbEnquiryTypeLevel.getNumberOfSearchInLast6Months();//91
-                    ncbEnquiryTypeLevel.getAttributeType().getNumberOfDaysNCBCheck();//92
-                }
-                borrowerTypeLevel.getWarningCodeFullMatched().getRiskCodeWithFullyIdentifyMatched();  //93
-                borrowerTypeLevel.getWarningCodePartialMatched().getRiskCodeWithSomeIdentifyMatched(); //94
-
+            try {
+                gregory = new GregorianCalendar();
+                gregory.setTime(applicationTypeLevel.getProcessDate());                         //2
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                applicationType.setDateOfApplication(calendar);
+            } catch (Exception e) {
+                gregory = new GregorianCalendar();
+                gregory.setTime(new Date());
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                applicationType.setDateOfApplication(calendar);
             }
 
-            applicationTypeLevel.isSameSetOfBorrower();                                                 //7
-            applicationTypeLevel.isRefinanceInFlag();                                                   //8
-            applicationTypeLevel.isRefinanceOutFlag();                                                  //9
-            applicationTypeLevel.getAttribute().getBorrowerGroupSale();                                 //19
-            applicationTypeLevel.getAttribute().getTotalGroupSale();                                    //20
-            applicationTypeLevel.getAttribute().getNumOfTotalFacility();     //29
-            applicationTypeLevel.getAttribute().getNumOfContingentFacility(); //30
-            applicationTypeLevel.getAttribute().getBusinessLocation();//44
-            applicationTypeLevel.getAttribute().getYearInBusiness();//45
-            applicationTypeLevel.getAttribute().getCountryOfRegistration();//46
+            attributeTypeList = applicationType.getAttribute();
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
 
+            try {
+                gregory.setTime(applicationTypeLevel.getAttribute().getAppInDate());            //3
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                attributeType.setName("App In Date");
+                attributeType.setDateTimeValue(calendar);
+                attributeTypeList.add(attributeType);
+            } catch (Exception e) {
+                gregory = new GregorianCalendar();
+                gregory.setTime(new Date());
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                attributeType.setName("App In Date");
+                attributeType.setDateTimeValue(calendar);
+                attributeTypeList.add(attributeType);
+            }
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Customer Entity");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getCustomerEntity());              //5//Enum = CustomerEntityEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Existing SME Customer Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isExistingSMECustomer()+"");       //6//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Set Of Borrower Flag");
+            attributeType.setStringValue(applicationTypeLevel.isSameSetOfBorrower()+"");                        //7//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Refinance In Flag");
+            attributeType.setStringValue(applicationTypeLevel.isRefinanceInFlag()+"");                          //8//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Refinance Out Flag");
+            attributeType.setStringValue(applicationTypeLevel.isRefinanceOutFlag()+"");                         //9//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Borrower Group Sale");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getBorrowerGroupSale());          //19
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Related Juristic Group Sale");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalGroupSale());             //20
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Num Of Total Facility");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumOfTotalFacility());             //29
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Num Of Contingent Facility");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumOfContingentFacility());        //30
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Business Location");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getBusinessLocation());                 //44//Enum = ProvinceEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Year In Business");
+            attributeType.setNumericValue(new BigDecimal(applicationTypeLevel.getAttribute().getYearInBusiness()));  //45
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+            attributeType.setName("Country Of Business");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getCountryOfRegistration()+"");         //46//Enum = CountryEnum   todo to check result
+            attributeTypeList.add(attributeType);
+
+            borrowerTypeList = applicationType.getBorrower();
+            borrowerTypeLevelList = applicationTypeLevel.getBorrowerType();
+            for (BorrowerTypeLevel borrowerTypeLevel : borrowerTypeLevelList) {
+                borrowerType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BorrowerType();
+                attributeTypeList = borrowerType.getAttribute();
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Customer Entity");
+                attributeType.setStringValue(borrowerTypeLevel.getCustomerEntity()+"");                         //5//Enum = CustomerEntityEnum  todo to check result
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Existing SME Customer Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isExistingSMECustomer() + "");                     //6//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Relationship Type");
+                attributeType.setStringValue(borrowerTypeLevel.getRelationshipType()+"");                       //51//Enum = RelationshipTypeEnum todo to check result
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Reference");
+                attributeType.setStringValue(borrowerTypeLevel.getReference()+"");                              //52//Enum = ReferenceEnum todo to check result
+                attributeTypeList.add(attributeType);
+
+                borrowerType.setNationality(borrowerTypeLevel.getNationality()+"");                             //53//Enum = NationalityEnum todo to check result
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Number Of Month From Last Set Up Date");
+                attributeType.setNumericValue(new BigDecimal(borrowerTypeLevel.getNumberOfMonthFromLastSetUpDate()));    //54
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("New Qualitative");
+                attributeType.setStringValue(borrowerTypeLevel.getNewQualitative());                   //55//Enum = NewQualitativeEnum
+                attributeTypeList.add(attributeType);
+
+                accountTypeList = borrowerType.getAccount();
+                accountTypeLevelBorrowerList = borrowerTypeLevel.getAccountType();
+                for (AccountTypeLevelBorrower accountTypeLevelBorrower : accountTypeLevelBorrowerList) {
+                    attributeTypeList = accountType.getAttribute();
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Adjust Class");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getBotClass());     //56//Enum = BOTClassEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Account Active Flag");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().isActiveFlag() + "");           //72//Enum = todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    accountType.setAccountType(accountTypeLevelBorrower.getDataSource());   //73//Enum = AccountTypeEnum  e.g. 04,05,09,22 etc.
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Account Reference");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getAccountRef()); //74//Enum =  AccountReferenceEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Cust To Account Relationship");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getCustToAccountRelationship()); //75//Enum =  CustToAccountRelationshipEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Number Of Day Principal Past Due");
+                    attributeType.setNumericValue(accountTypeLevelBorrower.getAttributeType().getNumberOfDayPrincipalPastDue()); //76
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Number Of Day Interest Past Due");
+                    attributeType.setNumericValue(accountTypeLevelBorrower.getAttributeType().getNumberOfDayInterestPastDue()); //77
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Card Block Code");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getCardBlockCode()); //78//Enum =  CardBlockCodeEnum
+                    attributeTypeList.add(attributeType);
+
+                    accountTypeList.add(accountType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                try {
+                    gregory.setTime(borrowerTypeLevel.getNextReviewDate());                             //57
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Next Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                } catch (Exception e) {
+                    gregory = new GregorianCalendar();
+                    gregory.setTime(new Date());
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Next Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Next Review Date Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isNextReviewDateFlag() + "");           //58//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                try {
+                    gregory.setTime(borrowerTypeLevel.getExtendedReviewDate());                             //59
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Extended Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                } catch (Exception e) {
+                    gregory = new GregorianCalendar();
+                    gregory.setTime(new Date());
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Extended Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Extended Review Date Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isExtendedReviewDateFlag() + "");           //60//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Rating Final");
+                attributeType.setStringValue(borrowerTypeLevel.getRatingFinal());     //61//Enum = BOTClassEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Unpaid Fee Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isUnpaidFeePaid() + "");           //62//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Claimed LG Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isClaimedLGFlag() + "");           //63//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                borrowerType.getIndividual().setCitizenID(borrowerTypeLevel.getIndividualType().getPersonalId());//69
+                borrowerType.getIndividual().setAge(borrowerTypeLevel.getIndividualType().getAge());  //70
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Day Overdue Annual Review");
+                attributeType.setNumericValue(borrowerTypeLevel.getDayAnnualReviewOverdue());                   //#N/A
+                attributeTypeList.add(attributeType);
+
+
+                /*ncbReportTypeList = borrowerType.getNcbReport();
+                ncbReportTypeLevel = borrowerTypeLevel.getNcbReportType();*/
+
+                ncbAccountTypeList = ncbReportType.getNcbAccount();
+                ncbReportTypeLevel = borrowerTypeLevel.getNcbReportType();
+                ncbAccountTypeLevelList = ncbReportTypeLevel.getNcbAccountType();
+                for (AccountTypeLevelNCBReport accountTypeLevelNCBReport : ncbAccountTypeLevelList) {
+                    attributeTypeList = ncbAccountType.getAttribute();
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("NCB Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isNcbFlag() + "");           //79//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    ncbAccountType.setNcbAccountStatus(accountTypeLevelNCBReport.getNcbAccountStatus());  //80Enum = enum=NCBAccountStatusEnum
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("TMB Bank Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isTmbBankFlag() + "");    //81//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("NCB NPL Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag() + "");     //82//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Credit Amount At First NPL Date");
+                    attributeType.setNumericValue(accountTypeLevelNCBReport.getCreditAmountFirstNPL()); //83
+                    attributeTypeList.add(attributeType);
+
+                    accountType.setTdrFlag(accountTypeLevelNCBReport.isNcbTDRFlag());                   //84
+
+                    ///////////////////////////////////////////////////////////////////////     //86-88 did not found.
+                    accountTypeLevelNCBReport.getCurrentPayment();                                      //86
+                    accountTypeLevelNCBReport.getPaymentPattern6M();                                    //87
+                    accountTypeLevelNCBReport.getPaymentPattern12M();                                   //88
+                    ////////////////////////////////////////////////////////////////////////////////////////
+
+                    accountType.setOverdue31DTo60DCount(accountTypeLevelNCBReport.getOverDue31to60DaysWithinLast12Months()); //89
+                    ncbAccountTypeList.add(ncbAccountType);
+
+                }
+                ncbEnquiryTypeList = ncbReportType.getNcbEnquiry();
+                ncbEnquiryTypesTypeLevelList = ncbReportTypeLevel.getNcbEnquiryTypes();
+                for (NCBEnquiryTypeLevel ncbEnquiryTypeLevel : ncbEnquiryTypesTypeLevelList) {
+                    attributeTypeList = ncbEnquiryType.getAttribute();
+
+                    ncbEnquiryType.setNumSearchesLast6Mths(ncbEnquiryTypeLevel.getNumberOfSearchInLast6Months());  //91
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Validity Period Of NCB");
+                    attributeType.setNumericValue(ncbEnquiryTypeLevel.getAttributeType().getNumberOfDaysNCBCheck()); //92
+                    attributeTypeList.add(attributeType);
+
+                    ncbEnquiryTypeList.add(ncbEnquiryType);
+                }
+
+                warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
+                warningCodeFullMatchedLevelList = borrowerTypeLevel.getWarningCodeFullMatched();
+                for (WarningCodeFullMatched warningCodeFullMatched : warningCodeFullMatchedLevelList) {
+                    warningCodeFullMatchedType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodeFullMatchedType();
+                    warningCodeFullMatchedType.setCode(warningCodeFullMatched.getRiskCodeWithFullyIdentifyMatched());  //93
+                    warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
+                }
+
+                warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
+                warningCodePartialMatchedLevelList = borrowerTypeLevel.getWarningCodePartialMatched();
+                for (WarningCodePartialMatched warningCodePartialMatched : warningCodePartialMatchedLevelList) {
+                    warningCodePartialMatchedType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.WarningCodePartialMatchedType();
+                    warningCodePartialMatchedType.setCode(warningCodePartialMatched.getRiskCodeWithSomeIdentifyMatched());  //94
+                    warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
+                }
+
+                borrowerTypeList.add(borrowerType);
+            }
+
+            ////////////////////////////////////////////////////////////////////////
             accountTypeLevelList = applicationTypeLevel.getAccountType();
             for (AccountTypeLevel accountTypeLevel : accountTypeLevelList) {
                 accountTypeLevel.getUtilizationPercent();   //95
@@ -141,166 +410,587 @@ public class ConvertImp implements ConvertInf, Serializable {
                 accountTypeLevel.getNoOfTransaction();                  //98
                 accountTypeLevel.isExcludeIncomeFlag();                     //105
             }
+            ////////////////////////////////////////////////////////////////////////
 
+
+            businessTypeList = applicationType.getBusiness();
             businessTypeLevelList = applicationTypeLevel.getBusinessType();
             for (BusinessTypeLevel businessTypeLevel : businessTypeLevelList) {
-                businessTypeLevel.getBusinessCodeRunningNumber(); //106
-                businessTypeLevel.getBusinessCode();                   //107
-                businessTypeLevel.getAttributeType().isNegativeFlag();      //108
-                businessTypeLevel.getAttributeType().isHighRiskFlag(); //109
+                businessType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.BusinessType();
+
+                attributeTypeList = businessType.getAttribute();
+
+                businessType.setID(businessTypeLevel.getBusinessCodeRunningNumber());  //106
+                businessType.setBusinessType(businessTypeLevel.getBusinessCode());     //107
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("Negative Flag");
+                attributeType.setStringValue(businessTypeLevel.getAttributeType().isNegativeFlag() + "");     //108//todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                attributeType.setName("High Risk Flag");
+                attributeType.setStringValue(businessTypeLevel.getAttributeType().isHighRiskFlag() + "");     //109//todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                businessTypeList.add(businessType);
             }
 
+
+
+            productTypeList = applicationType.getProduct();
             productTypeLevelList = applicationTypeLevel.getProductType();
             for(ProductTypeLevel productTypeLevel : productTypeLevelList) {
-                productTypeLevel.getProductGroup();//110
+                productType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.ProductType();
+                productType.setProductType(productTypeLevel.getProductGroup());                                     //110//Enum = SELOSProductGroupEnum
+                selosProductProgramTypeList = productType.getSelosProductProgram();
                 selosProductProgramTypeLevelList = productTypeLevel.getSelosProductProgramTypes();
                 for (SELOSProductProgramTypeLevel selosProductProgramTypeLevel : selosProductProgramTypeLevelList) {
-                    selosProductProgramTypeLevel.getProductProgram();//113
+                    selosProductProgramType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.SELOSProductProgramType();
+                    selosProductProgramType.setName(selosProductProgramTypeLevel.getProductProgram());              //113//Enum = SELOSProductProgramEnum
+                    creditFacilityTypeList = selosProductProgramType.getCreditFacility();
                     creditFacilityTypeLevelList = selosProductProgramTypeLevel.getCreditFacilityType();
                     for (CreditFacilityTypeLevel creditFacilityTypeLevel : creditFacilityTypeLevelList) {
-                        creditFacilityTypeLevel.getCreditFacilityType();//114
+                        creditFacilityType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CreditFacilityType();
+                        creditFacilityType.setType(creditFacilityTypeLevel.getCreditFacilityType());                //114//Enum = CreditFacilityTypeEnum
+
+                        creditFacilityTypeList.add(creditFacilityType);
                     }
+                    selosProductProgramTypeList.add(selosProductProgramType);
                 }
+
+                collateralTypeList = productType.getCollateral();
                 collateralTypeLevelList = productTypeLevel.getCollateralTypes();
                 for (CollateralTypeLevel collateralTypeLevel : collateralTypeLevelList) {
-                    collateralTypeLevel.getAttributeType().getCollateralPotential();///119
-                    collateralTypeLevel.getCollateralType();//120
+                    collateralType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.CollateralType();
+
+                    attributeType = new com.clevel.selos.integration.brms.service.prescreenunderwritingrules.AttributeType();
+                    attributeType.setName("Collateral Potential");
+                    attributeType.setStringValue(collateralTypeLevel.getAttributeType().getCollateralPotential());  //119//Enum = CollateralPotentialEnum
+                    attributeTypeList.add(attributeType);
+
+                    collateralType.setCollateralType(collateralTypeLevel.getCollateralType());          //120//Enum = CollateralTypeEnum
+                    collateralTypeList.add(collateralType);
                 }
+                productTypeList.add(productType);
             }
-
-
+            request.getUnderwritingRequest().getUnderwritingApprovalRequest().setApplication(applicationType);
+            return request;
         } catch (Exception e) {
-
+            log.error("convertInputModelToRequestModel() Exception : {}", e);
+            throw e;
         }
     }
 
     @Override
-    public void convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception {
+    public com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception {
         log.debug("convertInputModelToRequestModel(FullApplication : {})", inputModel.toString());
-        //todo
-        String applicationNumber = null;            //1
-        Date processDate = null;                    //2
-        Date appInDate = null;                      //3
-        Date expectedSubmitDate = null;             //4
-        String customerEntity = null;               //5
-        boolean existingSMECustomer;                //6
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest request = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.ApplicationType applicationType = null;
+        GregorianCalendar gregory = null;
+        XMLGregorianCalendar calendar = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType> attributeTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType attributeType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BorrowerType> borrowerTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BorrowerType borrowerType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AccountType> accountTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AccountType accountType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBReportType> ncbReportTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBReportType ncbReportType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBAccountType> ncbAccountTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBAccountType ncbAccountType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBEnquiryType> ncbEnquiryTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.NCBEnquiryType ncbEnquiryType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodeFullMatchedType> warningCodeFullMatchedTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodeFullMatchedType warningCodeFullMatchedType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodePartialMatchedType> warningCodePartialMatchedTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodePartialMatchedType warningCodePartialMatchedType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BusinessType> businessTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BusinessType businessType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.ProductType> productTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.ProductType productType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.SELOSProductProgramType> selosProductProgramTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.SELOSProductProgramType selosProductProgramType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CreditFacilityType> creditFacilityTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CreditFacilityType creditFacilityType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CollateralType> collateralTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CollateralType collateralType = null;
+        List<com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AppraisalType> appraisalTypeList = null;
+        com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AppraisalType appraisalType = null;
 
         try {
             applicationTypeLevel = inputModel.getApplicationType();
 
-            applicationNumber = applicationTypeLevel.getApplicationNumber();                            //1
-            log.debug("Application Number is {}", applicationNumber);
-            processDate = applicationTypeLevel.getProcessDate();                                        //2
-            log.debug("Process Date is {}", processDate);
-            appInDate = applicationTypeLevel.getAttribute().getAppInDate();                             //3
-            log.debug("App in Date is {}", appInDate);
+            request = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest();
+            applicationType = request.getUnderwritingRequest().getUnderwritingApprovalRequest().getApplication();
+            applicationTypeLevel = inputModel.getApplicationType();
 
-            expectedSubmitDate = applicationTypeLevel.getAttribute().getExpectedSubmitDate();           //4
-            log.debug("Expected Submit Date is {}", expectedSubmitDate);
-            customerEntity = applicationTypeLevel.getAttribute().getCustomerEntity();                   //5
-            log.debug("Customer Entity is {}", customerEntity);
-            existingSMECustomer = applicationTypeLevel.getAttribute().isExistingSMECustomer();          //6
-            log.debug("Existing SME Customer is {}", existingSMECustomer);
+            applicationType.setApplicationNumber(applicationTypeLevel.getApplicationNumber());  //1
 
-            applicationTypeLevel.isSameSetOfBorrower();                                                 //7
-            applicationTypeLevel.isRefinanceInFlag();                                                   //8
-            applicationTypeLevel.isRefinanceOutFlag();                                                  //9
-            applicationTypeLevel.getAttribute().isSBCGFlag();                                           //13
-            applicationTypeLevel.getAttribute().isAadFlag();                                            //14
-            applicationTypeLevel.getAttribute().getNumberOfYearFromLatestFinancialStatement();          //15
-            applicationTypeLevel.getAttribute().getNetWorth();                                          //16
-            applicationTypeLevel.getAttribute().getFinalDBR();                                          //17
-            applicationTypeLevel.getAttribute().getMonthlyIncome();                                     //18
-            applicationTypeLevel.getAttribute().getBorrowerGroupSale();                                 //19
-            applicationTypeLevel.getAttribute().getTotalGroupSale();                                    //20
-            applicationTypeLevel.getAttribute().getExistingGroupExposure();                             //21
-            applicationTypeLevel.getFinalGroupExposure();                                               //22
-            applicationTypeLevel.getAttribute().isLgCapability();                                       //23
-            applicationTypeLevel.getAttribute().isEverLgClaim();                                        //24
-            applicationTypeLevel.getAttribute().isAbandonProject();                                     //25
-            applicationTypeLevel.getAttribute().isProjectDelay();                                       //26
-            applicationTypeLevel.getAttribute().isSufficientSourceOfFund();                             //27
-            applicationTypeLevel.getAttribute().getPrimeCustomer();                                     //28
-            applicationTypeLevel.getAttribute().getNumOfTotalFacility();                                //29
-            applicationTypeLevel.getAttribute().getNumOfContingentFacility();                           //30
-            applicationTypeLevel.getAttribute().getNumberOfExistiongOD();                               //31
-            applicationTypeLevel.getAttribute().getNumberOfRequestedOD();                               //32
-            applicationTypeLevel.getAttribute().getNumberOfCoreAsset();                                 //33
-            applicationTypeLevel.getAttribute().getNumOfNonCoreAsset();                                 //34
-            applicationTypeLevel.getAttribute().getTotalFixAssetValue();                                //35
-            applicationTypeLevel.getAttribute().getExistingODLimit();                                   //36
-            applicationTypeLevel.getAttribute().getTotalCollOfExposure();                               //37
-            applicationTypeLevel.getAttribute().getTotalWCRequirement();                                //38
-            applicationTypeLevel.getAttribute().getNetWCRequirement125x();                              //39
-            applicationTypeLevel.getAttribute().getNetWCRequirement15x();                               //40
-            applicationTypeLevel.getAttribute().getNetWCRequirement35();                                //41
-            applicationTypeLevel.getAttribute().getExistingWCRCreditLimitWithTMB();                     //42
-            applicationTypeLevel.getAttribute().getExistingCoreWCLoanCreditLimitWithTMB();              //43
-            applicationTypeLevel.getAttribute().getBusinessLocation();                                  //44
-            applicationTypeLevel.getAttribute().getYearInBusiness();                                    //45
-            applicationTypeLevel.getAttribute().getCountryOfRegistration();                             //46
-            applicationTypeLevel.getAttribute().getTradeChequeReturn();                                 //47
-            applicationTypeLevel.getCollateralPotertialForPricing();                                    //48//Enum = CollateralPotentialEnum
+            try {
+                gregory = new GregorianCalendar();
+                gregory.setTime(applicationTypeLevel.getProcessDate());                         //2
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                applicationType.setDateOfApplication(calendar);
+            } catch (Exception e) {
+                gregory = new GregorianCalendar();
+                gregory.setTime(new Date());
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                applicationType.setDateOfApplication(calendar);
+            }
 
+            attributeTypeList = applicationType.getAttribute();
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+
+            try {
+                gregory.setTime(applicationTypeLevel.getAttribute().getAppInDate());            //3
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                attributeType.setName("App In Date");
+                attributeType.setDateTimeValue(calendar);
+                attributeTypeList.add(attributeType);
+            } catch (Exception e) {
+                gregory = new GregorianCalendar();
+                gregory.setTime(new Date());
+                calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                attributeType.setName("App In Date");
+                attributeType.setDateTimeValue(calendar);
+                attributeTypeList.add(attributeType);
+            }
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Customer Entity");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getCustomerEntity());              //5//Enum = CustomerEntityEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Existing SME Customer Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isExistingSMECustomer()+"");       //6//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Set Of Borrower Flag");
+            attributeType.setStringValue(applicationTypeLevel.isSameSetOfBorrower()+"");                        //7//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Refinance In Flag");
+            attributeType.setStringValue(applicationTypeLevel.isRefinanceInFlag()+"");                          //8//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Refinance Out Flag");
+            attributeType.setStringValue(applicationTypeLevel.isRefinanceOutFlag()+"");                         //9//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("SBCG Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isSBCGFlag()+"");                  //13//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("AAD Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isAadFlag()+"");                   //14//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Number Of Year From Latest Financial Statement");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumberOfYearFromLatestFinancialStatement());//15
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Net Worth");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNetWorth());                   //16
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Final DBR");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getFinalDBR());                   //17
+            attributeTypeList.add(attributeType);
+
+            applicationType.setTotalMonthlyIncome(applicationTypeLevel.getAttribute().getMonthlyIncome());      //18
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Borrower Group Sale");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getBorrowerGroupSale());          //19
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Related Juristic Group Sale");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalGroupSale());             //20
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Existing Group Exposure");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getExistingGroupExposure());      //21
+            attributeTypeList.add(attributeType);
+
+            applicationType.setAggregatedCreditExposureLimit(applicationTypeLevel.getFinalGroupExposure());     //22
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("LG Capability Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isLgCapability()+"");                   //23//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Ever LG Claim Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isEverLgClaim()+"");                   //24//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Abandon Project Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isAbandonProject()+"");                //25//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Project Delay Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isProjectDelay()+"");                  //26//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Sufficient Source Of Fund Flag");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().isSufficientSourceOfFund()+"");        //27//Enum = todo Enum YesNOEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Prime Customer");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getPrimeCustomer());                   //28//Enum = Prime Customer
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Num Of Total Facility");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumOfTotalFacility());             //29
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Num Of Contingent Facility");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumOfContingentFacility());        //30
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Number Of Existing OD");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumberOfExistiongOD());            //31
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Number Of Requested OD");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumberOfRequestedOD());            //32
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Num Of Core Asset");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumberOfCoreAsset());              //33
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Num Of Non Core Asset");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNumOfNonCoreAsset());              //34
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total Fix Asset Value");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalFixAssetValue());             //35
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Existing OD limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getExistingODLimit());                //36
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total Collateral Precent Of Exposure");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalCollOfExposure());            //37
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total W/C Requirement");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalWCRequirement());             //38
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Net W/C Requirement (1.25x)");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNetWCRequirement125x());           //39
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Net W/C Requirement (1.5x)");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNetWCRequirement15x());            //40
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Net W/C Requirement (35% of Sales)");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getNetWCRequirement35());             //41
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Existing W/C credit limit with TMB");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getExistingWCRCreditLimitWithTMB());  //42
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Existing Core W/C Loan credit limit with TMB");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getExistingCoreWCLoanCreditLimitWithTMB());//43
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Business Location");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getBusinessLocation());                 //44//Enum = ProvinceEnum
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Year In Business");
+            attributeType.setNumericValue(new BigDecimal(applicationTypeLevel.getAttribute().getYearInBusiness()));  //45
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Country Of Business");
+            attributeType.setStringValue(applicationTypeLevel.getAttribute().getCountryOfRegistration()+"");         //46//Enum = CountryEnum   todo to check result
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Trade Cheque Return Percent");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTradeChequeReturn());               //47
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Collateral Potential");
+            attributeType.setStringValue(applicationTypeLevel.getCollateralPotertialForPricing());                   //48//Enum = CollateralPotentialEnum
+            attributeTypeList.add(attributeType);
+
+
+            borrowerTypeList = applicationType.getBorrower();
             borrowerTypeLevelList = applicationTypeLevel.getBorrowerType();
             for (BorrowerTypeLevel borrowerTypeLevel : borrowerTypeLevelList) {
-                borrowerTypeLevel.getCustomerEntity();                                                  //5
-                borrowerTypeLevel.isExistingSMECustomer();                                              //6
-                borrowerTypeLevel.getRelationshipType();                                                //51
-                borrowerTypeLevel.getReference();                                                       //52
-                borrowerTypeLevel.getNationality();                                                     //53
-                borrowerTypeLevel.getNumberOfMonthFromLastSetUpDate();                                  //54
-                borrowerTypeLevel.getNewQualitative();                                                  //55
+                borrowerType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BorrowerType();
+                attributeTypeList = borrowerType.getAttribute();
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Customer Entity");
+                attributeType.setStringValue(borrowerTypeLevel.getCustomerEntity()+"");                         //5//Enum = CustomerEntityEnum  todo to check result
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Existing SME Customer Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isExistingSMECustomer() + "");                     //6//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Relationship Type");
+                attributeType.setStringValue(borrowerTypeLevel.getRelationshipType()+"");                       //51//Enum = RelationshipTypeEnum todo to check result
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Reference");
+                attributeType.setStringValue(borrowerTypeLevel.getReference()+"");                              //52//Enum = ReferenceEnum todo to check result
+                attributeTypeList.add(attributeType);
+
+                borrowerType.setNationality(borrowerTypeLevel.getNationality()+"");                             //53//Enum = NationalityEnum todo to check result
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Number Of Month From Last Set Up Date");
+                attributeType.setNumericValue(new BigDecimal(borrowerTypeLevel.getNumberOfMonthFromLastSetUpDate()));    //54
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("New Qualitative");
+                attributeType.setStringValue(borrowerTypeLevel.getNewQualitative());                   //55//Enum = NewQualitativeEnum
+                attributeTypeList.add(attributeType);
+
+
+                accountTypeList = borrowerType.getAccount();
                 accountTypeLevelBorrowerList = borrowerTypeLevel.getAccountType();
                 for (AccountTypeLevelBorrower accountTypeLevelBorrower : accountTypeLevelBorrowerList) {
-                    accountTypeLevelBorrower.getAttributeType().getBotClass();                          //56
-                    accountTypeLevelBorrower.getAttributeType().isActiveFlag();                         //72
-                    accountTypeLevelBorrower.getDataSource();                                           //73
-                    accountTypeLevelBorrower.getAttributeType().getAccountRef();                        //74
-                    accountTypeLevelBorrower.getAttributeType().getCustToAccountRelationship();         //75
-                    accountTypeLevelBorrower.getAttributeType().getNumberOfDayPrincipalPastDue();       //76
-                    accountTypeLevelBorrower.getAttributeType().getNumberOfDayInterestPastDue();        //77
-                    accountTypeLevelBorrower.getAttributeType().getCardBlockCode();                     //78
-                }
-                borrowerTypeLevel.getNextReviewDate();                                                  //57
-                borrowerTypeLevel.isNextReviewDateFlag();                                               //58
-                borrowerTypeLevel.getExtendedReviewDate();                                              //59
-                borrowerTypeLevel.isExtendedReviewDateFlag();                                           //60
-                borrowerTypeLevel.getRatingFinal();                                                     //61
-                borrowerTypeLevel.isUnpaidFeePaid();                                                    //62
-                borrowerTypeLevel.isClaimedLGFlag();                                                    //63
-                borrowerTypeLevel.getCreditWorthiness();                                                //64
-                borrowerTypeLevel.getKyc();                                                             //65
-                borrowerTypeLevel.getIndividualType().getPersonalId();                                  //69
-                borrowerTypeLevel.getIndividualType().getAge();                                         //70
-                borrowerTypeLevel.getDayAnnualReviewOverdue();                                          //#N/A
+                    attributeTypeList = accountType.getAttribute();
 
-                ncbReportTypeLevel = borrowerTypeLevel.getNcbReportType();
-                ncbAccountType = ncbReportTypeLevel.getNcbAccountType();
-                for (AccountTypeLevelNCBReport accountTypeLevelNCBReport : ncbAccountType) {
-                    accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag();                        //79
-                    accountTypeLevelNCBReport.getNcbAccountStatus();                                    //80
-                    accountTypeLevelNCBReport.getAttributeType().isTmbBankFlag();                       //81
-                    accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag();                        //82
-                    accountTypeLevelNCBReport.getCreditAmountFirstNPL();                                //83
-                    accountTypeLevelNCBReport.isNcbTDRFlag();                                           //84
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Adjust Class");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getBotClass());     //56//Enum = BOTClassEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Account Active Flag");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().isActiveFlag() + "");           //72//Enum = todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    accountType.setAccountType(accountTypeLevelBorrower.getDataSource());   //73//Enum = AccountTypeEnum  e.g. 04,05,09,22 etc.
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Account Reference");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getAccountRef()); //74//Enum =  AccountReferenceEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Cust To Account Relationship");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getCustToAccountRelationship()); //75//Enum =  CustToAccountRelationshipEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Number Of Day Principal Past Due");
+                    attributeType.setNumericValue(accountTypeLevelBorrower.getAttributeType().getNumberOfDayPrincipalPastDue()); //76
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Number Of Day Interest Past Due");
+                    attributeType.setNumericValue(accountTypeLevelBorrower.getAttributeType().getNumberOfDayInterestPastDue()); //77
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Card Block Code");
+                    attributeType.setStringValue(accountTypeLevelBorrower.getAttributeType().getCardBlockCode()); //78//Enum =  CardBlockCodeEnum
+                    attributeTypeList.add(attributeType);
+
+                    accountTypeList.add(accountType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                try {
+                    gregory.setTime(borrowerTypeLevel.getNextReviewDate());                             //57
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Next Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                } catch (Exception e) {
+                    gregory = new GregorianCalendar();
+                    gregory.setTime(new Date());
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Next Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Next Review Date Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isNextReviewDateFlag() + "");           //58//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                try {
+                    gregory.setTime(borrowerTypeLevel.getExtendedReviewDate());                             //59
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Extended Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                } catch (Exception e) {
+                    gregory = new GregorianCalendar();
+                    gregory.setTime(new Date());
+                    calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregory);
+                    attributeType.setName("Extended Review Date");
+                    attributeType.setDateTimeValue(calendar);
+                    attributeTypeList.add(attributeType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Extended Review Date Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isExtendedReviewDateFlag() + "");           //60//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Rating Final");
+                attributeType.setStringValue(borrowerTypeLevel.getRatingFinal());     //61//Enum = BOTClassEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Unpaid Fee Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isUnpaidFeePaid() + "");           //62//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Claimed LG Flag");
+                attributeType.setStringValue(borrowerTypeLevel.isClaimedLGFlag() + "");           //63//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Credit Worthiness Flag");
+                attributeType.setStringValue(borrowerTypeLevel.getCreditWorthiness() + "");           //64//Enum = todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                borrowerType.setKycRiskLevel(borrowerTypeLevel.getKyc());                          //65
+                borrowerType.getIndividual().setCitizenID(borrowerTypeLevel.getIndividualType().getPersonalId());//69
+                borrowerType.getIndividual().setAge(borrowerTypeLevel.getIndividualType().getAge());  //70
+
+                /*ncbReportTypeList = borrowerType.getNcbReport();
+                ncbReportTypeLevel = borrowerTypeLevel.getNcbReportType();*/
+
+                ncbAccountTypeList = ncbReportType.getNcbAccount();
+                ncbAccountTypeLevelList = ncbReportTypeLevel.getNcbAccountType();
+                for (AccountTypeLevelNCBReport accountTypeLevelNCBReport : ncbAccountTypeLevelList) {
+                    attributeTypeList = ncbAccountType.getAttribute();
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("NCB Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isNcbFlag() + "");           //79//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    ncbAccountType.setNcbAccountStatus(accountTypeLevelNCBReport.getNcbAccountStatus());  //80Enum = enum=NCBAccountStatusEnum
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("TMB Bank Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isTmbBankFlag() + "");    //81//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("NCB NPL Flag");
+                    attributeType.setStringValue(accountTypeLevelNCBReport.getAttributeType().isNcbNPLFlag() + "");     //82//todo Enum YesNOEnum
+                    attributeTypeList.add(attributeType);
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Credit Amount At First NPL Date");
+                    attributeType.setNumericValue(accountTypeLevelNCBReport.getCreditAmountFirstNPL()); //83
+                    attributeTypeList.add(attributeType);
+
+                    accountType.setTdrFlag(accountTypeLevelNCBReport.isNcbTDRFlag());                   //84
+
+                    ////////////////////////////////////////////////////////////////////////////////////////     //86-88 did not found.
                     accountTypeLevelNCBReport.getCurrentPayment();                                      //86
                     accountTypeLevelNCBReport.getPaymentPattern6M();                                    //87
                     accountTypeLevelNCBReport.getPaymentPattern12M();                                   //88
-                    accountTypeLevelNCBReport.getOverDue31to60DaysWithinLast12Months();                 //89
-                    accountTypeLevelNCBReport.getOverLimitWithinLast6Months();                          //90
+                    ////////////////////////////////////////////////////////////////////////////////////////
+
+                    accountType.setOverdue31DTo60DCount(accountTypeLevelNCBReport.getOverDue31to60DaysWithinLast12Months()); //89
+                    accountType.setOverLimitLast6MthsCount(accountTypeLevelNCBReport.getOverLimitWithinLast6Months());    //90
+
+                    ncbAccountTypeList.add(ncbAccountType);
                 }
+
+                ncbEnquiryTypeList = ncbReportType.getNcbEnquiry();
                 ncbEnquiryTypesTypeLevelList = ncbReportTypeLevel.getNcbEnquiryTypes();
                 for (NCBEnquiryTypeLevel ncbEnquiryTypeLevel : ncbEnquiryTypesTypeLevelList) {
-                    ncbEnquiryTypeLevel.getNumberOfSearchInLast6Months();                               //91
-                    ncbEnquiryTypeLevel.getAttributeType().getNumberOfDaysNCBCheck();                   //92
-                }
-                borrowerTypeLevel.getWarningCodeFullMatched().getRiskCodeWithFullyIdentifyMatched();    //93
-                borrowerTypeLevel.getWarningCodePartialMatched().getRiskCodeWithSomeIdentifyMatched();  //94
-                borrowerTypeLevel.getDayAnnualReviewOverdue();//#N/A
+                    attributeTypeList = ncbEnquiryType.getAttribute();
 
+                    ncbEnquiryType.setNumSearchesLast6Mths(ncbEnquiryTypeLevel.getNumberOfSearchInLast6Months());  //91
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Validity Period Of NCB");
+                    attributeType.setNumericValue(ncbEnquiryTypeLevel.getAttributeType().getNumberOfDaysNCBCheck()); //92
+                    attributeTypeList.add(attributeType);
+
+                    ncbEnquiryTypeList.add(ncbEnquiryType);
+                }
+
+                warningCodeFullMatchedTypeList = borrowerType.getWarningCodeFullMatched();
+                warningCodeFullMatchedLevelList = borrowerTypeLevel.getWarningCodeFullMatched();
+                for (WarningCodeFullMatched warningCodeFullMatched : warningCodeFullMatchedLevelList) {
+                    warningCodeFullMatchedType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodeFullMatchedType();
+                    warningCodeFullMatchedType.setCode(warningCodeFullMatched.getRiskCodeWithFullyIdentifyMatched());  //93
+                    warningCodeFullMatchedTypeList.add(warningCodeFullMatchedType);
+                }
+
+                warningCodePartialMatchedTypeList = borrowerType.getWarningCodePartialMatched();
+                warningCodePartialMatchedLevelList = borrowerTypeLevel.getWarningCodePartialMatched();
+                for (WarningCodePartialMatched warningCodePartialMatched : warningCodePartialMatchedLevelList) {
+                    warningCodePartialMatchedType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.WarningCodePartialMatchedType();
+                    warningCodePartialMatchedType.setCode(warningCodePartialMatched.getRiskCodeWithSomeIdentifyMatched());  //94
+                    warningCodePartialMatchedTypeList.add(warningCodePartialMatchedType);
+                }
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Day Overdue Annual Review");
+                attributeType.setNumericValue(borrowerTypeLevel.getDayAnnualReviewOverdue());                   //#N/A
+                attributeTypeList.add(attributeType);
+
+                borrowerTypeList.add(borrowerType);
             }
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////
             accountTypeLevelList = applicationTypeLevel.getAccountType();
             for (AccountTypeLevel accountTypeLevel : accountTypeLevelList) {
                 accountTypeLevel.getUtilizationPercent();                                               //95
@@ -315,56 +1005,148 @@ public class ConvertImp implements ConvertInf, Serializable {
                 accountTypeLevel.isTmbAccountFlag();                                                    //104
                 accountTypeLevel.isExcludeIncomeFlag();                                                 //105
             }
+            ////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+            businessTypeList = applicationType.getBusiness();
             businessTypeLevelList = applicationTypeLevel.getBusinessType();
             for (BusinessTypeLevel businessTypeLevel : businessTypeLevelList) {
-                businessTypeLevel.getBusinessCodeRunningNumber();                                       //106
-                businessTypeLevel.getBusinessCode();                                                    //107
-                businessTypeLevel.getAttributeType().isNegativeFlag();                                  //108
-                businessTypeLevel.getAttributeType().isHighRiskFlag();                                  //109
+                businessType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.BusinessType();
+
+                attributeTypeList = businessType.getAttribute();
+
+                businessType.setID(businessTypeLevel.getBusinessCodeRunningNumber());  //106
+                businessType.setBusinessType(businessTypeLevel.getBusinessCode());      //107
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Negative Flag");
+                attributeType.setStringValue(businessTypeLevel.getAttributeType().isNegativeFlag() + "");     //108//todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("High Risk Flag");
+                attributeType.setStringValue(businessTypeLevel.getAttributeType().isHighRiskFlag() + "");     //109//todo Enum YesNOEnum
+                attributeTypeList.add(attributeType);
+
+                businessTypeList.add(businessType);
             }
 
+
+
+
+            productTypeList = applicationType.getProduct();
             productTypeLevelList = applicationTypeLevel.getProductType();
             for(ProductTypeLevel productTypeLevel : productTypeLevelList) {
-                productTypeLevel.getProductGroup();                                                     //110
-                productTypeLevel.getAttributeType().getMaxCreditLimitByCollateral();                    //111
-                productTypeLevel.getTotalProposedCreditLimit();                                         //112
+                productType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.ProductType();
+                productType.setProductType(productTypeLevel.getProductGroup());                                     //110//Enum = SELOSProductGroupEnum
+
+                attributeTypeList = productType.getAttribute();
+                attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                attributeType.setName("Validity Period Of NCB");
+                attributeType.setNumericValue(new BigDecimal(productTypeLevel.getAttributeType().getMaxCreditLimitByCollateral())); //111
+                attributeTypeList.add(attributeType);
+
+                productType.setRequestedCreditLimit(productTypeLevel.getTotalProposedCreditLimit());  //112
+
+                selosProductProgramTypeList = productType.getSelosProductProgram();
                 selosProductProgramTypeLevelList = productTypeLevel.getSelosProductProgramTypes();
                 for (SELOSProductProgramTypeLevel selosProductProgramTypeLevel : selosProductProgramTypeLevelList) {
-                    selosProductProgramTypeLevel.getProductProgram();                                   //113
+                    selosProductProgramType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.SELOSProductProgramType();
+                    selosProductProgramType.setName(selosProductProgramTypeLevel.getProductProgram());              //113//Enum = SELOSProductProgramEnum
+                    creditFacilityTypeList = selosProductProgramType.getCreditFacility();
                     creditFacilityTypeLevelList = selosProductProgramTypeLevel.getCreditFacilityType();
                     for (CreditFacilityTypeLevel creditFacilityTypeLevel : creditFacilityTypeLevelList) {
-                        creditFacilityTypeLevel.getCreditFacilityType();                                //114
-                        creditFacilityTypeLevel.getCreditLimit();                                       //115
-                        creditFacilityTypeLevel.getTenor();                                             //116
-                        creditFacilityTypeLevel.getGuaranteeType();                                     //117
-                        creditFacilityTypeLevel.getLoanPurpose();                                       //118
+                        creditFacilityType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CreditFacilityType();
+                        creditFacilityType.setType(creditFacilityTypeLevel.getCreditFacilityType());                //114//Enum = CreditFacilityTypeEnum
+                        creditFacilityType.setCreditLimit(creditFacilityTypeLevel.getCreditLimit());    //115
+                        creditFacilityType.setTenor(creditFacilityTypeLevel.getTenor());                //116
+
+                        creditFacilityTypeLevel.getGuaranteeType();                                     //117//Enum = guaranteeTypeEnum  //todo : setGuaranteeType did not found
+
+                        creditFacilityType.setLoanPurpose(creditFacilityTypeLevel.getLoanPurpose());    //118
+
+                        creditFacilityTypeList.add(creditFacilityType);
                     }
+                    selosProductProgramTypeList.add(selosProductProgramType);
                 }
+
+                collateralTypeList = productType.getCollateral();
                 collateralTypeLevelList = productTypeLevel.getCollateralTypes();
                 for (CollateralTypeLevel collateralTypeLevel : collateralTypeLevelList) {
-                    collateralTypeLevel.getAttributeType().getCollateralPotential();                    //119
-                    collateralTypeLevel.getCollateralType();                                            //120
+                    collateralType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.CollateralType();
+
+                    attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                    attributeType.setName("Collateral Potential");
+                    attributeType.setStringValue(collateralTypeLevel.getAttributeType().getCollateralPotential());  //119//Enum = CollateralPotentialEnum
+                    attributeTypeList.add(attributeType);
+
+                    collateralType.setCollateralType(collateralTypeLevel.getCollateralType());          //120//Enum = CollateralTypeEnum
+
+                    appraisalTypeList = collateralType.getAppraisal();
                     appraisalTypeLevelList = collateralTypeLevel.getAppraisalType();
                     for (AppraisalTypeLevel appraisalTypeLevel : appraisalTypeLevelList) {
-                        appraisalTypeLevel.getAttributeType().getAppraisalFlag();                       //121
-                        appraisalTypeLevel.getAttributeType().getAadComment();                          //122
-                        appraisalTypeLevel.getAttributeType().getAppraisalValueOfBuildingWithOwnershipDoc(); //123
-                        appraisalTypeLevel.getAttributeType().getLengthOfAppraisal();                   //124
 
+                        appraisalType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AppraisalType();
+
+                        attributeTypeList = appraisalType.getAttribute();
+
+                        attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                        attributeType.setName("Appraisal Flag");
+                        attributeType.setStringValue(appraisalTypeLevel.getAttributeType().getAppraisalFlag());  //121//Enum = AppraisalFlagEnum
+                        attributeTypeList.add(attributeType);
+
+                        attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                        attributeType.setName("AAD Comment");
+                        attributeType.setStringValue(appraisalTypeLevel.getAttributeType().getAadComment());  //122//Enum = AADCommentEnum
+                        attributeTypeList.add(attributeType);
+
+                        attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                        attributeType.setName("Percent Appraisal Value Of Building With Ownership Doc");
+                        attributeType.setNumericValue(appraisalTypeLevel.getAttributeType().getAppraisalValueOfBuildingWithOwnershipDoc()); //123
+                        attributeTypeList.add(attributeType);
+
+                        attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+                        attributeType.setName("Appraisal Length");
+                        attributeType.setNumericValue(appraisalTypeLevel.getAttributeType().getLengthOfAppraisal()); //124
+                        attributeTypeList.add(attributeType);
+
+                        appraisalTypeList.add(appraisalType);
                     }
-
+                    collateralTypeList.add(collateralType);
                 }
+                productTypeList.add(productType);
             }
 
-            applicationTypeLevel.getAttribute().getMaxWCCreditLimit();                                  //#N/A
-            applicationTypeLevel.getAttribute().getTotalRequestedWCCreditLimit();                       //#N/A
-            applicationTypeLevel.getAttribute().getMaxCoreWCLoanLimit();                                //#N/A
-            applicationTypeLevel.getAttribute().getTotalRequestedCoreWCLoanCreditLimit();               //#N/A
-            applicationTypeLevel.getAttribute().getTotalRequestedODCreditLimit();                       //#N/A
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Max WC Credit Limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getMaxWCCreditLimit());               //#N/A
+            attributeTypeList.add(attributeType);
 
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total Requested WC Credit Limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalRequestedWCCreditLimit());               //#N/A
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Max Core WC Loan Limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getMaxCoreWCLoanLimit());               //#N/A
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total Requested Core WC Loan credit limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalRequestedCoreWCLoanCreditLimit());               //#N/A
+            attributeTypeList.add(attributeType);
+
+            attributeType = new com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.AttributeType();
+            attributeType.setName("Total Requested OD credit limit");
+            attributeType.setNumericValue(applicationTypeLevel.getAttribute().getTotalRequestedODCreditLimit());               //#N/A
+            attributeTypeList.add(attributeType);
+
+            request.getUnderwritingRequest().getUnderwritingApprovalRequest().setApplication(applicationType);
+            return request;
         } catch (Exception e) {
-
+            log.error("convertInputModelToRequestModel() Exception : {}", e);
+            throw e;
         }
     }
 
