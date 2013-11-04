@@ -238,7 +238,7 @@ public class AppInProcessService implements Serializable {
             customerDetailList.add(customerDetail);
             AppInProcess2 appInProcessEntity = customerDetail2.getAppInProcess2();
             appInProcess.setAppNumber(appInProcessEntity.getAppRefNumber());
-            if (appInProcessEntity.getProductCode() != null && appInProcessEntity.getProjectCode() != null) { //todo: wait for confirm codition
+            if (!Util.isEmpty(appInProcessEntity.getProductCode()) || !Util.isEmpty(appInProcessEntity.getProjectCode())) {
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode());
@@ -250,7 +250,7 @@ public class AppInProcessService implements Serializable {
                 creditDetail.setFinalInstallment(appInProcessEntity.getFinalInstallment());
                 creditDetails.add(creditDetail);
             }
-            if (appInProcessEntity.getProductCode2() != null && appInProcessEntity.getProjectCode2() != null) { //todo: wait for confirm codition
+            if (!Util.isEmpty(appInProcessEntity.getProductCode2()) || !Util.isEmpty(appInProcessEntity.getProjectCode2())) {
                 CreditDetail creditDetail = new CreditDetail();
                 creditDetail.setProductCode(appInProcessEntity.getProductCode2());
                 creditDetail.setProjectCode(appInProcessEntity.getProjectCode2());
