@@ -45,15 +45,15 @@ public class BorrowerTypeLevel implements Serializable {
     private NCBReportTypeLevel ncbReportType;
 
     //WarningCodeFullMatched
-    private WarningCodeFullMatched warningCodeFullMatched;
+    private List<WarningCodeFullMatched> warningCodeFullMatched;
 
     //WarningCodePartialMatched
-    private WarningCodePartialMatched warningCodePartialMatched;
+    private List<WarningCodePartialMatched> warningCodePartialMatched;
 
     public BorrowerTypeLevel() {
     }
 
-    public BorrowerTypeLevel(Nationality nationality, int kyc, CustomerEntity customerEntity, boolean existingSMECustomer, Relation relationshipType, Reference reference, int numberOfMonthFromLastSetUpDate, String newQualitative, Date nextReviewDate, boolean nextReviewDateFlag, Date extendedReviewDate, boolean extendedReviewDateFlag, String ratingFinal, boolean unpaidFeePaid, boolean claimedLGFlag, String creditWorthiness, String sPouseId, String sPouseRelationshipType, BigDecimal dayAnnualReviewOverdue, List<AccountTypeLevelBorrower> accountType, IndividualTypeLevel individualType, NCBReportTypeLevel ncbReportType, WarningCodeFullMatched warningCodeFullMatched, WarningCodePartialMatched warningCodePartialMatched) {
+    public BorrowerTypeLevel(Nationality nationality, int kyc, CustomerEntity customerEntity, boolean existingSMECustomer, Relation relationshipType, Reference reference, int numberOfMonthFromLastSetUpDate, String newQualitative, Date nextReviewDate, boolean nextReviewDateFlag, Date extendedReviewDate, boolean extendedReviewDateFlag, String ratingFinal, boolean unpaidFeePaid, boolean claimedLGFlag, String creditWorthiness, String sPouseId, String sPouseRelationshipType, BigDecimal dayAnnualReviewOverdue, List<AccountTypeLevelBorrower> accountType, IndividualTypeLevel individualType, NCBReportTypeLevel ncbReportType, List<WarningCodeFullMatched> warningCodeFullMatched, List<WarningCodePartialMatched> warningCodePartialMatched) {
         this.nationality = nationality;
         this.kyc = kyc;
         this.customerEntity = customerEntity;
@@ -256,19 +256,19 @@ public class BorrowerTypeLevel implements Serializable {
         this.ncbReportType = ncbReportType;
     }
 
-    public WarningCodeFullMatched getWarningCodeFullMatched() {
+    public List<WarningCodeFullMatched> getWarningCodeFullMatched() {
         return warningCodeFullMatched;
     }
 
-    public void setWarningCodeFullMatched(WarningCodeFullMatched warningCodeFullMatched) {
+    public void setWarningCodeFullMatched(List<WarningCodeFullMatched> warningCodeFullMatched) {
         this.warningCodeFullMatched = warningCodeFullMatched;
     }
 
-    public WarningCodePartialMatched getWarningCodePartialMatched() {
+    public List<WarningCodePartialMatched> getWarningCodePartialMatched() {
         return warningCodePartialMatched;
     }
 
-    public void setWarningCodePartialMatched(WarningCodePartialMatched warningCodePartialMatched) {
+    public void setWarningCodePartialMatched(List<WarningCodePartialMatched> warningCodePartialMatched) {
         this.warningCodePartialMatched = warningCodePartialMatched;
     }
 
