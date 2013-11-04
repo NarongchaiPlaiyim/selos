@@ -290,7 +290,6 @@ public class CustomerInfoIndividual implements Serializable {
         onAddNewIndividual();
 
         if(customerId != 0){ // Go to edit
-            System.out.println("################## TEST CREATE NEW ##################");
             onEditIndividual();
         }
     }
@@ -673,9 +672,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onChangeMaritalStatus(){
-        System.out.println("############################# Before ########################################## "+customerInfoView.getMaritalStatus().getId());
         customerInfoView.setMaritalStatus(maritalStatusDAO.findById(customerInfoView.getMaritalStatus().getId()));
-        System.out.println("############################# After ########################################## "+customerInfoView.getMaritalStatus().getId());
     }
 
     public void onChangeReference(){
@@ -979,15 +976,6 @@ public class CustomerInfoIndividual implements Serializable {
             long cusId = customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             messageHeader = "Save Customer Info Individual Success.";
             message = "Save Customer Info Individual data success.";
-
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("customerId", cusId);
-            FacesUtil.getFlash().put("cusInfoParams", map);
-
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-
-            onCreation();
-
         } catch(Exception ex){
             messageHeader = "Save Customer Info Individual Failed.";
             if(ex.getCause() != null){

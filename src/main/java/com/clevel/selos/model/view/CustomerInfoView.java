@@ -2,6 +2,7 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.CustomerCSI;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -62,12 +63,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int reviewFlag;
     private String reason;
     private BusinessType businessType;
-    private WarningCode csi;
     private Date documentAuthorizeDate;
     private String kycReason;
     private int worthiness;
     private AddressType mailingAddressType;
     private long spouseId;
+    private List<CustomerCSIView> customerCSIList;
 
     //*** Var for Individual ***//
     private Date dateOfBirth;
@@ -158,9 +159,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.reviewFlag = -1;
         this.reason = "";
         this.spouse = new CustomerInfoView();
-        this.csi = new WarningCode();
         this.businessType = new BusinessType();
         this.documentAuthorizeDate = new Date();
+        this.customerCSIList = new ArrayList<CustomerCSIView>();
     }
 
     public long getIndividualId() {
@@ -651,12 +652,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.spouse = spouse;
     }
 
-    public WarningCode getCsi() {
-        return csi;
+    public List<CustomerCSIView> getCustomerCSIList() {
+        return customerCSIList;
     }
 
-    public void setCsi(WarningCode csi) {
-        this.csi = csi;
+    public void setCustomerCSIList(List<CustomerCSIView> customerCSIList) {
+        this.customerCSIList = customerCSIList;
     }
 
     public int getListIndex() {

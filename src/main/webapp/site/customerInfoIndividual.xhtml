@@ -1081,7 +1081,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.csi')}"/>
                                 </td>
                                 <td>
-                                    <p:dataTable var="item" value="#{custInfoSumIndi.customerInfoView}"
+                                    <p:dataTable var="item" value="#{custInfoSumIndi.customerInfoView.customerCSIList}"
                                                  paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
                                         <p:column headerText="" styleClass="center" style="width:22px;">
@@ -1089,15 +1089,15 @@
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoIndi.content.csi.code')}" styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{item.warningCode.code}"/>
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoIndi.content.csi.year')}" styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{item.warningDate}"/>
                                         </p:column>
 
                                         <p:column headerText="#{msg.get('app.custInfoIndi.content.csi.descrip')}" styleClass="center">
-                                            <h:outputText value=""/>
+                                            <h:outputText value="#{item.warningCode.definitionTh}"/>
                                         </p:column>
                                     </p:dataTable>
                                 </td>

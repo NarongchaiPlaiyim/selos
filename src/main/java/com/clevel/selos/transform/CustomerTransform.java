@@ -7,6 +7,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AddressView;
+import com.clevel.selos.model.view.CustomerCSIView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import org.slf4j.Logger;
 
@@ -18,6 +19,9 @@ import java.util.List;
 public class CustomerTransform extends Transform {
     @Inject
     Logger log;
+
+    @Inject
+    CustomerCSITransform customerCSITransform;
 
     @Inject
     CustomerDAO customerDAO;
@@ -122,10 +126,8 @@ public class CustomerTransform extends Transform {
             customerInfoView.setReference(new Reference());
         }
 
-        customerInfoView.setCsi(customer.getCsi());
-        if(customerInfoView.getCsi() == null){
-            customerInfoView.setCsi(new WarningCode());
-        }
+        List<CustomerCSIView> customerCSIViewList = customerCSITransform.transformToViewList(customer.getCustomerCSIList());
+        customerInfoView.setCustomerCSIList(customerCSIViewList);
 
         customerInfoView.setIsSpouse(customer.getIsSpouse());
         customerInfoView.setSpouseId(customer.getSpouseId());
@@ -153,6 +155,8 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setSearchBy(customer.getSearchBy());
         customerInfoView.setSearchId(customer.getSearchId());
+
+        customerInfoView.setPercentShare(customer.getPercentShare());
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -378,12 +382,6 @@ public class CustomerTransform extends Transform {
             customer.setReference(null);
         }
 
-        if(customerInfoView.getCsi() != null && customerInfoView.getCsi().getId() != 0){
-            customer.setCsi(warningCodeDAO.findById(customerInfoView.getCsi().getId()));
-        } else {
-            customer.setCsi(null);
-        }
-
         customer.setIsSpouse(customerInfoView.getIsSpouse());
         customer.setSpouseId(customerInfoView.getSpouseId());
         customer.setSearchFromRM(customerInfoView.getSearchFromRM());
@@ -456,7 +454,7 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
-            if(currentAddress.getCountry() != null && currentAddress.getId() != 0){
+            if(currentAddress.getCountry() != null && currentAddress.getCountry().getId() != 0){
                 Country country = countryDAO.findById(currentAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -512,7 +510,7 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
-            if(registerAddress.getCountry() != null && registerAddress.getId() != 0){
+            if(registerAddress.getCountry() != null && registerAddress.getCountry().getId() != 0){
                 Country country = countryDAO.findById(registerAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -567,7 +565,7 @@ public class CustomerTransform extends Transform {
                 address.setSubDistrict(null);
             }
 
-            if(workAddress.getCountry() != null && workAddress.getId() != 0){
+            if(workAddress.getCountry() != null && workAddress.getCountry().getId() != 0){
                 Country country = countryDAO.findById(workAddress.getCountry().getId());
                 address.setCountry(country);
             } else {
@@ -615,6 +613,12 @@ public class CustomerTransform extends Transform {
                 individual.setNationality(null);
             }
 
+            if(customerInfoView.getSndNationality() != null && customerInfoView.getSndNationality().getId() != 0){
+                individual.setSndNationality(nationalityDAO.findById(customerInfoView.getSndNationality().getId()));
+            } else {
+                individual.setSndNationality(null);
+            }
+
             if(customerInfoView.getOccupation() != null && customerInfoView.getOccupation().getId() != 0){
                 individual.setOccupation(occupationDAO.findById(customerInfoView.getOccupation().getId()));
             } else {
@@ -632,6 +636,8 @@ public class CustomerTransform extends Transform {
             } else {
                 individual.setRace(null);
             }
+
+            individual.setNumberOfChildren(customerInfoView.getNumberOfChild());
 
             customer.setIndividual(individual);
         } else {

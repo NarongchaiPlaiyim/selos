@@ -147,6 +147,15 @@ public class CustomerInfoSummary implements Serializable {
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
+    public String onLinkToAddIndividual(){
+        passParamsToIndividual(0);
+        return "customerInfoIndividual?faces-redirect=true";
+    }
+
+    public String onLinkToAddJuristic(){
+        passParamsToIndividual(0);
+        return "customerInfoJuristic?faces-redirect=true";
+    }
 
     public CustomerInfoSummaryView getCustomerInfoSummaryView() {
         return customerInfoSummaryView;

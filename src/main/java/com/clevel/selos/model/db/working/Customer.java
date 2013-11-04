@@ -106,9 +106,8 @@ public class Customer implements Serializable {
     @OneToOne(mappedBy="customer")
     private NCB ncb;
 
-    @OneToOne
-    @JoinColumn(name="warningcode_id")
-    private WarningCode csi;
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerCSI> customerCSIList;
 
     @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")
     private int isSpouse;
@@ -373,12 +372,12 @@ public class Customer implements Serializable {
         this.ncb = ncb;
     }
 
-    public WarningCode getCsi() {
-        return csi;
+    public List<CustomerCSI> getCustomerCSIList() {
+        return customerCSIList;
     }
 
-    public void setCsi(WarningCode csi) {
-        this.csi = csi;
+    public void setCustomerCSIList(List<CustomerCSI> customerCSIList) {
+        this.customerCSIList = customerCSIList;
     }
 
     public int getIsSpouse() {
@@ -555,7 +554,7 @@ public class Customer implements Serializable {
                 append("relation", relation).
                 append("reference", reference).
                 append("ncb", ncb).
-                append("csi", csi).
+                append("customerCSIList", customerCSIList).
                 append("isSpouse", isSpouse).
                 append("spouseId", spouseId).
                 append("searchFromRM", searchFromRM).

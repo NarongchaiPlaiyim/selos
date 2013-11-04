@@ -11,6 +11,11 @@
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <style>
+        .ui-datatable td,.ui-datatable th,.ui-datatable span {
+            white-space: normal!important;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -51,9 +56,11 @@
                                     </td>
                                     <td>
                                         <p:commandButton id="btnIndividual" value="Add Individual" styleClass="larger" process="@form"
-                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"/>
+                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
+                                                         action="#{custInfoSummary.onLinkToAddIndividual()}"/>
                                         <p:commandButton id="btnJuristic" value="Add Juristic" styleClass="larger" process="@form"
-                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"/>
+                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
+                                                         action="#{custInfoSummary.onLinkToAddJuristic()}"/>
                                     </td>
                                 </tr>
 
@@ -68,112 +75,125 @@
                                                      paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
                                             <p:columnGroup type="header">
                                                 <p:row>
-                                                    <p:column rowspan="2" width="20px;"/>
-                                                    <p:column rowspan="2" width="200px;">
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="160px;">
+                                                    <p:column rowspan="1" colspan="2" width="160">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="170px;">
+                                                    <p:column rowspan="1" colspan="2" width="170">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="280px;">
+                                                    <p:column rowspan="1" colspan="2" width="280">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="30px;">
+                                                    <p:column rowspan="2" width="30">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="40px;"/>
+                                                    <p:column rowspan="2" width="40"/>
                                                 </p:row>
                                                 <p:row>
-                                                    <p:column colspan="1" width="100px;">
+                                                    <p:column colspan="1" width="100">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="60px;">
+                                                    <p:column colspan="1" width="60">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="130px;">
+                                                    <p:column colspan="1" width="130">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="40px;">
+                                                    <p:column colspan="1" width="40">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
                                                     </p:column>
                                                 </p:row>
                                             </p:columnGroup>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{rowIndex+1}"/>
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}" />
+                                                <h:outputText value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.citizenId}"/>
+                                                <h:outputText value="#{item.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item.tmbCustomerId}"/>
+                                                <h:outputText value="#{item.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item.relation.description}"/>
+                                                <h:outputText value="#{item.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item.collateralOwner == 1 ? 'Y' : item.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                                <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"/>
+                                                <h:outputText value="#{item.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"/>
+                                                <h:outputText value="#{item.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.percentShare}"/>
+                                                <h:outputText value="#{item.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.age}"/>
+                                                <h:outputText value="#{item.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.kycLevel.kycLevel}"/>
+                                                <h:outputText value="#{item.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.csi.code}"/>
+                                                <h:outputText value="#{item}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.id}"/>
+                                                <h:outputText value="#{item.id}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
-                                            <p:column> <!--14-->
+                                            <p:column styleClass="center"> <!--14-->
                                                 <p:commandButton title="#{msg.get('app.button.edit')}"
                                                                  icon="ui-icon-pencil"
                                                                  action="#{custInfoSummary.onLinkToEditBorrower()}">
@@ -199,109 +219,122 @@
                                                      paginator="false" rowKey="#{item2}" rowIndexVar="rowIndex">
                                             <p:columnGroup type="header">
                                                 <p:row>
-                                                    <p:column rowspan="2" width="20px;"/>
-                                                    <p:column rowspan="2" width="200px;">
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="160px;">
+                                                    <p:column rowspan="1" colspan="2" width="160">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="170px;">
+                                                    <p:column rowspan="1" colspan="2" width="170">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="280px;">
+                                                    <p:column rowspan="1" colspan="2" width="280">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="30px;">
+                                                    <p:column rowspan="2" width="30">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="40px;"/>
+                                                    <p:column rowspan="2" width="40"/>
                                                 </p:row>
                                                 <p:row>
-                                                    <p:column colspan="1" width="100px;">
+                                                    <p:column colspan="1" width="100">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="60px;">
+                                                    <p:column colspan="1" width="60">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="130px;">
+                                                    <p:column colspan="1" width="130">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="40px;">
+                                                    <p:column colspan="1" width="40">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
                                                     </p:column>
                                                 </p:row>
                                             </p:columnGroup>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{rowIndex+1}"/>
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item2.titleTh.titleTh}#{item2.firstNameTh} #{item2.lastNameTh}" />
+                                                <h:outputText value="#{item2.titleTh.titleTh}#{item2.firstNameTh} #{item2.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.citizenId}"/>
+                                                <h:outputText value="#{item2.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item2.tmbCustomerId}"/>
+                                                <h:outputText value="#{item2.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item2.relation.description}"/>
+                                                <h:outputText value="#{item2.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : item2.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                                <h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.reference.description}"/>
+                                                <h:outputText value="#{item2.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.reference.description}"/>
+                                                <h:outputText value="#{item2.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.percentShare}"/>
+                                                <h:outputText value="#{item2.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.age}"/>
+                                                <h:outputText value="#{item2.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.kycLevel.kycLevel}"/>
+                                                <h:outputText value="#{item2.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.csi.code}"/>
+                                                <h:outputText value="#{item2}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.id}"/>
+                                                <h:outputText value="#{item2.id}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column> <!--14-->
@@ -324,109 +357,122 @@
                                                      paginator="false" rowKey="#{item3}" rowIndexVar="rowIndex">
                                             <p:columnGroup type="header">
                                                 <p:row>
-                                                    <p:column rowspan="2" width="20px;"/>
-                                                    <p:column rowspan="2" width="200px;">
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="160px;">
+                                                    <p:column rowspan="1" colspan="2" width="160">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="170px;">
+                                                    <p:column rowspan="1" colspan="2" width="170">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="280px;">
+                                                    <p:column rowspan="1" colspan="2" width="280">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="30px;">
+                                                    <p:column rowspan="2" width="30">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
+                                                    <p:column rowspan="2" width="50">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="40px;"/>
+                                                    <p:column rowspan="2" width="40"/>
                                                 </p:row>
                                                 <p:row>
-                                                    <p:column colspan="1" width="100px;">
+                                                    <p:column colspan="1" width="100">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="60px;">
+                                                    <p:column colspan="1" width="60">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="130px;">
+                                                    <p:column colspan="1" width="130">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="40px;">
+                                                    <p:column colspan="1" width="40">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
+                                                    <p:column colspan="1" width="140">
                                                         <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
                                                     </p:column>
                                                 </p:row>
                                             </p:columnGroup>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{rowIndex+1}"/>
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item3.titleTh.titleTh}#{item3.firstNameTh} #{item3.lastNameTh}" />
+                                                <h:outputText value="#{item3.titleTh.titleTh}#{item3.firstNameTh} #{item3.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.citizenId}"/>
+                                                <h:outputText value="#{item3.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item3.tmbCustomerId}"/>
+                                                <h:outputText value="#{item3.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item3.relation.description}"/>
+                                                <h:outputText value="#{item3.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : item3.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                                <h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.reference.description}"/>
+                                                <h:outputText value="#{item3.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.reference.description}"/>
+                                                <h:outputText value="#{item3.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.percentShare}"/>
+                                                <h:outputText value="#{item3.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.age}"/>
+                                                <h:outputText value="#{item3.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.kycLevel.kycLevel}"/>
+                                                <h:outputText value="#{item3.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.csi.code}"/>
+                                                <h:outputText value="#{item3}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.id}"/>
+                                                <h:outputText value="#{item3.id}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column> <!--14-->

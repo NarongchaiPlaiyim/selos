@@ -118,21 +118,12 @@ public class CustomerInfoControl extends BusinessControl {
                 if(customer.getSpouseId() != 0){
                     Customer cus = customerDAO.findById(customer.getSpouseId());
                     if(cus != null){
-                        List<Address> addressList = addressDAO.findByCriteria(Restrictions.eq("customer.id", cus.getId()));
-                        if(addressList != null){
-                            addressDAO.delete(addressList);
+                        if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
+                            addressDAO.delete(cus.getAddressesList());
                         }
-
-                        List<Individual> individualList = individualDAO.findByCriteria(Restrictions.eq("customer.id", cus.getId()));
-                        if(individualList != null){
-                            individualDAO.delete(individualList);
+                        if(cus.getIndividual() != null){
+                            individualDAO.delete(cus.getIndividual());
                         }
-//                        if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
-//                            addressDAO.delete(cus.getAddressesList());
-//                        }
-//                        if(cus.getIndividual() != null){
-//                            individualDAO.delete(cus.getIndividual());
-//                        }
                         customerDAO.delete(cus);
                     }
 
