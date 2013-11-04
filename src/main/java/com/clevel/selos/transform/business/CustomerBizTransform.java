@@ -14,6 +14,7 @@ import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerAccountView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Restrictions;
 
@@ -77,8 +78,21 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (customerInfoView.getDocumentType() == null) {
                         customerInfoView.setDocumentType(new DocumentType());
                     }
-                    customerInfoView.setDocumentExpiredDate(Util.convertStringToDateBuddhist(individualModel.getDocumentExpiredDate()));
-                    customerInfoView.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getDateOfBirth()));
+                    log.debug("CustomerBizTransform ::: documentExpiredDate : {}", individualModel.getDocumentExpiredDate());
+                    if(!individualModel.getDocumentExpiredDate().equalsIgnoreCase("00/00/0000")){
+                        customerInfoView.setDocumentExpiredDate(DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
+                        log.debug("CustomerBizTransform ::: documentExpiredDate parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDocumentExpiredDate()));
+                    }else{
+                        customerInfoView.setDocumentExpiredDate(null);
+                    }
+
+                    log.debug("CustomerBizTransform ::: getDateOfBirth : {}", individualModel.getDateOfBirth());
+                    if(!individualModel.getDateOfBirth().equalsIgnoreCase("00/00/0000")){
+                        customerInfoView.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
+                        log.debug("CustomerBizTransform ::: getDateOfBirth parseDate : {}", DateTimeUtil.parseToDate(individualModel.getDateOfBirth()));
+                    }else{
+                        customerInfoView.setDateOfBirth(null);
+                    }
 
                     if (individualModel.getGender().equals("M")) {
                         customerInfoView.setGender(Gender.MALE);
@@ -117,7 +131,14 @@ public class CustomerBizTransform extends BusinessTransform {
                     spouse.setFirstNameTh(individualModel.getSpouse().getFirstname());
                     spouse.setLastNameTh(individualModel.getSpouse().getLastname());
                     spouse.setCitizenId(individualModel.getSpouse().getCitizenID());
-                    spouse.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getSpouse().getDateOfBirth()));
+                    //spouse.setDateOfBirth(Util.convertStringToDateBuddhist(individualModel.getSpouse().getDateOfBirth()));
+                    log.debug("CustomerBizTransform ::: spouse DateOfBirth : {}", individualModel.getSpouse().getDateOfBirth());
+                    if(!individualModel.getSpouse().getDateOfBirth().equalsIgnoreCase("00/00/0000")){
+                        spouse.setDateOfBirth(DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
+                        log.debug("CustomerBizTransform ::: spouse DateOfBirth parse date : {}", DateTimeUtil.parseToDate(individualModel.getSpouse().getDateOfBirth()));
+                    }else{
+                        spouse.setDateOfBirth(null);
+                    }
                     customerInfoView.setSpouse(spouse);
 
 
@@ -351,7 +372,15 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setDocumentType(new DocumentType());
                     }
                     customerInfoView.setCustomerEntity(customerEntityDAO.findById(2));
-                    customerInfoView.setDateOfRegister(Util.convertStringToDateBuddhist(corporateModel.getRegistrationDate()));
+
+                    log.debug("CustomerBizTransform ::: registrationDate : {}", corporateModel.getRegistrationDate());
+                    if(!corporateModel.getRegistrationDate().equalsIgnoreCase("00/00/0000")){
+                        customerInfoView.setDateOfRegister(DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
+                        log.debug("CustomerBizTransform ::: registrationDate parse date : {}", DateTimeUtil.parseToDate(corporateModel.getRegistrationDate()));
+                    }else{
+                        customerInfoView.setDateOfRegister(null);
+                    }
+
                     customerInfoView.setRegistrationCountry(countryDAO.findOneByCriteria(Restrictions.eq("code2", corporateModel.getRegistrationCountry())));
                     if (customerInfoView.getRegistrationCountry() == null) {
                         customerInfoView.setRegistrationCountry(new Country());

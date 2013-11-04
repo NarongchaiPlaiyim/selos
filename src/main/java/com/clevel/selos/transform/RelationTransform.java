@@ -11,9 +11,6 @@ import java.util.List;
 public class RelationTransform extends Transform {
 
     @Inject
-    Logger log;
-
-    @Inject
     public RelationTransform() {
     }
 

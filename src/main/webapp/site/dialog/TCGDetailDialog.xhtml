@@ -18,6 +18,8 @@
                                          size="1"
                                          style="width: 200px;"
                                          required="true">
+                                         <!--required="#{not empty param[addDlgData.clientId]}"-->
+
                             <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue=""/>
                             <f:selectItems value="#{tcgInfo.potentialCollateralList}"
                                            var="potentialCollateralList"
@@ -54,9 +56,14 @@
                     </td>
                     <td>
                         <p:inputText styleClass="large" id="appraisalAmount"
-                                     value="#{tcgInfo.TCGDetailView.appraisalAmount}">
+                                     value="#{tcgInfo.TCGDetailView.appraisalAmount}"
+                                     required="true"
+                                     style="width:200px;">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-                            <p:ajax event="blur" update=":tcgDlgForm:appraisalAmount"/>
+                            <p:ajax event="blur"
+                                    process=":tcgDlgForm"
+                                    listener="#{tcgInfo.calculateLtvValue}"
+                                    update=":tcgDlgForm" />
                         </p:inputText>
                     </td>
                 </tr>
@@ -65,7 +72,11 @@
                         <h:outputText value="#{msg.get('app.tcg.dlg.textBox.ltvValue')} :"/>
                     </td>
                     <td>
-                        <p:inputText styleClass="large" id="LTVvalue" value="#{tcgInfo.TCGDetailView.ltvValue}">
+                        <p:inputText styleClass="large"
+                                     id="LTVvalue"
+                                     value="#{tcgInfo.TCGDetailView.ltvValue}"
+                                     required="#{not empty param[addDlgData.clientId]}"
+                                     style="width:200px;" >
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                             <p:ajax event="blur" update=":tcgDlgForm:LTVvalue"/>
                         </p:inputText>
@@ -88,7 +99,7 @@
                         <p:commandButton
                                 id="save"
                                 value="#{msg.get('app.tcg.dlg.button.ok')}"
-                                binding="#{addRowData}"
+                                binding="#{addDlgData}"
                                 styleClass="small"
                                 actionListener="#{tcgInfo.onSaveCollateralDetail}"
                                 process=":tcgDlgForm"

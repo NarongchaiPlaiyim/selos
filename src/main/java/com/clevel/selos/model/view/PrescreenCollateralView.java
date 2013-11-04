@@ -21,17 +21,13 @@ public class PrescreenCollateralView implements Serializable {
 
     private long id;
     private PotentialCollateral potentialCollateral;
-    private String collateralTypeName;
-    private BigDecimal collateralAmount;
 
     public PrescreenCollateralView() {
     }
 
-    public void reset() {
+    public void reset(){
         this.id = 0;
         this.potentialCollateral = new PotentialCollateral();
-        this.collateralTypeName = "";
-        this.collateralAmount = new BigDecimal(0);
     }
 
     public long getId() {
@@ -50,30 +46,12 @@ public class PrescreenCollateralView implements Serializable {
         this.potentialCollateral = potentialCollateral;
     }
 
-    public String getCollateralTypeName() {
-        return collateralTypeName;
-    }
-
-    public void setCollateralTypeName(String collateralTypeName) {
-        this.collateralTypeName = collateralTypeName;
-    }
-
-    public BigDecimal getCollateralAmount() {
-        return collateralAmount;
-    }
-
-    public void setCollateralAmount(BigDecimal collateralAmount) {
-        this.collateralAmount = collateralAmount;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("msg", msg)
                 .append("id", id)
                 .append("potentialCollateral", potentialCollateral)
-                .append("collateralTypeName", collateralTypeName)
-                .append("collateralAmount", collateralAmount)
                 .toString();
     }
 }

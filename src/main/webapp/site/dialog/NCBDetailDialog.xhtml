@@ -64,10 +64,17 @@
         <h:outputText value="#{msg.get('app.dlg.dateOfInfo')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfInfo}" id="dateOfInfo" pattern="dd/MM/yyyy"
-                    showOn="button" required="#{not empty param[addRowData.clientId]}">
-            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfInfo}"
+                    id="dateOfInfo"
+                    pattern="dd/MM/yyyy"
+                    showOn="button"
+                    required="#{not empty param[addRowData.clientId]}"
+                    locale="th_TH"
+                    timeZone="Asia/Bangkok"
+                    yearRange="2440:3000">
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </p:calendar>
+
     </td>
 </tr>
 <tr>
@@ -75,9 +82,15 @@
         <h:outputText value="#{msg.get('app.dlg.accountOpenDate')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.accountOpenDate}" id="accountOpenDate" pattern="dd/MM/yyyy"
-                    showOn="button" required="#{not empty param[addRowData.clientId]}">
-            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        <p:calendar value="#{ncbInfo.ncbDetailView.accountOpenDate}"
+                    id="accountOpenDate"
+                    pattern="dd/MM/yyyy"
+                    showOn="button"
+                    required="#{not empty param[addRowData.clientId]}"
+                    locale="th_TH"
+                    timeZone="Asia/Bangkok"
+                    yearRange="2440:3000">
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </p:calendar>
     </td>
 </tr>
@@ -122,9 +135,15 @@
         <h:outputText value="#{msg.get('app.dlg.dateOfDebtRestructuring')}"/>
     </td>
     <td>
-        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}" pattern="dd/MM/yyyy"
-                    id="dateOfDebtRestructuring" showOn="button" required="#{not empty param[addRowData.clientId]}">
-            <f:convertDateTime pattern="dd/MM/yyyy"/>
+        <p:calendar value="#{ncbInfo.ncbDetailView.dateOfDebtRestructuring}"
+                    pattern="dd/MM/yyyy"
+                    id="dateOfDebtRestructuring"
+                    showOn="button"
+                    required="#{not empty param[addRowData.clientId]}"
+                    locale="th_TH"
+                    timeZone="Asia/Bangkok"
+                    yearRange="2440:3000">
+            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
         </p:calendar>
 
     </td>

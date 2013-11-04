@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class BankAccountStatusView implements Serializable {
     private int id;
-    private int code;
+    private String code;
     private String description;
     private BankAccountTypeView bankAccountTypeView;
     private int active;
@@ -20,11 +20,11 @@ public class BankAccountStatusView implements Serializable {
         this.id = id;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

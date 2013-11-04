@@ -28,4 +28,17 @@ public class DocumentTypeDAO extends GenericDAO<DocumentType, Integer> {
         log.info("findByCustomerEntityId. (result size: {})", documentTypeList.size());
         return documentTypeList;
     }
+
+    public List<DocumentType> getDocumentTypeListPreScreen(int customerEntityId){
+        log.debug("getDocumentTypeListPreScreen");
+        Criteria criteria = createCriteria();
+        if(customerEntityId != 0){
+            criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
+        }
+        criteria.add(Restrictions.in("documentTypeCode", new String[]{"CI", "SC"}));
+        criteria.addOrder(Order.asc("id"));
+        List<DocumentType> documentTypeList = criteria.list();
+
+        return documentTypeList;
+    }
 }
