@@ -108,7 +108,7 @@ public class RMService implements Serializable {
     public IndividualModel individualService(SearchIndividual searchIndividual, String userId) throws Exception {
         log.debug("IndividualService() START");
         IndividualModel individualModel = null;
-        System.out.println("============================== : " + blank);
+        //System.out.println("============================== : " + blank);
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
@@ -657,8 +657,8 @@ public class RMService implements Serializable {
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
         //todo
-        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
-        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
+        //header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
+        //header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();

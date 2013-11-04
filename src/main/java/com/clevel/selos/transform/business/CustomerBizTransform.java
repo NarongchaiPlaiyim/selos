@@ -115,16 +115,22 @@ public class CustomerBizTransform extends BusinessTransform {
                     if (customerInfoView.getNationality() == null) {
                         customerInfoView.setNationality(new Nationality());
                     }
-                    customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
-                    if (individualModel.getOccupationCode().matches("[0-9]*")) {
-                        customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code", new Integer(individualModel.getOccupationCode()))));
-                        if (customerInfoView.getOccupation() == null) {
+                    //TODO Check Null before Casting
+                    if(Util.isEmpty(individualModel.getNumberOfChild())){
+                        customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
+                    }
+                    if(Util.isEmpty(individualModel.getOccupationCode())){
+                        if (individualModel.getOccupationCode().matches("[0-9]*")) {
+                            customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code", new Integer(individualModel.getOccupationCode()))));
+                            if (customerInfoView.getOccupation() == null) {
+                                customerInfoView.setOccupation(new Occupation());
+                            }
+                        } else {
                             customerInfoView.setOccupation(new Occupation());
                         }
-                    } else {
+                    }else{
                         customerInfoView.setOccupation(new Occupation());
                     }
-                    //        customerInfoView.setBusinessType(businessTypeDAO.findOneByCriteria(Restrictions.eq("",individualModel.getBizCode())));
 
                     CustomerInfoView spouse = new CustomerInfoView();
                     spouse.reset();

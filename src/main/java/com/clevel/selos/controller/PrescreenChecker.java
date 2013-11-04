@@ -76,6 +76,12 @@ public class PrescreenChecker implements Serializable {
     private String bdmMakerName;
     private String remark;
 
+    private List<NcbView> ncbViewList;
+
+    private int customerEntityId;
+
+    boolean success;
+
     public PrescreenChecker(){
 
     }
@@ -126,6 +132,9 @@ public class PrescreenChecker implements Serializable {
             citizenID = new String[row];
         }
 
+        success = false;
+        ncbViewList = new ArrayList<NcbView>();
+
         log.debug("customerinfoList : {}", customerInfoViewList);
 
     }
@@ -136,6 +145,7 @@ public class PrescreenChecker implements Serializable {
             if(item.getRelation().getId() == 1){
                 customerInfoList.add(item);
                 if(item.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
+                    customerEntityId = BorrowerType.INDIVIDUAL.value();
                     if(item.getMaritalStatus() != null && item.getMaritalStatus().getId() == 2){
                         CustomerInfoView spouse = new CustomerInfoView();
                         spouse = item.getSpouse();
@@ -145,6 +155,8 @@ public class PrescreenChecker implements Serializable {
                             }
                         }
                     }
+                } else {
+                    customerEntityId = BorrowerType.JURISTIC.value();
                 }
             }
         }
@@ -153,6 +165,7 @@ public class PrescreenChecker implements Serializable {
 
     public void onCheckCustomer(){
         log.debug("onCheckCustomer :::");
+        RequestContext.getCurrentInstance().execute("blockUICheckCustomer.show()");
         List<CustomerInfoView> tmpCustomerInfoViewList = new ArrayList<CustomerInfoView>();
         tmpCustomerInfoViewList = customerInfoViewList;
         customerInfoViewList = new ArrayList<CustomerInfoView>();   //Clear old value
@@ -185,9 +198,12 @@ public class PrescreenChecker implements Serializable {
             customerInfoViewList.add(customer);
         }
 
+
         if(failCount == 0){
             //TODO Check ncb
-            onCheckNCB();
+            //onCheckNCB();
+            RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
+            RequestContext.getCurrentInstance().execute("commandCheckNCB()");
         }
     }
 
@@ -216,27 +232,30 @@ public class PrescreenChecker implements Serializable {
     public void onCheckNCB(){
         //To Get NCB Data and submit to MAKER
         log.debug("onCheckNCB :::");
-        boolean success = false;
-
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
             List<CustomerInfoView> customerInfoViews = new ArrayList<CustomerInfoView>();
             List<CustomerInfoView> tmpCustomerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+
             log.debug("onCheckNCB ::: customerInfoView size : {}", tmpCustomerInfoViews.size());
+
             if(tmpCustomerInfoViews != null){
                 customerInfoViews = generateCustomerInfoList(tmpCustomerInfoViews);
             }
-            List<NcbView> ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
+
+            ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
             log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
             int index = 0;
             int failedCount = 0;
+
             for(CustomerInfoView customerInfoView : customerInfoViewList){
                 if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
                     customerInfoView.setNcbReason("");
                     customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
                 }
             }
+
             if(ncbViewList != null && ncbViewList.size() > 0){
                 for(NcbView item : ncbViewList){
                     index = 0;
@@ -282,6 +301,7 @@ public class PrescreenChecker implements Serializable {
                 } else {
                     success = true;
                 }
+                RequestContext.getCurrentInstance().execute("commandCheckCSI()");
             }
         } catch(Exception ex){
             log.error("Exception : {}", ex);
@@ -290,7 +310,24 @@ public class PrescreenChecker implements Serializable {
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
 
+    public void onCheckCSI(){
+        try{
+            if(ncbViewList != null && ncbViewList.size() > 0){
+                prescreenBusinessControl.getCSIData(ncbViewList, customerEntityId, userId, workCasePreScreenId);
+                RequestContext.getCurrentInstance().execute("commandSubmitCase()");
+            }
+        } catch (Exception ex){
+            log.error("Exception : {}", ex);
+            messageHeader = "Check CSI failed.";
+            message = ex.getMessage();
+            messageErr = true;
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onCompleteChecker(){
         //TODO Show message box
         if(success){
             //TODO submit case
@@ -299,7 +336,7 @@ public class PrescreenChecker implements Serializable {
                 String actionCode = "1004";
                 prescreenBusinessControl.nextStepPreScreen(workCasePreScreenId, queueName, actionCode);
             }catch (Exception ex){
-                messageHeader = "Check NCB failed.";
+                messageHeader = "Submit case failed.";
                 message = ex.getMessage();
                 messageErr = true;
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -314,7 +351,6 @@ public class PrescreenChecker implements Serializable {
                 log.debug("Exception :: {}",ex);
             }
         }
-
     }
 
     public void onCompleteCheckNCB(){

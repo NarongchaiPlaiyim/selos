@@ -61,13 +61,17 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setAccountName(obligation.getAccountName());
         //existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());   //code
         //use dataSource to find bankAccountType
-        /*if(!Util.isEmpty(obligation.getDataSource())){
+        if(!Util.isEmpty(obligation.getDataSource())){
             DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource());
             String code = obligation.getAccountStatus();
             BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
-            BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-            existingCreditDetailView.setAccountStatus(bankAccountStatusView);
-        }*/
+            if(bankAccountStatus != null){
+                BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+            } else {
+                existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+            }
+        }
         existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
         existingCreditDetailView.setAccountNumber(obligation.getAccountNumber());
         existingCreditDetailView.setAccountSuf(obligation.getAccountSuffix());
@@ -100,12 +104,16 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetailView.setAccountName(accountName.toString());
                 existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
                 //existingCreditDetailView.setAccountStatus(appInProcess.getStatus());  delete
-                /*if(!Util.isEmpty(appInProcess.getStatus())){
+                if(!Util.isEmpty(appInProcess.getStatus())){
                     BankAccountType bankAccountType = bankAccountTypeDAO.getAccountTypeRLOS();
-                    BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
-                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
-                }*/
+                    if(bankAccountType != null){
+                        BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
+                        BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                        existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                    } else {
+                        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                    }
+                }
                 existingCreditDetailView.setAccountSuf("-");
                 existingCreditDetailView.setProductCode(creditDetail.getProductCode());
                 existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());

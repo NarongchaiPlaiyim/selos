@@ -13,7 +13,7 @@
                     <td colspan="3">
                         <p:selectOneMenu id="dlgSelBrDocType" value="#{prescreenMaker.borrowerInfo.documentType.id}"
                                          required="#{not empty param[searchButton.clientId] || not empty param[saveCustomerButton.clientId]}"
-                                         size="1" style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableDocumentType}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.documentTypeList}"
@@ -397,7 +397,7 @@
                     <td class="title">Relationship :</td>
                     <td>
                         <p:selectOneMenu id="dlgSelSpRelation" value="#{prescreenMaker.borrowerInfo.spouse.relation.id}"
-                                         size="1" style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.spouseRelationList}"
@@ -422,7 +422,7 @@
                     <td class="title">Reference :</td>
                     <td>
                         <p:selectOneMenu id="dlgSelSpReference" value="#{prescreenMaker.borrowerInfo.spouse.reference.id}"
-                                         size="1" style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                         required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.spouseReferenceList}"
@@ -628,7 +628,7 @@
                     <td class="title">Relationship :</td>
                     <td>
                         <p:selectOneMenu id="dlgSelJrRelation" value="#{prescreenMaker.borrowerInfo.relation.id}"
-                                         size="1" style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCustomerButton.clientId]}"
                                          disabled="#{not prescreenMaker.enableCustomerForm}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -654,8 +654,7 @@
                     <td class="title">Reference :</td>
                     <td>
                         <p:selectOneMenu id="dlgSelJrReference" value="#{prescreenMaker.borrowerInfo.reference.id}"
-                                         size="1"
-                                         style="width: 200px;"
+                                         size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableCustomerForm}"
                                          required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
