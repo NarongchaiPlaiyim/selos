@@ -105,12 +105,14 @@
 
                                 <p:commandButton value="Add New User" actionListener="#{isa.onOpenNewUserForm()}"
                                                  oncomplete="PF('manageUserDlg').show()"
-                                                 update=":manageDialogForm"/>
+                                                 update=":manageDialogForm">
+                                    <p:resetInput target=":manageDialogForm"/>
+                                                 </p:commandButton>
 
-                                <p:commandButton value="เปิดการใช้งาน" action="#{isa.onEditUserActive}" update=":userTableData">
+                                <p:commandButton value="เปิดการใช้งาน" oncomplete="confirmEditUserActiveDlg.show()">
                                     <f:setPropertyActionListener value="1" target="#{isa.active}"/>
                                 </p:commandButton>
-                                <p:commandButton value="ปิดการใช้งาน" action="#{isa.onEditUserActive}" update=":userTableData">
+                                <p:commandButton value="ปิดการใช้งาน" oncomplete="confirmEditUserActiveDlg.show()">
                                     <f:setPropertyActionListener value="0" target="#{isa.active}"/>
                                 </p:commandButton>
 
@@ -181,6 +183,7 @@
                                                  update=":manageDialogForm">
                                     <f:setPropertyActionListener value="#{c.id}"
                                                                  target="#{isa.id}"  />
+                                    <p:resetInput target=":manageDialogForm"/>
                                         </p:commandButton>
 
                                 <p:commandButton icon="ui-icon-trash"
@@ -249,6 +252,15 @@
             <ui:param name="controller" value="#{isa}"/>
             <ui:param name="action" value="editUser"/>
             <ui:param name="update" value=":userTableData"/>
+        </ui:include>
+
+        <ui:include src="site/dialog/confirmEditDlg.xhtml">
+            <ui:param name="id" value="confirmEditUserActiveDialog"/>
+            <ui:param name="name" value="confirmEditUserActiveDlg"/>
+            <ui:param name="formId" value="frmConfirmEditUserActive"/>
+            <ui:param name="controller" value="#{isa}"/>
+            <ui:param name="action" value="onEditUserActive"/>
+            <ui:param name="update" value=":userTableData,:msgBoxSystemMessagePanel"/>
         </ui:include>
 
     </h:body>
