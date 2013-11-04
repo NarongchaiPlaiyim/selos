@@ -87,7 +87,7 @@ public class CustomerInfoControl extends BusinessControl {
         return caseBorrowerTypeId;
     }
 
-    public long saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
+    public void saveCustomerInfoIndividual(CustomerInfoView customerInfoView, long workCaseId){
         WorkCase workCase = workCaseDAO.findById(workCaseId);
 
         customerInfoView.getCustomerEntity().setId(1);
@@ -132,8 +132,6 @@ public class CustomerInfoControl extends BusinessControl {
                 }
             }
         }
-
-        return customer.getId();
     }
 
     public CustomerInfoView getCustomerIndividualById(long id){
