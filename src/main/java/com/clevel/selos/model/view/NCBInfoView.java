@@ -143,7 +143,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getNplTMBMonth() {
-        return nplTMBMonth;
+        if(nplTMBFlag == true){
+            return nplTMBMonth;
+        } else{
+            return 0;
+        }
+
     }
 
     public void setNplTMBMonth(int nplTMBMonth) {
@@ -151,7 +156,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getNplTMBYear() {
-        return nplTMBYear;
+        if(nplTMBFlag == true){
+            return nplTMBYear;
+        } else{
+            return 0;
+        }
+
     }
 
     public void setNplTMBYear(int nplTMBYear) {
@@ -160,7 +170,12 @@ public class NCBInfoView implements Serializable {
 
 
     public int getNplOtherMonth() {
-        return nplOtherMonth;
+        if(nplOtherFlag == true){
+            return nplOtherMonth;
+        } else{
+            return 0;
+        }
+
     }
 
     public void setNplOtherMonth(int nplOtherMonth) {
@@ -168,7 +183,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getNplOtherYear() {
-        return nplOtherYear;
+        if(nplOtherFlag == true){
+            return nplOtherYear;
+        } else{
+            return 0;
+        }
+
     }
 
     public void setNplOtherYear(int nplOtherYear) {
@@ -176,7 +196,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getTdrTMBMonth() {
-        return tdrTMBMonth;
+        if(tdrTMBFlag == true){
+            return tdrTMBMonth;
+        }else{
+            return 0;
+        }
+
     }
 
     public void setTdrTMBMonth(int tdrTMBMonth) {
@@ -184,7 +209,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getTdrTMBYear() {
-        return tdrTMBYear;
+        if(tdrTMBFlag == true){
+            return tdrTMBYear;
+        }else{
+            return 0;
+        }
+
     }
 
     public void setTdrTMBYear(int tdrTMBYear) {
@@ -192,7 +222,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getTdrOtherMonth() {
-        return tdrOtherMonth;
+        if(tdrOtherFlag == true){
+            return tdrOtherMonth;
+        }else{
+            return 0;
+        }
+
     }
 
     public void setTdrOtherMonth(int tdrOtherMonth) {
@@ -200,7 +235,12 @@ public class NCBInfoView implements Serializable {
     }
 
     public int getTdrOtherYear() {
-        return tdrOtherYear;
+        if(tdrOtherFlag == true){
+            return tdrOtherYear;
+        }else{
+            return 0;
+        }
+
     }
 
     public void setTdrOtherYear(int tdrOtherYear) {

@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -331,6 +334,13 @@ public class Isa implements Serializable {
         RequestContext context = RequestContext.getCurrentInstance();
         try {
 
+//            if (selectUserDetail.length == 0) {
+//                message = "Please Select User ";
+//                context.execute("msgBoxSystemMessageDlg.show()");
+//            } else {
+//                context.execute("confirmDeleteUserListDlg.show()");
+//            }
+
             if (active == 1) {
                 isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.ACTIVE);
             } else if (active == 0) {
@@ -432,11 +442,12 @@ public class Isa implements Serializable {
         builder.append("Status");builder.append("\n");
 
         try{
-            list=isaBusinessControl.getUserReportList();
+             list=isaBusinessControl.getUserReportList();
         }catch (Exception e){
 
         }
         int number=1;
+        if(list!=null){
         for(IsaUserReportView isaUserReportView:list){
             builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
             builder.append("'"+isaUserReportView.getUserId()+"'");builder.append(COMMA_DELIMITED);
@@ -459,11 +470,30 @@ public class Isa implements Serializable {
 
             number++;
         }
+        }
         System.out.println(builder.toString());
         ScvExport scvExport=new ScvExport();
 
-//        scvExport.exportCSV(null,"ok",builder.toString());
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+
+        scvExport.exportCSV(response,"ok",builder.toString());
+
+
+        context.responseComplete();
     }
+
+
+    public void uploadUserFile(){
+         log.debug("uploadUserFile()");
+
+
+
+
+
+    }
+
+
 
     public List<User> getUserDetail() {
         return userDetail;

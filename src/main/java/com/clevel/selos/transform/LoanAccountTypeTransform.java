@@ -22,6 +22,7 @@ public class LoanAccountTypeTransform {
         }
         loanAccountTypeView.setId(loanAccountType.getId());
         loanAccountTypeView.setName(loanAccountType.getName());
+        loanAccountTypeView.setCalculateType(loanAccountType.getCalculateType());
         return loanAccountTypeView;
     }
 
@@ -43,6 +44,7 @@ public class LoanAccountTypeTransform {
         }
         loanAccountType.setId(loanAccountTypeView.getId());
         loanAccountType.setName(loanAccountTypeView.getName());
+
         return loanAccountType;
 
     }

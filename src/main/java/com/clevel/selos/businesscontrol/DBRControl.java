@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.DBRDAO;
 import com.clevel.selos.dao.working.DBRDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.DBRDetail;
@@ -50,7 +51,9 @@ public class DBRControl {
     public void saveDBRInfo(DBRView dbrView, long workCaseId, String userId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         User user = userDAO.findById(userId);
-        DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
+
+        DBR dbr = calculateDBR(dbrView, user, workCase);
+
         DBR returnDBRInfo = dbrdao.persist(dbr);
         List<DBRDetailView> dbrDetailViews = dbrView.getDbrDetailViews();
         List<DBRDetail> newDbrDetails = new ArrayList<DBRDetail>();  // new record
@@ -84,10 +87,28 @@ public class DBRControl {
 
     public DBRView getDBRByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
-        workCase.setId(workCaseId);
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
         DBRView dbrView = dbrTransform.getDBRView(dbr);
         return dbrView;
+    }
+
+    private DBR calculateDBR(DBRView dbrView, User user, WorkCase workCase){
+        DBR result = new DBR();
+        int roleId = user.getRole().getId();
+        DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
+        if(roleId == RoleUser.UW.getValue()){
+            // DBRInfo
+
+
+            //DBRDetail
+
+        }else if(roleId == RoleUser.BDM.getValue()){
+
+        }else{
+            return result;
+        }
+        log.debug("calculateDBR complete");
+        return result;
     }
 
 }

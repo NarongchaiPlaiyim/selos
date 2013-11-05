@@ -3,7 +3,7 @@ package com.clevel.selos.integration.brms.convert;
 import com.clevel.selos.integration.brms.model.request.*;
 
 public interface ConvertInf {
-    public void convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception;
+    public com.clevel.selos.integration.brms.service.prescreenunderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(PreScreenRequest inputModel) throws Exception;
 
     public com.clevel.selos.integration.brms.service.fullapplicationUnderwritingrules.DecisionServiceRequest convertInputModelToRequestModel(FullApplicationRequest inputModel) throws Exception;
 
