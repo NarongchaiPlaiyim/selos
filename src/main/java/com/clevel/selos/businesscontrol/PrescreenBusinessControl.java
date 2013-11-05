@@ -371,6 +371,14 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 ncbOutputView.setNcrsOutputModelList(ncrsOutputModelList);
 
+                for(NCRSOutputModel ncrsOutputModel : ncrsOutputModelList){
+                    if(ncrsOutputModel.getActionResult() == ActionResult.SUCCEED){
+                        Customer customer = individualDAO.findByCitizenId(ncrsOutputModel.getIdNumber(), workCasePreScreenId);
+                        customer.setNcbFlag(1);
+                        customerDAO.persist(customer);
+                    }
+                }
+
                 //**** END FUNCTION ****//
                 //*** Return ncbOutputView to Controller ***//
             } else if(nccrsInputModel != null){
@@ -378,6 +386,14 @@ public class PrescreenBusinessControl extends BusinessControl {
                 List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
 
                 ncbOutputView.setNccrsOutputModelList(nccrsOutputModelList);
+
+                for(NCCRSOutputModel nccrsOutputModel : nccrsOutputModelList){
+                    if(nccrsOutputModel.getActionResult() == ActionResult.SUCCEED){
+                        Customer customer = individualDAO.findByCitizenId(nccrsOutputModel.getIdNumber(), workCasePreScreenId);
+                        customer.setNcbFlag(1);
+                        customerDAO.persist(customer);
+                    }
+                }
                 //**** End function ****//
             }
 

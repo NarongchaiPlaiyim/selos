@@ -1664,7 +1664,7 @@ public class NCBBizTransform extends BusinessTransform {
                     return true;
                 }
             }
-            return true;
+            return false;
         }
         return false;
     }
