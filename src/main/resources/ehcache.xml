@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="false" monitoring="autodetect"
+         dynamicConfig="false">
+
+    <cache name="com.clevel.selos.model.db.master.BusinessGroup"
+           maxEntriesLocalHeap="100"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.BusinessDescription"
+           maxEntriesLocalHeap="2000"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.Country"
+           maxEntriesLocalHeap="300"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.Region"
+           maxEntriesLocalHeap="20"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.Province"
+           maxEntriesLocalHeap="100"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.District"
+           maxEntriesLocalHeap="1200"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+    <cache name="com.clevel.selos.model.db.master.SubDistrict"
+           maxEntriesLocalHeap="10000"
+           eternal="true"
+           overflowToDisk="false"
+           statistics="true"
+            />
+
+</ehcache>

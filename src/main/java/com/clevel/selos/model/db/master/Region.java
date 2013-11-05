@@ -2,6 +2,8 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_region")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Region implements Serializable {
     @Id
     @Column(name = "code")

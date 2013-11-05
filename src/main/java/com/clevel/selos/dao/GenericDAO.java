@@ -34,19 +34,9 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         this.session = session;
     }
 
-//    public void setLog(Logger log) {
-//        this.log = log;
-//    }
-
     public void setEntityClass(Class<T> T) {
         this.entityClass = T;
     }
-
-//    public void setup(Session session,Class<T> T,Logger log) {
-//        setSession(session);
-//        setEntityClass(T);
-//        setLog(log);
-//    }
 
     public Class<T> getEntityClass() {
         return entityClass;
