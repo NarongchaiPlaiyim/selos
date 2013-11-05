@@ -1,0 +1,65 @@
+
+package com.tmb.common.data.eaisearchindividualcustomercm;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
+
+
+/**
+ * <p>Java class for anonymous complex type.
+ * 
+ * <p>The following schema fragment specifies the expected content contained within this class.
+ * 
+ * <pre>
+ * &lt;complexType>
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;sequence>
+ *         &lt;element name="responseData" type="{http://data.common.tmb.com/responseSearchIndividualCustomer}resSearchIndividualCustomer"/>
+ *       &lt;/sequence>
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
+ * </pre>
+ * 
+ * 
+ */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "", propOrder = {
+    "responseData"
+})
+@XmlRootElement(name = "searchIndividualCustomerResponse")
+public class SearchIndividualCustomerResponse {
+
+    @XmlElement(required = true)
+    protected ResSearchIndividualCustomer responseData;
+
+    /**
+     * Gets the value of the responseData property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link ResSearchIndividualCustomer }
+     *     
+     */
+    public ResSearchIndividualCustomer getResponseData() {
+        return responseData;
+    }
+
+    /**
+     * Sets the value of the responseData property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link ResSearchIndividualCustomer }
+     *     
+     */
+    public void setResponseData(ResSearchIndividualCustomer value) {
+        this.responseData = value;
+    }
+
+}
