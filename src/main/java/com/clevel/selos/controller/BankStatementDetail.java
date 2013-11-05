@@ -108,7 +108,7 @@ public class BankStatementDetail implements Serializable {
     private void preRender() {
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
-        session.setAttribute("stepId", 1001);
+        session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
 
         log.info("preRender ::: setSession ");
@@ -200,8 +200,15 @@ public class BankStatementDetail implements Serializable {
 
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
+        if (isTmbBank) {
+            summaryView.getTmbBankStmtViewList().add(bankStmtView);
+        } else {
+            summaryView.getOthBankStmtViewList().add(bankStmtView);
+        }
+
         try {
-            bankStmtControl.saveBankStmt(summaryView, bankStmtView, workCaseId, workCasePrescreenId, userId);
+            bankStmtControl.saveBankStmtSummary(summaryView,workCaseId, workCasePrescreenId, userId);
+
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
