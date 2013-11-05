@@ -2,12 +2,17 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_province")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Province implements Serializable {
     @Id
     @Column(name = "code")
