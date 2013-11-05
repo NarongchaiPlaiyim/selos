@@ -906,6 +906,7 @@ public class NCBBizTransform extends BusinessTransform {
                                         String reason = "Unexpected value from NCCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
+                                        ncbViews.add(ncbView);
                                         continue;
                                     }
 
@@ -1505,6 +1506,7 @@ public class NCBBizTransform extends BusinessTransform {
                                         String reason = "Unexpected value from NCCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
+                                        ncbViews.add(ncbView);
                                         continue;
                                     }
 
