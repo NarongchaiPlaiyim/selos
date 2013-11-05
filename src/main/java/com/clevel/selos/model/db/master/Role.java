@@ -94,7 +94,7 @@ public class Role implements Serializable {
                 append("description", description).
                 append("systemName", systemName).
                 append("roleType", roleType).
-                append("stepList", stepList).
+//                append("stepList", stepList).
                 append("active", active).
                 toString();
     }

@@ -25,7 +25,6 @@ public class ValidationUtil {
         return value == expected;
     }
 
-
     //for NCB
     public static boolean isEmpty(String field) {
         return (field == null) || "".equalsIgnoreCase(field.trim());
@@ -109,5 +108,9 @@ public class ValidationUtil {
 
     public static boolean isValueEqualZero(BigDecimal value) {
         return BigDecimal.ZERO.compareTo(value) == 0;
+    }
+
+    public static boolean isValueEqual(BigDecimal value1, BigDecimal value2) {
+        return value1.compareTo(value2) == 0;
     }
 }

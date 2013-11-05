@@ -85,6 +85,8 @@ public class NCBInfo implements Serializable {
     private Long customerId;
     private User user;
 
+    private boolean nplRendered;
+    private boolean tdrRendered;
     private List<String> yearList;
 
     @Inject
@@ -130,15 +132,11 @@ public class NCBInfo implements Serializable {
 
             ncbInfoView = ncbInfoControl.getNCBInfoView(customerId); // find NCB by customer
 
-            log.info("ncbCusMarriageStatus :: {}", ncbInfoView.getNcbCusMarriageStatus());
-            log.info("enquiry :: {}", ncbInfoView.getEnquiry());
-            log.info("ncbLastInfoAsOfDate :: {}", ncbInfoView.getNcbLastInfoAsOfDate());
-            log.info("ncbCusAddress :: {}", ncbInfoView.getNcbCusAddress());
-
             if (ncbInfoView != null) {
                 ncbDetailViewList = ncbInfoControl.getNcbDetailListView(ncbInfoView);
                 log.info("ncbDetailViewList  :::::::::::: {} ", ncbDetailViewList);
-
+                toControlNplFlagRendered();
+                toControlTdrFlagRendered();
             }
         }else{
             try {
@@ -218,6 +216,27 @@ public class NCBInfo implements Serializable {
 
     }
 
+    public void toControlNplFlagRendered(){
+        log.info("nplFlag :: {}", ncbInfoView.getNplFlag());
+
+        if(ncbInfoView.getNplFlag() == 0){
+            nplRendered = false;
+        }else{
+            nplRendered = true;
+        }
+
+    }
+
+    public void toControlTdrFlagRendered(){
+        log.info("tdrFlag :: {}", ncbInfoView.getTdrFlag());
+
+        if(ncbInfoView.getTdrFlag() == 0){
+            tdrRendered = false;
+        }else{
+            tdrRendered = true;
+        }
+
+    }
 
     // onclick add button
     public void onAddNcbRecord() {
@@ -779,5 +798,21 @@ public class NCBInfo implements Serializable {
 
     public void setYearList(List<String> yearList) {
         this.yearList = yearList;
+    }
+
+    public boolean isNplRendered() {
+        return nplRendered;
+    }
+
+    public void setNplRendered(boolean nplRendered) {
+        this.nplRendered = nplRendered;
+    }
+
+    public boolean isTdrRendered() {
+        return tdrRendered;
+    }
+
+    public void setTdrRendered(boolean tdrRendered) {
+        this.tdrRendered = tdrRendered;
     }
 }

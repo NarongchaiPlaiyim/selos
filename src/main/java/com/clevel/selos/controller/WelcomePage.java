@@ -18,6 +18,8 @@ import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
+import com.clevel.selos.report.ReportService;
+import com.clevel.selos.report.SimpleReport;
 import com.clevel.selos.system.audit.SystemAuditor;
 import com.clevel.selos.system.audit.UserAuditor;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -27,6 +29,7 @@ import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +37,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -393,6 +397,14 @@ public class WelcomePage implements Serializable {
 
         log.debug("getDateTimeString dateTh: {}",DateTimeUtil.getDateTimeStr(dateTh));
         log.debug("getDateTimeString dateEn: {}",DateTimeUtil.getDateTimeStr(dateEn));
+    }
+
+    @Inject
+    @SimpleReport
+    ReportService reportService;
+
+    public StreamedContent genReport() {
+        return reportService.getReportFile(new HashMap<String, Object>());
     }
 
     public Date getDateTh() {
