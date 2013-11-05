@@ -294,6 +294,7 @@ public class PrescreenMaker implements Serializable {
             log.debug("onCreation ::: stepId : {}", stepId);
             log.debug("onCreation ::: queueName : {}", queueName);
 
+
             user = (User)session.getAttribute("user");
 
             modeForButton = ModeForButton.ADD;

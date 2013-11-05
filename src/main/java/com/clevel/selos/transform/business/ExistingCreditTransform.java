@@ -62,12 +62,16 @@ public class ExistingCreditTransform extends BusinessTransform {
         //existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());   //code
         //use dataSource to find bankAccountType
         if(!Util.isEmpty(obligation.getDataSource())){
-            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource());
-            String code = obligation.getAccountStatus();
-            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
-            if(bankAccountStatus != null){
-                BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource().trim());
+            if(dwhBankDataSource != null){
+                String code = obligation.getAccountStatus();
+                BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
+                if(bankAccountStatus != null){
+                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                } else {
+                    existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                }
             } else {
                 existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
             }
