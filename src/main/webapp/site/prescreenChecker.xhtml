@@ -99,6 +99,11 @@
                                  update=":frmMain"
                                  onstart="blockUICheckNCB.show()"
                                  oncomplete="blockUICheckNCB.hide()"/>
+                <p:remoteCommand name="commandSaveNCB"
+                                 action="#{prescreenChecker.onSaveNCB()}"
+                                 update=":frmMain"
+                                 onstart="blockUISavNCB.show()"
+                                 oncomplete="blockUISavNCB.hide()"/>
                 <p:remoteCommand name="commandCheckCSI"
                                  action="#{prescreenChecker.onCheckCSI()}"
                                  update=":frmMain"
@@ -117,6 +122,10 @@
             </p:blockUI>
             <p:blockUI block="pnl_maincontainer" widgetVar="blockUICheckNCB">
                 CHECKING NCB<br/>
+                <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+            </p:blockUI>
+            <p:blockUI block="pnl_maincontainer" widgetVar="blockUISavNCB">
+                SAVING NCB<br/>
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>
             <p:blockUI block="pnl_maincontainer" widgetVar="blockUICheckCSI">

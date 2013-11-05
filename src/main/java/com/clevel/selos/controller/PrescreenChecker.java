@@ -9,6 +9,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.view.CustomerInfoView;
+import com.clevel.selos.model.view.NCBOutputView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.security.UserDetail;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -77,6 +78,7 @@ public class PrescreenChecker implements Serializable {
     private String remark;
 
     private List<NcbView> ncbViewList;
+    private NCBOutputView ncbOutputView;
 
     private int customerEntityId;
 
@@ -123,7 +125,6 @@ public class PrescreenChecker implements Serializable {
         //TODO Generate row for textBox to check Citizen id
         List<CustomerInfoView> customerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
         if(customerInfoViews != null){
-            //customerInfoViewList = prescreenBusinessControl.getBorrowerViewListByCustomerViewList(customerInfoViews);
             customerInfoViewList = generateCustomerInfoList(customerInfoViews);
         }
 
@@ -201,7 +202,6 @@ public class PrescreenChecker implements Serializable {
 
         if(failCount == 0){
             //TODO Check ncb
-            //onCheckNCB();
             RequestContext.getCurrentInstance().execute("blockUICheckCustomer.hide()");
             RequestContext.getCurrentInstance().execute("commandCheckNCB()");
         }
@@ -235,80 +235,77 @@ public class PrescreenChecker implements Serializable {
         try{
             //TODO get data for NCB
             //** Retrieve new customer data !protect data is not up to date **//
-            List<CustomerInfoView> customerInfoViews = new ArrayList<CustomerInfoView>();
-            List<CustomerInfoView> tmpCustomerInfoViews = prescreenBusinessControl.getCustomerListByWorkCasePreScreenId(workCasePreScreenId);
+            ncbOutputView = prescreenBusinessControl.getNCBFromNCB(customerInfoViewList, userId, workCasePreScreenId);
 
-            log.debug("onCheckNCB ::: customerInfoView size : {}", tmpCustomerInfoViews.size());
-
-            if(tmpCustomerInfoViews != null){
-                customerInfoViews = generateCustomerInfoList(tmpCustomerInfoViews);
-            }
-
-            ncbViewList = prescreenBusinessControl.getNCBFromNCB(customerInfoViews, userId, workCasePreScreenId);
-            log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
-            int index = 0;
-            int failedCount = 0;
-
-            for(CustomerInfoView customerInfoView : customerInfoViewList){
-                if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
-                    customerInfoView.setNcbReason("");
-                    customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
-                }
-            }
-
-            if(ncbViewList != null && ncbViewList.size() > 0){
-                for(NcbView item : ncbViewList){
-                    index = 0;
-                    for(CustomerInfoView customerInfoView : customerInfoViewList){
-                        if(item.getIdNumber() != null){
-                            log.debug("onCheckNCB ::: index : {}", index);
-                            if(customerInfoView.getCustomerEntity() != null){
-                                if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
-                                    if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
-                                        log.debug("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
-                                        customerInfoView.setNcbReason(item.getReason());
-                                        customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCESS)){
-                                            customerInfoView.setNcbFlag(RadioValue.YES.value());
-                                        }else{
-                                            failedCount = failedCount + 1;
-                                        }
-                                    }
-                                }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
-                                    if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
-                                        log.debug("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
-                                        customerInfoView.setNcbReason(item.getReason());
-                                        customerInfoView.setNcbResult(item.getResult().name());
-                                        if(item.getResult().equals(ActionResult.SUCCESS)){
-                                            customerInfoView.setNcbFlag(RadioValue.YES.value());
-                                        }else{
-                                            failedCount = failedCount + 1;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        log.debug("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
-                        customerInfoViewList.set(index, customerInfoView);
-                        index = index + 1;
-                    }
-                }
-                //TODO update customer to database
-                log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
-                prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
-                if(failedCount != 0){
-                    success = false;
-                } else {
-                    success = true;
-                }
-                RequestContext.getCurrentInstance().execute("commandCheckCSI()");
-            }
+            RequestContext.getCurrentInstance().execute("commandSaveNCB()");
         } catch(Exception ex){
             log.error("Exception : {}", ex);
             messageHeader = "Check NCB failed.";
             message = ex.getMessage();
             messageErr = true;
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onSaveNCB(){
+        ncbViewList = prescreenBusinessControl.getNCBData(ncbOutputView, workCasePreScreenId);
+        log.debug("onCheckNCB ::: ncbViewList : {}", ncbViewList);
+        int index = 0;
+        int failedCount = 0;
+
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            if(customerInfoView.getNcbFlag() == RadioValue.YES.value()){
+                customerInfoView.setNcbReason("");
+                customerInfoView.setNcbResult(ActionResult.SUCCESS.name());
+            }
+        }
+
+        if(ncbViewList != null && ncbViewList.size() > 0){
+            for(NcbView item : ncbViewList){
+                index = 0;
+                for(CustomerInfoView customerInfoView : customerInfoViewList){
+                    if(item.getIdNumber() != null){
+                        log.debug("onCheckNCB ::: index : {}", index);
+                        if(customerInfoView.getCustomerEntity() != null){
+                            if(customerInfoView.getCustomerEntity().getId() == 1 && customerInfoView.getCitizenId() != null){
+                                if(item.getIdNumber().equals(customerInfoView.getCitizenId())){
+                                    log.debug("onCheckNCB ::: individual citizenId : {}", customerInfoView.getCitizenId());
+                                    customerInfoView.setNcbReason(item.getReason());
+                                    customerInfoView.setNcbResult(item.getResult().name());
+                                    if(item.getResult().equals(ActionResult.SUCCESS)){
+                                        customerInfoView.setNcbFlag(RadioValue.YES.value());
+                                    }else{
+                                        failedCount = failedCount + 1;
+                                    }
+                                }
+                            }else if(customerInfoView.getCustomerEntity().getId() == 2 && customerInfoView.getRegistrationId() != null){
+                                if(item.getIdNumber().equals(customerInfoView.getRegistrationId())){
+                                    log.debug("onCheckNCB ::: juristic registerId : {}", customerInfoView.getRegistrationId());
+                                    customerInfoView.setNcbReason(item.getReason());
+                                    customerInfoView.setNcbResult(item.getResult().name());
+                                    if(item.getResult().equals(ActionResult.SUCCESS)){
+                                        customerInfoView.setNcbFlag(RadioValue.YES.value());
+                                    }else{
+                                        failedCount = failedCount + 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    log.debug("onCheckNCB ::: setCustomerInfo : {}", customerInfoView);
+                    customerInfoViewList.set(index, customerInfoView);
+                    index = index + 1;
+                }
+            }
+            //TODO update customer to database
+            log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
+            prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, workCasePreScreenId);
+            if(failedCount != 0){
+                success = false;
+            } else {
+                success = true;
+            }
+            RequestContext.getCurrentInstance().execute("commandCheckCSI()");
         }
     }
 

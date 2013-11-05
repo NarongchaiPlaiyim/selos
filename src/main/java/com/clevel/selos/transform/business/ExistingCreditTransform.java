@@ -190,6 +190,16 @@ public class ExistingCreditTransform extends BusinessTransform {
                 }
                 existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
                 existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
+                if(existingCreditDetailView.getAccountStatus() != null){
+                    BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getAccountStatus());
+                    if(bankAccountStatus.getId() != 0){
+                        existingCreditDetail.setAccountstatus(bankAccountStatus);
+                    }else{
+                        existingCreditDetail.setAccountstatus(null);
+                    }
+                }else{
+                    existingCreditDetail.setAccountstatus(null);
+                }
                 existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
                 existingCreditDetail.setExistingCreditSummary(existingCreditSummary);
                 existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
@@ -198,6 +208,8 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetail.setLimit(existingCreditDetailView.getLimit());
                 existingCreditDetail.setOutstanding(existingCreditDetailView.getOutstanding());
                 existingCreditDetail.setIntFee(existingCreditDetailView.getIntFeePercent());
+
+                existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
                 existingCreditDetailList.add(existingCreditDetail);
             }
         }

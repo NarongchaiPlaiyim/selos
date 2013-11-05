@@ -403,9 +403,9 @@ public class WelcomePage implements Serializable {
     @SimpleReport
     ReportService reportService;
 
-    public StreamedContent genReport() {
+    /*public StreamedContent genReport() {
         return reportService.getReportFile(new HashMap<String, Object>());
-    }
+    }*/
 
     public Date getDateTh() {
         return dateTh;

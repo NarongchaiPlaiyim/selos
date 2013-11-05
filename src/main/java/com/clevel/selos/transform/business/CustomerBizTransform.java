@@ -116,10 +116,10 @@ public class CustomerBizTransform extends BusinessTransform {
                         customerInfoView.setNationality(new Nationality());
                     }
                     //TODO Check Null before Casting
-                    if(Util.isEmpty(individualModel.getNumberOfChild())){
+                    if(!Util.isEmpty(individualModel.getNumberOfChild())){
                         customerInfoView.setNumberOfChild(new Integer(individualModel.getNumberOfChild()));
                     }
-                    if(Util.isEmpty(individualModel.getOccupationCode())){
+                    if(!Util.isEmpty(individualModel.getOccupationCode())){
                         if (individualModel.getOccupationCode().matches("[0-9]*")) {
                             customerInfoView.setOccupation(occupationDAO.findOneByCriteria(Restrictions.eq("code", new Integer(individualModel.getOccupationCode()))));
                             if (customerInfoView.getOccupation() == null) {

@@ -276,8 +276,9 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
-        List<NcbView> ncbViewList = new ArrayList<NcbView>();
+    public NCBOutputView getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+        //List<NcbView> ncbViewList = new ArrayList<NcbView>();
+        NCBOutputView ncbOutputView = new NCBOutputView();
 
         NCRSInputModel ncrsInputModel = null;
         ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
@@ -349,6 +350,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 nccrsModelList.add(nccrsModel);
             }
         }
+
         log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
         if(ncrsModelList.size() > 0){
             ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
@@ -367,82 +369,97 @@ public class PrescreenBusinessControl extends BusinessControl {
                 log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
                 List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
 
-                log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
-                List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
+                ncbOutputView.setNcrsOutputModelList(ncrsOutputModelList);
 
-                log.info("getNCBFromNCB ::: ncbIndividualViewList : {}", ncbIndividualViewList);
-                if(ncbIndividualViewList != null){
-                    for(NcbView item : ncbIndividualViewList){
-                        ncbViewList.add(item);
-                    }
-                }
-
-                //*** Save NCB Data to Database *** //
-                for(NcbView ncbView : ncbIndividualViewList){
-                    if(ncbView.getResult() == ActionResult.SUCCESS){
-                        Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
-                        log.info("saving ncb (individual) data ... findByCitizenId customer : {}", customer);
-                        if(customer == null ){
-                            customer = new Customer();
-                        }
-
-                        log.debug("saving ncb (individual) data ... ncbView before transform : {}", ncbView);
-                        NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
-                        List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
-
-                        //*** Save NCB ,, Transform NCB ***//
-                        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
-                        log.debug("saving ncb (individual) data ... ncbView after transform : {}", ncb);
-                        ncb.setCustomer(customer);
-                        ncbDAO.persist(ncb);
-
-                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
-                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
-                            ncbDetailDAO.persist(ncbDetailList);
-                        }
-                    }
-                }
-
-                //*** Return ncbIndividualViewList to Controller ***//
+                //**** END FUNCTION ****//
+                //*** Return ncbOutputView to Controller ***//
             } else if(nccrsInputModel != null){
                 log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
                 List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
-                log.info("getNCBFromNCB ::: nccrsOutputModelList : {}", nccrsOutputModelList);
-                List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
-                log.info("getNCBFromNCB ::: ncbJuristicViewList : {}", ncbJuristicViewList);
-                if(ncbJuristicViewList != null){
-                    for(NcbView item : ncbJuristicViewList){
-                        ncbViewList.add(item);
-                    }
-                }
 
-                //*** Save NCB Data to Database ***//
-                for(NcbView ncbView : ncbJuristicViewList){
-                    Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
-                    log.info("saving ncb (juristic) data ... findByCitizenId customer : {}", customer);
+                ncbOutputView.setNccrsOutputModelList(nccrsOutputModelList);
+                //**** End function ****//
+            }
+
+        } catch (Exception ex){
+            throw ex;
+        }
+
+        return ncbOutputView;
+    }
+
+    public List<NcbView> getNCBData(NCBOutputView ncbOutputView, long workCasePreScreenId){
+        List<NcbView> ncbViewList = new ArrayList<NcbView>();
+
+        if(ncbOutputView.getNcrsOutputModelList() != null && ncbOutputView.getNcrsOutputModelList().size() > 0){
+            log.info("getNCBData ::: ncrsOutputModelList {}", ncbOutputView.getNcrsOutputModelList());
+            List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncbOutputView.getNcrsOutputModelList());
+
+            log.info("getNCBData ::: ncbIndividualViewList : {}", ncbIndividualViewList);
+            if(ncbIndividualViewList != null){
+                for(NcbView item : ncbIndividualViewList){
+                    ncbViewList.add(item);
+                }
+            }
+
+            //*** Save NCB Data to Database *** //
+            for(NcbView ncbView : ncbIndividualViewList){
+                if(ncbView.getResult() == ActionResult.SUCCESS){
+                    Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                    log.info("saving ncb (individual) data ... findByCitizenId customer : {}", customer);
                     if(customer == null ){
                         customer = new Customer();
                     }
 
-                    log.debug("saving ncb (juristic) data ... ncbView before transform : {}", ncbView);
+                    log.debug("saving ncb (individual) data ... ncbView before transform : {}", ncbView);
                     NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                     List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
-                    //save NCB,, transform NCB
+                    //*** Save NCB ,, Transform NCB ***//
                     NCB ncb = ncbTransform.transformToModel(ncbInfoView);
-                    log.debug("saving ncb (juristic) data ... ncbView after transform : {}", ncb);
+                    log.debug("saving ncb (individual) data ... ncbView after transform : {}", ncb);
                     ncb.setCustomer(customer);
                     ncbDAO.persist(ncb);
-                    //transform NCBDetail list
+
                     if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
                         List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
                         ncbDetailDAO.persist(ncbDetailList);
                     }
                 }
             }
+        } else if(ncbOutputView.getNccrsOutputModelList() != null && ncbOutputView.getNccrsOutputModelList().size() > 0){
+            log.info("getNCBData ::: nccrsOutputModelList : {}", ncbOutputView.getNccrsOutputModelList());
+            List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(ncbOutputView.getNccrsOutputModelList());
+            log.info("getNCBData ::: ncbJuristicViewList : {}", ncbJuristicViewList);
+            if(ncbJuristicViewList != null){
+                for(NcbView item : ncbJuristicViewList){
+                    ncbViewList.add(item);
+                }
+            }
 
-        } catch (Exception ex){
-            throw ex;
+            //*** Save NCB Data to Database ***//
+            for(NcbView ncbView : ncbJuristicViewList){
+                Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+                log.info("saving ncb (juristic) data ... findByCitizenId customer : {}", customer);
+                if(customer == null ){
+                    customer = new Customer();
+                }
+
+                log.debug("saving ncb (juristic) data ... ncbView before transform : {}", ncbView);
+                NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
+                List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
+
+                //save NCB,, transform NCB
+                NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+                log.debug("saving ncb (juristic) data ... ncbView after transform : {}", ncb);
+                ncb.setCustomer(customer);
+                ncbDAO.persist(ncb);
+                //transform NCBDetail list
+                if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
+                    List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                    ncbDetailDAO.persist(ncbDetailList);
+                }
+            }
         }
 
         return ncbViewList;

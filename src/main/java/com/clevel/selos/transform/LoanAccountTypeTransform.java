@@ -11,9 +11,6 @@ import java.util.List;
 
 public class LoanAccountTypeTransform {
     @Inject
-    Logger log;
-
-    @Inject
     public LoanAccountTypeTransform() {
 
     }
