@@ -222,6 +222,7 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (!Util.isEmpty(currentWorstPaymentStatus)) {
                                             currentWorstPaymentStatus = getWorstCode(subjectAccountModel.getPaymt01(), currentWorstPaymentStatus);
                                         } else {
+                                            if(!isIgnoreCode(subjectAccountModel.getPaymt01()))
                                             currentWorstPaymentStatus = subjectAccountModel.getPaymt01();
                                         }
 
@@ -235,7 +236,9 @@ public class NCBBizTransform extends BusinessTransform {
                                                     numberOfOverLimit++;
                                                 }
                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), SIX_MONTH)) {
-                                                    worstCode = subjectAccountModel.getPaymt01();
+                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt01())){
+                                                        worstCode = subjectAccountModel.getPaymt01();
+                                                    }
                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt01())) {
                                                         numberOfOutStandingPayment++;
                                                     }
@@ -262,7 +265,14 @@ public class NCBBizTransform extends BusinessTransform {
                                                         numberOfOverLimit++;
                                                     }
                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), SIX_MONTH)) {
-                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
+                                                        if(!Util.isEmpty(worstCode)){
+                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
+                                                        } else {
+                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt02())){
+                                                                worstCode = subjectAccountModel.getPaymt02();
+                                                            }
+                                                        }
+
                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt02())) {
                                                             numberOfOutStandingPayment++;
                                                         }
@@ -289,7 +299,14 @@ public class NCBBizTransform extends BusinessTransform {
                                                             numberOfOverLimit++;
                                                         }
                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), SIX_MONTH)) {
-                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
+                                                            if(!Util.isEmpty(worstCode)){
+                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
+                                                            } else {
+                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt03())){
+                                                                    worstCode = subjectAccountModel.getPaymt03();
+                                                                }
+                                                            }
+
                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt03())) {
                                                                 numberOfOutStandingPayment++;
                                                             }
@@ -316,7 +333,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 numberOfOverLimit++;
                                                             }
                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), SIX_MONTH)) {
-                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
+                                                                if(!Util.isEmpty(worstCode)){
+                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
+                                                                } else {
+                                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt04())){
+                                                                        worstCode = subjectAccountModel.getPaymt04();
+                                                                    }
+                                                                }
                                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt04())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
@@ -343,7 +366,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     numberOfOverLimit++;
                                                                 }
                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), SIX_MONTH)) {
-                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
+                                                                    if(!Util.isEmpty(worstCode)){
+                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
+                                                                    } else {
+                                                                        if(!isIgnoreCode(subjectAccountModel.getPaymt05())){
+                                                                            worstCode = subjectAccountModel.getPaymt05();
+                                                                        }
+                                                                    }
                                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt05())) {
                                                                         numberOfOutStandingPayment++;
                                                                     }
@@ -370,7 +399,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         numberOfOverLimit++;
                                                                     }
                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), SIX_MONTH)) {
-                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
+                                                                        if(!Util.isEmpty(worstCode)){
+                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
+                                                                        } else {
+                                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt06())){
+                                                                                worstCode = subjectAccountModel.getPaymt06();
+                                                                            }
+                                                                        }
                                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt06())) {
                                                                             numberOfOutStandingPayment++;
                                                                         }
@@ -397,7 +432,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                             numberOfOverLimit++;
                                                                         }
                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), SIX_MONTH)) {
-                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
+                                                                            if(!Util.isEmpty(worstCode)){
+                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
+                                                                            } else {
+                                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt07())){
+                                                                                    worstCode = subjectAccountModel.getPaymt07();
+                                                                                }
+                                                                            }
                                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt07())) {
                                                                                 numberOfOutStandingPayment++;
                                                                             }
@@ -424,7 +465,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                 numberOfOverLimit++;
                                                                             }
                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), SIX_MONTH)) {
-                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
+                                                                                if(!Util.isEmpty(worstCode)){
+                                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
+                                                                                } else {
+                                                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt08())){
+                                                                                        worstCode = subjectAccountModel.getPaymt08();
+                                                                                    }
+                                                                                }
                                                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt08())) {
                                                                                     numberOfOutStandingPayment++;
                                                                                 }
@@ -451,7 +498,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                     numberOfOverLimit++;
                                                                                 }
                                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), SIX_MONTH)) {
-                                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
+                                                                                    if(!Util.isEmpty(worstCode)){
+                                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
+                                                                                    } else {
+                                                                                        if(!isIgnoreCode(subjectAccountModel.getPaymt09())){
+                                                                                            worstCode = subjectAccountModel.getPaymt09();
+                                                                                        }
+                                                                                    }
                                                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt09())) {
                                                                                         numberOfOutStandingPayment++;
                                                                                     }
@@ -478,7 +531,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                         numberOfOverLimit++;
                                                                                     }
                                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), SIX_MONTH)) {
-                                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
+                                                                                        if(!Util.isEmpty(worstCode)){
+                                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
+                                                                                        } else {
+                                                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt10())){
+                                                                                                worstCode = subjectAccountModel.getPaymt10();
+                                                                                            }
+                                                                                        }
                                                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt10())) {
                                                                                             numberOfOutStandingPayment++;
                                                                                         }
@@ -505,7 +564,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                             numberOfOverLimit++;
                                                                                         }
                                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), SIX_MONTH)) {
-                                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
+                                                                                            if(!Util.isEmpty(worstCode)){
+                                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
+                                                                                            } else {
+                                                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt11())){
+                                                                                                    worstCode = subjectAccountModel.getPaymt11();
+                                                                                                }
+                                                                                            }
                                                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt11())) {
                                                                                                 numberOfOutStandingPayment++;
                                                                                             }
@@ -532,7 +597,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 numberOfOverLimit++;
                                                                                             }
                                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), SIX_MONTH)) {
-                                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
+                                                                                                if(!Util.isEmpty(worstCode)){
+                                                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
+                                                                                                } else {
+                                                                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt12())){
+                                                                                                        worstCode = subjectAccountModel.getPaymt12();
+                                                                                                    }
+                                                                                                }
                                                                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt12())) {
                                                                                                     numberOfOutStandingPayment++;
                                                                                                 }
@@ -568,7 +639,9 @@ public class NCBBizTransform extends BusinessTransform {
                                             }
                                         } else {
                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), TWELVE_MONTH)) {
-                                                worstCode = subjectAccountModel.getPaymt01();
+                                                if(!isIgnoreCode(subjectAccountModel.getPaymt01())){
+                                                    worstCode = subjectAccountModel.getPaymt01();
+                                                }
                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt01())) {
                                                     numberOfOutStandingPayment++;
                                                 }
@@ -593,7 +666,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                     }
                                                 }
                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), TWELVE_MONTH)) {
-                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
+                                                    if(!Util.isEmpty(worstCode)){
+                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt02(), worstCode);
+                                                    } else {
+                                                        if(!isIgnoreCode(subjectAccountModel.getPaymt02())){
+                                                            worstCode = subjectAccountModel.getPaymt02();
+                                                        }
+                                                    }
                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt02())) {
                                                         numberOfOutStandingPayment++;
                                                     }
@@ -618,7 +697,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                         }
                                                     }
                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), TWELVE_MONTH)) {
-                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
+                                                        if(!Util.isEmpty(worstCode)){
+                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt03(), worstCode);
+                                                        } else {
+                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt03())){
+                                                                worstCode = subjectAccountModel.getPaymt03();
+                                                            }
+                                                        }
                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt03())) {
                                                             numberOfOutStandingPayment++;
                                                         }
@@ -643,7 +728,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                             }
                                                         }
                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), TWELVE_MONTH)) {
-                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
+                                                            if(!Util.isEmpty(worstCode)){
+                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt04(), worstCode);
+                                                            } else {
+                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt04())){
+                                                                    worstCode = subjectAccountModel.getPaymt04();
+                                                                }
+                                                            }
                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt04())) {
                                                                 numberOfOutStandingPayment++;
                                                             }
@@ -668,7 +759,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 }
                                                             }
                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), TWELVE_MONTH)) {
-                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
+                                                                if(!Util.isEmpty(worstCode)){
+                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt05(), worstCode);
+                                                                } else {
+                                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt05())){
+                                                                        worstCode = subjectAccountModel.getPaymt05();
+                                                                    }
+                                                                }
                                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt05())) {
                                                                     numberOfOutStandingPayment++;
                                                                 }
@@ -693,7 +790,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     }
                                                                 }
                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), TWELVE_MONTH)) {
-                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
+                                                                    if(!Util.isEmpty(worstCode)){
+                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt06(), worstCode);
+                                                                    } else {
+                                                                        if(!isIgnoreCode(subjectAccountModel.getPaymt06())){
+                                                                            worstCode = subjectAccountModel.getPaymt06();
+                                                                        }
+                                                                    }
                                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt06())) {
                                                                         numberOfOutStandingPayment++;
                                                                     }
@@ -718,7 +821,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                         }
                                                                     }
                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), TWELVE_MONTH)) {
-                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
+                                                                        if(!Util.isEmpty(worstCode)){
+                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt07(), worstCode);
+                                                                        } else {
+                                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt07())){
+                                                                                worstCode = subjectAccountModel.getPaymt07();
+                                                                            }
+                                                                        }
                                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt07())) {
                                                                             numberOfOutStandingPayment++;
                                                                         }
@@ -743,7 +852,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                             }
                                                                         }
                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), TWELVE_MONTH)) {
-                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
+                                                                            if(!Util.isEmpty(worstCode)){
+                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt08(), worstCode);
+                                                                            } else {
+                                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt08())){
+                                                                                    worstCode = subjectAccountModel.getPaymt08();
+                                                                                }
+                                                                            }
                                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt08())) {
                                                                                 numberOfOutStandingPayment++;
                                                                             }
@@ -768,7 +883,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                 }
                                                                             }
                                                                             if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), TWELVE_MONTH)) {
-                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
+                                                                                if(!Util.isEmpty(worstCode)){
+                                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt09(), worstCode);
+                                                                                } else {
+                                                                                    if(!isIgnoreCode(subjectAccountModel.getPaymt09())){
+                                                                                        worstCode = subjectAccountModel.getPaymt09();
+                                                                                    }
+                                                                                }
                                                                                 if (isOutStandingPayment(subjectAccountModel.getPaymt09())) {
                                                                                     numberOfOutStandingPayment++;
                                                                                 }
@@ -793,7 +914,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                     }
                                                                                 }
                                                                                 if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), TWELVE_MONTH)) {
-                                                                                    worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
+                                                                                    if(!Util.isEmpty(worstCode)){
+                                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt10(), worstCode);
+                                                                                    } else {
+                                                                                        if(!isIgnoreCode(subjectAccountModel.getPaymt10())){
+                                                                                            worstCode = subjectAccountModel.getPaymt10();
+                                                                                        }
+                                                                                    }
                                                                                     if (isOutStandingPayment(subjectAccountModel.getPaymt10())) {
                                                                                         numberOfOutStandingPayment++;
                                                                                     }
@@ -818,7 +945,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                         }
                                                                                     }
                                                                                     if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), TWELVE_MONTH)) {
-                                                                                        worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
+                                                                                        if(!Util.isEmpty(worstCode)){
+                                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt11(), worstCode);
+                                                                                        } else {
+                                                                                            if(!isIgnoreCode(subjectAccountModel.getPaymt11())){
+                                                                                                worstCode = subjectAccountModel.getPaymt11();
+                                                                                            }
+                                                                                        }
                                                                                         if (isOutStandingPayment(subjectAccountModel.getPaymt11())) {
                                                                                             numberOfOutStandingPayment++;
                                                                                         }
@@ -843,7 +976,13 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                             }
                                                                                         }
                                                                                         if (isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), 12)) {
-                                                                                            worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
+                                                                                            if(!Util.isEmpty(worstCode)){
+                                                                                                worstCode = getWorstCode(subjectAccountModel.getPaymt12(), worstCode);
+                                                                                            } else {
+                                                                                                if(!isIgnoreCode(subjectAccountModel.getPaymt12())){
+                                                                                                    worstCode = subjectAccountModel.getPaymt12();
+                                                                                                }
+                                                                                            }
                                                                                             if (isOutStandingPayment(subjectAccountModel.getPaymt12())) {
                                                                                                 numberOfOutStandingPayment++;
                                                                                             }
@@ -889,7 +1028,9 @@ public class NCBBizTransform extends BusinessTransform {
                                         if (!Util.isEmpty(worstPaymentStatus)) {
                                             worstPaymentStatus = getWorstCode(subjectAccountModel.getPaymt01(), worstPaymentStatus);
                                         } else {
-                                            worstPaymentStatus = subjectAccountModel.getPaymt01();
+                                            if(!isIgnoreCode(subjectAccountModel.getPaymt01())){
+                                                worstPaymentStatus = subjectAccountModel.getPaymt01();
+                                            }
                                         }
                                         //set number of outstanding payment
                                         ncbDetailView.setNoOfOutstandingPaymentIn12months(new BigDecimal(numberOfOutStandingPayment));
@@ -1681,10 +1822,22 @@ public class NCBBizTransform extends BusinessTransform {
     private String getWorstCode(String code, String worstCode) {
         int value1 = NCBPaymentCode.getValue(worstCode).value();
         int value2 = NCBPaymentCode.getValue(code).value();
+        if (value2 < 0){
+           return worstCode;
+        }
         if (value2 > value1) {
             return code;
         }
         return worstCode;
+    }
+
+    private boolean isIgnoreCode(String code){
+        if(!Util.isEmpty(code)
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_XXX.toString())
+                && !code.equalsIgnoreCase(NCBPaymentCode.CODE_999.toString())) {
+            return false;
+        }
+        return true;
     }
 
     private boolean isInMonthPeriodYYYYMMDD(String dateStr, int numberMonth) {
