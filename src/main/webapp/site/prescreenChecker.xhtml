@@ -96,22 +96,22 @@
                 </div>
                 <p:remoteCommand name="commandCheckNCB"
                                  action="#{prescreenChecker.onCheckNCB()}"
-                                 update=":frmMain"
+                                 update=":frmMain :msgBoxSystemMessagePanel"
                                  onstart="blockUICheckNCB.show()"
                                  oncomplete="blockUICheckNCB.hide()"/>
                 <p:remoteCommand name="commandSaveNCB"
                                  action="#{prescreenChecker.onSaveNCB()}"
-                                 update=":frmMain"
+                                 update=":frmMain :msgBoxSystemMessagePanel"
                                  onstart="blockUISavNCB.show()"
                                  oncomplete="blockUISavNCB.hide()"/>
                 <p:remoteCommand name="commandCheckCSI"
                                  action="#{prescreenChecker.onCheckCSI()}"
-                                 update=":frmMain"
+                                 update=":frmMain :msgBoxSystemMessagePanel"
                                  onstart="blockUICheckCSI.show()"
                                  oncomplete="blockUICheckCSI.hide()"/>
                 <p:remoteCommand name="commandSubmitCase"
                                  action="#{prescreenChecker.onCompleteChecker()}"
-                                 update=":frmMain"
+                                 update=":frmMain :msgBoxSystemMessagePanel"
                                  onstart="blockUISubmitCase.show()"
                                  oncomplete="blockUISubmitCase.hide()"/>
             </h:form>
