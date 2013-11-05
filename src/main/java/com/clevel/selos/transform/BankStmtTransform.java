@@ -17,8 +17,11 @@ import com.clevel.selos.model.db.working.BankStatementSummary;
 import com.clevel.selos.model.db.working.BankStmtSrcOfCollateralProof;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.util.DateTimeUtil;
+import com.clevel.selos.util.Util;
+import com.clevel.selos.util.ValidationUtil;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -250,30 +253,67 @@ public class BankStmtTransform extends Transform {
             bankStatementSummary.setSeasonal(bankStmtSummaryView.getSeasonal());
             bankStatementSummary.setExpectedSubmitDate(bankStmtSummaryView.getExpectedSubmitDate());
 
-            bankStatementSummary.setTMBTotalIncomeGross(bankStmtSummaryView.getTMBTotalIncomeGross());
-            bankStatementSummary.setTMBTotalIncomeNetBDM(bankStmtSummaryView.getTMBTotalIncomeNetBDM());
-            bankStatementSummary.setTMBTotalIncomeNetUW(bankStmtSummaryView.getTMBTotalIncomeNetUW());
+            //todo: Check bank statement summary Recalculate logic here
+            // ----- Recalculate Total & Grand total ----- //
+            BigDecimal tmbTotalIncomeGross = BigDecimal.ZERO;
+            BigDecimal tmbTotalIncomeNetBDM = BigDecimal.ZERO;
+            BigDecimal tmbTotalIncomeNetUW = BigDecimal.ZERO;
 
-            bankStatementSummary.setOthTotalIncomeGross(bankStmtSummaryView.getOthTotalIncomeGross());
-            bankStatementSummary.setOthTotalIncomeNetBDM(bankStmtSummaryView.getOthTotalIncomeNetBDM());
-            bankStatementSummary.setOthTotalIncomeNetUW(bankStmtSummaryView.getTMBTotalIncomeNetUW());
+            BigDecimal othTotalIncomeGross = BigDecimal.ZERO;
+            BigDecimal othTotalIncomeNetBDM = BigDecimal.ZERO;
+            BigDecimal othTotalIncomeNetUW = BigDecimal.ZERO;
 
-            bankStatementSummary.setGrdTotalIncomeGross(bankStmtSummaryView.getGrdTotalIncomeGross());
-            bankStatementSummary.setGrdTotalIncomeNetBDM(bankStmtSummaryView.getGrdTotalIncomeNetBDM());
-            bankStatementSummary.setGrdTotalIncomeNetUW(bankStmtSummaryView.getGrdTotalIncomeNetUW());
-
-            bankStatementSummary.setGrdTotalTDChqRetAmount(bankStmtSummaryView.getGrdTotalTDChqRetAmount());
-            bankStatementSummary.setGrdTotalTDChqRetPercent(bankStmtSummaryView.getGrdTotalTDChqRetPercent());
-            bankStatementSummary.setGrdTotalAvgOSBalanceAmount(bankStmtSummaryView.getGrdTotalAvgOSBalanceAmount());
+            // grdTotalTrdChqRetAmount = SUM(trdChequeReturnAmount)
+            BigDecimal grdTotalTrdChqRetAmount = BigDecimal.ZERO;
 
             List<BankStatement> bankStatementList = new ArrayList<BankStatement>();
-            for (BankStmtView tmbBankStmtView : bankStmtSummaryView.getTmbBankStmtViewList())
+            for (BankStmtView tmbBankStmtView : bankStmtSummaryView.getTmbBankStmtViewList()) {
+                tmbTotalIncomeGross = tmbTotalIncomeGross.add(tmbBankStmtView.getAvgIncomeGross());
+                tmbTotalIncomeNetBDM = tmbTotalIncomeNetBDM.add(tmbBankStmtView.getAvgIncomeNetBDM());
+                tmbTotalIncomeNetUW = tmbTotalIncomeNetUW.add(tmbBankStmtView.getAvgIncomeNetUW());
+                grdTotalTrdChqRetAmount = grdTotalTrdChqRetAmount.add(tmbBankStmtView.getTrdChequeReturnAmount());
+
                 bankStatementList.add(getBankStatement(tmbBankStmtView, bankStatementSummary, user));
+            }
 
-            for (BankStmtView othBankStmtView : bankStmtSummaryView.getOthBankStmtViewList())
+            for (BankStmtView othBankStmtView : bankStmtSummaryView.getOthBankStmtViewList()) {
+                othTotalIncomeGross = othTotalIncomeGross.add(othBankStmtView.getAvgIncomeGross());
+                othTotalIncomeNetBDM = othTotalIncomeNetBDM.add(othBankStmtView.getAvgIncomeNetBDM());
+                othTotalIncomeNetUW = othTotalIncomeNetUW.add(othBankStmtView.getAvgIncomeNetUW());
+                grdTotalTrdChqRetAmount = grdTotalTrdChqRetAmount.add(othBankStmtView.getTrdChequeReturnAmount());
+
                 bankStatementList.add(getBankStatement(othBankStmtView, bankStatementSummary, user));
-
+            }
             bankStatementSummary.setBankStmtList(bankStatementList);
+
+            bankStatementSummary.setTMBTotalIncomeGross(tmbTotalIncomeGross);
+            bankStatementSummary.setTMBTotalIncomeNetBDM(tmbTotalIncomeNetBDM);
+            bankStatementSummary.setTMBTotalIncomeNetUW(tmbTotalIncomeNetUW);
+
+            bankStatementSummary.setOthTotalIncomeGross(othTotalIncomeGross);
+            bankStatementSummary.setOthTotalIncomeNetBDM(othTotalIncomeNetBDM);
+            bankStatementSummary.setOthTotalIncomeNetUW(othTotalIncomeNetUW);
+
+            // Grand total
+            BigDecimal grdTotalIncomeGross = tmbTotalIncomeGross.add(othTotalIncomeGross);
+            BigDecimal grdTotalIncomeNetBDM = tmbTotalIncomeNetBDM.add(othTotalIncomeNetBDM);
+            BigDecimal grdTotalIncomeNetUW = tmbTotalIncomeNetUW.add(othTotalIncomeNetUW);
+
+            // if (grdTotalIncomeNetUW = grdTotalTrdChqRetAmount / grdTotalIncomeNetBDM)
+            // else (grdTotalTrdChqRetAmount / grdTotalIncomeNetUW)
+            BigDecimal grdTotalTrdChqRetPercent = BigDecimal.ZERO;
+            if (ValidationUtil.isValueEqual(grdTotalIncomeNetUW, Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM))) {
+                grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
+            } else {
+                grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
+            }
+            bankStatementSummary.setGrdTotalIncomeGross(grdTotalIncomeGross);
+            bankStatementSummary.setGrdTotalIncomeNetBDM(grdTotalIncomeNetBDM);
+            bankStatementSummary.setGrdTotalIncomeNetUW(grdTotalIncomeNetUW);
+            bankStatementSummary.setGrdTotalTDChqRetAmount(grdTotalTrdChqRetAmount);
+            bankStatementSummary.setGrdTotalTDChqRetPercent(grdTotalTrdChqRetPercent);
+
+            bankStatementSummary.setGrdTotalAvgOSBalanceAmount(bankStmtSummaryView.getGrdTotalAvgOSBalanceAmount());
         }
         return bankStatementSummary;
     }
@@ -315,6 +355,13 @@ public class BankStmtTransform extends Transform {
             bankStatement.setOverLimitTimes(bankStmtView.getOverLimitTimes());
             bankStatement.setOverLimitDays(bankStmtView.getOverLimitDays());
             bankStatement.setRemark(bankStmtView.getRemark());
+            bankStatement.setAvgOSBalanceAmount(bankStmtView.getAvgOSBalanceAmount());
+            //set child list
+            List<BankStatementDetail> bankStatementDetailList = new ArrayList<BankStatementDetail>();
+            for (BankStmtDetailView detailView : bankStmtView.getBankStmtDetailViewList()) {
+                bankStatementDetailList.add(getBankStatementDetail(detailView, bankStatement));
+            }
+            bankStatement.setBankStatementDetailList(bankStatementDetailList);
             //set parent
             bankStatement.setBankStatementSummary(bankStatementSummary);
         }

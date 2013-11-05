@@ -61,7 +61,7 @@
                     </td>
                     <td>
                         <p:inputText id="debtForCalculate" value="#{dbrInfo.selectedItem.debtForCalculate}"
-                                     required="true">
+                                     readonly="true">
                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                              type="number"/>
                             <p:ajax event="change" update=":dbrDetailDlgForm:debtForCalculate"/>

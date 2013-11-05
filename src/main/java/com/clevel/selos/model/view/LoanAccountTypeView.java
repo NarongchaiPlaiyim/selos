@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class LoanAccountTypeView implements Serializable {
     private int id;
     private String name;
+    private int calculateType;
 
     public LoanAccountTypeView() {
         reset();
@@ -17,6 +18,7 @@ public class LoanAccountTypeView implements Serializable {
     public void reset() {
         this.id = 0;
         this.name = "";
+        this.calculateType = 0;
     }
 
 
@@ -34,6 +36,14 @@ public class LoanAccountTypeView implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getCalculateType() {
+        return calculateType;
+    }
+
+    public void setCalculateType(int calculateType) {
+        this.calculateType = calculateType;
     }
 
     @Override

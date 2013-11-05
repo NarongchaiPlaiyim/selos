@@ -338,6 +338,8 @@ public class BankStmtControl extends BusinessControl {
     }
 
     public void saveBankStmtSummary(BankStmtSummaryView bankStmtSummaryView, long workCaseId, long workCasePrescreenId, String userId) {
+        log.debug("saveBankStmtSummary() bankStmtSummaryView.id: {}, workCaseId: {}, workCasePrescreenId: {}, userId: {}",
+                bankStmtSummaryView.getId(), workCaseId, workCasePrescreenId, userId);
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
         User user = userDAO.findById(userId);
@@ -349,27 +351,9 @@ public class BankStmtControl extends BusinessControl {
         log.debug("persist BankStatementSummary: {}", bankStatementSummary);
     }
 
-    public void saveBankStmt(BankStmtSummaryView bankStmtSummaryView, BankStmtView bankStmtView, long workCaseId, long workCasePrescreenId, String userId) {
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePrescreenId);
-        User user = userDAO.findById(userId);
-
-        BankStatementSummary bankStatementSummary = bankStmtTransform.getBankStatementSummary(bankStmtSummaryView, user);
-        bankStatementSummary.setWorkCase(workCase);
-        bankStatementSummary.setWorkCasePrescreen(workCasePrescreen);
-        //todo: persist BankStatementSummary
-        //log.debug("persist BankStatementSummary: {}", bankStatementSummary);
-
-        BankStatement bankStatement = bankStmtTransform.getBankStatement(bankStmtView, bankStatementSummary, user);
-        bankStatementDAO.persist(bankStatement);
-        log.debug("persist BankStatement: {}", bankStatement);
-
-        if (bankStmtView.getBankStmtDetailViewList() != null) {
-            for (BankStmtDetailView bankStmtDetailView : bankStmtView.getBankStmtDetailViewList()) {
-                BankStatementDetail bankStatementDetail = bankStmtTransform.getBankStatementDetail(bankStmtDetailView, bankStatement);
-                bankStatementDetailDAO.persist(bankStatementDetail);
-                log.debug("persist BankStatementDetail: {}", bankStatementDetail);
-            }
-        }
+    public void deleteBankStmt(long bankStmtId) {
+        log.debug("deleteBankStmt() bankStmtId: {}", bankStmtId);
+        BankStatement bankStatement = bankStatementDAO.findById(bankStmtId);
+        bankStatementDAO.delete(bankStatement);
     }
 }

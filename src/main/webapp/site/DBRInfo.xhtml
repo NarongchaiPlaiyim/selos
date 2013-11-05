@@ -54,9 +54,9 @@
                     <p:outputLabel value="#{msg.get('app.dbr.label.dbrInterest')}" styleClass="center"/>
                 </td>
                 <td>
-                    <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right">
+                    <p:inputText id="dbrInterest" value="#{dbrInfo.dbr.dbrInterest}" style="text-align: right" readonly="true">
                         <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="change" update=":frmMain:dbrInterest"/>
+
                     </p:inputText>
                 </td>
             </tr>
@@ -143,7 +143,7 @@
         <table style="width: 80%">
             <tr >
                 <td class="title top">
-                    <p:outputLabel value="#{msg.get('app.dbr.debtOfConfederate')}"/>
+                    <p:outputLabel value="#{msg.get('app.dbr.debtOfBorrowers')}"/>
                 </td>
             </tr>
             <tr>

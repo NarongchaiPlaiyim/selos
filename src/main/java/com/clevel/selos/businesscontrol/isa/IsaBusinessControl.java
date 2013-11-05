@@ -255,7 +255,7 @@ public class IsaBusinessControl implements Serializable {
         List<IsaUserReportView>list=new ArrayList<IsaUserReportView>();
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -(day+1));
-
+        System.out.println(cal.getTime());
         List<User> users = userDAO.findByCriteria(Restrictions.le("lastLogon", cal.getTime()));
             for(User userlist:users){
                 IsaUserReportView isaUserReportView=new IsaUserReportView();
@@ -267,13 +267,13 @@ public class IsaBusinessControl implements Serializable {
                 isaUserReportView.setLastLogon(userlist.getLastLogon());
                 isaUserReportView.setPhoneExt(userlist.getPhoneExt());
                 isaUserReportView.setPhoneNumber(userlist.getPhoneNumber());
-                isaUserReportView.setRole(userlist.getRole().getName());
-                isaUserReportView.setDepartment(userlist.getDepartment().getName());
-                isaUserReportView.setDivision(userlist.getDivision().getName());
-                isaUserReportView.setRegion(userlist.getRegion().getName());
-                isaUserReportView.setTeam(userlist.getTeam().getName());
-                isaUserReportView.setTitle(userlist.getTitle().getName());
-                isaUserReportView.setZone(userlist.getZone().getName());
+                isaUserReportView.setRole(userlist.getRole().getName()!=null?userlist.getRole().getName():"");
+                isaUserReportView.setDepartment(userlist.getDepartment().getName()!=null?userlist.getDepartment().getName():"");
+                isaUserReportView.setDivision(userlist.getDivision().getName()!=null?userlist.getDivision().getName():"");
+                isaUserReportView.setRegion(userlist.getRegion().getName()!=null?userlist.getRegion().getName():"");
+                isaUserReportView.setTeam(userlist.getTeam().getName()!=null?userlist.getTeam().getName():"");
+                isaUserReportView.setTitle(userlist.getTitle().getName()!=null?userlist.getTitle().getName():"");
+                isaUserReportView.setZone(userlist.getZone().getName()!=null?userlist.getZone().getName():"");
                 isaUserReportView.setActive(userlist.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
                 isaUserReportView.setUserStatus(userlist.getUserStatus().name());
 
@@ -293,6 +293,7 @@ public class IsaBusinessControl implements Serializable {
         role.setId(1);
 
         List<User> users = userDAO.findByCriteria(Restrictions.gt("role",role));
+        System.out.println(users.size());
         for(User userlist:users){
             IsaUserReportView isaUserReportView=new IsaUserReportView();
             isaUserReportView.setUserId(userlist.getId());
@@ -303,15 +304,15 @@ public class IsaBusinessControl implements Serializable {
             isaUserReportView.setLastLogon(userlist.getLastLogon());
             isaUserReportView.setPhoneExt(userlist.getPhoneExt());
             isaUserReportView.setPhoneNumber(userlist.getPhoneNumber());
-            isaUserReportView.setRole(userlist.getRole().getName());
-            isaUserReportView.setDepartment(userlist.getDepartment().getName());
-            isaUserReportView.setDivision(userlist.getDivision().getName());
-            isaUserReportView.setRegion(userlist.getRegion().getName());
-            isaUserReportView.setTeam(userlist.getTeam().getName());
-            isaUserReportView.setTitle(userlist.getTitle().getName());
-            isaUserReportView.setZone(userlist.getZone().getName());
+            isaUserReportView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : " ");
+            isaUserReportView.setDepartment(userlist.getDepartment().getName()!=null?userlist.getDepartment().getName():" ");
+            isaUserReportView.setDivision(userlist.getDivision().getName()!=null?userlist.getDivision().getName():" ");
+            isaUserReportView.setRegion(userlist.getRegion().getName()!=null?userlist.getRegion().getName():" ");
+            isaUserReportView.setTeam(userlist.getTeam().getName()!=null?userlist.getTeam().getName():" ");
+            isaUserReportView.setTitle(userlist.getTitle().getName()!=null?userlist.getTitle().getName():" ");
+            isaUserReportView.setZone(userlist.getZone().getName()!=null?userlist.getZone().getName():" ");
             isaUserReportView.setActive(userlist.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
-            isaUserReportView.setUserStatus(userlist.getUserStatus().name());
+            isaUserReportView.setUserStatus(userlist.getUserStatus().name()!=null?userlist.getUserStatus().name():" ");
 
             list.add(isaUserReportView);
         }
