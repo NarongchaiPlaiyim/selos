@@ -160,6 +160,19 @@ public class Customer implements Serializable {
     @Column(name="search_id")
     private String searchId;
 
+    @OneToOne
+    @JoinColumn(name="source_income")
+    private Country sourceIncome;
+
+    @OneToOne
+    @JoinColumn(name="country_income")
+    private Country countryIncome;
+
+    @Column(name="is_committee", nullable=false, columnDefinition="int default 0")
+    private int isCommittee;
+
+    @Column(name="juristic_id")
+    private long juristicId;
 
     public Customer() {
     }
@@ -524,6 +537,38 @@ public class Customer implements Serializable {
         this.searchId = searchId;
     }
 
+    public Country getSourceIncome() {
+        return sourceIncome;
+    }
+
+    public void setSourceIncome(Country sourceIncome) {
+        this.sourceIncome = sourceIncome;
+    }
+
+    public Country getCountryIncome() {
+        return countryIncome;
+    }
+
+    public void setCountryIncome(Country countryIncome) {
+        this.countryIncome = countryIncome;
+    }
+
+    public int getIsCommittee() {
+        return isCommittee;
+    }
+
+    public void setIsCommittee(int committee) {
+        isCommittee = committee;
+    }
+
+    public long getJuristicId() {
+        return juristicId;
+    }
+
+    public void setJuristicId(long juristicId) {
+        this.juristicId = juristicId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -571,6 +616,10 @@ public class Customer implements Serializable {
                 append("mailingAddressType", mailingAddressType).
                 append("searchBy", searchBy).
                 append("searchId", searchId).
+                append("sourceIncome", sourceIncome).
+                append("countryIncome", countryIncome).
+                append("isCommittee", isCommittee).
+                append("juristicId", juristicId).
                 toString();
     }
 }

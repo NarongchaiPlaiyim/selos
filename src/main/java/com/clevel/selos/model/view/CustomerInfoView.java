@@ -22,6 +22,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int subIndex;
     private String listName;
     private int isSpouse;
+    private int isCommittee;
 
     //*** Var for search ***//
     private int searchBy;
@@ -69,6 +70,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private AddressType mailingAddressType;
     private long spouseId;
     private List<CustomerCSIView> customerCSIList;
+    private Country sourceIncome;
+    private Country countryIncome;
+    private long committeeId;
 
     //*** Var for Individual ***//
     private Date dateOfBirth;
@@ -93,6 +97,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String signCondition;
     private BigDecimal totalShare;
     private Country registrationCountry;
+    private List<CustomerInfoView> individualViewList;
+    private Date documentIssueDate;
+    private BigDecimal salesFromFinancialStmt;
+    private BigDecimal shareHolderRatio;
+    private String numberOfAuthorizedUsers;
 
     //*** Var for Address ***//
     private AddressView currentAddress;
@@ -162,6 +171,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.businessType = new BusinessType();
         this.documentAuthorizeDate = new Date();
         this.customerCSIList = new ArrayList<CustomerCSIView>();
+        this.sourceIncome = new Country();
+        this.countryIncome = new Country();
+        this.individualViewList = new ArrayList<CustomerInfoView>();
     }
 
     public long getIndividualId() {
@@ -677,11 +689,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
     }
 
     public void setIsSpouse(int spouse) {
-        isSpouse = spouse;
+        this.isSpouse = spouse;
     }
 
     public int getIsSpouse(){
-        return isSpouse;
+        return  isSpouse;
     }
 
     public int getSubIndex() {
@@ -722,6 +734,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setWorthiness(int worthiness) {
         this.worthiness = worthiness;
     }
+
     public long getSpouseId() {
         return spouseId;
     }
@@ -729,11 +742,84 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setSpouseId(long spouseId) {
         this.spouseId = spouseId;
     }
+
     public String getPassportId() {
         return passportId;
     }
 
     public void setPassportId(String passportId) {
         this.passportId = passportId;
+    }
+
+    public Country getSourceIncome() {
+        return sourceIncome;
+    }
+
+    public void setSourceIncome(Country sourceIncome) {
+        this.sourceIncome = sourceIncome;
+    }
+
+    public Country getCountryIncome() {
+        return countryIncome;
+    }
+
+    public void setCountryIncome(Country countryIncome) {
+        this.countryIncome = countryIncome;
+    }
+
+    public List<CustomerInfoView> getIndividualViewList() {
+        return individualViewList;
+    }
+
+    public void setIndividualViewList(List<CustomerInfoView> individualViewList) {
+        this.individualViewList = individualViewList;
+    }
+
+    public long getCommitteeId() {
+        return committeeId;
+    }
+
+    public void setCommitteeId(long committeeId) {
+        this.committeeId = committeeId;
+    }
+
+    public Date getDocumentIssueDate() {
+        return documentIssueDate;
+    }
+
+    public void setDocumentIssueDate(Date documentIssueDate) {
+        this.documentIssueDate = documentIssueDate;
+    }
+
+    public BigDecimal getSalesFromFinancialStmt() {
+        return salesFromFinancialStmt;
+    }
+
+    public void setSalesFromFinancialStmt(BigDecimal salesFromFinancialStmt) {
+        this.salesFromFinancialStmt = salesFromFinancialStmt;
+    }
+
+    public BigDecimal getShareHolderRatio() {
+        return shareHolderRatio;
+    }
+
+    public void setShareHolderRatio(BigDecimal shareHolderRatio) {
+        this.shareHolderRatio = shareHolderRatio;
+    }
+
+    public String getNumberOfAuthorizedUsers() {
+        return numberOfAuthorizedUsers;
+    }
+
+    public void setNumberOfAuthorizedUsers(String numberOfAuthorizedUsers) {
+        this.numberOfAuthorizedUsers = numberOfAuthorizedUsers;
+    }
+
+    public void setIsCommittee(int committee) {
+        this.isCommittee = committee;
+    }
+
+    public int getIsCommittee(){
+        return isCommittee;
     }
 }

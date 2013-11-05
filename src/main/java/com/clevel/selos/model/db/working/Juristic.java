@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.Country;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -28,14 +27,6 @@ public class Juristic implements Serializable {
     @JoinColumn(name = "register_date")
     private Date registerDate;
 
-    @OneToOne
-    @JoinColumn(name = "register_country")
-    private Country registerCountry;
-
-    @OneToOne
-    @JoinColumn(name = "owner_id")
-    private Individual owner;
-
     @Column(name = "financial_year")
     private int financialYear;
 
@@ -50,6 +41,19 @@ public class Juristic implements Serializable {
 
     @Column(name = "signCondition")
     private String signCondition;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JoinColumn(name = "document_issue_date")
+    private Date documentIssueDate;
+
+    @Column(name = "sales_financial_stmt")
+    private BigDecimal salesFromFinancialStmt;
+
+    @Column(name = "share_holder_ratio")
+    private BigDecimal shareHolderRatio;
+
+    @Column(name = "number_authorized_users")
+    private String numberOfAuthorizedUsers;
 
     public Juristic() {
     }
@@ -84,22 +88,6 @@ public class Juristic implements Serializable {
 
     public void setRegisterDate(Date registerDate) {
         this.registerDate = registerDate;
-    }
-
-    public Country getRegisterCountry() {
-        return registerCountry;
-    }
-
-    public void setRegisterCountry(Country registerCountry) {
-        this.registerCountry = registerCountry;
-    }
-
-    public Individual getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Individual owner) {
-        this.owner = owner;
     }
 
     public int getFinancialYear() {
@@ -142,20 +130,54 @@ public class Juristic implements Serializable {
         this.signCondition = signCondition;
     }
 
+    public Date getDocumentIssueDate() {
+        return documentIssueDate;
+    }
+
+    public void setDocumentIssueDate(Date documentIssueDate) {
+        this.documentIssueDate = documentIssueDate;
+    }
+
+    public BigDecimal getSalesFromFinancialStmt() {
+        return salesFromFinancialStmt;
+    }
+
+    public void setSalesFromFinancialStmt(BigDecimal salesFromFinancialStmt) {
+        this.salesFromFinancialStmt = salesFromFinancialStmt;
+    }
+
+    public BigDecimal getShareHolderRatio() {
+        return shareHolderRatio;
+    }
+
+    public void setShareHolderRatio(BigDecimal shareHolderRatio) {
+        this.shareHolderRatio = shareHolderRatio;
+    }
+
+    public String getNumberOfAuthorizedUsers() {
+        return numberOfAuthorizedUsers;
+    }
+
+    public void setNumberOfAuthorizedUsers(String numberOfAuthorizedUsers) {
+        this.numberOfAuthorizedUsers = numberOfAuthorizedUsers;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("customer", customer)
-                .append("registrationId", registrationId)
-                .append("registerDate", registerDate)
-                .append("registerCountry", registerCountry)
-                .append("owner", owner)
-                .append("financialYear", financialYear)
-                .append("capital", capital)
-                .append("paidCapital", paidCapital)
-                .append("totalShare", totalShare)
-                .append("signCondition", signCondition)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("customer", customer).
+                append("registrationId", registrationId).
+                append("registerDate", registerDate).
+                append("financialYear", financialYear).
+                append("capital", capital).
+                append("paidCapital", paidCapital).
+                append("totalShare", totalShare).
+                append("signCondition", signCondition).
+                append("documentIssueDate", documentIssueDate).
+                append("salesFromFinancialStmt", salesFromFinancialStmt).
+                append("shareHolderRatio", shareHolderRatio).
+                append("numberOfAuthorizedUsers", numberOfAuthorizedUsers).
+                toString();
     }
 }

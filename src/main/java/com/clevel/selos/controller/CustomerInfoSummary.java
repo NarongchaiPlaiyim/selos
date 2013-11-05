@@ -59,9 +59,6 @@ public class CustomerInfoSummary implements Serializable {
     //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
 
-    private String messageHeader;
-    private String message;
-
     //session
     private long workCaseId;
     private long stepId;
@@ -138,12 +135,22 @@ public class CustomerInfoSummary implements Serializable {
     private void passParamsToIndividual(long customerId) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("customerId", customerId);
+        map.put("isFromJuris",false);
+        CustomerInfoView custView = new CustomerInfoView();
+        custView.reset();
+        map.put("customerInfoView", custView);
+        map.put("isEditFormJuris", false);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 
     private void passParamsToJuristic(long customerId) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("customerId", customerId);
+        map.put("isFromJuris",false);
+        CustomerInfoView custView = new CustomerInfoView();
+        custView.reset();
+        map.put("customerInfoView", custView);
+        map.put("isEditFormJuris", false);
         FacesUtil.getFlash().put("cusInfoParams", map);
     }
 

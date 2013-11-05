@@ -141,15 +141,29 @@ public class CustomerTransform extends Transform {
         customerInfoView.setConvenantFlag(customer.getConvenantFlag());
         customerInfoView.setReviewFlag(customer.getReviewFlag());
         customerInfoView.setReason(customer.getReason());
-        customerInfoView.setKycLevel(customer.getKycLevel());
 
+        customerInfoView.setKycLevel(customer.getKycLevel());
         if(customerInfoView.getKycLevel() == null){
             customerInfoView.setKycLevel(new KYCLevel());
         }
+
         customerInfoView.setMailingAddressType(customer.getMailingAddressType());
         if(customerInfoView.getMailingAddressType() == null){
             customerInfoView.setMailingAddressType(new AddressType());
         }
+
+        customerInfoView.setSourceIncome(customer.getSourceIncome());
+        if(customerInfoView.getSourceIncome() == null){
+            customerInfoView.setSourceIncome(new Country());
+        }
+
+        customerInfoView.setCountryIncome(customer.getCountryIncome());
+        if(customerInfoView.getCountryIncome() == null){
+            customerInfoView.setCountryIncome(new Country());
+        }
+
+        customerInfoView.setIsCommittee(customer.getIsCommittee());
+        customerInfoView.setCommitteeId(customer.getJuristicId());
 
         customerInfoView.setValidId(2);
 
@@ -294,11 +308,10 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setDateOfRegister(juristic.getRegisterDate());
                 customerInfoView.setSignCondition(juristic.getSignCondition());
                 customerInfoView.setRegistrationId(juristic.getRegistrationId());
-                if(juristic.getRegisterCountry() != null){
-                    customerInfoView.setRegistrationCountry(juristic.getRegisterCountry());
-                } else {
-                    customerInfoView.setRegistrationCountry(new Country());
-                }
+                customerInfoView.setDocumentIssueDate(juristic.getDocumentIssueDate());
+                customerInfoView.setSalesFromFinancialStmt(juristic.getSalesFromFinancialStmt());
+                customerInfoView.setShareHolderRatio(juristic.getShareHolderRatio());
+                customerInfoView.setNumberOfAuthorizedUsers(juristic.getNumberOfAuthorizedUsers());
             } else {
                 customerInfoView.setRegistrationCountry(new Country());
             }
@@ -405,9 +418,22 @@ public class CustomerTransform extends Transform {
         } else {
             customer.setMailingAddressType(null);
         }
+        if(customerInfoView.getSourceIncome() != null && customerInfoView.getSourceIncome().getId() != 0){
+            customer.setSourceIncome(countryDAO.findById(customerInfoView.getSourceIncome().getId()));
+        } else {
+            customer.setSourceIncome(null);
+        }
+        if(customerInfoView.getCountryIncome() != null && customerInfoView.getCountryIncome().getId() != 0){
+            customer.setCountryIncome(countryDAO.findById(customerInfoView.getCountryIncome().getId()));
+        } else {
+            customer.setCountryIncome(null);
+        }
 
         customer.setSearchBy(customerInfoView.getSearchBy());
         customer.setSearchId(customerInfoView.getSearchId());
+
+        customer.setIsCommittee(customerInfoView.getIsCommittee());
+        customer.setJuristicId(customerInfoView.getCommitteeId());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 
@@ -652,14 +678,12 @@ public class CustomerTransform extends Transform {
             juristic.setFinancialYear(customerInfoView.getFinancialYear());
             juristic.setRegisterDate(customerInfoView.getDateOfRegister());
             juristic.setRegistrationId(customerInfoView.getRegistrationId());
-            juristic.setRegisterCountry(customerInfoView.getRegistrationCountry());
-            if(juristic.getRegisterCountry() != null && juristic.getRegisterCountry().getId() != 0){
-                juristic.setRegisterCountry(countryDAO.findById(juristic.getRegisterCountry().getId()));
-            }else{
-                juristic.setRegisterCountry(null);
-            }
             juristic.setSignCondition(customerInfoView.getSignCondition());
             juristic.setTotalShare(customerInfoView.getTotalShare());
+            juristic.setDocumentIssueDate(customerInfoView.getDocumentIssueDate());
+            juristic.setSalesFromFinancialStmt(customerInfoView.getSalesFromFinancialStmt());
+            juristic.setShareHolderRatio(customerInfoView.getShareHolderRatio());
+            juristic.setNumberOfAuthorizedUsers(customerInfoView.getNumberOfAuthorizedUsers());
 
             customer.setJuristic(juristic);
         }

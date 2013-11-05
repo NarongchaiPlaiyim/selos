@@ -1,10 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.DocumentTypeDAO;
-import com.clevel.selos.dao.working.AddressDAO;
-import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.dao.working.IndividualDAO;
-import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
 import com.clevel.selos.integration.corebanking.model.CustomerInfo;
@@ -45,6 +42,8 @@ public class CustomerInfoControl extends BusinessControl {
     AddressDAO addressDAO;
     @Inject
     DocumentTypeDAO documentTypeDAO;
+    @Inject
+    JuristicDAO juristicDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -130,6 +129,44 @@ public class CustomerInfoControl extends BusinessControl {
                     customer.setSpouseId(0);
                     customerDAO.persist(customer);
                 }
+            }
+        }
+    }
+
+    public void saveCustomerInfoJuristic(CustomerInfoView customerInfoView, long workCaseId){
+        WorkCase workCase = workCaseDAO.findById(workCaseId);
+
+        customerInfoView.getCustomerEntity().setId(2);
+
+        //for delete customer where is committee & committee id = juristic id
+        if(customerInfoView.getId() != 0){
+            List<Customer> cusList = customerDAO.findCustomerByCommitteeId(customerInfoView.getId());
+            for(Customer customer : cusList){
+                if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
+                    addressDAO.delete(customer.getAddressesList());
+                }
+                if(customer.getIndividual() != null){
+                    individualDAO.delete(customer.getIndividual());
+                }
+                customerDAO.delete(customer);
+            }
+        }
+
+        //for add new
+        Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
+        customerDAO.persist(customerJuristic);
+        juristicDAO.persist(customerJuristic.getJuristic());
+        addressDAO.persist(customerJuristic.getAddressesList());
+
+        if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
+            for(CustomerInfoView cusIndividual : customerInfoView.getIndividualViewList()){
+                cusIndividual.setIsCommittee(1);
+                cusIndividual.setCommitteeId(customerJuristic.getId());
+                if(cusIndividual.getSpouse() != null){
+                    cusIndividual.getSpouse().setIsCommittee(1);
+                    cusIndividual.getSpouse().setCommitteeId(customerJuristic.getId());
+                }
+                saveCustomerInfoIndividual(cusIndividual,workCaseId);
             }
         }
     }
