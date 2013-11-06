@@ -1044,8 +1044,8 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if(!isValidPayment){
-                                        log.debug("unexpected value from NCCRS : settlement status");
-                                        String reason = "Unexpected value from NCCRS : settlement status";
+                                        log.debug("unexpected value getting from NCRS : settlement status");
+                                        String reason = "Unexpected value getting from NCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
                                         ncbViews.add(ncbView);
@@ -1644,8 +1644,8 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if(!isValidPayment){
-                                        log.debug("unexpected value from NCCRS : settlement status");
-                                        String reason = "Unexpected value from NCCRS : settlement status";
+                                        log.debug("unexpected value getting from NCCRS : settlement status");
+                                        String reason = "Unexpected value getting from NCCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
                                         ncbViews.add(ncbView);
