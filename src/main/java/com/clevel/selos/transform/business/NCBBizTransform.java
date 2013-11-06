@@ -159,6 +159,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     for (SubjectAccountModel subjectAccountModel : subjectAccountModelResults) {
                                         //check for payment pattern
                                         isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel);
+                                        log.debug("isValidPayment {}",isValidPayment);
                                         if(!isValidPayment){
                                             break;
                                         }
@@ -1731,28 +1732,40 @@ public class NCBBizTransform extends BusinessTransform {
     private boolean isValidPaymentPatternIndividual(SubjectAccountModel subjectAccountModel){
         if(!Util.isEmpty(subjectAccountModel.getPaymtdate01()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), TWELVE_MONTH)){
             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate01()) != null){
+                log.debug("subjectAccountModel.getPaymtdate01() : {}",subjectAccountModel.getPaymtdate01());
                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate02()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), TWELVE_MONTH)){
                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate02()) != null){
+                        log.debug("subjectAccountModel.getPaymtdate02() : {}",subjectAccountModel.getPaymtdate02());
                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate03()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), TWELVE_MONTH)){
                             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate03()) != null){
+                                log.debug("subjectAccountModel.getPaymtdate03() : {}",subjectAccountModel.getPaymtdate03());
                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate04()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), TWELVE_MONTH)){
                                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate04()) != null){
+                                        log.debug("subjectAccountModel.getPaymtdate04() : {}",subjectAccountModel.getPaymtdate04());
                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate05()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), TWELVE_MONTH)){
                                             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate05()) != null){
+                                                log.debug("subjectAccountModel.getPaymtdate05() : {}",subjectAccountModel.getPaymtdate05());
                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate06()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), TWELVE_MONTH)){
                                                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate06()) != null){
+                                                        log.debug("subjectAccountModel.getPaymtdate06() : {}",subjectAccountModel.getPaymtdate06());
                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate07()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), TWELVE_MONTH)){
                                                             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate07()) != null){
+                                                                log.debug("subjectAccountModel.getPaymtdate07() : {}",subjectAccountModel.getPaymtdate07());
                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate08()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), TWELVE_MONTH)){
                                                                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate08()) != null){
+                                                                        log.debug("subjectAccountModel.getPaymtdate08() : {}",subjectAccountModel.getPaymtdate08());
                                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate09()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), TWELVE_MONTH)){
                                                                             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate09()) != null){
+                                                                                log.debug("subjectAccountModel.getPaymtdate09() : {}",subjectAccountModel.getPaymtdate09());
                                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate10()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), TWELVE_MONTH)){
                                                                                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate10()) != null){
+                                                                                        log.debug("subjectAccountModel.getPaymtdate10() : {}",subjectAccountModel.getPaymtdate10());
                                                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate11()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), TWELVE_MONTH)){
                                                                                             if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate11()) != null){
+                                                                                                log.debug("subjectAccountModel.getPaymtdate11() : {}",subjectAccountModel.getPaymtdate11());
                                                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate12()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), TWELVE_MONTH)){
                                                                                                     if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate12()) != null){
+                                                                                                        log.debug("subjectAccountModel.getPaymtdate12() : {}",subjectAccountModel.getPaymtdate12());
                                                                                                             return true;
                                                                                                     } else {
                                                                                                         return false;
@@ -1826,7 +1839,10 @@ public class NCBBizTransform extends BusinessTransform {
         } else {
             if(!Util.isEmpty(subjectAccountModel.getPaymtdate01())){
                 if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate01()) != null){
+                    log.debug("subjectAccountModel.getPaymtdate01() : {}",subjectAccountModel.getPaymtdate01());
                     return true;
+                } else {
+                    return false;
                 }
             }
             return false;
