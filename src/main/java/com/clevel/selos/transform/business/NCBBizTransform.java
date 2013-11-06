@@ -155,7 +155,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     boolean isTDROther = false;
                                     String lastTDRDateTMB = null;
                                     String lastTDRDateOther = null;
-                                    boolean isValidPayment = false;
+                                    boolean isValidPayment = true;
                                     for (SubjectAccountModel subjectAccountModel : subjectAccountModelResults) {
                                         //check for payment pattern
                                         isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel);
@@ -1229,7 +1229,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     boolean isTDROther = false;
                                     String lastTDRDateTMB = null;
                                     String lastTDRDateOther = null;
-                                    boolean isValidPayment = false;
+                                    boolean isValidPayment = true;
                                     //check for active account
                                     if (haveActiveAccountData) {
                                         for (AccountModel accountModel : h2HResponseSubjectModel.getActiveaccounts().getAccount()) {
@@ -1760,46 +1760,68 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 } else {
                                                                                                     return true;
                                                                                                 }
+                                                                                            } else {
+                                                                                                return false;
                                                                                             }
                                                                                         } else {
                                                                                             return true;
                                                                                         }
+                                                                                    } else {
+                                                                                        return false;
                                                                                     }
                                                                                 } else {
                                                                                     return true;
                                                                                 }
+                                                                            } else {
+                                                                                return false;
                                                                             }
                                                                         } else {
                                                                             return true;
                                                                         }
+                                                                    } else {
+                                                                        return false;
                                                                     }
                                                                 } else {
                                                                     return true;
                                                                 }
+                                                            } else {
+                                                                return false;
                                                             }
                                                         } else {
                                                             return true;
                                                         }
+                                                    } else {
+                                                        return false;
                                                     }
                                                 } else {
                                                     return true;
                                                 }
+                                            } else {
+                                                return false;
                                             }
                                         } else {
                                             return true;
                                         }
+                                    } else {
+                                        return false;
                                     }
                                 } else {
                                     return true;
                                 }
+                            } else {
+                                return false;
                             }
                         } else {
                             return true;
                         }
+                    } else {
+                        return false;
                     }
                 } else {
                     return true;
                 }
+            } else {
+                return false;
             }
         } else {
             if(!Util.isEmpty(subjectAccountModel.getPaymtdate01())){
@@ -1809,7 +1831,6 @@ public class NCBBizTransform extends BusinessTransform {
             }
             return false;
         }
-        return false;
     }
 
     private boolean isValidPaymentPatternJuristic(CreditHistModel creditHistModel){
