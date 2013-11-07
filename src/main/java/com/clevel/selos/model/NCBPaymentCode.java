@@ -16,7 +16,8 @@ public enum NCBPaymentCode {
     CODE_010("010", 13),
     CODE_011("011", 14),
     CODE___F("F", 15),
-    CODE_999("999", -1);
+    CODE_999("999", -1),
+    CODE_XXX("XXX", -2);
 
     String code;
     int value;
