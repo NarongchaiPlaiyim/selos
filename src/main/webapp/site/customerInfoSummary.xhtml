@@ -184,12 +184,15 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item}"
-                                                              style="min-width: 50px; max-width: 50px;"/>
+                                                <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.id}"
+                                                <h:outputText value="#{item.worthiness}"
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
@@ -198,7 +201,7 @@
                                                                  icon="ui-icon-pencil"
                                                                  action="#{custInfoSummary.onLinkToEditBorrower()}">
                                                     <f:setPropertyActionListener value="#{item}"
-                                                                                 target="#{custInfoSummary.selectEditCustomerBorrower}"/>
+                                                                                 target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
                                                 </p:commandButton>
                                             </p:column>
 
@@ -328,18 +331,33 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2}"
-                                                              style="min-width: 50px; max-width: 50px;"/>
+                                                <ui:repeat value="#{item2.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item2}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item2.id}"
+                                                <h:outputText value="#{item2.worthiness}"
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}">
+                                                    <f:setPropertyActionListener value="#{item2}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteGuarantorDlg.show()"
+                                                                 update=":frmMain,:msgBoxSystemMessagePanel">
+                                                    <f:setPropertyActionListener value="#{item2}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
+                                                </p:commandButton>
                                             </p:column>
-
                                         </p:dataTable>
                                     </td>
                                 </tr>
@@ -466,18 +484,33 @@
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3}"
-                                                              style="min-width: 50px; max-width: 50px;"/>
+                                                <ui:repeat value="#{item3.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item3}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item3.id}"
+                                                <h:outputText value="#{item3.worthiness}"
                                                               style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditRelated()}">
+                                                    <f:setPropertyActionListener value="#{item3}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerRelated}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteRelatedDlg.show()"
+                                                                 update=":frmMain,:msgBoxSystemMessagePanel">
+                                                    <f:setPropertyActionListener value="#{item3}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerRelated}"/>
+                                                </p:commandButton>
                                             </p:column>
-
                                         </p:dataTable>
                                     </td>
                                 </tr>
@@ -501,18 +534,35 @@
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>-->
 
-    </p:panel>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteGuarantorDialog"/>
+            <ui:param name="name" value="confirmDeleteGuarantorDlg"/>
+            <ui:param name="formId" value="frmConfirmGuarantorAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteGuarantor"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
-    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
-            <p:commandButton value="OK"
-                             process="@this"
-                             update="frmMain"
-                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
-        </p:confirmDialog>
-    </p:panel>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteRelatedDialog"/>
+            <ui:param name="name" value="confirmDeleteRelatedDlg"/>
+            <ui:param name="formId" value="frmConfirmRelatedAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteRelated"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{custInfoSummary.messageHeader}" message="#{custInfoSummary.message}" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+
+    </p:panel>
 </h:body>
 </f:view>
 </html>

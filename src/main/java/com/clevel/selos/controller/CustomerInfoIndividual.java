@@ -11,6 +11,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
@@ -242,11 +243,12 @@ public class CustomerInfoIndividual implements Serializable {
     private boolean reqSpoMobNo;
     private boolean reqSpoKYCLev;
 
-    //onEdit
+    //onEdit , param for map
     private long customerId;
     private CustomerInfoView cusInfoJuristic;
-    private boolean isFromJurisParam;
-    private boolean isEditFromJuris;
+    private boolean isFromJuristicParam;
+    private boolean isFromSummaryParam;
+    private boolean isEditFromJuristic;
     private int rowIndex;
 
     private boolean isEditBorrower;
@@ -291,33 +293,38 @@ public class CustomerInfoIndividual implements Serializable {
 
         preRender();
 
+        //default value
+        isFromJuristic = false;
+
+        onAddNewIndividual();
+
         Flash flash = FacesUtil.getFlash();
         Map<String, Object> cusInfoParams = (Map<String, Object>) flash.get("cusInfoParams");
         if (cusInfoParams != null) {
+            isFromSummaryParam = (Boolean) cusInfoParams.get("isFromSummaryParam");
+            isFromJuristicParam = (Boolean) cusInfoParams.get("isFromJuristicParam");
+            isEditFromJuristic = (Boolean) cusInfoParams.get("isEditFromJuristic");
             customerId = (Long) cusInfoParams.get("customerId");
-            isFromJurisParam = (Boolean) cusInfoParams.get("isFromJuris");
             cusInfoJuristic = (CustomerInfoView) cusInfoParams.get("customerInfoView");
-            isEditFromJuris = (Boolean) cusInfoParams.get("isEditFromJuris");
-            if(isEditFromJuris){
+            if(isEditFromJuristic){
                 rowIndex = (Integer) cusInfoParams.get("rowIndex");
             }
         }
 
-        onAddNewIndividual();
-
-        if(customerId != 0 && customerId != -1){ // Go to edit
-            onEditIndividual();
-        }
-
-        isFromJuristic = false;
-
-        if(isFromJurisParam){ // add individual from juristic
-            isFromJuristic = true;
+        //flag for show button
+        if(isFromJuristicParam){                        // add new individual from juristic
+            isFromJuristic = true;                      // for pass param return to juristic
         }else{
-            isFromJuristic = false;
+            isFromJuristic = false;                     // for save individual to DB
         }
 
-        if(isEditFromJuris && customerId < 1){
+        if(isFromSummaryParam){                         // go to edit from summary
+            if(customerId != 0 && customerId != -1){
+                onEditIndividual();
+            }
+        }
+
+        if(isEditFromJuristic){                          // select edit individual from juristic
             if(cusInfoParams != null){
                 customerInfoView = (CustomerInfoView) cusInfoParams.get("individualView");
                 onEditIndividual();
@@ -369,7 +376,7 @@ public class CustomerInfoIndividual implements Serializable {
         addressFlagForm5 = 1;
         addressFlagForm6 = 1;
 
-        addressTypeList = addressTypeDAO.findAll();
+        addressTypeList = addressTypeDAO.findByCustomerEntityId(1);
         kycLevelList = kycLevelDAO.findAll();
 
         enableDocumentType = true;
@@ -380,13 +387,11 @@ public class CustomerInfoIndividual implements Serializable {
         isEditBorrower = false;
         isEditSpouseBorrower = false;
 
-        customerInfoView.setCollateralOwner(99);
-        customerInfoView.getSpouse().setCollateralOwner(99);
+        customerInfoView.setCollateralOwner(0);
+        customerInfoView.getSpouse().setCollateralOwner(0);
 
         onChangeReference();
         onChangeReferenceSpouse();
-
-        updateCSIList();
     }
 
     public void onEditIndividual(){
@@ -438,8 +443,6 @@ public class CustomerInfoIndividual implements Serializable {
         }else{
             relationSpouseList = relationDAO.getOtherRelationList();
         }
-
-        updateCSIList();
     }
 
     public void onChangeRelation(){
@@ -823,16 +826,6 @@ public class CustomerInfoIndividual implements Serializable {
 //        reqSpoKYCLev =
     }
 
-    public void updateCSIList() {
-        if(customerInfoView.getCustomerCSIList() != null && customerInfoView.getCustomerCSIList().size() == 0){
-            customerInfoView.setCustomerCSIList(null);
-        }
-
-        if(customerInfoView.getSpouse().getCustomerCSIList() != null && customerInfoView.getSpouse().getCustomerCSIList().size() == 0){
-            customerInfoView.getSpouse().setCustomerCSIList(null);
-        }
-    }
-
     public void onSearchCustomerInfo() {
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
@@ -1039,6 +1032,12 @@ public class CustomerInfoIndividual implements Serializable {
             }
         }
 
+        //calculate age
+        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
+        Calendar today = Calendar.getInstance(new Locale("th", "TH"));
+        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
+        customerInfoView.setAge(today.getTime().getYear());
+
         try{
             customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
             messageHeader = "Save Customer Info Individual Success.";
@@ -1056,12 +1055,26 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public String onSaveFromJuristic(){
-        if(isEditFromJuris){
+        //todo: find title , relation , reference , etc for show in list in juristic page
+        customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
+        customerInfoView.getRelation().setDescription(relationDAO.findById(customerInfoView.getRelation().getId()).getDescription());
+//        customerInfoView.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
+
+        //calculate age
+        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
+        Calendar today = Calendar.getInstance(new Locale("th", "TH"));
+        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
+        customerInfoView.setAge(today.getTime().getYear());
+
+        if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
         } else {
             cusInfoJuristic.getIndividualViewList().add(customerInfoView);
         }
         Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isFromIndividualParam",true);
+        map.put("isFromSummaryParam",false);
+        map.put("customerId",new Long(0));
         map.put("customerInfoView", cusInfoJuristic);
         FacesUtil.getFlash().put("cusInfoParams", map);
         return "customerInfoJuristic?faces-redirect=true";

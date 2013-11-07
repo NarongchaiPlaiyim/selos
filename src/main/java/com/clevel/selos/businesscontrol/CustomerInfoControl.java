@@ -11,10 +11,7 @@ import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.master.User;
-import com.clevel.selos.model.db.working.Address;
-import com.clevel.selos.model.db.working.Customer;
-import com.clevel.selos.model.db.working.Individual;
-import com.clevel.selos.model.db.working.WorkCase;
+import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -25,6 +22,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -44,6 +42,8 @@ public class CustomerInfoControl extends BusinessControl {
     DocumentTypeDAO documentTypeDAO;
     @Inject
     JuristicDAO juristicDAO;
+    @Inject
+    CustomerCSIDAO customerCSIDAO;
 
     @Inject
     RMInterface rmInterface;
@@ -74,7 +74,6 @@ public class CustomerInfoControl extends BusinessControl {
         return customerInfoSummaryView;
     }
 
-    // For Customer Info. Detail - Individual
     public int getCaseBorrowerTypeIdByWorkCase(long workCaseId){
         int caseBorrowerTypeId = 0;
         WorkCase workCase = workCaseDAO.findById(workCaseId);
@@ -153,6 +152,26 @@ public class CustomerInfoControl extends BusinessControl {
         }
 
         //for add new
+        if(customerInfoView.getIndividualViewList() != null && customerInfoView.getIndividualViewList().size() > 0){
+            for(CustomerInfoView cus : customerInfoView.getIndividualViewList()){
+                cus.getCurrentAddress().setId(0);
+                cus.getRegisterAddress().setId(0);
+                cus.getWorkAddress().setId(0);
+                //for check delete spouse
+                if(cus.getSpouseId() != 0){
+                    Customer spouse = customerDAO.findById(cus.getSpouseId());
+                    if(spouse.getAddressesList() != null && spouse.getAddressesList().size() > 0){
+                        addressDAO.delete(spouse.getAddressesList());
+                    }
+                    if(spouse.getIndividual() != null){
+                        individualDAO.delete(spouse.getIndividual());
+                    }
+                    customerDAO.delete(spouse);
+                }
+                cus.setId(0);
+            }
+        }
+
         Customer customerJuristic = customerTransform.transformToModel(customerInfoView, null, workCase);
         customerDAO.persist(customerJuristic);
         juristicDAO.persist(customerJuristic.getJuristic());
@@ -163,8 +182,9 @@ public class CustomerInfoControl extends BusinessControl {
                 cusIndividual.setIsCommittee(1);
                 cusIndividual.setCommitteeId(customerJuristic.getId());
                 if(cusIndividual.getSpouse() != null){
-                    cusIndividual.getSpouse().setIsCommittee(1);
-                    cusIndividual.getSpouse().setCommitteeId(customerJuristic.getId());
+//                    cusIndividual.getSpouse().setIsCommittee(1);
+                    cusIndividual.getSpouse().setIsCommittee(0);
+//                    cusIndividual.getSpouse().setCommitteeId(customerJuristic.getId());
                 }
                 saveCustomerInfoIndividual(cusIndividual,workCaseId);
             }
@@ -180,6 +200,82 @@ public class CustomerInfoControl extends BusinessControl {
             customerInfoView.setSpouse(spouseInfoView);
         }
         return customerInfoView;
+    }
+
+    public CustomerInfoView getCustomerJuristicById(long id){
+        Customer customer = customerDAO.findById(id);
+        CustomerInfoView customerInfoView = customerTransform.transformToView(customer);
+
+        List<Customer> cusList = customerDAO.findCustomerByCommitteeId(customer.getId());
+        List<CustomerInfoView> cusViewList = new ArrayList<CustomerInfoView>();
+        if(cusList != null && cusList.size() > 0){
+            cusViewList = customerTransform.transformToViewList(cusList);
+        }
+        customerInfoView.setIndividualViewList(cusViewList);
+        return customerInfoView;
+    }
+
+    public void deleteCustomerIndividual(long customerId){
+        Customer customer = customerDAO.findById(customerId);
+        if(customer.getSpouseId() != 0){ // have spouse
+            Customer cus = customerDAO.findById(customer.getSpouseId());
+            if(cus != null){
+                if(cus.getAddressesList() != null && cus.getAddressesList().size() > 0){
+                    addressDAO.delete(cus.getAddressesList());
+                }
+                if(cus.getIndividual() != null){
+                    individualDAO.delete(cus.getIndividual());
+                }
+
+                //for check customer CSI
+                List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(cus.getId());
+                if(customerCSIList != null && customerCSIList.size() > 0){
+                    customerCSIDAO.delete(customerCSIList);
+                }
+
+                customerDAO.delete(cus);
+            }
+        }
+
+        if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
+            addressDAO.delete(customer.getAddressesList());
+        }
+        if(customer.getIndividual() != null){
+            individualDAO.delete(customer.getIndividual());
+        }
+
+        //for check customer CSI
+        List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
+        if(customerCSIList != null && customerCSIList.size() > 0){
+            customerCSIDAO.delete(customerCSIList);
+        }
+
+        customerDAO.delete(customer);
+    }
+
+    public void deleteCustomerJuristic(long customerId){
+        Customer customer = customerDAO.findById(customerId);
+        List<Customer> cusIndList = customerDAO.findCustomerByCommitteeId(customer.getId()); // find committee
+        if(cusIndList != null && cusIndList.size() > 0){
+            for(Customer cusInd : cusIndList){
+                deleteCustomerIndividual(cusInd.getId());
+            }
+        }
+
+        if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
+            addressDAO.delete(customer.getAddressesList());
+        }
+        if(customer.getJuristic() != null){
+            juristicDAO.delete(customer.getJuristic());
+        }
+
+        //for check customer CSI
+        List<CustomerCSI> customerCSIList = customerCSIDAO.findCustomerCSIByCustomerId(customerId);
+        if(customerCSIList != null && customerCSIList.size() > 0){
+            customerCSIDAO.delete(customerCSIList);
+        }
+
+        customerDAO.delete(customer);
     }
 
     //** function for integration **//

@@ -207,23 +207,39 @@ public class CustomerTransform extends Transform {
                 addressView.setContactPhone(address.getContactPhone());
                 addressView.setAddress(address.getAddress());
 
-                if(address.getAddressType().getId() == 1){
-                    // Current address
-                    customerInfoView.setCurrentAddress(addressView);
-                    if(customerInfoView.getCurrentAddress() == null){
-                        customerInfoView.setCurrentAddress(new AddressView());
+                if(customer.getCustomerEntity().getId() == 1){
+                    if(address.getAddressType().getId() == 1){
+                        // Current address
+                        customerInfoView.setCurrentAddress(addressView);
+                        if(customerInfoView.getCurrentAddress() == null){
+                            customerInfoView.setCurrentAddress(new AddressView());
+                        }
+                    } else if(address.getAddressType().getId() == 2){
+                        // Register Address
+                        customerInfoView.setRegisterAddress(addressView);
+                        if(customerInfoView.getRegisterAddress() == null){
+                            customerInfoView.setRegisterAddress(new AddressView());
+                        }
+                    } else if(address.getAddressType().getId() == 3){
+                        // Work Address
+                        customerInfoView.setWorkAddress(addressView);
+                        if(customerInfoView.getWorkAddress() == null){
+                            customerInfoView.setWorkAddress(new AddressView());
+                        }
                     }
-                } else if(address.getAddressType().getId() == 2){
-                    // Register Address
-                    customerInfoView.setRegisterAddress(addressView);
-                    if(customerInfoView.getRegisterAddress() == null){
-                        customerInfoView.setRegisterAddress(new AddressView());
-                    }
-                } else if(address.getAddressType().getId() == 3){
-                    // Work Address
-                    customerInfoView.setWorkAddress(addressView);
-                    if(customerInfoView.getWorkAddress() == null){
-                        customerInfoView.setWorkAddress(new AddressView());
+                } else {
+                    if(address.getAddressType().getId() == 4){
+                        // Register Address
+                        customerInfoView.setRegisterAddress(addressView);
+                        if(customerInfoView.getRegisterAddress() == null){
+                            customerInfoView.setRegisterAddress(new AddressView());
+                        }
+                    } else if(address.getAddressType().getId() == 5){
+                        // Work Address
+                        customerInfoView.setWorkAddress(addressView);
+                        if(customerInfoView.getWorkAddress() == null){
+                            customerInfoView.setWorkAddress(new AddressView());
+                        }
                     }
                 }
             }
@@ -312,8 +328,7 @@ public class CustomerTransform extends Transform {
                 customerInfoView.setSalesFromFinancialStmt(juristic.getSalesFromFinancialStmt());
                 customerInfoView.setShareHolderRatio(juristic.getShareHolderRatio());
                 customerInfoView.setNumberOfAuthorizedUsers(juristic.getNumberOfAuthorizedUsers());
-            } else {
-                customerInfoView.setRegistrationCountry(new Country());
+                customerInfoView.setTotalShare(juristic.getTotalShare());
             }
         }
 
@@ -506,9 +521,14 @@ public class CustomerTransform extends Transform {
             }
             address.setCustomer(customer);
 
-            //Get Address Type = Current//
-            AddressType addressType = addressTypeDAO.findById(2);
-            address.setAddressType(addressType);
+            //Get Address Type = Register//
+            if(customerInfoView.getCustomerEntity().getId() == 1){
+                AddressType addressType = addressTypeDAO.findById(2);
+                address.setAddressType(addressType);
+            } else {
+                AddressType addressType = addressTypeDAO.findById(4);
+                address.setAddressType(addressType);
+            }
 
             address.setAddressNo(registerAddress.getAddressNo());
             address.setMoo(registerAddress.getMoo());
@@ -561,9 +581,14 @@ public class CustomerTransform extends Transform {
             }
             address.setCustomer(customer);
 
-            //Get Address Type = Current//
-            AddressType addressType = addressTypeDAO.findById(3);
-            address.setAddressType(addressType);
+            //Get Address Type = Work//
+            if(customerInfoView.getCustomerEntity().getId() == 1){
+                AddressType addressType = addressTypeDAO.findById(3);
+                address.setAddressType(addressType);
+            } else {
+                AddressType addressType = addressTypeDAO.findById(5);
+                address.setAddressType(addressType);
+            }
 
             address.setAddressNo(workAddress.getAddressNo());
             address.setMoo(workAddress.getMoo());

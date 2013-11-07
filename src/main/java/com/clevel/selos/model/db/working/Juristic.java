@@ -33,13 +33,13 @@ public class Juristic implements Serializable {
     @Column(name = "capital")
     private BigDecimal capital;
 
-    @Column(name = "paidCapital")
+    @Column(name = "paid_capital")
     private BigDecimal paidCapital;
 
-    @Column(name = "totalShare")
+    @Column(name = "total_share")
     private BigDecimal totalShare;
 
-    @Column(name = "signCondition")
+    @Column(name = "sign_sondition")
     private String signCondition;
 
     @Temporal(TemporalType.TIMESTAMP)

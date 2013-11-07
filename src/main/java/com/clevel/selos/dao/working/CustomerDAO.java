@@ -103,7 +103,7 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.debug("findSpouseById ::: committeeId : {}", committeeId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("juristicId", committeeId));
-        List<Customer> customerList = (List<Customer>) criteria.uniqueResult();
+        List<Customer> customerList = (List<Customer>) criteria.list();
 
         return customerList;
     }
