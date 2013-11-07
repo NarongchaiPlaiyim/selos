@@ -218,6 +218,12 @@ function handleAppraisalContactDetailRequest(xhr, status, args) {
     }
 }
 
+function handleCollateralDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalComsViewDlg.hide();
+    }
+}
+
 function testHandle(){
     return true;
 }
