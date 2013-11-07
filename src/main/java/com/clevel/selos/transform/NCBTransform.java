@@ -4,8 +4,6 @@ import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.NCBInfoView;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class NCBTransform extends Transform {

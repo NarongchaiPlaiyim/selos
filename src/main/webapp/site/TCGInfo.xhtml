@@ -59,7 +59,10 @@
                                                     <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}" >
+                                                    <p:inputText styleClass="large right"
+                                                                 id="requestLimitRequiredTCG"
+                                                                 value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
+                                                                 required="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
@@ -70,7 +73,9 @@
                                                     <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitNotRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"  >
+                                                    <p:inputText styleClass="large right"
+                                                                 id="requestLimitNotRequiredTCG"
+                                                                 value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"  >
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
@@ -121,8 +126,8 @@
                                                 id="btnAdd"
                                                 value="#{msg.get('app.addButton')}"
                                                 styleClass="smaller"
-                                                process="@this"
                                                 actionListener="#{tcgInfo.onAddCollateralDetail}"
+                                                process="@this"
                                                 update=":tcgDlgForm"
                                                 oncomplete="tcgDlg.show();">
                                             <p:resetInput target=":tcgDlgForm"/>
@@ -169,6 +174,7 @@
                                                         <p:column>
                                                             <p:commandButton icon="ui-icon-pencil"
                                                                              action="#{tcgInfo.onEditCollateralDetail()}"
+                                                                             process="@this"
                                                                              update=":tcgDlgForm"
                                                                              oncomplete="tcgDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"

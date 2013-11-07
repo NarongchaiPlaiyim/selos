@@ -3,11 +3,13 @@
 <f:view xmlns="http://www.w3.org/1999/xhtml"
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
     <h:head>
         <title>Welcome</title>
         <link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" type="text/css" media="screen"/>
+        <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
     </h:head>
     <h:body>
 
@@ -69,10 +71,16 @@
         <p:panel id="testPanel">
             <h:form>
 
-                <p:calendar value="#{welcomePage.dateTh}" id="popupButtonCalTh" showOn="button" pattern="dd/MM/yyyy" locale="th_TH" />
-                <p:calendar value="#{welcomePage.dateEn}" id="popupButtonCalEn" showOn="button" pattern="dd/MM/yyyy" />
+                <!--<p:calendar value="#{welcomePage.dateTh}" id="popupButtonCalTh" showOn="button" pattern="dd/MM/yyyy"-->
+                         <!--navigator="true" locale="th_TH" isBE="true" showButtonPanel="true" />-->
+                <clv:BECalendar value="#{welcomePage.dateTh}" id="popupButtonCalTh" showOn="button" pattern="dd/MM/yyyy"
+                               navigator="true" locale="th_TH" showButtonPanel="true" />
 
-                <p:commandButton value="test Calendar" action="#{welcomePage.testCalendar()}"/>
+                <p:calendar value="#{welcomePage.dateEn}" id="popupButtonCalEn" showOn="button" pattern="dd/MM/yyyy"
+                         navigator="true" showButtonPanel="true"/>
+
+
+                <p:commandButton value="test Calendar" action="#{welcomePage.testCalendar}"/>
 
                 <h:outputText value="xxxx: " />
                 <h:outputText value="#{welcomePage.radioValue}"  />

@@ -123,9 +123,9 @@ function onKeyText(evt){
      123={,  125=}
      */
 
-    if ((evt.keyCode > 32 && evt.keyCode < 43) || evt.keyCode == 45 || evt.keyCode == 47 ||
-        (evt.keyCode > 57 && evt.keyCode < 61) || (evt.keyCode > 61 && evt.keyCode < 65) ||
-        evt.keyCode == 91 || evt.keyCode == 93 || evt.keyCode == 94 || evt.keyCode == 95 || evt.keyCode == 123 || evt.keyCode == 125) {
+    if( (evt.keyCode > 32 && evt.keyCode < 43) || evt.keyCode == 45 || evt.keyCode == 47 ||
+            (evt.keyCode > 57 && evt.keyCode < 61) || (evt.keyCode > 61 && evt.keyCode < 65) ||
+                evt.keyCode == 91 || evt.keyCode == 93 || evt.keyCode == 94 || evt.keyCode == 95 || evt.keyCode == 123 || evt.keyCode == 125 ){
         return false;
     }
 
@@ -206,7 +206,25 @@ function handleContactRecordRequest(xhr, status, args) {
     }
 }
 
-function testHandle() {
+function handleAppraisalDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalDetailViewDlg.hide();
+    }
+}
+
+function handleAppraisalContactDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalContactDetailViewDlg.hide();
+    }
+}
+
+function handleCollateralDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalComsViewDlg.hide();
+    }
+}
+
+function testHandle(){
     return true;
 }
 
