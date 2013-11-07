@@ -155,10 +155,11 @@ public class NCBBizTransform extends BusinessTransform {
                                     boolean isTDROther = false;
                                     String lastTDRDateTMB = null;
                                     String lastTDRDateOther = null;
-                                    boolean isValidPayment = false;
+                                    boolean isValidPayment = true;
                                     for (SubjectAccountModel subjectAccountModel : subjectAccountModelResults) {
                                         //check for payment pattern
                                         isValidPayment = isValidPaymentPatternIndividual(subjectAccountModel);
+                                        log.debug("isValidPayment {}",isValidPayment);
                                         if(!isValidPayment){
                                             break;
                                         }
@@ -1043,8 +1044,8 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if(!isValidPayment){
-                                        log.debug("unexpected value from NCCRS : settlement status");
-                                        String reason = "Unexpected value from NCCRS : settlement status";
+                                        log.debug("unexpected value getting from NCRS : settlement status");
+                                        String reason = "Unexpected value getting from NCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
                                         ncbViews.add(ncbView);
@@ -1229,7 +1230,7 @@ public class NCBBizTransform extends BusinessTransform {
                                     boolean isTDROther = false;
                                     String lastTDRDateTMB = null;
                                     String lastTDRDateOther = null;
-                                    boolean isValidPayment = false;
+                                    boolean isValidPayment = true;
                                     //check for active account
                                     if (haveActiveAccountData) {
                                         for (AccountModel accountModel : h2HResponseSubjectModel.getActiveaccounts().getAccount()) {
@@ -1643,8 +1644,8 @@ public class NCBBizTransform extends BusinessTransform {
                                     }
 
                                     if(!isValidPayment){
-                                        log.debug("unexpected value from NCCRS : settlement status");
-                                        String reason = "Unexpected value from NCCRS : settlement status";
+                                        log.debug("unexpected value getting from NCCRS : settlement status");
+                                        String reason = "Unexpected value getting from NCCRS : settlement status";
                                         ncbView.setResult(ActionResult.FAILED);
                                         ncbView.setReason(reason);
                                         ncbViews.add(ncbView);
@@ -1730,29 +1731,41 @@ public class NCBBizTransform extends BusinessTransform {
 
     private boolean isValidPaymentPatternIndividual(SubjectAccountModel subjectAccountModel){
         if(!Util.isEmpty(subjectAccountModel.getPaymtdate01()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate01(), TWELVE_MONTH)){
-            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate01()) != null){
+            log.debug("subjectAccountModel.getPaymt01() : {}",subjectAccountModel.getPaymt01());
+            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt01()) != null){
                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate02()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate02(), TWELVE_MONTH)){
-                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate02()) != null){
+                    log.debug("subjectAccountModel.getPaymt02() : {}",subjectAccountModel.getPaymt02());
+                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt02()) != null){
                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate03()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate03(), TWELVE_MONTH)){
-                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate03()) != null){
+                            log.debug("subjectAccountModel.getPaymt03() : {}",subjectAccountModel.getPaymt03());
+                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt03()) != null){
                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate04()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate04(), TWELVE_MONTH)){
-                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate04()) != null){
+                                    log.debug("subjectAccountModel.getPaymt04() : {}",subjectAccountModel.getPaymt04());
+                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt04()) != null){
                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate05()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate05(), TWELVE_MONTH)){
-                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate05()) != null){
+                                            log.debug("subjectAccountModel.getPaymt05() : {}",subjectAccountModel.getPaymt05());
+                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt05()) != null){
                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate06()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate06(), TWELVE_MONTH)){
-                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate06()) != null){
+                                                    log.debug("subjectAccountModel.getPaymt06() : {}",subjectAccountModel.getPaymt06());
+                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt06()) != null){
                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate07()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate07(), TWELVE_MONTH)){
-                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate07()) != null){
+                                                            log.debug("subjectAccountModel.getPaymt07() : {}",subjectAccountModel.getPaymt07());
+                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt07()) != null){
                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate08()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate08(), TWELVE_MONTH)){
-                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate08()) != null){
+                                                                    log.debug("subjectAccountModel.getPaymt08() : {}",subjectAccountModel.getPaymt08());
+                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt08()) != null){
                                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate09()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate09(), TWELVE_MONTH)){
-                                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate09()) != null){
+                                                                            log.debug("subjectAccountModel.getPaymt09() : {}",subjectAccountModel.getPaymt09());
+                                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt09()) != null){
                                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate10()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate10(), TWELVE_MONTH)){
-                                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate10()) != null){
+                                                                                    log.debug("subjectAccountModel.getPaymt10() : {}",subjectAccountModel.getPaymt10());
+                                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt10()) != null){
                                                                                         if(!Util.isEmpty(subjectAccountModel.getPaymtdate11()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate11(), TWELVE_MONTH)){
-                                                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate11()) != null){
+                                                                                            log.debug("subjectAccountModel.getPaymt11() : {}",subjectAccountModel.getPaymt11());
+                                                                                            if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt11()) != null){
                                                                                                 if(!Util.isEmpty(subjectAccountModel.getPaymtdate12()) && isInMonthPeriodYYYYMMDD(subjectAccountModel.getPaymtdate12(), TWELVE_MONTH)){
-                                                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate12()) != null){
+                                                                                                    log.debug("subjectAccountModel.getPaymt12() : {}",subjectAccountModel.getPaymt12());
+                                                                                                    if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt12()) != null){
                                                                                                             return true;
                                                                                                     } else {
                                                                                                         return false;
@@ -1760,56 +1773,80 @@ public class NCBBizTransform extends BusinessTransform {
                                                                                                 } else {
                                                                                                     return true;
                                                                                                 }
+                                                                                            } else {
+                                                                                                return false;
                                                                                             }
                                                                                         } else {
                                                                                             return true;
                                                                                         }
+                                                                                    } else {
+                                                                                        return false;
                                                                                     }
                                                                                 } else {
                                                                                     return true;
                                                                                 }
+                                                                            } else {
+                                                                                return false;
                                                                             }
                                                                         } else {
                                                                             return true;
                                                                         }
+                                                                    } else {
+                                                                        return false;
                                                                     }
                                                                 } else {
                                                                     return true;
                                                                 }
+                                                            } else {
+                                                                return false;
                                                             }
                                                         } else {
                                                             return true;
                                                         }
+                                                    } else {
+                                                        return false;
                                                     }
                                                 } else {
                                                     return true;
                                                 }
+                                            } else {
+                                                return false;
                                             }
                                         } else {
                                             return true;
                                         }
+                                    } else {
+                                        return false;
                                     }
                                 } else {
                                     return true;
                                 }
+                            } else {
+                                return false;
                             }
                         } else {
                             return true;
                         }
+                    } else {
+                        return false;
                     }
                 } else {
                     return true;
                 }
+            } else {
+                return false;
             }
         } else {
-            if(!Util.isEmpty(subjectAccountModel.getPaymtdate01())){
-                if(NCBPaymentCode.getValue(subjectAccountModel.getPaymtdate01()) != null){
+            if(!Util.isEmpty(subjectAccountModel.getPaymt01())){
+                log.debug("subjectAccountModel.getPaymt01() : {}",subjectAccountModel.getPaymt01());
+                if(NCBPaymentCode.getValue(subjectAccountModel.getPaymt01()) != null){
                     return true;
+                } else {
+                    return false;
                 }
             }
             return true;
         }
-        return false;
     }
 
     private boolean isValidPaymentPatternJuristic(CreditHistModel creditHistModel){

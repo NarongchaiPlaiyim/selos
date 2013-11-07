@@ -27,6 +27,10 @@
         <param-name>primefaces.THEME</param-name>
         <param-value>theme</param-value>
     </context-param>
+    <context-param>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/be-calendar.xml</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
