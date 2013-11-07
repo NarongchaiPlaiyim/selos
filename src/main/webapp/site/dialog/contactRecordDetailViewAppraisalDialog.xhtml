@@ -12,11 +12,11 @@
                 <td>
                     <p:calendar size="10" id="callingDate" showOn="button" navigator="true"
                                 value="#{appraisalAppointment.contactRecordDetailView.callingDate}"
-                                pattern="dd/MM/yyyy"
+                                pattern="dd/MM/yyyy HH:mm"
                                 locale="th_TH"
                                 timeZone="Asia/Bangkok"
                                 yearRange="2440:3000">
-                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        <f:convertDateTime pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
                     </p:calendar>
                     <p:spacer width="10"/>
                     <p:inputMask id="callingTime" size="5" value="#{appraisalAppointment.contactRecordDetailView.callingTime}"  mask="99:99"  />
@@ -48,27 +48,23 @@
                 <td>
                     <p:calendar size="10" id="nextCallingDate" mindate="#{appraisalAppointment.currentDate}" showOn="button" navigator="true"
                                 value="#{appraisalAppointment.contactRecordDetailView.nextCallingDate}"
-                                pattern="dd/MM/yyyy"
+                                pattern="dd/MM/yyyy  HH:mm"
                                 locale="th_TH"
                                 timeZone="Asia/Bangkok"
                                 yearRange="2440:3000">
-                        <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="th_TH"/>
                     </p:calendar>
-                    <p:spacer width="10"/>
-                    <p:inputMask id="nextCallingTime" size="5" value="#{appraisalAppointment.contactRecordDetailView.nextCallingTime}"  mask="99:99"  />
                 </td>
             </tr>
             <tr>
                 <td class="title"><h:outputText value="#{msg.get('app.contactRecordDetail.label.reason')}"/><h:outputLabel value="*" styleClass="require-field"/></td>
                 <td>
-                    <p:selectOneMenu style="width: 100px" value="#{appraisalAppointment.contactRecordDetailView.reason.id}" id="reasonId">
+                    <p:selectOneMenu style="width: 100px" value="#{appraisalAppointment.contactRecordDetailView.reason}" id="reason">
                         <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{appraisalAppointment.reasonList}"
-                                       var="reason"
-                                       itemLabel="#{reason.description}"
-                                       itemValue="#{reason.id}"/>
+                        <f:selectItem itemLabel="Accept" itemValue="1"/>
+                        <f:selectItem itemLabel="Not Accept" itemValue="0"/>
+                        <f:selectItem itemLabel="Need to consider" itemValue="2"/>
                     </p:selectOneMenu>
-
                 </td>
             </tr>
             <tr>
@@ -87,7 +83,7 @@
                     <p:commandButton
                             id="btnSaveContactRecord"
                             binding="#{saveContactRecord}"
-                            value="#{msg.get('app.button.save')}"
+                            value="#{msg.get('app.button.ok')}"
                             action="#{appraisalAppointment.onSaveContactRecordDetailView()}"
                             process=":contactRecordViewDlgForm"
                             update=":frmMain:contactRecordDetailViewTable"

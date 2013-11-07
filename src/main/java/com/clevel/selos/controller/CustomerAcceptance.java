@@ -60,8 +60,6 @@ public class CustomerAcceptance implements Serializable {
 
     private ContactRecordDetailView selectContactRecordDetail;
     private ContactRecordDetailView contactRecordDetailViewTemp;
-    private List<Reason> reasonList;
-    private Reason reason;
 
     @Inject
     private CustomerAcceptanceControl customerAcceptanceControl;
@@ -69,8 +67,6 @@ public class CustomerAcceptance implements Serializable {
     private UserDAO userDAO;
     @Inject
     private WorkCaseDAO workCaseDAO;
-    @Inject
-    private ReasonDAO reasonDAO;
 
     public CustomerAcceptance() {
 
@@ -85,10 +81,9 @@ public class CustomerAcceptance implements Serializable {
         session.setAttribute("workCaseId", 10001);
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
 
-        reasonList = reasonDAO.findAll();
+
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
+
         if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ",workCaseId);
@@ -134,7 +129,6 @@ public class CustomerAcceptance implements Serializable {
 
     public void onSaveContactRecordDetailView(){
         boolean complete = false;
-        Reason reasonTemp;
         RequestContext context = RequestContext.getCurrentInstance();
 
         if(true){
@@ -142,14 +136,8 @@ public class CustomerAcceptance implements Serializable {
             if(modeForButton.equalsIgnoreCase("add")){
                 log.info("onSaveContactRecordDetailView add >>> begin ");
                 log.info("contactRecordDetailViewList size >>> is " + contactRecordDetailViewList.size());
-
                 contactRecordDetailView.setNo(contactRecordDetailViewList.size()+1);
                 log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + contactRecordDetailView);
-
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
-
-                contactRecordDetailView.setReason(reason);
                 contactRecordDetailViewList.add(contactRecordDetailView);
 
                 log.info("onSaveContactRecordDetailView add >>> end ");
@@ -165,11 +153,7 @@ public class CustomerAcceptance implements Serializable {
                 contactRecordDetailViewRow.setAcceptResult(contactRecordDetailView.getAcceptResult());
                 contactRecordDetailViewRow.setNextCallingDate(contactRecordDetailView.getNextCallingDate());
                 contactRecordDetailViewRow.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
-
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
-
-                contactRecordDetailViewRow.setReason(reason);
+                contactRecordDetailViewRow.setReason(contactRecordDetailView.getReason());
                 contactRecordDetailViewRow.setRemark(contactRecordDetailView.getRemark());
 
                 contactRecordDetailView = new ContactRecordDetailView();
@@ -184,9 +168,6 @@ public class CustomerAcceptance implements Serializable {
         log.info( " onEditBizProductDetailView getRemark is " + selectContactRecordDetail.getRemark());
         modeForButton = "edit";
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
-
         //*** Check list size ***//
         if( rowIndex < contactRecordDetailViewList.size() ) {
             contactRecordDetailView.setCallingDate(selectContactRecordDetail.getCallingDate());
@@ -213,9 +194,6 @@ public class CustomerAcceptance implements Serializable {
     public void onAddContactRecordDetailView(){
         log.info("onAddContactRecordView >>> begin ");
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        reason.setId(0);
-        contactRecordDetailView.setReason(reason);
         modeForButton = "add";
     }
 
@@ -339,14 +317,6 @@ public class CustomerAcceptance implements Serializable {
 
     public void setMessageHeader(String messageHeader) {
         this.messageHeader = messageHeader;
-    }
-
-    public List<Reason> getReasonList() {
-        return reasonList;
-    }
-
-    public void setReasonList(List<Reason> reasonList) {
-        this.reasonList = reasonList;
     }
 
     public Date getCurrentDate() {

@@ -57,8 +57,6 @@ public class AppraisalAppointment implements Serializable {
     @Inject
     private WorkCaseDAO workCaseDAO;
     @Inject
-    private ReasonDAO reasonDAO;
-    @Inject
     private AppraisalCompanyDAO appraisalCompanyDAO;
     @Inject
     private AppraisalDivisionDAO appraisalDivisionDAO;
@@ -93,8 +91,6 @@ public class AppraisalAppointment implements Serializable {
 
     private ContactRecordDetailView selectContactRecordDetail;
     private ContactRecordDetailView contactRecordDetailViewTemp;
-    private List<Reason> reasonList;
-    private Reason reason;
     private List<AppraisalCompany> appraisalCompanyList;
     private List<AppraisalDivision> appraisalDivisionList;
     private List<LocationProperty> locationPropertyList;
@@ -124,10 +120,6 @@ public class AppraisalAppointment implements Serializable {
         appraisalContactDetailViewList = new ArrayList<AppraisalContactDetailView>();
         contactRecordDetailView = new ContactRecordDetailView();
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
-
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
-        reasonList = reasonDAO.findAll();
 
         appraisalCompanyList = appraisalCompanyDAO.findAll();
         appraisalDivisionList= appraisalDivisionDAO.findAll();
@@ -251,7 +243,6 @@ public class AppraisalAppointment implements Serializable {
 
     public void onSaveContactRecordDetailView(){
         boolean complete = false;
-        Reason reasonTemp;
         RequestContext context = RequestContext.getCurrentInstance();
 
         if(true){
@@ -263,10 +254,6 @@ public class AppraisalAppointment implements Serializable {
                 contactRecordDetailView.setNo(contactRecordDetailViewList.size()+1);
                 log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + contactRecordDetailView);
 
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
-
-                contactRecordDetailView.setReason(reason);
                 contactRecordDetailViewList.add(contactRecordDetailView);
 
                 log.info("onSaveContactRecordDetailView add >>> end ");
@@ -283,10 +270,8 @@ public class AppraisalAppointment implements Serializable {
                 contactRecordDetailViewRow.setNextCallingDate(contactRecordDetailView.getNextCallingDate());
                 contactRecordDetailViewRow.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
 
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
 
-                contactRecordDetailViewRow.setReason(reason);
+                contactRecordDetailViewRow.setReason(contactRecordDetailView.getReason());
                 contactRecordDetailViewRow.setRemark(contactRecordDetailView.getRemark());
 
                 contactRecordDetailView = new ContactRecordDetailView();
@@ -301,9 +286,6 @@ public class AppraisalAppointment implements Serializable {
         log.info( " onEditContactRecordDetailView " + selectContactRecordDetail.getRemark());
         modeForButton = "edit";
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
-
         //*** Check list size ***//
         if( rowIndex < contactRecordDetailViewList.size() ) {
             contactRecordDetailView.setCallingDate(selectContactRecordDetail.getCallingDate());
@@ -330,9 +312,6 @@ public class AppraisalAppointment implements Serializable {
     public void onAddContactRecordDetailView(){
         log.info("onAddContactRecordView >>> begin ");
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        reason.setId(0);
-        contactRecordDetailView.setReason(reason);
         modeForButton = "add";
     }
 
@@ -664,22 +643,6 @@ public class AppraisalAppointment implements Serializable {
 
     public void setSelectContactRecordDetail(ContactRecordDetailView selectContactRecordDetail) {
         this.selectContactRecordDetail = selectContactRecordDetail;
-    }
-
-    public Reason getReason() {
-        return reason;
-    }
-
-    public void setReason(Reason reason) {
-        this.reason = reason;
-    }
-
-    public List<Reason> getReasonList() {
-        return reasonList;
-    }
-
-    public void setReasonList(List<Reason> reasonList) {
-        this.reasonList = reasonList;
     }
 
     public AppraisalDetailView getSelectAppraisalDetailView() {

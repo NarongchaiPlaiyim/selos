@@ -21,7 +21,7 @@ public class ContactRecordDetailView {
     private String acceptResultStr;
     private Date nextCallingDate;
     private String nextCallingTime;
-    private Reason reason;
+    private String reason;
     private String remark;
     private String status;
     private Date createDate;
@@ -72,18 +72,6 @@ public class ContactRecordDetailView {
     }
 
     public String getCallingResultStr() {
-        System.out.println(" this.callingResult is " + this.callingResult);
-        /*if(this.callingResult==0){
-            System.out.println(" case 0 " + msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact");
-        }else if(this.callingResult==1){
-            System.out.println(" case 1 " + msg.get("app.customerAcceptance.radio.label.callingResult.canContact"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.canContact");
-        }else{
-            System.out.println(" case else "+msg.get("app.customerAcceptance.radio.label.callingResult.etc"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.etc");
-        }
-        System.out.println(" final callingResultStr is  " + callingResultStr);*/
         return callingResultStr;
     }
 
@@ -132,11 +120,11 @@ public class ContactRecordDetailView {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 

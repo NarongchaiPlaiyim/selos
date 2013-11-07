@@ -178,67 +178,67 @@
                     <tr>
                         <td colspan="6">
                             <p:dataTable tableStyleClass="center" style="width: 100%"
-                                         id="appraisalDetailViewTable"
-                                         var="appraisalDetailView"
-                                         value="#{appraisalAppointment.appraisalDetailViewList}"
-                                         paginator="false"
-                                         rowKey="#{appraisalDetailView.id}"
-                                         rowIndexVar="rowIndex" >
+                                                       id="appraisalDetailViewTable"
+                                                       var="appraisalDetailView"
+                                                       value="#{appraisalAppointment.appraisalDetailViewList}"
+                                                       paginator="false"
+                                                       rowKey="#{appraisalDetailView.id}"
+                                                       rowIndexVar="rowIndex" >
 
-                                <p:columnGroup type="header">
-                                    <p:row>
-                                        <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
-                                        <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
-                                        <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
-                                        <p:column colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
-                                        <p:column rowspan="2" headerText=""/>
-                                    </p:row>
-                                    <p:row>
-                                        <p:column
-                                                headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
-                                        <p:column
-                                                headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
-                                    </p:row>
-                                </p:columnGroup>
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
+                                    <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
+                                    <p:column colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
+                                    <p:column rowspan="2" headerText=""/>
+                                </p:row>
+                                <p:row>
+                                    <p:column
+                                            headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
+                                    <p:column
+                                            headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
+                                </p:row>
+                            </p:columnGroup>
 
-                                <p:column  styleClass="center" style="width:4%;">
-                                    <p:outputLabel value="#{appraisalDetailView.no}"/>
-                                </p:column>
-                                <p:column styleClass="left" >
-                                    <p:outputLabel value="#{appraisalDetailView.titleDeed}" />
-                                </p:column>
-                                <p:column  styleClass="left">
-                                    <p:outputLabel value="#{appraisalDetailView.purposeReviewAppraisalLabel}"/> <p:spacer width="5px"/>
-                                    <p:outputLabel value="#{appraisalDetailView.purposeNewAppraisalLabel}"/>    <p:spacer width="5px"/>
-                                    <p:outputLabel value="#{appraisalDetailView.purposeReviewBuildingLabel}"/>
-                                </p:column>
-                                <p:column  styleClass="left">
-                                    <p:outputLabel value="#{appraisalDetailView.characteristicLabel}"/>
-                                </p:column>
-                                <p:column styleClass="right">
-                                    <p:outputLabel value="#{appraisalDetailView.numberOfDocuments}"/>
-                                </p:column>
-                                <p:column headerText="" styleClass="center">
-                                    <p:commandButton icon="ui-icon-pencil"
-                                                     action="#{appraisalAppointment.onEditAppraisalDetailView()}"
-                                                     update=":appraisalDetailDlgForm"
-                                                     process=":frmMain:appraisalDetailViewTable"
-                                                     oncomplete="appraisalDetailViewDlg.show();">
-                                        <f:setPropertyActionListener value="#{appraisalDetailView}"
-                                                                     target="#{appraisalAppointment.selectAppraisalDetailView}"/>
-                                        <f:setPropertyActionListener value="#{rowIndex}"
-                                                                     target="#{appraisalAppointment.rowIndex}"/>
-                                    </p:commandButton>
-                                    <p:commandButton title="Remove" process="@this"
-                                                     icon="ui-icon-trash"
-                                                     oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
-                                        <f:setPropertyActionListener value="#{appraisalDetailView}"
-                                                                     target="#{appraisalAppointment.selectAppraisalDetailView}"/>
-                                        <f:setPropertyActionListener value="#{rowIndex}"
-                                                                     target="#{appraisalAppointment.rowIndex}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
+                            <p:column  styleClass="center" style="width:4%;">
+                                <p:outputLabel value="#{appraisalDetailView.no}"/>
+                            </p:column>
+                            <p:column styleClass="left" >
+                                <p:outputLabel value="#{appraisalDetailView.titleDeed}" />
+                            </p:column>
+                            <p:column  styleClass="left">
+                                <p:outputLabel value="#{appraisalDetailView.purposeReviewAppraisalLabel}"/> <p:spacer width="5px"/>
+                                <p:outputLabel value="#{appraisalDetailView.purposeNewAppraisalLabel}"/>    <p:spacer width="5px"/>
+                                <p:outputLabel value="#{appraisalDetailView.purposeReviewBuildingLabel}"/>
+                            </p:column>
+                            <p:column  styleClass="left">
+                                <p:outputLabel value="#{appraisalDetailView.characteristicLabel}"/>
+                            </p:column>
+                            <p:column styleClass="right">
+                                <p:outputLabel value="#{appraisalDetailView.numberOfDocuments}"/>
+                            </p:column>
+                            <p:column headerText="" styleClass="center">
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 action="#{appraisalAppointment.onEditAppraisalDetailView()}"
+                                                 update=":appraisalDetailDlgForm"
+                                                 process=":frmMain:appraisalDetailViewTable"
+                                                 oncomplete="appraisalDetailViewDlg.show();">
+                                    <f:setPropertyActionListener value="#{appraisalDetailView}"
+                                                                 target="#{appraisalAppointment.selectAppraisalDetailView}"/>
+                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                 target="#{appraisalAppointment.rowIndex}"/>
+                                </p:commandButton>
+                                <p:commandButton title="Remove" process="@this"
+                                                 icon="ui-icon-trash"
+                                                 oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
+                                    <f:setPropertyActionListener value="#{appraisalDetailView}"
+                                                                 target="#{appraisalAppointment.selectAppraisalDetailView}"/>
+                                    <f:setPropertyActionListener value="#{rowIndex}"
+                                                                 target="#{appraisalAppointment.rowIndex}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
                         </td>
                     </tr>
                     <tr>
@@ -305,13 +305,9 @@
                                         locale="th_TH"
                                         timeZone="Asia/Bangkok"
                                         yearRange="2440:3000">
-                                <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                <f:convertDateTime pattern="dd/MM/yyyy  HH:mm" locale="th_TH"/>
                             </p:calendar>
 
-                            <p:spacer width="10px"/>
-                            <p:inputMask size="5" value="#{appraisalAppointment.appraisalView.appointmentTime}" mask="99:99">
-
-                            </p:inputMask>
                         </td>
                         <td class="title">
                             <p:outputLabel value="#{msg.get('app.appraisal.label.appointmentCusName')}"/>

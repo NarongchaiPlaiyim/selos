@@ -1,6 +1,5 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -38,9 +37,8 @@ public class ContactRecordDetail {
     @Column(name="next_calling_time")
     private String nextCallingTime;
 
-    @OneToOne
-    @JoinColumn(name="reason_id")
-    private Reason reason;
+    @JoinColumn(name="reason")
+    private String reason;
 
     @Column(name="remark")
     private String remark;
@@ -137,11 +135,11 @@ public class ContactRecordDetail {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 
