@@ -174,7 +174,7 @@
                                                         <p:column>
                                                             <p:commandButton icon="ui-icon-pencil"
                                                                              action="#{tcgInfo.onEditCollateralDetail()}"
-                                                                             process="@this"
+                                                                             process=":frmMain:resultCollateralDetail"
                                                                              update=":tcgDlgForm"
                                                                              oncomplete="tcgDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"

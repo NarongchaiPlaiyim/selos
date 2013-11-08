@@ -234,3 +234,16 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
         PF(name).hide();
     }
 }
+
+function handleDlgCreditProposeRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        creditInfoDlg.hide();
+    }
+}
+
+
+function handleConditionInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        conditionDlg.hide();
+    }
+}
