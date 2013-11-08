@@ -114,10 +114,7 @@ public class DBRInfo implements Serializable {
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
-
-                dbr.setDbrInterest(dbrInterest);
-
-
+            dbr.setDbrInterest(dbrInterest);
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
@@ -217,7 +214,9 @@ public class DBRInfo implements Serializable {
     public void onSaveDBRInfo() {
         try {
             dbr.setDbrDetailViews(dbrDetails);
-            dbrControl.saveDBRInfo(dbr, workCaseId, userId);
+            dbr.setWorkCaseId(workCaseId);
+            dbr.setUserId(userId);
+            dbrControl.saveDBRInfo(dbr);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -238,24 +237,24 @@ public class DBRInfo implements Serializable {
         }
     }
 
-    public BigDecimal getOutStandingNCBTotal(){
-        BigDecimal outStandingNCB = BigDecimal.ZERO;
+    public BigDecimal getDebtForCalNCBTotal(){
+        BigDecimal debtForCalNCB = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){
             for(NCBDetailView ncbDetailView : ncbDetails){
-                outStandingNCB = outStandingNCB.add(ncbDetailView.getOutstanding());
+                debtForCalNCB = debtForCalNCB.add(ncbDetailView.getOutstanding());
             }
         }
-        return outStandingNCB;
+        return debtForCalNCB;
     }
 
-    public BigDecimal getOutStandingDBRTotal(){
-        BigDecimal outStandingDBR = BigDecimal.ZERO;
+    public BigDecimal getDebtForCalDBRTotal(){
+        BigDecimal debtForCalDBR = BigDecimal.ZERO;
         if(dbrDetails != null && !dbrDetails.isEmpty()){
             for(DBRDetailView dbrDetailView : dbrDetails){
-                outStandingDBR = outStandingDBR.add(dbrDetailView.getDebtForCalculate());
+                debtForCalDBR = debtForCalDBR.add(dbrDetailView.getDebtForCalculate());
             }
         }
-        return outStandingDBR;
+        return debtForCalDBR;
     }
 
     public DBRView getDbr() {
