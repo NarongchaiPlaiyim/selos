@@ -20,11 +20,11 @@ public class BankStmtDetailView implements Serializable {
     private BigDecimal timesOfAvgCreditUW;
     private BigDecimal debitAmount;
     private int numberOfDebitTxn;
-    private Date highestBalanceDate;
-    private BigDecimal highestBalance;
-    private Date lowestBalanceDate;
-    private BigDecimal lowestBalance;
-    private BigDecimal monthEndBalance;
+    private Date dateOfMaxBalance;
+    private BigDecimal maxBalance;
+    private Date dateOfMinBalance;
+    private BigDecimal minBalance;
+    private BigDecimal monthBalance;
     private int numberOfChequeReturn;
     private BigDecimal chequeReturnAmount;
     private int overLimitTimes;
@@ -49,11 +49,11 @@ public class BankStmtDetailView implements Serializable {
         this.timesOfAvgCreditBDM = BigDecimal.ZERO;
         this.timesOfAvgCreditUW = BigDecimal.ZERO;
         this.debitAmount = BigDecimal.ZERO;
-        this.highestBalanceDate = new Date();
-        this.highestBalance = BigDecimal.ZERO;
-        this.lowestBalanceDate = new Date();
-        this.lowestBalance = BigDecimal.ZERO;
-        this.monthEndBalance = BigDecimal.ZERO;
+        this.dateOfMaxBalance = new Date();
+        this.maxBalance = BigDecimal.ZERO;
+        this.dateOfMinBalance = new Date();
+        this.minBalance = BigDecimal.ZERO;
+        this.monthBalance = BigDecimal.ZERO;
         this.chequeReturnAmount = BigDecimal.ZERO;
         this.swingPercent = BigDecimal.ZERO;
         this.utilizationPercent = BigDecimal.ZERO;
@@ -156,44 +156,44 @@ public class BankStmtDetailView implements Serializable {
         this.numberOfDebitTxn = numberOfDebitTxn;
     }
 
-    public Date getHighestBalanceDate() {
-        return highestBalanceDate;
+    public Date getDateOfMaxBalance() {
+        return dateOfMaxBalance;
     }
 
-    public void setHighestBalanceDate(Date highestBalanceDate) {
-        this.highestBalanceDate = highestBalanceDate;
+    public void setDateOfMaxBalance(Date dateOfMaxBalance) {
+        this.dateOfMaxBalance = dateOfMaxBalance;
     }
 
-    public BigDecimal getHighestBalance() {
-        return highestBalance;
+    public BigDecimal getMaxBalance() {
+        return maxBalance;
     }
 
-    public void setHighestBalance(BigDecimal highestBalance) {
-        this.highestBalance = highestBalance;
+    public void setMaxBalance(BigDecimal maxBalance) {
+        this.maxBalance = maxBalance;
     }
 
-    public Date getLowestBalanceDate() {
-        return lowestBalanceDate;
+    public Date getDateOfMinBalance() {
+        return dateOfMinBalance;
     }
 
-    public void setLowestBalanceDate(Date lowestBalanceDate) {
-        this.lowestBalanceDate = lowestBalanceDate;
+    public void setDateOfMinBalance(Date dateOfMinBalance) {
+        this.dateOfMinBalance = dateOfMinBalance;
     }
 
-    public BigDecimal getLowestBalance() {
-        return lowestBalance;
+    public BigDecimal getMinBalance() {
+        return minBalance;
     }
 
-    public void setLowestBalance(BigDecimal lowestBalance) {
-        this.lowestBalance = lowestBalance;
+    public void setMinBalance(BigDecimal minBalance) {
+        this.minBalance = minBalance;
     }
 
-    public BigDecimal getMonthEndBalance() {
-        return monthEndBalance;
+    public BigDecimal getMonthBalance() {
+        return monthBalance;
     }
 
-    public void setMonthEndBalance(BigDecimal monthEndBalance) {
-        this.monthEndBalance = monthEndBalance;
+    public void setMonthBalance(BigDecimal monthBalance) {
+        this.monthBalance = monthBalance;
     }
 
     public int getNumberOfChequeReturn() {
@@ -283,11 +283,11 @@ public class BankStmtDetailView implements Serializable {
                 .append("timesOfAvgCreditUW", timesOfAvgCreditUW)
                 .append("debitAmount", debitAmount)
                 .append("numberOfDebitTxn", numberOfDebitTxn)
-                .append("highestBalanceDate", highestBalanceDate)
-                .append("highestBalance", highestBalance)
-                .append("lowestBalanceDate", lowestBalanceDate)
-                .append("lowestBalance", lowestBalance)
-                .append("monthEndBalance", monthEndBalance)
+                .append("dateOfMaxBalance", dateOfMaxBalance)
+                .append("maxBalance", maxBalance)
+                .append("dateOfMinBalance", dateOfMinBalance)
+                .append("minBalance", minBalance)
+                .append("monthBalance", monthBalance)
                 .append("numberOfChequeReturn", numberOfChequeReturn)
                 .append("chequeReturnAmount", chequeReturnAmount)
                 .append("overLimitTimes", overLimitTimes)
