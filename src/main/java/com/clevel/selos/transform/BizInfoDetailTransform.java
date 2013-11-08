@@ -66,7 +66,7 @@ public class BizInfoDetailTransform extends Transform {
         bizInfoDetail.setStockValueBDM(bizInfoDetailView.getStockValueBDM());
         bizInfoDetail.setStockValueUW(bizInfoDetailView.getStockValueUW());
 
-        bizInfoDetail.setModifyBy(bizInfoDetailView.getCreateBy());
+        bizInfoDetail.setModifyBy(bizInfoDetailView.getModifyBy());
         bizInfoDetail.setModifyDate(DateTime.now().toDate());
 
 

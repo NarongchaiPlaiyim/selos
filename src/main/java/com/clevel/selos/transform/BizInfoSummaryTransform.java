@@ -77,8 +77,8 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummary.setSumWeightInterviewedIncomeFactorPercent(bizInfoSummaryView.getSumWeightInterviewedIncomeFactorPercent());
 
 
-        bizInfoSummary.setModifyBy(bizInfoSummaryView.getCreateBy());
-        bizInfoSummaryView.setModifyDate(DateTime.now().toDate());
+        bizInfoSummary.setModifyBy(bizInfoSummaryView.getModifyBy());
+        bizInfoSummary.setModifyDate(DateTime.now().toDate());
 
 
         return bizInfoSummary;
@@ -139,7 +139,7 @@ public class BizInfoSummaryTransform extends Transform {
         bizInfoSummaryView.setNetMarginAmount(bizInfoSummary.getNetMarginAmount());
         bizInfoSummaryView.setNetMarginPercentage(bizInfoSummary.getNetMarginPercentage());
 
-        bizInfoSummaryView.setModifyBy(bizInfoSummary.getCreateBy());
+        bizInfoSummaryView.setModifyBy(bizInfoSummary.getModifyBy());
         bizInfoSummaryView.setModifyDate(bizInfoSummary.getModifyDate());
 
         bizInfoSummaryView.setCreateBy(bizInfoSummary.getCreateBy());
