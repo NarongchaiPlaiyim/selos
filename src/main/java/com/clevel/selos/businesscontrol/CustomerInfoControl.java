@@ -237,6 +237,12 @@ public class CustomerInfoControl extends BusinessControl {
             }
         }
 
+        if(customer.getIsSpouse() == 1){ // if this is spouse
+            Customer cus = customerDAO.findCustomerBySpouseId(customer.getId());
+            cus.setSpouseId(0);
+            customerDAO.persist(cus);
+        }
+
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
             addressDAO.delete(customer.getAddressesList());
         }

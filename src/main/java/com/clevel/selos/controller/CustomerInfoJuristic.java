@@ -2,8 +2,10 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.JuristicDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -82,6 +84,8 @@ public class CustomerInfoJuristic implements Serializable {
     private KYCLevelDAO kycLevelDAO;
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private JuristicDAO juristicDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -469,12 +473,6 @@ public class CustomerInfoJuristic implements Serializable {
         }
     }
 
-//    public void updateCSIList() {
-//        if(customerInfoView.getCustomerCSIList().size() == 0){
-//            customerInfoView.setCustomerCSIList(null);
-//        }
-//    }
-
     public void onSearchCustomerInfo() {
         log.debug("onSearchCustomerInfo :::");
         log.debug("onSearchCustomerInfo ::: customerInfoView : {}", customerInfoSearch);
@@ -598,6 +596,15 @@ public class CustomerInfoJuristic implements Serializable {
     }
 
     public void onSave(){
+        //check registration
+        Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
+        if(customer != null && customer.getId() != 0){
+            messageHeader = "Save Juristic Failed.";
+            message = "Registration Id is already exist";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
         if(addressFlagForm2 == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
             AddressView addressView = new AddressView(customerInfoView.getRegisterAddress(),customerInfoView.getWorkAddress().getId());
             customerInfoView.setWorkAddress(addressView);
@@ -605,15 +612,15 @@ public class CustomerInfoJuristic implements Serializable {
 
         try{
             customerInfoControl.saveCustomerInfoJuristic(customerInfoView, workCaseId);
-            messageHeader = "Save Customer Info Juristic Success.";
-            message = "Save Customer Info Juristic data success.";
+            messageHeader = "Save Juristic Success.";
+            message = "Save Juristic data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Customer Info Juristic Failed.";
+            messageHeader = "Save Juristic Failed.";
             if(ex.getCause() != null){
-                message = "Save Customer Info Juristic failed. Cause : " + ex.getCause().toString();
+                message = "Save Juristic failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Customer Info Juristic failed. Cause : " + ex.getMessage();
+                message = "Save Juristic failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }

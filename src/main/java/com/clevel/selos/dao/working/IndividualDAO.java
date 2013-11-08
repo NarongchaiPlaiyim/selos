@@ -21,6 +21,13 @@ public class IndividualDAO extends GenericDAO<Individual, Long> {
         Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
 
         return customer;
+    }
 
+    public Customer findCustomerByCitizenIdAndWorkCase(String citizenId, long workCaseId) {
+        log.info("findCustomerByCitizenIdAndWorkCase ::: citizenId : {}, workCaseId : {}", citizenId, workCaseId);
+        String query = "SELECT customer FROM Individual individual WHERE individual.customer.workCase.id = " + workCaseId + " AND individual.citizenId = '" + citizenId + "'";
+        Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
+
+        return customer;
     }
 }

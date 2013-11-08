@@ -32,6 +32,13 @@ public class JuristicDAO extends GenericDAO<Juristic, Long> {
         Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
 
         return customer;
+    }
 
+    public Customer findCustomerByRegistrationIdAndWorkCase(String registrationId, long workCaseId) {
+        log.info("findCustomerByRegistrationIdAndWorkCase ::: registrationId : {}, workCaseId : {}", registrationId, workCaseId);
+        String query = "SELECT customer FROM Juristic juristic WHERE juristic.customer.workCase.id = " + workCaseId + " AND juristic.registrationId = '" + registrationId + "'";
+        Customer customer = (Customer) getSession().createQuery(query).uniqueResult();
+
+        return customer;
     }
 }

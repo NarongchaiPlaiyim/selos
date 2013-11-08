@@ -2,8 +2,10 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerInfoResultView;
 import com.clevel.selos.model.view.CustomerInfoView;
@@ -79,6 +81,8 @@ public class CustomerInfoIndividual implements Serializable {
     private KYCLevelDAO kycLevelDAO;
     @Inject
     private UserDAO userDAO;
+    @Inject
+    private IndividualDAO individualDAO;
 
     @Inject
     private CustomerInfoControl customerInfoControl;
@@ -1004,6 +1008,15 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onSave(){
+        //check citizen id
+        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
+        if(customer != null && customer.getId() != 0){
+            messageHeader = "Save Individual Failed.";
+            message = "Citizen Id is already exist";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return;
+        }
+
         if(addressFlagForm2 == 1){ //dup address 1 to address 2
             AddressView addressView = new AddressView(customerInfoView.getCurrentAddress(),customerInfoView.getRegisterAddress().getId());
             customerInfoView.setRegisterAddress(addressView);
@@ -1040,21 +1053,30 @@ public class CustomerInfoIndividual implements Serializable {
 
         try{
             customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
-            messageHeader = "Save Customer Info Individual Success.";
-            message = "Save Customer Info Individual data success.";
+            messageHeader = "Save Individual Success.";
+            message = "Save Individual data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
-            messageHeader = "Save Customer Info Individual Failed.";
+            messageHeader = "Save Individual Failed.";
             if(ex.getCause() != null){
-                message = "Save Customer Info Individual failed. Cause : " + ex.getCause().toString();
+                message = "Save Individual failed. Cause : " + ex.getCause().toString();
             } else {
-                message = "Save Customer Info Individual failed. Cause : " + ex.getMessage();
+                message = "Save Individual failed. Cause : " + ex.getMessage();
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 
     public String onSaveFromJuristic(){
+        //check citizen id
+        Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
+        if(customer != null && customer.getId() != 0){
+            messageHeader = "Save Individual Failed.";
+            message = "Citizen Id is already exist";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            return "";
+        }
+
         //todo: find title , relation , reference , etc for show in list in juristic page
         customerInfoView.getTitleTh().setTitleTh(titleDAO.findById(customerInfoView.getTitleTh().getId()).getTitleTh());
         customerInfoView.getRelation().setDescription(relationDAO.findById(customerInfoView.getRelation().getId()).getDescription());
