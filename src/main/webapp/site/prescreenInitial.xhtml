@@ -189,9 +189,11 @@
             <p:column headerText="" styleClass="center" style="width:54px;">
                 <p:commandButton title="Edit"
                                  icon="ui-icon-pencil"
+                                 process="@this"
                                  action="#{prescreenMaker.onEditCustomerInfo()}"
                                  update=":customerDlgForm"
                                  oncomplete="customerDlg.show();">
+                    <p:resetInput target=":customerDlgForm" />
                     <f:setPropertyActionListener value="#{borrowerItem}"
                                                  target="#{prescreenMaker.selectCustomerInfoItem}"/>
                     <f:setPropertyActionListener value="#{rowIndex}"
@@ -444,7 +446,7 @@
                          styleClass="medium"
                          process="@form"
                          actionListener="#{prescreenMaker.onSavePrescreenInitial()}"
-                         update=":pnl_maincontainer :msgBoxSystemMessagePanel"/>
+                         update=":frmMain :msgBoxSystemMessagePanel"/>
     </td>
 </tr>
 </table>
@@ -470,7 +472,7 @@
                      header="#{prescreenMaker.messageHeader}" message="#{prescreenMaker.message}">
         <p:commandButton value="OK"
                          process="@this"
-                         update="frmMain"
+                         update=":frmMain"
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>

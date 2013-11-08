@@ -24,12 +24,13 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "bankStatementSummary")
-public class BankStatementSummary {
+public class BankStatementSummary implements Serializable {
     @Inject
     Logger log;
 

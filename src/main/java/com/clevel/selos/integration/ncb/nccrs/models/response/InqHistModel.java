@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class InqHistModel {
+import java.io.Serializable;
+
+public class InqHistModel implements Serializable {
     private String inqdate;
     private String creditor;
     private String creditortype;

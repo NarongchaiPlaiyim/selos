@@ -80,8 +80,12 @@ public class CustomerTransform extends Transform {
             customerInfoView.setDocumentType(new DocumentType());
         }
         customerInfoView.setNcbFlag(customer.getNcbFlag());
+        customerInfoView.setCsiFlag(customer.getCsiFlag());
+        customerInfoView.setServiceSegment(customer.getServiceSegment());
         customerInfoView.setSearchFromRM(customer.getSearchFromRM());
         customerInfoView.setValidId(2);
+        customerInfoView.setCollateralOwner(customer.getCollateralOwner());
+        customerInfoView.setPercentShare(customer.getPercentShare());
 
         if (customer.getAddressesList() != null && customer.getAddressesList().size() > 0) {
             List<Address> addressList = customer.getAddressesList();
@@ -258,6 +262,10 @@ public class CustomerTransform extends Transform {
         customer.setLastNameTh(customerInfoView.getLastNameTh());
         customer.setAge(customerInfoView.getAge());
         customer.setNcbFlag(customerInfoView.getNcbFlag());
+        customer.setCsiFlag(customerInfoView.getCsiFlag());
+        customer.setServiceSegment(customerInfoView.getServiceSegment());
+        customer.setCollateralOwner(customerInfoView.getCollateralOwner());
+        customer.setPercentShare(customerInfoView.getPercentShare());
 
         if (customerInfoView.getRelation() != null && customerInfoView.getRelation().getId() != 0) {
             customer.setRelation(relationDAO.findById(customerInfoView.getRelation().getId()));

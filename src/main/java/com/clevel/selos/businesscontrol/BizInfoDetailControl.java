@@ -24,9 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class BizInfoDetailControl {
-    @Inject
-    Logger log;
+public class BizInfoDetailControl extends BusinessControl {
 
     @Inject
     BusinessDescriptionDAO businessDescriptionDAO;

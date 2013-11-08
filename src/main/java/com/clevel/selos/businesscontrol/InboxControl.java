@@ -24,8 +24,6 @@ import java.util.List;
 
 @Stateless
 public class InboxControl extends BusinessControl {
-    @Inject
-    Logger log;
 
     @Inject
     BPMInterface bpmInterface;
@@ -47,6 +45,11 @@ public class InboxControl extends BusinessControl {
     InboxBizTransform inboxBizTransform;
     @Inject
     CustomerTransform customerTransform;
+
+    @Inject
+    public InboxControl(){
+
+    }
 
     public List<InboxView> getInboxFromBPM(UserDetail userDetail) {
 

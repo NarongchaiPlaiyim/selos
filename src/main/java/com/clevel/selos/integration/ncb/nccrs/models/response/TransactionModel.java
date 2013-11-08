@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class TransactionModel {
+import java.io.Serializable;
+
+public class TransactionModel implements Serializable {
     private String trackingid;
     private String user;
     private String transactiondate;

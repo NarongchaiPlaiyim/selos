@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.relation.PrdGroupToPrdProgramDAO;
@@ -219,6 +220,8 @@ public class PrescreenMaker implements Serializable {
     private PrescreenTransform prescreenTransform;
     @Inject
     private PrescreenBusinessControl prescreenBusinessControl;
+    @Inject
+    private InboxControl inboxControl;
 
     public PrescreenMaker() {
     }
@@ -305,6 +308,10 @@ public class PrescreenMaker implements Serializable {
             onClearObject();
             onCheckButton();
         }
+    }
+
+    public void onReset(){
+        onCreation();
     }
 
     public void onCheckButton(){
@@ -437,15 +444,17 @@ public class PrescreenMaker implements Serializable {
                         CustomerInfoView spouse = new CustomerInfoView();
                         spouse.setIsSpouse(1);
                         spouse = item.getSpouse();
-                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
-                            spouse.setSubIndex(borrowerInfoViewList.size());
-                            borrowerInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
-                            spouse.setSubIndex(guarantorInfoViewList.size());
-                            guarantorInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
-                            spouse.setSubIndex(relatedInfoViewList.size());
-                            relatedInfoViewList.add(spouse);
+                        if(spouse != null){
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                spouse.setSubIndex(borrowerInfoViewList.size());
+                                borrowerInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
+                                spouse.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
+                                spouse.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(spouse);
+                            }
                         }
                     }
                 }
@@ -458,15 +467,17 @@ public class PrescreenMaker implements Serializable {
                         CustomerInfoView spouse = new CustomerInfoView();
                         spouse.setIsSpouse(1);
                         spouse = item.getSpouse();
-                        if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
-                            spouse.setSubIndex(borrowerInfoViewList.size());
-                            borrowerInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
-                            spouse.setSubIndex(guarantorInfoViewList.size());
-                            guarantorInfoViewList.add(spouse);
-                        } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
-                            spouse.setSubIndex(relatedInfoViewList.size());
-                            relatedInfoViewList.add(spouse);
+                        if(spouse != null){
+                            if(spouse.getRelation() != null && spouse.getRelation().getId() == 1){
+                                spouse.setSubIndex(borrowerInfoViewList.size());
+                                borrowerInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && spouse.getRelation().getId() == 2){
+                                spouse.setSubIndex(guarantorInfoViewList.size());
+                                guarantorInfoViewList.add(spouse);
+                            } else if(spouse.getRelation() != null && ( spouse.getRelation().getId() == 3 || spouse.getRelation().getId() == 4 )){
+                                spouse.setSubIndex(relatedInfoViewList.size());
+                                relatedInfoViewList.add(spouse);
+                            }
                         }
                     }
                 }
@@ -962,14 +973,90 @@ public class PrescreenMaker implements Serializable {
                 if(borrowerInfo.getCustomerEntity().getId() == 1){      //Individual
                     //---- Validate CitizenId ----//
                     boolean validateCitizen = true;
-                    for(CustomerInfoView customerInfoView : customerInfoViewList ){
-                        if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+
+                    if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
+                        if(borrowerInfo.getSpouse() != null){
+                            log.debug("Borrower Citizen : {} , Spouse Citizen : {}", borrowerInfo.getCitizenId(), borrowerInfo.getSpouse().getCitizenId());
+                            if(borrowerInfo.getCitizenId().equals(borrowerInfo.getSpouse().getCitizenId())){
+                                validateCitizen = false;
+                                messageHeader = "Save customer failed.";
+                                message = "Duplicate citizen id.";
+                            }
+                        }
+                    }
+
+                    if(validateCitizen){
+                        for(CustomerInfoView customerInfoView : customerInfoViewList ){
+                        /*if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
                             validateCitizen = false;
                             messageHeader = "Save customer failed.";
                             message = "Duplicate citizen id.";
                             break;
+                        }*/
+                            //Case when update customer and change citizen id to same another.
+                            if(borrowerInfo.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                                validateCitizen = false;
+                                messageHeader = "Save customer failed.";
+                                message = "Duplicate citizen id.";
+                                break;
+                            }
+
+                            //Case when Borrower add citizen duplicate with spouse
+                            if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() == 2){
+                                if(customerInfoView.getSpouse() != null){
+                                    if(customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase(borrowerInfo.getCitizenId())){
+                                        validateCitizen = false;
+                                        messageHeader = "Save customer failed.";
+                                        message = "Duplicate citizen id.";
+                                        break;
+                                    }
+                                }
+                            }
+
+                            //Case when update customer add change citizen id (spouse) same another.
+                            if(borrowerInfo.getMaritalStatus() != null && borrowerInfo.getMaritalStatus().getId() != 0 && borrowerInfo.getMaritalStatus().getId() == 2){
+                                if(borrowerInfo.getSpouse() != null && customerInfoView.getSpouse() != null){
+                                    if(borrowerInfo.getSpouse().getListIndex() != 0){
+                                        //Update old spouse check with out old index
+                                        if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                                            //Check with other borrower
+                                            log.debug("spouse fail 01");
+                                            validateCitizen = false;
+                                            messageHeader = "Save customer (Spouse) failed.";
+                                            message = "Duplicate citizen id (Spouse).";
+                                            break;
+                                        }
+                                        if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                                            //Check with other spouse
+                                            validateCitizen = false;
+                                            messageHeader = "Save customer (Spouse) failed.";
+                                            message = "Duplicate citizen id (Spouse).";
+                                            break;
+                                        }
+                                    } else if (borrowerInfo.getSpouse().getListIndex() == 0){
+                                        //Insert new spouse check all in customerInfoViewList
+                                        if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                                            //Check with other borrower
+                                            validateCitizen = false;
+                                            messageHeader = "Save customer (Spouse) failed.";
+                                            message = "Duplicate citizen id (Spouse).";
+                                            break;
+                                        }
+                                        if(borrowerInfo.getSpouse().getCitizenId().equalsIgnoreCase(customerInfoView.getSpouse().getCitizenId())){
+                                            //Check with other spouse
+                                            if(borrowerInfo.getSpouse().getListIndex() != customerInfoView.getSpouse().getListIndex()){
+                                                validateCitizen = false;
+                                                messageHeader = "Save customer (Spouse) failed.";
+                                                message = "Duplicate citizen id (Spouse).";
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+
 
                     if(validateCitizen){
                         log.debug("onSaveCustomerInfo ::: Borrower - relation : {}", borrowerInfo.getRelation());
@@ -1132,6 +1219,18 @@ public class PrescreenMaker implements Serializable {
                             messageHeader = "Save customer failed.";
                             message = "Duplicate citizen id.";
                             break;
+                        }
+
+                        //Case when Borrower add citizen duplicate with spouse
+                        if(customerInfoView.getMaritalStatus() != null && customerInfoView.getMaritalStatus().getId() == 2){
+                            if(customerInfoView.getSpouse() != null){
+                                if(customerInfoView.getSpouse().getCitizenId().equalsIgnoreCase(borrowerInfo.getCitizenId())){
+                                    validateCitizen = false;
+                                    messageHeader = "Save customer failed.";
+                                    message = "Duplicate citizen id.";
+                                    break;
+                                }
+                            }
                         }
 
                         //Case when update customer add change citizen id (spouse) same another.
@@ -1787,7 +1886,7 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
                 }else{
                     //enableDocumentType = false;
-                    borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
+                    borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
                 }
 
                 enableDocumentType = false;
@@ -2047,6 +2146,11 @@ public class PrescreenMaker implements Serializable {
             //TODO show messageBox success
             messageHeader = "Save PreScreen Success.";
             message = "Save PreScreen data success.";
+
+            /*BaseController baseController = new BaseController();
+            baseController.setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));*/
+            //setAppHeaderView(inboxControl.getHeaderInformation(workCasePreScreenId, new Long(0)));
+
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         } catch(Exception ex){
