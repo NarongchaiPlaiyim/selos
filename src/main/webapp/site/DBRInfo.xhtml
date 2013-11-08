@@ -45,9 +45,9 @@
                 </td>
                 <td>
                     <p:inputText id="incomeFactor" value="#{dbrInfo.dbr.incomeFactor}" style="text-align: right"
-                                 required="true">
-                        <f:convertNumber type="number" integerOnly="true" maxIntegerDigits="3"/>
-                        <p:ajax event="change" update=":frmMain:incomeFactor"/>
+                                 required="true" readonly="true">
+                        <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
+                                         type="number"/>
                     </p:inputText>
                 </td>
                 <td class="title">
@@ -65,15 +65,15 @@
                     <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncome')}" styleClass="center"/>
                 </td>
                 <td>
-                    <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right">
+                    <p:inputText id="monthlyIncome" value="#{dbrInfo.dbr.monthlyIncome}" style="text-align: right" readonly="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"/>
-                        <p:ajax event="change" update=":frmMain:monthlyIncome"/>
+
                     </p:inputText>
                 </td>
             </tr>
             <tr>
                 <td class="title">
-                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center"/>
+                    <p:outputLabel value="#{msg.get('app.dbr.label.monthlyIncomeAdjust')}" styleClass="center" />
                 </td>
                 <td>
                     <p:inputText id="monthlyIncomeAdjust" value="#{dbrInfo.dbr.monthlyIncomeAdjust}"
@@ -101,18 +101,18 @@
                 </td>
                 <td>
                     <p:inputText id="netMonthlyIncome" value="#{dbrInfo.dbr.netMonthlyIncome}"
-                                 style="text-align: right">
+                                 style="text-align: right" readonly="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                        <p:ajax event="change" update=":frmMain:netMonthlyIncome"/>
+
                     </p:inputText>
                 </td>
                 <td class="title">
                     <p:outputLabel value="#{msg.get('app.dbr.label.currentDBR')}" styleClass="center"/>
                 </td>
                 <td>
-                    <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right">
+                    <p:inputText id="currentDBR" value="#{dbrInfo.dbr.currentDBR}" style="text-align: right" readonly="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
-                        <p:ajax event="change" update=":frmMain:currentDBR"/>
+
                     </p:inputText>
                 </td>
             </tr>
@@ -124,7 +124,7 @@
                 </td>
                 <td>
                     <p:inputText id="dbrBeforeRequest" value="#{dbrInfo.dbr.dbrBeforeRequest}"
-                                 style="text-align: right">
+                                 style="text-align: right" readonly="true">
                         <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2" type="number"/>
                         <p:ajax event="change" update=":frmMain:dbrBeforeRequest"/>
                     </p:inputText>
@@ -185,10 +185,10 @@
                                 <p:column colspan="5" footerText="Totals:" style="text-align:right"/>
                                 <p:column style="text-align:right">
                                     <f:facet name="footer">
-                                        <h:outputText value="#{dbrInfo.outStandingNCBTotal}">
+                                        <p:outputLabel value="#{dbrInfo.debtForCalNCBTotal}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                              maxIntegerDigits="14"/>
-                                        </h:outputText>
+                                        </p:outputLabel>
                                     </f:facet>
                                 </p:column>
                             </p:row>
@@ -280,7 +280,7 @@
                                 <p:column colspan="5" footerText="Totals:" style="text-align:right"/>
                                 <p:column style="text-align:right">
                                     <f:facet name="footer">
-                                        <h:outputText value="#{dbrInfo.outStandingDBRTotal}">
+                                        <h:outputText value="#{dbrInfo.debtForCalDBRTotal}">
                                             <f:convertNumber pattern="#,##0.##" minFractionDigits="2" maxFractionDigits="2"
                                                              maxIntegerDigits="14"/>
                                         </h:outputText>
