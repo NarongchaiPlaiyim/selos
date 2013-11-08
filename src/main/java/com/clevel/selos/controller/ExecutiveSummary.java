@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.ExSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -25,8 +26,8 @@ import java.util.Date;
 public class ExecutiveSummary implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

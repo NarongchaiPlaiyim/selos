@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
@@ -36,8 +37,8 @@ import java.util.List;
 public class TCGInfo implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

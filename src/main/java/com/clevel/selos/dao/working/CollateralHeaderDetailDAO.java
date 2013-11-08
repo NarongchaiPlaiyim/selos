@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.CollateralDetail;
 import com.clevel.selos.model.db.working.CollateralHeaderDetail;
 import org.hibernate.Criteria;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class CollateralHeaderDetailDAO extends GenericDAO<CollateralHeaderDetail, Long> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public CollateralHeaderDetailDAO(){
 

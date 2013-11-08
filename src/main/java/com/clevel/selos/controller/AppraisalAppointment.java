@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalAppointmentControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AppraisalContactDetailView;
 import com.clevel.selos.model.view.AppraisalDetailView;
@@ -38,8 +39,8 @@ import java.util.List;
 public class AppraisalAppointment implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.DistrictDAO;
 import com.clevel.selos.dao.master.ProvinceDAO;
 import com.clevel.selos.dao.master.SubDistrictDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
 import com.clevel.selos.model.db.master.SubDistrict;
@@ -12,8 +13,8 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class AddressFilterControl {
-
     @Inject
+    @SELOS
     Logger log;
     @Inject
     ProvinceDAO provinceDAO;

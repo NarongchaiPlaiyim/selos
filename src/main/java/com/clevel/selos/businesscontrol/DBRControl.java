@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.DBRDAO;
 import com.clevel.selos.dao.working.DBRDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.DBR;
@@ -25,8 +26,8 @@ import java.util.List;
 @Stateless
 public class DBRControl {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     DBRDAO dbrdao;
 

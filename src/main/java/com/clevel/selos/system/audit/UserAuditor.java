@@ -1,6 +1,7 @@
 package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.UserActivityDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.UserActivity;
 import com.clevel.selos.util.FacesUtil;
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 @Stateless
 public class UserAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     UserActivityDAO userActivityDAO;

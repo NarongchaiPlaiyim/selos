@@ -3,6 +3,7 @@ package com.clevel.selos.transform.business;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ncb.nccrs.models.response.*;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
@@ -26,6 +27,7 @@ import java.util.*;
 
 public class NCBBizTransform extends BusinessTransform {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     AccountTypeDAO accountTypeDAO;

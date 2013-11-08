@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.working.*;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.CollateralHeaderDetailView;
 import com.clevel.selos.model.view.CollateralDetailView;
@@ -16,6 +17,7 @@ import java.util.List;
 @Stateless
 public class AppraisalResultControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     WorkCaseDAO workCaseDAO;

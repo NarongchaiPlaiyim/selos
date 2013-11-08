@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.system.message.Message;
@@ -13,8 +14,8 @@ import java.io.Serializable;
 
 public class BusinessInfoView implements Serializable {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     @NormalMessage
     Message msg;
 

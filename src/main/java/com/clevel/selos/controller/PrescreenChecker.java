@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
 import com.clevel.selos.dao.master.ReasonDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
@@ -35,8 +36,8 @@ import java.util.List;
 @ManagedBean(name = "prescreenChecker")
 public class PrescreenChecker implements Serializable {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     @NormalMessage
     Message msg;
 

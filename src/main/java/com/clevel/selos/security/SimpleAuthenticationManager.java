@@ -2,6 +2,7 @@ package com.clevel.selos.security;
 
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleTypeName;
 import com.clevel.selos.security.encryption.EncryptionService;
 import com.clevel.selos.system.Config;
@@ -27,8 +28,8 @@ import java.util.List;
 @RequestScoped
 public class SimpleAuthenticationManager implements AuthenticationManager {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     LDAPInterface ldapInterface;
     @Inject
     BPMInterface bpmInterface;
