@@ -1,5 +1,6 @@
 package com.clevel.selos.util;
 
+import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -16,6 +17,7 @@ public class ScvExport implements Serializable {
 
     public void exportCSV(HttpServletResponse response, String fileName, String content) {
         try {
+
             response.setHeader("Content-Type", "text/csv");
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".csv");
 
@@ -29,9 +31,11 @@ public class ScvExport implements Serializable {
                 bos.flush();
             }
             out.flush();
+
         }
         catch (IOException e) {
 //            logger.error(e.getMessage());
+            System.out.println(e.getMessage());
         }
         finally {
 //            if(out != null) {

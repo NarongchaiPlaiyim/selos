@@ -5,8 +5,8 @@ public enum RoleUser {
 
     private int value;
 
-     RoleUser(int value) {
-         this.value = value;
+    RoleUser(int value) {
+        this.value = value;
     }
 
     public int getValue(){

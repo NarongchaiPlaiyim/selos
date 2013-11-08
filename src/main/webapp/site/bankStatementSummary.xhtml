@@ -15,654 +15,737 @@
 </h:head>
 
 <h:body>
-<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-<h:form id="frmMain">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<!-- End Header Logo -->
-<!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
-<!-- End Header Detail -->
-<!-- Start Menu -->
-<ui:include src="include/menubar.xhtml"/>
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">#{msg.get('app.bankStmtSum.header')}</div>
-<div id="content">
-<div id="content_info">
-    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
-</div>
-<div id="content_form">
-<!-- start content -->
-<table class="content_table_form">
-<tr>
-    <td class="title" style="width:250px;">
-        <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
-    </td>
-    <td>
-        <h:selectOneRadio value="#{bankStatementSummary.summaryView.seasonal}">
-            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
-            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width:250px;">
-        <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
-    </td>
-    <td>
-        <p:calendar id="calendarId" maxdate="#{bankStatementSummary.currentDate}" navigator="true"
-                    showButtonPanel="true" showOn="both"
-                    value="#{bankStatementSummary.summaryView.expectedSubmitDate}"
-                    pattern="dd/MM/yyyy"
-                    locale="th_TH"
-                    timeZone="Asia/Bangkok"
-                    yearRange="2440:3000"
-                    styleClass="calendar_right">
-            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
-        </p:calendar>
-        <p:spacer width="10"/>
-        <p:commandButton value="#{msg.get('app.button.refresh')}"
-                         action="#{bankStatementSummary.onLoadSummary()}"
-                         styleClass="smaller"/>
-    </td>
-</tr>
-<tr>
-    <td colspan="2">
-        <div class="separate"></div>
-    </td>
-</tr>
-<!-- TMB Bank Statement Summary -->
-<tr>
-    <td class="title" style="width:250px;">
-        <h:outputText value="#{msg.get('app.bankStmtSum.label.tmbBankStmtSum')}"/>
-    </td>
-    <td>
-        <p:commandButton value="#{msg.get('app.button.add')}"
-                         action="#{bankStatementSummary.onLinkToAddTmbBankDetail()}"
-                         styleClass="smaller"/>
-    </td>
-</tr>
-<tr>
-    <td colspan="2">
-        <p:dataTable id="dtTmbBankStmt"
-                     var="item" value="#{bankStatementSummary.summaryView.tmbBankStmtViewList}"
-                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
-
-            <p:columnGroup type="header">
-                <p:row>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}"/>
-                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}"/>
-                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}"/>
-                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}"/>
-                    <p:column rowspan="2" headerText=""/>
-                </p:row>
-
-                <p:row>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}"/>
-                </p:row>
-            </p:columnGroup>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{rowIndex + 1}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.accountName}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.accountNumber}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.bankAccountTypeView.name}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.mainAccount eq 1 ? 'Y' : ''}"/>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.limit}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.avgIncomeGross}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.avgIncomeNetBDM}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.avgIncomeNetUW}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.utilizationPercent}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.swingPercent}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.overLimitTimes}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.overLimitDays}"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="#{item.chequeReturn}"/>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.avgGrossInflowPerLimit}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.trdChequeReturnAmount}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="#{item.trdChequeReturnPercent}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </p:column>
-
-            <p:column headerText="" styleClass="option" style="width:54px;">
-                <p:commandButton title="#{msg.get('app.button.edit')}"
-                                 icon="ui-icon-pencil">
-                    <!--action="#{bankStatementSummary.onEditBankStmtSum()}"-->
-                    <!--update=":bankStmtSumDlgForm"-->
-                    <!--oncomplete="bankStmtSumDlg.show();">-->
-                    <!--<f:setPropertyActionListener value="#{item}"-->
-                    <!--target="#{bankStatementSummary.selectBankStmtSum}"/>-->
-                    <!--<f:setPropertyActionListener value="#{rowIndex}"-->
-                    <!--target="#{bankStatementSummary.rowIndex}"/>-->
-                </p:commandButton>
-                <p:commandButton title="#{msg.get('app.button.delete')}"
-                                 icon="ui-icon-trash">
-                    <!--oncomplete="confirmDeleteFacilityDlg.show()" -->
-                    <!--<f:setPropertyActionListener value="#{item}"
-                                                 target="#{prescreenMaker.selectFacilityItem}"/>-->
-                </p:commandButton>
-            </p:column>
-
-            <p:columnGroup type="footer">
-                <p:row>
-                    <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
-                              style="background-color:#f4f8b6; text-align:left;"/>
-
-                    <p:column style="background-color:#f4f8b6; text-align:right;">
-                        <f:facet name="footer">
-                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeGross}">
-                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-
-                    <p:column style="background-color:#f4f8b6; text-align:right;">
-                        <f:facet name="footer">
-                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeNetBDM}">
-                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-
-                    <p:column style="background-color:#f4f8b6; text-align:right;">
-                        <f:facet name="footer">
-                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeNetUW}">
-                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-
-                    <p:column colspan="9" style="background-color:#f4f8b6;"/>
-                </p:row>
-            </p:columnGroup>
-
-        </p:dataTable>
-    </td>
-</tr>
-<tr>
-    <td colspan="2" style="height:28px;"></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <div class="separate"></div>
-    </td>
-</tr>
-<!-- Other Bank -->
-<tr>
-    <td class="title" style="width:250px;">
-        <h:outputText value="#{msg.get('app.bankStmtSum.label.otherBankStmtSum')}"/>
-    </td>
-    <td>
-        <p:commandButton value="#{msg.get('app.button.add')}"
-                         action="#{bankStatementSummary.onLinkToAddOtherBankDetail()}"
-                         styleClass="smaller"/>
-    </td>
-</tr>
-<tr>
-<td colspan="2">
-<p:dataTable id="dtOtherBankStmtSum"
-             var="item" value="#{bankStatementSummary.summaryView.othBankStmtViewList}"
-             paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
-
-<p:columnGroup type="header">
-    <p:row>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}"/>
-        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}"/>
-        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}"/>
-        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}"/>
-        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}"/>
-        <p:column rowspan="2" headerText=""/>
-    </p:row>
-
-    <p:row>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}"/>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}"/>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}"/>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}"/>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}"/>
-        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}"/>
-    </p:row>
-</p:columnGroup>
-
-<p:column styleClass="center">
-    <h:outputText value="#{rowIndex + 1}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.accountName}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.accountNumber}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.bankAccountTypeView.name}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.mainAccount ? 'Y' : ''}"/>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.limit}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.avgIncomeGross}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.avgIncomeNetBDM}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.avgIncomeNetUW}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.utilizationPercent}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.swingPercent}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.overLimitTimes}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.overLimitDays}"/>
-</p:column>
-
-<p:column styleClass="center">
-    <h:outputText value="#{item.chequeReturn}"/>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.avgGrossInflowPerLimit}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.trdChequeReturnAmount}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column styleClass="right">
-    <h:outputText value="#{item.trdChequeReturnPercent}">
-        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-    </h:outputText>
-</p:column>
-
-<p:column headerText="" styleClass="option" style="width:54px;">
-    <p:commandButton title="#{msg.get('app.button.edit')}"
-                     icon="ui-icon-pencil">
-        <!--action="#{bankStatementSummary.onEditBankStmtSum()}"-->
-        <!--update=":bankStmtSumDlgForm"-->
-        <!--oncomplete="bankStmtSumDlg.show();">-->
-        <!--<f:setPropertyActionListener value="#{item}"-->
-        <!--target="#{bankStatementSummary.selectBankStmtSum}"/>-->
-        <!--<f:setPropertyActionListener value="#{rowIndex}"-->
-        <!--target="#{bankStatementSummary.rowIndex}"/>-->
-    </p:commandButton>
-    <p:commandButton title="#{msg.get('app.button.delete')}"
-                     icon="ui-icon-trash">
-        <!--oncomplete="confirmDeleteFacilityDlg.show()" -->
-        <!--<f:setPropertyActionListener value="#{item}"
-                                     target="#{prescreenMaker.selectFacilityItem}"/>-->
-    </p:commandButton>
-</p:column>
-
-<p:columnGroup type="footer">
-    <p:row>
-        <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
-                  style="background-color:#f4f8b6; text-align:left;"/>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeGross}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetBDM}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetUW}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column colspan="9" style="background-color:#f4f8b6;"/>
-    </p:row>
-
-    <p:row>
-        <p:column colspan="18" style="height:28px;"/>
-    </p:row>
-
-    <p:row>
-        <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
-                  style="background-color:#f4f8b6; text-align:left;"/>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeGross}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetBDM}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetUW}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column colspan="6" style="background-color:#f4f8b6;"/>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetAmount}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6; text-align:right;">
-            <f:facet name="footer">
-                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}">
-                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                     maxIntegerDigits="14"/>
-                </h:outputText>
-            </f:facet>
-        </p:column>
-
-        <p:column style="background-color:#f4f8b6;"/>
-    </p:row>
-</p:columnGroup>
-
-</p:dataTable>
-</td>
-</tr>
-<tr>
-    <td colspan="2" style="height:28px;"></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <div class="separate"></div>
-    </td>
-</tr>
-<!-- Source of Collateral Proof -->
-<tr>
-    <td class="title" style="width:250px;">
-        <h:outputText value="#{msg.get('app.bankStmtSum.label.srcOfCollateralProof')}"/>
-    </td>
-    <td></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <p:dataTable id="dtSrcOfCollateralProof" paginator="false" style="width:100%;">
-
-            <p:columnGroup type="header">
-                <p:row>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}"/>
-                    <p:column colspan="2" headerText="source.lastThreeMonth.first"/>
-                    <p:column colspan="2" headerText="source.lastThreeMonth.second"/>
-                    <p:column colspan="2" headerText="source.lastThreeMonth.third"/>
-                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.averageBaht')}"/>
-                </p:row>
-
-                <p:row>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
-
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
-
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
-                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
-                </p:row>
-            </p:columnGroup>
-
-            <p:column styleClass="center">
-                <h:outputText value="source.accountName"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="source.accountNumber"/>
-            </p:column>
-
-            <p:column styleClass="center">
-                <h:outputText value="source.accountType"/>
-            </p:column>
-
-            <!-- Last month 1 -->
-            <p:column styleClass="center">
-                <h:outputText value="source.osBalanceDay1"/>
-            </p:column>
-            <p:column styleClass="right">
-                <h:outputText value="source.osBalanceAmount1"/>
-            </p:column>
-
-            <!-- Last month 2 -->
-            <p:column styleClass="center">
-                <h:outputText value="source.osBalanceDay2"/>
-            </p:column>
-            <p:column styleClass="right">
-                <h:outputText value="source.osBalanceAmount2"/>
-            </p:column>
-
-            <!-- Last month 3 -->
-            <p:column styleClass="center">
-                <h:outputText value="source.osBalanceDay3"/>
-            </p:column>
-            <p:column styleClass="right">
-                <h:outputText value="source.osBalanceAmount3"/>
-            </p:column>
-
-            <p:column styleClass="right">
-                <h:outputText value="source.average"/>
-            </p:column>
-
-            <p:columnGroup type="footer">
-                <p:row><p:column colspan="10" style="height:28px;"/></p:row>
-
-                <p:row>
-                    <p:column colspan="9" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
-                              style="background-color:#f4f8b6; text-align:left;"/>
-
-                    <p:column style="background-color:#f4f8b6; text-align:right;">
-                        <f:facet name="footer">
-                            <h:outputText value="#{bankStatementSummary.summaryView.grdTotalAvgOSBalanceAmount}">
-                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
-                                                 maxIntegerDigits="14"/>
-                            </h:outputText>
-                        </f:facet>
-                    </p:column>
-                </p:row>
-            </p:columnGroup>
-
-        </p:dataTable>
-    </td>
-</tr>
-<tr>
-    <td colspan="2" style="height:28px;"></td>
-</tr>
-<tr>
-    <td colspan="2">
-        <div class="separate"></div>
-    </td>
-</tr>
-<tr>
-    <td colspan="2" class="center">
-        <p:commandButton value="#{msg.get('app.button.save')}"
-                         action="#{bankStatementSummary.onSaveSummary()}"
-                         styleClass="smaller"/>
-    </td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="clear"></div>
-
-<div id="bottom_line"></div>
-<!-- Start Footer -->
-<ui:include src="include/footer.xhtml"/>
-<!-- End Footer -->
-<h:inputHidden id="pagename" value="mnuprescreen"/>
-<h:inputHidden id="subpagename" value="submnuprescreen"/>
-</div>
-</h:form>
-</p:panel>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+            <!-- Start Header Logo -->
+            <ui:include src="include/header_logo.xhtml"/>
+            <!-- End Header Logo -->
+            <!-- Start Header Detail -->
+            <ui:include src="include/header_detail.xhtml"/>
+            <!-- End Header Detail -->
+            <!-- Start Menu -->
+            <ui:include src="include/menubar.xhtml"/>
+            <!-- End Menu -->
+            <div id="content_container">
+                <div id="content_name">#{msg.get('app.bankStmtSum.header')}</div>
+                <div id="content">
+                <div id="content_info">
+                    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                </div>
+                <div id="content_form">
+                <!-- start content -->
+                <table class="content_table_form">
+                <tr>
+                    <td class="title" style="width:250px;">
+                        <h:outputText value="#{msg.get('app.bankStmtSum.label.seasonal')}"/>
+                    </td>
+                    <td>
+                        <h:selectOneRadio value="#{bankStatementSummary.summaryView.seasonal}">
+                            <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                            <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
+                        </h:selectOneRadio>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title" style="width:250px;">
+                        <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
+                    </td>
+                    <td>
+                        <p:calendar id="calendarId" mindate="#{bankStatementSummary.currentDate}"
+                                    navigator="true" showButtonPanel="true" showOn="both"
+                                    value="#{bankStatementSummary.summaryView.expectedSubmitDate}"
+                                    pattern="dd/MM/yyyy"
+                                    locale="th_TH"
+                                    timeZone="Asia/Bangkok"
+                                    yearRange="2440:3000"
+                                    styleClass="calendar_right">
+                            <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                        </p:calendar>
+                        <p:spacer width="10"/>
+                        <p:commandButton value="#{msg.get('app.button.refresh')}"
+                                         action="#{bankStatementSummary.onRefresh()}" update=":frmMain"
+                                         styleClass="smaller"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="separate"></div>
+                    </td>
+                </tr>
+                <!-- TMB Bank Statement Summary -->
+                <tr>
+                    <td class="title" style="width:250px;">
+                        <h:outputText value="#{msg.get('app.bankStmtSum.label.tmbBankStmtSum')}"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{msg.get('app.button.add')}"
+                                         action="#{bankStatementSummary.onLinkToAddTmbBankDetail()}"
+                                         styleClass="smaller"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:dataTable id="dtTmbBankStmt"
+                                     var="item" value="#{bankStatementSummary.summaryView.tmbBankStmtViewList}"
+                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}" width="25"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}" width="80"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}" width="70"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}" width="60"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}" width="40"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}" width="100"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}" width="100"/>
+                                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}" width="70"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}" width="50"/>
+                                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}" width="100"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}" width="40"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}" width="100"/>
+                                    <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}"/>
+                                    <p:column rowspan="2" headerText=""/>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}" width="100"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}" width="100"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}" width="40"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}" width="40"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}" width="65"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}" width="65"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column styleClass="center" width="25">
+                                <h:outputText value="#{rowIndex + 1}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="80">
+                                <h:outputText value="#{item.accountName}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="70">
+                                <h:outputText value="#{item.accountNumber}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="60">
+                                <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="40">
+                                <h:outputText value="#{item.mainAccount eq 1 ? 'Y' : ''}"/>
+                            </p:column>
+
+                            <p:column styleClass="right" width="100">
+                                <h:outputText value="#{item.limit}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="100">
+                                <h:outputText value="#{item.avgIncomeGross}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' :
+                                              item.avgIncomeGross eq 0 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="100">
+                                <h:outputText value="#{item.avgIncomeNetBDM}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="100">
+                                <h:outputText value="#{item.avgIncomeNetUW}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="70">
+                                <h:outputText value="#{item.avgUtilizationPercent}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgUtilizationPercent le 90 ? 'green' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="50">
+                                <h:outputText value="#{item.avgSwingPercent}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgUtilizationPercent le 90 ? 'green' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="center" width="40">
+                                <h:outputText value="#{item.overLimitTimes}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.overLimitTimes lt 1 ? 'green' :
+                                              item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
+                                              item.overLimitTimes gt 2 ? 'red' : ''}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="40">
+                                <h:outputText value="#{item.overLimitDays}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.overLimitDays le 3 ? 'green' :
+                                              item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
+                                              item.overLimitDays gt 7 ? 'red' : ''}"/>
+                            </p:column>
+
+                            <p:column styleClass="center" width="40">
+                                <h:outputText value="#{item.chequeReturn}"
+                                              style="color:#{item.mainAccount != 1 ? '' :
+                                              item.chequeReturn lt 1 ? 'green' :
+                                              item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
+                                              item.chequeReturn gt 2 ? 'red' : ''}"/>
+                            </p:column>
+
+                            <p:column styleClass="right" width="100">
+                                <h:outputText value="#{item.avgGrossInflowPerLimit}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="65">
+                                <h:outputText value="#{item.trdChequeReturnAmount}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right" width="65">
+                                <h:outputText value="#{item.trdChequeReturnPercent}"
+                                              style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
+                                              item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
+                                              item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="" styleClass="option" style="width:54px;">
+                                <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
+                                                 action="#{bankStatementSummary.onEditTmbBankStmt()}">
+                                    <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                                </p:commandButton>
+
+                                <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
+                                                 oncomplete="confirmDeleteBankStmtDlg.show()">
+                                    <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
+                                              style="background-color:#f4f8b6; text-align:left;"/>
+
+                                    <p:column style="background-color:#f4f8b6; text-align:right;">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeGross}">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column style="background-color:#f4f8b6; text-align:right;">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeNetBDM}">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column style="background-color:#f4f8b6; text-align:right;">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{bankStatementSummary.summaryView.TMBTotalIncomeNetUW}">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column colspan="9" style="background-color:#f4f8b6;"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:28px;"> </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="separate"></div>
+                    </td>
+                </tr>
+                <!-- Other Bank -->
+                <tr>
+                    <td class="title" style="width:250px;">
+                        <h:outputText value="#{msg.get('app.bankStmtSum.label.otherBankStmtSum')}"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{msg.get('app.button.add')}"
+                                         action="#{bankStatementSummary.onLinkToAddOthBankDetail()}"
+                                         styleClass="smaller"/>
+                    </td>
+                </tr>
+                <tr>
+                <td colspan="2">
+                <p:dataTable id="dtOtherBankStmtSum"
+                             var="item" value="#{bankStatementSummary.summaryView.othBankStmtViewList}"
+                             paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.no')}" width="25"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}" width="80"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}" width="70"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}" width="60"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.main')}" width="40"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.limit')}" width="100"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeGross')}" width="100"/>
+                        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet')}"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.utilization')}" width="70"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.swing')}" width="50"/>
+                        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.overLimit')}" width="100"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.chequeReturn')}" width="40"/>
+                        <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.cashFlowLimit')}" width="100"/>
+                        <p:column colspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn')}" />
+                        <p:column rowspan="2" headerText=""/>
+                    </p:row>
+
+                    <p:row>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.BDM')}" width="100"/>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.incomeNet.UW')}" width="100"/>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.times')}" width="40"/>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.overLimit.days')}" width="40"/>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.amount')}" width="65"/>
+                        <p:column headerText="#{msg.get('app.bankStmtSum.table.column.trdChequeReturn.percent')}" width="65"/>
+                    </p:row>
+                </p:columnGroup>
+
+                <p:column styleClass="center" width="25">
+                    <h:outputText value="#{rowIndex + 1}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="80">
+                    <h:outputText value="#{item.accountName}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="70">
+                    <h:outputText value="#{item.accountNumber}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="60">
+                    <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="40">
+                    <h:outputText value="#{item.mainAccount eq 1 ? 'Y' : ''}"/>
+                </p:column>
+
+                <p:column styleClass="right" width="100">
+                    <h:outputText value="#{item.limit}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="100">
+                    <h:outputText value="#{item.avgIncomeGross}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgIncomeGross lt 0 or item.avgIncomeGross gt 0 ? 'green' :
+                                              item.avgIncomeGross eq 0 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="100">
+                    <h:outputText value="#{item.avgIncomeNetBDM}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="100">
+                    <h:outputText value="#{item.avgIncomeNetUW}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="70">
+                    <h:outputText value="#{item.avgUtilizationPercent}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgUtilizationPercent le 90 ? 'green' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="50">
+                    <h:outputText value="#{item.avgSwingPercent}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.avgUtilizationPercent le 90 ? 'green' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
+                                              item.avgUtilizationPercent gt 90 and item.avgSwingPercent lt 15 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="center" width="40">
+                    <h:outputText value="#{item.overLimitTimes}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.overLimitTimes lt 1 ? 'green' :
+                                              item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
+                                              item.overLimitTimes gt 2 ? 'red' : ''}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="40">
+                    <h:outputText value="#{item.overLimitDays}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.overLimitDays le 3 ? 'green' :
+                                              item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
+                                              item.overLimitDays gt 7 ? 'red' : ''}"/>
+                </p:column>
+
+                <p:column styleClass="center" width="40">
+                    <h:outputText value="#{item.chequeReturn}"
+                                  style="color:#{item.mainAccount != 1 ? '' :
+                                              item.chequeReturn lt 1 ? 'green' :
+                                              item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
+                                              item.chequeReturn gt 2 ? 'red' : ''}"/>
+                </p:column>
+
+                <p:column styleClass="right" width="100">
+                    <h:outputText value="#{item.avgGrossInflowPerLimit}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="65">
+                    <h:outputText value="#{item.trdChequeReturnAmount}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column styleClass="right" width="65">
+                    <h:outputText value="#{item.trdChequeReturnPercent}"
+                                  style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
+                                              item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
+                                              item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="" styleClass="option" style="width:54px;">
+                    <p:commandButton title="#{msg.get('app.button.edit')}" icon="ui-icon-pencil"
+                                     action="#{bankStatementSummary.onEditOthBankStmt()}">
+                        <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                    </p:commandButton>
+
+                    <p:commandButton title="#{msg.get('app.button.delete')}" icon="ui-icon-trash"
+                                     oncomplete="confirmDeleteBankStmtDlg.show()">
+                        <f:setPropertyActionListener value="#{item}" target="#{bankStatementSummary.selectedBankStmtView}"/>
+                    </p:commandButton>
+                </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.totalIncome')}"
+                                  style="background-color:#f4f8b6; text-align:left;"/>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeGross}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetBDM}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.othTotalIncomeNetUW}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column colspan="9" style="background-color:#f4f8b6;"/>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="18" style="height:28px;"/>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="6" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
+                                  style="background-color:#f4f8b6; text-align:left;"/>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeGross}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetBDM}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalIncomeNetUW}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column colspan="6" style="background-color:#f4f8b6;"/>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetAmount}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6; text-align:right;">
+                            <f:facet name="footer">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+
+                        <p:column style="background-color:#f4f8b6;"/>
+                    </p:row>
+                </p:columnGroup>
+
+                </p:dataTable>
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:28px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="separate"></div>
+                    </td>
+                </tr>
+                <!-- Source of Collateral Proof -->
+                <tr>
+                    <td class="title" style="width:250px;">
+                        <h:outputText value="#{msg.get('app.bankStmtSum.label.srcOfCollateralProof')}"/>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <p:dataTable id="dtSrcOfCollateralProof"
+                                     var="item" value="#{bankStatementSummary.bankStmtSrcOfCollateralProofList}"
+                                     paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}"/>
+                                    <p:column colspan="2" headerText="source.lastThreeMonth.first"/>
+                                    <p:column colspan="2" headerText="source.lastThreeMonth.second"/>
+                                    <p:column colspan="2" headerText="source.lastThreeMonth.third"/>
+                                    <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.averageBaht')}"/>
+                                </p:row>
+
+                                <p:row>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
+
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
+
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.osBalanceEndDay')}"/>
+                                    <p:column headerText="#{msg.get('app.bankStmtSum.table.column.amountBaht')}"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.accountName}"/>
+                            </p:column>
+
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.accountNumber}"/>
+                            </p:column>
+
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                            </p:column>
+
+                            <!-- Month (T-2) -->
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[0].dateOfMaxBalance}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column styleClass="right">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[0].maxBalance}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <!-- Month (T-1) -->
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[1].dateOfMaxBalance}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column styleClass="right">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[1].maxBalance}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <!-- Month (T) -->
+                            <p:column styleClass="center">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[2].dateOfMaxBalance}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column styleClass="right">
+                                <h:outputText value="#{item.srcOfCollateralProofViewList[2].maxBalance}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column styleClass="right">
+                                <h:outputText value="#{item.avgOSBalanceAmount}">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </h:outputText>
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row><p:column colspan="10" style="height:28px;"/></p:row>
+
+                                <p:row>
+                                    <p:column colspan="9" footerText="#{msg.get('app.bankStmtSum.grandTotal')}"
+                                              style="background-color:#f4f8b6; text-align:left;"/>
+
+                                    <p:column style="background-color:#f4f8b6; text-align:right;">
+                                        <f:facet name="footer">
+                                            <h:outputText value="#{bankStatementSummary.summaryView.grdTotalAvgOSBalanceAmount}">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:28px;"> </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="separate"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                         action="#{bankStatementSummary.onSaveSummary()}" process="@form"
+                                         update=":frmMain, :msgBoxSystemMessagePanel"
+                                         styleClass="smaller"/>
+                    </td>
+                </tr>
+                </table>
+                </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+
+            <div id="bottom_line"></div>
+            <!-- Start Footer -->
+            <ui:include src="include/footer.xhtml"/>
+            <!-- End Footer -->
+            </div>
+        </h:form>
+
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+
+    </p:panel>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteBankStmtDialog"/>
+        <ui:param name="name" value="confirmDeleteBankStmtDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteBankStmt"/>
+        <ui:param name="controller" value="#{bankStatementSummary}"/>
+        <ui:param name="action" value="onDeleteBankStmt"/>
+        <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+    </ui:include>
+
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{bankStatementSummary.messageHeader}" message="#{bankStatementSummary.message}">
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+
 </h:body>
 </f:view>
 </html>

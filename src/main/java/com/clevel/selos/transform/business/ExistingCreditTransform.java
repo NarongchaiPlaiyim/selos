@@ -78,6 +78,7 @@ public class ExistingCreditTransform extends BusinessTransform {
         int days = DateTimeUtil.daysBetween2Dates(obligation.getLastContractDate(), obligation.getMaturityDate());
         existingCreditDetailView.setTenor(new BigDecimal(days / 30.4));
         existingCreditDetailView.setCreditCategory(CreditCategory.COMMERCIAL);
+        existingCreditDetailView.setAccountRef(obligation.getAccountRef());
         return existingCreditDetailView;
     }
 

@@ -57,6 +57,10 @@ public class RLOSInterfaceImpl implements RLOSInterface, Serializable {
             Date responseTime = new Date();
             log.debug("CSI Result linkKey {}, data {}", linkKey, csiResult.toString());
             rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.SUCCESS, "", responseTime, linkKey);
+        } catch (RLOSInterfaceException e){
+            log.error("Exception while get CSI data!", e);
+            rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
+            throw e;
         } catch (Exception e) {
             log.error("Exception while get CSI data!", e);
             rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);

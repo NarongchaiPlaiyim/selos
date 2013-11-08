@@ -215,6 +215,19 @@
             <pattern>%date %-5level [%thread] %logger [%file:%line] %msg%n</pattern>
         </encoder>
     </appender>
+
+     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+          <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+
+      </appender>
+
+    <logger name="com.lordofthejars.foo" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT" />
+    </logger>
+
+
     <logger name="COMS" level="DEBUG" additivity="false">
         <appender-ref ref="COMS-FILE"/>
     </logger>

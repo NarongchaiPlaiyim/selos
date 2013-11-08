@@ -118,13 +118,20 @@ public class ExistingCreditControl extends BusinessControl {
                     ExistingCreditDetailView existingCreditDetailView = existingCreditTransform.getExistingCredit(obligation);
                     if (_borrowerTMBCusID.contains(obligation.getTmbCusId())) {
                         log.info("add obligation into borrower");
+                        String borrowerKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                         existingCreditDetailView.setCreditRelationType(CreditRelationType.BORROWER);
-                        borrowerComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
-                        _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                        if(!borrowerComCreditDetailHashMap.containsKey(borrowerKey)){
+                            borrowerComCreditDetailHashMap.put(borrowerKey, existingCreditDetailView);
+                            _totalBorrowerComLimit = _totalBorrowerComLimit.add(existingCreditDetailView.getLimit());
+                        }
                     } else {
+                        log.info("add obligation into relate");
+                        String relateKey = existingCreditDetailView.getAccountNumber().concat(existingCreditDetailView.getAccountSuf()).concat(existingCreditDetailView.getAccountRef());
                         existingCreditDetailView.setCreditRelationType(CreditRelationType.RELATED);
-                        relatedComCreditDetailHashMap.put(existingCreditDetailView.getAccountNumber(), existingCreditDetailView);
-                        _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                        if(!relatedComCreditDetailHashMap.containsKey(relateKey)){
+                            relatedComCreditDetailHashMap.put(relateKey, existingCreditDetailView);
+                            _totalRelatedComLimit = _totalRelatedComLimit.add(existingCreditDetailView.getLimit());
+                        }
                     }
                 }
 

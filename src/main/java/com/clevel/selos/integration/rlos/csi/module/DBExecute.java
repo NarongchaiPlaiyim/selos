@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.rlos.csi.module;
 
+import com.clevel.selos.exception.RLOSInterfaceException;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
@@ -73,7 +74,12 @@ public class DBExecute implements Serializable {
         try {
             log.debug("open connection.");
             log.debug("SQL_SELECT : {}", SQL_SELECT);
-            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+            try{
+                conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+            } catch (RLOSInterfaceException ex){
+                throw ex;
+            }
+
             log.debug("where clause : {}", clause);
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             statement.setString(1, idNumber);
@@ -115,7 +121,11 @@ public class DBExecute implements Serializable {
         try {
             log.debug("open connection.");
             log.debug("SQL_SELECT : {}", SQL_SELECT);
-            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+            try{
+                conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+            } catch (RLOSInterfaceException ex){
+                throw ex;
+            }
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             if (!Util.isEmpty(nameTh)) {
                 nameTh = "%" + nameTh + "%";

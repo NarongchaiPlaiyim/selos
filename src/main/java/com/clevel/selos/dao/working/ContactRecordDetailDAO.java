@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -27,8 +28,19 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Inte
 
         log.info("findByBizInfoSummaryId. (result size: {})", contactRecordDetailList.size());
 
-
         return contactRecordDetailList;
+    }
+
+    public List<ContactRecordDetail> findByAppraisal(Appraisal appraisal ){
+
+        log.info("findByAppraisal begin ");
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("appraisal", appraisal));
+        criteria.addOrder(Order.asc("no"));
+        List<ContactRecordDetail> appraisalContactDetailList = criteria.list();
+        log.info("findByAppraisal. (result size: {})", appraisalContactDetailList.size());
+
+        return appraisalContactDetailList;
     }
 
 

@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ViewScoped
@@ -51,6 +52,7 @@ public class BizInfoSummary implements Serializable {
     private SubDistrict subDistrict;
     private Country country;
     private User user;
+    private Date currentDate;
 
     private ReferredExperience referredExperience;
     private String sumIncomeAmountDis;
@@ -89,8 +91,6 @@ public class BizInfoSummary implements Serializable {
     @Inject
     private BizInfoSummaryControl bizInfoSummaryControl;
     @Inject
-    private UserDAO userDAO;
-    @Inject
     private CountryDAO countryDAO;
 
     @Inject
@@ -109,6 +109,8 @@ public class BizInfoSummary implements Serializable {
         provinceList = provinceDAO.getListOrderByParameter("name");
         countryList = countryDAO.findAll();
         referredExperienceList = referredExperienceDAO.findAll();
+        HttpSession session = FacesUtil.getSession(true);
+        user = (User)session.getAttribute("user");
 
         if (bizInfoSummaryView == null) {
 
@@ -267,15 +269,14 @@ public class BizInfoSummary implements Serializable {
             if (bizInfoSummaryView.getId() == 0) {
                 bizInfoSummaryView.setCreateBy(user);
                 bizInfoSummaryView.setCreateDate(DateTime.now().toDate());
-                bizInfoSummaryView.setModifyBy(user);
             }
+            bizInfoSummaryView.setModifyBy(user);
             HttpSession session = FacesUtil.getSession(true);
             session.setAttribute("workCaseId", 10001);
             session.setAttribute("bizInfoDetailViewId", -1);
             long workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             bizInfoSummaryControl.onSaveBizSummaryToDB(bizInfoSummaryView, workCaseId);
             log.info("bizInfoSummaryControl end");
-
 
             if (redirect != null && !redirect.equals("")) {
                 log.info("have to redirect ");
@@ -487,5 +488,13 @@ public class BizInfoSummary implements Serializable {
 
     public void setSumIncomeAmountDis(String sumIncomeAmountDis) {
         this.sumIncomeAmountDis = sumIncomeAmountDis;
+    }
+
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }
