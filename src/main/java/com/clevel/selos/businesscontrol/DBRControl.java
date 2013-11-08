@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +49,9 @@ public class DBRControl extends BusinessControl {
 
     }
 
-    public void saveDBRInfo(DBRView dbrView, long workCaseId, String userId) {
-        WorkCase workCase = workCaseDAO.findById(workCaseId);
-        User user = userDAO.findById(userId);
+    public void saveDBRInfo(DBRView dbrView) {
+        WorkCase workCase = workCaseDAO.findById(dbrView.getWorkCaseId());
+        User user = userDAO.findById(dbrView.getUserId());
 
         DBR dbr = calculateDBR(dbrView, user, workCase);
 
@@ -96,16 +97,24 @@ public class DBRControl extends BusinessControl {
         DBR result = new DBR();
         int roleId = user.getRole().getId();
         DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
+
+
+        BigDecimal monthlyIncomePerMonth = BigDecimal.ZERO;
+
+
+        BigDecimal currentDBR = BigDecimal.ZERO;
         if(roleId == RoleUser.UW.getValue()){
-            // DBRInfo
-
-
-            //DBRDetail
+            //netMinthlyIncome
+            monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
+            if(monthlyIncomePerMonth.compareTo(BigDecimal.ZERO) == 0){
+                monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
+            }
+            monthlyIncomePerMonth = monthlyIncomePerMonth.add(dbrView.getMonthlyIncomePerMonth());
 
         }else if(roleId == RoleUser.BDM.getValue()){
-
-        }else{
-            return result;
+            //netMinthlyIncome
+            monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());
+            monthlyIncomePerMonth = monthlyIncomePerMonth.add(dbrView.getMonthlyIncomePerMonth());
         }
         log.debug("calculateDBR complete");
         return result;
