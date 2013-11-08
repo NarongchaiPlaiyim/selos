@@ -26,8 +26,8 @@ public class BankStmtView implements Serializable {
     private BigDecimal avgIncomeNetBDM;
     private BigDecimal avgIncomeNetUW;
     private BigDecimal avgWithDrawAmount;
-    private BigDecimal swingPercent;
-    private BigDecimal utilizationPercent;
+    private BigDecimal avgSwingPercent;
+    private BigDecimal avgUtilizationPercent;
     private BigDecimal avgGrossInflowPerLimit;
     private BigDecimal chequeReturn;
     private BigDecimal trdChequeReturnAmount;
@@ -56,8 +56,8 @@ public class BankStmtView implements Serializable {
         this.avgIncomeNetBDM = BigDecimal.ZERO;
         this.avgIncomeNetUW = BigDecimal.ZERO;
         this.avgWithDrawAmount = BigDecimal.ZERO;
-        this.swingPercent = BigDecimal.ZERO;
-        this.utilizationPercent = BigDecimal.ZERO;
+        this.avgSwingPercent = BigDecimal.ZERO;
+        this.avgUtilizationPercent = BigDecimal.ZERO;
         this.avgGrossInflowPerLimit = BigDecimal.ZERO;
         this.chequeReturn = BigDecimal.ZERO;
         this.trdChequeReturnAmount = BigDecimal.ZERO;
@@ -204,20 +204,20 @@ public class BankStmtView implements Serializable {
         this.avgWithDrawAmount = avgWithDrawAmount;
     }
 
-    public BigDecimal getSwingPercent() {
-        return swingPercent;
+    public BigDecimal getAvgSwingPercent() {
+        return avgSwingPercent;
     }
 
-    public void setSwingPercent(BigDecimal swingPercent) {
-        this.swingPercent = swingPercent;
+    public void setAvgSwingPercent(BigDecimal avgSwingPercent) {
+        this.avgSwingPercent = avgSwingPercent;
     }
 
-    public BigDecimal getUtilizationPercent() {
-        return utilizationPercent;
+    public BigDecimal getAvgUtilizationPercent() {
+        return avgUtilizationPercent;
     }
 
-    public void setUtilizationPercent(BigDecimal utilizationPercent) {
-        this.utilizationPercent = utilizationPercent;
+    public void setAvgUtilizationPercent(BigDecimal avgUtilizationPercent) {
+        this.avgUtilizationPercent = avgUtilizationPercent;
     }
 
     public BigDecimal getAvgGrossInflowPerLimit() {
@@ -319,8 +319,8 @@ public class BankStmtView implements Serializable {
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)
                 .append("avgIncomeNetUW", avgIncomeNetUW)
                 .append("avgWithDrawAmount", avgWithDrawAmount)
-                .append("swingPercent", swingPercent)
-                .append("utilizationPercent", utilizationPercent)
+                .append("avgSwingPercent", avgSwingPercent)
+                .append("avgUtilizationPercent", avgUtilizationPercent)
                 .append("avgGrossInflowPerLimit", avgGrossInflowPerLimit)
                 .append("chequeReturn", chequeReturn)
                 .append("trdChequeReturnAmount", trdChequeReturnAmount)

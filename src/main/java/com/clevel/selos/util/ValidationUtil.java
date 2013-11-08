@@ -102,8 +102,16 @@ public class ValidationUtil {
         return value.compareTo(BigDecimal.ZERO) > 0;
     }
 
+    public static boolean isValueGreaterEqualZero(BigDecimal value) {
+        return value.compareTo(BigDecimal.ZERO) >= 0;
+    }
+
     public static boolean isValueLessThanZero(BigDecimal value) {
         return value.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    public static boolean isValueLessEqualZero(BigDecimal value) {
+        return value.compareTo(BigDecimal.ZERO) <= 0;
     }
 
     public static boolean isValueEqualZero(BigDecimal value) {
