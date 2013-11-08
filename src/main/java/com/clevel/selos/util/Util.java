@@ -267,4 +267,8 @@ public class Util {
         }
         return value;
     }
+
+    public static <T> List<T> safetyList(List<T> list) {
+        return list == null ? Collections.<T>emptyList() : list;
+    }
 }

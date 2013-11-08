@@ -11,10 +11,6 @@ import javax.inject.Inject;
 import java.util.Date;
 
 public class ContactRecordDetailView {
-    @Inject
-    @NormalMessage
-    Message msg;
-
     private long id;
     private int no;
     private Date callingDate;
@@ -25,8 +21,9 @@ public class ContactRecordDetailView {
     private String acceptResultStr;
     private Date nextCallingDate;
     private String nextCallingTime;
-    private Reason reason;
+    private String reason;
     private String remark;
+    private String status;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -75,18 +72,6 @@ public class ContactRecordDetailView {
     }
 
     public String getCallingResultStr() {
-        System.out.println(" this.callingResult is " + this.callingResult);
-        /*if(this.callingResult==0){
-            System.out.println(" case 0 " + msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact");
-        }else if(this.callingResult==1){
-            System.out.println(" case 1 " + msg.get("app.customerAcceptance.radio.label.callingResult.canContact"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.canContact");
-        }else{
-            System.out.println(" case else "+msg.get("app.customerAcceptance.radio.label.callingResult.etc"));
-            callingResultStr = msg.get("app.customerAcceptance.radio.label.callingResult.etc");
-        }
-        System.out.println(" final callingResultStr is  " + callingResultStr);*/
         return callingResultStr;
     }
 
@@ -135,11 +120,11 @@ public class ContactRecordDetailView {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 
@@ -149,6 +134,14 @@ public class ContactRecordDetailView {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreateDate() {
@@ -194,7 +187,6 @@ public class ContactRecordDetailView {
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("msg", msg)
                 .append("id", id)
                 .append("no", no)
                 .append("callingDate", callingDate)
@@ -207,6 +199,7 @@ public class ContactRecordDetailView {
                 .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
                 .append("remark", remark)
+                .append("status", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
