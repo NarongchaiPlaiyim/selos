@@ -21,6 +21,7 @@ public class LogProducer {
     private static final String LOGGER_NAME_WS = "WS";
     private static final String LOGGER_NAME_DWH = "DWH";
     private static final String LOGGER_NAME_COMS = "COMS";
+    private static final String LOGGER_NAME_SELOS = "SELOS";
 
     @Produces
     @SELOS
@@ -92,5 +93,11 @@ public class LogProducer {
     @COMS
     Logger createCOMSLogger() {
         return LoggerFactory.getLogger(LOGGER_NAME_COMS);
+    }
+
+    @Produces
+    @SELOS
+    Logger createSELOSLogger() {
+        return LoggerFactory.getLogger(LOGGER_NAME_SELOS);
     }
 }
