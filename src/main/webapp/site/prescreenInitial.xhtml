@@ -476,6 +476,30 @@
                          oncomplete="msgBoxSystemMessageDlg.hide()"/>
     </p:confirmDialog>
 </p:panel>
+<p:confirmDialog id="msgBoxInvalidCitizenSearchDialog" widgetVar="msgBoxInvalidCitizenSearchDlg" styleClass="messageDialog"
+                 closable="false"
+                 header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+    <p:commandButton value="OK"
+                     process="@this"
+                     update=":frmMain"
+                     oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSearchDlg', 'customerDlgForm\\:dlgInputSearchText')"/>
+</p:confirmDialog>
+<p:confirmDialog id="msgBoxInvalidCitizenBrDialog" widgetVar="msgBoxInvalidCitizenBrDlg" styleClass="messageDialog"
+                 closable="false"
+                 header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+    <p:commandButton value="OK"
+                     process="@this"
+                     update=":frmMain"
+                     oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenBrDlg', 'customerDlgForm\\:dlgInputBrCitizenText')"/>
+</p:confirmDialog>
+<p:confirmDialog id="msgBoxInvalidCitizenSpDialog" widgetVar="msgBoxInvalidCitizenSpDlg" styleClass="messageDialog"
+                 closable="false"
+                 header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+    <p:commandButton value="OK"
+                     process="@this"
+                     update=":frmMain"
+                     oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSpDlg', 'customerDlgForm\\:dlgInputSpCitizenText')"/>
+</p:confirmDialog>
 <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
           onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
           modal="true" width="400" height="150">

@@ -1886,7 +1886,11 @@ public class PrescreenMaker implements Serializable {
                     borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
                 }else{
                     //enableDocumentType = false;
-                    borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
+                    if(borrowerInfo.getSearchId() != null){
+                        if(borrowerInfo.getSearchId().length() > 12){
+                            borrowerInfo.setCitizenId(borrowerInfo.getSearchId().substring(0,13));
+                        }
+                    }
                 }
 
                 enableDocumentType = false;
@@ -1924,8 +1928,13 @@ public class PrescreenMaker implements Serializable {
 
     }
 
+    public void onChangeSearchBy(){
+        log.debug("onChangeSearchBy ::: relationId");
+        borrowerInfo.setSearchId("");
+    }
+
     public void onChangeRelation(){
-        log.debug("onChangeRelation ::: ");
+        log.debug("onChangeRelation ::: relationId : {}", borrowerInfo.getRelation().getId());
         if(caseBorrowerTypeId == 0){
             referenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getRelation().getId());
          } else{
@@ -1934,7 +1943,7 @@ public class PrescreenMaker implements Serializable {
     }
 
     public void onChangeSpouseRelation(){
-        log.debug("onChangeSpouseRelation ::: ");
+        log.debug("onChangeSpouseRelation ::: relationId : {}", borrowerInfo.getSpouse().getRelation().getId());
         if(caseBorrowerTypeId == 0){
             spouseReferenceList = referenceDAO.findByCustomerEntityId(borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getCustomerEntity().getId(), borrowerInfo.getSpouse().getRelation().getId());
         } else{

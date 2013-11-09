@@ -2,10 +2,61 @@ function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
 
+function checkThaiID(id) {
+    if(id=='') return true;
+    if(id.length != 13) return false;
+    var sum = 0;
+    for(i=0; i < 12; i++) {	sum += (13-i)*parseFloat(id.charAt(i));	}
+    var x = sum%11;
+    if(x <= 1 && (1-x != parseFloat(id.charAt(12)))) return false;
+    else if(x > 1 && (11-x != parseFloat(id.charAt(12)))) return false;
+    return true;
+}
+
+function checkSearchThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenSearchDlg').show();
+        }
+    }
+}
+
+function checkBorrowerThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenBrDlg').show();
+        }
+    }
+}
+
+function checkSpouseThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenBrDlg').show();
+        }
+    }
+}
+
+function closeMessageCitizenDialog(msgDlgName, inputId){
+    PF(msgDlgName).hide();
+    $("#"+inputId).focus();
+}
+
 function removeComma(obj) {
     var val = obj.value;
     val = val.replace(/,/g, '');
     obj.value = val;
+}
+
+function onClickReadonlyField(obj, readonly){
+    if(readonly != 1){
+        if(obj != undefined){
+            obj.blur();
+        }
+    }
 }
 
 function formatNumber(obj) {

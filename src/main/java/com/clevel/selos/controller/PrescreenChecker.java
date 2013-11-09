@@ -358,10 +358,12 @@ public class PrescreenChecker implements Serializable {
                         if(checkPersonalId){
                             if(csiResult.getActionResult() == ActionResult.SUCCESS){
                                 customerInfoView.setCsiFlag(1);
+                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI SUCCESS."));
                                 customerInfoView.setCsiResult("Check CSI SUCCESS");
                             } else if (csiResult.getActionResult() == ActionResult.FAILED){
                                 failedCount = failedCount + 1;
                                 customerInfoView.setCsiFlag(0);
+                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI FAILED, ").concat(customerInfoView.getCsiReason()));
                                 customerInfoView.setCsiResult("Check CSI FAILED");
                             }
                             customerInfoView.setCsiReason(csiResult.getResultReason());
@@ -409,10 +411,12 @@ public class PrescreenChecker implements Serializable {
                         if(checkPersonalId){
                             if(csiResult.getActionResult() == ActionResult.SUCCESS){
                                 customerInfoView.setCsiFlag(1);
+                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI SUCCESS."));
                                 customerInfoView.setCsiResult("Check CSI SUCCESS");
                             } else if (csiResult.getActionResult() == ActionResult.FAILED){
                                 failedCount = failedCount + 1;
                                 customerInfoView.setCsiFlag(0);
+                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI FAILED, ").concat(customerInfoView.getCsiReason()));
                                 customerInfoView.setCsiResult("Check CSI FAILED");
                             }
                             customerInfoView.setCsiReason(csiResult.getResultReason());
