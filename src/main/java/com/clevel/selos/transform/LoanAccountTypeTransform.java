@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.view.LoanAccountTypeView;
 import org.slf4j.Logger;
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LoanAccountTypeTransform {
+    @Inject
+    @SELOS
+    Logger log;
     @Inject
     public LoanAccountTypeTransform() {
 

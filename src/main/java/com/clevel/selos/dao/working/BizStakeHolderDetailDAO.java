@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizStakeHolderDetail;
 import org.hibernate.Criteria;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class BizStakeHolderDetailDAO extends GenericDAO<BizStakeHolderDetail, Long> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public BizStakeHolderDetailDAO() {
     }

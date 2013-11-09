@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.relation;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.ProductGroup;
 import com.clevel.selos.model.db.relation.PrdGroupToPrdProgram;
 import org.hibernate.Criteria;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class PrdGroupToPrdProgramDAO extends GenericDAO<PrdGroupToPrdProgram, Integer> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public PrdGroupToPrdProgramDAO() {
     }

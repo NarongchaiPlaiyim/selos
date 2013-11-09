@@ -54,7 +54,7 @@
                         <h:outputText value="#{msg.get('app.bankStmtSum.label.expectSubmissionDate')}"/>
                     </td>
                     <td>
-                        <p:calendar id="calendarId" mindate="#{bankStatementSummary.currentDate}"
+                        <p:calendar id="calendarId" mindate="#{bankStatementSummary.summaryView.expectedSubmitDate}"
                                     navigator="true" showButtonPanel="true" showOn="both"
                                     value="#{bankStatementSummary.summaryView.expectedSubmitDate}"
                                     pattern="dd/MM/yyyy"
@@ -173,7 +173,7 @@
                             </p:column>
 
                             <p:column styleClass="right" width="70">
-                                <h:outputText value="#{item.avgUtilizationPercent}"
+                                <h:outputText value="#{item.avgUtilizationPercent}%"
                                               style="color:#{item.mainAccount != 1 ? '' :
                                               item.avgUtilizationPercent le 90 ? 'green' :
                                               item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
@@ -184,7 +184,7 @@
                             </p:column>
 
                             <p:column styleClass="right" width="50">
-                                <h:outputText value="#{item.avgSwingPercent}"
+                                <h:outputText value="#{item.avgSwingPercent}%"
                                               style="color:#{item.mainAccount != 1 ? '' :
                                               item.avgUtilizationPercent le 90 ? 'green' :
                                               item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
@@ -199,7 +199,9 @@
                                               style="color:#{item.mainAccount != 1 ? '' :
                                               item.overLimitTimes lt 1 ? 'green' :
                                               item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
-                                              item.overLimitTimes gt 2 ? 'red' : ''}"/>
+                                              item.overLimitTimes gt 2 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column styleClass="center" width="40">
@@ -207,7 +209,9 @@
                                               style="color:#{item.mainAccount != 1 ? '' :
                                               item.overLimitDays le 3 ? 'green' :
                                               item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
-                                              item.overLimitDays gt 7 ? 'red' : ''}"/>
+                                              item.overLimitDays gt 7 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column styleClass="center" width="40">
@@ -215,11 +219,13 @@
                                               style="color:#{item.mainAccount != 1 ? '' :
                                               item.chequeReturn lt 1 ? 'green' :
                                               item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
-                                              item.chequeReturn gt 2 ? 'red' : ''}"/>
+                                              item.chequeReturn gt 2 ? 'red' : ''}">
+                                    <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                                </h:outputText>
                             </p:column>
 
                             <p:column styleClass="right" width="100">
-                                <h:outputText value="#{item.avgGrossInflowPerLimit}">
+                                <h:outputText value="#{item.avgGrossInflowPerLimit}%">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </h:outputText>
@@ -233,7 +239,7 @@
                             </p:column>
 
                             <p:column styleClass="right" width="65">
-                                <h:outputText value="#{item.trdChequeReturnPercent}"
+                                <h:outputText value="#{item.trdChequeReturnPercent}%"
                                               style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
                                               item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
                                               item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
@@ -395,7 +401,7 @@
                 </p:column>
 
                 <p:column styleClass="right" width="70">
-                    <h:outputText value="#{item.avgUtilizationPercent}"
+                    <h:outputText value="#{item.avgUtilizationPercent}%"
                                   style="color:#{item.mainAccount != 1 ? '' :
                                               item.avgUtilizationPercent le 90 ? 'green' :
                                               item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
@@ -405,7 +411,7 @@
                 </p:column>
 
                 <p:column styleClass="right" width="50">
-                    <h:outputText value="#{item.avgSwingPercent}"
+                    <h:outputText value="#{item.avgSwingPercent}%"
                                   style="color:#{item.mainAccount != 1 ? '' :
                                               item.avgUtilizationPercent le 90 ? 'green' :
                                               item.avgUtilizationPercent gt 90 and item.avgSwingPercent ge 15 ? 'yellow' :
@@ -419,7 +425,9 @@
                                   style="color:#{item.mainAccount != 1 ? '' :
                                               item.overLimitTimes lt 1 ? 'green' :
                                               item.overLimitTimes ge 1 or item.overLimitTimes ge 2 ? 'yellow' :
-                                              item.overLimitTimes gt 2 ? 'red' : ''}"/>
+                                              item.overLimitTimes gt 2 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                    </h:outputText>
                 </p:column>
 
                 <p:column styleClass="center" width="40">
@@ -427,7 +435,9 @@
                                   style="color:#{item.mainAccount != 1 ? '' :
                                               item.overLimitDays le 3 ? 'green' :
                                               item.overLimitDays gt 3 or item.overLimitDays le 7 ? 'yellow' :
-                                              item.overLimitDays gt 7 ? 'red' : ''}"/>
+                                              item.overLimitDays gt 7 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                    </h:outputText>
                 </p:column>
 
                 <p:column styleClass="center" width="40">
@@ -435,11 +445,13 @@
                                   style="color:#{item.mainAccount != 1 ? '' :
                                               item.chequeReturn lt 1 ? 'green' :
                                               item.chequeReturn ge 1 or item.chequeReturn le 2 ? 'yellow' :
-                                              item.chequeReturn gt 2 ? 'red' : ''}"/>
+                                              item.chequeReturn gt 2 ? 'red' : ''}">
+                        <f:convertNumber pattern="#,##0" maxIntegerDigits="14"/>
+                    </h:outputText>
                 </p:column>
 
                 <p:column styleClass="right" width="100">
-                    <h:outputText value="#{item.avgGrossInflowPerLimit}">
+                    <h:outputText value="#{item.avgGrossInflowPerLimit}%">
                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                     </h:outputText>
                 </p:column>
@@ -451,7 +463,7 @@
                 </p:column>
 
                 <p:column styleClass="right" width="65">
-                    <h:outputText value="#{item.trdChequeReturnPercent}"
+                    <h:outputText value="#{item.trdChequeReturnPercent}%"
                                   style="color:#{item.trdChequeReturnPercent le 3 ? 'green' :
                                               item.trdChequeReturnPercent gt 3 or item.trdChequeReturnPercent le 5 ? 'yellow' :
                                               item.trdChequeReturnPercent gt 5 ? 'red' : ''}">
@@ -554,7 +566,7 @@
 
                         <p:column style="background-color:#f4f8b6; text-align:right;">
                             <f:facet name="footer">
-                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}">
+                                <h:outputText value="#{bankStatementSummary.summaryView.grdTotalTDChqRetPercent}%">
                                     <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                      maxIntegerDigits="14"/>
                                 </h:outputText>
@@ -594,9 +606,29 @@
                                     <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountName')}"/>
                                     <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountNo')}"/>
                                     <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.accountType')}"/>
-                                    <p:column colspan="2" headerText="source.lastThreeMonth.first"/>
-                                    <p:column colspan="2" headerText="source.lastThreeMonth.second"/>
-                                    <p:column colspan="2" headerText="source.lastThreeMonth.third"/>
+                                    <p:column colspan="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bankStatementSummary.lastThreeMonth1}">
+                                                <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column colspan="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bankStatementSummary.lastThreeMonth2}">
+                                                <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
+
+                                    <p:column colspan="2">
+                                        <f:facet name="header">
+                                            <h:outputText value="#{bankStatementSummary.lastThreeMonth3}">
+                                                <f:convertDateTime pattern="MMM yyyy" locale="en"/>
+                                            </h:outputText>
+                                        </f:facet>
+                                    </p:column>
                                     <p:column rowspan="2" headerText="#{msg.get('app.bankStmtSum.table.column.averageBaht')}"/>
                                 </p:row>
 

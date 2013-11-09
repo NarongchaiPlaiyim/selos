@@ -2,10 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.BPMInterface;
-import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.RLOSInterface;
-import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
@@ -23,6 +20,7 @@ import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
@@ -41,8 +39,8 @@ import java.util.List;
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject

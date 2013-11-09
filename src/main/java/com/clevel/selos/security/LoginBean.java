@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
@@ -42,8 +43,8 @@ import java.util.Date;
 @RequestScoped
 public class LoginBean {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
 

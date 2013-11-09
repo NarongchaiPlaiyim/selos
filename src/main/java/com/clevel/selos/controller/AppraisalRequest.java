@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.AppraisalRequestControl;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -31,8 +32,8 @@ import java.util.List;
 public class AppraisalRequest implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

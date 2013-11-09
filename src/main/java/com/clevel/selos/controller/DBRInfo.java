@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -29,8 +30,8 @@ import java.util.List;
 @ManagedBean(name = "dbrInfo")
 public class DBRInfo implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

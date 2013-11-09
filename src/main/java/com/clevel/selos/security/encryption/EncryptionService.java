@@ -1,5 +1,6 @@
 package com.clevel.selos.security.encryption;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.system.Config;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -19,8 +20,8 @@ import java.security.spec.InvalidParameterSpecException;
 @ApplicationScoped
 public class EncryptionService {
     @Inject
+    @SELOS
     Logger log;
-
     private volatile static SecretKey secretKey;
     private static final String KEY_FILE_PASSWORD = "selos";
 

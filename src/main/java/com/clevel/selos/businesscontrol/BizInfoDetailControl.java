@@ -5,6 +5,7 @@ import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.BizProductDetailDAO;
 import com.clevel.selos.dao.working.BizStakeHolderDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
@@ -25,7 +26,6 @@ import java.util.List;
 
 @Stateless
 public class BizInfoDetailControl extends BusinessControl {
-
     @Inject
     BusinessDescriptionDAO businessDescriptionDAO;
 

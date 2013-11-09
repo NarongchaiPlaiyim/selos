@@ -8,6 +8,7 @@ import com.clevel.selos.integration.corebanking.model.customeraccount.CustomerAc
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatement;
 import com.clevel.selos.integration.dwh.bankstatement.model.DWHBankStatementResult;
 import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.*;
@@ -440,10 +441,12 @@ public class BankStmtControl extends BusinessControl {
         BigDecimal grdTotalIncomeNetBDM = tmbTotalIncomeNetBDM.add(othTotalIncomeNetBDM);
         BigDecimal grdTotalIncomeNetUW = tmbTotalIncomeNetUW.add(othTotalIncomeNetUW);
 
-        // if (grdTotalIncomeNetUW = grdTotalTrdChqRetAmount / grdTotalIncomeNetBDM)
-        // else (grdTotalTrdChqRetAmount / grdTotalIncomeNetUW)
+        // if (grdTotalIncomeNetUW = 0)
+        //      grdTotalTrdChqRetPercent = [ grdTotalTrdChqRetAmount / grdTotalIncomeNetBDM ]
+        // else
+        //      grdTotalTrdChqRetPercent = [ grdTotalTrdChqRetAmount / grdTotalIncomeNetUW ]
         BigDecimal grdTotalTrdChqRetPercent = BigDecimal.ZERO;
-        if (ValidationUtil.isValueEqual(grdTotalIncomeNetUW, Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM))) {
+        if (ValidationUtil.isValueEqualZero(grdTotalIncomeNetUW)) {
             grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetBDM);
         } else {
             grdTotalTrdChqRetPercent = Util.divide(grdTotalTrdChqRetAmount, grdTotalIncomeNetUW);
@@ -477,13 +480,13 @@ public class BankStmtControl extends BusinessControl {
     }
 
     // --------------- Source of Collateral Proof ---------------
-    public void setSOCPListAndCalAvgOSBalance(BankStmtView bankStmtView) {
-        log.debug("getListSrcOfCollateralProofView()");
+    public void calSourceOfCollateralProof(BankStmtView bankStmtView) {
+        log.debug("calSourceOfCollateralProof()");
         List<BankStmtDetailView> lastThreeMonthBankStmtDetail = getLastThreeMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList());
         List<BankStmtSrcOfCollateralProofView> srcOfCollateralProofViewList = bankStmtView.getSrcOfCollateralProofViewList();
-        /*  source.lastThreeMonth1 = BankStmtDetail.asOfDate(T-2)
-            source.lastThreeMonth2 = BankStmtDetail.asOfDate(T-1)
-            source.lastThreeMonth3 = BankStmtDetail.asOfDate(T)
+        /*  source.lastThreeMonth1 = BankStmtDetail.asOfDate( [T-x] )
+            source.lastThreeMonth2 = BankStmtDetail.asOfDate( [T-x]+1 )
+            source.lastThreeMonth3 = BankStmtDetail.asOfDate( [T-x]+2 )
          */
         // if source of collateral proof is already exist
         // re-calculate & replace the old data
@@ -506,7 +509,14 @@ public class BankStmtControl extends BusinessControl {
             }
             bankStmtView.setSrcOfCollateralProofViewList(srcOfCollateralProofViewList);
         }
-        bankStmtView.setAvgOSBalanceAmount(getAvgMaxBalance(bankStmtView));
+        bankStmtView.setAvgOSBalanceAmount( getAvgMaxBalance(bankStmtView) );
     }
 
+    public boolean isBDMUser() {
+        User user = getCurrentUser();
+        if (RoleUser.ABDM.getValue() == user.getRole().getId() || RoleUser.BDM.getValue() == user.getRole().getId())
+            return true;
+        else
+            return false;
+    }
 }

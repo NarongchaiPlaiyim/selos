@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -34,8 +35,8 @@ import java.util.*;
 @ManagedBean(name = "bankStatementDetail")
 public class BankStatementDetail implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -103,15 +104,13 @@ public class BankStatementDetail implements Serializable {
     }
 
     private void preRender() {
+        log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
 
-        log.info("preRender ::: setSession ");
-
         session = FacesUtil.getSession(true);
-
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             workCasePrescreenId = 21;
@@ -142,13 +141,15 @@ public class BankStatementDetail implements Serializable {
                     isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
 
             // if(add new bank statement)
-            // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first before click Add
+            // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
             if (null == bankStmtView && null == lastMonthDate && numberOfMonths == 0) {
                 FacesUtil.redirect("/site/bankStatementSummary.jsf");
+                return;
             }
         } else {
             //Return to Bank statement summary if parameter is null
             FacesUtil.redirect("/site/bankStatementSummary.jsf");
+            return;
         }
     }
 
@@ -193,7 +194,6 @@ public class BankStatementDetail implements Serializable {
         } else {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
         }
-
         bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
         //todo: get other bank account type
         othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
@@ -208,9 +208,9 @@ public class BankStatementDetail implements Serializable {
 
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
-
         // todo: validation
 
+        // calculate Bank statement and detail
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
 
         if (bankStmtView.getId() == 0) {
@@ -246,11 +246,11 @@ public class BankStatementDetail implements Serializable {
                     }
                 }
             }
-
         }
 
 
         try {
+            // recalculate and save Bank statement summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView);
             bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, workCasePrescreenId, userId);
 

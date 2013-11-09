@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.EmailActivityDAO;
 import com.clevel.selos.integration.Email;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.EmailActivity;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Email
 public class EmailAuditor implements SystemAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     EmailActivityDAO emailActivityDAO;

@@ -1,7 +1,7 @@
 package com.clevel.selos.model;
 
 public enum RoleUser {
-    BDM(102),UW(107);
+    ABDM(101),BDM(102),UW(107);
 
     private int value;
 

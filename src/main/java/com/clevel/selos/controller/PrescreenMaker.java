@@ -8,6 +8,7 @@ import com.clevel.selos.dao.relation.PrdProgramToCreditTypeDAO;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.dao.working.PrescreenDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.BorrowerType;
 import com.clevel.selos.model.RadioValue;
@@ -46,8 +47,8 @@ import java.util.List;
 @ManagedBean(name = "prescreenMaker")
 public class PrescreenMaker implements Serializable {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     @NormalMessage
     Message msg;
 

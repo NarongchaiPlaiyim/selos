@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.TCG;
@@ -25,8 +26,8 @@ import java.util.List;
 @Stateless
 public class TCGInfoControl extends BusinessControl {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;
