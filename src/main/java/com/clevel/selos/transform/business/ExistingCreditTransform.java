@@ -61,13 +61,21 @@ public class ExistingCreditTransform extends BusinessTransform {
         existingCreditDetailView.setAccountName(obligation.getAccountName());
         //existingCreditDetailView.setAccountStatus(obligation.getAccountStatus());   //code
         //use dataSource to find bankAccountType
-        /*if(!Util.isEmpty(obligation.getDataSource())){
-            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource());
-            String code = obligation.getAccountStatus();
-            BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
-            BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-            existingCreditDetailView.setAccountStatus(bankAccountStatusView);
-        }*/
+        if(!Util.isEmpty(obligation.getDataSource())){
+            DWHBankDataSource dwhBankDataSource = dwhBankDataSourceDAO.findByDataSource(obligation.getDataSource().trim());
+            if(dwhBankDataSource != null){
+                String code = obligation.getAccountStatus();
+                BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(code, dwhBankDataSource.getBankAccountType().getId());
+                if(bankAccountStatus != null){
+                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                } else {
+                    existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                }
+            } else {
+                existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+            }
+        }
         existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
         existingCreditDetailView.setAccountNumber(obligation.getAccountNumber());
         existingCreditDetailView.setAccountSuf(obligation.getAccountSuffix());
@@ -101,12 +109,16 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetailView.setAccountName(accountName.toString());
                 existingCreditDetailView.setAccountNumber(appInProcess.getAppNumber());
                 //existingCreditDetailView.setAccountStatus(appInProcess.getStatus());  delete
-                /*if(!Util.isEmpty(appInProcess.getStatus())){
+                if(!Util.isEmpty(appInProcess.getStatus())){
                     BankAccountType bankAccountType = bankAccountTypeDAO.getAccountTypeRLOS();
-                    BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
-                    BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
-                    existingCreditDetailView.setAccountStatus(bankAccountStatusView);
-                }*/
+                    if(bankAccountType != null){
+                        BankAccountStatus bankAccountStatus = bankAccountStatusDAO.findByCodeAndType(appInProcess.getStatus(), bankAccountType.getId());
+                        BankAccountStatusView bankAccountStatusView = bankAccountStatusTransform.getBankAccountStatusView(bankAccountStatus);
+                        existingCreditDetailView.setAccountStatus(bankAccountStatusView);
+                    } else {
+                        existingCreditDetailView.setAccountStatus(new BankAccountStatusView());
+                    }
+                }
                 existingCreditDetailView.setAccountSuf("-");
                 existingCreditDetailView.setProductCode(creditDetail.getProductCode());
                 existingCreditDetailView.setProjectCode(creditDetail.getProjectCode());
@@ -183,6 +195,16 @@ public class ExistingCreditTransform extends BusinessTransform {
                 }
                 existingCreditDetail.setAccountName(existingCreditDetailView.getAccountName());
                 existingCreditDetail.setAccountNumber(existingCreditDetailView.getAccountNumber());
+                if(existingCreditDetailView.getAccountStatus() != null){
+                    BankAccountStatus bankAccountStatus = bankAccountStatusTransform.getBankAccountStatus(existingCreditDetailView.getAccountStatus());
+                    if(bankAccountStatus.getId() != 0){
+                        existingCreditDetail.setAccountstatus(bankAccountStatus);
+                    }else{
+                        existingCreditDetail.setAccountstatus(null);
+                    }
+                }else{
+                    existingCreditDetail.setAccountstatus(null);
+                }
                 existingCreditDetail.setInstallment(existingCreditDetailView.getInstallment());
                 existingCreditDetail.setExistingCreditSummary(existingCreditSummary);
                 existingCreditDetail.setCreditCategory(existingCreditDetailView.getCreditCategory().value());
@@ -191,6 +213,8 @@ public class ExistingCreditTransform extends BusinessTransform {
                 existingCreditDetail.setLimit(existingCreditDetailView.getLimit());
                 existingCreditDetail.setOutstanding(existingCreditDetailView.getOutstanding());
                 existingCreditDetail.setIntFee(existingCreditDetailView.getIntFeePercent());
+
+                existingCreditDetail.setTenor(existingCreditDetailView.getTenor());
                 existingCreditDetailList.add(existingCreditDetail);
             }
         }

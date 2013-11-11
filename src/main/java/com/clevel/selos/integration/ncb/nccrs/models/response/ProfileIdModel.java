@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ProfileIdModel {
+import java.io.Serializable;
+
+public class ProfileIdModel implements Serializable {
     private String asofdate;
     private String idtypeandnumber;
     private String submittedby;

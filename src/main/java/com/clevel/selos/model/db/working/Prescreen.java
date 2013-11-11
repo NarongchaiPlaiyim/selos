@@ -52,10 +52,10 @@ public class Prescreen implements Serializable {
     private ReferredExperience referredExperience;
 
     @Column(name = "tcg")
-    private boolean tcg;
+    private int tcg;
 
     @Column(name = "refinance")
-    private boolean refinance;
+    private int refinance;
 
     @OneToOne
     @JoinColumn(name = "refinance_bank_id")
@@ -172,19 +172,19 @@ public class Prescreen implements Serializable {
         this.referredExperience = referredExperience;
     }
 
-    public boolean isTcg() {
+    public int getTcg() {
         return tcg;
     }
 
-    public void setTcg(boolean tcg) {
+    public void setTcg(int tcg) {
         this.tcg = tcg;
     }
 
-    public boolean isRefinance() {
+    public int getRefinance() {
         return refinance;
     }
 
-    public void setRefinance(boolean refinance) {
+    public void setRefinance(int refinance) {
         this.refinance = refinance;
     }
 

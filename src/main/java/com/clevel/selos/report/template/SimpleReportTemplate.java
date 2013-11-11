@@ -20,7 +20,7 @@ public class SimpleReportTemplate extends ReportService {
     @PostConstruct
     public void onCreation() {
         // todo: for testing
-        reportFileName = "report.pdf";
-        reportTemplate = "d:/tmp/testReport.jrxml";
+        //reportFileName = "report.pdf";
+        //reportTemplate = "d:/tmp/testReport.jrxml";
     }
 }

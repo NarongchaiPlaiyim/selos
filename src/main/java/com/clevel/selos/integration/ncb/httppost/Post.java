@@ -4,10 +4,7 @@ package com.clevel.selos.integration.ncb.httppost;
 import com.clevel.selos.exception.NCBInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.NCB;
-import com.clevel.selos.system.message.ExceptionMapping;
-import com.clevel.selos.system.message.Message;
-import com.clevel.selos.system.message.ValidationMapping;
-import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.system.message.*;
 import com.clevel.selos.util.ValidationUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -34,7 +31,11 @@ public class Post implements Serializable {
 
     @Inject
     @ValidationMessage
-    Message message;
+    Message validationMessage;
+
+    @Inject
+    @ExceptionMessage
+    Message exceptionMessage;
 
     private final String required = ValidationMapping.NCB_DATA_REQUIRED;
     private final String exception = ExceptionMapping.NCB_EXCEPTION;
@@ -45,13 +46,13 @@ public class Post implements Serializable {
     public String sendPost(String xml, String url, int timeOut) throws Exception {
         log.debug("Call : sendPost(url : {}, timeOut : {})", url, timeOut);
         if (ValidationUtil.isNull(xml)) {
-            throw new ValidationException(required, message.get(required, "XML"));
+            throw new ValidationException(required, validationMessage.get(required, "XML"));
         }
         if (ValidationUtil.isNull(url)) {
-            throw new ValidationException(required, message.get(required, "URL"));
+            throw new ValidationException(required, validationMessage.get(required, "URL"));
         }
         if (timeOut <= 0) {
-            throw new ValidationException(required, message.get(required, "Time Out"));
+            throw new ValidationException(required, validationMessage.get(required, "Time Out"));
         }
 
         DefaultHttpClient client = null;
@@ -90,7 +91,7 @@ public class Post implements Serializable {
             return builder != null ? builder.toString() : "";
         } else {
             log.error("The request has failed, Error code is {}", resCode);
-            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode), exception, message.get(exception, "" + resCode));
+            throw new NCBInterfaceException(new Exception("The request has failed, Error code is " + resCode), exception, exceptionMessage.get(exception, "" + resCode));
         }
     }
 }

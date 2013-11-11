@@ -120,7 +120,7 @@ public class RMService implements Serializable {
     public IndividualModel individualCMService(SearchIndividual searchIndividual, String userId) throws Exception {
         log.debug("IndividualService() START");
         IndividualModel individualModel = null;
-        System.out.println("============================== : " + blank);
+        //System.out.println("============================== : " + blank);
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {

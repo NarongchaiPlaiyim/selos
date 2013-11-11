@@ -6,10 +6,11 @@ import com.clevel.selos.ws.CaseCreationResponse;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.Date;
 
 @ManagedBean(name = "crs")
-public class TestCrsWebservice {
+public class TestCrsWebservice implements Serializable {
 
     @Inject
     CaseCreation crsWebservice;

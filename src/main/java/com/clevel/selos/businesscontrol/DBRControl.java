@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class DBRControl {
+public class DBRControl extends BusinessControl {
     @Inject
     @SELOS
     Logger log;

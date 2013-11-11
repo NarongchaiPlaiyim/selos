@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class NonOverDraftsHistBalanceModel {
+import java.io.Serializable;
+
+public class NonOverDraftsHistBalanceModel implements Serializable {
     private String asofdate;
     private String daypastdue;
     private String balance;
