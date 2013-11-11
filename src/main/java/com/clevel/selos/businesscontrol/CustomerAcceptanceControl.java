@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.ContactRecordDetailDAO;
 import com.clevel.selos.dao.working.CustomerAcceptanceDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -19,6 +20,7 @@ import java.util.List;
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     CustomerAcceptanceDAO customerAcceptanceDAO;

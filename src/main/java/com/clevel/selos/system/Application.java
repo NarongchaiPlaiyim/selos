@@ -1,5 +1,6 @@
 package com.clevel.selos.system;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RadioValue;
 import com.clevel.selos.model.UserStatus;
 import org.slf4j.Logger;
@@ -13,8 +14,8 @@ import javax.inject.Named;
 @Named("app")
 public class Application {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     public Application() {
     }

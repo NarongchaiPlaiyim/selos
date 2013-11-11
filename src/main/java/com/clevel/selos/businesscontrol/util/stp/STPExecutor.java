@@ -1,5 +1,6 @@
-package com.clevel.selos.dao.stp;
+package com.clevel.selos.businesscontrol.util.stp;
 
+import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -14,6 +15,7 @@ import javax.persistence.Query;
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class STPExecutor {
     @Inject
+    @SELOS
     Logger log;
     @PersistenceContext
     protected EntityManager em;

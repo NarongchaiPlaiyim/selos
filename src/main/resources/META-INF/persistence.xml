@@ -19,6 +19,11 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.ejb.naming_strategy" value="com.clevel.selos.system.CustomNamingStrategy"/>
 
+            <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true" />
+            <property name="hibernate.cache.region_prefix" value=""/>
+            <property name="hibernate.cache.use_query_cache" value="false" />
+
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,53 +1,50 @@
 package com.clevel.selos.model.db.working;
 
-import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.User;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 import java.util.Date;
-
 @Entity
-@Table(name = "wrk_contact_record")
-
+@Table(name="wrk_contact_record")
 public class ContactRecordDetail {
-
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_REC_CALL_ID", sequenceName = "SEQ_WRK_REC_CALL_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_REC_CALL_ID")
+    @SequenceGenerator(name="SEQ_WRK_CONTACT_REC_ID", sequenceName="SEQ_WRK_CONTACT_REC_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CONTACT_REC_ID")
     private long id;
 
-    @Column(name = "no")
+    @Column(name="no")
     private int no;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "calling_date")
+    @Column(name="calling_date")
     private Date callingDate;
 
-    @Column(name = "calling_time")
+    @Column(name="calling_time")
     private String callingTime;
 
-    @Column(name = "calling_result")
+    @Column(name="calling_result")
     private int callingResult;
 
-    @Column(name = "accept_result")
+    @Column(name="accept_result")
     private int acceptResult;
 
-
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "next_calling_date")
-    private Date nextCallingDate;
+    @Column(name="next_calling_date")
+    private Date nextCallingDate ;
 
-    @Column(name = "next_calling_time")
+    @Column(name="next_calling_time")
     private String nextCallingTime;
 
-    @OneToOne
-    @JoinColumn(name = "reason_id")
-    private Reason reason;
+    @JoinColumn(name="reason")
+    private String reason;
 
-    @Column(name = "remark")
+    @Column(name="remark")
     private String remark;
+
+    @Column(name="status")
+    private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -58,16 +55,21 @@ public class ContactRecordDetail {
     private Date modifyDate;
 
     @OneToOne
-    @JoinColumn(name = "create_user_id")
+    @JoinColumn(name="create_user_id")
     private User createBy;
 
     @OneToOne
-    @JoinColumn(name = "modify_user_id")
+    @JoinColumn(name="modify_user_id")
     private User modifyBy;
 
     @ManyToOne
     @JoinColumn(name = "customer_acceptance_id")
     private CustomerAcceptance customerAcceptance;
+
+    @ManyToOne
+    @JoinColumn(name = "appraisal_id")
+    private Appraisal appraisal;
+
 
     public long getId() {
         return id;
@@ -133,11 +135,11 @@ public class ContactRecordDetail {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public Reason getReason() {
+    public String getReason() {
         return reason;
     }
 
-    public void setReason(Reason reason) {
+    public void setReason(String reason) {
         this.reason = reason;
     }
 
@@ -147,6 +149,14 @@ public class ContactRecordDetail {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getCreateDate() {
@@ -189,6 +199,14 @@ public class ContactRecordDetail {
         this.customerAcceptance = customerAcceptance;
     }
 
+    public Appraisal getAppraisal() {
+        return appraisal;
+    }
+
+    public void setAppraisal(Appraisal appraisal) {
+        this.appraisal = appraisal;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -202,11 +220,13 @@ public class ContactRecordDetail {
                 .append("nextCallingTime", nextCallingTime)
                 .append("reason", reason)
                 .append("remark", remark)
+                .append("remark", status)
                 .append("createDate", createDate)
                 .append("modifyDate", modifyDate)
                 .append("createBy", createBy)
                 .append("modifyBy", modifyBy)
                 .append("customerAcceptance", customerAcceptance)
+                .append("appraisal", appraisal)
                 .toString();
     }
 }

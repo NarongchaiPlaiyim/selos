@@ -2,6 +2,7 @@ package com.clevel.selos.integration.ldap;
 
 import com.clevel.selos.exception.LDAPInterfaceException;
 import com.clevel.selos.integration.LDAPInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.system.Config;
 import com.clevel.selos.system.message.ExceptionMapping;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -19,8 +20,8 @@ import java.util.Hashtable;
 @Default
 public class LDAPInterfaceImpl implements LDAPInterface {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @Config(name = "interface.ldap.url")
     String ldapURL;

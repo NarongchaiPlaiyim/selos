@@ -24,6 +24,7 @@ public class TCGDetailView implements Serializable {
 
 
     public TCGDetailView() {
+        reset();
     }
 
     public void reset() {

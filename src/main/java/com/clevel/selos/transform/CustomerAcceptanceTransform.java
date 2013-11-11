@@ -28,7 +28,7 @@ public class CustomerAcceptanceTransform extends Transform {
         customerAcceptanceView.setCreateBy(customerAcceptance.getCreateBy());
         customerAcceptanceView.setCreateDate(customerAcceptance.getCreateDate());
         customerAcceptanceView.setModifyBy(customerAcceptance.getModifyBy());
-        customerAcceptanceView.setModifyDate(DateTime.now().toDate());
+        customerAcceptanceView.setModifyDate(customerAcceptance.getModifyDate());
 
         return customerAcceptanceView;
     }

@@ -4,6 +4,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.dao.master.CountryDAO;
 import com.clevel.selos.dao.master.CreditRequestTypeDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Country;
 import com.clevel.selos.model.db.master.CreditRequestType;
 import com.clevel.selos.model.db.master.User;
@@ -30,8 +31,8 @@ import java.util.List;
 public class CreditFacPropose implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

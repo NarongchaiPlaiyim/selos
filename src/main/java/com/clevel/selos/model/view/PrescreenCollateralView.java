@@ -1,5 +1,6 @@
 package com.clevel.selos.model.view;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -13,8 +14,8 @@ import java.math.BigDecimal;
 
 public class PrescreenCollateralView implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

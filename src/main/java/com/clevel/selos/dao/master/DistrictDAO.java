@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.District;
 import com.clevel.selos.model.db.master.Province;
 import org.hibernate.Criteria;
@@ -13,29 +14,30 @@ import java.util.List;
 
 public class DistrictDAO extends GenericDAO<District, Integer> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public DistrictDAO() {
     }
 
+    @SuppressWarnings("unchecked")
     public List<District> getListByProvince(Province province) {
-        log.info("getListByBusinessGroup. (province: {})", province);
+        log.debug("getListByProvince. (province: {})", province);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("province", province));
         criteria.addOrder(Order.asc("name"));
         List<District> districts = criteria.list();
-        log.info("getListByProvince. (result size: {})", districts.size());
+        log.debug("getListByProvince. (result size: {})", districts.size());
         return districts;
     }
 
     public District getByNameAndProvince(String districtName, Province province) {
-        log.info("getByNameAndProvince. (districtName: {}, province: {})", districtName, province);
+        log.debug("getByNameAndProvince. (districtName: {}, province: {})", districtName, province);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("province", province));
         criteria.add(Restrictions.eq("name", districtName));
         District district = (District) criteria.uniqueResult();
-        log.info("getByNameAndProvince. (result : {})", district);
+        log.debug("getByNameAndProvince. (result : {})", district);
         return district;
     }
 }

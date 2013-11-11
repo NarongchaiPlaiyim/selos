@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Reason;
 import com.clevel.selos.model.db.master.ReasonType;
 import org.hibernate.Criteria;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class ReasonDAO extends GenericDAO<Reason, Integer> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public ReasonDAO() {
     }

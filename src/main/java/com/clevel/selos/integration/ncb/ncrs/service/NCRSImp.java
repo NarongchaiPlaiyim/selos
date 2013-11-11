@@ -335,7 +335,11 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
     }
 
@@ -418,28 +422,44 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException));
+            } else {
+                throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
+            }
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException));
+            } else {
+                throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
+            }
         } catch (NCBInterfaceException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, resultDesc);
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, resultDesc);
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
     }
 

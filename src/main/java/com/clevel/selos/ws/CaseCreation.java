@@ -1,8 +1,8 @@
 package com.clevel.selos.ws;
 
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.history.CaseCreationHistoryDAO;
 import com.clevel.selos.dao.master.UserDAO;
-import com.clevel.selos.dao.stp.STPExecutor;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.UserStatus;

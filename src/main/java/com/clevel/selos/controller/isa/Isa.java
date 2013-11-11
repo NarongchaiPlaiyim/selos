@@ -35,6 +35,7 @@ import java.util.*;
 public class Isa implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
 
     @Inject

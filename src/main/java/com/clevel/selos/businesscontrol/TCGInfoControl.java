@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.working.TCGDAO;
 import com.clevel.selos.dao.working.TCGDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.TCG;
@@ -20,20 +21,13 @@ import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: SUKANDA CHITSUP
- * Date: 26/9/2556
- * Time: 16:01 น.
- * To change this template use File | Settings | File Templates.
- */
 
 
 @Stateless
 public class TCGInfoControl extends BusinessControl {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;

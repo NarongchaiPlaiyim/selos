@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.dao.stp.STPExecutor;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
@@ -26,7 +26,6 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.primefaces.model.StreamedContent;
@@ -37,19 +36,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @ViewScoped
 @ManagedBean(name = "welcomePage")
 public class WelcomePage implements Serializable {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     @RM
     Logger rmLog;
     @Inject
@@ -217,6 +212,17 @@ public class WelcomePage implements Serializable {
         validationStr = validationMsg.get("001");
         exceptionStr = exceptionMsg.get("001");
         dateTh = new Date();
+//        log.debug("DateTh: {}",dateTh);
+//        Calendar calendar = Calendar.getInstance(new Locale("th", "TH"));
+//        dateTh = calendar.getTime();
+//        log.debug("DateTh: {}",dateTh);
+//        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss")
+//                .withChronology(BuddhistChronology.getInstance()).withLocale(defaultLocale);
+//        DateTime dt = new DateTime(dateTh,BuddhistChronology.getInstance());
+//        log.debug("dt: {}",dt);
+//        dateTh = dt.toDate();
+//        log.debug("DateTh2: {}",dateTh);
+
         dateEn = new Date();
     }
 
@@ -395,8 +401,8 @@ public class WelcomePage implements Serializable {
         log.debug("test Calendar.");
         log.debug("dateTh: {}, dateEn: {}",dateTh,dateEn);
 
-        log.debug("getDateTimeString dateTh: {}",DateTimeUtil.getDateTimeStr(dateTh));
-        log.debug("getDateTimeString dateEn: {}",DateTimeUtil.getDateTimeStr(dateEn));
+        log.debug("getDateTimeString dateTh: {}",dateTh);
+        log.debug("getDateTimeString dateEn: {}",dateEn);
     }
 
     @Inject

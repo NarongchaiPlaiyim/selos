@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.rlos.csi.module;
 
+import com.clevel.selos.exception.RLOSInterfaceException;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.RLOSInterface;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
@@ -70,10 +71,16 @@ public class DBExecute implements Serializable {
         String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE " +
                 "FROM " + tableName + " WHERE " + clause + " = ?";
 
+        try{
+            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+        } catch (RLOSInterfaceException ex){
+            throw ex;
+        }
+
         try {
             log.debug("open connection.");
             log.debug("SQL_SELECT : {}", SQL_SELECT);
-            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+
             log.debug("where clause : {}", clause);
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             statement.setString(1, idNumber);
@@ -97,7 +104,7 @@ public class DBExecute implements Serializable {
             conn.close();
             conn = null;
             log.debug("connection closed.");
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             log.error("execute query exception!", e);
         } finally {
             closeConnection();
@@ -112,10 +119,16 @@ public class DBExecute implements Serializable {
         String SQL_SELECT = "SELECT ID_NO, PASSPORT_NO, BUSINESS_REG, NAME_TH, NAME_EN, WARNING_CODE, SOURCE, DATA_DATE, WARNING_CODE_DATE " +
                 "FROM " + tableName + " WHERE NAME_TH like ? OR NAME_EN like ? AND ID_NO is null AND PASSPORT_NO is null AND BUSINESS_REG is null";
 
+        try{
+            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+        } catch (RLOSInterfaceException ex){
+            throw ex;
+        }
+
         try {
             log.debug("open connection.");
             log.debug("SQL_SELECT : {}", SQL_SELECT);
-            conn = dbContext.getConnection(connRlos, rlosUser, rlosPassword);
+
             PreparedStatement statement = conn.prepareStatement(SQL_SELECT);
             if (!Util.isEmpty(nameTh)) {
                 nameTh = "%" + nameTh + "%";

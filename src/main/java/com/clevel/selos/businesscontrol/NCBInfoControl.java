@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.dao.working.NCBDAO;
 import com.clevel.selos.dao.working.NCBDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.NCB;
@@ -26,6 +27,7 @@ import java.util.List;
 @Stateless
 public class NCBInfoControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     NCBDetailTransform ncbDetailTransform;
@@ -44,7 +46,7 @@ public class NCBInfoControl extends BusinessControl {
     private LoanAccountTypeTransform loanAccountTypeTransform;
 
     @Inject
-    public void NCBInfoControl() {
+    public NCBInfoControl() {
 
     }
 

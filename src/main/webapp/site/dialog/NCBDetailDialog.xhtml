@@ -23,8 +23,7 @@
                            var="dlgAccountTypeList"
                            itemLabel="#{dlgAccountTypeList.name}"
                            itemValue="#{dlgAccountTypeList.id}"/>
-            <p:ajax event="change" listener="#{ncbInfo.onChangeAccountType}" process=":ncbDlgForm:dlgType"
-                    update=":ncbDlgForm"/>
+
         </p:selectOneMenu>
     </td>
 </tr>
@@ -204,6 +203,8 @@
                      required="#{not empty param[addRowData.clientId]}"/>
     </td>
 </tr>
+<!--
+
 <tr>
     <p:panel style="border-width: 0;"  rendered="#{ncbInfo.ncbDetailView.monthFlagPage}">
         <td class="title" style="width: 230px;">
@@ -218,14 +219,17 @@
                 <f:selectItem itemLabel="4" itemValue="4"/>
                 <f:selectItem itemLabel="5" itemValue="5"/>
                 <f:selectItem itemLabel="6" itemValue="6"/>
-                <p:ajax event="change"
+                &lt;!&ndash;<p:ajax event="change"
                         listener="#{ncbInfo.onchangeToGenMoneyOfmonthsPayment()}"
                         process="@this"
-                        update=":ncbDlgForm:genTextBoxFlagPanel"/>
+                        update=":ncbDlgForm:genTextBoxFlagPanel"/>&ndash;&gt;
             </h:selectOneMenu>
         </td>
     </p:panel>
 </tr>
+-->
+
+<!--
 <tr>
     <td></td>
     <td class="center">
@@ -306,6 +310,8 @@
         </p:panel>
     </td>
 </tr>
+-->
+
 <tr>
     <td class="title" style="width: 230px;">
         <h:outputText value="#{msg.get('app.dlg.refinanceFlag')}"/>
@@ -346,7 +352,7 @@
                 id="cancelBtn"
                 value="#{msg.get('app.cancelButton')}"
                 styleClass="small"
-                onclick="ncbDlg.hide()"/>
+                onclick="PF('ncbDlg').hide()"/>
     </td>
 </tr>
 </table>

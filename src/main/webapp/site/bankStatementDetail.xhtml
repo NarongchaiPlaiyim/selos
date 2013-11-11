@@ -9,8 +9,7 @@
 <h:head>
     <title>SE-LOS : Bank Statement Detail</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript"
-            src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"></script>
 </h:head>
 
@@ -75,6 +74,7 @@
                 <td>
                     <h:selectOneListbox size="1" value="#{bankStatementDetail.bankStmtView.bankAccountTypeView.id}"
                                         style="width:160px;">
+                        <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
                         <f:selectItems value="#{bankStatementDetail.bankAccTypeViewList}" var="bankAccType"
                                        itemLabel="#{bankAccType.name}" itemValue="#{bankAccType.id}"/>
                     </h:selectOneListbox>
@@ -92,7 +92,7 @@
             </tr>
             <tr>
                 <td class="title" style="width:250px;">
-                    <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountNo')}"/>
+                    <h:outputText value="#{msg.get('app.bankStmtDetail.label.accountNumber')}"/>
                 </td>
                 <td>
                     <p:inputText value="#{bankStatementDetail.bankStmtView.accountNumber}"
@@ -125,11 +125,9 @@
                 </td>
                 <td>
                     <h:selectOneRadio value="#{bankStatementDetail.bankStmtView.accountCharacteristic}">
-                        <f:selectItems value="#{bankStatementDetail.relationViewList}" var="relation"
-                                       itemLabel="#{relation.description}" itemValue="#{relation.id}"/>
-                        <!--<f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.borrowersAccount')}" itemValue="1"/>-->
-                        <!--<f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.mainDirectorAccount')}" itemValue="2"/>-->
-                        <!--<f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.confederateAccount')}" itemValue="3"/>-->
+                        <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.borrowersAccount')}" itemValue="1"/>
+                        <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.mainDirectorAccount')}" itemValue="2"/>
+                        <f:selectItem itemLabel="#{msg.get('app.bankStmtDetail.radio.confederateAccount')}" itemValue="3"/>
                     </h:selectOneRadio>
                 </td>
             </tr>
@@ -165,8 +163,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.overLimitAmount}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calSwingAndUtilization()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -178,8 +174,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.grossCreditBalance}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAverages()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -203,8 +197,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.excludeListBDM}" styleClass="right">
                             <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAverages()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -216,8 +208,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.excludeListUW}" styleClass="right">
                             <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAverages()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -227,8 +217,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.creditAmountBDM}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.creditAmountBDM}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -239,8 +228,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.creditAmountUW}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.creditAmountUW}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -251,8 +239,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.timesOfAvgCreditBDM}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.timesOfAvgCreditBDM}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -263,8 +250,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.timesOfAvgCreditUW}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.timesOfAvgCreditUW}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -280,8 +266,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.debitAmount}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAvgWithdrawAmount()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -299,12 +283,12 @@
                 <td colspan="#{bankStatementDetail.numberOfMonths + 1}" class="cell_spacer"></td>
             </tr>
             <tr>
-                <td class="left">#{msg.get('app.bankStmtDetail.table.row.highestBalanceDate')}</td>
+                <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMaxBalance')}</td>
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:calendar id="calendarId" maxdate="#{bankStatementDetail.currentDate}" navigator="true" showButtonPanel="true"
-                                    value="#{item.highestBalanceDate}"
+                                    value="#{item.dateOfMaxBalance}"
                                     pattern="dd/MM/yyyy"
                                     locale="th_TH"
                                     timeZone="Asia/Bangkok"
@@ -316,25 +300,23 @@
                 </ui:repeat>
             </tr>
             <tr>
-                <td class="left">#{msg.get('app.bankStmtDetail.table.row.highestBalance')}</td>
+                <td class="left">#{msg.get('app.bankStmtDetail.table.row.maxBalance')}</td>
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.highestBalance}" styleClass="right">
+                        <p:inputText value="#{item.maxBalance}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calSwingAndUtilization()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
             </tr>
             <tr>
-                <td class="left">#{msg.get('app.bankStmtDetail.table.row.lowestBalanceDate')}</td>
+                <td class="left">#{msg.get('app.bankStmtDetail.table.row.dateOfMinBalance')}</td>
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:calendar id="calendarId" maxdate="#{bankStatementDetail.currentDate}" navigator="true" showButtonPanel="true"
-                                    value="#{item.lowestBalanceDate}"
+                                    value="#{item.dateOfMinBalance}"
                                     pattern="dd/MM/yyyy"
                                     locale="th_TH"
                                     timeZone="Asia/Bangkok"
@@ -346,14 +328,12 @@
                 </ui:repeat>
             </tr>
             <tr>
-                <td class="left">#{msg.get('app.bankStmtDetail.table.row.lowestBalance')}</td>
+                <td class="left">#{msg.get('app.bankStmtDetail.table.row.minBalance')}</td>
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.lowestBalance}" styleClass="right">
+                        <p:inputText value="#{item.minBalance}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calSwingAndUtilization()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -363,10 +343,8 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.monthEndBalance}" styleClass="right">
+                        <p:inputText value="#{item.monthBalance}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calSwingAndUtilization()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -379,10 +357,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.numberOfChequeReturn}" styleClass="right">
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.sumNumberOfChequeReturn()}"/>
-                        </p:inputText>
+                        <p:inputText value="#{item.numberOfChequeReturn}" styleClass="right"/>
                     </td>
                 </ui:repeat>
             </tr>
@@ -393,8 +368,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.chequeReturnAmount}" styleClass="right">
                             <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAverages()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -404,10 +377,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.overLimitTimes}" styleClass="right">
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.sumOverLimitTimes()}"/>
-                        </p:inputText>
+                        <p:inputText value="#{item.overLimitTimes}" styleClass="right"/>
                     </td>
                 </ui:repeat>
             </tr>
@@ -416,10 +386,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.overLimitDays}" styleClass="right">
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.maxOverLimitDays()}"/>
-                        </p:inputText>
+                        <p:inputText value="#{item.overLimitDays}" styleClass="right"/>
                     </td>
                 </ui:repeat>
             </tr>
@@ -428,8 +395,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.swingPercent}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.swingPercent}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -440,8 +406,7 @@
                 <ui:repeat value="#{bankStatementDetail.bankStmtView.bankStmtDetailViewList}" var="item" varStatus="i">
                     <td class="center"
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
-                        <p:inputText value="#{item.utilizationPercent}" styleClass="right"
-                                     readonly="true">
+                        <p:inputText value="#{item.utilizationPercent}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
                         </p:inputText>
                     </td>
@@ -457,8 +422,6 @@
                         style="#{i.index + 1 le (bankStatementDetail.numberOfMonths / 2) ? 'background-color:#cccccc' : ''}">
                         <p:inputText value="#{item.grossInflowPerLimit}" styleClass="right">
                             <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="14"/>
-                            <p:ajax event="change" update=":frmMain" process="@form"
-                                    listener="#{bankStatementDetail.calAvgGrossInflowPerLimit()}"/>
                         </p:inputText>
                     </td>
                 </ui:repeat>
@@ -495,7 +458,7 @@
                                 <td>
                                     <p:inputText id="avgIncomeGross"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeGross}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -508,7 +471,7 @@
                                 <td>
                                     <p:inputText id="avgIncomeNetBDM"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetBDM}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -521,7 +484,7 @@
                                 <td>
                                     <p:inputText id="avgIncomeNetUW"
                                                  value="#{bankStatementDetail.bankStmtView.avgIncomeNetUW}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -534,7 +497,7 @@
                                 <td>
                                     <p:inputText id="avgWithDrawAmount"
                                                  value="#{bankStatementDetail.bankStmtView.avgWithDrawAmount}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -546,8 +509,8 @@
                                 </td>
                                 <td>
                                     <p:inputText id="swingPercent"
-                                                 value="#{bankStatementDetail.bankStmtView.swingPercent}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 value="#{bankStatementDetail.bankStmtView.avgSwingPercent}"
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -559,8 +522,8 @@
                                 </td>
                                 <td>
                                     <p:inputText id="utilizationPercent"
-                                                 value="#{bankStatementDetail.bankStmtView.utilizationPercent}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 value="#{bankStatementDetail.bankStmtView.avgUtilizationPercent}"
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -573,7 +536,7 @@
                                 <td>
                                     <p:inputText id="avgGrossInflowPerLimit"
                                                  value="#{bankStatementDetail.bankStmtView.avgGrossInflowPerLimit}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -586,7 +549,7 @@
                                 <td>
                                     <p:inputText id="chequeReturn"
                                                  value="#{bankStatementDetail.bankStmtView.chequeReturn}"
-                                                 styleClass="right" style="width:150px;" readonly="true"/>
+                                                 styleClass="right" style="width:150px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -596,7 +559,7 @@
                                 <td>
                                     <p:inputText id="trdChequeReturnAmount"
                                                  value="#{bankStatementDetail.bankStmtView.trdChequeReturnAmount}"
-                                                 styleClass="right" style="width:150px;" readonly="true">
+                                                 styleClass="right" style="width:150px;">
                                         <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
                                                          maxIntegerDigits="14"/>
                                     </p:inputText>
@@ -609,7 +572,7 @@
                                 <td>
                                     <p:inputText id="overLimitTimes"
                                                  value="#{bankStatementDetail.bankStmtView.overLimitTimes}"
-                                                 styleClass="right" style="width:150px;" readonly="true"/>
+                                                 styleClass="right" style="width:150px;"/>
                                 </td>
                             </tr>
                             <tr>
@@ -619,7 +582,7 @@
                                 <td>
                                     <p:inputText id="overLimitDays"
                                                  value="#{bankStatementDetail.bankStmtView.overLimitDays}"
-                                                 styleClass="right" style="width:150px;" readonly="true"/>
+                                                 styleClass="right" style="width:150px;"/>
                                 </td>
                             </tr>
                         </table>
