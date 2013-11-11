@@ -2,7 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
-import com.clevel.selos.dao.stp.STPExecutor;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
@@ -26,13 +26,8 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
-import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.joda.time.DateTime;
-import org.joda.time.chrono.BuddhistChronology;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
@@ -41,7 +36,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -49,8 +43,8 @@ import java.util.*;
 @ManagedBean(name = "welcomePage")
 public class WelcomePage implements Serializable {
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     @RM
     Logger rmLog;
     @Inject

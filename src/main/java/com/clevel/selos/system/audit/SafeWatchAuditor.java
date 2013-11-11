@@ -1,6 +1,7 @@
 package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.SafeWatchActivityDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.SafeWatch;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.SafeWatchActivity;
@@ -14,6 +15,7 @@ import java.util.Date;
 @SafeWatch
 public class SafeWatchAuditor implements SystemAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     SafeWatchActivityDAO safeWatchActivityDAO;

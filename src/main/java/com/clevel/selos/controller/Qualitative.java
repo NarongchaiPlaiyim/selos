@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
@@ -29,8 +30,8 @@ import java.util.List;
 @ManagedBean(name = "qualitative")
 public class Qualitative {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

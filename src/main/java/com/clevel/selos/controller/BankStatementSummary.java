@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.BankStmtControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BankStatementSummaryDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Bank;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.*;
@@ -31,8 +32,8 @@ import java.util.*;
 @ManagedBean(name = "bankStatementSummary")
 public class BankStatementSummary implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

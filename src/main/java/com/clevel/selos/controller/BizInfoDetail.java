@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.BusinessActivityDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.dao.master.BusinessTypeDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BizInfoDetailView;
 import com.clevel.selos.model.view.BizInfoSummaryView;
@@ -88,6 +89,7 @@ public class BizInfoDetail implements Serializable {
     private User user;
 
     @Inject
+    @SELOS
     Logger log;
     @Inject
     private BusinessGroupDAO businessGroupDAO;

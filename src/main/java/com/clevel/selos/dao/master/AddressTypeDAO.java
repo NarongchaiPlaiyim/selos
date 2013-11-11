@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AddressType;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import org.hibernate.Criteria;
@@ -13,8 +14,8 @@ import java.util.List;
 
 public class AddressTypeDAO extends GenericDAO<AddressType, Integer> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public AddressTypeDAO() {
     }

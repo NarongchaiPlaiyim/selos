@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -27,8 +28,8 @@ import java.util.List;
 @ManagedBean(name = "inbox")
 public class Inbox implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

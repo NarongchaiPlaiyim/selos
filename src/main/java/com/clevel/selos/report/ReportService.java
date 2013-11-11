@@ -1,5 +1,6 @@
 package com.clevel.selos.report;
 
+import com.clevel.selos.integration.SELOS;
 import net.sf.jasperreports.engine.*;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -14,8 +15,8 @@ import java.util.Map;
 
 public class ReportService implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     protected String reportTemplate;
     protected String reportFileName;
     protected StreamedContent reportFile;

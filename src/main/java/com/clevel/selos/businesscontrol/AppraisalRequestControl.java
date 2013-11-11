@@ -4,6 +4,7 @@ import com.clevel.selos.dao.working.AppraisalContactDetailDAO;
 import com.clevel.selos.dao.working.AppraisalDAO;
 import com.clevel.selos.dao.working.AppraisalDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.AppraisalContactDetail;
 import com.clevel.selos.model.db.working.AppraisalDetail;
@@ -22,8 +23,8 @@ import java.util.List;
 @Stateless
 public class AppraisalRequestControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     AppraisalDAO appraisalDAO;
     @Inject

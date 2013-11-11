@@ -5,6 +5,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
 import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -23,8 +24,8 @@ import java.util.List;
 public class BizInfoSummaryControl {
 
     @Inject
-    Logger log;
-    @Inject
+    @SELOS
+    Logger log;    @Inject
     BizInfoDetailTransform bizInfoDetailTransform;
 
     @Inject

@@ -1,6 +1,7 @@
 package com.clevel.selos.businesscontrol.isa;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
@@ -30,8 +31,8 @@ import java.util.List;
 public class IsaBusinessControl implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
 

@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.DBRDetailView;
 import com.clevel.selos.model.view.DBRView;
 import com.clevel.selos.model.view.LoanAccountTypeView;
@@ -23,8 +24,8 @@ import java.util.ArrayList;
 @ManagedBean(name = "creditFacExisting")
 public class CreditFacExisting implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     //## session
     private long workCaseId;
     private long stepId;

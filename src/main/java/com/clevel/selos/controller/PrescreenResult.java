@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.PrescreenBusinessControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.model.view.PrescreenResultView;
@@ -27,8 +28,8 @@ import java.util.List;
 @ManagedBean(name = "prescreenResult")
 public class PrescreenResult implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

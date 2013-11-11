@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.dao.working.IndividualDAO;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
@@ -33,6 +34,7 @@ import java.util.*;
 @ManagedBean(name = "custInfoSumIndi")
 public class CustomerInfoIndividual implements Serializable {
     @Inject
+    @SELOS
     Logger log;
 
     @Inject
