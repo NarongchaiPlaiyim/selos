@@ -335,7 +335,11 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("[{}] NCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
     }
 
@@ -418,28 +422,44 @@ public class NCRSImp implements NCRS, Serializable {
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException));
+            } else {
+                throw new NCBInterfaceException(e, httpHostException, message.get(httpHostException, resultDesc));
+            }
         } catch (ConnectTimeoutException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.FAILED, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException));
+            } else {
+                throw new NCBInterfaceException(e, timeOutException, message.get(timeOutException, resultDesc));
+            }
         } catch (NCBInterfaceException e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, resultDesc);
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, resultDesc);
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         } catch (Exception e) {
             resultDesc = e.getMessage();
             resultDate = new Date();
             log.debug("[{}] NCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
     }
 
@@ -460,8 +480,9 @@ public class NCRSImp implements NCRS, Serializable {
                         exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
                     }
                     resultDesc = exception.toString();
-                    log.error("NCRS NCB Exception TUEFERROR {}", null != exception ? exception.toString() : "");
-                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
+                    return responseModel;
+//                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 }
             } else {
                 resultDesc = responseModel.getBodyModel().getErrormsg();
@@ -586,7 +607,7 @@ public class NCRSImp implements NCRS, Serializable {
         xStream.processAnnotations(NCRSRequestModel.class);
         xml = new String(xStream.toXML(ncrsRequest).getBytes("UTF-8"));
         log.debug("NCRS Request : \n{}", xml);
-        int nTimeOut = 1; //minute
+        int nTimeOut = 60; //sec.
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
