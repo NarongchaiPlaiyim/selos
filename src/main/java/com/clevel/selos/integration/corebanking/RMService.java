@@ -25,17 +25,15 @@ import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Ser
 import com.tmb.common.data.eaisearchindividualcustomercm.EAISearchIndividualCustomerCM;
 import com.tmb.common.data.eaisearchindividualcustomercm.EAISearchIndividualCustomerCM_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
+import com.tmb.common.data.requestsearchindividualcustomer.Body;
+import com.tmb.common.data.requestsearchindividualcustomer.Header;
+import com.tmb.common.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
 import com.tmb.common.data.responsesearchcustomeraccount.ResSearchCustomerAccount;
+import com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_Service;
 import com.tmb.sme.data.requestsearchcorporatecustomer.ReqSearchCorporateCustomer;
-import com.tmb.sme.data.requestsearchindividualcustomer.Body;
-import com.tmb.sme.data.requestsearchindividualcustomer.Header;
-import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
 import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
-import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -106,311 +104,6 @@ public class RMService implements Serializable {
     public void onCreate() {
 
     }
-
-    public IndividualModel individualService(SearchIndividual searchIndividual, String userId) throws Exception {
-        log.debug("IndividualService() START");
-        IndividualModel individualModel = null;
-        System.out.println("============================== : " + blank);
-
-        //Validate ReqId
-        if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
-            if (searchIndividual.getReqId() == null || searchIndividual.getReqId().equals("")) {
-                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(reqId)"));
-            } else {
-                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(reqId)"));
-            }
-        }
-        //Validate CustType
-        if (!ValidationUtil.isValueEqual(1, searchIndividual.getCustType().length())) {
-            if (searchIndividual.getCustType() == null || searchIndividual.getCustType().equals("")) {
-                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(custType)"));
-            } else {
-                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(custType)"));
-            }
-        }
-        //Validate Type
-        if (!ValidationUtil.isValueEqual(2, searchIndividual.getType().length())) {
-            if (searchIndividual.getType() == null || searchIndividual.getType().equals("")) {
-                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(type)"));
-            } else {
-                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(type)"));
-            }
-        }
-        //Validate CustId
-        if (ValidationUtil.isGreaterThan(25, searchIndividual.getCustId().length())) {
-            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(custId)"));
-        }
-        //Validate CustNbr
-        if (ValidationUtil.isGreaterThan(14, searchIndividual.getCustNbr().length())) {
-            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(custNbr)"));
-        }
-        //Validate CustName
-        if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustName().length())) {
-            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(custName)"));
-        }
-        //Validate CustSurname
-        if (ValidationUtil.isGreaterThan(40, searchIndividual.getCustSurname().length())) {
-            throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(surname)"));
-        }
-        //Validate RadSelectSearch
-        if (!ValidationUtil.isValueInRange(1, 10, searchIndividual.getRadSelectSearch().length())) {
-            if (searchIndividual.getRadSelectSearch() == null || searchIndividual.getRadSelectSearch().equals("")) {
-                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(radSelectSearch)"));
-            } else {
-                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(radSelectSearch)"));
-            }
-        }
-        log.debug("Validate Pass!");
-
-        Header header = new Header();
-        header.setReqID(searchIndividual.getReqId());
-
-        Body body = new Body();
-        body.setCustType(searchIndividual.getCustType());
-        body.setType(searchIndividual.getType());
-        body.setCustId(searchIndividual.getCustId());
-        body.setCustNbr(searchIndividual.getCustNbr());
-        body.setCustName(searchIndividual.getCustName());
-        body.setCustSurname(searchIndividual.getCustSurname());
-        body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
-
-        ReqSearchIndividualCustomer reqSearch = new ReqSearchIndividualCustomer();
-        reqSearch.setHeader(header);
-        reqSearch.setBody(body);
-
-        //actionDesc
-        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
-
-        //requestTime
-        Date requestTime = new Date();
-        String linkKey = Util.getLinkKey(userId);
-        log.debug("LinkKey : {}", linkKey);
-        log.debug("============================ Request ==============================");
-        log.debug("requestServiceTime : {}", new Date());
-        log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
-        log.debug("requestBodyData : {}", reqSearch.getBody().toString());
-        try {
-            ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividual(reqSearch);
-            if (resSearchIndividualCustomer != null) {
-                //responseTime
-                Date responseTime = new Date();
-                log.debug("============================ Response ==============================");
-                log.debug("responseServiceTime : {}", new Date());
-                log.debug("responseHeaderData : {}", resSearchIndividualCustomer.getHeader().toString());
-                if (resSearchIndividualCustomer.getBody() != null
-                        && resSearchIndividualCustomer.getBody().getPersonalDetailSection() != null
-                        && resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail() != null) {
-                    log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
-                }
-                //Audit Data
-                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
-
-                //Check Success
-                log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
-                if (resSearchIndividualCustomer.getHeader().getResCode().equals("0000")) {
-                    individualModel = new IndividualModel();
-                    //checkSearchResult
-                    if (resSearchIndividualCustomer.getBody().getSearchResult().equals("CL")) {
-                        throw new RMInterfaceException(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE, exceptionMsg.get(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE));
-                    }
-                    //personal detail session
-                    individualModel.setTmbCusID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustNbr());
-                    individualModel.setTitleTH(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
-                    //spilt Name
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName() != null) {
-                        String name[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getName().split(" ");
-                        int nameSize = name.length - 1;
-                        if (nameSize >= 0) {
-                            individualModel.setFirstname(name[0]);
-                        }
-                        if (nameSize >= 1) {
-                            individualModel.setLastname(name[1]);
-                        }
-                    }
-                    individualModel.setDocumentType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
-                    individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
-                    log.debug("=================================== {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
-                    individualModel.setDocumentExpiredDate(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
-                    individualModel.setCusType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustType());
-//
-                    individualModel.setTelephoneNumber1(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber1()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension1()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType1()));
-                    individualModel.setTelephoneNumber2(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber2()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension2()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType2()));
-                    individualModel.setTelephoneNumber3(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber3()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension3()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType3()));
-                    individualModel.setTelephoneNumber4(new Telephone(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneNumber4()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExtension4()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTelephoneType4()));
-
-                    //
-                    individualModel.setDateOfBirth(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getDateOfBirth());
-                    individualModel.setGender(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getGender());
-                    individualModel.setEducationBackground(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getEducationLevel());
-                    individualModel.setRace(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRace());
-                    individualModel.setMarriageStatus(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getMaritalStatus());
-                    individualModel.setNationality(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getIsoCitizenCtry());
-                    individualModel.setNumberOfChild(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNoOfChildren());
-                    //spouse
-                    String spouse1 = "", spouse2 = "";
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseName() != null) {
-                        String spouseName[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseName().split(" ");
-                        int spouseSize = spouseName.length - 1;
-                        if (spouseSize >= 0) {
-                            spouse1 = spouseName[0];
-                        }
-                        if (spouseSize >= 1) {
-                            spouse2 = spouseName[1];
-                        }
-                    }
-
-                    individualModel.setSpouse(new Spouse(spouse1, spouse2, resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseTin()
-                            , resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getSpouseDateOfBirth()));
-
-                    individualModel.setOccupationCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getOccupationCode1());
-                    individualModel.setBizCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusType1());
-
-                    individualModel.setTitleEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitleEng());
-                    individualModel.setFirstnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
-                    individualModel.setLastnameEN(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getNameEng());
-                    //set HomeAddress
-                    ContactDetails homeContactDetails = new ContactDetails();
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1() != null) {
-                        String homeAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine1().split(" ");
-                        //validateSpiltSize
-                        int homeAddressLineSize1 = homeAddressLine1.length - 1;
-                        if (homeAddressLineSize1 >= 0) {
-                            homeContactDetails.setAddressNo(homeAddressLine1[0]);
-                        }
-                        if (homeAddressLineSize1 >= 1) {
-                            homeContactDetails.setAddressMoo(homeAddressLine1[1]);
-                        }
-                        if (homeAddressLineSize1 >= 2) {
-                            homeContactDetails.setAddressBuilding(homeAddressLine1[2]);
-                        }
-                    }
-                    homeContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine2());
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3() != null) {
-                        String homeAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResAddrLine3().split(" ");
-                        //validateSpiltSize
-                        int homeAddressLineSize3 = homeAddressLine3.length - 1;
-                        if (homeAddressLineSize3 >= 0) {
-                            homeContactDetails.setSubdistrict(Util.replaceToBlank(homeAddressLine3[0], blank));
-                        }
-                        if (homeAddressLineSize3 >= 1) {
-                            homeContactDetails.setDistrict(Util.replaceToBlank(homeAddressLine3[1], blank));
-                        }
-                    }
-
-                    homeContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCity());
-                    homeContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResPostalCd());
-                    homeContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResCtry());
-                    homeContactDetails.setCountryCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getResIsoCtryCode());
-                    individualModel.setHomeAddress(homeContactDetails);
-
-                    //set CurrentAddress
-                    ContactDetails currentContactDetails = new ContactDetails();
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine1() != null) {
-                        String currentAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine1().split(" ");
-                        //validateSpiltSize
-                        int currentAddressLineSize1 = currentAddressLine1.length - 1;
-                        if (currentAddressLineSize1 >= 0) {
-                            currentContactDetails.setAddressNo(currentAddressLine1[0]);
-                        }
-                        if (currentAddressLineSize1 >= 1) {
-                            currentContactDetails.setAddressMoo(currentAddressLine1[1]);
-                        }
-                        if (currentAddressLineSize1 >= 2) {
-                            currentContactDetails.setAddressBuilding(currentAddressLine1[2]);
-                        }
-                    }
-                    currentContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine2());
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine3() != null) {
-                        String currentAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegAddrLine3().split(" ");
-                        //validateSpiltSize
-                        int currentAddressLineSize3 = currentAddressLine3.length - 1;
-                        if (currentAddressLineSize3 >= 0) {
-                            currentContactDetails.setSubdistrict(Util.replaceToBlank(currentAddressLine3[0], blank));
-                        }
-                        if (currentAddressLineSize3 >= 1) {
-                            currentContactDetails.setDistrict(Util.replaceToBlank(currentAddressLine3[1], blank));
-                        }
-                    }
-                    currentContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCity());
-                    currentContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegPostalCd());
-                    currentContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegCtry());
-                    currentContactDetails.setCountryCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getRegIsoCtryCode());
-                    individualModel.setCurrentAddress(currentContactDetails);
-
-
-                    //set WorkAddress
-                    ContactDetails workContactDetails = new ContactDetails();
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine1() != null) {
-                        String workAddressLine1[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine1().split(" ");
-                        //validateSpiltSize
-                        int workAddressLineSize1 = workAddressLine1.length - 1;
-                        if (workAddressLineSize1 >= 0) {
-                            workContactDetails.setAddressNo(workAddressLine1[0]);
-                        }
-                        if (workAddressLineSize1 >= 1) {
-                            workContactDetails.setAddressMoo(workAddressLine1[1]);
-                        }
-                        if (workAddressLineSize1 >= 2) {
-                            workContactDetails.setAddressBuilding(workAddressLine1[2]);
-                        }
-                    }
-                    workContactDetails.setAddressStreet(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine2());
-                    if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine3() != null) {
-                        String workAddressLine3[] = resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusAddrLine3().split(" ");
-                        //ValidateSpiltSize
-                        int workAddressLineSize3 = workAddressLine3.length - 1;
-                        if (workAddressLineSize3 >= 0) {
-                            workContactDetails.setSubdistrict(Util.replaceToBlank(workAddressLine3[0], blank));
-                        }
-                        if (workAddressLineSize3 >= 1) {
-                            workContactDetails.setDistrict(Util.replaceToBlank(workAddressLine3[1], blank));
-                        }
-                    }
-                    workContactDetails.setProvince(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCity());
-                    workContactDetails.setPostcode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusPostalCd());
-                    workContactDetails.setCountry(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusCtry());
-                    workContactDetails.setCountryCode(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getBusIsoCtryCode());
-                    individualModel.setWorkAddress(workContactDetails);
-
-
-                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
-
-                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
-
-                    log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
-
-                } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
-                }
-                //check null
-            } else {
-                log.warn("resSearchIndividualCustomer : Null");
-                //Audit Data
-                rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.EXCEPTION, "responseIndividualCustomer : Null", new Date(), linkKey);
-                throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
-            }
-        } catch (RMInterfaceException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("Exception while call RM Individual", e);
-            //Audit Data
-            rmAuditor.add(userId, "IndividualService", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new RMInterfaceException(e, ExceptionMapping.RM_SERVICE_FAILED, exceptionMsg.get(ExceptionMapping.RM_SERVICE_FAILED));
-        }
-        log.debug("IndividualService() END");
-        return individualModel;
-    }
-
      //todo change to CM
     public IndividualModel individualCMService(SearchIndividual searchIndividual, String userId) throws Exception {
         log.debug("IndividualService() START");
@@ -465,16 +158,32 @@ public class RMService implements Serializable {
                 throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(radSelectSearch)"));
             }
         }
+        //Validate Acronym
+        if (!ValidationUtil.isValueInRange(1, 20, searchIndividual.getAcronym().length())) {
+            if (searchIndividual.getAcronym() == null || searchIndividual.getAcronym().equals("")) {
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(acronym)"));
+            } else {
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(acronym)"));
+            }
+        }
+        //Validate ProductCode
+        if (!ValidationUtil.isValueInRange(1, 8, searchIndividual.getProductCode().length())) {
+            if (searchIndividual.getProductCode() == null || searchIndividual.getProductCode().equals("")) {
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(productCode)"));
+            } else {
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(productCode)"));
+            }
+        }
         log.debug("Validate Pass!");
 
-        com.tmb.common.data.requestsearchindividualcustomer.Header header = new com.tmb.common.data.requestsearchindividualcustomer.Header();
+        Header header = new Header();
         header.setReqId(searchIndividual.getReqId());
-        header.setAcronym("");
-        header.setProductCode("");
+        header.setAcronym(searchIndividual.getAcronym());
+        header.setProductCode(searchIndividual.getProductCode());
 //        header.setServerURL();
 //        header.setSessionId();
 
-        com.tmb.common.data.requestsearchindividualcustomer.Body body = new com.tmb.common.data.requestsearchindividualcustomer.Body();
+        Body body = new Body();
         body.setCustType(searchIndividual.getCustType());
         body.setType(searchIndividual.getType());
         body.setCustId(searchIndividual.getCustId());
@@ -484,7 +193,7 @@ public class RMService implements Serializable {
         body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
 
 
-        com.tmb.common.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer reqSearch = new com.tmb.common.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer();
+        ReqSearchIndividualCustomer reqSearch = new ReqSearchIndividualCustomer();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
@@ -500,7 +209,7 @@ public class RMService implements Serializable {
         log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
         log.debug("requestBodyData : {}", reqSearch.getBody().toString());
         try {
-            com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividualCM(reqSearch);
+            ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividualCM(reqSearch);
             if (resSearchIndividualCustomer != null) {
                 //responseTime
                 Date responseTime = new Date();
@@ -515,7 +224,8 @@ public class RMService implements Serializable {
                     log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
                 }
                 //Audit Data
-                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
+                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, "ResCode : "+resSearchIndividualCustomer.getHeader().getResCode()+
+                        " , ProductCode : "+resSearchIndividualCustomer.getHeader().getProductCode(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -814,7 +524,7 @@ public class RMService implements Serializable {
                 }
 
                 //Audit Data
-                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
+                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS,"ResDesc : "+ resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
@@ -971,8 +681,8 @@ public class RMService implements Serializable {
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
         //todo
-        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
-        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
+//        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
+//        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();
@@ -1084,27 +794,11 @@ public class RMService implements Serializable {
 
 
     // Services
-    private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
-        log.debug("callServiceIndividual() START");
-        ResSearchIndividualCustomer resSearchIndividualCustomer = null;
-        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
-        QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
-        EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
-        EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                individualAddress);
-        resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
-        log.debug("callServiceIndividual() END");
-        return resSearchIndividualCustomer;
-    }
-
-    private com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer callServiceIndividualCM(com.tmb.common.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer reqSearch) throws Exception {
+    private ResSearchIndividualCustomer callServiceIndividualCM(ReqSearchIndividualCustomer reqSearch) throws Exception {
         log.debug("callServiceIndividual() START");
         com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer resSearchIndividualCustomer = null;
-        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
-        QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
+        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomerCM.wsdl");
+        QName qname = new QName("http://data.common.tmb.com/EAISearchIndividualCustomerCM/", "EAISearchIndividualCustomerCM");
         EAISearchIndividualCustomerCM_Service service = new EAISearchIndividualCustomerCM_Service(url, qname);
         EAISearchIndividualCustomerCM eaiSearchInd = service.getEAISearchIndividualCustomerCM();
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);

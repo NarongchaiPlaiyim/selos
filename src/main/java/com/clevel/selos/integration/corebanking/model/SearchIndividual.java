@@ -14,6 +14,8 @@ public class SearchIndividual implements Serializable {
     private String custName;
     private String custSurname;
     private String radSelectSearch;
+    private String acronym;
+    private String productCode;
 
     public String getReqId() {
         return reqId;
@@ -79,6 +81,22 @@ public class SearchIndividual implements Serializable {
         this.radSelectSearch = radSelectSearch;
     }
 
+    public String getAcronym() {
+        return acronym;
+    }
+
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -90,6 +108,8 @@ public class SearchIndividual implements Serializable {
                 .append("custName", custName)
                 .append("custSurname", custSurname)
                 .append("radSelectSearch", radSelectSearch)
+                .append("acronym", acronym)
+                .append("productCode", productCode)
                 .toString();
     }
 }
