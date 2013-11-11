@@ -906,7 +906,7 @@ public class CustomerInfoIndividual implements Serializable {
     }
 
     public void onRefreshInterfaceInfo(){
-        if(customerInfoView.getSearchFromRM() == 1){
+        if(customerInfoView.getSearchFromRM() == 1){ // for individual && check spouse
             log.debug("refreshInterfaceInfo ::: customerInfoView : {}", customerInfoView);
             CustomerInfoResultView customerInfoResultView;
             try{
@@ -923,15 +923,14 @@ public class CustomerInfoIndividual implements Serializable {
                             if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
                                 log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
                                 if(cusSpouseResultView.getCustomerInfoView() != null){
-                                    log.debug("refreshInterfaceInfo ::: customer found : {}", customerInfoResultView.getCustomerInfoView());
+                                    log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
                                     customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
                                 }
                             }
                         }
-
                         messageHeader = "Refresh Interface Info complete.";
                         message = "Customer found.";
-                    }else{
+                    } else {
                         log.debug("refreshInterfaceInfo ::: customer not found.");
                         messageHeader = customerInfoResultView.getActionResult().toString();
                         message = "Refresh Interface Info Customer not found.";
@@ -947,6 +946,37 @@ public class CustomerInfoIndividual implements Serializable {
                 message = ex.getMessage();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
+        } else if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getSearchFromRM() == 1) { // for only spouse
+            try {
+                CustomerInfoResultView cusSpouseResultView = customerInfoControl.getCustomerInfoFromRM(customerInfoView.getSpouse(), user);
+                if(cusSpouseResultView.getActionResult().equals(ActionResult.SUCCESS)){
+                    log.debug("refreshInterfaceInfo ActionResult.SUCCESS");
+                    if(cusSpouseResultView.getCustomerInfoView() != null){
+                        log.debug("refreshInterfaceInfo ::: customer found : {}", cusSpouseResultView.getCustomerInfoView());
+                        customerInfoView.setSpouse(cusSpouseResultView.getCustomerInfoView());
+
+                        messageHeader = "Refresh Interface Info complete.";
+                        message = "Customer found.";
+                    } else {
+                        log.debug("refreshInterfaceInfo ::: customer not found.");
+                        messageHeader = cusSpouseResultView.getActionResult().toString();
+                        message = "Refresh Interface Info Customer not found.";
+                    }
+                } else {
+                    messageHeader = "Refresh Interface Info Failed.";
+                    message = cusSpouseResultView.getReason();
+                }
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }catch (Exception ex){
+                log.debug("refreshInterfaceInfo Exception : {}", ex);
+                messageHeader = "Refresh Interface Info Failed.";
+                message = ex.getMessage();
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+            }
+        } else {
+            messageHeader = "Refresh Interface Info Failed.";
+            message = "Cause this customer do not search from RM";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
     }
 

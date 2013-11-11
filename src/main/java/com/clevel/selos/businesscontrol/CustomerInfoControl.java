@@ -4,7 +4,7 @@ import com.clevel.selos.dao.master.DocumentTypeDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
-import com.clevel.selos.integration.corebanking.model.CustomerInfo;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.BorrowerType;
@@ -17,7 +17,6 @@ import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.transform.CustomerTransform;
 import com.clevel.selos.transform.business.CustomerBizTransform;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
@@ -28,6 +27,7 @@ import java.util.List;
 @Stateless
 public class CustomerInfoControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
 
     @Inject

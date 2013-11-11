@@ -254,22 +254,14 @@ public class BasicInfo extends MandatoryFieldsControl {
             basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
         }
 
-        if(customerEntity.isChangeQualtiEnable()){
-            basicInfoView.setIndividual(1);
-        }else{
-            basicInfoView.setIndividual(0);
+        disQualitativeType = false;
+        if(!customerEntity.isChangeQualtiEnable()){
+            disQualitativeType = true;
         }
 
         basicInfoAccountView = new BasicInfoAccountView();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
-
-        //disable qualitative
-        if(basicInfoView.getIndividual() != 1){
-            disQualitativeType = true;
-        } else {
-            disQualitativeType = false;
-        }
 
         onChangeSpecialProgram();
         onChangeRefIn();
@@ -526,7 +518,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onChangeSpecialProgram(){
-        basicInfoView.getSpecialProgram().setId(0);
+//        basicInfoView.getSpecialProgram().setId(0);
         if(basicInfoView.getSpProgram() == 1){ // yes
             reqSpecialProgramValue = true;
             disSpecialProgramValue = false;
@@ -537,7 +529,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onChangeRefIn(){
-        basicInfoView.getRefinanceIn().setCode(0);
+//        basicInfoView.getRefinanceIn().setCode(0);
         if(basicInfoView.getRefIn() == 1){ // yes
             reqRefinanceInValue = true;
             disRefinanceInValue = false;
@@ -548,8 +540,8 @@ public class BasicInfo extends MandatoryFieldsControl {
     }
 
     public void onChangeRefOut(){
-        basicInfoView.getRefinanceOut().setCode(0);
-        if(basicInfoView.getRefIn() == 1){ // yes
+//        basicInfoView.getRefinanceOut().setCode(0);
+        if(basicInfoView.getRefOut() == 1){ // yes
             reqRefinanceOutValue = true;
             disRefinanceOutValue = false;
         } else {
@@ -605,6 +597,32 @@ public class BasicInfo extends MandatoryFieldsControl {
 
     public void onChangeAccountType(){
         openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
+    }
+
+    public void onRefreshInterfaceInfo(){
+        try{
+            messageHeader = "Refresh Interface Info complete.";
+            message = "Basic Info found.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.debug("refreshInterfaceInfo Exception : {}", ex);
+            messageHeader = "Refresh Interface Info Failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onDuplicateApplication(){
+        try{
+            messageHeader = "Duplicate Application complete.";
+            message = "Duplicate Application complete.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.debug("duplicateApplication Exception : {}", ex);
+            messageHeader = "Duplicate Application Failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     // Get Set

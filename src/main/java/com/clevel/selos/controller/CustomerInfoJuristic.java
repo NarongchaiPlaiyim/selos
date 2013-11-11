@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.JuristicDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.Customer;
@@ -36,6 +37,7 @@ import java.util.Map;
 @ManagedBean(name = "custInfoSumJuris")
 public class CustomerInfoJuristic implements Serializable {
     @Inject
+    @SELOS
     Logger log;
 
     @Inject

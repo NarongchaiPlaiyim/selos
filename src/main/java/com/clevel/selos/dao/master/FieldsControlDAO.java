@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.master;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.FieldsControl;
 import com.clevel.selos.model.db.master.Role;
 import com.clevel.selos.model.db.master.Status;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class FieldsControlDAO extends GenericDAO<FieldsControl, Long> {
     @Inject
+    @SELOS
     private Logger log;
 
     @Inject

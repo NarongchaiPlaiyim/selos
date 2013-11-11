@@ -90,10 +90,10 @@
 
                             <tr>
                                 <td style="padding-bottom: 20px;" colspan="4">
-                                    <p:commandButton type="button" styleClass="largest"
-                                                     value="#{msg.get('app.custInfoIndi.content.button.refresh')}"
+                                    <p:commandButton value="#{msg.get('app.custInfoIndi.content.button.refresh')}" id="btnRefresh"
+                                                     process="@form" styleClass="largest"
                                                      actionListener="#{custInfoSumIndi.onRefreshInterfaceInfo()}"
-                                                     update=":msgBoxSystemMessagePanel :frmMain" />
+                                                     update=":msgBoxSystemMessagePanel :frmMain"/>
                                 </td>
                             </tr>
                             <tr>
@@ -2109,7 +2109,7 @@
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
             </div>
 
-            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2">
+            <p:blockUI block=":frmMain" trigger=":frmMain:btnSave,:frmMain:btnSearch,:frmMain:btnSearch2,:frmMain:btnRefresh">
                 LOADING<br />
                 <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
             </p:blockUI>

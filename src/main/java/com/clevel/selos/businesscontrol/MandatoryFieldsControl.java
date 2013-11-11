@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.FieldsControlDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.integration.BRMSInterface;
 import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.BorrowerType;
@@ -33,6 +34,7 @@ import java.util.List;
 @Stateless
 public class MandatoryFieldsControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
