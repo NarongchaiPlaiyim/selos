@@ -409,8 +409,9 @@ public class NCCRSImp implements NCCRS, Serializable {
                     return responseModel;
                 } else {
                     resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
-                    log.error("NCCRS NCB Exception H2HERROR {}", responseModel.getBody().getTransaction().getH2herror().getErrormsg());
-                    throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
+                    log.error("NCCRS NCB Exception H2HERROR {}", resultDesc);
+                    return responseModel;
+//                    throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
                 }
             } else {
                 resultDesc = responseModel.getBody().getErrormsg();
