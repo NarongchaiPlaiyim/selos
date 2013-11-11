@@ -477,7 +477,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return ncbViewList;
     }
 
-    public List<CSIResult> getCSIData(List<NcbView> ncbViewList, int customerEntityId, String userId, long workCasePreScreenId) throws Exception{
+    public List<CSIResult> getCSIData(List<NcbView> ncbViewList, int customerEntityId, String userId, long workCasePreScreenId){
         //TODO Check CSI
         List<CSIResult> csiResultList = new ArrayList<CSIResult>();
         for(NcbView ncbView : ncbViewList){
@@ -566,7 +566,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         return csiResultList;
     }
 
-    public List<CSIResult> getCSIDataWithOutNCB(List<CustomerInfoView> customerInfoViewList, int customerEntityId, String userId, long workCasePreScreenId) throws Exception{
+    public List<CSIResult> getCSIDataWithOutNCB(List<CustomerInfoView> customerInfoViewList, int customerEntityId, String userId, long workCasePreScreenId){
         List<CSIResult> csiResultList = new ArrayList<CSIResult>();
         long customerId = 0;
         for(CustomerInfoView customerInfoView : customerInfoViewList){
@@ -619,10 +619,13 @@ public class PrescreenBusinessControl extends BusinessControl {
                 log.info("getCSI ::: csiInputData : {}", csiInputData);
                 CSIResult csiResult = new CSIResult();
                 String idNumber = "";
+                Customer customer = new Customer();
                 if(customerEntityId == 1){
                     idNumber = customerInfoView.getCitizenId();
+                    customer = individualDAO.findByCitizenId(idNumber, workCasePreScreenId);
                 } else if (customerEntityId == 2){
                     idNumber = customerInfoView.getRegistrationId();
+                    customer = juristicDAO.findByRegistrationId(idNumber, workCasePreScreenId);
                 }
                 try{
                     csiResult = rlosInterface.getCSIData(userId, csiInputData);
@@ -631,18 +634,51 @@ public class PrescreenBusinessControl extends BusinessControl {
                     csiResult.setActionResult(ActionResult.SUCCESS);
                     csiResult.setResultReason("SUCCESS");
                     csiResultList.add(csiResult);
+
+                    List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+
+                    if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("F");
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    if(csiResult != null && csiResult.getWarningCodePartialMatched() != null && csiResult.getWarningCodePartialMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("P");
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    log.info("getCSI ::: customerCSIList : {}", customerCSIList);
+                    if(customerCSIList != null && customerCSIList.size() > 0){
+                        log.info("getCSI ::: persist item");
+                        customerCSIDAO.persist(customerCSIList);
+                    }
+                    log.info("getCSI ::: end...");
+
                 } catch (Exception ex){
-                    log.debug("getCSI ::: fail to get CSI");
+                    log.error("getCSI ::: error ", ex);
                     csiResult = new CSIResult();
                     csiResult.setIdNumber(idNumber);
                     csiResult.setActionResult(ActionResult.FAILED);
                     csiResult.setResultReason(ex.getMessage());
                     csiResultList.add(csiResult);
                 }
+
             }
         }
-
-
 
         return csiResultList;
     }

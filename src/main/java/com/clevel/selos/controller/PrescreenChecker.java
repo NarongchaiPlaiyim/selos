@@ -315,11 +315,11 @@ public class PrescreenChecker implements Serializable {
                 log.debug("onCheckNCB ::: customerInfoViewList : {}", customerInfoViewList);
                 prescreenBusinessControl.savePreScreenChecker(customerInfoViewList, ncbViewList, customerEntityId, workCasePreScreenId);
                 log.debug("onCheckNCB ::: failedCount : {}", failedCount);
-                if(failedCount != 0){
-                    success = false;
-                } else {
-                    success = true;
-                }
+            }
+            if(failedCount != 0){
+                success = false;
+            } else {
+                success = true;
             }
             RequestContext.getCurrentInstance().execute("commandCheckCSI()");
         } catch (Exception ex){
@@ -361,13 +361,21 @@ public class PrescreenChecker implements Serializable {
                         if(checkPersonalId){
                             if(csiResult.getActionResult() == ActionResult.SUCCESS){
                                 customerInfoView.setCsiFlag(1);
-                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI SUCCESS."));
-                                customerInfoView.setCsiResult("Check CSI SUCCESS");
+                                if(customerInfoView.getNcbReason() != null){
+                                    customerInfoView.setNcbReason(customerInfoView.getNcbReason().concat(", Check CSI SUCCESS."));
+                                } else {
+                                    customerInfoView.setNcbReason("Check CSI SUCCESS.");
+                                }
+                                customerInfoView.setCsiResult(ActionResult.SUCCESS.toString());
                             } else if (csiResult.getActionResult() == ActionResult.FAILED){
                                 failedCount = failedCount + 1;
                                 customerInfoView.setCsiFlag(0);
-                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI FAILED, ").concat(customerInfoView.getCsiReason()));
-                                customerInfoView.setCsiResult("Check CSI FAILED");
+                                if(customerInfoView.getNcbReason() != null){
+                                    customerInfoView.setNcbReason(customerInfoView.getNcbReason().concat(", Check CSI FAILED, ").concat(csiResult.getResultReason()));
+                                } else {
+                                    customerInfoView.setNcbReason("Check CSI FAILED, ".concat(csiResult.getResultReason()));
+                                }
+                                customerInfoView.setCsiResult(ActionResult.FAILED.toString());
                             }
                             customerInfoView.setCsiReason(csiResult.getResultReason());
                         }
@@ -414,19 +422,32 @@ public class PrescreenChecker implements Serializable {
                         if(checkPersonalId){
                             if(csiResult.getActionResult() == ActionResult.SUCCESS){
                                 customerInfoView.setCsiFlag(1);
-                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI SUCCESS."));
-                                customerInfoView.setCsiResult("Check CSI SUCCESS");
+                                if(customerInfoView.getNcbReason() != null){
+                                    customerInfoView.setNcbReason(customerInfoView.getNcbReason().concat(", Check CSI SUCCESS."));
+                                } else {
+                                    customerInfoView.setNcbReason("Check CSI SUCCESS.");
+                                }
+                                customerInfoView.setCsiResult(ActionResult.SUCCESS.toString());
                             } else if (csiResult.getActionResult() == ActionResult.FAILED){
                                 failedCount = failedCount + 1;
                                 customerInfoView.setCsiFlag(0);
-                                customerInfoView.setNcbResult(customerInfoView.getNcbResult().concat(", Check CSI FAILED, ").concat(customerInfoView.getCsiReason()));
-                                customerInfoView.setCsiResult("Check CSI FAILED");
+                                if(customerInfoView.getNcbReason() != null){
+                                    log.debug("CSI REASON : {}", csiResult.getResultReason());
+                                    customerInfoView.setNcbReason(customerInfoView.getNcbReason().concat(", Check CSI FAILED, ").concat(csiResult.getResultReason()));
+                                } else {
+                                    customerInfoView.setNcbReason("Check CSI FAILED, ".concat(csiResult.getResultReason()));
+                                }
+
+                                customerInfoView.setCsiResult(ActionResult.FAILED.toString());
                             }
                             customerInfoView.setCsiReason(csiResult.getResultReason());
                         }
                     }
                     customerInfoViewList.add(customerInfoView);
                 }
+
+                log.debug("onCheckCSI ::: failedCount : {}", failedCount);
+                log.debug("onCheckCSI ::: success (old) : {}", success);
 
                 if(failedCount == 0){
                     if(success){
@@ -438,6 +459,7 @@ public class PrescreenChecker implements Serializable {
 
                 prescreenBusinessControl.savePreScreenCheckerOnlyCSI(customerInfoViewList, customerEntityId, workCasePreScreenId);
 
+                log.debug("onCheckCSI ::: savePrescreenCheckerOnlyCSI Complete !! success (new) : {}", success);
                 if(success){
                     RequestContext.getCurrentInstance().execute("commandSubmitCase()");
                 }

@@ -35,7 +35,7 @@ function checkSpouseThaiID(obj){
     if(obj != undefined){
         var id = obj.value;
         if(!checkThaiID(id)){
-            PF('msgBoxInvalidCitizenBrDlg').show();
+            PF('msgBoxInvalidCitizenSpDlg').show();
         }
     }
 }
@@ -101,15 +101,22 @@ function onKeyMoney(evt) {
     var validNums = '0123456789.,';
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
-    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
-    /*  96-105 = numkey 0-9
+    /*
+     35 = home
+     36 = end
+     37 = left
+     39 = right
+     96-105 = numkey 0-9
      8 = backspace
      9 = tab
      46 = delete
      188 = comma
      190 = period
      */
-    if ((evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' || evt.keyCode == 188 || evt.keyCode == 190) {
+    if ((evt.keyCode > 95 && evt.keyCode < 106)
+            || (( evt.keyCode == 35 || evt.keyCode == 36 || evt.keyCode == 37 || evt.keyCode == 39 ) && evt.charCode == 0 )
+            || evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 46
+            || evt.keyCode == 188 || evt.keyCode == 190) {
         return true;
     } else {
         keychar = String.fromCharCode(nbr);

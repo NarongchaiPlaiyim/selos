@@ -138,15 +138,15 @@
                 <tr>
                     <td class="title">Relationship :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelBrRelation" value="#{prescreenMaker.borrowerInfo.relation.id}"
+                        <p:selectOneMenu id="dlgSelBrRelations" value="#{prescreenMaker.borrowerRelation.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableCustomerForm}"
                                          required="#{not empty param[saveCustomerButton.clientId]}" >
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.relationList}"
-                                           var="relationItem"
-                                           itemLabel="#{relationItem.description}"
-                                           itemValue="#{relationItem.id}"/>
+                                           var="borrowerRelation"
+                                           itemLabel="#{borrowerRelation.description}"
+                                           itemValue="#{borrowerRelation.id}"/>
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeRelation()}"
                                     process="@this"
@@ -164,7 +164,7 @@
                 <tr>
                     <td class="title">Reference :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelBrReference" value="#{prescreenMaker.borrowerInfo.reference.id}"
+                        <p:selectOneMenu id="dlgSelBrReference" value="#{prescreenMaker.borrowerReference.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableCustomerForm}"
                                          required="#{not empty param[saveCustomerButton.clientId]}">
@@ -422,17 +422,17 @@
                 <tr>
                     <td class="title">Relationship :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelSpRelation" value="#{prescreenMaker.borrowerInfo.spouse.relation.id}"
+                        <p:selectOneMenu id="dlgSelSpRelation" value="#{prescreenMaker.spouseRelation.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                             <f:selectItems value="#{prescreenMaker.spouseRelationList}"
-                                           var="relationItem"
-                                           itemLabel="#{relationItem.description}"
-                                           itemValue="#{relationItem.id}"/>
+                                           var="spouseRelationItem"
+                                           itemLabel="#{spouseRelationItem.description}"
+                                           itemValue="#{spouseRelationItem.id}"/>
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeSpouseRelation()}"
-                                    process="@form"
+                                    process="@this"
                                     update=":customerDlgForm:dlgSelSpReference"/>
                         </p:selectOneMenu>
                     </td>
@@ -447,7 +447,7 @@
                 <tr>
                     <td class="title">Reference :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelSpReference" value="#{prescreenMaker.borrowerInfo.spouse.reference.id}"
+                        <p:selectOneMenu id="dlgSelSpReference" value="#{prescreenMaker.spouseReference.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                         required="#{not empty param[saveCustomerButton.clientId]}">
                             <f:selectItem itemLabel="- Please Select -" itemValue=""/>
@@ -654,7 +654,7 @@
                 <tr>
                     <td class="title">Relationship :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelJrRelation" value="#{prescreenMaker.borrowerInfo.relation.id}"
+                        <p:selectOneMenu id="dlgSelJrRelation" value="#{prescreenMaker.borrowerRelation.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          required="#{not empty param[saveCustomerButton.clientId]}"
                                          disabled="#{not prescreenMaker.enableCustomerForm}">
@@ -665,7 +665,7 @@
                                            itemValue="#{relationItem.id}"/>
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeRelation()}"
-                                    process="@form"
+                                    process="@this"
                                     update=":customerDlgForm:dlgSelJrReference"/>
                         </p:selectOneMenu>
                     </td>
@@ -680,7 +680,7 @@
                 <tr>
                     <td class="title">Reference :</td>
                     <td>
-                        <p:selectOneMenu id="dlgSelJrReference" value="#{prescreenMaker.borrowerInfo.reference.id}"
+                        <p:selectOneMenu id="dlgSelJrReference" value="#{prescreenMaker.borrowerReference.id}"
                                          size="1" style="min-width: 200px; width: 200px; max-width: 200px;"
                                          disabled="#{not prescreenMaker.enableCustomerForm}"
                                          required="#{not empty param[saveCustomerButton.clientId]}">
