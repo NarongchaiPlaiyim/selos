@@ -24,11 +24,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class IsaBusinessControl implements Serializable {
@@ -256,14 +254,14 @@ public class IsaBusinessControl implements Serializable {
     public List<IsaAuditLogView> getUserMaintenanceReport(Date dateFrom,Date dateTo) throws Exception {
         log.debug("getUserMaintenanceReport()");
         List<IsaAuditLogView> list = new ArrayList<IsaAuditLogView>();
-
-
         List<IsaActivity> isaActivity = isaActivityDAO.findByCriteria(Restrictions.between("actionDate",dateFrom,dateTo));
         for (IsaActivity activityList : isaActivity) {
             IsaAuditLogView isaAuditLogView = new IsaAuditLogView();
             isaAuditLogView.setUserId(activityList.getUserId());
             User username = userDAO.findOneByCriteria(Restrictions.eq("id", activityList.getUserId()));
             isaAuditLogView.setUserName(username != null ? username.getUserName() : "");
+            isaAuditLogView.setAction(activityList.getAction());
+            isaAuditLogView.setActionDesc(activityList.getActionDesc());
             isaAuditLogView.setIpAddress(activityList.getIpAddress());
             isaAuditLogView.setActionDate(activityList.getActionDate() + "");
             isaAuditLogView.setResult(activityList.getActionResult().name());

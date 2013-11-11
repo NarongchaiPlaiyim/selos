@@ -1,12 +1,14 @@
 package com.clevel.selos.controller.isa;
 
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
 import com.clevel.selos.util.CsvExport;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -21,6 +23,7 @@ import java.util.List;
 public class IsaReport implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
 
     @Inject
@@ -29,6 +32,18 @@ public class IsaReport implements Serializable {
     @Inject
     CsvExport csvExport;
 
+    @Inject
+    public IsaReport(){
+
+    }
+
+    @PostConstruct
+    public void onCreate(){
+        dateFrom = new Date();
+        dateTo = new Date();
+
+    }
+
     private int notLogonOverDay;
     private Date dateFrom;
     private Date dateTo;
@@ -36,10 +51,7 @@ public class IsaReport implements Serializable {
 
 
     private static char COMMA_DELIMITED = ',';
-    private final static String UPLOAD_FOLDER = "_userUpload";
     private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("dd_mm_yyyy");
-    private final static SimpleDateFormat dateFormatUploadFile = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-    private final static SimpleDateFormat dataFormatPrefix = new SimpleDateFormat("yyyyMMdd");
 
     public void notLogonOver() {
         log.debug("notLogonOver()");
@@ -208,6 +220,8 @@ public class IsaReport implements Serializable {
         builder.append("No"); builder.append(COMMA_DELIMITED);
         builder.append("User ID"); builder.append(COMMA_DELIMITED);
         builder.append("User Name"); builder.append(COMMA_DELIMITED);
+        builder.append("Action"); builder.append(COMMA_DELIMITED);
+        builder.append("Action Desc"); builder.append(COMMA_DELIMITED);
         builder.append("IP Address"); builder.append(COMMA_DELIMITED);
         builder.append("Login Date"); builder.append(COMMA_DELIMITED);
         builder.append("Status"); builder.append(COMMA_DELIMITED);
@@ -225,6 +239,8 @@ public class IsaReport implements Serializable {
                 builder.append('"'+number+'"');builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getUserId()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getUserName()+'"'); builder.append(COMMA_DELIMITED);
+                builder.append('"'+ isaAuditLogView.getAction()+'"'); builder.append(COMMA_DELIMITED);
+                builder.append('"'+ isaAuditLogView.getActionDesc()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getIpAddress()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getActionDate()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getResult()+'"'); builder.append(COMMA_DELIMITED);
@@ -235,8 +251,7 @@ public class IsaReport implements Serializable {
         }
         System.out.println(builder.toString());
 
-//        csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
-
+        csvExport.exportCSV("userMaintenanceReport_"+dateFormatFile.format(new Date()),builder.toString());
 
     }
 

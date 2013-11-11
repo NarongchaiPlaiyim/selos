@@ -5,7 +5,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:clv="http://clevel.com/ui">
     <h:head>
         <title>Isa Report</title>
         <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
@@ -30,13 +31,12 @@
                             <p:fieldset legend="User Maintenance - Audit Log">
                                 <p:panelGrid columns="5">
                                     <h:outputText value="จากวันที่:"/>
-                                    <p:calendar showOn="button" maxdate="#{isaReport.currentDate}" navigator="true"
-                                                value="#{isaReport.dateFrom}"
-                                                locale="th_TH"/>
+                                    <clv:BECalendar value="#{isaReport.dateFrom}" id="popupButtonCalTh1" showOn="button" pattern="dd/MM/yyyy"
+                                                    navigator="true" locale="th_TH" showButtonPanel="true" />
 
                                     <h:outputText value="ถึงวันที่:"/>
-                                    <p:calendar showOn="button" maxdate="#{isaReport.currentDate}" navigator="true"
-                                                value="#{isaReport.dateTo}"  />
+                                    <clv:BECalendar value="#{isaReport.dateTo}" id="popupButtonCalTh2" showOn="button" pattern="dd/MM/yyyy"
+                                                    navigator="true" locale="th_TH" showButtonPanel="true" />
 
                                     <p:commandButton value="ส่งออกรายงาน"
                                                      action="#{isaReport.userMaintenanceReport}"

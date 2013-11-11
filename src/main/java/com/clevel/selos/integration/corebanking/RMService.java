@@ -80,12 +80,24 @@ public class RMService implements Serializable {
     String customerSessionId;
 
     @Inject
-    @Config(name = "interface.rm.service.connectTimeout")
-    String connectTimeout;
+    @Config(name = "interface.rm.individual.connectTimeout")
+    String individualConnectTimeout;
+    @Inject
+    @Config(name = "interface.rm.juristic.connectTimeout")
+    String juristicConnectTimeout;
+    @Inject
+    @Config(name = "interface.rm.customerAccount.connectTimeout")
+    String cusAccountConnectTimeout;
 
     @Inject
-    @Config(name = "interface.rm.service.requestTimeout")
-    String requestTimeout;
+    @Config(name = "interface.rm.individual.requestTimeout")
+    String individualRequestTimeout;
+    @Inject
+    @Config(name = "interface.rm.juristic.requestTimeout")
+    String juristicRequestTimeout;
+    @Inject
+    @Config(name = "interface.rm.customerAccount.requestTimeout")
+    String cusAccountRequestTimeout;
 
     @Inject
     @Config(name = "interface.rm.replace.blank")
@@ -216,8 +228,7 @@ public class RMService implements Serializable {
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", new Date());
                 log.debug("responseHeaderData : {}", resSearchIndividualCustomer.getHeader().toString());
-//                resSearchIndividualCustomer.getHeader().getAcronym();
-//                resSearchIndividualCustomer.getHeader().getProductCode();
+
                 if (resSearchIndividualCustomer.getBody() != null
                         && resSearchIndividualCustomer.getBody().getPersonalDetailSection() != null
                         && resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail() != null) {
@@ -801,8 +812,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.common.tmb.com/EAISearchIndividualCustomerCM/", "EAISearchIndividualCustomerCM");
         EAISearchIndividualCustomerCM_Service service = new EAISearchIndividualCustomerCM_Service(url, qname);
         EAISearchIndividualCustomerCM eaiSearchInd = service.getEAISearchIndividualCustomerCM();
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,Integer.parseInt(individualRequestTimeout)*1000);
+        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,Integer.parseInt(individualConnectTimeout)*1000);
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 individualAddress);
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
@@ -817,8 +828,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(juristicRequestTimeout)*1000);
+        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(juristicConnectTimeout)*1000);
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 corporateAddress);
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
@@ -833,8 +844,8 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);
         EAISearchCustomerAccount eaiSearchCa = service.getEAISearchCustomerAccount();
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(cusAccountRequestTimeout)*1000);
+        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(cusAccountConnectTimeout)*1000);
         ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 customerAccountAddress);
         resSearchCustomerAccount = eaiSearchCa.searchCustomerAccount(reqSearch);

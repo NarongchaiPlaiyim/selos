@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.UserActivityDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.db.audit.IsaActivity;
@@ -17,7 +18,9 @@ import java.io.Serializable;
 public class IsaAuditor implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
+
     @Inject
     IsaActivityDAO isaActivityDAO;
 
