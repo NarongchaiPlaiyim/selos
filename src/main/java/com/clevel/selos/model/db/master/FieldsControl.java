@@ -25,6 +25,10 @@ public class FieldsControl implements Serializable {
     @JoinColumn(name = "status_id")
     private Status status;
 
+    @OneToOne
+    @JoinColumn(name = "step_id")
+    private Step step;
+
     @Column(name = "mandate")
     private int mandate;
 
@@ -85,5 +89,13 @@ public class FieldsControl implements Serializable {
 
     public void setReadonly(int readonly) {
         this.readonly = readonly;
+    }
+
+    public Step getStep() {
+        return step;
+    }
+
+    public void setStep(Step step) {
+        this.step = step;
     }
 }

@@ -48,6 +48,7 @@ public class MandatoryFieldsControl extends BusinessControl {
     WorkCase workCase;
     Status status;
     User user;
+    long stepId;
 
     protected List<FieldsControlView> initialCreation(Screen screen) {
         log.debug("initialCreation - Screen : {}",screen);
@@ -65,7 +66,11 @@ public class MandatoryFieldsControl extends BusinessControl {
 
         user = getCurrentUser();
 
-        List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControlByScreenRoleStepStatus(screen.value(), user.getRole(), status);
+        if(session.getAttribute("stepId") != null){
+            stepId = Long.parseLong(session.getAttribute("stepId").toString());
+        }
+
+        List<FieldsControl> fieldsControlList = fieldsControlDAO.findFieldControlByScreenRoleStepStatus(screen.value(), user.getRole(), status, stepId);
         List<FieldsControlView> fieldsControlViewList = fieldsControlTransform.transformToViewList(fieldsControlList);
         return fieldsControlViewList;
     }

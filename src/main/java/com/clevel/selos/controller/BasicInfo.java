@@ -188,6 +188,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void preRender(){
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
+        session.setAttribute("stepId", 1001);
 
         log.info("preRender ::: setSession ");
 
