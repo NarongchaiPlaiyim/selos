@@ -1,0 +1,54 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <p:panel id="collateralDlgPanel" styleClass="panel-dialog">
+        <h:form id="collateralDlgForm">
+            <table class="content_form">
+                <tr>
+                    <td class="title" style="width: 250px;">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.loanType')}"/>
+                    </td>
+                    <td style="width: 200px;">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">
+                        <h:outputText value="#{msg.get('app.credit.facility.propose.label.condition.conditionDesc')}"/>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="center">
+                       <!-- <p:commandButton
+                                id="save"
+                                value="#{msg.get('app.credit.facility.propose.okButton')}"
+                                binding="#{addConditionDlg}"
+                                styleClass="small"
+                                actionListener="#{creditFacPropose.onSaveConditionInfoDlg()}"
+                                process=":conditionDlgForm"
+                                update=":conditionDlgForm,:frmMain:conditionInfoDetailTable"
+                                oncomplete="handleConditionInfoRequest(xhr, status, args)"/>
+
+                        <p:commandButton
+                                value="#{msg.get('app.credit.facility.propose.cancelButton')}"
+                                styleClass="small"
+                                onclick="PF('conditionDlg').hide()"
+                                update=":conditionDlgForm"/>-->
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </p:panel>
+
+    <p:blockUI widgetVar="blockConditionDlg" block="conditionDlgPanel" trigger=":conditionDlgForm:save">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+
+</ui:composition>

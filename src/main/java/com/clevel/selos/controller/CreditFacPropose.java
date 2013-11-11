@@ -1,13 +1,12 @@
 package com.clevel.selos.controller;
 
 
-import com.clevel.selos.dao.master.CountryDAO;
-import com.clevel.selos.dao.master.CreditRequestTypeDAO;
-import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
-import com.clevel.selos.model.db.master.Country;
-import com.clevel.selos.model.db.master.CreditRequestType;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.view.ConditionInfoDetailView;
+import com.clevel.selos.model.view.CreditFacProposeView;
+import com.clevel.selos.model.view.ProposeCreditDetailView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -47,18 +46,33 @@ public class CreditFacPropose implements Serializable {
 
     private Long workCaseId;
     private User user;
-    enum ModeForButton{ ADD, EDIT }
+
+    enum ModeForButton {ADD, EDIT}
+
     private ModeForButton modeForButton;
-    enum ModeForDB{ ADD_DB, EDIT_DB,CANCEL_DB }
-    private ModeForDB  modeForDB;
+
+    enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
+
+    private ModeForDB modeForDB;
     private String messageHeader;
     private String message;
     private boolean messageErr;
 
     private List<CreditRequestType> creditRequestTypeList;
-    private CreditRequestType  creditRequestTypeSelected;
+    private CreditRequestType creditRequestTypeSelected;
     private List<Country> countryList;
     private Country countrySelected;
+    private List<ProductProgram> productProgramList;
+    private List<CreditType> creditTypeList;
+    private List<Disbursement> disbursementList;
+
+    private CreditFacProposeView creditFacProposeView;
+    private ProposeCreditDetailView proposeCreditDetailView;
+
+    // for  control Condition Information Dialog
+    private ConditionInfoDetailView conditionInfoDetailView;
+    private ConditionInfoDetailView selectConditionItem;
+
 
     @Inject
     UserDAO userDAO;
@@ -66,49 +80,171 @@ public class CreditFacPropose implements Serializable {
     CreditRequestTypeDAO creditRequestTypeDAO;
     @Inject
     CountryDAO countryDAO;
+    @Inject
+    ProductProgramDAO productProgramDAO;
+    @Inject
+    CreditTypeDAO creditTypeDAO;
+    @Inject
+    DisbursementDAO disbursementDAO;
 
-    public CreditFacPropose(){}
+    public CreditFacPropose() {
+    }
 
 
     @PostConstruct
     public void onCreation() {
         log.info("onCreation.");
 
-        HttpSession session  = FacesUtil.getSession(true);
-        session.setAttribute("workCaseId", new Long(2)) ;    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        HttpSession session = FacesUtil.getSession(true);
+        session.setAttribute("workCaseId", new Long(2));    // ไว้เทส set workCaseId ที่เปิดมาจาก Inbox
+        user = (User) session.getAttribute("user");
 
-        if(session.getAttribute("workCaseId") != null){
+        if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ",workCaseId);
+            log.info("workCaseId :: {} ", workCaseId);
         }
 
-        if(creditRequestTypeList == null){
+        if (creditFacProposeView == null) {
+            creditFacProposeView = new CreditFacProposeView();
+        }
+
+        if (creditRequestTypeList == null) {
             creditRequestTypeList = new ArrayList<CreditRequestType>();
         }
 
-        if(countryList == null){
+        if (countryList == null) {
             countryList = new ArrayList<Country>();
+        }
+
+        if (proposeCreditDetailView == null) {
+            proposeCreditDetailView = new ProposeCreditDetailView();
+        }
+
+        if (productProgramList == null) {
+            productProgramList = new ArrayList<ProductProgram>();
+        }
+
+        if (creditTypeList == null) {
+            creditTypeList = new ArrayList<CreditType>();
+        }
+
+        if (disbursementList == null) {
+            disbursementList = new ArrayList<Disbursement>();
+        }
+
+        if (conditionInfoDetailView == null) {
+            conditionInfoDetailView = new ConditionInfoDetailView();
         }
 
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
+        productProgramList = productProgramDAO.findAll();
+        creditTypeList = creditTypeDAO.findAll();
+        disbursementList = disbursementDAO.findAll();
     }
 
-    public void onSaveCreditFacPropose(){
+    //Call To COMs to get data Propose Credit Info
+    public void onCallRetrieveProposeCreditInfo() {
+
+    }
+
+
+    //  Start Propose Credit Information  //
+    public void onAddCreditInfo() {
+    }
+
+    public void onEditCreditInfo() {
+
+    }
+
+    public void onDeleteCreditInfo() {
+
+    }
+    //  END Propose Credit Information  //
+
+    //  Start Propose Collateral Information  //
+    public void onAddProposeCollInfo() {
+
+    }
+
+    public void onEditProposeCollInfo() {
+
+    }
+
+    public void onDeleteProposeCollInfo() {
+
+    }
+    //  END Propose Collateral Information  //
+
+    //  Start Guarantor //
+    public void onAddGuarantorInfo() {
+
+    }
+
+    public void onEditGuarantorInfo() {
+
+    }
+
+    public void onDeleteGuarantorInfo() {
+
+    }
+    //  END Guarantor //
+
+    //Start Condition Information //
+    public void onAddConditionInfo() {
+        log.info("onAddConditionInfo ::: ");
+        conditionInfoDetailView = new ConditionInfoDetailView();
+        modeForButton = ModeForButton.ADD;
+    }
+
+    public void onSaveConditionInfoDlg(){
+        log.info("onSaveConditionInfoDlg ::: mode : {}", modeForButton);
+
+        RequestContext context = RequestContext.getCurrentInstance();
+        boolean complete = false;
+
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
+
+            ConditionInfoDetailView conditionInfoDetailViewAdd = new ConditionInfoDetailView();
+            conditionInfoDetailViewAdd.setLoanType(conditionInfoDetailView.getLoanType());
+            conditionInfoDetailViewAdd.setConditionDesc(conditionInfoDetailView.getConditionDesc());
+            creditFacProposeView.getConditionInfoDetailViewList().add(conditionInfoDetailViewAdd);
+            complete = true;
+
+        } else {
+
+            log.info("onSaveConditionInfoDlg ::: validation failed.");
+            complete = false;
+        }
+
+        log.info("  complete >>>>  :  {}", complete);
+        context.addCallbackParam("functionComplete", complete);
+    }
+
+
+    public void onDeleteConditionInfo() {
+       log.info("onDeleteConditionInfo :: ");
+       creditFacProposeView.getConditionInfoDetailViewList().remove(selectConditionItem);
+    }
+
+    // END Condition Information //
+
+    // Database Action
+    public void onSaveCreditFacPropose() {
         log.info("onSaveCreditFacPropose ::: ModeForDB  {}", modeForDB);
 
-        try{
-                messageHeader = msg.get("app.header.save.success");
-                message = msg.get("");
-                onCreation();
-                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        try {
+            messageHeader = msg.get("app.header.save.success");
+            message = msg.get("");
+            onCreation();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
 
 
-        } catch(Exception ex){
+        } catch (Exception ex) {
             log.error("Exception : {}", ex);
             messageHeader = msg.get("app.header.save.failed");
 
-            if(ex.getCause() != null){
+            if (ex.getCause() != null) {
                 message = msg.get("") + " cause : " + ex.getCause().toString();
             } else {
                 message = msg.get("") + ex.getMessage();
@@ -122,7 +258,7 @@ public class CreditFacPropose implements Serializable {
     }
 
 
-    public void onCancelCreditFacPropose(){
+    public void onCancelCreditFacPropose() {
         modeForDB = ModeForDB.CANCEL_DB;
         log.info("onCancelCreditFacPropose ::: ");
 
@@ -184,6 +320,70 @@ public class CreditFacPropose implements Serializable {
 
     public void setCountrySelected(Country countrySelected) {
         this.countrySelected = countrySelected;
+    }
+
+    public CreditFacProposeView getCreditFacProposeView() {
+        return creditFacProposeView;
+    }
+
+    public void setCreditFacProposeView(CreditFacProposeView creditFacProposeView) {
+        this.creditFacProposeView = creditFacProposeView;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ProposeCreditDetailView getProposeCreditDetailView() {
+        return proposeCreditDetailView;
+    }
+
+    public void setProposeCreditDetailView(ProposeCreditDetailView proposeCreditDetailView) {
+        this.proposeCreditDetailView = proposeCreditDetailView;
+    }
+
+    public List<ProductProgram> getProductProgramList() {
+        return productProgramList;
+    }
+
+    public void setProductProgramList(List<ProductProgram> productProgramList) {
+        this.productProgramList = productProgramList;
+    }
+
+    public List<CreditType> getCreditTypeList() {
+        return creditTypeList;
+    }
+
+    public void setCreditTypeList(List<CreditType> creditTypeList) {
+        this.creditTypeList = creditTypeList;
+    }
+
+    public List<Disbursement> getDisbursementList() {
+        return disbursementList;
+    }
+
+    public void setDisbursementList(List<Disbursement> disbursementList) {
+        this.disbursementList = disbursementList;
+    }
+
+    public ConditionInfoDetailView getConditionInfoDetailView() {
+        return conditionInfoDetailView;
+    }
+
+    public void setConditionInfoDetailView(ConditionInfoDetailView conditionInfoDetailView) {
+        this.conditionInfoDetailView = conditionInfoDetailView;
+    }
+
+    public ConditionInfoDetailView getSelectConditionItem() {
+        return selectConditionItem;
+    }
+
+    public void setSelectConditionItem(ConditionInfoDetailView selectConditionItem) {
+        this.selectConditionItem = selectConditionItem;
     }
 }
 
