@@ -1,12 +1,14 @@
 package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.working.BizInfoSummaryDAO;
 import com.clevel.selos.dao.working.DBRDAO;
 import com.clevel.selos.dao.working.DBRDetailDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.RoleUser;
 import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.model.db.working.BizInfoSummary;
 import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.DBRDetail;
 import com.clevel.selos.model.db.working.WorkCase;
@@ -20,6 +22,7 @@ import org.slf4j.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +48,9 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     DBRDetailTransform dbrDetailTransform;
+
+    @Inject
+    BizInfoSummaryDAO bizInfoSummaryDAO;
 
     public DBRControl() {
 
@@ -90,6 +96,10 @@ public class DBRControl extends BusinessControl {
     public DBRView getDBRByWorkCase(long workCaseId) {
         WorkCase workCase = workCaseDAO.findById(workCaseId);
         DBR dbr = (DBR) dbrdao.createCriteria().add(Restrictions.eq("workCase", workCase)).uniqueResult();
+        BizInfoSummary bizInfoSummary = bizInfoSummaryDAO.onSearchByWorkCase(workCase);
+        dbr.setIncomeFactor(bizInfoSummary.getWeightIncomeFactor());
+        BigDecimal dbrInterest = BigDecimal.valueOf(7).add(BigDecimal.valueOf(3));
+        dbr.setDbrInterest(dbrInterest);
         DBRView dbrView = dbrTransform.getDBRView(dbr);
         return dbrView;
     }
@@ -99,11 +109,18 @@ public class DBRControl extends BusinessControl {
         int roleId = user.getRole().getId();
         DBR dbr = dbrTransform.getDBRInfoModel(dbrView, workCase, user);
 
-
+        BigDecimal dbrBeforeRequest = BigDecimal.ZERO;
+        BigDecimal netMonthlyIncome = BigDecimal.ZERO;
         BigDecimal monthlyIncomePerMonth = BigDecimal.ZERO;
-
-
         BigDecimal currentDBR = BigDecimal.ZERO;
+
+        //DbrIf
+
+        netMonthlyIncome = dbrView.getTotalMonthDebtBorrower().add(dbrView.getTotalMonthDebtRelated());
+
+        dbrBeforeRequest = currentDBR.divide(netMonthlyIncome, 20, RoundingMode.HALF_UP);
+
+
         if(roleId == RoleUser.UW.getValue()){
             //netMinthlyIncome
             monthlyIncomePerMonth = dbrView.getMonthlyIncomeAdjust().multiply(dbrView.getIncomeFactor());

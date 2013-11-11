@@ -64,9 +64,10 @@ public class Post implements Serializable {
         StringBuilder builder = null;
 
         params = new BasicHttpParams();
-        int minute = 1000;
-        HttpConnectionParams.setSoTimeout(params, minute * timeOut);
-        HttpConnectionParams.setConnectionTimeout(params, minute * timeOut);
+//        int minute = 60000;
+        int sec = 1000;
+        HttpConnectionParams.setSoTimeout(params, sec * timeOut);
+        HttpConnectionParams.setConnectionTimeout(params, sec * timeOut);
 
         client = new DefaultHttpClient(params);
         post = new HttpPost(url);
