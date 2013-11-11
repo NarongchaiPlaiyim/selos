@@ -75,7 +75,7 @@ public class DBRInfo implements Serializable {
     private String userId;
 
     private boolean isComplete;
-    private BigDecimal dbrInterest = BigDecimal.valueOf(3);
+
 
     public DBRInfo() {
 
@@ -111,11 +111,11 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
-            dbrInterest = dbrInterest.add(BigDecimal.valueOf(7)); // hardCode
+
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
-            dbr.setDbrInterest(dbrInterest);
+
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
@@ -157,10 +157,11 @@ public class DBRInfo implements Serializable {
         int loanType = selectedItem.getLoanAccountTypeView().getCalculateType();
         final  BigDecimal month = BigDecimal.valueOf(12);
         BigDecimal debtForCalculate = BigDecimal.ZERO;
+        //todo wait confirm Formula
         BigDecimal totalAverage = BigDecimal.TEN;     // hardCode
         switch (loanType){
-            case 1:
-                if(selectedItem.getInstallment().compareTo(BigDecimal.ZERO) != 0){
+            case 1:  //normal
+                if(selectedItem.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment = 0
                     debtForCalculate = debtForCalculate.add(selectedItem.getInstallment());
                 }else {
                     debtForCalculate =  selectedItem.getLimit().divide(totalAverage);
@@ -217,6 +218,8 @@ public class DBRInfo implements Serializable {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
             dbr.setUserId(userId);
+            dbr.setTotalMonthDebtBorrower(getTotalMonthDebtBorrower());
+            dbr.setTotalMonthDebtRelated(getTotalMonthDebtRelated());
             dbrControl.saveDBRInfo(dbr);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
@@ -238,24 +241,24 @@ public class DBRInfo implements Serializable {
         }
     }
 
-    public BigDecimal getDebtForCalNCBTotal(){
-        BigDecimal debtForCalNCB = BigDecimal.ZERO;
+    public BigDecimal getTotalMonthDebtBorrower(){
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){
             for(NCBDetailView ncbDetailView : ncbDetails){
-                debtForCalNCB = debtForCalNCB.add(ncbDetailView.getOutstanding());
+                totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getOutstanding());
             }
         }
-        return debtForCalNCB;
+        return totalMonthDebtBorrower;
     }
 
-    public BigDecimal getDebtForCalDBRTotal(){
-        BigDecimal debtForCalDBR = BigDecimal.ZERO;
+    public BigDecimal getTotalMonthDebtRelated(){
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
         if(dbrDetails != null && !dbrDetails.isEmpty()){
             for(DBRDetailView dbrDetailView : dbrDetails){
-                debtForCalDBR = debtForCalDBR.add(dbrDetailView.getDebtForCalculate());
+                totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetailView.getDebtForCalculate());
             }
         }
-        return debtForCalDBR;
+        return totalMonthDebtRelated;
     }
 
     public DBRView getDbr() {

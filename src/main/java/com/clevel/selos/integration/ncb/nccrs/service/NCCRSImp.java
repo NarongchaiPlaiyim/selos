@@ -409,8 +409,9 @@ public class NCCRSImp implements NCCRS, Serializable {
                     return responseModel;
                 } else {
                     resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
-                    log.error("NCCRS NCB Exception H2HERROR {}", responseModel.getBody().getTransaction().getH2herror().getErrormsg());
-                    throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
+                    log.error("NCCRS NCB Exception H2HERROR {}", resultDesc);
+                    return responseModel;
+//                    throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
                 }
             } else {
                 resultDesc = responseModel.getBody().getErrormsg();
@@ -431,8 +432,9 @@ public class NCCRSImp implements NCCRS, Serializable {
                 return responseModel;
             } else {
                 String resultDesc = responseModel.getBody().getErrormsg();
-                log.error("NCCRS NCB Exception {}", responseModel.getBody().getErrormsg());
-                throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
+                log.error("NCCRS NCB Exception {}", resultDesc);
+                return responseModel;
+//                throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
             }
         } else {
             String resultDesc = "NCCRS Response model is null";
@@ -510,6 +512,7 @@ public class NCCRSImp implements NCCRS, Serializable {
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
                         new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId())));
+
     }
 
     private NCCRSRequestModel createReadModel(String trackingId, String command) {
@@ -542,7 +545,13 @@ public class NCCRSImp implements NCCRS, Serializable {
         xStream.processAnnotations(NCCRSRequestModel.class);
         xml = new String(xStream.toXML(nccrsRequest).getBytes("UTF-8"));
         log.debug("NCCRS Request : \n{}", xml);
-        result = new String(post.sendPost(xml, url, Integer.parseInt(timeOut)).getBytes("ISO-8859-1"), "UTF-8");
+        int nTimeOut = 60; //sec.
+        try {
+            nTimeOut = Integer.parseInt(timeOut);
+        } catch (Exception ex) {
+            log.debug("error can not convert time out to integer");
+        }
+        result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");
         String res = "<ncrsresponse>";
         int pointer = result.indexOf(res);
         result = result.replace(result.substring(0, pointer), "");
