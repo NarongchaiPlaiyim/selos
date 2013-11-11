@@ -49,20 +49,20 @@ public class BankStatementDetail implements Serializable {
     @Column(name = "number_of_debit_txn")
     private int numberOfDebitTxn;
 
-    @Column(name = "highest_balance_date")
-    private Date highestBalanceDate;
+    @Column(name = "date_of_max_balance")
+    private Date dateOfMaxBalance;
 
-    @Column(name = "highest_balance")
-    private BigDecimal highestBalance;
+    @Column(name = "max_balance")
+    private BigDecimal maxBalance;
 
-    @Column(name = "lowest_balance_date")
-    private Date lowestBalanceDate;
+    @Column(name = "date_of_min_balance")
+    private Date dateOfMinBalance;
 
-    @Column(name = "lowest_balance")
-    private BigDecimal lowestBalance;
+    @Column(name = "min_balance")
+    private BigDecimal minBalance;
 
-    @Column(name = "month_end_balance")
-    private BigDecimal monthEndBalance;
+    @Column(name = "month_balance")
+    private BigDecimal monthBalance;
 
     @Column(name = "number_of_chq_return")
     private int numberOfChequeReturn;
@@ -191,44 +191,44 @@ public class BankStatementDetail implements Serializable {
         this.numberOfDebitTxn = numberOfDebitTxn;
     }
 
-    public Date getHighestBalanceDate() {
-        return highestBalanceDate;
+    public Date getDateOfMaxBalance() {
+        return dateOfMaxBalance;
     }
 
-    public void setHighestBalanceDate(Date highestBalanceDate) {
-        this.highestBalanceDate = highestBalanceDate;
+    public void setDateOfMaxBalance(Date dateOfMaxBalance) {
+        this.dateOfMaxBalance = dateOfMaxBalance;
     }
 
-    public BigDecimal getHighestBalance() {
-        return highestBalance;
+    public BigDecimal getMaxBalance() {
+        return maxBalance;
     }
 
-    public void setHighestBalance(BigDecimal highestBalance) {
-        this.highestBalance = highestBalance;
+    public void setMaxBalance(BigDecimal maxBalance) {
+        this.maxBalance = maxBalance;
     }
 
-    public Date getLowestBalanceDate() {
-        return lowestBalanceDate;
+    public Date getDateOfMinBalance() {
+        return dateOfMinBalance;
     }
 
-    public void setLowestBalanceDate(Date lowestBalanceDate) {
-        this.lowestBalanceDate = lowestBalanceDate;
+    public void setDateOfMinBalance(Date dateOfMinBalance) {
+        this.dateOfMinBalance = dateOfMinBalance;
     }
 
-    public BigDecimal getLowestBalance() {
-        return lowestBalance;
+    public BigDecimal getMinBalance() {
+        return minBalance;
     }
 
-    public void setLowestBalance(BigDecimal lowestBalance) {
-        this.lowestBalance = lowestBalance;
+    public void setMinBalance(BigDecimal minBalance) {
+        this.minBalance = minBalance;
     }
 
-    public BigDecimal getMonthEndBalance() {
-        return monthEndBalance;
+    public BigDecimal getMonthBalance() {
+        return monthBalance;
     }
 
-    public void setMonthEndBalance(BigDecimal monthEndBalance) {
-        this.monthEndBalance = monthEndBalance;
+    public void setMonthBalance(BigDecimal monthBalance) {
+        this.monthBalance = monthBalance;
     }
 
     public int getNumberOfChequeReturn() {
@@ -326,11 +326,11 @@ public class BankStatementDetail implements Serializable {
                 .append("timesOfAverageCreditUW", timesOfAverageCreditUW)
                 .append("debitAmount", debitAmount)
                 .append("numberOfDebitTxn", numberOfDebitTxn)
-                .append("highestBalanceDate", highestBalanceDate)
-                .append("highestBalance", highestBalance)
-                .append("lowestBalanceDate", lowestBalanceDate)
-                .append("lowestBalance", lowestBalance)
-                .append("monthEndBalance", monthEndBalance)
+                .append("dateOfMaxBalance", dateOfMaxBalance)
+                .append("maxBalance", maxBalance)
+                .append("dateOfMinBalance", dateOfMinBalance)
+                .append("minBalance", minBalance)
+                .append("monthBalance", monthBalance)
                 .append("numberOfChequeReturn", numberOfChequeReturn)
                 .append("chequeReturnAmount", chequeReturnAmount)
                 .append("overLimitTimes", overLimitTimes)

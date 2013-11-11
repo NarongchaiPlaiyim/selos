@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.*;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.*;
 import com.clevel.selos.model.view.AppBorrowerHeaderView;
@@ -25,8 +26,8 @@ import java.util.List;
 @Stateless
 public class InboxControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     BPMInterface bpmInterface;
 

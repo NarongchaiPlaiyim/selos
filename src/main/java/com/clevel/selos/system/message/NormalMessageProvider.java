@@ -1,5 +1,6 @@
 package com.clevel.selos.system.message;
 
+import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -13,7 +14,8 @@ import java.util.MissingResourceException;
 @Named("msg")
 public class NormalMessageProvider extends MessageProvider {
     @Inject
-    private Logger log;
+    @SELOS
+    Logger log;
     private static final String messageFile = "com.clevel.selos.messages";
 
     @Inject

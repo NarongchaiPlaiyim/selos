@@ -1,10 +1,12 @@
 package com.clevel.selos.system;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.security.encryption.EncryptionService;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
@@ -16,6 +18,7 @@ import java.util.ResourceBundle;
 @ApplicationScoped
 public class ConfigurationProducer {
     @Inject
+    @SELOS
     Logger log;
 
     private volatile static Properties config;

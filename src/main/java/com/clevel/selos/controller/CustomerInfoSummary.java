@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CustomerEntity;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -25,8 +26,8 @@ import java.util.List;
 @ManagedBean(name = "custInfoSummary")
 public class CustomerInfoSummary implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;

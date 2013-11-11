@@ -5,6 +5,7 @@ import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.BankAccountTypeDAO;
 import com.clevel.selos.dao.master.BankDAO;
 import com.clevel.selos.dao.master.RelationDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -34,8 +35,8 @@ import java.util.*;
 @ManagedBean(name = "bankStatementDetail")
 public class BankStatementDetail implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -59,8 +60,6 @@ public class BankStatementDetail implements Serializable {
     BankAccountTypeDAO bankAccountTypeDAO;
     @Inject
     AccountStatusDAO accountStatusDAO;
-    @Inject
-    RelationDAO relationDAO;
 
     //Transform
     @Inject
@@ -71,26 +70,25 @@ public class BankStatementDetail implements Serializable {
     BankAccountStatusTransform bankAccStatusTransform;
     @Inject
     AccountStatusTransform accountStatusTransform;
-    @Inject
-    RelationTransform relationTransform;
 
     //Parameters from Bank statement summary
-    private boolean isTmbBank;
-    private int seasonal;
-    private Date expectedSubmissionDate;
     private BankStmtSummaryView summaryView;
+    private boolean isTmbBank;
+    private Date lastMonthDate;
+    private int numberOfMonths;
 
     //View form
     private BankStmtView bankStmtView;
-    private int numberOfMonths;
     private Date currentDate;
+
+    enum ModeForButton { ADD, EDIT }
+    private ModeForButton modeForButton;
 
     //Select items list
     private List<BankView> bankViewList;
     private List<BankAccountTypeView> bankAccTypeViewList;
     private List<BankAccountTypeView> othBankAccTypeViewList;
     private List<AccountStatusView> accStatusViewList;
-    private List<RelationView> relationViewList;
 
     //Messages Dialog
     private String messageHeader;
@@ -106,15 +104,13 @@ public class BankStatementDetail implements Serializable {
     }
 
     private void preRender() {
+        log.info("preRender ::: setSession ");
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 2);
         session.setAttribute("stepId", 1006);
         session.setAttribute("userId", 10001);
 
-        log.info("preRender ::: setSession ");
-
         session = FacesUtil.getSession(true);
-
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             workCasePrescreenId = 21;
@@ -133,16 +129,23 @@ public class BankStatementDetail implements Serializable {
 
         //Parameters passed from Bank statement summary page
         Flash flash = FacesUtil.getFlash();
-        Map<String, Object> bankStmtSumParams = (Map<String, Object>) flash.get("bankStmtSumParams");
-        if (bankStmtSumParams != null) {
-            isTmbBank = (Boolean) bankStmtSumParams.get("isTmbBank");
-            summaryView = (BankStmtSummaryView) bankStmtSumParams.get("bankStmtSumView");
-            if (summaryView != null) {
-                seasonal = summaryView.getSeasonal();
-                expectedSubmissionDate = summaryView.getExpectedSubmitDate();
+        Map<String, Object> map = (Map<String, Object>) flash.get("bankStmtSumParams");
+        if (map != null) {
+            summaryView = (BankStmtSummaryView) map.get("bankStmtSumView");
+            isTmbBank = (Boolean) map.get("isTmbBank");
+            lastMonthDate = (Date) map.get("lastMonthDate");
+            numberOfMonths = (Integer) map.get("numberOfMonths");
+            bankStmtView = (BankStmtView) map.get("selectedBankStmtView");
+
+            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, selectedBankStmtView is null: {}}",
+                    isTmbBank, lastMonthDate, numberOfMonths, null == bankStmtView);
+
+            // if(add new bank statement)
+            // User must be click Refresh for retrieve 'lastMonthDate' and 'numberOfMonths' first
+            if (null == bankStmtView && null == lastMonthDate && numberOfMonths == 0) {
+                FacesUtil.redirect("/site/bankStatementSummary.jsf");
+                return;
             }
-            log.debug("onCreation() bankStmtSumParams:{isTmbBank: {}, seasonal: {}, expectedSubmissionDate: {}}",
-                    isTmbBank, seasonal, expectedSubmissionDate);
         } else {
             //Return to Bank statement summary if parameter is null
             FacesUtil.redirect("/site/bankStatementSummary.jsf");
@@ -150,16 +153,13 @@ public class BankStatementDetail implements Serializable {
         }
     }
 
-    private List<BankStmtDetailView> initDetailList() {
+    private List<BankStmtDetailView> generateBankStmtDetail() {
         List<BankStmtDetailView> bankStmtDetailViewList;
-
-        Date startBankStmtDate = bankStmtControl.getStartBankStmtDate(expectedSubmissionDate);
-        numberOfMonths = bankStmtControl.getRetrieveMonthBankStmt(seasonal);
         bankStmtDetailViewList = new ArrayList<BankStmtDetailView>(numberOfMonths);
         Date date;
         for (int i = 0; i < numberOfMonths; i++) {
             BankStmtDetailView bankStmtDetailView = new BankStmtDetailView();
-            date = DateTimeUtil.getOnlyDatePlusMonth(startBankStmtDate, -i);
+            date = DateTimeUtil.getOnlyDatePlusMonth(lastMonthDate, -i);
             bankStmtDetailView.setAsOfDate(date);
             bankStmtDetailViewList.add(bankStmtDetailView);
         }
@@ -175,44 +175,89 @@ public class BankStatementDetail implements Serializable {
         return bankStmtDetailViewList;
     }
 
-    private void initNewForm() {
-        bankStmtView = new BankStmtView();
-        bankStmtView.setBankStmtDetailViewList(initDetailList());
+    private void initViewFormAndSelectItems() {
 
-        //init items list
+        if (bankStmtView == null) {
+            // add new Bank statement
+            bankStmtView = new BankStmtView();
+            bankStmtView.setBankStmtDetailViewList(generateBankStmtDetail());
+            modeForButton = ModeForButton.ADD;
+        } else {
+            // edit Bank statement
+            numberOfMonths = Util.safetyList(bankStmtView.getBankStmtDetailViewList()).size();
+            modeForButton = ModeForButton.EDIT;
+        }
+
         bankViewList = new ArrayList<BankView>();
-        if (isTmbBank)
+        if (isTmbBank) {
             bankViewList.add(bankTransform.getBankView(bankDAO.getTMBBank()));
-        else
+        } else {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
-
+        }
         bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        //todo: get other bank account type
         othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
         accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
-        relationViewList = relationTransform.transformToViewList(relationDAO.findAll());
     }
 
     @PostConstruct
     public void onCreation() {
         preRender();
-        initNewForm();
+        initViewFormAndSelectItems();
     }
 
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
-        if (isTmbBank) {
-            summaryView.getTmbBankStmtViewList().add(bankStmtView);
-        } else {
-            summaryView.getOthBankStmtViewList().add(bankStmtView);
+        // todo: validation
+
+        // calculate Bank statement and detail
+        bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
+
+        if (bankStmtView.getId() == 0) {
+            // add new Bank statement
+            if (isTmbBank) {
+                summaryView.getTmbBankStmtViewList().add(bankStmtView);
+            } else {
+                summaryView.getOthBankStmtViewList().add(bankStmtView);
+            }
+        }
+        else {
+            // edit bank statement
+            boolean foundBankStmt = false;
+            // find from TMB Bank statement list
+            for (int i=0; i<summaryView.getTmbBankStmtViewList().size(); i++) {
+                BankStmtView tmbBankStmtView = summaryView.getTmbBankStmtViewList().get(i);
+                if (bankStmtView.getId() == tmbBankStmtView.getId()) {
+                    // replace edited Bank statement to old
+                    summaryView.getTmbBankStmtViewList().set(i, bankStmtView);
+                    foundBankStmt = true;
+                    break;
+                }
+            }
+
+            if (!foundBankStmt) {
+                // find from Other Bank statement list
+                for (int i=0; i<summaryView.getOthBankStmtViewList().size(); i++) {
+                    BankStmtView othBankStmtView = summaryView.getOthBankStmtViewList().get(i);
+                    if (bankStmtView.getId() == othBankStmtView.getId()) {
+                        // replace edited Bank statement to old
+                        summaryView.getOthBankStmtViewList().set(i, bankStmtView);
+                        break;
+                    }
+                }
+            }
         }
 
+
         try {
-            bankStmtControl.saveBankStmtSummary(summaryView,workCaseId, workCasePrescreenId, userId);
+            // recalculate and save Bank statement summary
+            bankStmtControl.bankStmtSumTotalCalculation(summaryView);
+            bankStmtControl.saveBankStmtSummary(summaryView, workCaseId, workCasePrescreenId, userId);
 
             messageHeader = "Save Bank Statement Detail Success.";
             message = "Save Bank Statement Detail data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            initNewForm();
+
         } catch (Exception e) {
             messageHeader = "Save Bank Statement Detail Failed.";
             if (e.getCause() != null) {
@@ -226,61 +271,7 @@ public class BankStatementDetail implements Serializable {
 
     public void onCancel() {
         log.debug("onCancel()");
-        initNewForm();
-    }
-
-    //********** Calculate Average **********//
-    public void calAverages() {
-        log.debug("calAverages()");
-        bankStmtControl.calAverages(bankStmtView, numberOfMonths);
-    }
-
-    public void calAvgWithdrawAmount() {
-        log.debug("calAvgWithdrawAmount()");
-        bankStmtControl.calAvgWithdrawAmount(bankStmtView, numberOfMonths);
-    }
-
-    public void calAvgGrossInflowPerLimit() {
-        log.debug("calAvgGrossInflowPerLimit()");
-        bankStmtControl.calAvgGrossInflowPerLimit(bankStmtView, numberOfMonths);
-    }
-
-    //********** Swing & Utilization **********//
-    public void calSwingAndUtilization() {
-        log.debug("calSwingAndUtilization()");
-        bankStmtControl.calSwingAndUtilization(bankStmtView);
-    }
-
-    //********** SUM , MAX **********//
-    public void sumNumberOfChequeReturn() {
-        log.debug("sumNumberOfChequeReturn()");
-        int sumNumOfChequeReturn = 0;
-        for (BankStmtDetailView detailView :
-                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
-            sumNumOfChequeReturn += detailView.getNumberOfChequeReturn();
-        }
-        bankStmtView.setChequeReturn(BigDecimal.valueOf(sumNumOfChequeReturn));
-    }
-
-    public void sumOverLimitTimes() {
-        log.debug("sumOverLimitTimes()");
-        int sumOverLimitTimes = 0;
-        for (BankStmtDetailView detailView :
-                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
-            sumOverLimitTimes += detailView.getOverLimitTimes();
-        }
-        bankStmtView.setOverLimitTimes(BigDecimal.valueOf(sumOverLimitTimes));
-    }
-
-    public void maxOverLimitDays() {
-        log.debug("maxOverLimitDays()");
-        int maxOverLimitDays = 0;
-        for (BankStmtDetailView detailView :
-                bankStmtControl.getLastSixMonthBankStmtDetails(bankStmtView.getBankStmtDetailViewList())) {
-            if (detailView.getOverLimitDays() > maxOverLimitDays)
-                maxOverLimitDays = detailView.getOverLimitDays();
-        }
-        bankStmtView.setOverLimitDays(BigDecimal.valueOf(maxOverLimitDays));
+        //initViewFormAndSelectItems();
     }
 
     //-------------------- Getter/Setter --------------------
@@ -330,14 +321,6 @@ public class BankStatementDetail implements Serializable {
 
     public void setAccStatusViewList(List<AccountStatusView> accStatusViewList) {
         this.accStatusViewList = accStatusViewList;
-    }
-
-    public List<RelationView> getRelationViewList() {
-        return relationViewList;
-    }
-
-    public void setRelationViewList(List<RelationView> relationViewList) {
-        this.relationViewList = relationViewList;
     }
 
     public String getMessageHeader() {

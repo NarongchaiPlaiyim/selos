@@ -54,7 +54,7 @@ public class DBContext implements Serializable {
                 password = encryptionService.decrypt(Base64.decodeBase64(password));
             }
             conn = DriverManager.getConnection(jdbcURL, user, password);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             log.error("Exception while connect to database!", e);
             throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_CONNECT_ERROR, msg.get(ExceptionMapping.RLOS_CSI_CONNECT_ERROR));
         }

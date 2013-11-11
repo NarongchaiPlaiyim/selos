@@ -294,7 +294,11 @@ public class NCCRSImp implements NCCRS, Serializable {
             log.debug("[{}] NCCRS Online audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
     }
 
@@ -385,7 +389,11 @@ public class NCCRSImp implements NCCRS, Serializable {
             log.debug("[{}] NCCRS Offline audit userId {} action {} actionDesc {} actionDate {} actionResult {} resultDesc {} resultDate {} linkKey {}",
                     linkKey, userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
             ncbAuditor.add(userId, action, actionDesc, actionDate, ActionResult.EXCEPTION, resultDesc, resultDate, linkKey);
-            throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            if(resultDesc==null){
+                throw new NCBInterfaceException(e, exception, message.get(exception));
+            } else {
+                throw new NCBInterfaceException(e, exception, message.get(exception, resultDesc));
+            }
         }
 
 
