@@ -11,11 +11,13 @@ import java.util.Date;
 public class CreditTypeDetailView implements Serializable {
     private long id;
     private int no;
+    private boolean noFlag;
     private String account;
     private String Type;
     private String productProgram;
     private String creditFacility;
     private BigDecimal  limit;
+    private BigDecimal  guaranteeAmount;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -25,14 +27,33 @@ public class CreditTypeDetailView implements Serializable {
         reset();
     }
 
+    public CreditTypeDetailView(
+          int  no,
+          String  account,
+          String  Type,
+          String  productProgram,
+          String  creditFacility,
+          BigDecimal  limit){
+
+        this.no = no;
+        this.account = account;
+        this.Type  = Type;
+        this.productProgram = productProgram;
+        this.creditFacility  = creditFacility;
+        this.limit = limit;
+
+    }
+
     public void reset() {
         this.id = 0;
         this.no = 0;
+        this.noFlag = false;
         this.account = "";
         this.Type  = "";
         this.productProgram = "";
         this.creditFacility  = "";
         this.limit = BigDecimal.ZERO;
+        this.guaranteeAmount = BigDecimal.ZERO;
 
     }
 
@@ -122,6 +143,27 @@ public class CreditTypeDetailView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public boolean isNoFlag() {
+        if(no == 1){
+            return true;
+        }else{
+            return false;
+        }
+//        return noFlag;
+    }
+
+    public void setNoFlag(boolean noFlag) {
+        this.noFlag = noFlag;
+    }
+
+    public BigDecimal getGuaranteeAmount() {
+        return guaranteeAmount;
+    }
+
+    public void setGuaranteeAmount(BigDecimal guaranteeAmount) {
+        this.guaranteeAmount = guaranteeAmount;
     }
 
     @Override

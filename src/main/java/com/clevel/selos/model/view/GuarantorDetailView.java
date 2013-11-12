@@ -22,6 +22,9 @@ public class GuarantorDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
+    //test
+    private CreditTypeDetailView creditTypeDetailView;
+
     public GuarantorDetailView() {
         reset();
     }
@@ -107,5 +110,15 @@ public class GuarantorDetailView implements Serializable {
 
     public void setTotalGuaranteeAmount(BigDecimal totalGuaranteeAmount) {
         this.totalGuaranteeAmount = totalGuaranteeAmount;
+    }
+
+
+    // test
+    public CreditTypeDetailView getCreditTypeDetailView() {
+        return creditTypeDetailView;
+    }
+
+    public void setCreditTypeDetailView(CreditTypeDetailView creditTypeDetailView) {
+        this.creditTypeDetailView = creditTypeDetailView;
     }
 }

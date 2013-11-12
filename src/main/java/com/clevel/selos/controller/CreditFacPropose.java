@@ -2,11 +2,11 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.dao.master.*;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.ConditionInfoDetailView;
-import com.clevel.selos.model.view.CreditFacProposeView;
-import com.clevel.selos.model.view.ProposeCreditDetailView;
+import com.clevel.selos.model.db.working.Customer;
+import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -69,6 +69,19 @@ public class CreditFacPropose implements Serializable {
     private CreditFacProposeView creditFacProposeView;
     private ProposeCreditDetailView proposeCreditDetailView;
 
+    // for control Propose Collateral
+    private ProposeCollateralInfoView proposeCollateralInfoView;
+    private ProposeCollateralInfoView selectCollateralDetailView;
+
+    private SubCollateralDetailView subCollateralDetailView;
+    private List<SubCollateralType> subCollateralTypeList;
+    private List<CollateralType> collateralTypeList;
+
+    // for  control Guarantor Information Dialog
+    private GuarantorDetailView guarantorDetailView;
+    private GuarantorDetailView guarantorDetailViewItem;
+    private List<Customer> guarantorList;
+
     // for  control Condition Information Dialog
     private ConditionInfoDetailView conditionInfoDetailView;
     private ConditionInfoDetailView selectConditionItem;
@@ -86,6 +99,12 @@ public class CreditFacPropose implements Serializable {
     CreditTypeDAO creditTypeDAO;
     @Inject
     DisbursementDAO disbursementDAO;
+    @Inject
+    CustomerDAO customerDAO;
+    @Inject
+    SubCollateralTypeDAO subCollateralTypeDAO;
+    @Inject
+    CollateralTypeDAO collateralTypeDAO;
 
     public CreditFacPropose() {
     }
@@ -102,6 +121,12 @@ public class CreditFacPropose implements Serializable {
         if (session.getAttribute("workCaseId") != null) {
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             log.info("workCaseId :: {} ", workCaseId);
+        }
+
+        if(workCaseId != null){
+            if(guarantorList ==null){
+                guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+            }
         }
 
         if (creditFacProposeView == null) {
@@ -136,18 +161,44 @@ public class CreditFacPropose implements Serializable {
             conditionInfoDetailView = new ConditionInfoDetailView();
         }
 
+        if(guarantorDetailView == null){
+            guarantorDetailView = new GuarantorDetailView();
+        }
+
+        if(proposeCollateralInfoView == null){
+            proposeCollateralInfoView = new ProposeCollateralInfoView();
+        }
+
+        if(subCollateralDetailView == null){
+            subCollateralDetailView = new SubCollateralDetailView();
+        }
+
+        if(subCollateralTypeList == null){
+            subCollateralTypeList = new ArrayList<SubCollateralType>();
+        }
+
+        if(collateralTypeList == null){
+            collateralTypeList = new ArrayList<CollateralType>();
+        }
+
         creditRequestTypeList = creditRequestTypeDAO.findAll();
         countryList = countryDAO.findAll();
         productProgramList = productProgramDAO.findAll();
         creditTypeList = creditTypeDAO.findAll();
         disbursementList = disbursementDAO.findAll();
+        subCollateralTypeList = subCollateralTypeDAO.findAll();
+        collateralTypeList = collateralTypeDAO.findAll();
     }
 
-    //Call To COMs to get data Propose Credit Info
+    //Call  COMs to get data Propose Credit Info
     public void onCallRetrieveProposeCreditInfo() {
 
     }
 
+    // Call  COMs to get Data Propose Collateral
+    public void onCallRetrieveAppraisalReportInfo(){
+
+    }
 
     //  Start Propose Credit Information  //
     public void onAddCreditInfo() {
@@ -171,10 +222,48 @@ public class CreditFacPropose implements Serializable {
 
     }
 
+    public void onSaveProposeCollInfo() {
+
+    }
+
     public void onDeleteProposeCollInfo() {
 
     }
+
+    // for sub collateral dialog
+    public void onAddCollateralOwnerUW(){
+
+    }
+
+    public void onAddMortgageType(){
+
+    }
+
+    public void onAddRelatedWith(){
+
+    }
+    // end for sub collateral dialog
+
     //  END Propose Collateral Information  //
+
+    // Start Add SUB Collateral
+    public void onAddSubCollateral(){
+
+    }
+
+    public void onEditSubCollateral(){
+
+    }
+
+    public void onSaveSubCollateral(){
+
+    }
+
+
+    public void onDeleteSubCollateral(){
+
+    }
+    // END Add SUB Collateral
 
     //  Start Guarantor //
     public void onAddGuarantorInfo() {
@@ -182,6 +271,10 @@ public class CreditFacPropose implements Serializable {
     }
 
     public void onEditGuarantorInfo() {
+
+    }
+
+    public void onSaveGuarantorInfoDlg(){
 
     }
 
@@ -384,6 +477,70 @@ public class CreditFacPropose implements Serializable {
 
     public void setSelectConditionItem(ConditionInfoDetailView selectConditionItem) {
         this.selectConditionItem = selectConditionItem;
+    }
+
+    public GuarantorDetailView getGuarantorDetailViewItem() {
+        return guarantorDetailViewItem;
+    }
+
+    public void setGuarantorDetailViewItem(GuarantorDetailView guarantorDetailViewItem) {
+        this.guarantorDetailViewItem = guarantorDetailViewItem;
+    }
+
+    public GuarantorDetailView getGuarantorDetailView() {
+        return guarantorDetailView;
+    }
+
+    public void setGuarantorDetailView(GuarantorDetailView guarantorDetailView) {
+        this.guarantorDetailView = guarantorDetailView;
+    }
+
+    public List<Customer> getGuarantorList() {
+        return guarantorList;
+    }
+
+    public void setGuarantorList(List<Customer> guarantorList) {
+        this.guarantorList = guarantorList;
+    }
+
+    public ProposeCollateralInfoView getProposeCollateralInfoView() {
+        return proposeCollateralInfoView;
+    }
+
+    public void setProposeCollateralInfoView(ProposeCollateralInfoView proposeCollateralInfoView) {
+        this.proposeCollateralInfoView = proposeCollateralInfoView;
+    }
+
+    public ProposeCollateralInfoView getSelectCollateralDetailView() {
+        return selectCollateralDetailView;
+    }
+
+    public void setSelectCollateralDetailView(ProposeCollateralInfoView selectCollateralDetailView) {
+        this.selectCollateralDetailView = selectCollateralDetailView;
+    }
+
+    public SubCollateralDetailView getSubCollateralDetailView() {
+        return subCollateralDetailView;
+    }
+
+    public void setSubCollateralDetailView(SubCollateralDetailView subCollateralDetailView) {
+        this.subCollateralDetailView = subCollateralDetailView;
+    }
+
+    public List<SubCollateralType> getSubCollateralTypeList() {
+        return subCollateralTypeList;
+    }
+
+    public void setSubCollateralTypeList(List<SubCollateralType> subCollateralTypeList) {
+        this.subCollateralTypeList = subCollateralTypeList;
+    }
+
+    public List<CollateralType> getCollateralTypeList() {
+        return collateralTypeList;
+    }
+
+    public void setCollateralTypeList(List<CollateralType> collateralTypeList) {
+        this.collateralTypeList = collateralTypeList;
     }
 }
 

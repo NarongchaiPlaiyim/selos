@@ -241,9 +241,27 @@ function handleDlgCreditProposeRequest(xhr, status, args) {
     }
 }
 
-
+// Credit Facility Propose Condition Dialog
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
     }
 }
+
+// Credit Facility Propose Collateral Dialog
+function handleProposeCollateralDetailRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        collateralInfoDlg.hide();
+    }
+}
+
+// Credit Facility Propose Sub Collateral Dialog
+function handleSubCollateralInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        subCollateralInfoDlg.hide();
+    }
+}
+// Credit Facility Propose Guarantor Dialog
+
+// Credit Facility Propose Credit Dialog
+
