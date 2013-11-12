@@ -21,8 +21,8 @@ public class PrescreenView implements Serializable {
     private Date registerDate;
     private Date referDate;
     private ReferredExperience referredExperience;
-    private boolean tcg;
-    private boolean refinance;
+    private int tcg;
+    private int refinance;
     private Bank refinanceBank;
     private BorrowingType borrowingType;
     private String checkerId;
@@ -42,8 +42,8 @@ public class PrescreenView implements Serializable {
         this.expectedSubmitDate = null;
         this.businessLocation = new Province();
         this.registerDate = null;
-        this.tcg = false;
-        this.refinance = false;
+        this.tcg = 0;
+        this.refinance = 0;
         this.refinanceBank = new Bank();
         this.referredExperience = new ReferredExperience();
         this.borrowingType = new BorrowingType();
@@ -137,19 +137,19 @@ public class PrescreenView implements Serializable {
         this.referredExperience = referredExperience;
     }
 
-    public boolean isTcg() {
+    public int getTcg() {
         return tcg;
     }
 
-    public void setTcg(boolean tcg) {
+    public void setTcg(int tcg) {
         this.tcg = tcg;
     }
 
-    public boolean isRefinance() {
+    public int getRefinance() {
         return refinance;
     }
 
-    public void setRefinance(boolean refinance) {
+    public void setRefinance(int refinance) {
         this.refinance = refinance;
     }
 

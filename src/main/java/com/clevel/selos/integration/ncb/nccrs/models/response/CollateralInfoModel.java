@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class CollateralInfoModel {
+import java.io.Serializable;
+
+public class CollateralInfoModel implements Serializable {
     private String type;
     private String description;
     private String appraisal;

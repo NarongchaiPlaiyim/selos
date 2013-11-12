@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ProfileModel {
+import java.io.Serializable;
+
+public class ProfileModel implements Serializable {
     private String thainame;
     private String engname;
     private String registtype;

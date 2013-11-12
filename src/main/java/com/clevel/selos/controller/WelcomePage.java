@@ -26,6 +26,7 @@ import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.primefaces.model.StreamedContent;
@@ -44,7 +45,8 @@ import java.util.*;
 public class WelcomePage implements Serializable {
     @Inject
     @SELOS
-    Logger log;    @Inject
+    Logger log;
+    @Inject
     @RM
     Logger rmLog;
     @Inject
@@ -405,13 +407,23 @@ public class WelcomePage implements Serializable {
         log.debug("getDateTimeString dateEn: {}",dateEn);
     }
 
+    Date endOfMonthTh;
+    Date endOfMonthEn;
+
+    public void testEndOfMonth() {
+        endOfMonthTh = DateTimeUtil.getLastDayOfMonth(dateTh);
+        endOfMonthEn = DateTimeUtil.getLastDayOfMonth(dateEn);
+        System.out.println("endOfMonthTh : "+endOfMonthTh);
+        System.out.println("endOfMonthEn : "+endOfMonthEn);
+    }
+
     @Inject
     @SimpleReport
     ReportService reportService;
 
-    public StreamedContent genReport() {
+    /*public StreamedContent genReport() {
         return reportService.getReportFile(new HashMap<String, Object>());
-    }
+    }*/
 
     public Date getDateTh() {
         return dateTh;
@@ -491,5 +503,21 @@ public class WelcomePage implements Serializable {
 
     public void setExceptionStr(String exceptionStr) {
         this.exceptionStr = exceptionStr;
+    }
+
+    public Date getEndOfMonthTh() {
+        return endOfMonthTh;
+    }
+
+    public void setEndOfMonthTh(Date endOfMonthTh) {
+        this.endOfMonthTh = endOfMonthTh;
+    }
+
+    public Date getEndOfMonthEn() {
+        return endOfMonthEn;
+    }
+
+    public void setEndOfMonthEn(Date endOfMonthEn) {
+        this.endOfMonthEn = endOfMonthEn;
     }
 }

@@ -1,12 +1,15 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.BasicInfoControl;
+import com.clevel.selos.businesscontrol.MandatoryFieldsControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.Screen;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.BasicInfoAccountPurposeView;
 import com.clevel.selos.model.view.BasicInfoAccountView;
 import com.clevel.selos.model.view.BasicInfoView;
+import com.clevel.selos.model.view.FieldsControlView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
@@ -24,16 +27,16 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "basicInfo")
-public class BasicInfo implements Serializable {
+public class BasicInfo extends MandatoryFieldsControl {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -97,9 +100,7 @@ public class BasicInfo implements Serializable {
 
     //Dialog
     private BasicInfoAccountView basicInfoAccountView;
-
-    enum ModeForButton {ADD, EDIT}
-
+    enum ModeForButton{ ADD, EDIT }
     private ModeForButton modeForButton;
     private BasicInfoAccountView selectAccount;
     private int rowIndex;
@@ -109,43 +110,113 @@ public class BasicInfo implements Serializable {
 
     //session
     private long workCaseId;
-    private long stepId;
-    private String userId;
+    private User user;
 
-    public BasicInfo() {
+    //for mandate
+    private boolean reqApplicationNo;
+    private boolean reqRefApplicationNo;
+    private boolean reqCaNo;
+    private boolean reqRequestType;
+    private boolean reqProductGroup;
+    private boolean reqUnpaidFeeInsurance;
+    private boolean reqNoPendingClaimLG;
+    private boolean reqIsConstructionRequestLG;
+    private boolean reqIsAbleToGettingGuarantorJob;
+    private boolean reqNoClaimLGHistory;
+    private boolean reqNoRevokedLicense;
+    private boolean reqNoLateWorkDelivery;
+    private boolean reqIsAdequateOfCapitalResource;
+    private boolean reqIsApplySpecialProgram;
+    private boolean reqSpecialProgramValue;
+    private boolean reqIsRefinanceIN;
+    private boolean reqRefinanceInValue;
+    private boolean reqIsRefinanceOUT;
+    private boolean reqRefinanceOutValue;
+    private boolean reqRiskCustomerType;
+    private boolean reqQualitativeType;
+    private boolean reqIsExistingSMECustomer;
+    private boolean reqExistingSMECustomerSince;
+    private boolean reqLastReviewDate;
+    private boolean reqExtendedReviewDate;
+    private boolean reqSCFScore;
+    private boolean reqRequestLoanWithSameName;
+    private boolean reqHaveLoanInOneYear;
+    private boolean reqPassAnnualReview;
+    private boolean reqLoanRequestPattern;
+    private boolean reqReferralName;
+    private boolean reqReferralID;
+    private boolean reqIsApplyBA;
+    private boolean reqBaPaymentMethod;
+
+    //for readOnly
+    private boolean disApplicationNo;
+    private boolean disRefApplicationNo;
+    private boolean disCaNo;
+    private boolean disRequestType;
+    private boolean disProductGroup;
+    private boolean disUnpaidFeeInsurance;
+    private boolean disNoPendingClaimLG;
+    private boolean disIsConstructionRequestLG;
+    private boolean disIsAbleToGettingGuarantorJob;
+    private boolean disNoClaimLGHistory;
+    private boolean disNoRevokedLicense;
+    private boolean disNoLateWorkDelivery;
+    private boolean disIsAdequateOfCapitalResource;
+    private boolean disIsApplySpecialProgram;
+    private boolean disSpecialProgramValue;
+    private boolean disIsRefinanceIN;
+    private boolean disRefinanceInValue;
+    private boolean disIsRefinanceOUT;
+    private boolean disRefinanceOutValue;
+    private boolean disRiskCustomerType;
+    private boolean disQualitativeType;
+    private boolean disIsExistingSMECustomer;
+    private boolean disExistingSMECustomerSince;
+    private boolean disLastReviewDate;
+    private boolean disExtendedReviewDate;
+    private boolean disSCFScore;
+    private boolean disRequestLoanWithSameName;
+    private boolean disHaveLoanInOneYear;
+    private boolean disPassAnnualReview;
+    private boolean disLoanRequestPattern;
+    private boolean disReferralName;
+    private boolean disReferralID;
+    private boolean disIsApplyBA;
+    private boolean disBaPaymentMethod;
+
+    public BasicInfo(){
     }
 
-    public void preRender() {
+    public void preRender(){
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1006);
-        session.setAttribute("userId", 10001);
+        session.setAttribute("stepId", 1004);
 
         log.info("preRender ::: setSession ");
 
         session = FacesUtil.getSession(true);
 
-        if (session.getAttribute("workCaseId") != null) {
+        user = getCurrentUser();
+
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            stepId = Long.parseLong(session.getAttribute("stepId").toString());
-            userId = session.getAttribute("userId").toString();
-        } else {
-            //TODO return to inbox
+        }else{
             log.info("preRender ::: workCaseId is null.");
-            try {
+            try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
-                return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
             }
         }
     }
 
     @PostConstruct
     public void onCreation() {
-
         preRender();
+
+        List<FieldsControlView> fieldsControlViewList = initialCreation(Screen.BASIC_INFO);
+        fieldsControl(fieldsControlViewList);
 
         basicInfoView = new BasicInfoView();
 
@@ -157,12 +228,11 @@ public class BasicInfo implements Serializable {
         bankList = bankDAO.getListRefinance();
 
         bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
-//        openAccountProductList = openAccountProductDAO.findAll();
         openAccountProductList = new ArrayList<OpenAccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for (OpenAccountPurpose oap : openAccountPurposeList) {
+        for(OpenAccountPurpose oap : openAccountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -174,33 +244,186 @@ public class BasicInfo implements Serializable {
 
         baPaymentMethodList = baPaymentMethodDAO.findAll();
 
-        if (baPaymentMethodList != null && baPaymentMethodList.size() > 0) {
+        if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
             basicInfoView.setBaPaymentMethod(baPaymentMethodList.get(0));
         }
 
         basicInfoView = basicInfoControl.getBasicInfo(workCaseId);
 
-        if (basicInfoView.getId() == 0) {
+        if(basicInfoView.getId() == 0){
             basicInfoView.setQualitative(customerEntity.getDefaultQualitative());
         }
 
-        if (customerEntity.isChangeQualtiEnable()) {
-            basicInfoView.setIndividual(1);
-        } else {
-            basicInfoView.setIndividual(0);
+        disQualitativeType = false;
+        if(!customerEntity.isChangeQualtiEnable()){
+            disQualitativeType = true;
         }
 
         basicInfoAccountView = new BasicInfoAccountView();
 
         yearList = DateTimeUtil.getPreviousFiftyYearTH();
+
+        onChangeSpecialProgram();
+        onChangeRefIn();
+        onChangeRefOut();
+        onChangeExistingSME();
+        onChangeBA();
+        onChangeReqLG();
     }
 
-    public void onAddAccount() {
+    public void fieldsControl(List<FieldsControlView> fieldsControlViewList){
+        if(fieldsControlViewList != null && fieldsControlViewList.size() > 0){
+            for(FieldsControlView fcv : fieldsControlViewList){
+                if(fcv.getFieldName().equalsIgnoreCase("applicationNo")){
+                    reqApplicationNo = fcv.isMandate();
+                    disApplicationNo = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("refApplicationNo")){
+                    reqRefApplicationNo = fcv.isMandate();
+                    disRefApplicationNo = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("caNo")){
+                    reqCaNo = fcv.isMandate();
+                    disCaNo = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("requestType")){
+                    reqRequestType = fcv.isMandate();
+                    disRequestType = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("productGroup")){
+                    reqProductGroup = fcv.isMandate();
+                    disProductGroup = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("unpaidFeeInsurance")){
+                    reqUnpaidFeeInsurance = fcv.isMandate();
+                    disUnpaidFeeInsurance = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("noPendingClaimLG")){
+                    reqNoPendingClaimLG = fcv.isMandate();
+                    disNoPendingClaimLG = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isConstructionRequestLG")){
+                    reqIsConstructionRequestLG = fcv.isMandate();
+                    disIsConstructionRequestLG = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isAbleToGettingGuarantorJob")){
+                    reqIsAbleToGettingGuarantorJob = fcv.isMandate();
+                    disIsAbleToGettingGuarantorJob = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("noClaimLGHistory")){
+                    reqNoClaimLGHistory = fcv.isMandate();
+                    disNoClaimLGHistory = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("noRevokedLicense")){
+                    reqNoRevokedLicense = fcv.isMandate();
+                    disNoRevokedLicense = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("noLateWorkDelivery")){
+                    reqNoLateWorkDelivery = fcv.isMandate();
+                    disNoLateWorkDelivery = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isAdequateOfCapitalResource")){
+                    reqIsAdequateOfCapitalResource = fcv.isMandate();
+                    disIsAdequateOfCapitalResource = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isApplySpecialProgram")){
+                    reqIsApplySpecialProgram = fcv.isMandate();
+                    disIsApplySpecialProgram = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("specialProgramValue")){
+                    reqSpecialProgramValue = fcv.isMandate();
+                    disSpecialProgramValue = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isRefinanceIN")){
+                    reqIsRefinanceIN = fcv.isMandate();
+                    disIsRefinanceIN = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("refinanceInValue")){
+                    reqRefinanceInValue = fcv.isMandate();
+                    disRefinanceInValue = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isRefinanceOUT")){
+                    reqIsRefinanceOUT = fcv.isMandate();
+                    disIsRefinanceOUT = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("refinanceOutValue")){
+                    reqRefinanceOutValue = fcv.isMandate();
+                    disRefinanceOutValue = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("riskCustomerType")){
+                    reqRiskCustomerType = fcv.isMandate();
+                    disRiskCustomerType = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("qualitativeType")){
+                    reqQualitativeType = fcv.isMandate();
+                    disQualitativeType = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isExistingSMECustomer")){
+                    reqIsExistingSMECustomer = fcv.isMandate();
+                    disIsExistingSMECustomer = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("existingSMECustomerSince")){
+                    reqExistingSMECustomerSince = fcv.isMandate();
+                    disExistingSMECustomerSince = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("lastReviewDate")){
+                    reqLastReviewDate = fcv.isMandate();
+                    disLastReviewDate = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("extendedReviewDate")){
+                    reqExtendedReviewDate = fcv.isMandate();
+                    disExtendedReviewDate = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("SCFScore")){
+                    reqSCFScore = fcv.isMandate();
+                    disSCFScore = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("requestLoanWithSameName")){
+                    reqRequestLoanWithSameName = fcv.isMandate();
+                    disRequestLoanWithSameName = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("haveLoanInOneYear")){
+                    reqHaveLoanInOneYear = fcv.isMandate();
+                    disHaveLoanInOneYear = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("passAnnualReview")){
+                    reqPassAnnualReview = fcv.isMandate();
+                    disPassAnnualReview = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("loanRequestPattern")){
+                    reqLoanRequestPattern = fcv.isMandate();
+                    disLoanRequestPattern = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("referralName")){
+                    reqReferralName = fcv.isMandate();
+                    disReferralName = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("referralID")){
+                    reqReferralID = fcv.isMandate();
+                    disReferralID = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("isApplyBA")){
+                    reqIsApplyBA = fcv.isMandate();
+                    disIsApplyBA = fcv.isReadOnly();
+                }
+                if(fcv.getFieldName().equalsIgnoreCase("baPaymentMethod")){
+                    reqBaPaymentMethod = fcv.isMandate();
+                    disBaPaymentMethod = fcv.isReadOnly();
+                }
+            }
+        }
+    }
+
+    public void onAddAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
+
+        bankAccountTypeList = bankAccountTypeDAO.findOpenAccountType();
+
+        openAccountProductList = new ArrayList<OpenAccountProduct>();
 
         openAccountPurposeList = openAccountPurposeDAO.findAll();
         basicInfoAccountPurposeViewList = new ArrayList<BasicInfoAccountPurposeView>();
-        for (OpenAccountPurpose oap : openAccountPurposeList) {
+        for(OpenAccountPurpose oap : openAccountPurposeList){
             BasicInfoAccountPurposeView purposeView = new BasicInfoAccountPurposeView();
             purposeView.setPurpose(oap);
             basicInfoAccountPurposeViewList.add(purposeView);
@@ -209,13 +432,14 @@ public class BasicInfo implements Serializable {
         modeForButton = ModeForButton.ADD;
     }
 
-    public void onEditAccount() {
+    public void onEditAccount(){
         basicInfoAccountView = new BasicInfoAccountView();
         basicInfoAccountView = selectAccount;
-        for (BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()) {
-            if (biapv.isSelected()) {
-                for (BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList) {
-                    if (biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())) {
+        onChangeAccountType();
+        for(BasicInfoAccountPurposeView biapv : basicInfoAccountView.getBasicInfoAccountPurposeView()){
+            if(biapv.isSelected()){
+                for(BasicInfoAccountPurposeView purposeView : basicInfoAccountPurposeViewList){
+                    if(biapv.getPurpose().getName().equals(purposeView.getPurpose().getName())){
                         purposeView.setSelected(true);
                     }
                 }
@@ -224,45 +448,45 @@ public class BasicInfo implements Serializable {
         modeForButton = ModeForButton.EDIT;
     }
 
-    public void addAccount() {
-        if (basicInfoAccountView.getBankAccountTypeView().getId() != 0) {
+    public void addAccount(){
+        if(basicInfoAccountView.getBankAccountTypeView().getId() != 0){
 
             basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findById(basicInfoAccountView.getBankAccountTypeView().getId())));
-        } else {
+        }else{
             basicInfoAccountView.getBankAccountTypeView().setName("-");
         }
 
-        if (basicInfoAccountView.getProduct().getId() != 0) {
+        if(basicInfoAccountView.getProduct().getId() != 0){
             basicInfoAccountView.setProduct(openAccountProductDAO.findById(basicInfoAccountView.getProduct().getId()));
-        } else {
+        }else{
             basicInfoAccountView.getProduct().setName("-");
         }
 
         StringBuilder stringBuilder = new StringBuilder();
 
         basicInfoAccountView.setBasicInfoAccountPurposeView(new ArrayList<BasicInfoAccountPurposeView>());
-        for (BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList) {
-            if (bia.isSelected()) {
-                if (basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0) {
+        for(BasicInfoAccountPurposeView bia : basicInfoAccountPurposeViewList){
+            if(bia.isSelected()){
+                if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() == 0){
                     basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
                     stringBuilder.append(bia.getPurpose().getName());
-                } else {
+                }else{
                     basicInfoAccountView.getBasicInfoAccountPurposeView().add(bia);
-                    stringBuilder.append(", " + bia.getPurpose().getName());
+                    stringBuilder.append(", "+bia.getPurpose().getName());
                 }
             }
         }
 
-        if (!stringBuilder.toString().isEmpty()) {
+        if(!stringBuilder.toString().isEmpty()){
             basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
-        } else {
+        }else{
             basicInfoAccountView.setPurposeForShow("-");
         }
 
-        if (modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
+        if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)) {
             basicInfoView.getBasicInfoAccountViews().add(basicInfoAccountView);
-        } else {
-            basicInfoView.getBasicInfoAccountViews().set(rowIndex, basicInfoAccountView);
+        }else{
+            basicInfoView.getBasicInfoAccountViews().set(rowIndex,basicInfoAccountView);
         }
 
         boolean complete = true;        //Change only failed to save
@@ -274,16 +498,16 @@ public class BasicInfo implements Serializable {
         basicInfoView.getBasicInfoAccountViews().remove(selectAccount);
     }
 
-    public void onSave() {
-        try {
-            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, userId);
+    public void onSave(){
+        try{
+            basicInfoControl.saveBasicInfo(basicInfoView, workCaseId, user);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             onCreation();
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-        } catch (Exception ex) {
+        } catch(Exception ex){
             messageHeader = "Save Basic Info Failed.";
-            if (ex.getCause() != null) {
+            if(ex.getCause() != null){
                 message = "Save Basic Info data failed. Cause : " + ex.getCause().toString();
             } else {
                 message = "Save Basic Info data failed. Cause : " + ex.getMessage();
@@ -293,32 +517,112 @@ public class BasicInfo implements Serializable {
         }
     }
 
-    public void onChangeSpecialProgram() {
-        basicInfoView.getSpecialProgram().setId(0);
-    }
-
-    public void onChangeRefIn() {
-        basicInfoView.getRefinanceIn().setCode(0);
-    }
-
-    public void onChangeRefOut() {
-        basicInfoView.getRefinanceOut().setCode(0);
-    }
-
-    public void onChangeBA() {
-        if (basicInfoView.getApplyBA() == 0) {
-            basicInfoView.getBaPaymentMethod().setId(0);
+    public void onChangeSpecialProgram(){
+//        basicInfoView.getSpecialProgram().setId(0);
+        if(basicInfoView.getSpProgram() == 1){ // yes
+            reqSpecialProgramValue = true;
+            disSpecialProgramValue = false;
         } else {
-            if (baPaymentMethodList != null && baPaymentMethodList.size() > 0) {
-                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
-            } else {
-                basicInfoView.getBaPaymentMethod().setId(0);
-            }
+            reqSpecialProgramValue = false;
+            disSpecialProgramValue = true;
         }
     }
 
-    public void onChangeAccountType() {
+    public void onChangeRefIn(){
+//        basicInfoView.getRefinanceIn().setCode(0);
+        if(basicInfoView.getRefIn() == 1){ // yes
+            reqRefinanceInValue = true;
+            disRefinanceInValue = false;
+        } else {
+            reqRefinanceInValue = false;
+            disRefinanceInValue = true;
+        }
+    }
+
+    public void onChangeRefOut(){
+//        basicInfoView.getRefinanceOut().setCode(0);
+        if(basicInfoView.getRefOut() == 1){ // yes
+            reqRefinanceOutValue = true;
+            disRefinanceOutValue = false;
+        } else {
+            reqRefinanceOutValue = false;
+            disRefinanceOutValue = true;
+        }
+    }
+
+    public void onChangeExistingSME(){
+        if(basicInfoView.getExistingSME() == 1){ // yes
+            reqExistingSMECustomerSince = true;
+            disExistingSMECustomerSince = false;
+        } else {
+            reqExistingSMECustomerSince = false;
+            disExistingSMECustomerSince = true;
+        }
+    }
+
+    public void onChangeBA(){
+        if(basicInfoView.getApplyBA() == 0){
+            basicInfoView.getBaPaymentMethod().setId(0);
+        }else{
+            if(baPaymentMethodList != null && baPaymentMethodList.size() > 0){
+                basicInfoView.getBaPaymentMethod().setId(baPaymentMethodList.get(0).getId());
+            }else{
+                basicInfoView.getBaPaymentMethod().setId(0);
+            }
+        }
+        if(basicInfoView.getApplyBA() == 1){ // yes
+            reqBaPaymentMethod = true;
+            disBaPaymentMethod = false;
+        } else {
+            reqBaPaymentMethod = false;
+            disBaPaymentMethod = true;
+        }
+    }
+
+    public void onChangeReqLG(){
+        if(basicInfoView.isCharFCLG()){
+            disIsAbleToGettingGuarantorJob = false;
+            disNoClaimLGHistory = false;
+            disNoRevokedLicense = false;
+            disNoLateWorkDelivery = false;
+            disIsAdequateOfCapitalResource = false;
+        } else {
+            disIsAbleToGettingGuarantorJob = true;
+            disNoClaimLGHistory = true;
+            disNoRevokedLicense = true;
+            disNoLateWorkDelivery = true;
+            disIsAdequateOfCapitalResource = true;
+        }
+    }
+
+    public void onChangeAccountType(){
         openAccountProductList = openAccountProductDAO.findByBankAccountTypeId(basicInfoAccountView.getBankAccountTypeView().getId());
+    }
+
+    public void onRefreshInterfaceInfo(){
+        try{
+            messageHeader = "Refresh Interface Info complete.";
+            message = "Refresh Interface Info complete.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.debug("refreshInterfaceInfo Exception : {}", ex);
+            messageHeader = "Refresh Interface Info Failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+    }
+
+    public void onDuplicateApplication(){
+        try{
+            messageHeader = "Duplicate Application complete.";
+            message = "Duplicate Application complete.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }catch (Exception ex){
+            log.debug("duplicateApplication Exception : {}", ex);
+            messageHeader = "Duplicate Application Failed.";
+            message = ex.getMessage();
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
     }
 
     // Get Set
@@ -472,5 +776,549 @@ public class BasicInfo implements Serializable {
 
     public void setYearList(List<String> yearList) {
         this.yearList = yearList;
+    }
+
+    public boolean isReqApplicationNo() {
+        return reqApplicationNo;
+    }
+
+    public void setReqApplicationNo(boolean reqApplicationNo) {
+        this.reqApplicationNo = reqApplicationNo;
+    }
+
+    public boolean isReqRefApplicationNo() {
+        return reqRefApplicationNo;
+    }
+
+    public void setReqRefApplicationNo(boolean reqRefApplicationNo) {
+        this.reqRefApplicationNo = reqRefApplicationNo;
+    }
+
+    public boolean isReqCaNo() {
+        return reqCaNo;
+    }
+
+    public void setReqCaNo(boolean reqCaNo) {
+        this.reqCaNo = reqCaNo;
+    }
+
+    public boolean isReqRequestType() {
+        return reqRequestType;
+    }
+
+    public void setReqRequestType(boolean reqRequestType) {
+        this.reqRequestType = reqRequestType;
+    }
+
+    public boolean isReqProductGroup() {
+        return reqProductGroup;
+    }
+
+    public void setReqProductGroup(boolean reqProductGroup) {
+        this.reqProductGroup = reqProductGroup;
+    }
+
+    public boolean isReqUnpaidFeeInsurance() {
+        return reqUnpaidFeeInsurance;
+    }
+
+    public void setReqUnpaidFeeInsurance(boolean reqUnpaidFeeInsurance) {
+        this.reqUnpaidFeeInsurance = reqUnpaidFeeInsurance;
+    }
+
+    public boolean isReqNoPendingClaimLG() {
+        return reqNoPendingClaimLG;
+    }
+
+    public void setReqNoPendingClaimLG(boolean reqNoPendingClaimLG) {
+        this.reqNoPendingClaimLG = reqNoPendingClaimLG;
+    }
+
+    public boolean isReqIsConstructionRequestLG() {
+        return reqIsConstructionRequestLG;
+    }
+
+    public void setReqIsConstructionRequestLG(boolean reqIsConstructionRequestLG) {
+        this.reqIsConstructionRequestLG = reqIsConstructionRequestLG;
+    }
+
+    public boolean isReqIsAbleToGettingGuarantorJob() {
+        return reqIsAbleToGettingGuarantorJob;
+    }
+
+    public void setReqIsAbleToGettingGuarantorJob(boolean reqIsAbleToGettingGuarantorJob) {
+        this.reqIsAbleToGettingGuarantorJob = reqIsAbleToGettingGuarantorJob;
+    }
+
+    public boolean isReqNoClaimLGHistory() {
+        return reqNoClaimLGHistory;
+    }
+
+    public void setReqNoClaimLGHistory(boolean reqNoClaimLGHistory) {
+        this.reqNoClaimLGHistory = reqNoClaimLGHistory;
+    }
+
+    public boolean isReqNoRevokedLicense() {
+        return reqNoRevokedLicense;
+    }
+
+    public void setReqNoRevokedLicense(boolean reqNoRevokedLicense) {
+        this.reqNoRevokedLicense = reqNoRevokedLicense;
+    }
+
+    public boolean isReqNoLateWorkDelivery() {
+        return reqNoLateWorkDelivery;
+    }
+
+    public void setReqNoLateWorkDelivery(boolean reqNoLateWorkDelivery) {
+        this.reqNoLateWorkDelivery = reqNoLateWorkDelivery;
+    }
+
+    public boolean isReqIsAdequateOfCapitalResource() {
+        return reqIsAdequateOfCapitalResource;
+    }
+
+    public void setReqIsAdequateOfCapitalResource(boolean reqIsAdequateOfCapitalResource) {
+        this.reqIsAdequateOfCapitalResource = reqIsAdequateOfCapitalResource;
+    }
+
+    public boolean isReqIsApplySpecialProgram() {
+        return reqIsApplySpecialProgram;
+    }
+
+    public void setReqIsApplySpecialProgram(boolean reqIsApplySpecialProgram) {
+        this.reqIsApplySpecialProgram = reqIsApplySpecialProgram;
+    }
+
+    public boolean isReqSpecialProgramValue() {
+        return reqSpecialProgramValue;
+    }
+
+    public void setReqSpecialProgramValue(boolean reqSpecialProgramValue) {
+        this.reqSpecialProgramValue = reqSpecialProgramValue;
+    }
+
+    public boolean isReqIsRefinanceIN() {
+        return reqIsRefinanceIN;
+    }
+
+    public void setReqIsRefinanceIN(boolean reqIsRefinanceIN) {
+        this.reqIsRefinanceIN = reqIsRefinanceIN;
+    }
+
+    public boolean isReqRefinanceInValue() {
+        return reqRefinanceInValue;
+    }
+
+    public void setReqRefinanceInValue(boolean reqRefinanceInValue) {
+        this.reqRefinanceInValue = reqRefinanceInValue;
+    }
+
+    public boolean isReqIsRefinanceOUT() {
+        return reqIsRefinanceOUT;
+    }
+
+    public void setReqIsRefinanceOUT(boolean reqIsRefinanceOUT) {
+        this.reqIsRefinanceOUT = reqIsRefinanceOUT;
+    }
+
+    public boolean isReqRefinanceOutValue() {
+        return reqRefinanceOutValue;
+    }
+
+    public void setReqRefinanceOutValue(boolean reqRefinanceOutValue) {
+        this.reqRefinanceOutValue = reqRefinanceOutValue;
+    }
+
+    public boolean isReqRiskCustomerType() {
+        return reqRiskCustomerType;
+    }
+
+    public void setReqRiskCustomerType(boolean reqRiskCustomerType) {
+        this.reqRiskCustomerType = reqRiskCustomerType;
+    }
+
+    public boolean isReqQualitativeType() {
+        return reqQualitativeType;
+    }
+
+    public void setReqQualitativeType(boolean reqQualitativeType) {
+        this.reqQualitativeType = reqQualitativeType;
+    }
+
+    public boolean isReqIsExistingSMECustomer() {
+        return reqIsExistingSMECustomer;
+    }
+
+    public void setReqIsExistingSMECustomer(boolean reqIsExistingSMECustomer) {
+        this.reqIsExistingSMECustomer = reqIsExistingSMECustomer;
+    }
+
+    public boolean isReqExistingSMECustomerSince() {
+        return reqExistingSMECustomerSince;
+    }
+
+    public void setReqExistingSMECustomerSince(boolean reqExistingSMECustomerSince) {
+        this.reqExistingSMECustomerSince = reqExistingSMECustomerSince;
+    }
+
+    public boolean isReqLastReviewDate() {
+        return reqLastReviewDate;
+    }
+
+    public void setReqLastReviewDate(boolean reqLastReviewDate) {
+        this.reqLastReviewDate = reqLastReviewDate;
+    }
+
+    public boolean isReqExtendedReviewDate() {
+        return reqExtendedReviewDate;
+    }
+
+    public void setReqExtendedReviewDate(boolean reqExtendedReviewDate) {
+        this.reqExtendedReviewDate = reqExtendedReviewDate;
+    }
+
+    public boolean isReqSCFScore() {
+        return reqSCFScore;
+    }
+
+    public void setReqSCFScore(boolean reqSCFScore) {
+        this.reqSCFScore = reqSCFScore;
+    }
+
+    public boolean isReqRequestLoanWithSameName() {
+        return reqRequestLoanWithSameName;
+    }
+
+    public void setReqRequestLoanWithSameName(boolean reqRequestLoanWithSameName) {
+        this.reqRequestLoanWithSameName = reqRequestLoanWithSameName;
+    }
+
+    public boolean isReqHaveLoanInOneYear() {
+        return reqHaveLoanInOneYear;
+    }
+
+    public void setReqHaveLoanInOneYear(boolean reqHaveLoanInOneYear) {
+        this.reqHaveLoanInOneYear = reqHaveLoanInOneYear;
+    }
+
+    public boolean isReqPassAnnualReview() {
+        return reqPassAnnualReview;
+    }
+
+    public void setReqPassAnnualReview(boolean reqPassAnnualReview) {
+        this.reqPassAnnualReview = reqPassAnnualReview;
+    }
+
+    public boolean isReqLoanRequestPattern() {
+        return reqLoanRequestPattern;
+    }
+
+    public void setReqLoanRequestPattern(boolean reqLoanRequestPattern) {
+        this.reqLoanRequestPattern = reqLoanRequestPattern;
+    }
+
+    public boolean isReqReferralName() {
+        return reqReferralName;
+    }
+
+    public void setReqReferralName(boolean reqReferralName) {
+        this.reqReferralName = reqReferralName;
+    }
+
+    public boolean isReqReferralID() {
+        return reqReferralID;
+    }
+
+    public void setReqReferralID(boolean reqReferralID) {
+        this.reqReferralID = reqReferralID;
+    }
+
+    public boolean isReqIsApplyBA() {
+        return reqIsApplyBA;
+    }
+
+    public void setReqIsApplyBA(boolean reqIsApplyBA) {
+        this.reqIsApplyBA = reqIsApplyBA;
+    }
+
+    public boolean isReqBaPaymentMethod() {
+        return reqBaPaymentMethod;
+    }
+
+    public void setReqBaPaymentMethod(boolean reqBaPaymentMethod) {
+        this.reqBaPaymentMethod = reqBaPaymentMethod;
+    }
+
+    public boolean isDisApplicationNo() {
+        return disApplicationNo;
+    }
+
+    public void setDisApplicationNo(boolean disApplicationNo) {
+        this.disApplicationNo = disApplicationNo;
+    }
+
+    public boolean isDisRefApplicationNo() {
+        return disRefApplicationNo;
+    }
+
+    public void setDisRefApplicationNo(boolean disRefApplicationNo) {
+        this.disRefApplicationNo = disRefApplicationNo;
+    }
+
+    public boolean isDisCaNo() {
+        return disCaNo;
+    }
+
+    public void setDisCaNo(boolean disCaNo) {
+        this.disCaNo = disCaNo;
+    }
+
+    public boolean isDisRequestType() {
+        return disRequestType;
+    }
+
+    public void setDisRequestType(boolean disRequestType) {
+        this.disRequestType = disRequestType;
+    }
+
+    public boolean isDisProductGroup() {
+        return disProductGroup;
+    }
+
+    public void setDisProductGroup(boolean disProductGroup) {
+        this.disProductGroup = disProductGroup;
+    }
+
+    public boolean isDisUnpaidFeeInsurance() {
+        return disUnpaidFeeInsurance;
+    }
+
+    public void setDisUnpaidFeeInsurance(boolean disUnpaidFeeInsurance) {
+        this.disUnpaidFeeInsurance = disUnpaidFeeInsurance;
+    }
+
+    public boolean isDisNoPendingClaimLG() {
+        return disNoPendingClaimLG;
+    }
+
+    public void setDisNoPendingClaimLG(boolean disNoPendingClaimLG) {
+        this.disNoPendingClaimLG = disNoPendingClaimLG;
+    }
+
+    public boolean isDisIsConstructionRequestLG() {
+        return disIsConstructionRequestLG;
+    }
+
+    public void setDisIsConstructionRequestLG(boolean disIsConstructionRequestLG) {
+        this.disIsConstructionRequestLG = disIsConstructionRequestLG;
+    }
+
+    public boolean isDisIsAbleToGettingGuarantorJob() {
+        return disIsAbleToGettingGuarantorJob;
+    }
+
+    public void setDisIsAbleToGettingGuarantorJob(boolean disIsAbleToGettingGuarantorJob) {
+        this.disIsAbleToGettingGuarantorJob = disIsAbleToGettingGuarantorJob;
+    }
+
+    public boolean isDisNoClaimLGHistory() {
+        return disNoClaimLGHistory;
+    }
+
+    public void setDisNoClaimLGHistory(boolean disNoClaimLGHistory) {
+        this.disNoClaimLGHistory = disNoClaimLGHistory;
+    }
+
+    public boolean isDisNoRevokedLicense() {
+        return disNoRevokedLicense;
+    }
+
+    public void setDisNoRevokedLicense(boolean disNoRevokedLicense) {
+        this.disNoRevokedLicense = disNoRevokedLicense;
+    }
+
+    public boolean isDisNoLateWorkDelivery() {
+        return disNoLateWorkDelivery;
+    }
+
+    public void setDisNoLateWorkDelivery(boolean disNoLateWorkDelivery) {
+        this.disNoLateWorkDelivery = disNoLateWorkDelivery;
+    }
+
+    public boolean isDisIsAdequateOfCapitalResource() {
+        return disIsAdequateOfCapitalResource;
+    }
+
+    public void setDisIsAdequateOfCapitalResource(boolean disIsAdequateOfCapitalResource) {
+        this.disIsAdequateOfCapitalResource = disIsAdequateOfCapitalResource;
+    }
+
+    public boolean isDisIsApplySpecialProgram() {
+        return disIsApplySpecialProgram;
+    }
+
+    public void setDisIsApplySpecialProgram(boolean disIsApplySpecialProgram) {
+        this.disIsApplySpecialProgram = disIsApplySpecialProgram;
+    }
+
+    public boolean isDisSpecialProgramValue() {
+        return disSpecialProgramValue;
+    }
+
+    public void setDisSpecialProgramValue(boolean disSpecialProgramValue) {
+        this.disSpecialProgramValue = disSpecialProgramValue;
+    }
+
+    public boolean isDisIsRefinanceIN() {
+        return disIsRefinanceIN;
+    }
+
+    public void setDisIsRefinanceIN(boolean disIsRefinanceIN) {
+        this.disIsRefinanceIN = disIsRefinanceIN;
+    }
+
+    public boolean isDisRefinanceInValue() {
+        return disRefinanceInValue;
+    }
+
+    public void setDisRefinanceInValue(boolean disRefinanceInValue) {
+        this.disRefinanceInValue = disRefinanceInValue;
+    }
+
+    public boolean isDisIsRefinanceOUT() {
+        return disIsRefinanceOUT;
+    }
+
+    public void setDisIsRefinanceOUT(boolean disIsRefinanceOUT) {
+        this.disIsRefinanceOUT = disIsRefinanceOUT;
+    }
+
+    public boolean isDisRefinanceOutValue() {
+        return disRefinanceOutValue;
+    }
+
+    public void setDisRefinanceOutValue(boolean disRefinanceOutValue) {
+        this.disRefinanceOutValue = disRefinanceOutValue;
+    }
+
+    public boolean isDisRiskCustomerType() {
+        return disRiskCustomerType;
+    }
+
+    public void setDisRiskCustomerType(boolean disRiskCustomerType) {
+        this.disRiskCustomerType = disRiskCustomerType;
+    }
+
+    public boolean isDisQualitativeType() {
+        return disQualitativeType;
+    }
+
+    public void setDisQualitativeType(boolean disQualitativeType) {
+        this.disQualitativeType = disQualitativeType;
+    }
+
+    public boolean isDisIsExistingSMECustomer() {
+        return disIsExistingSMECustomer;
+    }
+
+    public void setDisIsExistingSMECustomer(boolean disIsExistingSMECustomer) {
+        this.disIsExistingSMECustomer = disIsExistingSMECustomer;
+    }
+
+    public boolean isDisExistingSMECustomerSince() {
+        return disExistingSMECustomerSince;
+    }
+
+    public void setDisExistingSMECustomerSince(boolean disExistingSMECustomerSince) {
+        this.disExistingSMECustomerSince = disExistingSMECustomerSince;
+    }
+
+    public boolean isDisLastReviewDate() {
+        return disLastReviewDate;
+    }
+
+    public void setDisLastReviewDate(boolean disLastReviewDate) {
+        this.disLastReviewDate = disLastReviewDate;
+    }
+
+    public boolean isDisExtendedReviewDate() {
+        return disExtendedReviewDate;
+    }
+
+    public void setDisExtendedReviewDate(boolean disExtendedReviewDate) {
+        this.disExtendedReviewDate = disExtendedReviewDate;
+    }
+
+    public boolean isDisSCFScore() {
+        return disSCFScore;
+    }
+
+    public void setDisSCFScore(boolean disSCFScore) {
+        this.disSCFScore = disSCFScore;
+    }
+
+    public boolean isDisRequestLoanWithSameName() {
+        return disRequestLoanWithSameName;
+    }
+
+    public void setDisRequestLoanWithSameName(boolean disRequestLoanWithSameName) {
+        this.disRequestLoanWithSameName = disRequestLoanWithSameName;
+    }
+
+    public boolean isDisHaveLoanInOneYear() {
+        return disHaveLoanInOneYear;
+    }
+
+    public void setDisHaveLoanInOneYear(boolean disHaveLoanInOneYear) {
+        this.disHaveLoanInOneYear = disHaveLoanInOneYear;
+    }
+
+    public boolean isDisPassAnnualReview() {
+        return disPassAnnualReview;
+    }
+
+    public void setDisPassAnnualReview(boolean disPassAnnualReview) {
+        this.disPassAnnualReview = disPassAnnualReview;
+    }
+
+    public boolean isDisLoanRequestPattern() {
+        return disLoanRequestPattern;
+    }
+
+    public void setDisLoanRequestPattern(boolean disLoanRequestPattern) {
+        this.disLoanRequestPattern = disLoanRequestPattern;
+    }
+
+    public boolean isDisReferralName() {
+        return disReferralName;
+    }
+
+    public void setDisReferralName(boolean disReferralName) {
+        this.disReferralName = disReferralName;
+    }
+
+    public boolean isDisReferralID() {
+        return disReferralID;
+    }
+
+    public void setDisReferralID(boolean disReferralID) {
+        this.disReferralID = disReferralID;
+    }
+
+    public boolean isDisIsApplyBA() {
+        return disIsApplyBA;
+    }
+
+    public void setDisIsApplyBA(boolean disIsApplyBA) {
+        this.disIsApplyBA = disIsApplyBA;
+    }
+
+    public boolean isDisBaPaymentMethod() {
+        return disBaPaymentMethod;
+    }
+
+    public void setDisBaPaymentMethod(boolean disBaPaymentMethod) {
+        this.disBaPaymentMethod = disBaPaymentMethod;
     }
 }

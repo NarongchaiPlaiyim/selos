@@ -14,611 +14,655 @@
 </h:head>
 
 <h:body>
-<f:event type="preRenderView" listener="#{basicInfo.preRender()}"/>
-<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
-<h:form id="frmMain">
-<div id="main_container">
-<!-- Start Header Logo -->
-<ui:include src="include/header_logo.xhtml"/>
-<!-- End Header Logo -->
-<!-- Start Header Detail -->
-<ui:include src="include/header_detail.xhtml"/>
-<!-- End Header Detail -->
-<!-- Start Menu -->
-<ui:include src="include/menubar.xhtml"/>
-<!-- End Menu -->
-<div id="content_container">
-<div id="content_name">#{msg.get('app.basicInfo.header')}</div>
-<div id="content">
-<div id="content_info">
-    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
-            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
-</div>
-<div id="content_form">
-<!-- start content -->
-<table class="content_table_form">
-<tr>
-<td style="padding-left: 50px;">
-<table>
-<tr>
-    <td style="padding-bottom: 20px;" colspan="4">
-        <p:commandButton type="button" value="#{msg.get('app.basicInfo.content.button.refresh')}" styleClass="largest"/>
-        <p:commandButton type="button" value="#{msg.get('app.basicInfo.content.button.duplicate')}"
-                         styleClass="largest"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.appNo')}"/>
-    </td>
-    <td style="width: 200px;">
-        <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger" disabled="true"/>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.refAppNo')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger" disabled="true"/>
-    </td>
-    <td class="title" style="width: 300px; padding-left: 30px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}" style="margin-right: 10px;"/>
-        <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger" disabled="true"/>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.requestType')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1"
-                         value="#{basicInfo.basicInfoView.requestType.id}"
-                         required="true">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{basicInfo.requestTypeList}"
-                           var="requestType"
-                           itemLabel="#{requestType.name}"
-                           itemValue="#{requestType.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.productGroup')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1"
-                         value="#{basicInfo.basicInfoView.productGroup.id}"
-                         required="true">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{basicInfo.productGroupList}"
-                           var="productGroup"
-                           itemLabel="#{productGroup.name}"
-                           itemValue="#{productGroup.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td></td>
-    <td colspan="3">
-        <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristic')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charUnPaid}"/>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.unpaid')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoPending}"/>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.noPending')}"/>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td class="title">
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 50px;">
-                                <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charFCLG}">
-                                    <p:ajax update="checkBoxIns,checkBoxCom,checkBoxAba,checkBoxLate,checkBoxFund"/>
-                                </h:selectBooleanCheckbox>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox id="checkBoxIns" value="#{basicInfo.basicInfoView.charFCIns}"
-                                                         disabled="#{not basicInfo.basicInfoView.charFCLG}"/>
-                                <h:outputText
-                                        value="#{msg.get('app.basicInfo.content.characteristicFC.lg.insurance')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox id="checkBoxCom" value="#{basicInfo.basicInfoView.charFCCom}"
-                                                         disabled="#{not basicInfo.basicInfoView.charFCLG}"/>
-                                <h:outputText
-                                        value="#{msg.get('app.basicInfo.content.characteristicFC.lg.complaint')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox id="checkBoxAba" value="#{basicInfo.basicInfoView.charFCAba}"
-                                                         disabled="#{not basicInfo.basicInfoView.charFCLG}"/>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.abandon')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox id="checkBoxLate" value="#{basicInfo.basicInfoView.charFCLate}"
-                                                         disabled="#{not basicInfo.basicInfoView.charFCLG}"/>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.late')}"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="padding-left: 100px;">
-                                <h:selectBooleanCheckbox id="checkBoxFund" value="#{basicInfo.basicInfoView.charFCFund}"
-                                                         disabled="#{not basicInfo.basicInfoView.charFCLG}"/>
-                                <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.fund')}"/>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.specProgram')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <table>
-            <tr>
-                <td style="width: 120px;">
-                    <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
-                                      required="true">
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                        <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
-                    </h:selectOneRadio>
-                </td>
-                <td>
-                    <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
-                                     value="#{basicInfo.basicInfoView.specialProgram.id}"
-                                     disabled="#{basicInfo.basicInfoView.spProgram != 1}"
-                                     required="#{basicInfo.basicInfoView.spProgram == 1}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{basicInfo.specialProgramList}"
-                                       var="specialProgram"
-                                       itemLabel="#{specialProgram.code}"
-                                       itemValue="#{specialProgram.id}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.refIn')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <table>
-            <tr>
-                <td style="width: 120px;">
-                    <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
-                                      required="true">
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                        <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
-                    </h:selectOneRadio>
-                </td>
-                <td>
-                    <p:selectOneMenu id="refIn" styleClass="largest"
-                                     size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}"
-                                     disabled="#{basicInfo.basicInfoView.refIn != 1}"
-                                     required="#{basicInfo.basicInfoView.refIn == 1}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{basicInfo.bankList}"
-                                       var="bankList"
-                                       itemLabel="#{bankList.name}"
-                                       itemValue="#{bankList.code}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.refOut')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <table>
-            <tr>
-                <td style="width: 120px;">
-                    <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
-                                      required="true">
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                        <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
-                    </h:selectOneRadio>
-                </td>
-                <td>
-                    <p:selectOneMenu id="refOut" styleClass="largest"
-                                     size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}"
-                                     disabled="#{basicInfo.basicInfoView.refOut != 1}"
-                                     required="#{basicInfo.basicInfoView.refOut == 1}">
-                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-                        <f:selectItems value="#{basicInfo.bankList}"
-                                       var="bankList"
-                                       itemLabel="#{bankList.name}"
-                                       itemValue="#{bankList.code}"/>
-                    </p:selectOneMenu>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.risk')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1"
-                         value="#{basicInfo.basicInfoView.riskType.id}"
-                         required="true">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{basicInfo.riskTypeList}"
-                           var="riskType"
-                           itemLabel="#{riskType.description}"
-                           itemValue="#{riskType.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.qualitative')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}">
-            <!--required="true">-->
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"
-                          itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"
-                          itemDisabled="#{basicInfo.basicInfoView.individual != 1}"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.existing')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <h:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}">
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-            <p:ajax update="since"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.since')}"/>
-    </td>
-    <!--<td style="width: 200px;">-->
-    <!--<p:inputMask mask="9999" maxlength="4" value="#{basicInfo.basicInfoView.since}" styleClass="larger" id="since"-->
-    <!--required="#{basicInfo.basicInfoView.existingSME == 1}"-->
-    <!--disabled="#{basicInfo.basicInfoView.existingSME != 1}"/>-->
-    <!--</td>-->
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1" id="since"
-                         value="#{basicInfo.basicInfoView.since}"
-                         required="#{basicInfo.basicInfoView.existingSME == 1}"
-                         disabled="#{basicInfo.basicInfoView.existingSME != 1}">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{basicInfo.yearList}"
-                           var="yearList"
-                           itemLabel="#{yearList}"
-                           itemValue="#{yearList}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.lastRev')}"/>
-    </td>
-    <td>
-        <p:calendar value="#{basicInfo.basicInfoView.lastReviewDate}" pattern="dd/MM/yyyy" showOn="button"/>
-    </td>
-</tr>
-<tr>
-    <td class="title" style="width: 200px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.extRev')}"/>
-    </td>
-    <td>
-        <p:calendar value="#{basicInfo.basicInfoView.extReviewDate}" pattern="dd/MM/yyyy" showOn="button"/>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.sbf')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1"
-                         value="#{basicInfo.basicInfoView.sbfScore.id}">
-            <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
-            <f:selectItems value="#{basicInfo.sbfScoreList}"
-                           var="sbfScore"
-                           itemLabel="#{sbfScore.score}"
-                           itemValue="#{sbfScore.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.loan')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <h:selectOneRadio value="#{basicInfo.basicInfoView.loan}">
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}">
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.annual')}"/>
-    </td>
-    <td colspan="3" style="width: 300px;">
-        <h:selectOneRadio value="#{basicInfo.basicInfoView.annual}">
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-            <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-        </h:selectOneRadio>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.style')}"/>
-    </td>
-    <td>
-        <p:selectOneMenu styleClass="largest" size="1"
-                         value="#{basicInfo.basicInfoView.loanRequestPattern.id}"
-                         required="true">
-            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
-            <f:selectItems value="#{basicInfo.borrowingTypeList}"
-                           var="borrowingType"
-                           itemLabel="#{borrowingType.name}"
-                           itemValue="#{borrowingType.id}"/>
-        </p:selectOneMenu>
-    </td>
-</tr>
-<tr>
-    <td class="title">
-        <h:outputText value="#{msg.get('app.basicInfo.content.refName')}"/>
-    </td>
-    <td>
-        <p:inputText value="#{basicInfo.basicInfoView.refName}" styleClass="larger"/>
-    </td>
-    <td class="title" style="width: 200px; padding-left: 30px;">
-        <h:outputText value="#{msg.get('app.basicInfo.content.id')}" style="margin-right: 10px;"/>
-        <p:inputText value="#{basicInfo.basicInfoView.refId}" styleClass="larger"/>
-    </td>
-</tr>
-</table>
-</td>
-</tr>
+    <f:event type="preRenderView" listener="#{basicInfo.preRender()}" />
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name">#{msg.get('app.basicInfo.header')}</div>
+                    <div id="content">
+                        <div id="content_info">
+                            <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                            </div>
+                        </div>
+                        <div id="content_form">
+                            <!-- start content -->
+                            <table class="content_table_form">
+                                <tr>
+                                    <td style="padding-left: 50px;">
+                                        <table>
+                                            <tr>
+                                                <td style="padding-bottom: 20px;" colspan="4">
+                                                    <p:commandButton value="#{msg.get('app.basicInfo.content.button.refresh')}"
+                                                                     process="@form" styleClass="largest" id="refBtn"
+                                                                     actionListener="#{basicInfo.onRefreshInterfaceInfo()}"
+                                                                     update=":msgBoxSystemMessagePanel,:frmMain" />
+                                                    <p:commandButton value="#{msg.get('app.basicInfo.content.button.duplicate')}"
+                                                                     process="@form" styleClass="largest" id="dupBtn"
+                                                                     actionListener="#{basicInfo.onDuplicateApplication()}"
+                                                                     update=":msgBoxSystemMessagePanel,:frmMain" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title" style="width: 200px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.appNo')}"/>
+                                                </td>
+                                                <td style="width: 200px;">
+                                                    <p:inputText value="#{basicInfo.basicInfoView.appNo}" styleClass="larger"
+                                                                 disabled="#{basicInfo.disApplicationNo}" required="#{basicInfo.reqApplicationNo}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.refAppNo')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.refAppNo}" styleClass="larger"
+                                                                 disabled="#{basicInfo.disRefApplicationNo}" required="#{basicInfo.reqRefApplicationNo}"/>
+                                                </td>
+                                                <td class="title" style="width: 300px; padding-left: 30px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.CANo')}" style="margin-right: 10px;"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.caNo}" styleClass="larger"
+                                                                 disabled="#{basicInfo.disCaNo}" required="#{basicInfo.reqCaNo}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.requestType')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.requestType.id}"
+                                                                     disabled="#{basicInfo.disRequestType}"
+                                                                     required="#{basicInfo.reqRequestType and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.requestTypeList}"
+                                                                       var="requestType"
+                                                                       itemLabel="#{requestType.name}"
+                                                                       itemValue="#{requestType.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.productGroup')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.productGroup.id}"
+                                                                     disabled="#{basicInfo.disProductGroup}"
+                                                                     required="#{basicInfo.reqProductGroup and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.productGroupList}"
+                                                                       var="productGroup"
+                                                                       itemLabel="#{productGroup.name}"
+                                                                       itemValue="#{productGroup.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="3">
+                                                    <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
+                                                        <tr>
+                                                            <td>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="title">
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristic')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charUnPaid}"
+                                                                                                     disabled="#{basicInfo.disUnpaidFeeInsurance}"
+                                                                                                     required="#{basicInfo.reqUnpaidFeeInsurance and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.unpaid')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoPending}"
+                                                                                                     disabled="#{basicInfo.disNoPendingClaimLG}"
+                                                                                                     required="#{basicInfo.reqNoPendingClaimLG and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.noPending')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table border="1" style="border-spacing: 0; margin-top: 10px; width: 700px;">
+                                                        <tr>
+                                                            <td>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="title">
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 50px;">
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charFCLG}"
+                                                                                                     disabled="#{basicInfo.disIsConstructionRequestLG}"
+                                                                                                     required="#{basicInfo.reqIsConstructionRequestLG and not empty param[saveBtn.clientId]}">
+                                                                                <p:ajax update="checkBoxIns,checkBoxCom,checkBoxAba,checkBoxLate,checkBoxFund"
+                                                                                        listener="#{basicInfo.onChangeReqLG()}"/>
+                                                                            </p:selectBooleanCheckbox>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox id="checkBoxIns" value="#{basicInfo.basicInfoView.charFCIns}"
+                                                                                                     disabled="#{basicInfo.disIsAbleToGettingGuarantorJob}"
+                                                                                                     required="#{basicInfo.reqIsAbleToGettingGuarantorJob and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.insurance')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox id="checkBoxCom" value="#{basicInfo.basicInfoView.charFCCom}"
+                                                                                                     disabled="#{basicInfo.disNoClaimLGHistory}"
+                                                                                                     required="#{basicInfo.reqNoClaimLGHistory and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.complaint')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox id="checkBoxAba" value="#{basicInfo.basicInfoView.charFCAba}"
+                                                                                                     disabled="#{basicInfo.disNoRevokedLicense}"
+                                                                                                     required="#{basicInfo.reqNoRevokedLicense and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.abandon')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox id="checkBoxLate" value="#{basicInfo.basicInfoView.charFCLate}"
+                                                                                                     disabled="#{basicInfo.disNoLateWorkDelivery}"
+                                                                                                     required="#{basicInfo.reqNoLateWorkDelivery and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.late')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left: 100px;">
+                                                                            <p:selectBooleanCheckbox id="checkBoxFund" value="#{basicInfo.basicInfoView.charFCFund}"
+                                                                                                     disabled="#{basicInfo.disIsAdequateOfCapitalResource}"
+                                                                                                     required="#{basicInfo.reqIsAdequateOfCapitalResource and not empty param[saveBtn.clientId]}"/>
+                                                                            <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.fund')}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.specProgram')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <table style="margin-left: -3px;">
+                                                        <tr>
+                                                            <td style="width: 120px;">
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
+                                                                                  disabled="#{basicInfo.disIsApplySpecialProgram}"
+                                                                                  required="#{basicInfo.reqIsApplySpecialProgram and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
+                                                                </p:selectOneRadio>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
+                                                                                 value="#{basicInfo.basicInfoView.specialProgram.id}"
+                                                                                 disabled="#{basicInfo.disSpecialProgramValue}"
+                                                                                 required="#{basicInfo.reqSpecialProgramValue and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{basicInfo.specialProgramList}"
+                                                                                   var="specialProgram"
+                                                                                   itemLabel="#{specialProgram.code}"
+                                                                                   itemValue="#{specialProgram.id}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.refIn')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <table style="margin-left: -3px;">
+                                                        <tr>
+                                                            <td style="width: 120px;">
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
+                                                                                  disabled="#{basicInfo.disIsRefinanceIN}"
+                                                                                  required="#{basicInfo.reqIsRefinanceIN and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
+                                                                </p:selectOneRadio>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu id="refIn" styleClass="largest"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceIn.code}"
+                                                                                 disabled="#{basicInfo.disRefinanceInValue}"
+                                                                                 required="#{basicInfo.reqRefinanceInValue and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{basicInfo.bankList}"
+                                                                                   var="bankList"
+                                                                                   itemLabel="#{bankList.name}"
+                                                                                   itemValue="#{bankList.code}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.refOut')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <table style="margin-left: -3px;">
+                                                        <tr>
+                                                            <td style="width: 120px;">
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
+                                                                                  disabled="#{basicInfo.disIsRefinanceOUT}"
+                                                                                  required="#{basicInfo.reqIsRefinanceOUT and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                                    <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
+                                                                </p:selectOneRadio>
+                                                            </td>
+                                                            <td>
+                                                                <p:selectOneMenu id="refOut" styleClass="largest"
+                                                                                 size="1" value="#{basicInfo.basicInfoView.refinanceOut.code}"
+                                                                                 disabled="#{basicInfo.disRefinanceOutValue}"
+                                                                                 required="#{basicInfo.reqRefinanceOutValue and not empty param[saveBtn.clientId]}">
+                                                                    <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                                    <f:selectItems value="#{basicInfo.bankList}"
+                                                                                   var="bankList"
+                                                                                   itemLabel="#{bankList.name}"
+                                                                                   itemValue="#{bankList.code}"/>
+                                                                </p:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.risk')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.riskType.id}"
+                                                                     disabled="#{basicInfo.disRiskCustomerType}"
+                                                                     required="#{basicInfo.reqRiskCustomerType and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.riskTypeList}"
+                                                                       var="riskType"
+                                                                       itemLabel="#{riskType.description}"
+                                                                       itemValue="#{riskType.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.qualitative')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}"
+                                                                      disabled="#{basicInfo.disQualitativeType}"
+                                                                      required="#{basicInfo.reqQualitativeType and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.existing')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}"
+                                                                      disabled="#{basicInfo.disIsExistingSMECustomer}"
+                                                                      required="#{basicInfo.reqIsExistingSMECustomer and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <p:ajax update="since" listener="#{basicInfo.onChangeExistingSME()}"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title" style="width: 200px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.since')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1" id="since"
+                                                                     value="#{basicInfo.basicInfoView.since}"
+                                                                     disabled="#{basicInfo.disExistingSMECustomerSince}"
+                                                                     required="#{basicInfo.reqExistingSMECustomerSince and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.yearList}"
+                                                                       var="yearList"
+                                                                       itemLabel="#{yearList}"
+                                                                       itemValue="#{yearList}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title" style="width: 200px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.lastRev')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:calendar value="#{basicInfo.basicInfoView.lastReviewDate}"
+                                                                pattern="dd/MM/yyyy" showOn="button"
+                                                                disabled="#{basicInfo.disLastReviewDate}"
+                                                                required="#{basicInfo.reqLastReviewDate and not empty param[saveBtn.clientId]}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title" style="width: 200px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.extRev')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:calendar value="#{basicInfo.basicInfoView.extReviewDate}"
+                                                                pattern="dd/MM/yyyy" showOn="button"
+                                                                disabled="#{basicInfo.disExtendedReviewDate}"
+                                                                required="#{basicInfo.reqExtendedReviewDate and not empty param[saveBtn.clientId]}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.sbf')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.sbfScore.id}"
+                                                                     disabled="#{basicInfo.disSCFScore}"
+                                                                     required="#{basicInfo.reqSCFScore and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
+                                                        <f:selectItems value="#{basicInfo.sbfScoreList}"
+                                                                       var="sbfScore"
+                                                                       itemLabel="#{sbfScore.score}"
+                                                                       itemValue="#{sbfScore.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.loan')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.loan}"
+                                                                      disabled="#{basicInfo.disRequestLoanWithSameName}"
+                                                                      required="#{basicInfo.reqRequestLoanWithSameName and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
+                                                                      disabled="#{basicInfo.disHaveLoanInOneYear}"
+                                                                      required="#{basicInfo.reqHaveLoanInOneYear and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.annual')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
+                                                                      disabled="#{basicInfo.disPassAnnualReview}"
+                                                                      required="#{basicInfo.reqPassAnnualReview and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.style')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:selectOneMenu styleClass="largest" size="1"
+                                                                     value="#{basicInfo.basicInfoView.loanRequestPattern.id}"
+                                                                     disabled="#{basicInfo.disLoanRequestPattern}"
+                                                                     required="#{basicInfo.reqLoanRequestPattern and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+                                                        <f:selectItems value="#{basicInfo.borrowingTypeList}"
+                                                                       var="borrowingType"
+                                                                       itemLabel="#{borrowingType.name}"
+                                                                       itemValue="#{borrowingType.id}"/>
+                                                    </p:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.refName')}"/>
+                                                </td>
+                                                <td>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.refName}" styleClass="larger"
+                                                                 disabled="#{basicInfo.disReferralName}"
+                                                                 required="#{basicInfo.reqReferralName and not empty param[saveBtn.clientId]}"/>
+                                                </td>
+                                                <td class="title" style="width: 200px; padding-left: 30px;">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.id')}" style="margin-right: 10px;"/>
+                                                    <p:inputText value="#{basicInfo.basicInfoView.refId}" styleClass="larger"
+                                                                 disabled="#{basicInfo.disReferralID}"
+                                                                 required="#{basicInfo.reqReferralID and not empty param[saveBtn.clientId]}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td colspan="2">
-        <div class="separate"><!-- --></div>
-    </td>
-</tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td style="padding-left: 50px;">
-        <table>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.basicInfo.content.opAcc')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:commandButton value="#{msg.get('app.button.add')}"
-                                     styleClass="smaller"
-                                     process="@this"
-                                     actionListener="#{basicInfo.onAddAccount}"
-                                     update=":basicInfoAccountDlgForm"
-                                     oncomplete="basicInfoAccountDlg.show();"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p:dataTable id="resultTableOpeningAccount" var="item"
-                                 value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
-                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
+                                <tr>
+                                    <td style="padding-left: 50px;">
+                                        <table>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.opAcc')}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p:commandButton value="#{msg.get('app.button.add')}"
+                                                                     styleClass="smaller"
+                                                                     process="@this"
+                                                                     actionListener="#{basicInfo.onAddAccount}"
+                                                                     update=":basicInfoAccountDlgForm"
+                                                                     oncomplete="basicInfoAccountDlg.show();">
+                                                        <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                    </p:commandButton>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <p:dataTable id="resultTableOpeningAccount" var="item" value="#{basicInfo.basicInfoView.basicInfoAccountViews}"
+                                                                 paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
 
-                        <p:column headerText="" styleClass="center" style="width:22px;">
-                            <h:outputText value="#{rowIndex+1}"/>
-                        </p:column>
+                                                        <p:column headerText="" styleClass="center" style="width:22px;">
+                                                            <h:outputText value="#{rowIndex+1}"/>
+                                                        </p:column>
 
-                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 130px;">
-                            <h:outputText value="#{item.accountName}"/>
-                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accName')}" style="width: 130px;">
+                                                            <h:outputText value="#{item.accountName}"/>
+                                                        </p:column>
 
-                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 110px;">
-                            <h:outputText value="#{item.bankAccountTypeView.name}"/>
-                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.accType')}" style="width: 110px;">
+                                                            <h:outputText value="#{item.bankAccountTypeView.name}"/>
+                                                        </p:column>
 
-                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 110px;">
-                            <h:outputText value="#{item.product.name}"/>
-                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.product')}" style="width: 110px;">
+                                                            <h:outputText value="#{item.product.name}"/>
+                                                        </p:column>
 
-                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
-                            <h:outputText value="#{item.purposeForShow}"/>
-                        </p:column>
+                                                        <p:column headerText="#{msg.get('app.basicInfo.content.opAcc.purpose')}" style="width: 120px;">
+                                                            <h:outputText value="#{item.purposeForShow}"/>
+                                                        </p:column>
 
-                        <p:column headerText="" styleClass="center" style="width:54px;">
-                            <p:commandButton title="Edit"
-                                             icon="ui-icon-pencil"
-                                             action="#{basicInfo.onEditAccount()}"
-                                             update=":basicInfoAccountDlgForm"
-                                             oncomplete="basicInfoAccountDlg.show();">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{basicInfo.selectAccount}"/>
-                                <f:setPropertyActionListener value="#{rowIndex}"
-                                                             target="#{basicInfo.rowIndex}"/>
-                            </p:commandButton>
-                            <p:commandButton title="Remove"
-                                             icon="ui-icon-trash"
-                                             oncomplete="confirmDeleteAccountDlg.show()">
-                                <f:setPropertyActionListener value="#{item}"
-                                                             target="#{basicInfo.selectAccount}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+                                                        <p:column headerText="" styleClass="center" style="width:54px;">
+                                                            <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                             icon="ui-icon-pencil"
+                                                                             action="#{basicInfo.onEditAccount()}"
+                                                                             update=":basicInfoAccountDlgForm"
+                                                                             oncomplete="basicInfoAccountDlg.show();">
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{basicInfo.selectAccount}"/>
+                                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                                             target="#{basicInfo.rowIndex}"/>
+                                                                <p:resetInput target=":basicInfoAccountDlgForm"/>
+                                                            </p:commandButton>
+                                                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                             icon="ui-icon-trash"
+                                                                             oncomplete="confirmDeleteAccountDlg.show()"
+                                                                             update=":frmMain:resultTableOpeningAccount"
+                                                                             process="@form">
+                                                                <f:setPropertyActionListener value="#{item}"
+                                                                                             target="#{basicInfo.selectAccount}"/>
+                                                            </p:commandButton>
+                                                        </p:column>
+                                                    </p:dataTable>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td colspan="2">
-        <div class="separate"><!-- --></div>
-    </td>
-</tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td style="padding-left: 50px;">
-        <table>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.apply')}"/>
-                </td>
-                <td colspan="3" style="width: 300px;">
-                    <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}">
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
-                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                        <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
-                    </h:selectOneRadio>
-                </td>
-            </tr>
-            <tr>
-                <td class="title">
-                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
-                </td>
-                <td colspan="3" style="width: 300px;">
-                    <h:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}"
-                                      disabled="#{basicInfo.basicInfoView.applyBA != 1}">
-                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment"
-                                       itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
-                    </h:selectOneRadio>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+                                <tr>
+                                    <td style="padding-left: 50px;">
+                                        <table>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo')}"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.apply')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}"
+                                                                      disabled="#{basicInfo.disIsApplyBA}"
+                                                                      required="#{basicInfo.reqIsApplyBA and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
+                                                        <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
+                                                        <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="title">
+                                                    <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
+                                                </td>
+                                                <td colspan="3" style="width: 300px;">
+                                                    <p:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}"
+                                                                      disabled="#{basicInfo.disBaPaymentMethod}"
+                                                                      required="#{basicInfo.reqBaPaymentMethod and not empty param[saveBtn.clientId]}">
+                                                        <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment"
+                                                                       itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
+                                                    </p:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td colspan="2">
-        <div class="separate"><!-- --></div>
-    </td>
-</tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="separate"><!-- --></div>
+                                    </td>
+                                </tr>
 
-<tr>
-    <td colspan="4" class="center">
-        <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}" styleClass="smaller"
-                         process="@form" update=":frmMain, :msgBoxSystemMessagePanel"
-                         actionListener="#{basicInfo.onSave}"/>
-        <!--oncomplete="$('html, body').animate({scrollTop:0}, 'slow');"/>-->
-        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
-                         actionListener="#{basicInfo.onCreation}"/>
-        <!--oncomplete="$('html, body').animate({scrollTop:0}, 'slow');"/>-->
-    </td>
-</tr>
-</table>
-<!-- end content -->
-</div>
-</div>
-<div id="bottom_line"><!-- --></div>
-</div>
-<div class="clear"></div>
-<!-- Start Footer -->
-<ui:include src="include/footer.xhtml"/>
-<!-- End Footer -->
-</div>
-</h:form>
+                                <tr>
+                                    <td colspan="4" class="center">
+                                        <p:commandButton id="saveBtn" value="#{msg.get('app.button.save')}" styleClass="smaller"
+                                                         process="@form" update=":frmMain,:msgBoxSystemMessagePanel"
+                                                         actionListener="#{basicInfo.onSave}"  binding="#{saveBtn}"/>
+                                        <p:commandButton value="#{msg.get('app.button.cancel')}" styleClass="small" process="@form" update=":frmMain"
+                                                         actionListener="#{basicInfo.onCreation}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!-- end content -->
+                        </div>
+                    </div>
+                    <div id="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="include/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
+        </h:form>
 
-<p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
-    LOADING<br/>
-    <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
-</p:blockUI>
+        <p:blockUI block=":frmMain" trigger=":frmMain:saveBtn,:frmMain:refBtn,:frmMain:dupBtn">
+            LOADING<br />
+            <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+        </p:blockUI>
 
-</p:panel>
+    </p:panel>
 
-<p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg"
-          resizable="false"
-          modal="true" width="550" height="260">
-    <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
-</p:dialog>
+    <p:dialog id="basicInfoAccountDialog" header="Opening Account Information" widgetVar="basicInfoAccountDlg" resizable="false"
+              modal="true" width="550" height="260">
+        <ui:include src="dialog/basicInfoAccountDialog.xhtml"/>
+    </p:dialog>
 
-<ui:include src="dialog/confirmDeleteDlg.xhtml">
-    <ui:param name="id" value="confirmDeleteAccountDialog"/>
-    <ui:param name="name" value="confirmDeleteAccountDlg"/>
-    <ui:param name="formId" value="frmConfirmDeleteAccount"/>
-    <ui:param name="controller" value="#{basicInfo}"/>
-    <ui:param name="action" value="onDeleteAccount"/>
-    <ui:param name="update" value=":frmMain"/>
-</ui:include>
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAccountDialog"/>
+        <ui:param name="name" value="confirmDeleteAccountDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAccount"/>
+        <ui:param name="controller" value="#{basicInfo}"/>
+        <ui:param name="action" value="onDeleteAccount"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
-<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                     header="#{basicInfo.messageHeader}" message="#{basicInfo.message}">
-        <p:commandButton value="OK"
-                         process="@this"
-                         update="frmMain"
-                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
-    </p:confirmDialog>
-</p:panel>
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
 
 </h:body>
 </f:view>

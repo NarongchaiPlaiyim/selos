@@ -26,9 +26,12 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -74,6 +77,16 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
+
+    @PostConstruct
+    public void onCreation(){
+        if(SecurityContextHolder.getContext().getAuthentication() != null){
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(userDetail != null){
+                FacesUtil.redirect("/site/inbox.jsf");
+            }
+        }
+    }
 
     public String login() {
         log.debug("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
@@ -154,6 +167,7 @@ public class LoginBean {
             ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
             HttpSession httpSession = FacesUtil.getSession(false);
+            httpSession.setAttribute("user", null);
             httpSession.setAttribute("language", Language.EN);
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());

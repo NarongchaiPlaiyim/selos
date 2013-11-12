@@ -48,6 +48,7 @@ public class NCBDetailView implements Serializable {
 
     private String accountName;
     private LoanAccountTypeView loanAccountTypeView;
+    private BigDecimal debtForCalculate;
 
     public NCBDetailView() {
         reset();
@@ -415,6 +416,14 @@ public class NCBDetailView implements Serializable {
 
     public void setLoanAccountTypeView(LoanAccountTypeView loanAccountTypeView) {
         this.loanAccountTypeView = loanAccountTypeView;
+    }
+
+    public BigDecimal getDebtForCalculate() {
+        return debtForCalculate;
+    }
+
+    public void setDebtForCalculate(BigDecimal debtForCalculate) {
+        this.debtForCalculate = debtForCalculate;
     }
 
     @Override

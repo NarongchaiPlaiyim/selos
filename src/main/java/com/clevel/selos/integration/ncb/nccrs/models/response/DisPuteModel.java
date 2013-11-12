@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class DisPuteModel {
+import java.io.Serializable;
+
+public class DisPuteModel implements Serializable {
     private String date;
     private String status;
     private String topic;

@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ExecutiveSummaryModel {
+import java.io.Serializable;
+
+public class ExecutiveSummaryModel implements Serializable {
     private String totalaccounts;
     private String overdueaccounts;
     private String totaloutstanding;
