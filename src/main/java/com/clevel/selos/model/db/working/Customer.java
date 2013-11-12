@@ -82,6 +82,9 @@ public class Customer implements Serializable {
     @Column(name="ncb_checked", nullable=false, columnDefinition="int default 0")
     private int ncbFlag;
 
+    @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
+    private int csiFlag;
+
     @OneToOne(mappedBy="customer")
     private Individual individual;
 
@@ -125,7 +128,7 @@ public class Customer implements Serializable {
     @Column(name="kyc_reason")
     private String kycReason;
 
-    @Column(name="worthiness")
+    @Column(name="worthiness", nullable = false, columnDefinition = "int default -1")
     private int worthiness;
 
     @Column(name="mobile_number")
@@ -137,10 +140,10 @@ public class Customer implements Serializable {
     @Column(name="email")
     private String email;
 
-    @Column(name="convenant_flag")
+    @Column(name="convenant_flag", nullable = false, columnDefinition = "int default -1")
     private int convenantFlag;
 
-    @Column(name="review_flag")
+    @Column(name="review_flag", nullable = false, columnDefinition = "int default -1")
     private int reviewFlag;
 
     @Column(name="reason")
@@ -154,7 +157,7 @@ public class Customer implements Serializable {
     @JoinColumn(name="mailing_address_id")
     private AddressType mailingAddressType;
 
-    @Column(name="search_by")
+    @Column(name="search_by", nullable = false, columnDefinition = "int default 0")
     private int searchBy;
 
     @Column(name="search_id")
@@ -173,10 +176,6 @@ public class Customer implements Serializable {
 
     @Column(name="juristic_id")
     private long juristicId;
-
-    @OneToOne(mappedBy = "customer")
-    @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
-    private int csiFlag;
 
     public Customer() {
     }
@@ -571,6 +570,14 @@ public class Customer implements Serializable {
 
     public void setJuristicId(long juristicId) {
         this.juristicId = juristicId;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
     }
 
     @Override

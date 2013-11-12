@@ -125,7 +125,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charUnPaid}"
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charUnPaid}"
                                                                                                      disabled="#{basicInfo.disUnpaidFeeInsurance}"
                                                                                                      required="#{basicInfo.reqUnpaidFeeInsurance and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.unpaid')}"/>
@@ -133,7 +133,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoPending}"
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charNoPending}"
                                                                                                      disabled="#{basicInfo.disNoPendingClaimLG}"
                                                                                                      required="#{basicInfo.reqNoPendingClaimLG and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristic.noPending')}"/>
@@ -154,18 +154,18 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 50px;">
-                                                                            <h:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charFCLG}"
+                                                                            <p:selectBooleanCheckbox value="#{basicInfo.basicInfoView.charFCLG}"
                                                                                                      disabled="#{basicInfo.disIsConstructionRequestLG}"
                                                                                                      required="#{basicInfo.reqIsConstructionRequestLG and not empty param[saveBtn.clientId]}">
                                                                                 <p:ajax update="checkBoxIns,checkBoxCom,checkBoxAba,checkBoxLate,checkBoxFund"
                                                                                         listener="#{basicInfo.onChangeReqLG()}"/>
-                                                                            </h:selectBooleanCheckbox>
+                                                                            </p:selectBooleanCheckbox>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg')}"/>
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox id="checkBoxIns" value="#{basicInfo.basicInfoView.charFCIns}"
+                                                                            <p:selectBooleanCheckbox id="checkBoxIns" value="#{basicInfo.basicInfoView.charFCIns}"
                                                                                                      disabled="#{basicInfo.disIsAbleToGettingGuarantorJob}"
                                                                                                      required="#{basicInfo.reqIsAbleToGettingGuarantorJob and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.insurance')}"/>
@@ -173,7 +173,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox id="checkBoxCom" value="#{basicInfo.basicInfoView.charFCCom}"
+                                                                            <p:selectBooleanCheckbox id="checkBoxCom" value="#{basicInfo.basicInfoView.charFCCom}"
                                                                                                      disabled="#{basicInfo.disNoClaimLGHistory}"
                                                                                                      required="#{basicInfo.reqNoClaimLGHistory and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.complaint')}"/>
@@ -181,7 +181,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox id="checkBoxAba" value="#{basicInfo.basicInfoView.charFCAba}"
+                                                                            <p:selectBooleanCheckbox id="checkBoxAba" value="#{basicInfo.basicInfoView.charFCAba}"
                                                                                                      disabled="#{basicInfo.disNoRevokedLicense}"
                                                                                                      required="#{basicInfo.reqNoRevokedLicense and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.abandon')}"/>
@@ -189,7 +189,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox id="checkBoxLate" value="#{basicInfo.basicInfoView.charFCLate}"
+                                                                            <p:selectBooleanCheckbox id="checkBoxLate" value="#{basicInfo.basicInfoView.charFCLate}"
                                                                                                      disabled="#{basicInfo.disNoLateWorkDelivery}"
                                                                                                      required="#{basicInfo.reqNoLateWorkDelivery and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.late')}"/>
@@ -197,7 +197,7 @@
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding-left: 100px;">
-                                                                            <h:selectBooleanCheckbox id="checkBoxFund" value="#{basicInfo.basicInfoView.charFCFund}"
+                                                                            <p:selectBooleanCheckbox id="checkBoxFund" value="#{basicInfo.basicInfoView.charFCFund}"
                                                                                                      disabled="#{basicInfo.disIsAdequateOfCapitalResource}"
                                                                                                      required="#{basicInfo.reqIsAdequateOfCapitalResource and not empty param[saveBtn.clientId]}"/>
                                                                             <h:outputText value="#{msg.get('app.basicInfo.content.characteristicFC.lg.fund')}"/>
@@ -217,13 +217,13 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
                                                                                   disabled="#{basicInfo.disIsApplySpecialProgram}"
                                                                                   required="#{basicInfo.reqIsApplySpecialProgram and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="specialProgram" listener="#{basicInfo.onChangeSpecialProgram}"/>
-                                                                </h:selectOneRadio>
+                                                                </p:selectOneRadio>
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu id="specialProgram" styleClass="largest" size="1"
@@ -249,13 +249,13 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
                                                                                   disabled="#{basicInfo.disIsRefinanceIN}"
                                                                                   required="#{basicInfo.reqIsRefinanceIN and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="refIn" listener="#{basicInfo.onChangeRefIn}"/>
-                                                                </h:selectOneRadio>
+                                                                </p:selectOneRadio>
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu id="refIn" styleClass="largest"
@@ -281,13 +281,13 @@
                                                     <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
-                                                                <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
+                                                                <p:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"
                                                                                   disabled="#{basicInfo.disIsRefinanceOUT}"
                                                                                   required="#{basicInfo.reqIsRefinanceOUT and not empty param[saveBtn.clientId]}">
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                                     <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                                     <p:ajax update="refOut" listener="#{basicInfo.onChangeRefOut}"/>
-                                                                </h:selectOneRadio>
+                                                                </p:selectOneRadio>
                                                             </td>
                                                             <td>
                                                                 <p:selectOneMenu id="refOut" styleClass="largest"
@@ -327,12 +327,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.qualitative')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.qualitative}"
                                                                       disabled="#{basicInfo.disQualitativeType}"
                                                                       required="#{basicInfo.reqQualitativeType and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.a')}" itemValue="1"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.b')}" itemValue="2"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -340,13 +340,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.existing')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.existingSME}"
                                                                       disabled="#{basicInfo.disIsExistingSMECustomer}"
                                                                       required="#{basicInfo.reqIsExistingSMECustomer and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                         <p:ajax update="since" listener="#{basicInfo.onChangeExistingSME()}"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -410,12 +410,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.loan')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.loan}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.loan}"
                                                                       disabled="#{basicInfo.disRequestLoanWithSameName}"
                                                                       required="#{basicInfo.reqRequestLoanWithSameName and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -423,12 +423,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.moreOneYear')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.moreOneYear}"
                                                                       disabled="#{basicInfo.disHaveLoanInOneYear}"
                                                                       required="#{basicInfo.reqHaveLoanInOneYear and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -436,12 +436,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.annual')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.annual}"
                                                                       disabled="#{basicInfo.disPassAnnualReview}"
                                                                       required="#{basicInfo.reqPassAnnualReview and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -579,13 +579,13 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.apply')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}"
+                                                    <p:selectOneRadio value="#{basicInfo.basicInfoView.applyBA}"
                                                                       disabled="#{basicInfo.disIsApplyBA}"
                                                                       required="#{basicInfo.reqIsApplyBA and not empty param[saveBtn.clientId]}">
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.no')}" itemValue="0"/>
                                                         <f:selectItem itemLabel="#{msg.get('app.basicInfo.content.radio.yes')}" itemValue="1"/>
                                                         <p:ajax update="ba" listener="#{basicInfo.onChangeBA}"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -593,12 +593,12 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.baInfo.ba')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <h:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}"
+                                                    <p:selectOneRadio id="ba" value="#{basicInfo.basicInfoView.baPaymentMethod.id}"
                                                                       disabled="#{basicInfo.disBaPaymentMethod}"
                                                                       required="#{basicInfo.reqBaPaymentMethod and not empty param[saveBtn.clientId]}">
                                                         <f:selectItems value="#{basicInfo.baPaymentMethodList}" var="baPayment"
                                                                        itemLabel="#{baPayment.description}" itemValue="#{baPayment.id}"/>
-                                                    </h:selectOneRadio>
+                                                    </p:selectOneRadio>
                                                 </td>
                                             </tr>
                                         </table>
