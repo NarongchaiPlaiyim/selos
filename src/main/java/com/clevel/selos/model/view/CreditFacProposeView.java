@@ -59,8 +59,7 @@ public class CreditFacProposeView implements Serializable {
     private List<GuarantorDetailView> guarantorDetailViewList;
     private List<ConditionInfoDetailView> conditionInfoDetailViewList;
 
-    private CollateralDetailView collateralDetailView;   // Add credit info have head 1 , many Collateral : many subCollateral
-
+    private ProposeCollateralInfoView collateralDetailView;
 
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
@@ -121,7 +120,7 @@ public class CreditFacProposeView implements Serializable {
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
         this.guarantorDetailViewList = new ArrayList<GuarantorDetailView>();
         this.conditionInfoDetailViewList = new ArrayList<ConditionInfoDetailView>();
-        this.collateralDetailView = new CollateralDetailView();
+        this.collateralDetailView = new ProposeCollateralInfoView();
 
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
@@ -512,11 +511,11 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
-    public CollateralDetailView getCollateralDetailView() {
+    public ProposeCollateralInfoView getCollateralDetailView() {
         return collateralDetailView;
     }
 
-    public void setCollateralDetailView(CollateralDetailView collateralDetailView) {
+    public void setCollateralDetailView(ProposeCollateralInfoView collateralDetailView) {
         this.collateralDetailView = collateralDetailView;
     }
 }

@@ -106,8 +106,7 @@ public class CreditFacPropose implements Serializable {
     @Inject
     CollateralTypeDAO collateralTypeDAO;
 
-    public CreditFacPropose() {
-    }
+    public CreditFacPropose() {}
 
 
     @PostConstruct
@@ -125,6 +124,7 @@ public class CreditFacPropose implements Serializable {
 
         if(workCaseId != null){
             if(guarantorList ==null){
+                guarantorList = new ArrayList<Customer>();
 //                guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
             }
         }
