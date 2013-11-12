@@ -549,7 +549,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
-            log.debug("error can not convert time out to integer");
+            log.debug("can not convert time out to integer (Default is 60 second)");
         }
         result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");
         String res = "<ncrsresponse>";
