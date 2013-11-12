@@ -80,7 +80,14 @@ public class BaseController implements Serializable {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
-        }
+        } /*else {
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(user.getId() != userDetail.getUserName()){
+                user = userDAO.findById(userDetail.getUserName());
+                session = FacesUtil.getSession(false);
+                session.setAttribute("user", user);
+            }
+        }*/
 
     }
 

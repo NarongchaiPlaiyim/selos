@@ -57,8 +57,8 @@ public class BankAccountType implements Serializable {
         return shortName;
     }
 
-    public void setShortName(String shortname) {
-        this.shortName = shortname;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getDescription() {
@@ -102,7 +102,7 @@ public class BankAccountType implements Serializable {
                 .append("description", description)
                 .append("active", active)
                 .append("openAccountFlag", openAccountFlag)
-                .append("bankAccountFlag", bankStatementFlag)
+                .append("bankStatementFlag", bankStatementFlag)
                 .toString();
     }
 }

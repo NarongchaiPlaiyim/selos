@@ -480,8 +480,9 @@ public class NCRSImp implements NCRS, Serializable {
                         exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
                     }
                     resultDesc = exception.toString();
-                    log.error("NCRS NCB Exception TUEFERROR {}", null != exception ? exception.toString() : "");
-                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
+                    return responseModel;
+//                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
                 }
             } else {
                 resultDesc = responseModel.getBodyModel().getErrormsg();
@@ -606,11 +607,11 @@ public class NCRSImp implements NCRS, Serializable {
         xStream.processAnnotations(NCRSRequestModel.class);
         xml = new String(xStream.toXML(ncrsRequest).getBytes("UTF-8"));
         log.debug("NCRS Request : \n{}", xml);
-        int nTimeOut = 1; //minute
+        int nTimeOut = 60; //sec.
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
-            log.debug("error can not convert time out to integer");
+            log.debug("can not convert time out to integer (Default is 60 second)");
         }
 
         result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");

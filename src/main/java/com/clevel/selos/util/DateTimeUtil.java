@@ -72,8 +72,8 @@ public class DateTimeUtil {
         return dateConvert;
     }
 
-    public static String convertDateToString(Date date, Locale locale){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", locale);
+    public static String convertDateToString(Date date, Locale locale, String dateFormat){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, locale);
         String dateConvert = "";
         try {
             dateConvert = simpleDateFormat.format(date);

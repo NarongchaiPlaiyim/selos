@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class PaymentPatternModel {
+import java.io.Serializable;
+
+public class PaymentPatternModel implements Serializable {
     private String pattern;
     private String startmonth;
     private String endmonth;

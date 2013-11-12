@@ -174,6 +174,10 @@ public class Customer implements Serializable {
     @Column(name="juristic_id")
     private long juristicId;
 
+    @OneToOne(mappedBy = "customer")
+    @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
+    private int csiFlag;
+
     public Customer() {
     }
 

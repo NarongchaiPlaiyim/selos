@@ -173,6 +173,8 @@ public class CustomerTransform extends Transform {
 
         customerInfoView.setPercentShare(customer.getPercentShare());
 
+		customerInfoView.setCsiFlag(customer.getCsiFlag());
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(customer.getAddressesList() != null && customer.getAddressesList().size() > 0){
@@ -450,6 +452,8 @@ public class CustomerTransform extends Transform {
 
         customer.setIsCommittee(customerInfoView.getIsCommittee());
         customer.setJuristicId(customerInfoView.getCommitteeId());
+
+		customer.setCsiFlag(customerInfoView.getCsiFlag());
 
         log.info("transformToModel : customer before adding address : {}", customer);
 

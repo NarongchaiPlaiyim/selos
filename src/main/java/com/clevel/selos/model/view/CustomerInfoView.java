@@ -34,6 +34,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int validId;
     private String ncbResult;
     private String ncbReason;
+    private String csiResult;
+    private String csiReason;
+    private int csiFlag;
 
     //*** Var for Customer ***//
     private long id;
@@ -238,6 +241,30 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setNcbReason(String ncbReason) {
         this.ncbReason = ncbReason;
+    }
+
+    public String getCsiResult() {
+        return csiResult;
+    }
+
+    public void setCsiResult(String csiResult) {
+        this.csiResult = csiResult;
+    }
+
+    public String getCsiReason() {
+        return csiReason;
+    }
+
+    public void setCsiReason(String csiReason) {
+        this.csiReason = csiReason;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
     }
 
     public long getId() {
