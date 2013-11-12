@@ -120,11 +120,11 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.collOwner')}"/>
                                 </td>
                                 <td colspan="3" style="width: 300px;">
-                                    <h:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
+                                    <p:selectOneRadio id="collateral" value="#{custInfoSumJuris.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumJuris.customerInfoView.relation.getId() == 3 || custInfoSumJuris.customerInfoView.relation.getId() == 4}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="99"/>
-                                    </h:selectOneRadio>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
@@ -210,7 +210,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.nameTh')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <table>
+                                    <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -236,7 +236,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.nameEn')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <table>
+                                    <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -587,7 +587,7 @@
                                         <tr>
                                             <td></td>
                                             <td colspan="5">
-                                                <table>
+                                                <table style="margin-left: -3px;">
                                                     <tr>
                                                         <td>
                                                             <p:selectOneMenu size="1" style="width: 200px;"
@@ -687,11 +687,11 @@
                                     <h:outputText value="#{msg.get('app.custInfoJuri.content.bussAdd')}"/>
                                 </td>
                                 <td colspan="2">
-                                    <h:selectOneRadio value="#{custInfoSumJuris.addressFlagForm2}">
+                                    <p:selectOneRadio value="#{custInfoSumJuris.addressFlagForm2}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.reigs')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoJuri.content.button.other')}" itemValue="3"/>
                                         <p:ajax update=":frmMain:adForm2"/>
-                                    </h:selectOneRadio>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
@@ -737,7 +737,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td colspan="5">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;"

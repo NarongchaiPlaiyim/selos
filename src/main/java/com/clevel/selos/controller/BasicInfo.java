@@ -190,7 +190,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void preRender(){
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
-        session.setAttribute("stepId", 1001);
+        session.setAttribute("stepId", 1004);
 
         log.info("preRender ::: setSession ");
 
@@ -602,7 +602,7 @@ public class BasicInfo extends MandatoryFieldsControl {
     public void onRefreshInterfaceInfo(){
         try{
             messageHeader = "Refresh Interface Info complete.";
-            message = "Basic Info found.";
+            message = "Refresh Interface Info complete.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }catch (Exception ex){
             log.debug("refreshInterfaceInfo Exception : {}", ex);

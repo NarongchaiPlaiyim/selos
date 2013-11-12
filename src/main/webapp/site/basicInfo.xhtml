@@ -22,7 +22,7 @@
                 <ui:include src="include/header_logo.xhtml" />
                 <!-- End Header Logo -->
                 <!-- Start Header Detail -->
-                <!--<ui:include src="include/header_detail.xhtml" />-->
+                <ui:include src="include/header_detail.xhtml" />
                 <!-- End Header Detail -->
                 <!-- Start Menu -->
                 <ui:include src="include/menubar.xhtml" />
@@ -32,7 +32,9 @@
                     <div id="content">
                         <div id="content_info">
                             <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>,
+                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/>
+                            </div>
                         </div>
                         <div id="content_form">
                             <!-- start content -->
@@ -212,7 +214,7 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.specProgram')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.spProgram}"
@@ -244,7 +246,7 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refIn')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refIn}"
@@ -276,7 +278,7 @@
                                                     <h:outputText value="#{msg.get('app.basicInfo.content.refOut')}"/>
                                                 </td>
                                                 <td colspan="3" style="width: 300px;">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td style="width: 120px;">
                                                                 <h:selectOneRadio value="#{basicInfo.basicInfoView.refOut}"

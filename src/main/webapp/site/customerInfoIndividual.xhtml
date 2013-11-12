@@ -120,11 +120,11 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                 </td>
                                 <td colspan="3" style="width: 300px;">
-                                    <h:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
+                                    <p:selectOneRadio id="collateral" value="#{custInfoSumIndi.customerInfoView.collateralOwner}"
                                                       disabled="#{custInfoSumIndi.customerInfoView.relation.getId() == 3 || custInfoSumIndi.customerInfoView.relation.getId() == 4}">
                                         <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="99"/>
-                                    </h:selectOneRadio>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
@@ -248,7 +248,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.nameTh')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <table>
+                                    <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -278,7 +278,7 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.nameEn')}"/>
                                 </td>
                                 <td colspan="5">
-                                    <table>
+                                    <table style="margin-left: -3px;">
                                         <tr>
                                             <td>
                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -516,7 +516,7 @@
                                         <tr>
                                             <td></td>
                                             <td colspan="5">
-                                                <table>
+                                                <table style="margin-left: -3px;">
                                                     <tr>
                                                         <td>
                                                             <p:selectOneMenu size="1" style="width: 200px;"
@@ -618,11 +618,11 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.regisAdd')}"/>
                                 </td>
                                 <td colspan="2">
-                                    <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm2}">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.addressFlagForm2}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.current')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.other')}" itemValue="3"/>
                                         <p:ajax update=":frmMain:adForm2"/>
-                                    </h:selectOneRadio>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
@@ -669,7 +669,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td colspan="5">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -785,12 +785,12 @@
                                     <h:outputText value="#{msg.get('app.custInfoIndi.content.workAdd')}"/>
                                 </td>
                                 <td colspan="3">
-                                    <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm3}">
+                                    <p:selectOneRadio value="#{custInfoSumIndi.addressFlagForm3}">
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.current')}" itemValue="1"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.regis')}" itemValue="2"/>
                                         <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.other')}" itemValue="3"/>
                                         <p:ajax update=":frmMain:adForm3"/>
-                                    </h:selectOneRadio>
+                                    </p:selectOneRadio>
                                 </td>
                             </tr>
                             <tr>
@@ -835,7 +835,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td colspan="5">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -1211,11 +1211,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.collOwner')}"/>
                                     </td>
                                     <td colspan="3" style="width: 300px;">
-                                        <h:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
+                                        <p:selectOneRadio value="#{custInfoSumIndi.customerInfoView.spouse.collateralOwner}"
                                                           disabled="#{custInfoSumIndi.customerInfoView.spouse.relation.getId() == 3 || custInfoSumIndi.customerInfoView.spouse.relation.getId() == 4}">
                                             <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="99"/>
-                                        </h:selectOneRadio>
+                                        </p:selectOneRadio>
                                     </td>
                                 </tr>
 
@@ -1324,7 +1324,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.nameTh')}"/>
                                     </td>
                                     <td colspan="5">
-                                        <table>
+                                        <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
                                                     <p:selectOneMenu size="1" style="width: 200px;"
@@ -1351,7 +1351,7 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.nameEn')}"/>
                                     </td>
                                     <td colspan="5">
-                                        <table>
+                                        <table style="margin-left: -3px;">
                                             <tr>
                                                 <td>
                                                     <p:selectOneMenu size="1" style="width: 200px;"
@@ -1557,7 +1557,7 @@
                                             <tr>
                                                 <td></td>
                                                 <td colspan="5">
-                                                    <table>
+                                                    <table style="margin-left: -3px;">
                                                         <tr>
                                                             <td>
                                                                 <p:selectOneMenu size="1" style="width: 200px;"
@@ -1650,11 +1650,11 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.regisAdd')}"/>
                                     </td>
                                     <td colspan="2">
-                                        <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm5}">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.addressFlagForm5}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.current')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.other')}" itemValue="3"/>
                                             <p:ajax update=":frmMain:adForm5"/>
-                                        </h:selectOneRadio>
+                                        </p:selectOneRadio>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1698,7 +1698,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td colspan="5">
-                                                        <table>
+                                                        <table style="margin-left: -3px;">
                                                             <tr>
                                                                 <td>
                                                                     <p:selectOneMenu size="1" style="width: 200px;"
@@ -1800,12 +1800,12 @@
                                         <h:outputText value="#{msg.get('app.custInfoIndi.content.workAdd')}"/>
                                     </td>
                                     <td colspan="3">
-                                        <h:selectOneRadio value="#{custInfoSumIndi.addressFlagForm6}">
+                                        <p:selectOneRadio value="#{custInfoSumIndi.addressFlagForm6}">
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.current')}" itemValue="1"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.regis')}" itemValue="2"/>
                                             <f:selectItem itemLabel="#{msg.get('app.custInfoIndi.content.button.other')}" itemValue="3"/>
                                             <p:ajax update=":frmMain:adForm6"/>
-                                        </h:selectOneRadio>
+                                        </p:selectOneRadio>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1848,7 +1848,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td colspan="5">
-                                                        <table>
+                                                        <table style="margin-left: -3px;">
                                                             <tr>
                                                                 <td>
                                                                     <p:selectOneMenu size="1" style="width: 200px;"
