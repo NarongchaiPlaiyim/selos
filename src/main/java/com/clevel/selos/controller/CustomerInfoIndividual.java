@@ -1079,9 +1079,10 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
-        Calendar today = Calendar.getInstance(new Locale("th", "TH"));
-        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
-        customerInfoView.setAge(today.getTime().getYear());
+        Calendar today = Calendar.getInstance();
+//        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
+//        customerInfoView.setAge(today.getTime().getYear());
+        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
 
         try{
             customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
@@ -1116,9 +1117,10 @@ public class CustomerInfoIndividual implements Serializable {
 
         //calculate age
         Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
-        Calendar today = Calendar.getInstance(new Locale("th", "TH"));
-        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
-        customerInfoView.setAge(today.getTime().getYear());
+        Calendar today = Calendar.getInstance();
+//        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
+//        customerInfoView.setAge(today.getTime().getYear());
+        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);
