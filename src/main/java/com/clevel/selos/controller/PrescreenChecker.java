@@ -446,6 +446,12 @@ public class PrescreenChecker implements Serializable {
                     customerInfoViewList.add(customerInfoView);
                 }
 
+                for(CustomerInfoView customerInfoView : customerInfoViewList){
+                    if(customerInfoView.getCsiFlag() == 0){
+                        failedCount = failedCount + 1;
+                    }
+                }
+
                 log.debug("onCheckCSI ::: failedCount : {}", failedCount);
                 log.debug("onCheckCSI ::: success (old) : {}", success);
 
