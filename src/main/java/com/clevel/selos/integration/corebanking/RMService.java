@@ -415,15 +415,17 @@ public class RMService implements Serializable {
 
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
 
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
-
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 }
                 //check null
             } else {
@@ -608,13 +610,16 @@ public class RMService implements Serializable {
 
                     log.debug("responseCode: {}", resSearchCorporateCustomer.getHeader().getResCode());
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
 
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
                 }  //check null
             } else {
                 log.warn(" resSearchCorporateCustomer : Null");
@@ -774,12 +779,15 @@ public class RMService implements Serializable {
                     customerAccountResult.setAccountListModels(listModelList);
 
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 }
                 //check null
             } else {
@@ -815,14 +823,14 @@ public class RMService implements Serializable {
         try{
             ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,Integer.parseInt(individualRequestTimeout)*1000);
         }catch (Exception e){
-            log.error("individual Service request_timeout must be a number!");
+            log.debug("individual Service request_timeout must be a number!");
             ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,60000);
         }
 
         try{
             ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,Integer.parseInt(individualConnectTimeout)*1000);
         }catch (Exception e){
-            log.error("individual Service connect_timeout must be a number!");
+            log.debug("individual Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,60000);
         }
 
@@ -843,14 +851,14 @@ public class RMService implements Serializable {
         try{
             ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(juristicRequestTimeout)*1000);
         }catch (Exception e){
-            log.error("juristic Service request_timeout must be a number!");
+            log.debug("juristic Service request_timeout must be a number!");
             ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, 60000);
         }
 
         try{
             ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(juristicConnectTimeout)*1000);
         }catch (Exception e){
-            log.error("juristic Service connect_timeout must be a number!");
+            log.debug("juristic Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
         }
 
@@ -871,14 +879,14 @@ public class RMService implements Serializable {
         try{
             ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(cusAccountRequestTimeout)*1000);
         }catch (Exception e){
-            log.error("customerAccount Service request_timeout must be a number!");
+            log.debug("customerAccount Service request_timeout must be a number!");
             ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, 60000);
         }
 
         try{
             ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(cusAccountConnectTimeout)*1000);
         }catch (Exception e){
-            log.error("customerAccount Service connect_timeout must be a number!");
+            log.debug("customerAccount Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
         }
 

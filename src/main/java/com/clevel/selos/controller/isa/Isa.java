@@ -8,16 +8,12 @@ import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.model.view.isa.IsaSearchView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
 import com.clevel.selos.system.audit.IsaAuditor;
-import com.clevel.selos.util.CsvExport;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -68,6 +64,7 @@ public class Isa implements Serializable {
 
     @Inject
     IsaAuditor isaAuditor;
+
     public Isa() {
 
     }
@@ -105,25 +102,6 @@ public class Isa implements Serializable {
     private String messageHeader;
     private String message;
 
-    private List<String> testlist;
-
-    public List<String> getTestlist() {
-        return testlist;
-    }
-
-    public void setTestlist(List<String> testlist) {
-        this.testlist = testlist;
-    }
-
-    private UploadedFile file;
-
-    public UploadedFile getFile() {
-        return file;
-    }
-
-    public void setFile(UploadedFile file) {
-        this.file = file;
-    }
 
     @PostConstruct
     public void onCreate() {
@@ -134,10 +112,6 @@ public class Isa implements Serializable {
         isaManageUserView.reset();
         isaSearchView.reset();
 //        isaSearchView.getRoleId().setId(-1);
-        testlist=new ArrayList<String>();
-        testlist.add("sd"); testlist.add("sd");testlist.add("sd");testlist.add("sd");testlist.add("sd");testlist.add("sd");
-
-        System.out.println(testlist.size());
 
     }
 
@@ -429,17 +403,6 @@ public class Isa implements Serializable {
             context.execute("msgBoxSystemMessageDlg.show()");
             isaAuditor.add("ISA",ManageUserAction.UPDATE,"userId : "+id,ActionResult.EXCEPTION,message);
         }
-
-    }
-
-
-
-    public void uploadUserFile(FileUploadEvent event){
-       log.debug("uploadUserFile()");
-       Date date= Calendar.getInstance().getTime();
-
-        System.out.println(event.getFile().getFileName() + "  "+file.getSize());
-
 
     }
 

@@ -30,12 +30,12 @@
                             <p:fieldset legend="" style="width: 700px">
                                 <p:panelGrid columns="2">
                                 <h:outputText value="เลือก File ข้อมูลผู้ใช้ระบบ:"/>
-                                <p:fileUpload value="#{isa.uploadUserFile}" fileLimit="1"/>
+                                <p:fileUpload value="#{isaUpload.uploadUserFile}" fileLimit="1"/>
                                 </p:panelGrid>
 
                             </p:fieldset>
 
-                            <p:dataTable value="#{isa.testlist}" var="o" widgetVar="" style="width: 700px">
+                            <p:dataTable value="#{isaUpload.testlist}" var="o" widgetVar="" style="width: 700px">
                                 <p:column>
                                    Upload Time :
                                 </p:column>
