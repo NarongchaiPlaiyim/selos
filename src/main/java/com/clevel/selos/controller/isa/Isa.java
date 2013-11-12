@@ -3,28 +3,32 @@ package com.clevel.selos.controller.isa;
 import com.clevel.selos.businesscontrol.isa.IsaBusinessControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.ManageUserActive;
+import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.IsaManageUserView;
-import com.clevel.selos.model.view.IsaSearchView;
-import com.clevel.selos.model.view.IsaUserReportView;
-import com.clevel.selos.util.ScvExport;
+import com.clevel.selos.model.view.isa.IsaAuditLogView;
+import com.clevel.selos.model.view.isa.IsaManageUserView;
+import com.clevel.selos.model.view.isa.IsaSearchView;
+import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.system.audit.IsaAuditor;
+import com.clevel.selos.util.CsvExport;
 import org.hibernate.criterion.Restrictions;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @ViewScoped
@@ -34,6 +38,7 @@ public class Isa implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     UserDAO userDAO;
 
@@ -61,6 +66,8 @@ public class Isa implements Serializable {
     @Inject
     IsaBusinessControl isaBusinessControl;
 
+    @Inject
+    IsaAuditor isaAuditor;
     public Isa() {
 
     }
@@ -86,17 +93,37 @@ public class Isa implements Serializable {
 
 
     private IsaManageUserView isaManageUserView;
+    private IsaManageUserView isaUserEditView;
     private IsaSearchView isaSearchView;
 
     private int userSize;
     private String id;
     private int active;
-    private int notLogonOverDay;
+    private boolean readUserId;
 
+    //dialogMessage
     private String messageHeader;
     private String message;
 
-    private static char COMMA_DELIMITED = ',';
+    private List<String> testlist;
+
+    public List<String> getTestlist() {
+        return testlist;
+    }
+
+    public void setTestlist(List<String> testlist) {
+        this.testlist = testlist;
+    }
+
+    private UploadedFile file;
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
 
     @PostConstruct
     public void onCreate() {
@@ -107,10 +134,15 @@ public class Isa implements Serializable {
         isaManageUserView.reset();
         isaSearchView.reset();
 //        isaSearchView.getRoleId().setId(-1);
+        testlist=new ArrayList<String>();
+        testlist.add("sd"); testlist.add("sd");testlist.add("sd");testlist.add("sd");testlist.add("sd");testlist.add("sd");
+
+        System.out.println(testlist.size());
 
     }
 
     private boolean complete;
+
 
     public void onManageUserAction() {
         log.debug("onCreateNewUser()");
@@ -118,8 +150,10 @@ public class Isa implements Serializable {
         complete = true;
         System.out.println("------------------  :  " + isaManageUserView.toString());
 
+            IsaUserDetailView auditView=getAuditDesc(isaManageUserView);
+
         try {
-            if (isaManageUserView.getFlag() == ManageUserAction.ADD) {
+            if (isaManageUserView.getFlag() == ManageUserAction.CREATE) {
                 messageHeader = "Add New User.";
 
                 User user = userDAO.findOneByCriteria(Restrictions.eq("id", isaManageUserView.getId()));
@@ -127,21 +161,32 @@ public class Isa implements Serializable {
                     complete = false;
                     message = "Add new User failed. Cause : Duplicate UserId found in system!";
 
+                    isaAuditor.add("ISA", isaManageUserView.getFlag(),auditView.toString(), ActionResult.FAILED, message);
                 } else {
                     isaBusinessControl.createUser(isaManageUserView);
+//                    UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//                    System.out.println(userDetail.getUserName());
+                    isaAuditor.add("ISA", isaManageUserView.getFlag(),auditView.toString(), ActionResult.SUCCESS, "");
+
                     onSelectUser();
                     message = "Add New User Success.";
                 }
                 context.execute("msgBoxSystemMessageDlg.show()");
-            } else if (isaManageUserView.getFlag() == ManageUserAction.EDIT) {
+            } else if (isaManageUserView.getFlag() == ManageUserAction.UPDATE) {
                 context.execute("confirmEditUserDlg.show()");
                 complete = false;
             }
 
             context.addCallbackParam("functionComplete", complete);
         } catch (ConstraintViolationException e) {
+            if (e.getCause() != null) {
+                message = "Edit User failed. Cause : " +e.getCause().getMessage();
+            } else {
+                message = "Edit User failed. Cause : " +e.getMessage();
+            }
 
-            message = "Edit User failed. Cause :";
+            isaAuditor.add("ISA", isaManageUserView.getFlag(),auditView.toString(), ActionResult.EXCEPTION,message);
+
             context.execute("msgBoxSystemMessageDlg.show()");
         } catch (Exception ex) {
             log.debug("Exception : {}", ex);
@@ -151,6 +196,8 @@ public class Isa implements Serializable {
             } else {
                 message = "Add new customer failed. Cause : " + ex.getMessage();
             }
+
+            isaAuditor.add("ISA", isaManageUserView.getFlag(),auditView.toString(), ActionResult.EXCEPTION, message);
             context.execute("msgBoxSystemMessageDlg.show()");
         }
 
@@ -160,8 +207,8 @@ public class Isa implements Serializable {
 
         log.debug("onSelectUser()");
         userDetail = new ArrayList<User>();
-//        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
-        userDetail = userDAO.findAll();
+        userDetail = userDAO.findByCriteria(Restrictions.eq("userStatus", UserStatus.NORMAL));
+//        userDetail = userDAO.findAll();
         getSelectUserDetailList();
         userSize = userDetail.size();
     }
@@ -187,7 +234,7 @@ public class Isa implements Serializable {
 //        isaManageUserView = new IsaManageUserView();
         isaManageUserView.reset();
         isaManageUserView.getRole().setId(-1);
-        isaManageUserView.setFlag(ManageUserAction.ADD);
+        isaManageUserView.setFlag(ManageUserAction.CREATE);
 
         getSelectUserDetailList();
     }
@@ -200,9 +247,12 @@ public class Isa implements Serializable {
         try {
 
             isaManageUserView = isaBusinessControl.SelectUserById(id);
+            isaManageUserView.setReadOnlyUserId(true);
             if (isaManageUserView != null) {
 
-                isaManageUserView.setFlag(ManageUserAction.EDIT);
+                //set BeforeAudit
+                isaUserEditView=isaBusinessControl.SelectUserById(id);
+                isaManageUserView.setFlag(ManageUserAction.UPDATE);
                 getSelectUserDetailList();
 
             } else {
@@ -225,10 +275,11 @@ public class Isa implements Serializable {
     public void onDelete() {
         System.out.println("------------------ " + id);
         complete = true;
+
         try {
             isaBusinessControl.deleteUser(id);
+            isaAuditor.add("ISA",ManageUserAction.DELETE,"userId : "+id,ActionResult.SUCCESS,"");
             onSelectUser();
-
         } catch (Exception e) {
             complete = false;
             messageHeader = "Delete User.";
@@ -237,16 +288,15 @@ public class Isa implements Serializable {
             } else {
                 message = "Delete User failed. Cause : " + e.getMessage();
             }
+            isaAuditor.add("ISA",ManageUserAction.DELETE,"userId : "+id,ActionResult.EXCEPTION,message);
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
 
     }
 
     public void onDeleteUserList() {
+        log.debug("onDeleteUserList()");
         System.out.println("-------------------------------------22 : " + selectUserDetail.length);
-        for (User list : selectUserDetail) {
-            System.out.println(list.getId());
-        }
         RequestContext context = RequestContext.getCurrentInstance();
         try {
             messageHeader = "Delete User.";
@@ -274,8 +324,14 @@ public class Isa implements Serializable {
 
         RequestContext context = RequestContext.getCurrentInstance();
         try {
+            StringBuilder builder=new StringBuilder("");
+            for(User list:selectUserDetail){
+                builder.append(list.getId()); builder.append(",");
+            }
 
             isaBusinessControl.deleteUserList(selectUserDetail);
+
+            isaAuditor.add("ISA",ManageUserAction.DELETE,"userId : "+builder,ActionResult.SUCCESS,"");
 
         } catch (Exception e) {
 
@@ -286,6 +342,7 @@ public class Isa implements Serializable {
                 message = "Delete User failed. Cause : " + e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
+            isaAuditor.add("ISA",ManageUserAction.DELETE,"userId : "+id,ActionResult.EXCEPTION,message);
         }
         onSelectUser();
     }
@@ -293,8 +350,16 @@ public class Isa implements Serializable {
     public void editUser() {
         log.debug("editUser()");
         RequestContext context = RequestContext.getCurrentInstance();
+
+        IsaUserDetailView auditAfter=getAuditDesc(isaManageUserView);
+        IsaUserDetailView auditBefore=getAuditDesc(isaUserEditView);
         try {
+
+
             isaBusinessControl.editUser(isaManageUserView);
+
+            isaAuditor.add("ISA",ManageUserAction.UPDATE,"before : "+auditBefore.toString()+ ", after : "+auditAfter.toString(),ActionResult.SUCCESS,"");
+
             onSelectUser();
             context.execute("manageUserDlg.hide()");
         } catch (Exception e) {
@@ -304,9 +369,9 @@ public class Isa implements Serializable {
             } else {
                 message = "Edit User failed. Cause : " + e.getMessage();
             }
+            isaAuditor.add("ISA",ManageUserAction.UPDATE,auditAfter.toString(),ActionResult.EXCEPTION,message);
             context.execute("msgBoxSystemMessageDlg.show()");
         }
-
 
     }
 
@@ -341,11 +406,17 @@ public class Isa implements Serializable {
 //            } else {
 //                context.execute("confirmDeleteUserListDlg.show()");
 //            }
+            StringBuilder builder=new StringBuilder("");
+            for(User list:selectUserDetail){
+                builder.append(list.getId()); builder.append(",");
+            }
 
             if (active == 1) {
                 isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.ACTIVE);
+                isaAuditor.add("ISA",ManageUserAction.UPDATE,"userId : "+builder +" To "+ManageUserActive.ACTIVE,ActionResult.SUCCESS,"");
             } else if (active == 0) {
                 isaBusinessControl.editUserActive(selectUserDetail, ManageUserActive.INACTIVE);
+                isaAuditor.add("ISA",ManageUserAction.UPDATE,"userId : "+builder +" To "+ManageUserActive.INACTIVE,ActionResult.SUCCESS,"");
             }
             onSelectUser();
 
@@ -356,143 +427,46 @@ public class Isa implements Serializable {
                 message = "Edit UserActive failed. Cause : " + e.getMessage();
             }
             context.execute("msgBoxSystemMessageDlg.show()");
+            isaAuditor.add("ISA",ManageUserAction.UPDATE,"userId : "+id,ActionResult.EXCEPTION,message);
         }
 
     }
 
 
-    public void notLogonOver() {
-        log.debug("notLogonOver()");
 
-        List<IsaUserReportView> list=new ArrayList<IsaUserReportView>();
-        StringBuilder builder = new StringBuilder();
-        builder.append("No");builder.append(COMMA_DELIMITED);
-        builder.append("User ID");builder.append(COMMA_DELIMITED);
-        builder.append("User Name");builder.append(COMMA_DELIMITED);
-        builder.append("Email Address");builder.append(COMMA_DELIMITED);
-        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
-        builder.append("Last IP");builder.append(COMMA_DELIMITED);
-        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
-        builder.append("Role");builder.append(COMMA_DELIMITED);
-        builder.append("Department");builder.append(COMMA_DELIMITED);
-        builder.append("Division");builder.append(COMMA_DELIMITED);
-        builder.append("Region");builder.append(COMMA_DELIMITED);
-        builder.append("Team");builder.append(COMMA_DELIMITED);
-        builder.append("Title");builder.append(COMMA_DELIMITED);
-        builder.append("Zone");builder.append(COMMA_DELIMITED);
-        builder.append("Active");builder.append(COMMA_DELIMITED);
-        builder.append("Status");builder.append("\n");
+    public void uploadUserFile(FileUploadEvent event){
+       log.debug("uploadUserFile()");
+       Date date= Calendar.getInstance().getTime();
 
-        try{
-            list=isaBusinessControl.getUserNotLogonOver(notLogonOverDay);
-        }catch (Exception e){
-
-        }
-        int number=1;
-        for(IsaUserReportView isaUserReportView:list){
-            builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserId()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserName()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getRole()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getDivision()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getRegion()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getTeam()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getTitle()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getZone()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getActive()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserStatus()+"'");builder.append("\n");
-
-            number++;
-        }
-        System.out.println(builder.toString());
-
-    }
-
-
-    public void userReport() {
-        log.debug("userReport()");
-
-        List<IsaUserReportView> list=new ArrayList<IsaUserReportView>();
-        StringBuilder builder = new StringBuilder();
-        builder.append("No");builder.append(COMMA_DELIMITED);
-        builder.append("User ID");builder.append(COMMA_DELIMITED);
-        builder.append("User Name");builder.append(COMMA_DELIMITED);
-        builder.append("Email Address");builder.append(COMMA_DELIMITED);
-        builder.append("Bu Code");builder.append(COMMA_DELIMITED);
-        builder.append("Last IP");builder.append(COMMA_DELIMITED);
-        builder.append("Last Logon");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Ext");builder.append(COMMA_DELIMITED);
-        builder.append("Phone Number");builder.append(COMMA_DELIMITED);
-        builder.append("Role");builder.append(COMMA_DELIMITED);
-        builder.append("Department");builder.append(COMMA_DELIMITED);
-        builder.append("Division");builder.append(COMMA_DELIMITED);
-        builder.append("Region");builder.append(COMMA_DELIMITED);
-        builder.append("Team");builder.append(COMMA_DELIMITED);
-        builder.append("Title");builder.append(COMMA_DELIMITED);
-        builder.append("Zone");builder.append(COMMA_DELIMITED);
-        builder.append("Active");builder.append(COMMA_DELIMITED);
-        builder.append("Status");builder.append("\n");
-
-        try{
-             list=isaBusinessControl.getUserReportList();
-        }catch (Exception e){
-
-        }
-        int number=1;
-        if(list!=null){
-        for(IsaUserReportView isaUserReportView:list){
-            builder.append("'"+number+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserId()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserName()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getEmailAddress()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getBuCode()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getLastIp()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getLastLogon()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getPhoneExt()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getPhoneNumber()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getRole()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getDepartment()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getDivision()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getRegion()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getTeam()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getTitle()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getZone()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getActive()+"'");builder.append(COMMA_DELIMITED);
-            builder.append("'"+isaUserReportView.getUserStatus()+"'");builder.append("\n");
-
-            number++;
-        }
-        }
-        System.out.println(builder.toString());
-        ScvExport scvExport=new ScvExport();
-
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-
-        scvExport.exportCSV(response,"ok",builder.toString());
-
-
-        context.responseComplete();
-    }
-
-
-    public void uploadUserFile(){
-         log.debug("uploadUserFile()");
-
-
-
+        System.out.println(event.getFile().getFileName() + "  "+file.getSize());
 
 
     }
+
+
+    public IsaUserDetailView getAuditDesc(IsaManageUserView isaManageUserView){
+
+        IsaUserDetailView isaUserDetailView=new IsaUserDetailView();
+        isaUserDetailView.setUserId(isaManageUserView.getId());
+        isaUserDetailView.setUserName(isaManageUserView.getUsername());
+        isaUserDetailView.setBuCode(isaManageUserView.getBuCode());
+        isaUserDetailView.setEmailAddress(isaManageUserView.getEmailAddress());
+        isaUserDetailView.setPhoneExt(isaManageUserView.getPhoneExt());
+        isaUserDetailView.setPhoneNumber(isaManageUserView.getPhoneNumber());
+        isaUserDetailView.setRole(roleDAO.findById(isaManageUserView.getRole().getId()).getName());
+        isaUserDetailView.setDepartment(userDepartmentDAO.findById(isaManageUserView.getUserDepartment().getId()).getName());
+        isaUserDetailView.setDivision(userDivisionDAO.findById(isaManageUserView.getUserDivision().getId()).getName());
+        isaUserDetailView.setRegion(userRegionDAO.findById(isaManageUserView.getUserRegion().getId()).getName());
+        isaUserDetailView.setTeam(userTeamDAO.findById(isaManageUserView.getUserTeam().getId()).getName());
+        isaUserDetailView.setTitle(userTitleDAO.findById(isaManageUserView.getUserTitle().getId()).getName());
+        isaUserDetailView.setZone(userZoneDAO.findById(isaManageUserView.getUserZone().getId()).getName());
+        isaUserDetailView.setActive(isaManageUserView.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
+
+        return  isaUserDetailView;
+    }
+
+
+
 
 
 
@@ -616,11 +590,19 @@ public class Isa implements Serializable {
         this.active = active;
     }
 
-    public int getNotLogonOverDay() {
-        return notLogonOverDay;
+    public IsaManageUserView getIsaUserEditView() {
+        return isaUserEditView;
     }
 
-    public void setNotLogonOverDay(int notLogonOverDay) {
-        this.notLogonOverDay = notLogonOverDay;
+    public void setIsaUserEditView(IsaManageUserView isaUserEditView) {
+        this.isaUserEditView = isaUserEditView;
+    }
+
+    public boolean isReadUserId() {
+        return readUserId;
+    }
+
+    public void setReadUserId(boolean readUserId) {
+        this.readUserId = readUserId;
     }
 }

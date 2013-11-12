@@ -6,9 +6,10 @@ import com.clevel.selos.integration.brms.model.request.data2.ApplicationTypeLeve
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class FullApplicationRequest {
+public class FullApplicationRequest implements Serializable {
 //    public ApplicationLevel applicationLevel;
 //    public List<BorrowerLevel> customerLevelList;
 //    public String bizDescription;

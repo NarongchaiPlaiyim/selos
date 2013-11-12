@@ -20,11 +20,13 @@ public class BankAccountStatusDAO extends GenericDAO<BankAccountStatus, Integer>
     }
 
     public BankAccountStatus findByCodeAndType(String code, int type){
-        log.info("findByCodeAndType. (code: {}, type: {})", code, type);
+        log.info("findByCodeAndType. (code: {}, type: {})", code.trim(), type);
         Criteria criteria = createCriteria();
-        criteria.add(Restrictions.eq("code", code));
-        criteria.add(Restrictions.eq("bankAccountType", type));
+        criteria.add(Restrictions.eq("code", code.trim()));
+        criteria.add(Restrictions.eq("bankAccountType.id", type));
         BankAccountStatus bankAccountStatus = (BankAccountStatus)criteria.uniqueResult();
+
+        log.info("findByCodeAndType. bankAccountStatus : {}", bankAccountStatus);
 
         return bankAccountStatus;
     }

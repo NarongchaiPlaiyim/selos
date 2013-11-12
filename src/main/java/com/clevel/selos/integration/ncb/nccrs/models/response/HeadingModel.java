@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class HeadingModel {
+import java.io.Serializable;
+
+public class HeadingModel implements Serializable {
     private String productref;
     private String producttype;
     private String issueddate;

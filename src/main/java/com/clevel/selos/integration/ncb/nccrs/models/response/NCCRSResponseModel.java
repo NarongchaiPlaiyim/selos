@@ -2,8 +2,10 @@ package com.clevel.selos.integration.ncb.nccrs.models.response;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+import java.io.Serializable;
+
 @XStreamAlias("ncrsresponse")
-public class NCCRSResponseModel {
+public class NCCRSResponseModel implements Serializable {
 
     @XStreamAlias("header")
     private HeaderModel header;

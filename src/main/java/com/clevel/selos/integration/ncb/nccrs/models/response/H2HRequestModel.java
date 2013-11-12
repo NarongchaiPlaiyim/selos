@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class H2HRequestModel {
+import java.io.Serializable;
+
+public class H2HRequestModel implements Serializable {
     private String registtype;
     private String registid;
     private String companyname;

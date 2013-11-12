@@ -1,5 +1,5 @@
 package com.clevel.selos.model;
 
 public enum ManageUserAction {
-    ADD, EDIT
+    CREATE, UPDATE ,DELETE
 }

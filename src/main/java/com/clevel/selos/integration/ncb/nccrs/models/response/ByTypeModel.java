@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ByTypeModel {
+import java.io.Serializable;
+
+public class ByTypeModel implements Serializable {
     private String credittype;
     private String totalaccounts;
     private String activeaccounts;
