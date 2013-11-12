@@ -46,7 +46,7 @@
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
                                                  update="frmMain:interfaceInfoPanel">
 
-                            </p:commandButton></td>
+                            </p:commandButton><p:spacer width="10" height="5"/><h:outputText styleClass="require-field" value="#{msg.get('app.prescreen.result.warning')}" rendered="#{prescreenResult.prescreenView.modifyFlag == 1}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupExposure')}"/></td>

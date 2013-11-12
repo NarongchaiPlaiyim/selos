@@ -1512,10 +1512,9 @@ public class CorporateDetail {
 
         try {
             return new String(comRegTumbon.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-
+        } catch (Exception e) {
+            return null;
         }
-        return comRegTumbon;
     }
 
     /**
