@@ -125,7 +125,7 @@ public class CreditFacPropose implements Serializable {
 
         if(workCaseId != null){
             if(guarantorList ==null){
-                guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
+//                guarantorList = customerDAO.findGuarantorByWorkCaseId(workCaseId);
             }
         }
 
