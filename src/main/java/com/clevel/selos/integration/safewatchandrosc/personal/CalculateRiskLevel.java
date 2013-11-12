@@ -2,6 +2,7 @@ package com.clevel.selos.integration.safewatchandrosc.personal;
 
 
 import com.clevel.selos.controller.CalculateRiskLevelPage;
+import com.clevel.selos.integration.SELOS;
 import com.tmb.common.data.eaicalrisknewpersonal.EAICalRiskNewPersonal;
 import com.tmb.common.data.eaicalrisknewpersonal.EAICalRiskNewPersonal_Service;
 import com.tmb.common.data.requestcalrisknewpersonal.Body;
@@ -19,7 +20,9 @@ import java.net.URL;
 
 
 public class CalculateRiskLevel implements Serializable {
+
     @Inject
+    @SELOS
     Logger log;
 
     public CalculateRiskLevel() {

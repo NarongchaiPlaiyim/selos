@@ -2,10 +2,61 @@ function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
 
+function checkThaiID(id) {
+    if(id=='') return true;
+    if(id.length != 13) return false;
+    var sum = 0;
+    for(i=0; i < 12; i++) {	sum += (13-i)*parseFloat(id.charAt(i));	}
+    var x = sum%11;
+    if(x <= 1 && (1-x != parseFloat(id.charAt(12)))) return false;
+    else if(x > 1 && (11-x != parseFloat(id.charAt(12)))) return false;
+    return true;
+}
+
+function checkSearchThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenSearchDlg').show();
+        }
+    }
+}
+
+function checkBorrowerThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenBrDlg').show();
+        }
+    }
+}
+
+function checkSpouseThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenSpDlg').show();
+        }
+    }
+}
+
+function closeMessageCitizenDialog(msgDlgName, inputId){
+    PF(msgDlgName).hide();
+    $("#"+inputId).focus();
+}
+
 function removeComma(obj) {
     var val = obj.value;
     val = val.replace(/,/g, '');
     obj.value = val;
+}
+
+function onClickReadonlyField(obj, readonly){
+    if(readonly != 1){
+        if(obj != undefined){
+            obj.blur();
+        }
+    }
 }
 
 function formatNumber(obj) {
@@ -50,15 +101,22 @@ function onKeyMoney(evt) {
     var validNums = '0123456789.,';
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
-    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
-    /*  96-105 = numkey 0-9
+    /*
+     35 = home
+     36 = end
+     37 = left
+     39 = right
+     96-105 = numkey 0-9
      8 = backspace
      9 = tab
      46 = delete
      188 = comma
      190 = period
      */
-    if ((evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' || evt.keyCode == 188 || evt.keyCode == 190) {
+    if ((evt.keyCode > 95 && evt.keyCode < 106)
+            || (( evt.keyCode == 35 || evt.keyCode == 36 || evt.keyCode == 37 || evt.keyCode == 39 ) && evt.charCode == 0 )
+            || evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 46
+            || evt.keyCode == 188 || evt.keyCode == 190) {
         return true;
     } else {
         keychar = String.fromCharCode(nbr);
@@ -123,9 +181,9 @@ function onKeyText(evt){
      123={,  125=}
      */
 
-    if ((evt.keyCode > 32 && evt.keyCode < 43) || evt.keyCode == 45 || evt.keyCode == 47 ||
-        (evt.keyCode > 57 && evt.keyCode < 61) || (evt.keyCode > 61 && evt.keyCode < 65) ||
-        evt.keyCode == 91 || evt.keyCode == 93 || evt.keyCode == 94 || evt.keyCode == 95 || evt.keyCode == 123 || evt.keyCode == 125) {
+    if( (evt.keyCode > 32 && evt.keyCode < 43) || evt.keyCode == 45 || evt.keyCode == 47 ||
+            (evt.keyCode > 57 && evt.keyCode < 61) || (evt.keyCode > 61 && evt.keyCode < 65) ||
+                evt.keyCode == 91 || evt.keyCode == 93 || evt.keyCode == 94 || evt.keyCode == 95 || evt.keyCode == 123 || evt.keyCode == 125 ){
         return false;
     }
 
@@ -206,7 +264,25 @@ function handleContactRecordRequest(xhr, status, args) {
     }
 }
 
-function testHandle() {
+function handleAppraisalDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalDetailViewDlg.hide();
+    }
+}
+
+function handleAppraisalContactDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalContactDetailViewDlg.hide();
+    }
+}
+
+function handleCollateralDetailRequest(xhr, status, args) {
+    if(args.functionComplete){
+        appraisalComsViewDlg.hide();
+    }
+}
+
+function testHandle(){
     return true;
 }
 
@@ -214,5 +290,18 @@ function handleDialogRequest(xhr, status, args, widgetVarName) {
     if (args.functionComplete) {
         var name = widgetVarName;
         PF(name).hide();
+    }
+}
+
+function handleDlgCreditProposeRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        creditInfoDlg.hide();
+    }
+}
+
+
+function handleConditionInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        conditionDlg.hide();
     }
 }

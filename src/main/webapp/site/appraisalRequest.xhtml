@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+        <title>Appraisal Request</title>
+        <link type="text/css" rel="stylesheet" href="../resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+</h:head>
+<h:body>
+    <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+        <h:form id="frmMain">
+            <div id="main_container">
+                <!-- Start Header Logo -->
+                <ui:include src="include/header_logo.xhtml" />
+                <!-- End Header Logo -->
+                <!-- Start Header Detail -->
+                <ui:include src="include/header_detail.xhtml" />
+                <!-- End Header Detail -->
+                <!-- Start Menu -->
+                <ui:include src="include/menubar.xhtml" />
+                <!-- End Menu -->
+                <div id="content_container">
+                    <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}" style="font-size: 18px"/></div>
+                    <div id="content">
+                        <table id="table_content" style="width: 100%;" class="content_table_form">
+                            <tr>
+                                <td colspan="6" class="right" style="padding-right: 1%;">
+                                    Last update by <p:outputLabel value="#{appraisalRequest.appraisalView.modifyBy.userName}"/> , <p:outputLabel value="#{appraisalRequest.appraisalView.modifyDate}"/>
+                                    <a style="cursor: pointer;" href="#">[View Track Change]</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td class="left" colspan="6">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalDetail.header')}" style="font-size: 15px"/>
+                                    <p:spacer width="50" height="20"></p:spacer>
+                                    <p:commandButton id="btnAddAppraisalDetail"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     styleClass="smaller"
+                                                     style="width: 150px"
+                                                     process="@this"
+                                                     actionListener="#{appraisalRequest.onAddAppraisalDetailView()}"
+                                                     update=":appraisalDetailDlgForm"
+                                                     oncomplete="appraisalDetailViewDlg.show()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <p:dataTable tableStyleClass="center" style="width: 100%"
+                                                 id="appraisalDetailViewTable"
+                                                 var="appraisalDetailView"
+                                                 value="#{appraisalRequest.appraisalDetailViewList}"
+                                                 paginator="false"
+                                                 rowKey="#{appraisalDetailView.id}"
+                                                 rowIndexVar="rowIndex" >
+                                        <p:columnGroup type="header">
+                                            <p:row>
+                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.no')}"/>
+                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.titleDeed')}" />
+                                                <p:column rowspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.purpose')}"/>
+                                                <p:column colspan="2" headerText="#{msg.get('app.appraisal.appraisalDetail.table.docDetail')}"/>
+                                                <p:column rowspan="2" headerText=""/>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column
+                                                        headerText="#{msg.get('app.appraisal.appraisalDetail.table.characteristic')}"/>
+                                                <p:column
+                                                        headerText="#{msg.get('app.appraisal.appraisalDetail.table.numberOfDocuments')}"/>
+                                            </p:row>
+                                        </p:columnGroup>
+                                        <p:column  styleClass="center" style="width:4%;">
+                                            <p:outputLabel value="#{appraisalDetailView.no}"/>
+                                        </p:column>
+                                        <p:column styleClass="left" >
+                                            <p:outputLabel value="#{appraisalDetailView.titleDeed}" />
+                                        </p:column>
+                                        <p:column styleClass="left">
+                                            <p:outputLabel value="#{appraisalDetailView.purposeReviewAppraisalLabel}"/> <p:spacer width="5px"/>
+                                            <p:outputLabel value="#{appraisalDetailView.purposeNewAppraisalLabel}"/>    <p:spacer width="5px"/>
+                                            <p:outputLabel value="#{appraisalDetailView.purposeReviewBuildingLabel}"/>
+                                        </p:column>
+                                        <p:column styleClass="left">
+                                            <p:outputLabel value="#{appraisalDetailView.characteristicLabel}"/>
+                                        </p:column>
+                                        <p:column styleClass="right">
+                                            <p:outputLabel value="#{appraisalDetailView.numberOfDocuments}"/>
+                                        </p:column>
+                                        <p:column styleClass="center" >
+                                            <p:commandButton icon="ui-icon-pencil"
+                                                             action="#{appraisalRequest.onEditAppraisalDetailView()}"
+                                                             update=":appraisalDetailDlgForm"
+                                                             process=":frmMain:appraisalDetailViewTable"
+                                                             oncomplete="appraisalDetailViewDlg.show();">
+                                                <f:setPropertyActionListener value="#{appraisalDetailView}"
+                                                                             target="#{appraisalRequest.selectAppraisalDetailView}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{appraisalRequest.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove" process="@this"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteAppraisalDetailViewDlg.show()" >
+                                                <f:setPropertyActionListener value="#{appraisalDetailView}"
+                                                                             target="#{appraisalRequest.selectAppraisalDetailView}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{appraisalRequest.rowIndex}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td class="left" colspan="6">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.appraisalContactDetail.header')}" style="font-size: 15px" />
+                                    <p:spacer width="50" height="20"></p:spacer>
+                                    <p:commandButton id="btnAddAppraisalContactDetail"
+                                                     value="#{msg.get('app.button.add')}"
+                                                     styleClass="smaller"
+                                                     style="width: 150px"
+                                                     process="@this"
+                                                     actionListener="#{appraisalRequest.onAddAppraisalContactDetailView()}"
+                                                     update=":appraisalContactDetailDlgForm"
+                                                     oncomplete="appraisalContactDetailViewDlg.show()"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="width:100%">
+                                    <p:dataTable tableStyleClass="center"  style="width:100%"
+                                                 id="appraisalContactDetailViewTable"
+                                                 var="appraisalContactDetailView"
+                                                 value="#{appraisalRequest.appraisalContactDetailViewList}"
+                                                 paginator="false"
+                                                 rowKey="#{appraisalContactDetailView.id}"
+                                                 rowIndexVar="rowIndex" >
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.no')}" styleClass="center" style="width:30px;" >
+                                            <p:outputLabel value="#{appraisalContactDetailView.no}"/>
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.customerName')}" styleClass="left"  style="width:200px;">
+                                            <p:outputLabel value="#{appraisalContactDetailView.customerName}" />
+                                        </p:column>
+                                        <p:column headerText="#{msg.get('app.appraisal.appraisalContactDetail.table.contactNo')}" styleClass="left" style="width:150px;">
+                                            <p:outputLabel value="#{appraisalContactDetailView.contactNo}" />
+                                        </p:column>
+                                        <p:column headerText="" styleClass="center" style="width:8%;">
+                                            <p:commandButton icon="ui-icon-pencil"
+                                                             action="#{appraisalRequest.onEditAppraisalContactDetailView()}"
+                                                             update=":appraisalContactDetailDlgForm"
+                                                             process=":frmMain:appraisalContactDetailViewTable"
+                                                             oncomplete="appraisalContactDetailViewDlg.show();">
+                                                <f:setPropertyActionListener value="#{appraisalContactDetailView}"
+                                                                             target="#{appraisalRequest.selectAppraisalContactDetailView}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{appraisalRequest.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="Remove" process="@this"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteAppraisalContactDetailViewDlg.show()" >
+                                                <f:setPropertyActionListener value="#{appraisalContactDetailView}"
+                                                                             target="#{appraisalRequest.selectAppraisalContactDetailView}"/>
+                                                <f:setPropertyActionListener value="#{rowIndex}"
+                                                                             target="#{appraisalRequest.rowIndex}"/>
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:dataTable>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><p:spacer/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><div class="separate"><!-- --></div></td>
+                            </tr>
+                            <tr>
+                                <td class="title" colspan="6">
+                                    <p:outputLabel value="#{msg.get('app.appraisal.label.locationAppraisal')}" style="font-size: 15px"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">
+                                    <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.zoneLocation')}"/>
+                                </td>
+                                <td>
+                                    <p:inputText value="#{appraisalRequest.appraisalView.zoneLocation}" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 150px;">
+                                    <p:outputLabel styleClass="title"  value="#{msg.get('app.appraisal.label.bdmRemark')}"/>
+                                </td>
+                                <td>
+                                    <p:inputTextarea value="#{appraisalRequest.appraisalView.bdmRemark}"  rows="3" cols="150"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="center" colspan="6">
+                                    <p:commandButton id="btnSave"
+                                                     value="#{msg.get('app.saveButton')}"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{appraisalRequest.onSaveAppraisalRequest()}"
+                                                     update=":msgBoxSystemMessagePanel"/>
+
+                                    <p:commandButton value="#{msg.get('app.cancelButton')}"
+                                                     id="btnCancel"
+                                                     styleClass="medium"
+                                                     process=":frmMain"
+                                                     action="#{appraisalRequest.onCancelAppraisalRequest()}"
+                                                     update=":frmMain"/>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="bottom_line"><!-- --></div>
+                </div>
+                <div class="clear"></div>
+                <!-- Start Footer -->
+                <ui:include src="../resources/footer.xhtml" />
+                <!-- End Footer -->
+            </div>
+            </h:form>
+    </p:panel>
+    <p:dialog id="appraisalDetailDialog" header="Appraisal Detail Information" widgetVar="appraisalDetailViewDlg" resizable="false"
+              modal="true" width="420" height="220" >
+        <ui:include src="dialog/appraisalDetailDialog.xhtml"/>
+    </p:dialog>
+    <p:dialog id="appraisalContactDetailDialog" header="Appraisal Contact Detail Information" widgetVar="appraisalContactDetailViewDlg" resizable="false"
+              modal="true" width="370" height="120" >
+        <ui:include src="dialog/appraisalContactDetailDialog.xhtml"/>
+    </p:dialog>
+
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAppraisalDetailViewDialog"/>
+        <ui:param name="name" value="confirmDeleteAppraisalDetailViewDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAppraisalDetailView"/>
+        <ui:param name="controller" value="#{appraisalRequest}"/>
+        <ui:param name="action" value="onDeleteAppraisalDetailView"/>
+        <ui:param name="update" value=":frmMain:appraisalDetailViewTable"/>
+    </ui:include>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteAppraisalContactDetailViewDialog"/>
+        <ui:param name="name" value="confirmDeleteAppraisalContactDetailViewDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteAppraisalContactDetailView"/>
+        <ui:param name="controller" value="#{appraisalRequest}"/>
+        <ui:param name="action" value="onDeleteAppraisalContactDetailView"/>
+        <ui:param name="update" value=":frmMain:appraisalContactDetailViewTable"/>
+    </ui:include>
+
+
+    
+    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                         header="#{appraisalRequest.messageHeader}" message="#{appraisalRequest.message}" >
+            <p:commandButton value="OK"
+                             process="@this"
+                             update="frmMain"
+                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
+        </p:confirmDialog>
+    </p:panel>
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br />
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+
+</h:body>
+</f:view>
+</html>

@@ -46,18 +46,22 @@
                                                  actionListener="#{prescreenResult.onRetrieveInterfaceInfo}"
                                                  update="frmMain:interfaceInfoPanel">
 
-                            </p:commandButton></td>
+                            </p:commandButton><p:spacer width="10" height="5"/><h:outputText styleClass="require-field" value="#{msg.get('app.prescreen.result.warning')}" rendered="#{prescreenResult.prescreenView.modifyFlag == 1}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupExposure')}"/></td>
                             <td><p:inputText title="msg.get('app.prescreen.result.groupExposure')" styleClass="medium right" readonly="true"
-                                             value="#{prescreenResult.prescreenResultView.groupExposure}"/><p:spacer width="5"/><h:outputText
+                                             value="#{prescreenResult.prescreenResultView.groupExposure}">
+                                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                </p:inputText><p:spacer width="5"/><h:outputText
                                     value="#{msg.get('app.moneyUnit.baht')}"/></td>
                         </tr>
                         <tr>
                             <td class="title"><h:outputText value="#{msg.get('app.prescreen.result.groupIncome')}"/></td>
                             <td><p:inputText title="msg.get('app.prescreen.result.groupIncome')" styleClass="medium right" readonly="true"
-                                             value="#{prescreenResult.prescreenResultView.groupIncome}"/><p:spacer width="5"/><h:outputText
+                                             value="#{prescreenResult.prescreenResultView.groupIncome}">
+                                <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2" />
+                                             </p:inputText><p:spacer width="5"/><h:outputText
                                     value="#{msg.get('app.moneyUnit.baht')}"/></td>
                         </tr>
                         <tr>
@@ -101,7 +105,7 @@
                                             value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText
                                             value="#{creditItem.accountSuf}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus.code}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
@@ -184,7 +188,7 @@
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText
                                             value="#{creditItem.accountNumber}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus.code}"/>
                                     </p:column>
                                     <p:column styleClass="center" style="width: 150px;">
                                         <h:outputText value="#{creditItem.productProgram}"/>
@@ -272,7 +276,7 @@
                                             value="#{msg.get('app.creditfact.table.account.suf')}"/><h:outputText
                                             value="#{creditItem.accountSuf}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.account.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus.code}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">
@@ -355,7 +359,7 @@
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.no')}"/><h:outputText
                                             value="#{creditItem.accountNumber}"/><br/>
                                         <h:outputText value="#{msg.get('app.creditfact.table.app.status')}"/><h:outputText
-                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus}"/>
+                                            value="#{creditItem.accountStatusID}"/> - <h:outputText value="#{creditItem.accountStatus.code}"/>
                                     </p:column>
                                     <p:column headerText="#{msg.get('app.creditfact.table.productProgram')}" styleClass="center"
                                               style="width: 150px;">

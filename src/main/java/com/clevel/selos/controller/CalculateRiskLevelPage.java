@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.safewatchandrosc.personal.CalculateRiskLevel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class CalculateRiskLevelPage implements Serializable {
     private String result;
 
     @Inject
+    @SELOS
     Logger log;
 
     @Inject

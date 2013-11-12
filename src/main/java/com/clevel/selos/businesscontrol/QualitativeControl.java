@@ -3,6 +3,7 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.working.QualitativeADAO;
 import com.clevel.selos.dao.working.QualitativeBDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.QualitativeA;
 import com.clevel.selos.model.db.working.QualitativeB;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 public class QualitativeControl extends BusinessControl {
 
     @Inject
+    @SELOS
     Logger log;
     @Inject
     WorkCaseDAO workCaseDAO;

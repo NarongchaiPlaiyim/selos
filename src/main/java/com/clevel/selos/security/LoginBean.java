@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.exception.ApplicationRuntimeException;
 import com.clevel.selos.integration.BPMInterface;
 import com.clevel.selos.integration.LDAPInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.User;
@@ -25,9 +26,12 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +43,8 @@ import java.util.Date;
 @RequestScoped
 public class LoginBean {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
 
@@ -73,6 +77,16 @@ public class LoginBean {
     private SimpleAuthenticationManager authenticationManager;
     @ManagedProperty(value = "#{sessionRegistry}")
     private SessionRegistry sessionRegistry;
+
+    @PostConstruct
+    public void onCreation(){
+        if(SecurityContextHolder.getContext().getAuthentication() != null){
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(userDetail != null){
+                FacesUtil.redirect("/site/inbox.jsf");
+            }
+        }
+    }
 
     public String login() {
         log.debug("SessionRegistry principle size: {}", sessionRegistry.getAllPrincipals().size());
@@ -153,6 +167,7 @@ public class LoginBean {
             ConcurrentSessionControlStrategy concurrentSessionControlStrategy = new ConcurrentSessionControlStrategy(sessionRegistry);
             concurrentSessionControlStrategy.onAuthentication(request, httpServletRequest, httpServletResponse);
             HttpSession httpSession = FacesUtil.getSession(false);
+            httpSession.setAttribute("user", null);
             httpSession.setAttribute("language", Language.EN);
 
             securityAuditor.addSucceed(userDetail.getUserName(), "Login", "", new Date());

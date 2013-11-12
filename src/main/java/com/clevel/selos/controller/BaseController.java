@@ -1,6 +1,7 @@
 package com.clevel.selos.controller;
 
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ManageButton;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.view.AppHeaderView;
@@ -20,8 +21,8 @@ import java.io.Serializable;
 @ManagedBean(name = "baseController")
 public class BaseController implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
 
@@ -79,7 +80,14 @@ public class BaseController implements Serializable {
             user = userDAO.findById(userDetail.getUserName());
             session = FacesUtil.getSession(false);
             session.setAttribute("user", user);
-        }
+        } /*else {
+            UserDetail userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(user.getId() != userDetail.getUserName()){
+                user = userDAO.findById(userDetail.getUserName());
+                session = FacesUtil.getSession(false);
+                session.setAttribute("user", user);
+            }
+        }*/
 
     }
 

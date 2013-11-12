@@ -48,7 +48,7 @@
                                                     <h:outputText value="#{msg.get('app.tcg.radio.TCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" >
+                                                    <h:selectOneRadio id="radio" value="#{tcgInfo.TCGView.TCG}" disabled="true">
                                                         <f:selectItem itemLabel="No" itemValue="0"/>
                                                         <f:selectItem itemLabel="Yes" itemValue="1"/>
                                                     </h:selectOneRadio>
@@ -59,7 +59,10 @@
                                                     <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitRequiredTCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitRequiredTCG}" >
+                                                    <p:inputText styleClass="large right"
+                                                                 id="requestLimitRequiredTCG"
+                                                                 value="#{tcgInfo.TCGView.requestLimitRequiredTCG}"
+                                                                 required="true">
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
@@ -70,7 +73,9 @@
                                                     <h:outputText value="#{msg.get('app.tcg.textBox.requestLimitNotRequiredTCG')} :" />
                                                 </td>
                                                 <td>
-                                                    <p:inputText styleClass="large right" id="requestLimitNotRequiredTCG"  value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"  >
+                                                    <p:inputText styleClass="large right"
+                                                                 id="requestLimitNotRequiredTCG"
+                                                                 value="#{tcgInfo.TCGView.requestLimitNotRequiredTCG}"  >
                                                         <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                                                         <p:ajax event="blur" update="@this"/>
                                                     </p:inputText>
@@ -121,8 +126,8 @@
                                                 id="btnAdd"
                                                 value="#{msg.get('app.addButton')}"
                                                 styleClass="smaller"
-                                                process="@this"
                                                 actionListener="#{tcgInfo.onAddCollateralDetail}"
+                                                process="@this"
                                                 update=":tcgDlgForm"
                                                 oncomplete="tcgDlg.show();">
                                             <p:resetInput target=":tcgDlgForm"/>
@@ -169,8 +174,8 @@
                                                         <p:column>
                                                             <p:commandButton icon="ui-icon-pencil"
                                                                              action="#{tcgInfo.onEditCollateralDetail()}"
+                                                                             process=":frmMain:resultCollateralDetail"
                                                                              update=":tcgDlgForm"
-                                                                             process="@this"
                                                                              oncomplete="tcgDlg.show();">
                                                                 <f:setPropertyActionListener value="#{item}"
                                                                                              target="#{tcgInfo.selectCollateralItem}"/>
@@ -299,7 +304,7 @@
     </p:panel>
 
     <p:dialog id="tcgDialog" header="#{msg.get('app.tcg.dlg.label.title')}" widgetVar="tcgDlg"
-              modal="true" width="700" height="200">
+              modal="true" width="650" height="200">
         <ui:include src="dialog/TCGDetailDialog.xhtml"/>
     </p:dialog>
 

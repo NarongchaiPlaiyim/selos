@@ -30,6 +30,8 @@ public class ExistingCreditDetailView implements Serializable {
     private String source;
     private BigDecimal tenor;
 
+    private String accountRef;
+
     public long getId() {
         return id;
     }
@@ -174,6 +176,14 @@ public class ExistingCreditDetailView implements Serializable {
         this.tenor = tenor;
     }
 
+    public String getAccountRef() {
+        return accountRef;
+    }
+
+    public void setAccountRef(String accountRef) {
+        this.accountRef = accountRef;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -193,6 +203,7 @@ public class ExistingCreditDetailView implements Serializable {
                 .append("intFeePercent", intFeePercent)
                 .append("source", source)
                 .append("tenor", tenor)
+                .append("accountRef", accountRef)
                 .toString();
     }
 }

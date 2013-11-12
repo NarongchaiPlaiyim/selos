@@ -6,6 +6,7 @@ import com.clevel.selos.dao.master.PotentialCollateralDAO;
 import com.clevel.selos.dao.master.TCGCollateralTypeDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.relation.PotentialColToTCGColDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.TCGCollateralType;
 import com.clevel.selos.model.db.master.User;
@@ -17,7 +18,6 @@ import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
-import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -37,8 +37,8 @@ import java.util.List;
 public class TCGInfo implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -167,10 +167,6 @@ public class TCGInfo implements Serializable {
         modeForButton = ModeForButton.ADD;
         TCGDetailView = new TCGDetailView();
         TCGDetailView.reset();
-//        TCGDetailView.setPotentialCollateral(new PotentialCollateral());
-//        TCGDetailView.setTcgCollateralType(new TCGCollateralType());
-//        TCGDetailView.setProposeInThisRequest(0);
-
     }
 
     // onclick edit button
@@ -194,6 +190,16 @@ public class TCGInfo implements Serializable {
         }
     }
 
+    public void calculateLtvValue(){
+        if (TCGDetailView.getPotentialCollateral().getId() != 0 && TCGDetailView.getTcgCollateralType().getId() != 0) {
+            BigDecimal ltvValueBig ;
+            log.info("TCGDetailView AppraisalAmount :: {}" , TCGDetailView.getAppraisalAmount());
+
+
+            ltvValueBig = tcgInfoControl.toCalculateLtvValue(TCGDetailView);
+            TCGDetailView.setLtvValue(ltvValueBig);
+        }
+    }
 
     public void onSaveCollateralDetail() {
         log.info("onSaveCollateralDetail ::: mode : {}", modeForButton);
@@ -235,11 +241,16 @@ public class TCGInfo implements Serializable {
             }
 
             if (TCGDetailViewList.size() > 0) {
-                log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", CalculateSumValue(TCGDetailViewList, "Appraisal"));
+                /*log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", CalculateSumValue(TCGDetailViewList, "Appraisal"));
                 TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList, "Appraisal"));
                 TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList, "LTV"));
                 TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
-                TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList, "LTV"));
+                TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList, "LTV"));*/
+                log.info("complete ::: CalculateSumValue(TCGDetailViewList); :: {} ", tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
+                TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
+                TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
+                TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
+                TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "LTV"));
             } else {
                 TCGView.setSumAppraisalAmount(new BigDecimal(0));
                 TCGView.setSumLtvValue(new BigDecimal(0));
@@ -259,7 +270,7 @@ public class TCGInfo implements Serializable {
         context.addCallbackParam("functionComplete", complete);
     }
 
-    public BigDecimal CalculateSumValue(List<TCGDetailView> TCGDetailViewList, String typeAmt) {
+   /* public BigDecimal CalculateSumValue(List<TCGDetailView> TCGDetailViewList, String typeAmt) {
         BigDecimal sum = new BigDecimal(0);
 
         for (int i = 0; i < TCGDetailViewList.size(); i++) {
@@ -299,7 +310,7 @@ public class TCGInfo implements Serializable {
         log.info("sum ::: {} ", sum);
 
         return sum;
-    }
+    }*/
 
     public void onDeleteTcgDetail() {
         TCGDetailViewList.remove(selectCollateralItem);
@@ -309,11 +320,18 @@ public class TCGInfo implements Serializable {
     public void calculateAfterDelete() {
         log.info("calculateAfterDelete :: {} ");
         if (TCGDetailViewList.size() > 0) {
-            log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
+        /*   log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
             TCGView.setSumAppraisalAmount(CalculateSumValue(TCGDetailViewList, "Appraisal"));
             TCGView.setSumLtvValue(CalculateSumValue(TCGDetailViewList, "LTV"));
             TCGView.setSumInThisAppraisalAmount(CalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
             TCGView.setSumInThisLtvValue(CalculateSumValueInThis(TCGDetailViewList, "LTV"));
+        */
+            log.info("onDeleteTcgDetail ::: CalculateSumValue(TCGDetailViewList); :: ");
+            TCGView.setSumAppraisalAmount(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "Appraisal"));
+            TCGView.setSumLtvValue(tcgInfoControl.toCalculateSumValue(TCGDetailViewList, "LTV"));
+            TCGView.setSumInThisAppraisalAmount(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "Appraisal"));
+            TCGView.setSumInThisLtvValue(tcgInfoControl.toCalculateSumValueInThis(TCGDetailViewList, "LTV"));
+
         } else {
             TCGView.setSumAppraisalAmount(new BigDecimal(0));
             TCGView.setSumLtvValue(new BigDecimal(0));
@@ -325,22 +343,34 @@ public class TCGInfo implements Serializable {
 
     public void onSaveTcgInfo() {
         log.info("onSaveTcgInfo ::: ModeForDB  {}", modeForDB);
-
+        BigDecimal collateralRuleResult = BigDecimal.ZERO;
+        BigDecimal requestTCGAmount     = BigDecimal.ZERO;
         try {
             if (TCGDetailViewList.size() > 0) {
                 if (modeForDB != null && modeForDB.equals(ModeForDB.ADD_DB)) {
-                    if (TCGView.getId() == 0) {
-                        TCGView.setCreateBy(user);
-                        TCGView.setCreateDate(DateTime.now().toDate());
-                    }
 
-                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId);
+                    collateralRuleResult = tcgInfoControl.toCalCollateralRuleResult(TCGView);
+                    log.info("collateralRuleResult :: {} ",collateralRuleResult);
+                    TCGView.setCollateralRuleResult(collateralRuleResult);
+
+                    requestTCGAmount = tcgInfoControl.toCalRequestTCGAmount(TCGView);
+                    log.info("requestTCGAmount :: {} ",requestTCGAmount);
+                    TCGView.setRequestTCGAmount(requestTCGAmount);
+
+                    tcgInfoControl.onSaveTCGToDB(TCGView, TCGDetailViewList, workCaseId , user);
 
 
                 } else if (modeForDB != null && modeForDB.equals(ModeForDB.EDIT_DB)) {
-                    TCGView.setModifyBy(user);
-                    TCGView.setModifyDate(DateTime.now().toDate());
-                    tcgInfoControl.onEditTCGToDB(TCGView, TCGDetailViewList, workCaseId);
+
+                    collateralRuleResult = tcgInfoControl.toCalCollateralRuleResult(TCGView);
+                    log.info("collateralRuleResult :: {} ",collateralRuleResult);
+                    TCGView.setCollateralRuleResult(collateralRuleResult);
+
+                    requestTCGAmount = tcgInfoControl.toCalRequestTCGAmount(TCGView);
+                    log.info("requestTCGAmount :: {} ",requestTCGAmount);
+                    TCGView.setRequestTCGAmount(requestTCGAmount);
+
+                    tcgInfoControl.onEditTCGToDB(TCGView, TCGDetailViewList, workCaseId, user);
                 }
 
                 messageHeader = msg.get("app.header.save.success");

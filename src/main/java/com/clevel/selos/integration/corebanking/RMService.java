@@ -22,18 +22,18 @@ import com.clevel.selos.util.ValidationUtil;
 import com.sun.xml.internal.ws.client.BindingProviderProperties;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount;
 import com.tmb.common.data.eaisearchcustomeraccount.EAISearchCustomerAccount_Service;
+import com.tmb.common.data.eaisearchindividualcustomercm.EAISearchIndividualCustomerCM;
+import com.tmb.common.data.eaisearchindividualcustomercm.EAISearchIndividualCustomerCM_Service;
 import com.tmb.common.data.requestsearchcustomeraccount.ReqSearchCustomerAccount;
+import com.tmb.common.data.requestsearchindividualcustomer.Body;
+import com.tmb.common.data.requestsearchindividualcustomer.Header;
+import com.tmb.common.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
 import com.tmb.common.data.responsesearchcustomeraccount.ResSearchCustomerAccount;
+import com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer;
 import com.tmb.sme.data.eaisearchcorporatecustomer.EAISearchCorporateCustomer_Service;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer;
-import com.tmb.sme.data.eaisearchindividualcustomer.EAISearchIndividualCustomer_Service;
 import com.tmb.sme.data.requestsearchcorporatecustomer.ReqSearchCorporateCustomer;
-import com.tmb.sme.data.requestsearchindividualcustomer.Body;
-import com.tmb.sme.data.requestsearchindividualcustomer.Header;
-import com.tmb.sme.data.requestsearchindividualcustomer.ReqSearchIndividualCustomer;
 import com.tmb.sme.data.responsesearchcorporatecustomer.ResSearchCorporateCustomer;
-import com.tmb.sme.data.responsesearchindividualcustomer.ResSearchIndividualCustomer;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -80,12 +80,24 @@ public class RMService implements Serializable {
     String customerSessionId;
 
     @Inject
-    @Config(name = "interface.rm.service.connectTimeout")
-    String connectTimeout;
+    @Config(name = "interface.rm.individual.connectTimeout")
+    String individualConnectTimeout;
+    @Inject
+    @Config(name = "interface.rm.juristic.connectTimeout")
+    String juristicConnectTimeout;
+    @Inject
+    @Config(name = "interface.rm.customerAccount.connectTimeout")
+    String cusAccountConnectTimeout;
 
     @Inject
-    @Config(name = "interface.rm.service.requestTimeout")
-    String requestTimeout;
+    @Config(name = "interface.rm.individual.requestTimeout")
+    String individualRequestTimeout;
+    @Inject
+    @Config(name = "interface.rm.juristic.requestTimeout")
+    String juristicRequestTimeout;
+    @Inject
+    @Config(name = "interface.rm.customerAccount.requestTimeout")
+    String cusAccountRequestTimeout;
 
     @Inject
     @Config(name = "interface.rm.replace.blank")
@@ -104,11 +116,11 @@ public class RMService implements Serializable {
     public void onCreate() {
 
     }
-
-    public IndividualModel individualService(SearchIndividual searchIndividual, String userId) throws Exception {
+     //todo change to CM
+    public IndividualModel individualCMService(SearchIndividual searchIndividual, String userId) throws Exception {
         log.debug("IndividualService() START");
         IndividualModel individualModel = null;
-        System.out.println("============================== : " + blank);
+        //System.out.println("============================== : " + blank);
 
         //Validate ReqId
         if (!ValidationUtil.isValueInRange(1, 50, searchIndividual.getReqId().length())) {
@@ -158,10 +170,30 @@ public class RMService implements Serializable {
                 throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(radSelectSearch)"));
             }
         }
+        //Validate Acronym
+        if (!ValidationUtil.isValueInRange(1, 20, searchIndividual.getAcronym().length())) {
+            if (searchIndividual.getAcronym() == null || searchIndividual.getAcronym().equals("")) {
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(acronym)"));
+            } else {
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(acronym)"));
+            }
+        }
+        //Validate ProductCode
+        if (!ValidationUtil.isValueInRange(1, 8, searchIndividual.getProductCode().length())) {
+            if (searchIndividual.getProductCode() == null || searchIndividual.getProductCode().equals("")) {
+                throw new ValidationException(ValidationMapping.DATA_REQUIRED, validationMsg.get(ValidationMapping.DATA_REQUIRED, "(productCode)"));
+            } else {
+                throw new ValidationException(ValidationMapping.FIELD_LENGTH_INVALID, validationMsg.get(ValidationMapping.FIELD_LENGTH_INVALID, "(productCode)"));
+            }
+        }
         log.debug("Validate Pass!");
 
         Header header = new Header();
-        header.setReqID(searchIndividual.getReqId());
+        header.setReqId(searchIndividual.getReqId());
+        header.setAcronym(searchIndividual.getAcronym());
+        header.setProductCode(searchIndividual.getProductCode());
+//        header.setServerURL();
+//        header.setSessionId();
 
         Body body = new Body();
         body.setCustType(searchIndividual.getCustType());
@@ -172,12 +204,13 @@ public class RMService implements Serializable {
         body.setCustSurname(searchIndividual.getCustSurname());
         body.setRadSelectSearch(searchIndividual.getRadSelectSearch());
 
+
         ReqSearchIndividualCustomer reqSearch = new ReqSearchIndividualCustomer();
         reqSearch.setHeader(header);
         reqSearch.setBody(body);
 
         //actionDesc
-        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqID() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
+        String actionDesc = "ReqID=" + reqSearch.getHeader().getReqId() + ",CustId=" + reqSearch.getBody().getCustId() + ",RedSelectSearch=" + reqSearch.getBody().getRadSelectSearch();
 
         //requestTime
         Date requestTime = new Date();
@@ -188,20 +221,22 @@ public class RMService implements Serializable {
         log.debug("requestHeaderData : {}", reqSearch.getHeader().toString());
         log.debug("requestBodyData : {}", reqSearch.getBody().toString());
         try {
-            ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividual(reqSearch);
+            ResSearchIndividualCustomer resSearchIndividualCustomer = callServiceIndividualCM(reqSearch);
             if (resSearchIndividualCustomer != null) {
                 //responseTime
                 Date responseTime = new Date();
                 log.debug("============================ Response ==============================");
                 log.debug("responseServiceTime : {}", new Date());
                 log.debug("responseHeaderData : {}", resSearchIndividualCustomer.getHeader().toString());
+
                 if (resSearchIndividualCustomer.getBody() != null
                         && resSearchIndividualCustomer.getBody().getPersonalDetailSection() != null
                         && resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail() != null) {
                     log.debug("responseBodyData : {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().toString());
                 }
                 //Audit Data
-                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchIndividualCustomer.getHeader().getResCode(), responseTime, linkKey);
+                rmAuditor.add(userId, "individualService", actionDesc, requestTime, ActionResult.SUCCESS, "ResCode : "+resSearchIndividualCustomer.getHeader().getResCode()+
+                        " , ProductCode : "+resSearchIndividualCustomer.getHeader().getProductCode(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchIndividualCustomer.getHeader().getResDesc());
@@ -380,15 +415,17 @@ public class RMService implements Serializable {
 
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1500")) { //Host Parameter is null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
 
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
 
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
-
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 } else if (resSearchIndividualCustomer.getHeader().getResCode().equals("3500")) { //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchIndividualCustomer.getHeader().getResCode(), resSearchIndividualCustomer.getHeader().getResDesc());
                 }
                 //check null
             } else {
@@ -500,7 +537,7 @@ public class RMService implements Serializable {
                 }
 
                 //Audit Data
-                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS, resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
+                rmAuditor.add(userId, "corporateService", actionDesc, requestTime, ActionResult.SUCCESS,"ResDesc : "+ resSearchCorporateCustomer.getHeader().getResDesc(), responseTime, linkKey);
 
                 //Check Success
                 log.debug("requestServiceDescription : {}", resSearchCorporateCustomer.getHeader().getResDesc());
@@ -573,13 +610,16 @@ public class RMService implements Serializable {
 
                     log.debug("responseCode: {}", resSearchCorporateCustomer.getHeader().getResCode());
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1500")) { //Host parameter is null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
 
                 } else if (resSearchCorporateCustomer.getHeader().getResCode().equals("3500")) {  //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchCorporateCustomer.getHeader().getResCode(), resSearchCorporateCustomer.getHeader().getResDesc());
                 }  //check null
             } else {
                 log.warn(" resSearchCorporateCustomer : Null");
@@ -657,8 +697,8 @@ public class RMService implements Serializable {
         header.setAcronym(searchCustomerAccountModel.getAcronym());
         header.setProductCode(searchCustomerAccountModel.getProductCode());
         //todo
-        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
-        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
+//        header.setServerURL(new JAXBElement<String>(new QName(customerServerUrl), String.class, customerServerUrl));
+//        header.setSessionId(new JAXBElement<String>(new QName(customerSessionId), String.class, customerSessionId));
 
         //setBody
         com.tmb.common.data.requestsearchcustomeraccount.Body body = new com.tmb.common.data.requestsearchcustomeraccount.Body();
@@ -739,12 +779,15 @@ public class RMService implements Serializable {
                     customerAccountResult.setAccountListModels(listModelList);
 
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1500")) { //Host Parameter is Null
-                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL, exceptionMsg.get(ExceptionMapping.RM_HOST_PARAMETER_IS_NULL));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("1511")) { //Data Not Found
                     log.debug("Data Not Found!");
-                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_DATA_NOT_FOUND, exceptionMsg.get(ExceptionMapping.RM_DATA_NOT_FOUND));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 } else if (resSearchCustomerAccount.getHeader().getResCode().equals("3500")) { //fail
-                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+//                    throw new RMInterfaceException(ExceptionMapping.RM_FAIL, exceptionMsg.get(ExceptionMapping.RM_FAIL));
+                    throw new RMInterfaceException(resSearchCustomerAccount.getHeader().getResCode(), resSearchCustomerAccount.getHeader().getResDesc());
                 }
                 //check null
             } else {
@@ -770,15 +813,27 @@ public class RMService implements Serializable {
 
 
     // Services
-    private ResSearchIndividualCustomer callServiceIndividual(ReqSearchIndividualCustomer reqSearch) throws Exception {
+    private ResSearchIndividualCustomer callServiceIndividualCM(ReqSearchIndividualCustomer reqSearch) throws Exception {
         log.debug("callServiceIndividual() START");
-        ResSearchIndividualCustomer resSearchIndividualCustomer = null;
-        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomer.wsdl");
-        QName qname = new QName("http://data.sme.tmb.com/EAISearchIndividualCustomer/", "EAISearchIndividualCustomer");
-        EAISearchIndividualCustomer_Service service = new EAISearchIndividualCustomer_Service(url, qname);
-        EAISearchIndividualCustomer eaiSearchInd = service.getEAISearchIndividualCustomer();
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        com.tmb.common.data.responsesearchindividualcustomer.ResSearchIndividualCustomer resSearchIndividualCustomer = null;
+        URL url = this.getClass().getResource("/com/tmb/EAISearchIndividualCustomerCM.wsdl");
+        QName qname = new QName("http://data.common.tmb.com/EAISearchIndividualCustomerCM/", "EAISearchIndividualCustomerCM");
+        EAISearchIndividualCustomerCM_Service service = new EAISearchIndividualCustomerCM_Service(url, qname);
+        EAISearchIndividualCustomerCM eaiSearchInd = service.getEAISearchIndividualCustomerCM();
+        try{
+            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,Integer.parseInt(individualRequestTimeout)*1000);
+        }catch (Exception e){
+            log.debug("individual Service request_timeout must be a number!");
+            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT,60000);
+        }
+
+        try{
+            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,Integer.parseInt(individualConnectTimeout)*1000);
+        }catch (Exception e){
+            log.debug("individual Service connect_timeout must be a number!");
+            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,60000);
+        }
+
         ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 individualAddress);
         resSearchIndividualCustomer = eaiSearchInd.searchIndividualCustomer(reqSearch);
@@ -793,8 +848,20 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.sme.tmb.com/EAISearchCorporateCustomer/", "EAISearchCorporateCustomer");
         EAISearchCorporateCustomer_Service service = new EAISearchCorporateCustomer_Service(url, qname);
         EAISearchCorporateCustomer eaiSearchCor = service.getEAISearchCorporateCustomer();
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        try{
+            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(juristicRequestTimeout)*1000);
+        }catch (Exception e){
+            log.debug("juristic Service request_timeout must be a number!");
+            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, 60000);
+        }
+
+        try{
+            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(juristicConnectTimeout)*1000);
+        }catch (Exception e){
+            log.debug("juristic Service connect_timeout must be a number!");
+            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
+        }
+
         ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 corporateAddress);
         resSearchCorporateCustomer = eaiSearchCor.searchCorporateCustomer(reqSearch);
@@ -809,8 +876,21 @@ public class RMService implements Serializable {
         QName qname = new QName("http://data.common.tmb.com/EAISearchCustomerAccount/", "EAISearchCustomerAccount");
         EAISearchCustomerAccount_Service service = new EAISearchCustomerAccount_Service(url, qname);
         EAISearchCustomerAccount eaiSearchCa = service.getEAISearchCustomerAccount();
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, requestTimeout);
-        ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, connectTimeout);
+        try{
+            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, Integer.parseInt(cusAccountRequestTimeout)*1000);
+        }catch (Exception e){
+            log.debug("customerAccount Service request_timeout must be a number!");
+            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.REQUEST_TIMEOUT, 60000);
+        }
+
+        try{
+            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(cusAccountConnectTimeout)*1000);
+        }catch (Exception e){
+            log.debug("customerAccount Service connect_timeout must be a number!");
+            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
+        }
+
+
         ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 customerAccountAddress);
         resSearchCustomerAccount = eaiSearchCa.searchCustomerAccount(reqSearch);

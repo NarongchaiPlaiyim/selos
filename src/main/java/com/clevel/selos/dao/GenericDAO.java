@@ -1,5 +1,6 @@
 package com.clevel.selos.dao;
 
+import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
@@ -33,19 +34,9 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         this.session = session;
     }
 
-//    public void setLog(Logger log) {
-//        this.log = log;
-//    }
-
     public void setEntityClass(Class<T> T) {
         this.entityClass = T;
     }
-
-//    public void setup(Session session,Class<T> T,Logger log) {
-//        setSession(session);
-//        setEntityClass(T);
-//        setLog(log);
-//    }
 
     public Class<T> getEntityClass() {
         return entityClass;
@@ -86,9 +77,14 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         }
     }
 
-//    public void evict(Class<T> entity) {
-//        getSession().evict(entity);
-//    }
+    @SuppressWarnings("unchecked")
+    public List<T> refresh() {
+        Session session = getSession();
+        session.setCacheMode(CacheMode.REFRESH);
+        Criteria criteria = session.createCriteria(getEntityClass());
+        List<T> list = criteria.list();
+        return list;
+    }
 
     public boolean isRecordExist(Criterion... criterion) {
         List<T> list = findByCriteria(criterion);

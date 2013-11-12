@@ -1,0 +1,77 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="bizProductViewDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.productType')}"/><h:outputLabel value="*"
+                                                                                                             styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productType}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentSalesVolume')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText id="percentSalesVolume" styleClass="right"
+                                 value="#{bizInfoDetail.bizProductDetailView.percentSalesVolume}" required="true">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":bizProductViewDlgForm:percentSalesVolume"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizProduct.label.percentEBIT')}"/><h:outputLabel value="*"
+                                                                                                             styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText id="percentEBIT" styleClass="right"
+                                 value="#{bizInfoDetail.bizProductDetailView.percentEBIT}" required="true">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":bizProductViewDlgForm:percentEBIT"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText value="#{msg.get('app.bizInfoDetail.bizProduct.label.productDetail')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizProductDetailView.productDetail}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton
+                            id="btnSaveBizProductView"
+                            value="#{msg.get('app.button.ok')}"
+                            action="#{bizInfoDetail.onSaveBizProductDetailView()}"
+                            process=":bizProductViewDlgForm"
+                            update=":frmMain:bizProductViewTable,:msgBoxSystemMessagePanel,:bizProductViewDlgForm"
+                            oncomplete="handleFullappBizProductRequest(xhr, status, args)"
+                            />
+                    <p:commandButton value="#{msg.get('app.button.cancel')}" onclick="bizProductViewDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+    <p:blockUI block=":bizProductViewDlgForm" trigger=":bizProductViewDlgForm:btnSaveBizProductView">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</ui:composition>

@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class H2HResponseSubjectModel {
+import java.io.Serializable;
+
+public class H2HResponseSubjectModel implements Serializable {
     private HeadingModel heading;
     private ProfileModel profile;
     private ShareHoldersModel shareholders;

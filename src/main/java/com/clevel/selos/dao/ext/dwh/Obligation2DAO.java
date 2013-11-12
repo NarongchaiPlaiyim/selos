@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.ext.dwh;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.ext.dwh.Obligation2;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class Obligation2DAO extends GenericDAO<Obligation2, Long> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public Obligation2DAO() {
     }

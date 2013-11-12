@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>SE-LOS : Decision</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"></script>
+    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"></script>
+</h:head>
+
+<h:body>
+<p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
+    <h:form id="frmMain">
+        <div id="main_container">
+        <!-- Start Header Logo -->
+        <ui:include src="include/header_logo.xhtml"/>
+        <!-- End Header Logo -->
+        <!-- Start Header Detail -->
+        <ui:include src="include/header_detail.xhtml"/>
+        <!-- End Header Detail -->
+        <!-- Start Menu -->
+        <ui:include src="include/menubar.xhtml"/>
+        <!-- End Menu -->
+        <div id="content_container">
+            <div id="content_name">#{msg.get('app.decision.header')}</div>
+            <div id="content">
+                <div id="content_info">
+                    <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
+                    <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText
+                            id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                </div>
+                <!-- start content -->
+                <div id="content_form">
+                    <table class="content_table_form">
+                        <!-- Existing Credit -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.existingCredit')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.borrower')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdBorrowerCommCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.conditionComCredit')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdConditionCommCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.loanType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.conditionDesc')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdRetailCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdAppInRLOS"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <!-- Borrower -->
+                                        <p:row>
+                                            <p:column colspan="10" footerText="#{msg.get('app.decision.borrower')}"
+                                                      style="line-height:30px; height:30px; text-align:left;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalCommercial')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalCommAndOBOD')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalExposure')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.relatedPerson')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdRelatedPersonCommCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.commercialCredit')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdRelatedPersonRetailCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.retailCredit')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCrdRelatedPersonAppInRLOS"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column colspan="10" headerText="#{msg.get('app.decision.tb.th.appInRLOSProcess')}"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.outstanding')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.intFeePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <!-- Related -->
+                                        <p:row>
+                                            <p:column colspan="10" footerText="#{msg.get('app.decision.related')}"
+                                                      style="line-height:30px; height:30px; text-align:left;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalCommercial')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalCommAndOBOD')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalExposure')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <!-- Group -->
+                                        <p:row>
+                                            <p:column colspan="10" footerText="#{msg.get('app.decision.group')}"
+                                                      style="line-height:30px; height:30px; text-align:left;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.grpTotalCommercial')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.grpTotalCommAndOBOD')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="10" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.grpTotalExposure')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="4" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Existing Collateral -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.existingCollateral')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.borrower')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCltrBorrower"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.relatedPerson')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtCltrRelatedPerson"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.collateralType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Existing Guarantor -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.existingGuarantor')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.borrowerGuarantor')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtExtGrtBorrower"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="5" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Proposed Credit -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.proposedCredit')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtProposedCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.standardPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.suggestPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.finalPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.frontEndFeePercent')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="11" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column colspan="3" footerText="#{msg.get('app.decision.totalProposedCredit')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="6" style="background-color:#f4f8b6; text-align:left;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+
+                        <!-- Approved Credit -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.approvedCredit')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h:outputText value="#{msg.get('app.decision.label.approvedPurposed')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h:selectOneRadio value="">
+                                    <f:selectItem itemLabel="#{msg.get('app.decision.radio.creditCusType.normal')}" itemValue="0"/>
+                                    <f:selectItem itemLabel="#{msg.get('app.decision.radio.creditCusType.prime')}" itemValue="1"/>
+                                </h:selectOneRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h:outputText value="#{msg.get('app.decision.label.typeOfLoan')}"/>
+                                <h:selectOneListbox size="1" value="">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                </h:selectOneListbox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h:outputText value="#{msg.get('app.decision.label.investedCountry')}"/>
+                                <h:selectOneListbox size="1" value="">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                </h:selectOneListbox>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h:outputText value="#{msg.get('app.decision.label.existingSMELimit')}"/>
+                                <p:inputText value=""></p:inputText>
+
+                                <p:spacer width="10"/>
+
+                                <h:outputText value="#{msg.get('app.decision.label.maxExistingSMELimit')}"/>
+                                <p:inputText value="" styleClass="left">
+                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                     maxIntegerDigits="14"/>
+                                </p:inputText>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                                 styleClass="smaller"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtApprovedCredit"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.decision')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.code')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.standardPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.suggestPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.finalPricePercent')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.installment')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.tenorMonths')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.frontEndFeePercent')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalProposedCredit')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="6" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <!-- Approved Credit - Borrower -->
+                                        <p:row>
+                                            <p:column colspan="12" footerText="#{msg.get('app.decision.borrower')}"
+                                                      style="line-height:30px; height:30px; text-align:left;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalBrwCommercial')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="6" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalBrwCommAndOBOD')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="6" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="12" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.decision.totalGrpExposure')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                            <p:column colspan="6" style="background-color:#f4f8b6;"/>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.standardFrontEndFee')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.commitmentFee')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.extensionFee')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.prepaymentFee')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.cancellationFee')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+
+                        <!-- Proposed Collateral -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.proposedCollateral')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <!-- Proposed Collateral Table -->
+                                <table border="0">
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="#001"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.appraisalDate')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="dd/MM/yyyy">
+                                                <!--<f:convertDateTime pattern="dd/MM/yyyy"/>-->
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="Accept"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Reason Example"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Remark Example"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Use"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.typeOfUsage')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Type of Usage"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Mortgage Condition XXX"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Mortgage Condition Detail....."/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.creditType')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <p:dataTable paginator="false" rowIndexVar="rowIndex" style="width:100%">
+
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column headerText=""/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.type')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.creditFacility')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.BDMComments')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="BDM Comments Detail....."/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="separate"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.potential')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="Core Asset"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.collTypePercentLTV')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Land and Building"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.existingCredit')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="123456.78">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.titleDeed')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="12, 1234"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.collateralLocation')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Jompol, Jatujak, Bangkok"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.headCollAppraisalValue')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="123456.78">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.headCollType')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Land and Building"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.insuranceCompany')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:selectOneRadio value="">
+                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="0"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
+                                            </h:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <p:dataTable paginator="false" rowIndexVar="rowIndex">
+
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column headerText=""/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.subCollType')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.titleDeed')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.collateralOwner.add')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.collateralOwner.uw')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.relatedWith')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+
+                        <!-- Approved Collateral -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.approvedCollateral')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <!-- Approved Collateral Table -->
+                                <table border="0">
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.jobId')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="#001"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.appraisalDate')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="dd/MM/yyyy">
+                                                <!--<f:convertDateTime pattern="dd/MM/yyyy"/>-->
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecision')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="Accept"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReason')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Reason Example"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.AADDecisionReasonDetail')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Remark Example"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.usage')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Use"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.typeOfUsage')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Type of Usage"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.UWDecision')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="#{msg.get('app.decision.label.approved')}"/>
+                                            <h:selectOneRadio value="">
+                                                <f:selectItem itemLabel="#{msg.get('app.button.yes')}" itemValue="1"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.button.no')}" itemValue="0"/>
+                                            </h:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.UWRemark')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="Remark Example"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageCondition')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Mortgage Condition XXX"/>
+                                        </td>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.mortgageConditionDetail')}"/>
+                                        </td>
+                                        <td class="left">
+                                            <h:outputText value="Mortgage Condition Detail....."/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.creditType')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <p:dataTable paginator="false" rowIndexVar="rowIndex" style="width:100%">
+
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column headerText=""/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.account')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.type')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.productProgram')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.creditFacility')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.limit')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.BDMComments')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="BDM Comments Detail....."/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <div class="separate"></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.potential')}"/>
+                                        </td>
+                                        <td colspan="3" class="left">
+                                            <h:outputText value="Core Asset"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.collTypePercentLTV')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Land and Building"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.existingCredit')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="123456.78">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.titleDeed')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="12, 1234"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.collateralLocation')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Jompol, Jatujak, Bangkok"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.headCollAppraisalValue')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="123456.78">
+                                                <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                 maxIntegerDigits="14"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.headCollType')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:outputText value="Land and Building"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="title">
+                                            <h:outputText value="#{msg.get('app.decision.label.insuranceCompany')}"/>
+                                        </td>
+                                        <td colspan="3">
+                                            <h:selectOneRadio value="">
+                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.partner')}" itemValue="0"/>
+                                                <f:selectItem itemLabel="#{msg.get('app.decision.radio.insuranceComp.nonPartner')}" itemValue="1"/>
+                                            </h:selectOneRadio>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">
+                                            <p:dataTable paginator="false" rowIndexVar="rowIndex">
+
+                                                <p:columnGroup type="header">
+                                                    <p:row>
+                                                        <p:column headerText=""/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.subCollType')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.titleDeed')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.collateralOwner.add')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.collateralOwner.uw')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.mortgageType')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.relatedWith')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.appraisalValue')}"/>
+                                                        <p:column headerText="#{msg.get('app.decision.tb.th.mortgageValue')}"/>
+                                                    </p:row>
+                                                </p:columnGroup>
+
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+                                                <p:column><h:outputText value=""/></p:column>
+
+                                            </p:dataTable>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Proposed Guarantor -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.proposedGuarantor')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtProposedGuarantor"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="5" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+
+                        <!-- Approved Guarantor -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.approvedGuarantor')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable id="dtApprovedGuarantor"
+                                             paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.decision')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guarantorName')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.TCGLGNo')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.creditType')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.guaranteeAmount')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="6" style="background-color:#ffffff; line-height:10px; height:10px;"/>
+                                        </p:row>
+                                        <p:row>
+                                            <p:column style="background-color:#f4f8b6;"/>
+                                            <p:column colspan="4" footerText="#{msg.get('app.label.total')}"
+                                                      style="background-color:#f4f8b6; text-align:left;"/>
+                                            <p:column style="background-color:#f4f8b6; text-align:right;">
+                                                <f:facet name="footer">
+                                                    <h:outputText value="123456.78">
+                                                        <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                         maxIntegerDigits="14"/>
+                                                    </h:outputText>
+                                                </f:facet>
+                                            </p:column>
+                                        </p:row>
+                                    </p:columnGroup>
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- FollowUp - Condition -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.followupCondition')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <h:selectOneListbox size="1" value="">
+                                    <f:selectItem itemLabel="#{msg.get('app.select.item0')}" itemValue="0"/>
+                                </h:selectOneListbox>
+
+                                <p:spacer width="10"/>
+
+                                <p:commandButton value="#{msg.get('app.button.add')}"
+                                                 styleClass="smaller"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:inputText value=""></p:inputText>
+
+                                <p:spacer width="10"/>
+
+                                <p:calendar id="calendarId" mindate=""
+                                            navigator="true" showButtonPanel="true" showOn="both"
+                                            value=""
+                                            pattern="dd/MM/yyyy"
+                                            locale="th_TH"
+                                            timeZone="Asia/Bangkok"
+                                            yearRange="2440:3000"
+                                            styleClass="calendar_right">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" locale="th_TH"/>
+                                </p:calendar>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.topic')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.detail')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.date')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Price Fee Reduction Table -->
+                        <tr>
+                            <td colspan="2">
+                                <table border="0" class="ui-datatable" style="float:left; border-collapse:separate; border-spacing:0; border:none;">
+                                    <thead>
+                                        <tr>
+                                            <th class="ui-state-default" colspan="6">
+                                                <h:outputText value="#{msg.get('app.decision.tb.th.priceFeeReduction')}"/>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="ui-datatable-data ui-widget-content">
+                                        <tr>
+                                            <td class="left">#{msg.get('app.decision.tb.td.label.intFeeDOA')}</td>
+                                            <td class="left">
+                                                <p:inputText value="" styleClass="right">
+                                                    <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1"
+                                                                     maxIntegerDigits="14"/>
+                                                </p:inputText>
+                                                <h:outputText value=" %"/>
+                                            </td>
+
+                                            <td class="left">#{msg.get('app.decision.tb.td.label.frontEndFeeDOA')}</td>
+                                            <td class="left">
+                                                <p:inputText value="" styleClass="right">
+                                                    <f:convertNumber pattern="#,##0.0" minFractionDigits="1" maxFractionDigits="1"
+                                                                     maxIntegerDigits="14"/>
+                                                </p:inputText>
+                                                <h:outputText value=" %"/>
+                                            </td>
+
+                                            <td class="left">#{msg.get('app.decision.tb.td.label.guarantorBA')}</td>
+                                            <td class="left">
+                                                <p:inputText value="" styleClass="right">
+                                                    <f:convertNumber pattern="#,##0.00" minFractionDigits="2" maxFractionDigits="2"
+                                                                     maxIntegerDigits="14"/>
+                                                </p:inputText>
+                                                <h:outputText value=" %"/>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="left">#{msg.get('app.decision.tb.td.label.reasonForReduction')}</td>
+                                            <td class="left" colspan="5">
+                                                <p:inputText value="" style="width:100%"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Written / Approval History -->
+                        <tr>
+                            <td colspan="2" class="title">
+                                <h:outputText value="#{msg.get('app.decision.appApprovalHistory')}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <p:dataTable paginator="false" rowIndexVar="rowIndex">
+
+                                    <p:columnGroup type="header">
+                                        <p:row>
+                                            <p:column headerText=""/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.action')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.actionBy')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.role')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.position')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.date')}"/>
+                                            <p:column headerText="#{msg.get('app.decision.tb.th.comments')}"/>
+                                        </p:row>
+                                    </p:columnGroup>
+
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+                                    <p:column><h:outputText value=""/></p:column>
+
+                                </p:dataTable>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="height:28px;"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <div class="separate"></div>
+                            </td>
+                        </tr>
+
+                        <!-- Save & Cancel Buttons -->
+                        <tr>
+                            <td colspan="2" class="center">
+                                <p:commandButton id="btnSave" value="#{msg.get('app.button.save')}"
+                                                 update=":frmMain, :msgBoxSystemMessagePanel"
+                                                 styleClass="smaller"/>
+
+                                <p:spacer width="5" height="0"/>
+
+                                <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                                 update=":frmMain"
+                                                 styleClass="smaller"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+
+        <div id="bottom_line"></div>
+        <!-- Start Footer -->
+        <ui:include src="include/footer.xhtml"/>
+        <!-- End Footer -->
+        </div>
+    </h:form>
+
+    <p:blockUI block=":frmMain" trigger=":frmMain:btnSave">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</p:panel>
+
+<p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+    <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                     header="" message="">
+        <p:commandButton value="OK"
+                         process="@this"
+                         update="frmMain"
+                         oncomplete="msgBoxSystemMessageDlg.hide()"/>
+    </p:confirmDialog>
+</p:panel>
+
+</h:body>
+</f:view>
+</html>

@@ -1,0 +1,121 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="stakeholderViewDlgForm">
+        <table class="content_form">
+            <tr>
+                <td class="title"><h:outputText value="#{bizInfoDetail.dlgStakeName}"/><h:outputLabel value="*"
+                                                                                                      styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.name}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactName')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactName}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.phoneNo')}"/><h:outputLabel value="*"
+                                                                                                             styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.phoneNo}" required="true"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.contactYear')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText value="#{bizInfoDetail.bizStakeHolderDetailView.contactYear}" required="true">
+                        <f:convertNumber pattern="#,##0" integerOnly="true"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText value="#{bizInfoDetail.dlgStakeSaleType}"/> <h:outputLabel value="*"
+                                                                                                           styleClass="require-field"/>
+                </td>
+                <td>
+                    <p:inputText id="percentSalesVolume" styleClass="right"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentSalesVolume}" required="true">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentSalesVolume"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCash')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText id="percentCash" styleClass="right"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCash}" required="true">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCash"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.percentCredit')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText id="percentCredit" styleClass="right"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.percentCredit}" required="true">
+                        <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"
+                                         maxIntegerDigits="2"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:percentCredit"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td class="title"><h:outputText
+                        value="#{msg.get('app.bizInfoDetail.bizStakeHolder.label.creditTerm')}"/><h:outputLabel
+                        value="*" styleClass="require-field"/></td>
+                <td>
+                    <p:inputText id="creditTerm" styleClass="right"
+                                 value="#{bizInfoDetail.bizStakeHolderDetailView.creditTerm}" required="true">
+                        <f:convertNumber pattern="#,##0" integerOnly="true"/>
+                        <p:ajax event="blur" update=":stakeholderViewDlgForm:creditTerm"/>
+                    </p:inputText>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p:spacer></p:spacer>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="center">
+                    <p:commandButton id="btnSaveStakeholderView"
+                                     value="#{msg.get('app.button.ok')}"
+                                     process=":stakeholderViewDlgForm"
+                                     action="#{bizInfoDetail.onSaveBizStakeHolderDetailView()}"
+                                     update=":frmMain:supplierTable,:frmMain:buyerTable,:msgBoxSystemMessagePanel,:stakeholderViewDlgForm"
+                                     oncomplete="handleFullappBizStakeHolderRequest(xhr, status, args)"/>
+
+                    <p:commandButton value="#{msg.get('app.button.cancel')}"
+                                     onclick="stakeholderViewDlg.hide()"/>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+    <p:blockUI block=":stakeholderViewDlgForm" trigger=":stakeholderViewDlgForm:btnSaveStakeholderView">
+        LOADING<br/>
+        <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+    </p:blockUI>
+</ui:composition>

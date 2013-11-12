@@ -2,11 +2,10 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.businesscontrol.CustomerAcceptanceControl;
-import com.clevel.selos.dao.master.ReasonDAO;
-import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.WorkCaseDAO;
-import com.clevel.selos.model.db.master.Reason;
-import com.clevel.selos.model.db.master.User;
+import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import com.clevel.selos.model.view.CustomerAcceptanceView;
 import com.clevel.selos.system.message.ExceptionMessage;
@@ -25,6 +24,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -33,8 +33,8 @@ import java.util.List;
 public class CustomerAcceptance implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -50,7 +50,7 @@ public class CustomerAcceptance implements Serializable {
     private int rowIndex;
     private String messageHeader;
     private String message;
-
+    private Date currentDate;
 
     private User user;
 
@@ -61,8 +61,6 @@ public class CustomerAcceptance implements Serializable {
 
     private ContactRecordDetailView selectContactRecordDetail;
     private ContactRecordDetailView contactRecordDetailViewTemp;
-    private List<Reason> reasonList;
-    private Reason reason;
 
     @Inject
     private CustomerAcceptanceControl customerAcceptanceControl;
@@ -70,8 +68,6 @@ public class CustomerAcceptance implements Serializable {
     private UserDAO userDAO;
     @Inject
     private WorkCaseDAO workCaseDAO;
-    @Inject
-    private ReasonDAO reasonDAO;
 
     public CustomerAcceptance() {
 
@@ -86,76 +82,68 @@ public class CustomerAcceptance implements Serializable {
         session.setAttribute("workCaseId", 10001);
         contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
 
-        reasonList = reasonDAO.findAll();
+
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
-        if (session.getAttribute("workCaseId") != null) {
+
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
-            log.info("workCaseId :: {} ", workCaseId);
+            log.info("workCaseId :: {} ",workCaseId);
             customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceByWorkCase(workCaseId); // find NCB by customer
-            if (customerAcceptanceView != null) {
+            if(customerAcceptanceView != null){
                 contactRecordDetailViewList = customerAcceptanceControl.getContactRecordViewList(customerAcceptanceView);
                 log.info("contactRecordDetailViewList  :::::::::::: {} ", contactRecordDetailViewList);
-                if (contactRecordDetailViewList == null) {
+                if(contactRecordDetailViewList == null){
                     contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
                 }
                 setStrOnDataTable();
-                log.info("customerAcceptanceView.getApproveResult is   :::::::::::: {} " + customerAcceptanceView.getApproveResult());
+                log.info("customerAcceptanceView.getApproveResult is   :::::::::::: {} "+customerAcceptanceView.getApproveResult());
 
-            } else {
+            }else{
                 customerAcceptanceView = new CustomerAcceptanceView();
             }
         }
     }
 
-    private void setStrOnDataTable() {
+    private void setStrOnDataTable(){
         ContactRecordDetailView contactRecordDetailViewForStr;
-        for (int i = 0; i < contactRecordDetailViewList.size(); i++) {
+        for(int i=0;i<contactRecordDetailViewList.size();i++){
 
-            contactRecordDetailViewForStr = contactRecordDetailViewList.get(i);
-            if (contactRecordDetailViewForStr.getCallingResult() == 0) {
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.customerAcceptance.radio.label.callingResult.cannotContact"));
-            } else if (contactRecordDetailViewForStr.getCallingResult() == 1) {
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.customerAcceptance.radio.label.callingResult.canContact"));
-            } else {
-                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.customerAcceptance.radio.label.callingResult.etc"));
+            contactRecordDetailViewForStr =  contactRecordDetailViewList.get(i);
+            if(contactRecordDetailViewForStr.getCallingResult()==0){
+                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.cannotContact"));
+            }else if(contactRecordDetailViewForStr.getCallingResult()==1){
+                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.canContact"));
+            }else{
+                contactRecordDetailViewForStr.setCallingResultStr(msg.get("app.contactRecordDetail.radio.label.callingResult.etc"));
             }
 
-            if (contactRecordDetailViewForStr.getAcceptResult() == 0) {
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.customerAcceptance.radio.label.acceptResult.notAccept"));
-            } else if (contactRecordDetailViewForStr.getAcceptResult() == 1) {
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.customerAcceptance.radio.label.acceptResult.accept"));
-            } else {
-                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.customerAcceptance.radio.label.acceptResult.etc"));
+            if(contactRecordDetailViewForStr.getAcceptResult()==0){
+                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.notAccept"));
+            }else if(contactRecordDetailViewForStr.getAcceptResult()==1){
+                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.accept"));
+            }else{
+                contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.etc"));
             }
 
         }
     }
 
-    public void onSaveContactRecordDetailView() {
+    public void onSaveContactRecordDetailView(){
         boolean complete = false;
-        Reason reasonTemp;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if (true) {
+        if(true){
             complete = true;
-            if (modeForButton.equalsIgnoreCase("add")) {
+            if(modeForButton.equalsIgnoreCase("add")){
                 log.info("onSaveContactRecordDetailView add >>> begin ");
                 log.info("contactRecordDetailViewList size >>> is " + contactRecordDetailViewList.size());
-
-                contactRecordDetailView.setNo(contactRecordDetailViewList.size() + 1);
+                contactRecordDetailView.setNo(contactRecordDetailViewList.size()+1);
                 log.info("onSaveContactRecordDetailView contactRecordDetailView >>> " + contactRecordDetailView);
-
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
-
-                contactRecordDetailView.setReason(reason);
                 contactRecordDetailViewList.add(contactRecordDetailView);
 
                 log.info("onSaveContactRecordDetailView add >>> end ");
 
-            } else if (modeForButton.equalsIgnoreCase("edit")) {
+            }else if(modeForButton.equalsIgnoreCase("edit")){
                 log.info("onSaveContactRecordDetailView edit >>> begin ");
                 ContactRecordDetailView contactRecordDetailViewRow;
                 contactRecordDetailViewRow = contactRecordDetailViewList.get(rowIndex);
@@ -166,11 +154,7 @@ public class CustomerAcceptance implements Serializable {
                 contactRecordDetailViewRow.setAcceptResult(contactRecordDetailView.getAcceptResult());
                 contactRecordDetailViewRow.setNextCallingDate(contactRecordDetailView.getNextCallingDate());
                 contactRecordDetailViewRow.setNextCallingTime(contactRecordDetailView.getNextCallingTime());
-
-                reasonTemp = contactRecordDetailView.getReason();
-                reason = reasonDAO.findById(reasonTemp.getId());
-
-                contactRecordDetailViewRow.setReason(reason);
+                contactRecordDetailViewRow.setReason(contactRecordDetailView.getReason());
                 contactRecordDetailViewRow.setRemark(contactRecordDetailView.getRemark());
 
                 contactRecordDetailView = new ContactRecordDetailView();
@@ -180,16 +164,13 @@ public class CustomerAcceptance implements Serializable {
         setStrOnDataTable();
         context.addCallbackParam("functionComplete", complete);
     }
-
-    public void onEditContactRecordDetailView() {
-        log.info(" onEditBizProductDetailView getRemark is " + selectContactRecordDetail.getRemark());
+    
+    public void onEditContactRecordDetailView(){
+        log.info( " onEditBizProductDetailView getRemark is " + selectContactRecordDetail.getRemark());
         modeForButton = "edit";
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        contactRecordDetailView.setReason(reason);
-
         //*** Check list size ***//
-        if (rowIndex < contactRecordDetailViewList.size()) {
+        if( rowIndex < contactRecordDetailViewList.size() ) {
             contactRecordDetailView.setCallingDate(selectContactRecordDetail.getCallingDate());
             contactRecordDetailView.setCallingTime(selectContactRecordDetail.getCallingTime());
             contactRecordDetailView.setCallingResult(selectContactRecordDetail.getCallingResult());
@@ -211,27 +192,24 @@ public class CustomerAcceptance implements Serializable {
         setStrOnDataTable();
     }
 
-    public void onAddContactRecordDetailView() {
+    public void onAddContactRecordDetailView(){
         log.info("onAddContactRecordView >>> begin ");
         contactRecordDetailView = new ContactRecordDetailView();
-        reason = new Reason();
-        reason.setId(0);
-        contactRecordDetailView.setReason(reason);
         modeForButton = "add";
     }
 
     public void onDeleteContactRecordDetailView() {
-        log.info(" onDeleteContactRecordDetailView getRemark is " + selectContactRecordDetail.getRemark());
+        log.info( " onDeleteContactRecordDetailView getRemark is " + selectContactRecordDetail.getRemark());
         contactRecordDetailViewList.remove(selectContactRecordDetail);
         onSetRowNoContactRecordDetailView();
-        log.info(" onDeleteContactRecordDetailView end ");
+        log.info( " onDeleteContactRecordDetailView end ");
     }
 
-    public void onSetRowNoContactRecordDetailView() {
+    public void onSetRowNoContactRecordDetailView(){
         ContactRecordDetailView contactRecordDetailViewRow;
-        for (int i = 0; i < contactRecordDetailViewList.size(); i++) {
+        for(int i=0;i< contactRecordDetailViewList.size();i++){
             contactRecordDetailViewRow = contactRecordDetailViewList.get(i);
-            contactRecordDetailViewRow.setNo(i + 1);
+            contactRecordDetailViewRow.setNo(i+1);
         }
     }
 
@@ -239,32 +217,33 @@ public class CustomerAcceptance implements Serializable {
     public void onSaveCustomerAcceptance() {    // call transform  and then call businessControl
         log.info("onSaveCustomerAcceptance::::");
         log.info("contactRecordDetailViewList.size() ::: {} ", contactRecordDetailViewList.size());
-        try {
-            if (contactRecordDetailViewList.size() > 0) {
-                if (customerAcceptanceView.getId() == 0) {
+        try{
+            if(contactRecordDetailViewList.size() > 0){
+                if(customerAcceptanceView.getId() == 0){
                     customerAcceptanceView.setCreateBy(user);
                     customerAcceptanceView.setCreateDate(DateTime.now().toDate());
                 }
+                customerAcceptanceView.setModifyBy(user);
                 customerAcceptanceControl.onSaveCustomerAcceptance(customerAcceptanceView, contactRecordDetailViewList, workCaseId);
-                messageHeader = msg.get("app.customerAcceptance.message.header.save.success");
-                message = msg.get("app.customerAcceptance.message.body.save.success");
+                messageHeader = msg.get("app.contactRecordDetail.message.header.save.success");
+                message = msg.get("app.contactRecordDetail.message.body.save.success");
                 onCreation();
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            } else {
-                messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
-                message = msg.get("app.customerAcceptance.message.body.noContactRecord.fail");
+            } else{
+                messageHeader = msg.get("app.contactRecordDetail.message.header.save.fail");
+                message = msg.get("app.contactRecordDetail.message.body.noContactRecord.fail");
                 RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
             }
 
 
-        } catch (Exception ex) {
+        } catch(Exception ex){
             log.error("Exception : {}", ex);
-            messageHeader = msg.get("app.customerAcceptance.message.header.save.fail");
+            messageHeader = msg.get("app.contactRecordDetail.message.header.save.fail");
 
-            if (ex.getCause() != null) {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + " cause : " + ex.getCause().toString();
+            if(ex.getCause() != null){
+                message = msg.get("app.contactRecordDetail.message.body.save.fail") + " cause : "+ ex.getCause().toString();
             } else {
-                message = msg.get("app.customerAcceptance.message.body.save.fail") + ex.getMessage();
+                message = msg.get("app.contactRecordDetail.message.body.save.fail") + ex.getMessage();
             }
 
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -272,7 +251,7 @@ public class CustomerAcceptance implements Serializable {
         }
     }
 
-    public void onCancelCustomerAcceptance() {
+    public void onCancelCustomerAcceptance(){
         log.info("onCancelCustomerAcceptance::::  ");
         onCreation();
     }
@@ -341,11 +320,11 @@ public class CustomerAcceptance implements Serializable {
         this.messageHeader = messageHeader;
     }
 
-    public List<Reason> getReasonList() {
-        return reasonList;
+    public Date getCurrentDate() {
+        return DateTime.now().toDate();
     }
 
-    public void setReasonList(List<Reason> reasonList) {
-        this.reasonList = reasonList;
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

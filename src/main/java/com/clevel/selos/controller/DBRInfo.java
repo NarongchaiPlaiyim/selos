@@ -3,6 +3,7 @@ package com.clevel.selos.controller;
 import com.clevel.selos.businesscontrol.DBRControl;
 import com.clevel.selos.businesscontrol.LoanAccountTypeControl;
 import com.clevel.selos.businesscontrol.NCBInfoControl;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
@@ -21,6 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,8 @@ import java.util.List;
 @ManagedBean(name = "dbrInfo")
 public class DBRInfo implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -109,9 +111,11 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
+
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
+
             dbrDetails = new ArrayList<DBRDetailView>();
             if (dbr.getDbrDetailViews() != null && !dbr.getDbrDetailViews().isEmpty()) {
                 dbrDetails = dbr.getDbrDetailViews();
@@ -120,7 +124,6 @@ public class DBRInfo implements Serializable {
             loanAccountTypes = loanAccountTypeControl.getListLoanTypeByCus(1);
             ncbDetails = new ArrayList<NCBDetailView>();
             ncbDetails = ncbInfoControl.getNCBForCalDBR(workCaseId);
-
         }catch (Exception e){
 
         }
@@ -145,11 +148,41 @@ public class DBRInfo implements Serializable {
                 LoanAccountTypeView loanAccountType = new LoanAccountTypeView();
                 loanAccountType.setId(selectedItem.getLoanAccountTypeView().getId());
                 loanAccountType.setName(loanAccountTypeView.getName());
+                loanAccountType.setCalculateType(loanAccountTypeView.getCalculateType());
                 selectedItem.setLoanAccountTypeView(loanAccountType);
                 break;
             }
         }
 
+        int loanType = selectedItem.getLoanAccountTypeView().getCalculateType();
+        final  BigDecimal month = BigDecimal.valueOf(12);
+        BigDecimal debtForCalculate = BigDecimal.ZERO;
+        //todo wait confirm Formula
+        BigDecimal totalAverage = BigDecimal.TEN;     // hardCode
+        switch (loanType){
+            case 1:  //normal
+                if(selectedItem.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment = 0
+                    debtForCalculate = debtForCalculate.add(selectedItem.getInstallment());
+                }else {
+                    debtForCalculate =  selectedItem.getLimit().divide(totalAverage);
+                    debtForCalculate = debtForCalculate.multiply(dbr.getDbrInterest());
+                    debtForCalculate = debtForCalculate.divide(month);
+                }
+                break;
+            case 2:    //*5%
+                debtForCalculate = selectedItem.getLimit().divide(totalAverage, 20, RoundingMode.HALF_UP);
+                debtForCalculate = debtForCalculate.multiply(BigDecimal.valueOf(5));
+                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 20, RoundingMode.HALF_UP);
+                break;
+            case 3:  // *10%
+                debtForCalculate = selectedItem.getLimit().divide(totalAverage, 20, RoundingMode.HALF_UP);
+                debtForCalculate = debtForCalculate.multiply(BigDecimal.valueOf(10));
+                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 20, RoundingMode.HALF_UP);
+                break;
+            default:
+            return;
+        }
+        selectedItem.setDebtForCalculate(debtForCalculate);
         if (isUpdate) {
             dbrDetails.set(rowIndex, selectedItem);
         } else {
@@ -160,6 +193,7 @@ public class DBRInfo implements Serializable {
         context.addCallbackParam("functionComplete", isComplete);
 
     }
+
 
 
     public void initEditDBRDetail() {
@@ -182,7 +216,11 @@ public class DBRInfo implements Serializable {
     public void onSaveDBRInfo() {
         try {
             dbr.setDbrDetailViews(dbrDetails);
-            dbrControl.saveDBRInfo(dbr, workCaseId, userId);
+            dbr.setWorkCaseId(workCaseId);
+            dbr.setUserId(userId);
+            dbr.setTotalMonthDebtBorrower(getTotalMonthDebtBorrower());
+            dbr.setTotalMonthDebtRelated(getTotalMonthDebtRelated());
+            dbrControl.saveDBRInfo(dbr);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -203,24 +241,24 @@ public class DBRInfo implements Serializable {
         }
     }
 
-    public BigDecimal getOutStandingNCBTotal(){
-        BigDecimal outStandingNCB = BigDecimal.ZERO;
+    public BigDecimal getTotalMonthDebtBorrower(){
+        BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){
             for(NCBDetailView ncbDetailView : ncbDetails){
-                outStandingNCB = outStandingNCB.add(ncbDetailView.getOutstanding());
+                totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getOutstanding());
             }
         }
-        return outStandingNCB;
+        return totalMonthDebtBorrower;
     }
 
-    public BigDecimal getOutStandingDBRTotal(){
-        BigDecimal outStandingDBR = BigDecimal.ZERO;
+    public BigDecimal getTotalMonthDebtRelated(){
+        BigDecimal totalMonthDebtRelated = BigDecimal.ZERO;
         if(dbrDetails != null && !dbrDetails.isEmpty()){
             for(DBRDetailView dbrDetailView : dbrDetails){
-                outStandingDBR = outStandingDBR.add(dbrDetailView.getDebtForCalculate());
+                totalMonthDebtRelated = totalMonthDebtRelated.add(dbrDetailView.getDebtForCalculate());
             }
         }
-        return outStandingDBR;
+        return totalMonthDebtRelated;
     }
 
     public DBRView getDbr() {

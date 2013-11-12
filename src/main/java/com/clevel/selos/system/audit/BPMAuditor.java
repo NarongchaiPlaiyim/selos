@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.BPMActivityDAO;
 import com.clevel.selos.integration.BPM;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.BPMActivity;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.Date;
 @BPM
 public class BPMAuditor implements SystemAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     BPMActivityDAO bpmActivityDAO;
