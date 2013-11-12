@@ -14,7 +14,7 @@ public class IsaUserDetailView implements Serializable {
     private String emailAddress;
     private String buCode;
     private String lastIp;
-    private Date lastLogon;
+    private String lastLogon;
     private String phoneExt;
     private String phoneNumber;
     private String role;
@@ -68,11 +68,11 @@ public class IsaUserDetailView implements Serializable {
         this.lastIp = lastIp;
     }
 
-    public Date getLastLogon() {
+    public String getLastLogon() {
         return lastLogon;
     }
 
-    public void setLastLogon(Date lastLogon) {
+    public void setLastLogon(String lastLogon) {
         this.lastLogon = lastLogon;
     }
 

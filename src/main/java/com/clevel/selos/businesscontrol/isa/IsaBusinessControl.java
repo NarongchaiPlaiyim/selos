@@ -15,6 +15,7 @@ import com.clevel.selos.model.view.isa.IsaAuditLogView;
 import com.clevel.selos.model.view.isa.IsaManageUserView;
 import com.clevel.selos.model.view.isa.IsaSearchView;
 import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.util.DateTimeUtil;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -54,7 +55,8 @@ public class IsaBusinessControl implements Serializable {
     }
 
     boolean complete = true;
-
+    private final Locale THAI_LOCALE = new Locale("th", "TH");
+    private final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss.sss";
 
     public void createUser(IsaManageUserView isaManageUserView) throws Exception {
 
@@ -290,7 +292,7 @@ public class IsaBusinessControl implements Serializable {
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
             isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(userlist.getLastLogon());
+            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : "");
@@ -349,7 +351,7 @@ public class IsaBusinessControl implements Serializable {
             isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
             isaUserDetailView.setBuCode(userlist.getBuCode());
             isaUserDetailView.setLastIp(userlist.getLastIP());
-            isaUserDetailView.setLastLogon(userlist.getLastLogon());
+            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
             isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
             isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
             isaUserDetailView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : " ");
