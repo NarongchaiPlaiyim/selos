@@ -152,7 +152,7 @@ public class NCBInfoControl extends BusinessControl {
                     }
                     ncbDetailView.setDebtForCalculate(debtForCalculate);
                     StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitle().getTitleTh())
+                    accountName.append(customer.getTitleTh().getTitleTh())
                             .append(" ").append(customer.getNameTh())
                             .append(" ").append(customer.getLastNameTh());
                     ncbDetailView.setAccountName(accountName.toString());

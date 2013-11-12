@@ -11,112 +11,171 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wrk_customer")
+@Table(name="wrk_customer")
 public class Customer implements Serializable {
     @Id
-    @SequenceGenerator(name = "SEQ_WRK_CUSTOMER_ID", sequenceName = "SEQ_WRK_CUSTOMER_ID", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_WRK_CUSTOMER_ID")
+    @SequenceGenerator(name="SEQ_WRK_CUSTOMER_ID", sequenceName="SEQ_WRK_CUSTOMER_ID", allocationSize=1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator="SEQ_WRK_CUSTOMER_ID")
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "workcase_id")
+    @JoinColumn(name="workcase_id")
     private WorkCase workCase;
 
     @ManyToOne
-    @JoinColumn(name = "workcase_prescreen_id")
+    @JoinColumn(name="workcase_prescreen_id")
     private WorkCasePrescreen workCasePrescreen;
 
     @OneToOne
-    @JoinColumn(name = "customerentity_id")
+    @JoinColumn(name="customerentity_id")
     private CustomerEntity customerEntity;
 
     @OneToOne
-    @JoinColumn(name = "documenttype_id")
+    @JoinColumn(name="documenttype_id")
     private DocumentType documentType;
 
-    @Column(name = "document_authorize_by")
+    @Column(name="document_authorize_by")
     private String documentAuthorizeBy;
 
-    @Column(name = "service_segment")
+    @Column(name="service_segment")
     private String serviceSegment;
 
-    @Column(name = "collateral_owner")
+    @Column(name="collateral_owner")
     private int collateralOwner;
 
-    @Column(name = "percent_share")
+    @Column(name="percent_share")
     private BigDecimal percentShare;
 
-    @Column(name = "approx_income")
+    @Column(name="approx_income")
     private BigDecimal approxIncome;
 
-    @Column(name = "id_number")
-    private String idNumber;
+    @Column(name="tmb_customer_id")
+    private String tmbCustomerId;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "expire_date")
-    private Date expireDate;
+    @Column(name="document_expire_date")
+    private Date documentExpiredDate;
 
     @OneToOne
-    @JoinColumn(name = "title_id")
-    private Title title;
+    @JoinColumn(name="title_th_id")
+    private Title titleTh;
 
-    @Column(name = "name_en")
+    @OneToOne
+    @JoinColumn(name="title_en_id")
+    private Title titleEn;
+
+    @Column(name="name_en")
     private String nameEn;
 
-    @Column(name = "name_th")
+    @Column(name="name_th")
     private String nameTh;
 
-    @Column(name = "lastname_th")
+    @Column(name="lastname_th")
     private String lastNameTh;
 
-    @Column(name = "lastname_en")
+    @Column(name="lastname_en")
     private String lastNameEn;
 
-    @Column(name = "age")
+    @Column(name="age")
     private int age;
 
-    @Column(name = "ncb_checked", nullable = false, columnDefinition = "int default 0")
+    @Column(name="ncb_checked", nullable=false, columnDefinition="int default 0")
     private int ncbFlag;
 
     @Column(name = "csi_checked", nullable = false, columnDefinition = "int default 0")
     private int csiFlag;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy="customer")
     private Individual individual;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy="customer")
     private Juristic juristic;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy="customer")
     private List<Address> addressesList;
 
     @OneToOne
-    @JoinColumn(name = "businesstype_id")
+    @JoinColumn(name="businesstype_id")
     private BusinessType businessType;
 
     @OneToOne
-    @JoinColumn(name = "relation_id")
+    @JoinColumn(name="relation_id")
     private Relation relation;
 
     @OneToOne
-    @JoinColumn(name = "reference_id")
+    @JoinColumn(name="reference_id")
     private Reference reference;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy="customer")
     private NCB ncb;
 
-    @OneToOne
-    @JoinColumn(name = "warningcode_id")
-    private WarningCode csi;
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerCSI> customerCSIList;
 
-    @Column(name = "is_spouse", nullable = false, columnDefinition = "int default 0")
+    @Column(name="is_spouse", nullable=false, columnDefinition="int default 0")
     private int isSpouse;
 
-    @Column(name = "spouse_id")
+    @Column(name="spouse_id")
     private long spouseId;
 
-    @Column(name = "is_search_rm", nullable = false, columnDefinition = "int default 0")
+    @Column(name="is_search_rm", nullable=false, columnDefinition = "int default 0")
     private int searchFromRM;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="document_authorize_date")
+    private Date documentAuthorizeDate;
+
+    @Column(name="kyc_reason")
+    private String kycReason;
+
+    @Column(name="worthiness", nullable = false, columnDefinition = "int default -1")
+    private int worthiness;
+
+    @Column(name="mobile_number")
+    private String mobileNumber;
+
+    @Column(name="fax_number")
+    private String faxNumber;
+
+    @Column(name="email")
+    private String email;
+
+    @Column(name="convenant_flag", nullable = false, columnDefinition = "int default -1")
+    private int convenantFlag;
+
+    @Column(name="review_flag", nullable = false, columnDefinition = "int default -1")
+    private int reviewFlag;
+
+    @Column(name="reason")
+    private String reason;
+
+    @OneToOne
+    @JoinColumn(name="kyclevel_id")
+    private KYCLevel kycLevel;
+
+    @OneToOne
+    @JoinColumn(name="mailing_address_id")
+    private AddressType mailingAddressType;
+
+    @Column(name="search_by", nullable = false, columnDefinition = "int default 0")
+    private int searchBy;
+
+    @Column(name="search_id")
+    private String searchId;
+
+    @OneToOne
+    @JoinColumn(name="source_income")
+    private Country sourceIncome;
+
+    @OneToOne
+    @JoinColumn(name="country_income")
+    private Country countryIncome;
+
+    @Column(name="is_committee", nullable=false, columnDefinition="int default 0")
+    private int isCommittee;
+
+    @Column(name="juristic_id")
+    private long juristicId;
 
     public Customer() {
     }
@@ -201,28 +260,28 @@ public class Customer implements Serializable {
         this.approxIncome = approxIncome;
     }
 
-    public String getIdNumber() {
-        return idNumber;
+    public String getTmbCustomerId() {
+        return tmbCustomerId;
     }
 
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
+    public void setTmbCustomerId(String idNumber) {
+        this.tmbCustomerId = idNumber;
     }
 
-    public Date getExpireDate() {
-        return expireDate;
+    public Date getDocumentExpiredDate() {
+        return documentExpiredDate;
     }
 
-    public void setExpireDate(Date expireDate) {
-        this.expireDate = expireDate;
+    public void setDocumentExpiredDate(Date expireDate) {
+        this.documentExpiredDate = expireDate;
     }
 
-    public Title getTitle() {
-        return title;
+    public Title getTitleTh() {
+        return titleTh;
     }
 
-    public void setTitle(Title title) {
-        this.title = title;
+    public void setTitleTh(Title title) {
+        this.titleTh = title;
     }
 
     public String getNameEn() {
@@ -263,14 +322,6 @@ public class Customer implements Serializable {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public int getCsiFlag() {
-        return csiFlag;
-    }
-
-    public void setCsiFlag(int csiFlag) {
-        this.csiFlag = csiFlag;
     }
 
     public int getNcbFlag() {
@@ -337,12 +388,12 @@ public class Customer implements Serializable {
         this.ncb = ncb;
     }
 
-    public WarningCode getCsi() {
-        return csi;
+    public List<CustomerCSI> getCustomerCSIList() {
+        return customerCSIList;
     }
 
-    public void setCsi(WarningCode csi) {
-        this.csi = csi;
+    public void setCustomerCSIList(List<CustomerCSI> customerCSIList) {
+        this.customerCSIList = customerCSIList;
     }
 
     public int getIsSpouse() {
@@ -369,38 +420,217 @@ public class Customer implements Serializable {
         this.searchFromRM = searchFromRM;
     }
 
+    public int getSpouse() {
+        return isSpouse;
+    }
+
+    public void setSpouse(int spouse) {
+        isSpouse = spouse;
+    }
+
+    public Date getDocumentAuthorizeDate() {
+        return documentAuthorizeDate;
+    }
+
+    public void setDocumentAuthorizeDate(Date documentAuthorizeDate) {
+        this.documentAuthorizeDate = documentAuthorizeDate;
+    }
+
+    public String getKycReason() {
+        return kycReason;
+    }
+
+    public void setKycReason(String kycReason) {
+        this.kycReason = kycReason;
+    }
+
+    public int getWorthiness() {
+        return worthiness;
+    }
+
+    public void setWorthiness(int worthiness) {
+        this.worthiness = worthiness;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getFaxNumber() {
+        return faxNumber;
+    }
+
+    public void setFaxNumber(String faxNumber) {
+        this.faxNumber = faxNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getConvenantFlag() {
+        return convenantFlag;
+    }
+
+    public void setConvenantFlag(int convenantFlag) {
+        this.convenantFlag = convenantFlag;
+    }
+
+    public int getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(int reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public KYCLevel getKycLevel() {
+        return kycLevel;
+    }
+
+    public void setKycLevel(KYCLevel kycLevel) {
+        this.kycLevel = kycLevel;
+    }
+
+    public AddressType getMailingAddressType() {
+        return mailingAddressType;
+    }
+
+    public void setMailingAddressType(AddressType mailingAddressType) {
+        this.mailingAddressType = mailingAddressType;
+    }
+
+    public Title getTitleEn() {
+        return titleEn;
+    }
+
+    public void setTitleEn(Title titleEn) {
+        this.titleEn = titleEn;
+    }
+
+    public int getSearchBy() {
+        return searchBy;
+    }
+
+    public void setSearchBy(int searchBy) {
+        this.searchBy = searchBy;
+    }
+
+    public String getSearchId() {
+        return searchId;
+    }
+
+    public void setSearchId(String searchId) {
+        this.searchId = searchId;
+    }
+
+    public Country getSourceIncome() {
+        return sourceIncome;
+    }
+
+    public void setSourceIncome(Country sourceIncome) {
+        this.sourceIncome = sourceIncome;
+    }
+
+    public Country getCountryIncome() {
+        return countryIncome;
+    }
+
+    public void setCountryIncome(Country countryIncome) {
+        this.countryIncome = countryIncome;
+    }
+
+    public int getIsCommittee() {
+        return isCommittee;
+    }
+
+    public void setIsCommittee(int committee) {
+        isCommittee = committee;
+    }
+
+    public long getJuristicId() {
+        return juristicId;
+    }
+
+    public void setJuristicId(long juristicId) {
+        this.juristicId = juristicId;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-                .append("id", id)
-                .append("workCase", workCase)
-                .append("workCasePrescreen", workCasePrescreen)
-                .append("customerEntity", customerEntity)
-                .append("documentType", documentType)
-                .append("documentAuthorizeBy", documentAuthorizeBy)
-                .append("serviceSegment", serviceSegment)
-                .append("collateralOwner", collateralOwner)
-                .append("percentShare", percentShare)
-                .append("approxIncome", approxIncome)
-                .append("idNumber", idNumber)
-                .append("expireDate", expireDate)
-                .append("title", title)
-                .append("nameEn", nameEn)
-                .append("nameTh", nameTh)
-                .append("lastNameTh", lastNameTh)
-                .append("lastNameEn", lastNameEn)
-                .append("age", age)
-                .append("ncbFlag", ncbFlag)
-                .append("individual", individual)
-                .append("juristic", juristic)
-                .append("addressesList", addressesList)
-                .append("businessType", businessType)
-                .append("relation", relation)
-                .append("reference", reference)
-                .append("ncb", ncb)
-                .append("csi", csi)
-                .append("isSpouse", isSpouse)
-                .append("spouseId", spouseId)
-                .toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
+                append("id", id).
+                append("workCase", workCase).
+                append("workCasePrescreen", workCasePrescreen).
+                append("customerEntity", customerEntity).
+                append("documentType", documentType).
+                append("documentAuthorizeBy", documentAuthorizeBy).
+                append("serviceSegment", serviceSegment).
+                append("collateralOwner", collateralOwner).
+                append("percentShare", percentShare).
+                append("approxIncome", approxIncome).
+                append("tmbCustomerId", tmbCustomerId).
+                append("documentExpiredDate", documentExpiredDate).
+                append("titleTh", titleTh).
+                append("titleEn", titleEn).
+                append("nameEn", nameEn).
+                append("nameTh", nameTh).
+                append("lastNameTh", lastNameTh).
+                append("lastNameEn", lastNameEn).
+                append("age", age).
+                append("ncbFlag", ncbFlag).
+                append("individual", individual).
+                append("juristic", juristic).
+                append("addressesList", addressesList).
+                append("businessType", businessType).
+                append("relation", relation).
+                append("reference", reference).
+                append("ncb", ncb).
+                append("customerCSIList", customerCSIList).
+                append("isSpouse", isSpouse).
+                append("spouseId", spouseId).
+                append("searchFromRM", searchFromRM).
+                append("documentAuthorizeDate", documentAuthorizeDate).
+                append("kycReason", kycReason).
+                append("worthiness", worthiness).
+                append("mobileNumber", mobileNumber).
+                append("faxNumber", faxNumber).
+                append("email", email).
+                append("convenantFlag", convenantFlag).
+                append("reviewFlag", reviewFlag).
+                append("reason", reason).
+                append("kycLevel", kycLevel).
+                append("mailingAddressType", mailingAddressType).
+                append("searchBy", searchBy).
+                append("searchId", searchId).
+                append("sourceIncome", sourceIncome).
+                append("countryIncome", countryIncome).
+                append("isCommittee", isCommittee).
+                append("juristicId", juristicId).
+                toString();
     }
 }

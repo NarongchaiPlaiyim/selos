@@ -38,7 +38,7 @@ public class NCBIExportImp implements Serializable {
         String firstName = exportModel.getFirstName();
         String lastName = exportModel.getLastName();
         String juristicName = exportModel.getJuristicName();
-        String caNumber = exportModel.getCaNumber();
+        String appRefNumber = exportModel.getAppRefNumber();
         String caution = exportModel.getCaution();
         String referenceTel = exportModel.getReferenceTel();
         String inquiryStatus = exportModel.getInquiryStatus();
@@ -59,7 +59,7 @@ public class NCBIExportImp implements Serializable {
                 firstName,
                 lastName,
                 juristicName,
-                caNumber,
+                appRefNumber,
                 caution,
                 referenceTel,
                 inquiryStatus,

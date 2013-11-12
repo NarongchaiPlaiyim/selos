@@ -11,30 +11,33 @@
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/jquery.numeric.js"/>
     <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <style>
+        .ui-datatable td,.ui-datatable th,.ui-datatable span {
+            white-space: normal!important;
+        }
+    </style>
 </h:head>
 
 <h:body>
-    <f:event type="preRenderView" listener="#{basicInfo.preRender()}"/>
+    <f:event type="preRenderView" listener="#{custInfoSummary.preRender()}" />
     <p:panel id="pnl_maincontainer" style="border:0; margin:0; padding: 0;">
         <h:form id="frmMain">
             <div id="main_container">
                 <!-- Start Header Logo -->
-                <ui:include src="include/header_logo.xhtml"/>
+                <ui:include src="include/header_logo.xhtml" />
                 <!-- End Header Logo -->
                 <!-- Start Header Detail -->
-                <ui:include src="include/header_detail.xhtml"/>
+                <ui:include src="include/header_detail.xhtml" />
                 <!-- End Header Detail -->
                 <!-- Start Menu -->
-                <ui:include src="include/menubar.xhtml"/>
+                <ui:include src="include/menubar.xhtml" />
                 <!-- End Menu -->
                 <div id="content_container">
                     <div id="content_name">#{msg.get('app.custInfoSummary.header')}</div>
                     <div id="content">
                         <div id="content_info">
                             <div id="content_trackchange" title="Click to view Track Change">[ View Track Change ]</div>
-                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName"
-                                                                                      value="MR.BDM Maker"/>,
-                                <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
+                            <div id="content_lastupdate">Last update by <h:outputText id="lastupdateName" value="MR.BDM Maker"/>, <h:outputText id="lastupdateTime" value="18/08/2556 11:11:01"/></div>
                         </div>
                         <div id="content_form">
                             <!-- start content -->
@@ -42,7 +45,7 @@
                                 <tr>
                                     <td class="small">
                                         <p:selectOneMenu styleClass="largest" size="1"
-                                                         value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}">
+                                                         value="#{custInfoSummary.customerInfoSummaryView.customerEntity.id}" >
                                             <f:selectItem itemLabel="- Please Select -" itemValue="0"/>
                                             <f:selectItems value="#{custInfoSummary.customerEntityList}"
                                                            var="customerEntity"
@@ -52,12 +55,12 @@
                                         </p:selectOneMenu>
                                     </td>
                                     <td>
-                                        <p:commandButton id="btnIndividual" value="Add Individual" styleClass="larger"
-                                                         process="@form"
-                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"/>
-                                        <p:commandButton id="btnJuristic" value="Add Juristic" styleClass="larger"
-                                                         process="@form"
-                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"/>
+                                        <p:commandButton id="btnIndividual" value="Add Individual" styleClass="larger" process="@form"
+                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 1}"
+                                                         action="#{custInfoSummary.onLinkToAddIndividual()}"/>
+                                        <p:commandButton id="btnJuristic" value="Add Juristic" styleClass="larger" process="@form"
+                                                         rendered="#{custInfoSummary.customerInfoSummaryView.customerEntity.id == 2}"
+                                                         action="#{custInfoSummary.onLinkToAddJuristic()}"/>
                                     </td>
                                 </tr>
 
@@ -68,135 +71,446 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <p:dataTable id="resultTableBorrower" var="item"
-                                                     value="#{custInfoSummary.customerInfoSummaryView.borrowerCustomerViewList}"
+                                        <p:dataTable id="resultTableBorrower" var="item" value="#{custInfoSummary.customerInfoSummaryView.borrowerCustomerViewList}"
                                                      paginator="false" rowKey="#{item}" rowIndexVar="rowIndex">
                                             <p:columnGroup type="header">
                                                 <p:row>
-                                                    <p:column rowspan="2" width="20px;"/>
-                                                    <p:column rowspan="2" width="200px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="160px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
+                                                    <p:column rowspan="1" colspan="2" width="160">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="170px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
+                                                    <p:column rowspan="1" colspan="2" width="170">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="1" colspan="2" width="280px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
+                                                    <p:column rowspan="1" colspan="2" width="280">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="30px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
+                                                    <p:column rowspan="2" width="30">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="50px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
                                                     </p:column>
-                                                    <p:column rowspan="2" width="40px;"/>
+                                                    <p:column rowspan="2" width="40"/>
                                                 </p:row>
                                                 <p:row>
-                                                    <p:column colspan="1" width="100px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
+                                                    <p:column colspan="1" width="100">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="60px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
+                                                    <p:column colspan="1" width="60">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="130px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
+                                                    <p:column colspan="1" width="130">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="40px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
+                                                    <p:column colspan="1" width="40">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
                                                     </p:column>
-                                                    <p:column colspan="1" width="140px;">
-                                                        <f:facet
-                                                                name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
                                                     </p:column>
                                                 </p:row>
                                             </p:columnGroup>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{rowIndex+1}"/>
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText
-                                                        value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"/>
+                                                <h:outputText value="#{item.titleTh.titleTh}#{item.firstNameTh} #{item.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.citizenId}"/>
+                                                <h:outputText value="#{item.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item.tmbCustomerId}"/>
+                                                <h:outputText value="#{item.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
                                             </p:column>
 
                                             <p:column styleClass="left">
-                                                <h:outputText value="#{item.relation.description}"/>
+                                                <h:outputText value="#{item.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
                                                 <!--<h:outputText value="#{item.collateralOwner == 1 ? 'Y' : item.collateralOwner == 0 ? 'N' : '-'}"/>-->
-                                                <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"/>
+                                                <h:outputText value="#{item.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"/>
+                                                <h:outputText value="#{item.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.reference.description}"/>
+                                                <h:outputText value="#{item.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.percentShare}"/>
+                                                <h:outputText value="#{item.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.age}"/>
+                                                <h:outputText value="#{item.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.kycLevel.kycLevel}"/>
+                                                <h:outputText value="#{item.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.csi.code}"/>
+                                                <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
                                             </p:column>
 
                                             <p:column styleClass="center">
-                                                <h:outputText value="#{item.id}"/>
+                                                <h:outputText value="#{item.worthiness}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center"> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditBorrower()}">
+                                                    <f:setPropertyActionListener value="#{item}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerBorrower}"/>
+                                                </p:commandButton>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <!-- Guarantor -->
+
+                                <tr>
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                        #{msg.get('app.custInfoSummary.content.guarantor')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="resultTableGuarantor" var="item2" value="#{custInfoSummary.customerInfoSummaryView.guarantorCustomerViewList}"
+                                                     paginator="false" rowKey="#{item2}" rowIndexVar="rowIndex">
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="160">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="170">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="280">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="30">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="40"/>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="1" width="100">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="60">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="130">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="40">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.titleTh.titleTh}#{item2.firstNameTh} #{item2.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item2.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <!--<h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : item2.collateralOwner == 0 ? 'N' : '-'}"/>-->
+                                                <h:outputText value="#{item2.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <ui:repeat value="#{item2.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item2}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item2.worthiness}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
                                             </p:column>
 
                                             <p:column> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditGuarantor()}">
+                                                    <f:setPropertyActionListener value="#{item2}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteGuarantorDlg.show()"
+                                                                 update=":frmMain,:msgBoxSystemMessagePanel">
+                                                    <f:setPropertyActionListener value="#{item2}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerGuarantor}"/>
+                                                </p:commandButton>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </td>
+                                </tr>
+
+                                <!-- Related -->
+
+                                <tr>
+                                    <td class="title" style="padding-top: 10px; padding-bottom: 10px;">
+                                        #{msg.get('app.custInfoSummary.content.related')}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <p:dataTable id="resultTableRelated" var="item3" value="#{custInfoSummary.customerInfoSummaryView.relatedCustomerViewList}"
+                                                     paginator="false" rowKey="#{item3}" rowIndexVar="rowIndex">
+                                            <p:columnGroup type="header">
+                                                <p:row>
+                                                    <p:column rowspan="2" width="20"/>
+                                                    <p:column rowspan="2" width="200">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.customerName')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="160">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="170">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="1" colspan="2" width="280">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="30">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.share')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.age')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.kyc')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.csi')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="50">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.worth')}</f:facet>
+                                                    </p:column>
+                                                    <p:column rowspan="2" width="40"/>
+                                                </p:row>
+                                                <p:row>
+                                                    <p:column colspan="1" width="100">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.citiRegis')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="60">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.id.cus')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="130">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.type')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="40">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.relationShip.coll')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.ind')}</f:facet>
+                                                    </p:column>
+                                                    <p:column colspan="1" width="140">
+                                                        <f:facet name="header">#{msg.get('app.custInfoSummary.table.reference.jus')}</f:facet>
+                                                    </p:column>
+                                                </p:row>
+                                            </p:columnGroup>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{rowIndex+1}"
+                                                              style="min-width: 20px; max-width: 20px;"/>
                                             </p:column>
 
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.titleTh.titleTh}#{item3.firstNameTh} #{item3.lastNameTh}"
+                                                              style="min-width: 200px; max-width: 200px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.citizenId}"
+                                                              style="min-width: 100px; max-width: 100px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.tmbCustomerId}"
+                                                              style="min-width: 60px; max-width: 60px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="left">
+                                                <h:outputText value="#{item3.relation.description}"
+                                                              style="min-width: 130px; max-width: 130px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <!--<h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : item3.collateralOwner == 0 ? 'N' : '-'}"/>-->
+                                                <h:outputText value="#{item3.collateralOwner == 1 ? 'Y' : 'N'}"
+                                                              style="min-width: 40px; max-width: 40px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.reference.description}"
+                                                              style="min-width: 140px; max-width: 140px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.percentShare}"
+                                                              style="min-width: 30px; max-width: 30px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.age}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.kycLevel.kycLevel}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <ui:repeat value="#{item3.customerCSIList}" var="customerCSI">
+                                                    <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
+                                                </ui:repeat>
+                                                <!--<h:outputText value="#{item3}"
+                                                              style="min-width: 50px; max-width: 50px;"/>-->
+                                            </p:column>
+
+                                            <p:column styleClass="center">
+                                                <h:outputText value="#{item3.worthiness}"
+                                                              style="min-width: 50px; max-width: 50px;"/>
+                                            </p:column>
+
+                                            <p:column> <!--14-->
+                                                <p:commandButton title="#{msg.get('app.button.edit')}"
+                                                                 icon="ui-icon-pencil"
+                                                                 action="#{custInfoSummary.onLinkToEditRelated()}">
+                                                    <f:setPropertyActionListener value="#{item3}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerRelated}"/>
+                                                </p:commandButton>
+                                                <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                                 icon="ui-icon-trash"
+                                                                 oncomplete="confirmDeleteRelatedDlg.show()"
+                                                                 update=":frmMain,:msgBoxSystemMessagePanel">
+                                                    <f:setPropertyActionListener value="#{item3}"
+                                                                                 target="#{custInfoSummary.selectedItemCustomerRelated}"/>
+                                                </p:commandButton>
+                                            </p:column>
                                         </p:dataTable>
                                     </td>
                                 </tr>
@@ -208,7 +522,7 @@
                 </div>
                 <div class="clear"></div>
                 <!-- Start Footer -->
-                <ui:include src="include/footer.xhtml"/>
+                <ui:include src="include/footer.xhtml" />
                 <!-- End Footer -->
                 <h:inputHidden id="pagename" value="mnuprescreen"/>
                 <h:inputHidden id="subpagename" value="submnuprescreen"/>
@@ -220,18 +534,35 @@
             <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
         </p:blockUI>-->
 
-    </p:panel>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteGuarantorDialog"/>
+            <ui:param name="name" value="confirmDeleteGuarantorDlg"/>
+            <ui:param name="formId" value="frmConfirmGuarantorAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteGuarantor"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
-    <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
-        <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
-                         header="#{basicInfo.messageHeader}" message="#{basicInfo.message}">
-            <p:commandButton value="OK"
-                             process="@this"
-                             update="frmMain"
-                             oncomplete="msgBoxSystemMessageDlg.hide()"/>
-        </p:confirmDialog>
-    </p:panel>
+        <ui:include src="dialog/confirmDeleteDlg.xhtml">
+            <ui:param name="id" value="confirmDeleteRelatedDialog"/>
+            <ui:param name="name" value="confirmDeleteRelatedDlg"/>
+            <ui:param name="formId" value="frmConfirmRelatedAccount"/>
+            <ui:param name="controller" value="#{custInfoSummary}"/>
+            <ui:param name="action" value="onDeleteRelated"/>
+            <ui:param name="update" value=":frmMain,:msgBoxSystemMessagePanel"/>
+        </ui:include>
 
+        <p:panel id="msgBoxSystemMessagePanel" styleClass="panel">
+            <p:confirmDialog id="msgBoxSystemMessageDialog" widgetVar="msgBoxSystemMessageDlg"
+                             header="#{custInfoSummary.messageHeader}" message="#{custInfoSummary.message}" >
+                <p:commandButton value="OK"
+                                 process="@this"
+                                 update="frmMain"
+                                 oncomplete="msgBoxSystemMessageDlg.hide()"/>
+            </p:confirmDialog>
+        </p:panel>
+
+    </p:panel>
 </h:body>
 </f:view>
 </html>

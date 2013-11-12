@@ -527,6 +527,9 @@ public class PrescreenBusinessControl extends BusinessControl {
                     customer = new Customer();
                 }
 
+                List<CustomerCSI> customerCSIs = customerCSIDAO.getCustomerCSIByCustomer(customer);
+                customerCSIDAO.delete(customerCSIs);
+
                 List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
 
                 if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
@@ -1045,6 +1048,10 @@ public class PrescreenBusinessControl extends BusinessControl {
 
                 if(customer != null){
                     log.debug("savePreScreenChecker ::: ncbView.getAccountInfoIdList() : {}", ncbView.getAccountInfoIdList());
+
+                    List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+                    customerAccountDAO.delete(customerAccountList);
+
                     if(ncbView.getAccountInfoIdList() != null && ncbView.getAccountInfoIdList().size() > 0){
                         for(AccountInfoId accountInfoId : ncbView.getAccountInfoIdList()){
                             CustomerAccount customerAccount = new CustomerAccount();
@@ -1064,6 +1071,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                     }
 
                     log.debug("savePreScreenChecker ::: ncbView.getAccountInfoNameList() : {}", ncbView.getAccountInfoNameList());
+
+                    List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+                    customerAccountNameDAO.delete(customerAccountNameList);
+
                     if(ncbView.getAccountInfoNameList() != null && ncbView.getAccountInfoNameList().size() > 0){
                         for(AccountInfoName accountInfoName : ncbView.getAccountInfoNameList()){
                             CustomerAccountName customerAccountName = new CustomerAccountName();
@@ -1462,7 +1473,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         //KYCLevel kycLevel;
 
         customer.setConvenantFlag(customerInfoView.getConvenantFlag());
-        customer.setEwsFlag(customerInfoView.getEwsFlag());
+//        customer.setEwsFlag(customerInfoView.getEwsFlag());
         customer.setReviewFlag(customerInfoView.getReviewFlag());
         customer.setReason(customerInfoView.getReason());
         customer.setBusinessType(customerInfoView.getBusinessType());
@@ -1602,7 +1613,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             //KYCLevel kycLevel;
 
             spouse.setConvenantFlag(oldSpouse.getConvenantFlag());
-            spouse.setEwsFlag(oldSpouse.getEwsFlag());
+//            spouse.setEwsFlag(oldSpouse.getEwsFlag());
             spouse.setReviewFlag(oldSpouse.getReviewFlag());
             spouse.setReason(oldSpouse.getReason());
             spouse.setBusinessType(oldSpouse.getBusinessType());
