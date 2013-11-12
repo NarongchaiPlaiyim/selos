@@ -1,4 +1,4 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.isa;
 
 import com.clevel.selos.model.UserStatus;
 import com.clevel.selos.model.db.master.*;

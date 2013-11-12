@@ -1,4 +1,4 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.isa;
 
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.db.master.*;
@@ -25,6 +25,7 @@ public class IsaManageUserView implements Serializable {
     private int active;
 
     private ManageUserAction flag;
+    private boolean readOnlyUserId;
 
     public void reset() {
         this.id = "";
@@ -42,7 +43,9 @@ public class IsaManageUserView implements Serializable {
         this.userZone = new UserZone();
         this.active = 1;
 //        this.flag = ManageUserAction.ADD;
+        this.readOnlyUserId = false;
     }
+
 
     public String getId() {
         return id;
@@ -162,6 +165,14 @@ public class IsaManageUserView implements Serializable {
 
     public void setFlag(ManageUserAction flag) {
         this.flag = flag;
+    }
+
+    public boolean isReadOnlyUserId() {
+        return readOnlyUserId;
+    }
+
+    public void setReadOnlyUserId(boolean readOnlyUserId) {
+        this.readOnlyUserId = readOnlyUserId;
     }
 
     @Override

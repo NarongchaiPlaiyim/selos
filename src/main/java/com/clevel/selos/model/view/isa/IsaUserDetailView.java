@@ -1,4 +1,4 @@
-package com.clevel.selos.model.view;
+package com.clevel.selos.model.view.isa;
 
 import com.clevel.selos.model.ManageUserActive;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.io.Serializable;
 import java.util.Date;
 
-public class IsaUserReportView implements Serializable {
+public class IsaUserDetailView implements Serializable {
 
     private String userId;
     private String userName;
@@ -26,6 +26,7 @@ public class IsaUserReportView implements Serializable {
     private String zone;
     private ManageUserActive active;
     private String userStatus;
+
 
     public String getUserId() {
         return userId;

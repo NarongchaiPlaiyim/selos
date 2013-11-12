@@ -1,6 +1,9 @@
 
 package com.tmb.common.data.requestsearchindividualcustomer;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -269,4 +272,16 @@ public class Body {
         this.radSelectSearch = value;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("custType", custType)
+                .append("type", type)
+                .append("custId", custId)
+                .append("custNbr", custNbr)
+                .append("custName", custName)
+                .append("custSurname", custSurname)
+                .append("radSelectSearch", radSelectSearch)
+                .toString();
+    }
 }
