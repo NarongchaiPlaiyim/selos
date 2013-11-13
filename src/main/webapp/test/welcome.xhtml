@@ -69,7 +69,7 @@
         </p:panel>
 
         <p:panel id="testPanel">
-            <h:form>
+            <h:form id="dateFrm">
 
                 <!--<p:calendar value="#{welcomePage.dateTh}" id="popupButtonCalTh" showOn="button" pattern="dd/MM/yyyy"-->
                          <!--navigator="true" locale="th_TH" isBE="true" showButtonPanel="true" />-->
@@ -84,6 +84,10 @@
 
                 <h:outputText value="xxxx: " />
                 <h:outputText value="#{welcomePage.radioValue}"  />
+
+                <p:commandButton value="test EndOfMonth" action="#{welcomePage.testEndOfMonth()}" update=":dateFrm:eomTh, :dateFrm:eomEn"/>
+                <h:outputText id="eomTh" value="#{welcomePage.endOfMonthTh}"  />
+                <h:outputText id="eomEn" value="#{welcomePage.endOfMonthEn}"  />
 
                 <p:selectOneMenu id="userStatus" value="#{welcomePage.userStatus}" >
                     <f:selectItem itemLabel="Select Value" itemValue="" />

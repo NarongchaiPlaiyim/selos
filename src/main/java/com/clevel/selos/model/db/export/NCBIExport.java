@@ -71,7 +71,7 @@ public class NCBIExport implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.juristicName = juristicName;
-        this.caNumber = caNumber;
+        this.caNumber = caNumber; //AppRefNumber
         this.caution = caution;
         this.referenceTel = referenceTel;
         this.inquiryStatus = inquiryStatus;

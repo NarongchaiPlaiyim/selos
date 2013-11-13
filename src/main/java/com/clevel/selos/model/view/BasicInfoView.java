@@ -50,8 +50,6 @@ public class BasicInfoView implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
-    //for disable
-    private int individual;
 
     public BasicInfoView() {
         reset();
@@ -390,14 +388,6 @@ public class BasicInfoView implements Serializable {
         this.modifyBy = modifyBy;
     }
 
-    public int getIndividual() {
-        return individual;
-    }
-
-    public void setIndividual(int individual) {
-        this.individual = individual;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -441,7 +431,6 @@ public class BasicInfoView implements Serializable {
                 append("modifyDate", modifyDate).
                 append("createBy", createBy).
                 append("modifyBy", modifyBy).
-                append("individual", individual).
                 toString();
     }
 }

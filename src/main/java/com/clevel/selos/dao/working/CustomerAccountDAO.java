@@ -2,6 +2,7 @@ package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.db.working.CustomerAccount;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -28,6 +29,16 @@ public class CustomerAccountDAO extends GenericDAO<CustomerAccount, Long> {
         criteria.addOrder(Order.asc("id"));
         List<CustomerAccount> customerAccountList = (List<CustomerAccount>) criteria.list();
         log.info("getCustomerAccountByCustomerId ::: size : {}", customerAccountList.size());
+        return customerAccountList;
+    }
+
+    public List<CustomerAccount> getCustomerAccountByCustomer(Customer customer){
+        log.info("getCustomerAccountByCustomer ::: customerId : {}", customer);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customer", customer));
+        criteria.addOrder(Order.asc("id"));
+        List<CustomerAccount> customerAccountList = (List<CustomerAccount>) criteria.list();
+        log.info("getCustomerAccountByCustomer ::: size : {}", customerAccountList.size());
         return customerAccountList;
     }
 }
