@@ -1473,7 +1473,7 @@ public class PrescreenBusinessControl extends BusinessControl {
         //KYCLevel kycLevel;
 
         customer.setConvenantFlag(customerInfoView.getConvenantFlag());
-        customer.setEwsFlag(customerInfoView.getEwsFlag());
+//        customer.setEwsFlag(customerInfoView.getEwsFlag());
         customer.setReviewFlag(customerInfoView.getReviewFlag());
         customer.setReason(customerInfoView.getReason());
         customer.setBusinessType(customerInfoView.getBusinessType());
@@ -1613,7 +1613,7 @@ public class PrescreenBusinessControl extends BusinessControl {
             //KYCLevel kycLevel;
 
             spouse.setConvenantFlag(oldSpouse.getConvenantFlag());
-            spouse.setEwsFlag(oldSpouse.getEwsFlag());
+//            spouse.setEwsFlag(oldSpouse.getEwsFlag());
             spouse.setReviewFlag(oldSpouse.getReviewFlag());
             spouse.setReason(oldSpouse.getReason());
             spouse.setBusinessType(oldSpouse.getBusinessType());

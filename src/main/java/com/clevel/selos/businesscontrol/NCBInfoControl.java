@@ -113,7 +113,6 @@ public class NCBInfoControl extends BusinessControl {
         List<NCBDetailView> ncbDetailViews = new ArrayList<NCBDetailView>();
         log.info("Begin getNCBForCalDBR workcase:{}", workcaseId);
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
-
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         log.info("ncbs :{}", ncbs.size());
         for(NCB ncb : ncbs){
@@ -129,11 +128,13 @@ public class NCBInfoControl extends BusinessControl {
                     ncbDetailView.setLimit(ncbDetail.getLimit());
                     ncbDetailView.setInstallment(ncbDetail.getInstallment());
                     BigDecimal debtForCalculate = BigDecimal.ZERO;
-                    BigDecimal dbrInterest = BigDecimal.TEN.add(BigDecimal.valueOf(3));
+                    //todo hardcode interest
+                    BigDecimal dbrInterest = getDBRInterest();
                     switch (accountType.getCalculateType()){
                         case 1:
                             if(ncbDetail.getInstallment().compareTo(BigDecimal.ZERO) == 0){
                                 debtForCalculate = ncbDetail.getLimit().multiply(dbrInterest);
+                                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100));
                                 debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP);
                             }else{
                                 debtForCalculate = ncbDetail.getInstallment();
@@ -152,7 +153,7 @@ public class NCBInfoControl extends BusinessControl {
                     }
                     ncbDetailView.setDebtForCalculate(debtForCalculate);
                     StringBuilder accountName = new StringBuilder();
-                    accountName.append(customer.getTitle().getTitleTh())
+                    accountName.append(customer.getTitleTh().getTitleTh())
                             .append(" ").append(customer.getNameTh())
                             .append(" ").append(customer.getLastNameTh());
                     ncbDetailView.setAccountName(accountName.toString());
@@ -162,5 +163,13 @@ public class NCBInfoControl extends BusinessControl {
             }
         }
         return ncbDetailViews;
+    }
+
+    private BigDecimal getDBRInterest(){
+        BigDecimal result = BigDecimal.ZERO;
+        //todo waiting get form to Database
+        BigDecimal mrr = BigDecimal.TEN;
+        result = mrr.add(BigDecimal.valueOf(3));
+        return result;
     }
 }

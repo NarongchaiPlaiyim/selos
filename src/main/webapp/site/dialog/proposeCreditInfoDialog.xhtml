@@ -1,0 +1,288 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<p:panel id="creditInfoDlgPanel" styleClass="panel-dialog">
+<h:form id="creditInfoDlgForm">
+<table class="content_form">
+<tr>
+    <td class="title" style="width:200px;">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.type')}"/>
+    </td>
+    <td colspan="3">
+        <h:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.requestType}">
+            <f:selectItem itemLabel="New" itemValue="1"/>
+            <f:selectItem itemLabel="Change" itemValue="0"/>
+        </h:selectOneRadio>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.refinance')}"/>
+    </td>
+    <td colspan="3">
+        <h:selectOneRadio value="#{creditFacPropose.proposeCreditDetailView.refinance}">
+            <f:selectItem itemLabel="Yes" itemValue="1"/>
+            <f:selectItem itemLabel="No" itemValue="0"/>
+        </h:selectOneRadio>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productProgram')}"/>
+    </td>
+    <td colspan="3">
+        <p:selectOneMenu id="dlgSelProdProgram"
+                         value="#{creditFacPropose.proposeCreditDetailView.productProgram.id}"
+                         size="1"
+                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         required="true">
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{creditFacPropose.productProgramList}"
+                           var="prodProgramItem"
+                           itemLabel="#{prodProgramItem.description}"
+                           itemValue="#{prodProgramItem.id}"/>
+
+        </p:selectOneMenu>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.creditType')}"/>
+    </td>
+    <td colspan="3">
+        <p:selectOneMenu id="dlgSelCreditType"
+                         value="#{creditFacPropose.proposeCreditDetailView.creditType.id}"
+                         size="1"
+                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         required="true">
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{creditFacPropose.creditTypeList}"
+                           var="creditTypeItem"
+                           itemLabel="#{creditTypeItem.description}"
+                           itemValue="#{creditTypeItem.id}"/>
+
+        </p:selectOneMenu>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.productCode')}"/>
+    </td>
+    <td>
+        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.productCode}"/>
+    </td>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.projectCode')}"/>
+    </td>
+    <td>
+        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.projectCode}"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
+    </td>
+    <td>
+        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.limit}"
+                     style="text-align:right"/>
+    </td>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
+    </td>
+    <td>
+        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEPercent}"
+                     style="text-align:right"/>
+        <p:spacer/>
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.percent')}"/>
+    </td>
+
+</tr>
+<tr>
+    <td colspan="2">
+    </td>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
+    </td>
+    <td>
+        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEAmount}"
+                     style="text-align:right">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+        </h:inputText>
+    </td>
+</tr>
+<tr>
+    <td colspan="4">
+        <div class="separate"><!-- --></div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <!--<p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reducePriceFlag}">
+        </p:selectBooleanCheckbox>-->
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
+    </td>
+    <td></td>
+    <td colspan="2">
+        <!--     <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFrontEndFee}">
+             </p:selectBooleanCheckbox>-->
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.standard')}"/>
+    </td>
+    <td colspan="3">
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.standardPrice}"
+                     style="text-align:right"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.suggest')}"/>
+    </td>
+    <td colspan="3">
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.suggestPrice}"
+                     style="text-align:right"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.final')}"/>
+    </td>
+    <td style="text-align: left;" colspan="3">
+        <p:commandButton
+                value="#{msg.get('app.addButton')}"
+                styleClass="smaller"
+                process="@this"
+                update=":frmMain">
+        </p:commandButton>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+    </td>
+    <td colspan="3">
+        <p:dataTable id="resultFinal" var="item"
+                     value="#{creditFacPropose.proposeCreditDetailView.creditTierDetailViewList}"
+                     rowKey="#{item.creditTierDetailView}" rowIndexVar="rowIndex" style="width: 100%">
+
+            <p:columnGroup type="header">
+                <p:row>
+                    <p:column style="width:50px;"/>
+                    <p:column style="width:150px;"
+                              headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.price')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.tenor')}"/>
+                    <p:column style="width:200px;"
+                              headerText="#{msg.get('app.credit.facility.propose.dlg.tb.header.installment')}"/>
+                </p:row>
+
+            </p:columnGroup>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{rowIndex+1}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{item.finalPriceRate}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{item.tenor}"/>
+            </p:column>
+
+            <p:column styleClass="center">
+                <h:outputText value="#{item.installment}">
+                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                </h:outputText>
+            </p:column>
+
+        </p:dataTable>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.frontEnd')}"/>
+    </td>
+    <td colspan="3">
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.frontEndFee}"
+                     style="text-align:right">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+        </p:inputText>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.loanPurpose')}"/>
+    </td>
+    <td colspan="3">
+
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.purposeDetail')}"/>
+    </td>
+    <td colspan="3">
+        <h:inputTextarea value="#{creditFacPropose.proposeCreditDetailView.remark}"
+                         cols="95"
+                         rows="2"/>
+    </td>
+</tr>
+<tr>
+    <td class="title">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.disbursement')}"/>
+    </td>
+    <td>
+        <p:selectOneMenu id="dlgDisbursement"
+                         value="#{creditFacPropose.proposeCreditDetailView.disbursement.id}"
+                         size="1"
+                         style="min-width: 200px; width: 200px; max-width: 200px;"
+                         required="true">
+            <f:selectItem itemLabel="- Please Select -" itemValue=""/>
+            <f:selectItems value="#{creditFacPropose.disbursementList}"
+                           var="disbursementItem"
+                           itemLabel="#{disbursementItem.disbursement}"
+                           itemValue="#{disbursementItem.id}"/>
+
+        </p:selectOneMenu>
+    </td>
+    <td class="title" style="width:100px;">
+        <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.holdLimitAmt')}"/>
+    </td>
+    <td>
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.holdLimitAmount}"
+                     style="text-align:right">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+        </p:inputText>
+    </td>
+</tr>
+<tr>
+    <td colspan="4" class="center">
+        <p:commandButton id="dlgSaveCreditBtn"
+                         styleClass="small"
+                         value="#{msg.get('app.button.ok')}"
+                         action="#{creditFacPropose.onSaveCreditInfoDlg}"
+                         process="@form"
+                         update=":creditInfoDlgForm :frmMain"
+                         oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
+        <p:commandButton type="button" styleClass="small"
+                         value="#{msg.get('app.button.cancel')}"
+                         onclick="PF('creditInfoDlg').hide()"
+                         update=":creditInfoDlgForm"/>
+    </td>
+</tr>
+</table>
+</h:form>
+</p:panel>
+<!-- <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:addDlgCreditButton">
+     LOADING<br/>
+     <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
+ </p:blockUI>-->
+
+</ui:composition>

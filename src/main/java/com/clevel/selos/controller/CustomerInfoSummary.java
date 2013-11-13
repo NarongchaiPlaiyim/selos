@@ -1,15 +1,19 @@
 package com.clevel.selos.controller;
 
-import com.clevel.selos.businesscontrol.CustomerInfoSummaryControl;
+import com.clevel.selos.businesscontrol.CustomerInfoControl;
 import com.clevel.selos.dao.master.CustomerEntityDAO;
+import com.clevel.selos.dao.working.CustomerDAO;
 import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.CustomerEntity;
+import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.CustomerInfoSummaryView;
+import com.clevel.selos.model.view.CustomerInfoView;
 import com.clevel.selos.system.message.ExceptionMessage;
 import com.clevel.selos.system.message.Message;
 import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.FacesUtil;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +24,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ViewScoped
 @ManagedBean(name = "custInfoSummary")
@@ -28,6 +35,7 @@ public class CustomerInfoSummary implements Serializable {
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     @NormalMessage
     Message msg;
@@ -42,9 +50,11 @@ public class CustomerInfoSummary implements Serializable {
 
     @Inject
     private CustomerEntityDAO customerEntityDAO;
+    @Inject
+    private CustomerDAO customerDAO;
 
     @Inject
-    private CustomerInfoSummaryControl customerInfoSummaryControl;
+    private CustomerInfoControl customerInfoControl;
 
     //*** Drop down List ***//
     private List<CustomerEntity> customerEntityList;
@@ -52,25 +62,22 @@ public class CustomerInfoSummary implements Serializable {
     //*** View ***//
     private CustomerInfoSummaryView customerInfoSummaryView;
 
-    //Dialog
-//    private BasicInfoAccountView basicInfoAccountView;
-//    enum ModeForButton{ ADD, EDIT }
-//    private ModeForButton modeForButton;
-//    private BasicInfoAccountView selectAccount;
-//    private int rowIndex;
-
-    private String messageHeader;
-    private String message;
-
     //session
     private long workCaseId;
     private long stepId;
     private String userId;
 
-    public CustomerInfoSummary() {
+    private CustomerInfoView selectedItemCustomerBorrower;
+    private CustomerInfoView selectedItemCustomerGuarantor;
+    private CustomerInfoView selectedItemCustomerRelated;
+
+    private String messageHeader;
+    private String message;
+
+    public CustomerInfoSummary(){
     }
 
-    public void preRender() {
+    public void preRender(){
         HttpSession session = FacesUtil.getSession(false);
         session.setAttribute("workCaseId", 101);
         session.setAttribute("stepId", 1006);
@@ -80,19 +87,19 @@ public class CustomerInfoSummary implements Serializable {
 
         session = FacesUtil.getSession(true);
 
-        if (session.getAttribute("workCaseId") != null) {
+        if(session.getAttribute("workCaseId") != null){
             workCaseId = Long.parseLong(session.getAttribute("workCaseId").toString());
             stepId = Long.parseLong(session.getAttribute("stepId").toString());
             userId = session.getAttribute("userId").toString();
-        } else {
+        }else{
             //TODO return to inbox
             log.info("preRender ::: workCaseId is null.");
-            try {
+            try{
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
                 ec.redirect(ec.getRequestContextPath() + "/site/inbox.jsf");
                 return;
-            } catch (Exception ex) {
-                log.info("Exception :: {}", ex);
+            }catch (Exception ex){
+                log.info("Exception :: {}",ex);
             }
         }
     }
@@ -104,7 +111,141 @@ public class CustomerInfoSummary implements Serializable {
         customerEntityList = customerEntityDAO.findAll();
         customerInfoSummaryView = new CustomerInfoSummaryView();
 
-        customerInfoSummaryView = customerInfoSummaryControl.getCustomerInfoSummary(workCaseId);
+        customerInfoSummaryView = customerInfoControl.getCustomerInfoSummary(workCaseId);
+    }
+
+    public String onLinkToEditBorrower() {
+        long customerId;
+        if(selectedItemCustomerBorrower.getSpouse() != null && selectedItemCustomerBorrower.getIsSpouse() == 1){
+            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerBorrower.getId());
+            customerId = customer.getId();
+        }else{
+            customerId = selectedItemCustomerBorrower.getId();
+        }
+
+        if(selectedItemCustomerBorrower.getCustomerEntity().getId() == 1){ // Individual
+            passParamsToIndividual(customerId);
+            return "customerInfoIndividual?faces-redirect=true";
+        }else{
+            passParamsToJuristic(customerId);
+            return "customerInfoJuristic?faces-redirect=true";
+        }
+    }
+
+    public String onLinkToEditGuarantor() {
+        long customerId;
+        if(selectedItemCustomerGuarantor.getSpouse() != null && selectedItemCustomerGuarantor.getIsSpouse() == 1){
+            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerGuarantor.getId());
+            customerId = customer.getId();
+        }else{
+            customerId = selectedItemCustomerGuarantor.getId();
+        }
+
+        if(selectedItemCustomerGuarantor.getCustomerEntity().getId() == 1){ // Individual
+            passParamsToIndividual(customerId);
+            return "customerInfoIndividual?faces-redirect=true";
+        }else{
+            passParamsToJuristic(customerId);
+            return "customerInfoJuristic?faces-redirect=true";
+        }
+    }
+
+    public String onLinkToEditRelated() {
+        long customerId;
+        if(selectedItemCustomerRelated.getSpouse() != null && selectedItemCustomerRelated.getIsSpouse() == 1){
+            Customer customer = customerDAO.findCustomerBySpouseId(selectedItemCustomerRelated.getId());
+            customerId = customer.getId();
+        }else{
+            customerId = selectedItemCustomerRelated.getId();
+        }
+
+        if(selectedItemCustomerRelated.getCustomerEntity().getId() == 1){ // Individual
+            passParamsToIndividual(customerId);
+            return "customerInfoIndividual?faces-redirect=true";
+        }else{
+            passParamsToJuristic(customerId);
+            return "customerInfoJuristic?faces-redirect=true";
+        }
+    }
+
+    private void passParamsToIndividual(long customerId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isFromSummaryParam",true);
+        map.put("isFromJuristicParam",false);
+        map.put("isFromIndividualParam",false);
+        map.put("isEditFromJuristic", false);
+        map.put("customerId", customerId);
+        CustomerInfoView cusView = new CustomerInfoView();
+        cusView.reset();
+        map.put("customerInfoView", cusView);
+        FacesUtil.getFlash().put("cusInfoParams", map);
+    }
+
+    private void passParamsToJuristic(long customerId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("isFromSummaryParam",true);
+        map.put("isFromJuristicParam",false);
+        map.put("isFromIndividualParam",false);
+        map.put("isEditFromJuristic", false);
+        map.put("customerId", customerId);
+        CustomerInfoView cusView = new CustomerInfoView();
+        cusView.reset();
+        map.put("customerInfoView", cusView);
+        FacesUtil.getFlash().put("cusInfoParams", map);
+    }
+
+    public String onLinkToAddIndividual(){
+        passParamsToIndividual(0);
+        return "customerInfoIndividual?faces-redirect=true";
+    }
+
+    public String onLinkToAddJuristic(){
+        passParamsToJuristic(0);
+        return "customerInfoJuristic?faces-redirect=true";
+    }
+
+    public void onDeleteGuarantor(){
+        try{
+            onDelete(selectedItemCustomerGuarantor);
+            messageHeader = "Delete Customer Info Guarantor Success.";
+            message = "Delete Customer Info Guarantor Success.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Delete Customer Info Guarantor Failed.";
+            if(ex.getCause() != null){
+                message = "Delete Customer Info Guarantor failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Delete Customer Info Guarantor failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+        onCreation();
+    }
+
+    public void onDeleteRelated(){
+        try{
+            onDelete(selectedItemCustomerRelated);
+            messageHeader = "Delete Customer Info Related Success.";
+            message = "Delete Customer Info Related Success.";
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        } catch(Exception ex){
+            messageHeader = "Delete Customer Info Related Failed.";
+            if(ex.getCause() != null){
+                message = "Delete Customer Info Related failed. Cause : " + ex.getCause().toString();
+            } else {
+                message = "Delete Customer Info Related failed. Cause : " + ex.getMessage();
+            }
+            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+        }
+        onCreation();
+    }
+
+    private void onDelete(CustomerInfoView customerInfoView){
+        if(customerInfoView.getCustomerEntity().getId() == 1){ // Individual
+            customerInfoControl.deleteCustomerIndividual(customerInfoView.getId());
+        } else {
+            customerInfoControl.deleteCustomerJuristic(customerInfoView.getId());
+        }
     }
 
     public CustomerInfoSummaryView getCustomerInfoSummaryView() {
@@ -121,5 +262,45 @@ public class CustomerInfoSummary implements Serializable {
 
     public void setCustomerEntityList(List<CustomerEntity> customerEntityList) {
         this.customerEntityList = customerEntityList;
+    }
+
+    public CustomerInfoView getSelectedItemCustomerBorrower() {
+        return selectedItemCustomerBorrower;
+    }
+
+    public void setSelectedItemCustomerBorrower(CustomerInfoView selectedItemCustomerBorrower) {
+        this.selectedItemCustomerBorrower = selectedItemCustomerBorrower;
+    }
+
+    public CustomerInfoView getSelectedItemCustomerGuarantor() {
+        return selectedItemCustomerGuarantor;
+    }
+
+    public void setSelectedItemCustomerGuarantor(CustomerInfoView selectedItemCustomerGuarantor) {
+        this.selectedItemCustomerGuarantor = selectedItemCustomerGuarantor;
+    }
+
+    public CustomerInfoView getSelectedItemCustomerRelated() {
+        return selectedItemCustomerRelated;
+    }
+
+    public void setSelectedItemCustomerRelated(CustomerInfoView selectedItemCustomerRelated) {
+        this.selectedItemCustomerRelated = selectedItemCustomerRelated;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getMessageHeader() {
+        return messageHeader;
+    }
+
+    public void setMessageHeader(String messageHeader) {
+        this.messageHeader = messageHeader;
     }
 }

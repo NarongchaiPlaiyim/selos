@@ -99,6 +99,22 @@ public class SubCollateralDetailView {
         this.collateralOwner = collateralOwner;
     }
 
+    public String getCollateralOwnerAAD() {
+        return collateralOwnerAAD;
+    }
+
+    public void setCollateralOwnerAAD(String collateralOwnerAAD) {
+        this.collateralOwnerAAD = collateralOwnerAAD;
+    }
+
+    public BigDecimal getMortgageValue() {
+        return mortgageValue;
+    }
+
+    public void setMortgageValue(BigDecimal mortgageValue) {
+        this.mortgageValue = mortgageValue;
+    }
+
     public BigDecimal getAppraisalValue() {
         return appraisalValue;
     }

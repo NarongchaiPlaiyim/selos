@@ -14,6 +14,14 @@ public class CollateralHeaderDetailView {
     private String collateralLocation;
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
+
+    //dropdown
+//    private potential;
+//    private collTypePercentLTV ;
+
+    private String existingCredit;
+    private int insuranceCompany;
+
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -108,4 +116,22 @@ public class CollateralHeaderDetailView {
     public void setSubCollateralDetailViewList(List<SubCollateralDetailView> subCollateralDetailViewList) {
         this.subCollateralDetailViewList = subCollateralDetailViewList;
     }
+
+    public String getExistingCredit() {
+        return existingCredit;
+    }
+
+    public void setExistingCredit(String existingCredit) {
+        this.existingCredit = existingCredit;
+    }
+
+    public int getInsuranceCompany() {
+        return insuranceCompany;
+    }
+
+    public void setInsuranceCompany(int insuranceCompany) {
+        this.insuranceCompany = insuranceCompany;
+    }
+
+
 }

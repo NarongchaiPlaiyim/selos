@@ -18,7 +18,15 @@ public class CustomerCSIDAO extends GenericDAO<CustomerCSI, Long> {
     Logger log;
     @Inject
     public CustomerCSIDAO() {
+    }
 
+    public List<CustomerCSI> findCustomerCSIByCustomerId(long customerId) {
+        log.debug("findCustomerCSIByCustomerId ::: customerId : {}", customerId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("customer.id", customerId));
+        List<CustomerCSI> customerCSIList = (List<CustomerCSI>) criteria.list();
+
+        return customerCSIList;
     }
 
     public List<CustomerCSI> getCustomerCSIByCustomer(Customer customer){
