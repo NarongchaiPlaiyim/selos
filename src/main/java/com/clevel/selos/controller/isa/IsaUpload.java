@@ -6,10 +6,14 @@ import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.io.File;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,14 +43,32 @@ public class IsaUpload implements Serializable{
     private UploadedFile file;
     private List<String> testlist;
 
+    private final static String UPLOAD_FOLDER = "_userUpload";
+    private final static SimpleDateFormat dateFormatFile = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
 
-    public void uploadUserFile(FileUploadEvent event){
+
+    public void uploadUserFile(){
         log.debug("uploadUserFile()");
-        Date date= Calendar.getInstance().getTime();
+        System.out.println("upload");
 
-        System.out.println(event.getFile().getFileName() + "  "+file.getSize());
-
+        if(file!=null){
+        FacesMessage facesMessage=new FacesMessage("Succesful",file.getFileName()+" is upload");
+        FacesContext.getCurrentInstance().addMessage(null,facesMessage);
+        Date now = Calendar.getInstance().getTime();
+        String userUploadId = dateFormatFile.format(now) + UPLOAD_FOLDER;
+        System.out.println(userUploadId+file.getSize());
+        }else {
+            System.out.println("file is null");
+        }
+//        String result = importService.uploadDocFiles(request, userUploadId);
+//
+//        String tmpDir = importService.getTmpFolder(userUploadId);
+//
+//        File file = new File(tmpDir);
+//        if(file.isDirectory()){
+//            userUploadService.processUserUploadFiles(tmpDir, file.listFiles()[0].getName());
+//        }
 
     }
 

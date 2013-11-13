@@ -80,7 +80,7 @@ public class IsaReport implements Serializable {
         try{
             list=isaBusinessControl.getUserNotLogonOver(notLogonOverDay);
         }catch (Exception e){
-
+            log.debug("Excepion : {}",e.getMessage());
         }
         int number=1;
         for(IsaUserDetailView isaUserDetailView :list){
@@ -140,7 +140,7 @@ public class IsaReport implements Serializable {
         try{
             list=isaBusinessControl.getUserReportList();
         }catch (Exception e){
-
+            log.debug("Excepion : {}",e.getMessage());
         }
         int number=1;
         if(list!=null){
@@ -190,7 +190,7 @@ public class IsaReport implements Serializable {
         try{
             list=isaBusinessControl.getViolationReport();
         }catch (Exception e){
-
+             log.debug("Excepion : {}",e.getMessage());
         }
         int number=1;
         if(list!=null){
@@ -202,7 +202,7 @@ public class IsaReport implements Serializable {
                 builder.append('"'+ isaAuditLogView.getActionDate()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getResult()+'"'); builder.append(COMMA_DELIMITED);
                 builder.append('"'+ isaAuditLogView.getResultDesc()+'"'); builder.append('\n');
-
+                System.out.println(isaAuditLogView.getActionDate());
                 number++;
             }
         }
@@ -231,7 +231,7 @@ public class IsaReport implements Serializable {
             System.out.println(dateFrom +" "+ dateTo);
             list=isaBusinessControl.getUserMaintenanceReport(dateFrom,dateTo);
         }catch (Exception e){
-
+            log.debug("Excepion : {}",e.getMessage());
         }
         int number=1;
         if(list!=null){
