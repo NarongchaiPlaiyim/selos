@@ -507,8 +507,6 @@
                                             <ui:repeat value="#{item.customerCSIList}" var="customerCSI">
                                                 <h:outputText value="#{customerCSI.warningCode.code}"/><p:spacer width="5"/>
                                             </ui:repeat>
-                                            <!--<h:outputText value="#{item}"
-                                                          style="min-width: 50px; max-width: 50px;"/>-->
                                         </p:column>
 
                                         <p:column styleClass="center">
@@ -524,6 +522,14 @@
                                                                              target="#{custInfoSumJuris.selectEditIndividual}"/>
                                                 <f:setPropertyActionListener value="#{rowIndex}"
                                                                              target="#{custInfoSumJuris.rowIndex}"/>
+                                            </p:commandButton>
+                                            <p:commandButton title="#{msg.get('app.button.remove')}"
+                                                             icon="ui-icon-trash"
+                                                             oncomplete="confirmDeleteIndividualDlg.show()"
+                                                             update=":frmMain:resultTableCustomer"
+                                                             process="@form">
+                                                <f:setPropertyActionListener value="#{item}"
+                                                                             target="#{custInfoSumJuris.selectEditIndividual}"/>
                                             </p:commandButton>
                                         </p:column>
                                     </p:dataTable>
@@ -1053,6 +1059,15 @@
                              oncomplete="msgBoxSystemMessageDlg.hide()"/>
         </p:confirmDialog>
     </p:panel>
+
+    <ui:include src="dialog/confirmDeleteDlg.xhtml">
+        <ui:param name="id" value="confirmDeleteIndividualDialog"/>
+        <ui:param name="name" value="confirmDeleteIndividualDlg"/>
+        <ui:param name="formId" value="frmConfirmDeleteIndividual"/>
+        <ui:param name="controller" value="#{custInfoSumJuris}"/>
+        <ui:param name="action" value="onDeleteIndividual"/>
+        <ui:param name="update" value=":frmMain"/>
+    </ui:include>
 
 </h:body>
 </f:view>

@@ -13,6 +13,10 @@ public class ExSummaryView  implements Serializable {
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+
+    private List<CustomerInfoView> borrowerViewList;
+    private List<NCBInfoView> ncbInfoViewList;
+
     //Borrower Characteristic
     private List<ExSumCharacteristicView> exCharacteristicListView;
 /*     private String customer;
@@ -298,5 +302,21 @@ public class ExSummaryView  implements Serializable {
 
     public void setExSumBusinessInfoListView(List<ExSumBusinessInfoView> exSumBusinessInfoListView) {
         this.exSumBusinessInfoListView = exSumBusinessInfoListView;
+    }
+
+    public List<CustomerInfoView> getBorrowerViewList() {
+        return borrowerViewList;
+    }
+
+    public void setBorrowerViewList(List<CustomerInfoView> borrowerViewList) {
+        this.borrowerViewList = borrowerViewList;
+    }
+
+    public List<NCBInfoView> getNcbInfoViewList() {
+        return ncbInfoViewList;
+    }
+
+    public void setNcbInfoViewList(List<NCBInfoView> ncbInfoViewList) {
+        this.ncbInfoViewList = ncbInfoViewList;
     }
 }

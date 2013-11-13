@@ -83,7 +83,7 @@ input[readonly="readonly"], input[readonly] {
     margin-right: 4px;
     padding: 2px;
     border: 1px solid #cfcfcf;
-    background: darkblue;
+    background: #e8e8ff;
 }
 
 textarea {
@@ -689,5 +689,7 @@ td .cell_spacer {
 .isaPanelGridSearch table,tr{
     background: transparent !important;
     /*border: none !important;*/
-
+}
+.summary_column{
+    background-color:#f4f8b6;
 }

@@ -51,6 +51,9 @@ public class DBRControl extends BusinessControl {
     @Inject
     BankStatementSummaryDAO bankStatementSummaryDAO;
 
+    @Inject
+    NCBInfoControl ncbInfoControl;
+
 
 
     public DBRControl() {
@@ -117,7 +120,13 @@ public class DBRControl extends BusinessControl {
     }
 
 
-    public void updateValueAndCalDBR(){
+    public void updateValueAndCalculate(DBRView dbrView, long workcaseId, String userId){
+        WorkCase workCase = workCaseDAO.findById(workcaseId);
+        User user = userDAO.findById(userId);
+        List<NCBDetailView> ncbDetailViews = ncbInfoControl.getNCBForCalDBR(workcaseId);
+        DBR dbr =  calculateDBR(dbrView, ncbDetailViews, user, workCase);
+        dbrdao.persist(dbr);
+
 
     }
 
