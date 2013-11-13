@@ -472,18 +472,22 @@ public class NCRSImp implements NCRS, Serializable {
                 if (null == responseModel.getBodyModel().getTransaction().getTueferror()) {
                     return responseModel;
                 } else {
-                    StringBuilder exception = new StringBuilder("TUEF Error");
-                    TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
-                    ArrayList<ErrorModel> arrayList = error.getError();
-                    for (int i = 0; i < arrayList.size(); i++) {
-                        ErrorModel errorModel = arrayList.get(i);
-                        exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
+                    if(null != responseModel.getBodyModel().getErrormsg()){
+                        resultDesc = responseModel.getBodyModel().getErrormsg();
+                        log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
+                        throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                    } else {
+                        StringBuilder exception = new StringBuilder("TUEF Error");
+                        TUEFErrorError error = responseModel.getBodyModel().getTransaction().getTueferror().getError();
+                        ArrayList<ErrorModel> arrayList = error.getError();
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            ErrorModel errorModel = arrayList.get(i);
+                            exception.append((i + 1)).append(" ").append(errorModel.getDescription()).append(" ");
+                        }
+                        resultDesc = exception.toString();
+                        log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
+                        return responseModel;
                     }
-                    resultDesc = exception.toString();
-                    log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
-                    return responseModel;
-//                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
-                }
             } else {
                 resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
