@@ -14,6 +14,7 @@ import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.transform.LoanAccountTypeTransform;
 import com.clevel.selos.transform.NCBDetailTransform;
 import com.clevel.selos.transform.NCBTransform;
+import com.clevel.selos.util.Util;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -115,11 +116,11 @@ public class NCBInfoControl extends BusinessControl {
         List<Customer> customers = customerDAO.findByWorkCaseId(workcaseId);
         List<NCB> ncbs = ncbDAO.createCriteria().add(Restrictions.in("customer", customers)).list();
         log.info("ncbs :{}", ncbs.size());
-        for(NCB ncb : ncbs){
+        for(NCB ncb : Util.safetyList(ncbs)){
             Customer customer = ncb.getCustomer();
             List<NCBDetail> ncbDetails = ncbDetailDAO.createCriteria().add(Restrictions.eq("ncb", ncb)).list();
             AccountType accountType;
-            for(NCBDetail ncbDetail : ncbDetails){
+            for(NCBDetail ncbDetail : Util.safetyList(ncbDetails)){
                 log.info("ncbDetail :{}", ncbDetail);
                 accountType = ncbDetail.getAccountType();
                 if(accountType.getDbrFlag() == 1){
