@@ -172,4 +172,18 @@ public class NCBInfoControl extends BusinessControl {
         result = mrr.add(BigDecimal.valueOf(3));
         return result;
     }
+
+    public List<NCBInfoView> getNCBInfoViewByWorkCaseId(long workCaseId){
+        List<NCBInfoView> ncbInfoViewList = new ArrayList<NCBInfoView>();
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        if (customerList != null && customerList.size() > 0) {
+            for(Customer cus : customerList){
+                if(cus.getNcb() != null){
+                    NCBInfoView ncbView = ncbTransform.transformToView(cus.getNcb());
+                    ncbInfoViewList.add(ncbView);
+                }
+            }
+        }
+        return ncbInfoViewList;
+    }
 }

@@ -601,10 +601,12 @@ public class CustomerInfoJuristic implements Serializable {
         //check registration
         Customer customer = juristicDAO.findCustomerByRegistrationIdAndWorkCase(customerInfoView.getRegistrationId(),workCaseId);
         if(customer != null && customer.getId() != 0){
-            messageHeader = "Save Juristic Failed.";
-            message = "Registration Id is already exist";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
+            if(customer.getId() != customerInfoView.getId()){
+                messageHeader = "Save Juristic Failed.";
+                message = "Registration Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
         }
 
         if(addressFlagForm2 == 1){ //dup address 1 to address 2 - Address 1 is Regis , Address 2 is Work
@@ -626,6 +628,10 @@ public class CustomerInfoJuristic implements Serializable {
             }
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
         }
+    }
+
+    public void onDeleteIndividual(){
+        customerInfoView.getIndividualViewList().remove(selectEditIndividual);
     }
 
     //Get Set
