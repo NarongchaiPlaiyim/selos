@@ -1,5 +1,6 @@
 package com.clevel.selos.controller;
 
+import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.BusinessDescriptionDAO;
 import com.clevel.selos.dao.master.BusinessGroupDAO;
 import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
@@ -16,6 +17,7 @@ import com.clevel.selos.integration.rlos.appin.model.AppInProcessResult;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
 import com.clevel.selos.model.*;
+import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.BusinessDescription;
 import com.clevel.selos.model.db.master.BusinessGroup;
 import com.clevel.selos.report.ReportService;
@@ -28,6 +30,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.Util;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.criterion.Restrictions;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 
@@ -102,6 +105,9 @@ public class WelcomePage implements Serializable {
     @Inject
     @NCB
     SystemAuditor ncbAuditor;
+
+    @Inject
+    RMTitleDAO rmTitleDAO;
 
 //    @Inject
 //    @Config(name = "system.name")
@@ -196,6 +202,16 @@ public class WelcomePage implements Serializable {
             Date fromDate = Util.strToDateFormat("082013", "MMyyyy");
             bankStatementResult = dwh.getBankStatementData("BDM001", "3042582720", fromDate, 12);
             log.debug("BankStatement result : {}", bankStatementResult);
+        } catch (Exception e) {
+            log.error("", e);
+        }
+//        log.debug("system: {}",system);
+    }
+
+    public void testRMTitle() {
+        try {
+            RMTitle rmTitle = rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", "MR"));
+            log.debug("rmTitle : {}",rmTitle);
         } catch (Exception e) {
             log.error("", e);
         }

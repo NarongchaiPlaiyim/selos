@@ -1,5 +1,6 @@
 package com.clevel.selos.transform.business;
 
+import com.clevel.selos.dao.ext.map.RMTitleDAO;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateModel;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
@@ -9,6 +10,7 @@ import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualM
 import com.clevel.selos.integration.corebanking.model.individualInfo.IndividualResult;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.Gender;
+import com.clevel.selos.model.db.ext.map.RMTitle;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.view.AddressView;
 import com.clevel.selos.model.view.CustomerAccountView;
@@ -51,6 +53,8 @@ public class CustomerBizTransform extends BusinessTransform {
     RaceDAO raceDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
+    @Inject
+    RMTitleDAO rmTitleDAO;
 
     public CustomerInfoResultView tranformIndividual(IndividualResult individualResult) {
         CustomerInfoResultView customerInfoResultView = null;
@@ -66,7 +70,11 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.reset();
 
                     customerInfoView.setCitizenId(individualModel.getCitizenID());
-                    customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", individualModel.getTitleTH())));
+                    RMTitle rmTitle =  rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", individualModel.getTitleTH()));
+                    if(rmTitle!=null && rmTitle.getTitle()!=null){
+                        customerInfoView.setTitleTh(rmTitle.getTitle());
+                    }
+
                     if (customerInfoView.getTitleTh() == null) {
                         customerInfoView.setTitleTh(new Title());
                     }
@@ -366,7 +374,12 @@ public class CustomerBizTransform extends BusinessTransform {
                     customerInfoView.reset();
 
                     customerInfoView.setTmbCustomerId(corporateModel.getTmbCusID());
-                    customerInfoView.setTitleTh(titleDAO.findOneByCriteria(Restrictions.eq("titleTh", corporateModel.getTitleTH())));
+
+                    RMTitle rmTitle =  rmTitleDAO.findOneByCriteria(Restrictions.eq("rmTitle", corporateModel.getTitleTH()));
+                    if(rmTitle!=null && rmTitle.getTitle()!=null){
+                        customerInfoView.setTitleTh(rmTitle.getTitle());
+                    }
+
                     if (customerInfoView.getTitleTh() == null) {
                         customerInfoView.setTitleTh(new Title());
                     }

@@ -64,6 +64,7 @@
                 <p:commandButton value="test report" ajax="false">
                     <p:fileDownload value="#{welcomePage.genReport()}" />
                 </p:commandButton>
+                <p:commandButton value="test RM Title" action="#{welcomePage.testRMTitle()}" update=":welcomePanel"/>
 
             </h:form>
         </p:panel>
