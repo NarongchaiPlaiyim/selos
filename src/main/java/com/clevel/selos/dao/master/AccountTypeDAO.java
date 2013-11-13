@@ -53,6 +53,7 @@ public class AccountTypeDAO extends GenericDAO<AccountType, Integer> {
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("customerEntity.id", customerEntityId));
         criteria.add(Restrictions.eq("active", 1));
+        criteria.add(Restrictions.eq("dbrFlag", 1));
         List<AccountType> accountTypes = criteria.list();
         log.debug("getListLoanTypeByCusEntity. (AccountType:{} )", accountTypes);
         return accountTypes;
