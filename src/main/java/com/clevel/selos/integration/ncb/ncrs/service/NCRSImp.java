@@ -488,6 +488,9 @@ public class NCRSImp implements NCRS, Serializable {
                         log.error("NCRS NCB Exception TUEFERROR {}", resultDesc);
                         return responseModel;
                     }
+
+//                    throw new NCBInterfaceException(new Exception(resultDesc), this.exception, resultDesc);
+                }
             } else {
                 resultDesc = responseModel.getBodyModel().getErrormsg();
                 log.error("NCRS NCB Exception {}", responseModel.getBodyModel().getErrormsg());
