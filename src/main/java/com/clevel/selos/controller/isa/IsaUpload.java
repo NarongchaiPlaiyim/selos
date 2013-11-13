@@ -1,5 +1,6 @@
 package com.clevel.selos.controller.isa;
 
+import com.clevel.selos.businesscontrol.isa.IsaUploadService;
 import com.clevel.selos.integration.SELOS;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
@@ -26,6 +27,9 @@ public class IsaUpload implements Serializable{
     @Inject
     @SELOS
     Logger log;
+
+    @Inject
+    IsaUploadService isaUploadService;
 
     public IsaUpload(){
 
@@ -65,10 +69,10 @@ public class IsaUpload implements Serializable{
 //
 //        String tmpDir = importService.getTmpFolder(userUploadId);
 //
-//        File file = new File(tmpDir);
-//        if(file.isDirectory()){
-//            userUploadService.processUserUploadFiles(tmpDir, file.listFiles()[0].getName());
-//        }
+        File file = new File("C:\\Users\\sahawat\\Desktop\\test");
+        if(file.isDirectory()){
+//            isaUploadService.processUserUploadFiles(tmpDir, file.listFiles()[0].getName());
+        }
 
     }
 
