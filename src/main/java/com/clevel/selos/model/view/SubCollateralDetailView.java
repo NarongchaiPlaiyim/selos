@@ -1,6 +1,5 @@
 package com.clevel.selos.model.view;
 
-import com.clevel.selos.model.db.master.CollateralType;
 import com.clevel.selos.model.db.master.SubCollateralType;
 import com.clevel.selos.model.db.master.User;
 
@@ -15,11 +14,34 @@ public class SubCollateralDetailView {
     private String landOffice;
     private String titleDeed;
     private String collateralOwner;
-    private BigDecimal appraisalValue;
+    private String collateralOwnerAAD;
+    private BigDecimal  appraisalValue;
+    private BigDecimal  mortgageValue;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
     private User modifyBy;
+
+    // list master  ??
+//    private   collateralOwnerUW;
+//    private   mortgageType;
+//    private   relatedWith;
+
+    public SubCollateralDetailView() {
+        reset();
+    }
+
+    public void reset() {
+        this.id = 0;
+        this.address    = "";
+        this.titleDeed  = "";
+        this.landOffice = "";
+        this.collateralOwnerAAD = "";
+        this.appraisalValue = BigDecimal.ZERO;
+        this.mortgageValue  = BigDecimal.ZERO;
+        this.subCollateralType    = new SubCollateralType();
+
+    }
 
     public long getId() {
         return id;
@@ -75,6 +97,22 @@ public class SubCollateralDetailView {
 
     public void setCollateralOwner(String collateralOwner) {
         this.collateralOwner = collateralOwner;
+    }
+
+    public String getCollateralOwnerAAD() {
+        return collateralOwnerAAD;
+    }
+
+    public void setCollateralOwnerAAD(String collateralOwnerAAD) {
+        this.collateralOwnerAAD = collateralOwnerAAD;
+    }
+
+    public BigDecimal getMortgageValue() {
+        return mortgageValue;
+    }
+
+    public void setMortgageValue(BigDecimal mortgageValue) {
+        this.mortgageValue = mortgageValue;
     }
 
     public BigDecimal getAppraisalValue() {

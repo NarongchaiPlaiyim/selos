@@ -2,6 +2,9 @@ package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.Gender;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.working.CustomerCSI;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +22,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int subIndex;
     private String listName;
     private int isSpouse;
+    private int isCommittee;
 
     //*** Var for search ***//
     private int searchBy;
@@ -30,6 +34,9 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int validId;
     private String ncbResult;
     private String ncbReason;
+    private String csiResult;
+    private String csiReason;
+    private int csiFlag;
 
     //*** Var for Customer ***//
     private long id;
@@ -52,6 +59,23 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private int collateralOwner;
     private BigDecimal percentShare;
     private BigDecimal approxIncome;
+    private String mobileNumber;
+    private String faxNumber;
+    private String email;
+    private KYCLevel kycLevel;
+    private int convenantFlag;
+    private int reviewFlag;
+    private String reason;
+    private BusinessType businessType;
+    private Date documentAuthorizeDate;
+    private String kycReason;
+    private int worthiness;
+    private AddressType mailingAddressType;
+    private long spouseId;
+    private List<CustomerCSIView> customerCSIList;
+    private Country sourceIncome;
+    private Country countryIncome;
+    private long committeeId;
 
     //*** Var for Individual ***//
     private Date dateOfBirth;
@@ -65,6 +89,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private Nationality sndNationality;
     private Race origin;
     private Occupation occupation;
+    private Country citizenCountry;
 
     //*** Var for Juristic ***//
     private BigDecimal capital;
@@ -74,42 +99,28 @@ public class CustomerInfoView implements Serializable, Cloneable {
     private String registrationId;
     private String signCondition;
     private BigDecimal totalShare;
+    private Country registrationCountry;
+    private List<CustomerInfoView> individualViewList;
+    private Date documentIssueDate;
+    private BigDecimal salesFromFinancialStmt;
+    private BigDecimal shareHolderRatio;
+    private String numberOfAuthorizedUsers;
 
     //*** Var for Address ***//
     private AddressView currentAddress;
     private AddressView workAddress;
     private AddressView registerAddress;
-    private AddressType mailingAddressType;
 
     //*** Var for Children ***//
     private List<ChildrenView> childrenList;
 
-    private Country citizenCountry;
-    private Country registrationCountry;
-    private String mobileNumber;
-    private String faxNumber;
-    private String email;
-    private KYCLevel kycLevel;
-    private int convenantFlag;
-    private int ewsFlag;
-    private int reviewFlag;
-    private String reason;
-    private BusinessType businessType;
-
     private CustomerInfoView spouse;
 
-    private WarningCode csi;
-
-    private BigDecimal share;
-    private Date documentAuthorizeDate;
-    private String kycReason;
-    private int worthiness;
-
-    public CustomerInfoView() {
+    public CustomerInfoView(){
         //reset();
     }
 
-    public void reset() {
+    public void reset(){
         this.id = new Long(0);
         this.individualId = new Long(0);
         this.juristicId = new Long(0);
@@ -126,7 +137,7 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.tmbCustomerId = "";
         this.serviceSegment = "";
         this.collateralOwner = -1;
-        this.percentShare = new BigDecimal(0);
+        this.percentShare = BigDecimal.ZERO;
         this.titleTh = new Title();
         this.titleEn = new Title();
         this.firstNameTh = "";
@@ -151,18 +162,21 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.workAddress = new AddressView();
         this.registerAddress = new AddressView();
         this.mailingAddressType = new AddressType();
-        this.approxIncome = new BigDecimal(0);
+        this.approxIncome = BigDecimal.ZERO;
         this.mobileNumber = "";
         this.faxNumber = "";
         this.email = "";
         this.kycLevel = new KYCLevel();
         this.convenantFlag = -1;
-        this.ewsFlag = -1;
         this.reviewFlag = -1;
         this.reason = "";
         this.spouse = new CustomerInfoView();
-        this.csi = new WarningCode();
         this.businessType = new BusinessType();
+        this.documentAuthorizeDate = new Date();
+        this.customerCSIList = new ArrayList<CustomerCSIView>();
+        this.sourceIncome = new Country();
+        this.countryIncome = new Country();
+        this.individualViewList = new ArrayList<CustomerInfoView>();
     }
 
     public long getIndividualId() {
@@ -227,6 +241,30 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setNcbReason(String ncbReason) {
         this.ncbReason = ncbReason;
+    }
+
+    public String getCsiResult() {
+        return csiResult;
+    }
+
+    public void setCsiResult(String csiResult) {
+        this.csiResult = csiResult;
+    }
+
+    public String getCsiReason() {
+        return csiReason;
+    }
+
+    public void setCsiReason(String csiReason) {
+        this.csiReason = csiReason;
+    }
+
+    public int getCsiFlag() {
+        return csiFlag;
+    }
+
+    public void setCsiFlag(int csiFlag) {
+        this.csiFlag = csiFlag;
     }
 
     public long getId() {
@@ -323,14 +361,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
 
     public void setConvenantFlag(int convenantFlag) {
         this.convenantFlag = convenantFlag;
-    }
-
-    public int getEwsFlag() {
-        return ewsFlag;
-    }
-
-    public void setEwsFlag(int ewsFlag) {
-        this.ewsFlag = ewsFlag;
     }
 
     public int getReviewFlag() {
@@ -661,12 +691,12 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.spouse = spouse;
     }
 
-    public WarningCode getCsi() {
-        return csi;
+    public List<CustomerCSIView> getCustomerCSIList() {
+        return customerCSIList;
     }
 
-    public void setCsi(WarningCode csi) {
-        this.csi = csi;
+    public void setCustomerCSIList(List<CustomerCSIView> customerCSIList) {
+        this.customerCSIList = customerCSIList;
     }
 
     public int getListIndex() {
@@ -686,11 +716,11 @@ public class CustomerInfoView implements Serializable, Cloneable {
     }
 
     public void setIsSpouse(int spouse) {
-        isSpouse = spouse;
+        this.isSpouse = spouse;
     }
 
-    public int getIsSpouse() {
-        return isSpouse;
+    public int getIsSpouse(){
+        return  isSpouse;
     }
 
     public int getSubIndex() {
@@ -708,15 +738,6 @@ public class CustomerInfoView implements Serializable, Cloneable {
     public void setSearchFromRM(int searchFromRM) {
         this.searchFromRM = searchFromRM;
     }
-
-    public BigDecimal getShare() {
-        return share;
-    }
-
-    public void setShare(BigDecimal share) {
-        this.share = share;
-    }
-
     public Date getDocumentAuthorizeDate() {
         return documentAuthorizeDate;
     }
@@ -741,11 +762,91 @@ public class CustomerInfoView implements Serializable, Cloneable {
         this.worthiness = worthiness;
     }
 
+    public long getSpouseId() {
+        return spouseId;
+    }
+
+    public void setSpouseId(long spouseId) {
+        this.spouseId = spouseId;
+    }
+
     public String getPassportId() {
         return passportId;
     }
 
     public void setPassportId(String passportId) {
         this.passportId = passportId;
+    }
+
+    public Country getSourceIncome() {
+        return sourceIncome;
+    }
+
+    public void setSourceIncome(Country sourceIncome) {
+        this.sourceIncome = sourceIncome;
+    }
+
+    public Country getCountryIncome() {
+        return countryIncome;
+    }
+
+    public void setCountryIncome(Country countryIncome) {
+        this.countryIncome = countryIncome;
+    }
+
+    public List<CustomerInfoView> getIndividualViewList() {
+        return individualViewList;
+    }
+
+    public void setIndividualViewList(List<CustomerInfoView> individualViewList) {
+        this.individualViewList = individualViewList;
+    }
+
+    public long getCommitteeId() {
+        return committeeId;
+    }
+
+    public void setCommitteeId(long committeeId) {
+        this.committeeId = committeeId;
+    }
+
+    public Date getDocumentIssueDate() {
+        return documentIssueDate;
+    }
+
+    public void setDocumentIssueDate(Date documentIssueDate) {
+        this.documentIssueDate = documentIssueDate;
+    }
+
+    public BigDecimal getSalesFromFinancialStmt() {
+        return salesFromFinancialStmt;
+    }
+
+    public void setSalesFromFinancialStmt(BigDecimal salesFromFinancialStmt) {
+        this.salesFromFinancialStmt = salesFromFinancialStmt;
+    }
+
+    public BigDecimal getShareHolderRatio() {
+        return shareHolderRatio;
+    }
+
+    public void setShareHolderRatio(BigDecimal shareHolderRatio) {
+        this.shareHolderRatio = shareHolderRatio;
+    }
+
+    public String getNumberOfAuthorizedUsers() {
+        return numberOfAuthorizedUsers;
+    }
+
+    public void setNumberOfAuthorizedUsers(String numberOfAuthorizedUsers) {
+        this.numberOfAuthorizedUsers = numberOfAuthorizedUsers;
+    }
+
+    public void setIsCommittee(int committee) {
+        this.isCommittee = committee;
+    }
+
+    public int getIsCommittee(){
+        return isCommittee;
     }
 }

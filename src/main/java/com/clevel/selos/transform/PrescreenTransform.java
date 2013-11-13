@@ -59,7 +59,8 @@ public class PrescreenTransform extends Transform {
         } else {
             prescreen.setReferredExperience(null);
         }
-        prescreen.setRefinance(prescreenView.isRefinance());
+        prescreen.setRefinance(prescreenView.getRefinance());
+        prescreen.setTcg(prescreenView.getTcg());
         if (prescreenView.getRefinanceBank() != null && prescreenView.getRefinanceBank().getCode() != 0) {
             prescreen.setRefinanceBank(bankDAO.findById(prescreenView.getRefinanceBank().getCode()));
         } else {
@@ -96,7 +97,8 @@ public class PrescreenTransform extends Transform {
         if (prescreenView.getReferredExperience() == null) {
             prescreenView.setReferredExperience(new ReferredExperience());
         }
-        prescreenView.setRefinance(prescreen.isRefinance());
+        prescreenView.setRefinance(prescreen.getRefinance());
+        prescreenView.setTcg(prescreen.getTcg());
         prescreenView.setRefinanceBank(prescreen.getRefinanceBank());
         if (prescreenView.getRefinanceBank() == null) {
             prescreenView.setRefinanceBank(new Bank());

@@ -1,6 +1,7 @@
 package com.clevel.selos.transform;
 
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.AccountType;
 import com.clevel.selos.model.view.LoanAccountTypeView;
 import org.slf4j.Logger;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class LoanAccountTypeTransform {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     public LoanAccountTypeTransform() {
 
@@ -31,7 +32,7 @@ public class LoanAccountTypeTransform {
 
     public List<LoanAccountTypeView> getLoanAccountTypeViews(List<AccountType> loanAccountTypes) {
         List<LoanAccountTypeView> loanAccountTypeViews = new ArrayList<LoanAccountTypeView>();
-        if (loanAccountTypes == null && loanAccountTypes.isEmpty()) {
+        if (loanAccountTypes == null || loanAccountTypes.isEmpty()) {
             return loanAccountTypeViews;
         }
         for (AccountType loanAccountType : loanAccountTypes) {
@@ -47,7 +48,7 @@ public class LoanAccountTypeTransform {
         }
         loanAccountType.setId(loanAccountTypeView.getId());
         loanAccountType.setName(loanAccountTypeView.getName());
-
+        loanAccountType.setCalculateType(loanAccountTypeView.getCalculateType());
         return loanAccountType;
 
     }

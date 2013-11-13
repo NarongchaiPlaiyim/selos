@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.User;
@@ -15,6 +16,7 @@ import java.util.Date;
 @Stateless
 public class SecurityAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     SecurityActivityDAO securityActivityDAO;

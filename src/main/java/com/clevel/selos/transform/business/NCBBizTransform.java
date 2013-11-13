@@ -3,6 +3,7 @@ package com.clevel.selos.transform.business;
 import com.clevel.selos.dao.master.AccountStatusDAO;
 import com.clevel.selos.dao.master.AccountTypeDAO;
 import com.clevel.selos.dao.master.SettlementStatusDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.ncb.nccrs.models.response.*;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSModel;
 import com.clevel.selos.integration.ncb.nccrs.nccrsmodel.NCCRSOutputModel;
@@ -17,6 +18,7 @@ import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -26,6 +28,7 @@ import java.util.*;
 
 public class NCBBizTransform extends BusinessTransform {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     AccountTypeDAO accountTypeDAO;
@@ -1251,7 +1254,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
-                                                ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
+                                                ncbDetailView.setDateOfInfo(DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(creditInfoModel.getAsofdate())));
                                                 //set open date
                                                 String[] openDate = Util.splitSpace(creditInfoModel.getOpeneddate());
                                                 if (openDate != null && openDate.length > 0) {
@@ -1457,7 +1460,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
-                                                ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
+                                                ncbDetailView.setDateOfInfo(DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(creditInfoModel.getAsofdate())));
                                                 //set open date
                                                 String[] openDate = Util.splitSpace(creditInfoModel.getOpeneddate());
                                                 if (openDate != null && openDate.length > 0) {
@@ -1845,7 +1848,7 @@ public class NCBBizTransform extends BusinessTransform {
                     return false;
                 }
             }
-            return true;
+            return false;
         }
     }
 

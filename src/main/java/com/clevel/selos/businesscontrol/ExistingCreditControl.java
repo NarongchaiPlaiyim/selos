@@ -94,6 +94,21 @@ public class ExistingCreditControl extends BusinessControl {
                 if (customerInfoView.getRelation().getId() == 1) {
                     _borrowerTMBCusID.add(customerInfoView.getTmbCustomerId());
                 }
+
+                //get for spouse
+                if(customerInfoView.getSpouse() != null && customerInfoView.getSpouse().getId() != 0){
+                    CustomerInfoView spouseInfoView = customerInfoView.getSpouse();
+                    log.info("get spouse tmbCusId {}", spouseInfoView.getTmbCustomerId());
+                    Reference referenceSpouse = spouseInfoView.getReference();
+                    if (Util.isTrue(referenceSpouse.getSll())) {
+                        tmbCusIDList.add(spouseInfoView.getTmbCustomerId());
+                        log.info("get spouse reference {}", referenceSpouse);
+                    }
+
+                    if (spouseInfoView.getRelation().getId() == 1) {
+                        _borrowerTMBCusID.add(spouseInfoView.getTmbCustomerId());
+                    }
+                }
             }
         }
 

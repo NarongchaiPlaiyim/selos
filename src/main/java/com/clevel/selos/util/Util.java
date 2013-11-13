@@ -242,16 +242,16 @@ public class Util {
     }
 
     public static BigDecimal divide(BigDecimal value, BigDecimal divisor) {
-        if (BigDecimal.ZERO.compareTo(divisor) == 0 || BigDecimal.valueOf(0.00).compareTo(divisor) == 0) {
+        if (BigDecimal.ZERO.compareTo(divisor) == 0) {
             log.debug("divide() divisor is zero!");
             return BigDecimal.ZERO;
         }
         try {
-            value = value.divide(divisor, 2, RoundingMode.HALF_UP);
-        } catch (ArithmeticException ae) {
-            log.error("", ae);
+            return value.divide(divisor, 2, RoundingMode.HALF_UP);
+        } catch (Exception e) {
+            log.error("", e);
+            return BigDecimal.ZERO;
         }
-        return value;
     }
 
     public static BigDecimal divide(BigDecimal value, int divisor) {
@@ -260,12 +260,11 @@ public class Util {
             return BigDecimal.ZERO;
         }
         try {
-            BigDecimal divisorBD = BigDecimal.valueOf(divisor);
-            value = value.divide(divisorBD, 2, RoundingMode.HALF_UP);
+            return value.divide(BigDecimal.valueOf(divisor), 2, RoundingMode.HALF_UP);
         } catch (Exception e) {
             log.error("", e);
+            return BigDecimal.ZERO;
         }
-        return value;
     }
 
     public static <T> List<T> safetyList(List<T> list) {

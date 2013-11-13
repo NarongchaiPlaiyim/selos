@@ -79,11 +79,13 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
         searchIndividual.setCustName("");
         searchIndividual.setCustSurname("");
         searchIndividual.setRadSelectSearch(searchByValue);
+        searchIndividual.setAcronym(userId);
+        searchIndividual.setProductCode(productCode);
         log.debug("RequestValue : {} ", searchIndividual.toString());
         IndividualModel individualModel = null;
         IndividualResult individualResult;
         try {
-            individualModel = rmService.individualService(searchIndividual, userId);
+            individualModel = rmService.individualCMService(searchIndividual, userId);
             individualResult = new IndividualResult();
             individualResult.setCustomerId(customerId);
             individualResult.setActionResult(ActionResult.SUCCESS);

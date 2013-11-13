@@ -79,6 +79,12 @@ input[type="text"]:disabled {
     padding: 2px;
     border: 1px solid #cfcfcf;
 }
+input[readonly="readonly"], input[readonly] {
+    margin-right: 4px;
+    padding: 2px;
+    border: 1px solid #cfcfcf;
+    background: darkblue;
+}
 
 textarea {
     margin: 0;
@@ -685,4 +691,3 @@ td .cell_spacer {
     /*border: none !important;*/
 
 }
-

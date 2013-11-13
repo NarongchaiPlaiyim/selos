@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.BizInfoDetailControl;
 import com.clevel.selos.businesscontrol.BizInfoSummaryControl;
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.BizInfoDetailDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.*;
 import com.clevel.selos.model.db.working.BizInfoDetail;
 import com.clevel.selos.model.view.BizInfoDetailView;
@@ -69,6 +70,7 @@ public class BizInfoSummary implements Serializable {
     private String redirect;
 
     @Inject
+    @SELOS
     Logger log;
     @Inject
     private BusinessGroupDAO businessGroupDAO;

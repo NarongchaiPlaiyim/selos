@@ -26,7 +26,7 @@ public class DBR implements Serializable {
     private List<DBRDetail> dbrDetails;
 
     @Column(name = "income_factor")
-    private int incomeFactor;
+    private BigDecimal incomeFactor;
 
     @Column(name = "monthly_income")
     private BigDecimal monthlyIncome;
@@ -85,11 +85,19 @@ public class DBR implements Serializable {
         this.workCase = workCase;
     }
 
-    public int getIncomeFactor() {
+    public List<DBRDetail> getDbrDetails() {
+        return dbrDetails;
+    }
+
+    public void setDbrDetails(List<DBRDetail> dbrDetails) {
+        this.dbrDetails = dbrDetails;
+    }
+
+    public BigDecimal getIncomeFactor() {
         return incomeFactor;
     }
 
-    public void setIncomeFactor(int incomeFactor) {
+    public void setIncomeFactor(BigDecimal incomeFactor) {
         this.incomeFactor = incomeFactor;
     }
 
@@ -139,14 +147,6 @@ public class DBR implements Serializable {
 
     public void setDbrBeforeRequest(BigDecimal dbrBeforeRequest) {
         this.dbrBeforeRequest = dbrBeforeRequest;
-    }
-
-    public List<DBRDetail> getDbrDetails() {
-        return dbrDetails;
-    }
-
-    public void setDbrDetails(List<DBRDetail> dbrDetails) {
-        this.dbrDetails = dbrDetails;
     }
 
     public BigDecimal getDbrInterest() {

@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.Customer;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -12,8 +13,8 @@ import java.util.List;
 
 public class CustomerDAO extends GenericDAO<Customer, Long> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public CustomerDAO() {
     }
@@ -84,6 +85,25 @@ public class CustomerDAO extends GenericDAO<Customer, Long> {
         log.info("findByWorkCaseId : {}", workCaseId);
         Criteria criteria = createCriteria();
         criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        List<Customer> customerList = (List<Customer>) criteria.list();
+
+        return customerList;
+    }
+
+    public Customer findCustomerBySpouseId(long spouseId) {
+        log.debug("findSpouseById ::: spouseId : {}", spouseId);
+        Customer customer = new Customer();
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("spouseId", spouseId));
+        customer = (Customer) criteria.uniqueResult();
+
+        return customer;
+    }
+
+    public List<Customer> findCustomerByCommitteeId(long committeeId) {
+        log.debug("findSpouseById ::: committeeId : {}", committeeId);
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("juristicId", committeeId));
         List<Customer> customerList = (List<Customer>) criteria.list();
 
         return customerList;

@@ -1512,10 +1512,9 @@ public class CorporateDetail {
 
         try {
             return new String(comRegTumbon.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-
+        } catch (Exception e) {
+            return null;
         }
-        return comRegTumbon;
     }
 
     /**
@@ -1537,10 +1536,9 @@ public class CorporateDetail {
     public String getComRegAumper() {
         try {
             return new String(comRegAumper.getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-
+        } catch (Exception e) {
+            return null;
         }
-        return comRegAumper;
     }
 
     /**

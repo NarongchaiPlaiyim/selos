@@ -11,9 +11,8 @@ import java.util.List;
 
 public class DBRView implements Serializable {
     private long id;
-    private WorkCase workCase;
     private List<DBRDetailView> dbrDetailViews;
-    private int incomeFactor;
+    private BigDecimal incomeFactor;
     private BigDecimal monthlyIncome;
     private BigDecimal monthlyIncomeAdjust;
     private BigDecimal monthlyIncomePerMonth;
@@ -21,6 +20,9 @@ public class DBRView implements Serializable {
     private BigDecimal currentDBR;
     private BigDecimal dbrBeforeRequest;
     private BigDecimal dbrInterest;
+    private long workCaseId;
+    private String userId;
+
 
     public DBRView() {
         reset();
@@ -28,8 +30,7 @@ public class DBRView implements Serializable {
 
     public void reset() {
         this.id = 0;
-        this.incomeFactor = 0;
-        this.workCase = new WorkCase();
+        this.incomeFactor = BigDecimal.ZERO;
         this.dbrDetailViews = new ArrayList<DBRDetailView>();
         this.monthlyIncome = BigDecimal.ZERO;
         this.monthlyIncomeAdjust = BigDecimal.ZERO;
@@ -38,8 +39,9 @@ public class DBRView implements Serializable {
         this.currentDBR = BigDecimal.ZERO;
         this.dbrBeforeRequest = BigDecimal.ZERO;
         this.dbrInterest = BigDecimal.ZERO;
-    }
+        this.workCaseId = 0L;
 
+    }
 
     public long getId() {
         return id;
@@ -47,14 +49,6 @@ public class DBRView implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public WorkCase getWorkCase() {
-        return workCase;
-    }
-
-    public void setWorkCase(WorkCase workCase) {
-        this.workCase = workCase;
     }
 
     public List<DBRDetailView> getDbrDetailViews() {
@@ -65,11 +59,11 @@ public class DBRView implements Serializable {
         this.dbrDetailViews = dbrDetailViews;
     }
 
-    public int getIncomeFactor() {
+    public BigDecimal getIncomeFactor() {
         return incomeFactor;
     }
 
-    public void setIncomeFactor(int incomeFactor) {
+    public void setIncomeFactor(BigDecimal incomeFactor) {
         this.incomeFactor = incomeFactor;
     }
 
@@ -129,11 +123,28 @@ public class DBRView implements Serializable {
         this.dbrInterest = dbrInterest;
     }
 
+    public long getWorkCaseId() {
+        return workCaseId;
+    }
+
+    public void setWorkCaseId(long workCaseId) {
+        this.workCaseId = workCaseId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
                 .append("id", id)
-                .append("workCase", workCase)
                 .append("dbrDetailViews", dbrDetailViews)
                 .append("incomeFactor", incomeFactor)
                 .append("monthlyIncome", monthlyIncome)
@@ -143,6 +154,8 @@ public class DBRView implements Serializable {
                 .append("currentDBR", currentDBR)
                 .append("dbrBeforeRequest", dbrBeforeRequest)
                 .append("dbrInterest", dbrInterest)
+                .append("workCaseId", workCaseId)
+                .append("userId", userId)
                 .toString();
     }
 }

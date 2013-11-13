@@ -63,8 +63,12 @@ public class RLOSInterfaceImpl implements RLOSInterface, Serializable {
             throw e;
         } catch (Exception e) {
             log.error("Exception while get CSI data!", e);
+            String exceptionMessage = msg.get(ExceptionMapping.RLOS_CSI_EXCEPTION);
+            if(!Util.isEmpty(e.getMessage()) && !e.getMessage().trim().equalsIgnoreCase("null")){
+                exceptionMessage = e.getMessage();
+            }
             rlosAuditor.add(userId, "getCSIData", actionDesc, requestTime, ActionResult.FAILED, e.getMessage(), new Date(), linkKey);
-            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_EXCEPTION, msg.get(ExceptionMapping.RLOS_CSI_EXCEPTION, userId));
+            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_EXCEPTION, exceptionMessage);
         }
         return csiResult;
     }
@@ -84,7 +88,11 @@ public class RLOSInterfaceImpl implements RLOSInterface, Serializable {
             }
         } catch (Exception e) {
             log.error("Exception while get AppInProcess data!", e);
-            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_EXCEPTION, msg.get(ExceptionMapping.RLOS_APPIN_EXCEPTION, userId));
+            String exceptionMessage = msg.get(ExceptionMapping.RLOS_APPIN_EXCEPTION);
+            if(!Util.isEmpty(e.getMessage()) && !e.getMessage().trim().equalsIgnoreCase("null")){
+                exceptionMessage = e.getMessage();
+            }
+            throw new RLOSInterfaceException(e, ExceptionMapping.RLOS_CSI_EXCEPTION, exceptionMessage);
         }
         return appInProcessResult;
     }

@@ -1,18 +1,23 @@
 package com.clevel.selos.businesscontrol.isa;
 
+import com.clevel.selos.dao.audit.IsaActivityDAO;
+import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.model.ActionResult;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ManageUserAction;
 import com.clevel.selos.model.ManageUserActive;
 import com.clevel.selos.model.UserStatus;
+import com.clevel.selos.model.db.audit.IsaActivity;
+import com.clevel.selos.model.db.audit.SecurityActivity;
 import com.clevel.selos.model.db.master.*;
-import com.clevel.selos.model.view.IsaManageUserView;
-import com.clevel.selos.model.view.IsaSearchView;
-import com.clevel.selos.model.view.IsaUserReportView;
-import com.clevel.selos.util.Util;
+import com.clevel.selos.model.view.isa.IsaAuditLogView;
+import com.clevel.selos.model.view.isa.IsaManageUserView;
+import com.clevel.selos.model.view.isa.IsaSearchView;
+import com.clevel.selos.model.view.isa.IsaUserDetailView;
+import com.clevel.selos.util.DateTimeUtil;
 import org.hibernate.Criteria;
-import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.SimpleExpression;
 import org.slf4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -20,20 +25,24 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Stateless
 public class IsaBusinessControl implements Serializable {
 
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     UserDAO userDAO;
+
+    @Inject
+    SecurityActivityDAO securityActivityDAO;
+
+    @Inject
+    IsaActivityDAO isaActivityDAO;
 
     @Inject
     public IsaBusinessControl() {
@@ -46,7 +55,8 @@ public class IsaBusinessControl implements Serializable {
     }
 
     boolean complete = true;
-
+    private final Locale THAI_LOCALE = new Locale("th", "TH");
+    private final String DATE_FORMAT = "dd/MM/yyyy HH:mm:ss.sss";
 
     public void createUser(IsaManageUserView isaManageUserView) throws Exception {
 
@@ -243,78 +253,118 @@ public class IsaBusinessControl implements Serializable {
 
     }
 
-    public List<User>getUserAuditLogReport ()throws Exception{
+    public List<IsaAuditLogView> getUserMaintenanceReport(Date dateFrom,Date dateTo) throws Exception {
+        log.debug("getUserMaintenanceReport()");
+        List<IsaAuditLogView> list = new ArrayList<IsaAuditLogView>();
+        List<IsaActivity> isaActivity = isaActivityDAO.findByCriteria(Restrictions.between("actionDate",dateFrom,dateTo));
+        for (IsaActivity activityList : isaActivity) {
+            IsaAuditLogView isaAuditLogView = new IsaAuditLogView();
+            isaAuditLogView.setUserId(activityList.getUserId());
+            User username = userDAO.findOneByCriteria(Restrictions.eq("id", activityList.getUserId()));
+            isaAuditLogView.setUserName(username != null ? username.getUserName() : "");
+            isaAuditLogView.setAction(activityList.getAction());
+            isaAuditLogView.setActionDesc(activityList.getActionDesc());
+            isaAuditLogView.setIpAddress(activityList.getIpAddress());
+            isaAuditLogView.setActionDate(activityList.getActionDate() + "");
+            isaAuditLogView.setResult(activityList.getActionResult().name());
+            isaAuditLogView.setResultDesc(activityList.getResultDesc());
 
-        return null;
-    }
-
-
-    public List<IsaUserReportView> getUserNotLogonOver(int day) throws Exception {
-        log.debug("getUserNotLogonOver");
-
-        List<IsaUserReportView>list=new ArrayList<IsaUserReportView>();
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -(day+1));
-        System.out.println(cal.getTime());
-        List<User> users = userDAO.findByCriteria(Restrictions.le("lastLogon", cal.getTime()));
-            for(User userlist:users){
-                IsaUserReportView isaUserReportView=new IsaUserReportView();
-                isaUserReportView.setUserId(userlist.getId());
-                isaUserReportView.setUserName(userlist.getUserName());
-                isaUserReportView.setEmailAddress(userlist.getEmailAddress());
-                isaUserReportView.setBuCode(userlist.getBuCode());
-                isaUserReportView.setLastIp(userlist.getLastIP());
-                isaUserReportView.setLastLogon(userlist.getLastLogon());
-                isaUserReportView.setPhoneExt(userlist.getPhoneExt());
-                isaUserReportView.setPhoneNumber(userlist.getPhoneNumber());
-                isaUserReportView.setRole(userlist.getRole().getName()!=null?userlist.getRole().getName():"");
-                isaUserReportView.setDepartment(userlist.getDepartment().getName()!=null?userlist.getDepartment().getName():"");
-                isaUserReportView.setDivision(userlist.getDivision().getName()!=null?userlist.getDivision().getName():"");
-                isaUserReportView.setRegion(userlist.getRegion().getName()!=null?userlist.getRegion().getName():"");
-                isaUserReportView.setTeam(userlist.getTeam().getName()!=null?userlist.getTeam().getName():"");
-                isaUserReportView.setTitle(userlist.getTitle().getName()!=null?userlist.getTitle().getName():"");
-                isaUserReportView.setZone(userlist.getZone().getName()!=null?userlist.getZone().getName():"");
-                isaUserReportView.setActive(userlist.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
-                isaUserReportView.setUserStatus(userlist.getUserStatus().name());
-
-                list.add(isaUserReportView);
-            }
+            list.add(isaAuditLogView);
+        }
 
         return list;
     }
 
 
-    public List<IsaUserReportView> getUserReportList() throws Exception {
+    public List<IsaUserDetailView> getUserNotLogonOver(int day) throws Exception {
+        log.debug("getUserNotLogonOver()");
+
+        List<IsaUserDetailView> list = new ArrayList<IsaUserDetailView>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -(day + 1));
+
+        System.out.println(cal.getTime());
+        List<User> users = userDAO.findByCriteria(Restrictions.le("lastLogon", cal.getTime()));
+        for (User userlist : users) {
+            IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
+            isaUserDetailView.setUserId(userlist.getId());
+            isaUserDetailView.setUserName(userlist.getUserName());
+            isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
+            isaUserDetailView.setBuCode(userlist.getBuCode());
+            isaUserDetailView.setLastIp(userlist.getLastIP());
+            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+            isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
+            isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
+            isaUserDetailView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : "");
+            isaUserDetailView.setDepartment(userlist.getDepartment().getName() != null ? userlist.getDepartment().getName() : "");
+            isaUserDetailView.setDivision(userlist.getDivision().getName() != null ? userlist.getDivision().getName() : "");
+            isaUserDetailView.setRegion(userlist.getRegion().getName() != null ? userlist.getRegion().getName() : "");
+            isaUserDetailView.setTeam(userlist.getTeam().getName() != null ? userlist.getTeam().getName() : "");
+            isaUserDetailView.setTitle(userlist.getTitle().getName() != null ? userlist.getTitle().getName() : "");
+            isaUserDetailView.setZone(userlist.getZone().getName() != null ? userlist.getZone().getName() : "");
+            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+            isaUserDetailView.setUserStatus(userlist.getUserStatus().name());
+
+            list.add(isaUserDetailView);
+        }
+
+        return list;
+    }
+
+    public List<IsaAuditLogView> getViolationReport() throws Exception {
+        log.debug("getViolationReport()");
+
+        List<IsaAuditLogView> list = new ArrayList<IsaAuditLogView>();
+
+        List<SecurityActivity> users = securityActivityDAO.findByCriteria(Restrictions.eq("actionResult", ActionResult.FAILED));
+        for (SecurityActivity userlist : users) {
+            IsaAuditLogView isaAuditLogView = new IsaAuditLogView();
+            isaAuditLogView.setUserId(userlist.getUserId());
+
+            User username = userDAO.findOneByCriteria(Restrictions.eq("id", userlist.getUserId()));
+            isaAuditLogView.setUserName(username != null ? username.getUserName() : "");
+            isaAuditLogView.setIpAddress(userlist.getIpAddress());
+            isaAuditLogView.setActionDate(userlist.getActionDate() + "");
+            isaAuditLogView.setResult(userlist.getActionResult().name());
+            isaAuditLogView.setResultDesc(userlist.getResultDesc());
+            list.add(isaAuditLogView);
+        }
+
+        return list;
+    }
+
+
+    public List<IsaUserDetailView> getUserReportList() throws Exception {
         log.debug("getUserNotLogonOver");
 
-        List<IsaUserReportView>list=new ArrayList<IsaUserReportView>();
+        List<IsaUserDetailView> list = new ArrayList<IsaUserDetailView>();
 
-        Role role=new Role();
+        Role role = new Role();
         role.setId(1);
 
-        List<User> users = userDAO.findByCriteria(Restrictions.gt("role",role));
+        List<User> users = userDAO.findByCriteria(Restrictions.gt("role", role));
         System.out.println(users.size());
-        for(User userlist:users){
-            IsaUserReportView isaUserReportView=new IsaUserReportView();
-            isaUserReportView.setUserId(userlist.getId());
-            isaUserReportView.setUserName(userlist.getUserName());
-            isaUserReportView.setEmailAddress(userlist.getEmailAddress());
-            isaUserReportView.setBuCode(userlist.getBuCode());
-            isaUserReportView.setLastIp(userlist.getLastIP());
-            isaUserReportView.setLastLogon(userlist.getLastLogon());
-            isaUserReportView.setPhoneExt(userlist.getPhoneExt());
-            isaUserReportView.setPhoneNumber(userlist.getPhoneNumber());
-            isaUserReportView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : " ");
-            isaUserReportView.setDepartment(userlist.getDepartment().getName()!=null?userlist.getDepartment().getName():" ");
-            isaUserReportView.setDivision(userlist.getDivision().getName()!=null?userlist.getDivision().getName():" ");
-            isaUserReportView.setRegion(userlist.getRegion().getName()!=null?userlist.getRegion().getName():" ");
-            isaUserReportView.setTeam(userlist.getTeam().getName()!=null?userlist.getTeam().getName():" ");
-            isaUserReportView.setTitle(userlist.getTitle().getName()!=null?userlist.getTitle().getName():" ");
-            isaUserReportView.setZone(userlist.getZone().getName()!=null?userlist.getZone().getName():" ");
-            isaUserReportView.setActive(userlist.getActive()==1?ManageUserActive.ACTIVE:ManageUserActive.INACTIVE);
-            isaUserReportView.setUserStatus(userlist.getUserStatus().name()!=null?userlist.getUserStatus().name():" ");
+        for (User userlist : users) {
+            IsaUserDetailView isaUserDetailView = new IsaUserDetailView();
+            isaUserDetailView.setUserId(userlist.getId());
+            isaUserDetailView.setUserName(userlist.getUserName());
+            isaUserDetailView.setEmailAddress(userlist.getEmailAddress());
+            isaUserDetailView.setBuCode(userlist.getBuCode());
+            isaUserDetailView.setLastIp(userlist.getLastIP());
+            isaUserDetailView.setLastLogon(DateTimeUtil.convertDateToString(userlist.getLastLogon(),THAI_LOCALE,DATE_FORMAT));
+            isaUserDetailView.setPhoneExt(userlist.getPhoneExt());
+            isaUserDetailView.setPhoneNumber(userlist.getPhoneNumber());
+            isaUserDetailView.setRole(userlist.getRole().getName() != null ? userlist.getRole().getName() : " ");
+            isaUserDetailView.setDepartment(userlist.getDepartment().getName() != null ? userlist.getDepartment().getName() : " ");
+            isaUserDetailView.setDivision(userlist.getDivision().getName() != null ? userlist.getDivision().getName() : " ");
+            isaUserDetailView.setRegion(userlist.getRegion().getName() != null ? userlist.getRegion().getName() : " ");
+            isaUserDetailView.setTeam(userlist.getTeam().getName() != null ? userlist.getTeam().getName() : " ");
+            isaUserDetailView.setTitle(userlist.getTitle().getName() != null ? userlist.getTitle().getName() : " ");
+            isaUserDetailView.setZone(userlist.getZone().getName() != null ? userlist.getZone().getName() : " ");
+            isaUserDetailView.setActive(userlist.getActive() == 1 ? ManageUserActive.ACTIVE : ManageUserActive.INACTIVE);
+            isaUserDetailView.setUserStatus(userlist.getUserStatus().name() != null ? userlist.getUserStatus().name() : " ");
 
-            list.add(isaUserReportView);
+            list.add(isaUserDetailView);
         }
 
         return list;

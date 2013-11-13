@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ShareHolderInfoModel {
+import java.io.Serializable;
+
+public class ShareHolderInfoModel implements Serializable {
     private String name;
     private String asofdate;
     private String percentage;

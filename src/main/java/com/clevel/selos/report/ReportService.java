@@ -1,21 +1,23 @@
 package com.clevel.selos.report;
 
+/*import net.sf.jasperreports.engine.*;
+import com.clevel.selos.integration.SELOS;
 import net.sf.jasperreports.engine.*;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.slf4j.Logger;
+import org.slf4j.Logger;*/
 
-import javax.inject.Inject;
+/*import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.InputStream;*/
 import java.io.Serializable;
-import java.util.Map;
+//import java.util.Map;
 
 public class ReportService implements Serializable {
-    @Inject
+    /*@Inject
+    @SELOS
     Logger log;
-
     protected String reportTemplate;
     protected String reportFileName;
     protected StreamedContent reportFile;
@@ -43,6 +45,6 @@ public class ReportService implements Serializable {
     public StreamedContent getReportFile(Map<String,Object> parameters) {
         generatePDF(parameters);
         return reportFile;
-    }
+    }*/
 
 }

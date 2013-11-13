@@ -1,0 +1,41 @@
+<ui:composition
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+    <script type="text/javascript" src="#{request.contextPath}/resources/js/jquery.menu.js"></script>
+    <link rel="stylesheet" type="text/css" href="#{request.contextPath}/resources/css/jquery.menu.css"/>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function () {
+            selosmenu.init({
+                mainmenuid: "selosmenu", //menu DIV id
+                orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+                classname: 'selosmenu'//, //class added to menu's outer DIV
+            });
+        });
+        //]]>
+    </script>
+
+    <div id="selosmenu" class="selosmenu">
+        <ul>
+            <li id="mnuinbox">
+                <a href="inbox.jsf" title="Inbox">Admin</a>
+                <ul>
+                    <li id="submnuprescreen"><a href="manageUser.jsf" title="ManageUser">ManageUser</a></li>
+                </ul>
+            </li>
+            <li id="mnuprescreen">
+                <a href="prescreen.jsf" title="Report">Report</a>
+                <ul>
+                    <li id="submnuprescreenresult"><a href="isaReport.jsf" title="ISA Report">ISA Report</a></li>
+                </ul>
+            </li>
+
+        </ul>
+        <br style="clear: left"/>
+    </div>
+    <div id="menu_sub" style="height: 14px;"><!-- --></div>
+    <div class="clear"></div>
+</ui:composition>

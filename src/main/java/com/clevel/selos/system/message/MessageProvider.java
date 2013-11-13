@@ -1,5 +1,6 @@
 package com.clevel.selos.system.message;
 
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.Language;
 import com.clevel.selos.util.FacesUtil;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -14,7 +15,8 @@ import java.util.ResourceBundle;
 
 public abstract class MessageProvider implements Message {
     @Inject
-    private Logger log;
+    @SELOS
+    Logger log;
     protected String resource;
     protected ResourceBundle messageTh;
     protected ResourceBundle messageEn;

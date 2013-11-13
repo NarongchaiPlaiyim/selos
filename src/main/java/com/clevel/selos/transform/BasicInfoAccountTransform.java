@@ -54,11 +54,13 @@ public class BasicInfoAccountTransform extends Transform {
         basicInfoAccountView.setProduct(openAccount.getAccountProduct());
         if (basicInfoAccountView.getProduct() == null) {
             basicInfoAccountView.setProduct(new OpenAccountProduct());
+            basicInfoAccountView.getProduct().setName("-"); // for view
         }
 
         basicInfoAccountView.setBankAccountTypeView(bankAccountTypeTransform.getBankAccountTypeView(openAccount.getBankAccountType()));
         if (basicInfoAccountView.getBankAccountTypeView() == null) {
             basicInfoAccountView.setBankAccountTypeView(new BankAccountTypeView());
+            basicInfoAccountView.getBankAccountTypeView().setName("-"); // for view
         }
 
         BasicInfoAccPurposeTransform basicInfoAccPurposeTransform = new BasicInfoAccPurposeTransform();
@@ -67,15 +69,19 @@ public class BasicInfoAccountTransform extends Transform {
         basicInfoAccountView.setBasicInfoAccountPurposeView(basicInfoAccountPurposeViews);
 
         //for show view
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < basicInfoAccountView.getBasicInfoAccountPurposeView().size(); i++) {
-            if (i == 0) {
-                stringBuilder.append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
-            } else {
-                stringBuilder.append(", " + basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+        if(basicInfoAccountView.getBasicInfoAccountPurposeView().size() > 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < basicInfoAccountView.getBasicInfoAccountPurposeView().size(); i++) {
+                if (i == 0) {
+                    stringBuilder.append(basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+                } else {
+                    stringBuilder.append(", " + basicInfoAccountView.getBasicInfoAccountPurposeView().get(i).getPurpose().getName());
+                }
             }
+            basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
+        } else {
+            basicInfoAccountView.setPurposeForShow("-"); // for view
         }
-        basicInfoAccountView.setPurposeForShow(stringBuilder.toString());
 
         return basicInfoAccountView;
     }

@@ -4,6 +4,7 @@ import com.clevel.selos.businesscontrol.QualitativeControl;
 import com.clevel.selos.dao.master.QualityLevelDAO;
 import com.clevel.selos.dao.master.UserDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.QualitativeClass;
 import com.clevel.selos.model.db.master.QualityLevel;
 import com.clevel.selos.model.db.master.User;
@@ -22,15 +23,16 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @ViewScoped
 @ManagedBean(name = "qualitative")
-public class Qualitative {
+public class Qualitative implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
