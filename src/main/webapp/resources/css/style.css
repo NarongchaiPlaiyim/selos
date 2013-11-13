@@ -689,5 +689,7 @@ td .cell_spacer {
 .isaPanelGridSearch table,tr{
     background: transparent !important;
     /*border: none !important;*/
-
+}
+.summary_column{
+    background-color:#f4f8b6;
 }
