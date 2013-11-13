@@ -24,6 +24,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
@@ -65,6 +66,7 @@ public class BankStatementSummary implements Serializable {
     private Date lastThreeMonth1;
     private Date lastThreeMonth2;
     private Date lastThreeMonth3;
+    private Date toDay;
 
     //Session
     private long workCaseId;
@@ -72,9 +74,13 @@ public class BankStatementSummary implements Serializable {
     private long stepId;
     private String userId;
 
-    //Dialog
+    //Message Dialog
     private String messageHeader;
     private String message;
+
+    //Confirm Dialog
+    private String confirmMessageHeader;
+    private String confirmMessage;
 
     private Date lastMonthDate;
     private int numberOfMonths;
@@ -149,25 +155,23 @@ public class BankStatementSummary implements Serializable {
             lastThreeMonth2 = DateTimeUtil.getOnlyDatePlusMonth(theLastMonthDate, 1); // Ex. May 2013
             lastThreeMonth3 = DateTimeUtil.getOnlyDatePlusMonth(theLastMonthDate, 2); // Ex
         }
+        // provide Source of Collateral Proof from all Bank Statement
+        provideSrcOfCollateralProofList();
+        // calculate Summary
+        bankStmtControl.bankStmtSumTotalCalculation(summaryView);
+    }
 
-        // count Source of Collateral Proof from All Bank statement
-        BigDecimal sumAvgOsBalance = BigDecimal.ZERO;
+    private void provideSrcOfCollateralProofList() {
+        // count Source of Collateral Proof from All Bank Statement
         bankStmtSrcOfCollateralProofList = new ArrayList<BankStmtView>();
         for (BankStmtView tmbBankStmtView : summaryView.getTmbBankStmtViewList()) {
             bankStmtControl.calSourceOfCollateralProof(tmbBankStmtView);
-            sumAvgOsBalance = sumAvgOsBalance.add(tmbBankStmtView.getAvgOSBalanceAmount());
-
             bankStmtSrcOfCollateralProofList.add(tmbBankStmtView);
         }
         for (BankStmtView othBankStmtView : summaryView.getOthBankStmtViewList()) {
             bankStmtControl.calSourceOfCollateralProof(othBankStmtView);
-            sumAvgOsBalance = sumAvgOsBalance.add(othBankStmtView.getAvgOSBalanceAmount());
-
             bankStmtSrcOfCollateralProofList.add(othBankStmtView);
         }
-        summaryView.setGrdTotalAvgOSBalanceAmount(sumAvgOsBalance);
-        // recalculate Summary
-        bankStmtControl.bankStmtSumTotalCalculation(summaryView);
     }
 
     public void onRefresh() {
@@ -183,14 +187,13 @@ public class BankStatementSummary implements Serializable {
                 return;
             }
         }
-        // todo: check if(lastMonthDate from expectedSubmitDate != lastMonthDate from Bank statement detail)
 
         // check for seasonal flag & expected submission date
         // calculate for the last month & a number of months to be retrieved the bank statement detail
         lastMonthDate = bankStmtControl.getLastMonthDateBankStmt(summaryView.getExpectedSubmitDate());
         numberOfMonths = bankStmtControl.getNumberOfMonthsBankStmt(summaryView.getSeasonal());
 
-        // todo: retrieve new TMB data (all fields) to replace previous data
+        // todo: retrieve new TMB data (all fields) to replace previous data and recalculate
     }
 
     public void onSaveSummary() {
@@ -220,15 +223,17 @@ public class BankStatementSummary implements Serializable {
         } else {
             summaryView.getOthBankStmtViewList().remove(selectedBankStmtView);
         }
+        // re-provide Source of collateral proof
+        provideSrcOfCollateralProofList();
+        // re-calculate Summary
+        bankStmtControl.bankStmtSumTotalCalculation(summaryView);
 
         try {
             bankStmtControl.deleteBankStmt(selectedBankStmtView.getId());
-            // todo: re-calculate summary and save ?
 
             messageHeader = "Delete Bank Statement Success.";
             message = "Delete Bank Statement success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            // todo: call onRefresh() ?
         } catch (Exception e) {
             messageHeader = "Delete Bank Statement Failed.";
             if (e.getCause() != null) {
@@ -240,35 +245,76 @@ public class BankStatementSummary implements Serializable {
         }
     }
 
-    public String onEditTmbBankStmt() {
+
+    public void onRedirectToBankStmtDetail() {
+        log.debug("onRedirectToBankStmtDetail()");
+//        return "bankStatementDetail?faces-redirect=true";
+        FacesUtil.redirect("/site/bankStatementDetail.jsf");
+    }
+
+    public void onEditTmbBankStmt() {
         log.debug("onEditTmbBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
         passParamsToBankStmtDetail(summaryView, true, selectedBankStmtView);
-        return "bankStatementDetail?faces-redirect=true";
+        onRedirectToBankStmtDetail();
     }
 
-    public String onEditOthBankStmt() {
+    public void onEditOthBankStmt() {
         log.debug("onEditOthBankStmt() selectedBankStmtView: {}", selectedBankStmtView);
         passParamsToBankStmtDetail(summaryView, false, selectedBankStmtView);
-        return "bankStatementDetail?faces-redirect=true";
+        onRedirectToBankStmtDetail();
     }
 
-    public String onLinkToAddTmbBankDetail() {
-        log.debug("Link to Bank statement detail with params{isTmbBank: true, seasonal: {}, expectedSubmissionDate: {}}",
-                summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
-        // todo: lastMonthDate and numberOfMonths will be aligned with TMB Bank statement
-        passParamsToBankStmtDetail(summaryView, true, null);
-        return "bankStatementDetail?faces-redirect=true";
+    public void onClickAddTMBBankStmt() {
+        log.debug("onClickAddTMBBankStmt()");
+        if ( checkConfirmToAddBankStmt() ) {
+            passParamsToBankStmtDetail(summaryView, true, null);
+            onRedirectToBankStmtDetail();
+        }
     }
 
-    public String onLinkToAddOthBankDetail() {
-        log.debug("Link to Bank statement detail with params{isTmbBank: false, seasonal: {}, expectedSubmissionDate: {}}",
-                summaryView.getSeasonal(), summaryView.getExpectedSubmitDate());
-        // todo: lastMonthDate and numberOfMonths will be aligned with TMB Bank statement
-        passParamsToBankStmtDetail(summaryView, false, null);
-        return "bankStatementDetail?faces-redirect=true";
+    public void onClickAddOtherBankStmt() {
+        log.debug("onClickAddOtherBankStmt()");
+        if ( checkConfirmToAddBankStmt() ) {
+            passParamsToBankStmtDetail(summaryView, false, null);
+            onRedirectToBankStmtDetail();
+        }
+    }
+
+    private boolean checkConfirmToAddBankStmt() {
+        // number of months based on expected submission date and seasonal flag, which have to be aligned with TMB Bank Statement
+        if (summaryView.getTmbBankStmtViewList() != null && summaryView.getTmbBankStmtViewList().size() > 0) {
+            List<BankStmtDetailView> detailViewList = summaryView.getTmbBankStmtViewList().get(0).getBankStmtDetailViewList();
+            int numberOfMonthsFromTMB = detailViewList.size();
+            int numberOfMonthsFromView = bankStmtControl.getNumberOfMonthsBankStmt(summaryView.getSeasonal());
+            // Check number of months
+            if (numberOfMonthsFromTMB != numberOfMonthsFromView) {
+                confirmMessageHeader = "Confirm message dialog";
+                confirmMessage = "Number of months are not aligned with TMB Bank Statement!";
+                RequestContext.getCurrentInstance().execute("confirmChangeScreenBankStmtDlg.show()");
+                return false;
+            }
+
+            bankStmtControl.sortAsOfDateBankStmtDetails(detailViewList, SortOrder.ASCENDING);
+            Date dateFromTMB = detailViewList.get(numberOfMonthsFromTMB - 1).getAsOfDate();
+            Date dateFromView = bankStmtControl.getLastMonthDateBankStmt(summaryView.getExpectedSubmitDate());
+            int lastMonthTMB = DateTimeUtil.getMonthOfDate(dateFromTMB);
+            int lastMonthFromView = DateTimeUtil.getMonthOfDate(dateFromView);
+            int yearOfLastMonthTMB = DateTimeUtil.getYearOfDate(dateFromTMB);
+            int yearOfLastMonthView = DateTimeUtil.getYearOfDate(dateFromView);
+            // Check last month Bank Statement
+            if (lastMonthTMB != lastMonthFromView || yearOfLastMonthTMB != yearOfLastMonthView) {
+                confirmMessageHeader = "Confirm message dialog";
+                confirmMessage = "The last of month is not mapped with TMB Bank Statement!";
+                RequestContext.getCurrentInstance().execute("confirmChangeScreenBankStmtDlg.show()");
+                return false;
+            }
+        }
+        return true;
     }
 
     private void passParamsToBankStmtDetail(BankStmtSummaryView bankStmtSumView, boolean isTmbBank, BankStmtView bankStmtView) {
+        log.debug("passParamsToBankStmtDetail() bankStmtSumView.id: {}, bankStmtSumView.seasonalFlag: {}, bankStmtSumView.expectedSubmitDate: {}, isTmbBank: {}, lastMonthDate: {}, numberOfMonths: {}, bankStmtView: {}",
+                bankStmtSumView.getId(), bankStmtSumView.getSeasonal(), bankStmtSumView.getExpectedSubmitDate(), isTmbBank, lastMonthDate, numberOfMonths, bankStmtView);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bankStmtSumView", bankStmtSumView);
         map.put("isTmbBank", isTmbBank);
@@ -348,5 +394,29 @@ public class BankStatementSummary implements Serializable {
 
     public void setCountRefresh(int countRefresh) {
         this.countRefresh = countRefresh;
+    }
+
+    public String getConfirmMessageHeader() {
+        return confirmMessageHeader;
+    }
+
+    public void setConfirmMessageHeader(String confirmMessageHeader) {
+        this.confirmMessageHeader = confirmMessageHeader;
+    }
+
+    public String getConfirmMessage() {
+        return confirmMessage;
+    }
+
+    public void setConfirmMessage(String confirmMessage) {
+        this.confirmMessage = confirmMessage;
+    }
+
+    public Date getToDay() {
+        return DateTimeUtil.getCurrentDateTH();
+    }
+
+    public void setToDay(Date toDay) {
+        this.toDay = toDay;
     }
 }

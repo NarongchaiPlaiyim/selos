@@ -26,6 +26,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.Flash;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -100,6 +101,8 @@ public class BankStatementDetail implements Serializable {
     private long stepId;
     private String userId;
 
+    private boolean bankAccTypeSelectRequired;
+
     public BankStatementDetail() {
     }
 
@@ -165,13 +168,14 @@ public class BankStatementDetail implements Serializable {
         }
 
         //Ascending: asOfDate
-        Collections.sort(bankStmtDetailViewList, new Comparator<BankStmtDetailView>() {
-            public int compare(BankStmtDetailView o1, BankStmtDetailView o2) {
-                if (o1.getAsOfDate() == null || o2.getAsOfDate() == null)
-                    return 0;
-                return o1.getAsOfDate().compareTo(o2.getAsOfDate());
-            }
-        });
+//        Collections.sort(bankStmtDetailViewList, new Comparator<BankStmtDetailView>() {
+//            public int compare(BankStmtDetailView o1, BankStmtDetailView o2) {
+//                if (o1.getAsOfDate() == null || o2.getAsOfDate() == null)
+//                    return 0;
+//                return o1.getAsOfDate().compareTo(o2.getAsOfDate());
+//            }
+//        });
+        bankStmtControl.sortAsOfDateBankStmtDetails(bankStmtDetailViewList, SortOrder.ASCENDING);
         return bankStmtDetailViewList;
     }
 
@@ -195,8 +199,8 @@ public class BankStatementDetail implements Serializable {
             bankViewList = bankTransform.getBankViewList(bankDAO.getListExcludeTMB());
         }
         bankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
-        //todo: get other bank account type
-        othBankAccTypeViewList = bankAccTypeTransform.getBankAccountTypeView(bankAccountTypeDAO.findAll());
+        //todo: get other bank account type list
+        othBankAccTypeViewList = new ArrayList<BankAccountTypeView>();
         accStatusViewList = accountStatusTransform.transformToViewList(accountStatusDAO.findAll());
     }
 
@@ -204,11 +208,11 @@ public class BankStatementDetail implements Serializable {
     public void onCreation() {
         preRender();
         initViewFormAndSelectItems();
+        onChangeBankAccTypeSelected();
     }
 
     public void onSave() {
         log.debug("onSave() bankStmtView: {}", bankStmtView);
-        // todo: validation
 
         // calculate Bank statement and detail
         bankStmtControl.bankStmtDetailCalculation(bankStmtView, summaryView.getSeasonal());
@@ -248,7 +252,6 @@ public class BankStatementDetail implements Serializable {
             }
         }
 
-
         try {
             // recalculate and save Bank statement summary
             bankStmtControl.bankStmtSumTotalCalculation(summaryView);
@@ -272,6 +275,23 @@ public class BankStatementDetail implements Serializable {
     public void onCancel() {
         log.debug("onCancel()");
         //initViewFormAndSelectItems();
+    }
+
+    public void onChangeBankAccTypeSelected() {
+        int bankAccTypeId = bankStmtView.getBankAccountTypeView().getId();
+        int otherAccType = bankStmtView.getOtherAccountType();
+
+        if (bankAccTypeId == 0 && otherAccType == 0) {
+            bankAccTypeSelectRequired = true;
+            return;
+        }
+
+        if (bankAccTypeId != 0) {
+            bankStmtView.setOtherAccountType(0);
+        } else {
+            bankStmtView.getBankAccountTypeView().setId(0);
+        }
+        bankAccTypeSelectRequired = false;
     }
 
     //-------------------- Getter/Setter --------------------
@@ -345,5 +365,13 @@ public class BankStatementDetail implements Serializable {
 
     public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public boolean isBankAccTypeSelectRequired() {
+        return bankAccTypeSelectRequired;
+    }
+
+    public void setBankAccTypeSelectRequired(boolean bankAccTypeSelectRequired) {
+        this.bankAccTypeSelectRequired = bankAccTypeSelectRequired;
     }
 }

@@ -304,13 +304,18 @@ public class BankStmtTransform extends Transform {
             bankStatement.setModifyBy(user);
             bankStatement.setModifyDate(now);
 
-            bankStatement.setBank(bankDAO.findById(bankStmtView.getBankView().getCode()));
+            bankStatement.setBank(bankStmtView.getBankView().getCode() != 0 ?
+                    bankDAO.findById(bankStmtView.getBankView().getCode()) : null);
             bankStatement.setBranch(bankStmtView.getBranchName());
-            bankStatement.setBankAccountType(bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()));
-            bankStatement.setAccountNo(bankStmtView.getAccountNumber());
+            bankStatement.setBankAccountType(bankStmtView.getBankAccountTypeView().getId() != 0 ?
+                    bankAccountTypeDAO.findById(bankStmtView.getBankAccountTypeView().getId()) : null);
+            bankStatement.setAccountNo(Util.removeNonDigit(bankStmtView.getAccountNumber()));
             bankStatement.setAccountName(bankStmtView.getAccountName());
             bankStatement.setOtherAccountType(bankStmtView.getOtherAccountType());
-            bankStatement.setAccountStatus(accountStatusDAO.findById(Integer.parseInt(bankStmtView.getAccountStatusView().getId())));
+
+            int accountStatusId = Integer.parseInt(bankStmtView.getAccountStatusView().getId());
+            bankStatement.setAccountStatus(accountStatusId != 0 ?
+                    accountStatusDAO.findById(accountStatusId) : null);
             bankStatement.setMainAccount(bankStmtView.getMainAccount());
             bankStatement.setAccountCharacteristic(bankStmtView.getAccountCharacteristic());
             bankStatement.setLimit(bankStmtView.getLimit());

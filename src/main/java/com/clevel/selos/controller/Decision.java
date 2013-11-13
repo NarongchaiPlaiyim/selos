@@ -45,7 +45,6 @@ public class Decision implements Serializable {
 
     //View
 
-
     public Decision() {
     }
 
