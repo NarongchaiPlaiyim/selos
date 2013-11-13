@@ -17,6 +17,7 @@ import com.clevel.selos.model.view.NCBDetailView;
 import com.clevel.selos.model.view.NCBInfoView;
 import com.clevel.selos.model.view.NcbView;
 import com.clevel.selos.system.Config;
+import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.Util;
 import org.slf4j.Logger;
 
@@ -1093,7 +1094,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
-                                                ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
+                                                ncbDetailView.setDateOfInfo(DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(creditInfoModel.getAsofdate())));
                                                 //set open date
                                                 String[] openDate = Util.splitSpace(creditInfoModel.getOpeneddate());
                                                 if (openDate != null && openDate.length > 0) {
@@ -1278,7 +1279,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                 AccountStatus accountStatus = accountStatusDAO.getJuristicByCode(creditInfoModel.getAccountstatus());
                                                 ncbDetailView.setAccountStatus(accountStatus);
                                                 //set date of info
-                                                ncbDetailView.setDateOfInfo(Util.strYYYYMMDDtoDateFormat(creditInfoModel.getAsofdate()));
+                                                ncbDetailView.setDateOfInfo(DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(creditInfoModel.getAsofdate())));
                                                 //set open date
                                                 String[] openDate = Util.splitSpace(creditInfoModel.getOpeneddate());
                                                 if (openDate != null && openDate.length > 0) {
