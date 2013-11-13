@@ -807,6 +807,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
+
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 individualDAO.delete(customer.getIndividual());
@@ -936,6 +946,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         log.info("savePreScreenInitial ::: customerDeleteList : {}", customerDeleteList);
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
+
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
 
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
@@ -1135,6 +1155,15 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getAddressesList() != null){
                 List<Address> addressList = customer.getAddressesList();
                 addressDAO.delete(addressList);
+            }
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
             }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
                 Individual individual = customer.getIndividual();

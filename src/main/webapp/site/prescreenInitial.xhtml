@@ -9,7 +9,8 @@
 <h:head>
     <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputScript library="js" name="custom.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -199,6 +200,7 @@
                 </p:commandButton>
                 <p:commandButton title="Remove"
                                  icon="ui-icon-trash"
+                                 rendered="#{borrowerItem.ncbFlag == 0}"
                                  oncomplete="confirmDeleteCustomerDlg.show()">
                     <f:setPropertyActionListener value="#{borrowerItem}"
                                                  target="#{prescreenMaker.selectCustomerInfoItem}"/>

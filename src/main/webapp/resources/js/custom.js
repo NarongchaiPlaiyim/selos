@@ -22,6 +22,15 @@ function checkSearchThaiID(obj){
     }
 }
 
+function checkJuristicThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenJrDlg').show();
+        }
+    }
+}
+
 function checkBorrowerThaiID(obj){
     if(obj != undefined){
         var id = obj.value;

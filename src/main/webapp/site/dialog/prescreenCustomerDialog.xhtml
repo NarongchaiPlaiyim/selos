@@ -3,7 +3,8 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 <p:panel id="customerDlgPanel" styleClass="panel-dialog">
     <h:form id="customerDlgForm">
         <div id="customer_relation">
@@ -125,14 +126,14 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableTMBCustomerId}" onclick="onClickReadonlyField(this, '#{prescreenMaker.enableTMBCustomerId}')" />
+                                     onclick="onClickReadonlyField(this, 1)"
+                                     readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     onclick="onClickReadonlyField(this, 1)"
+                                     readonly="true" />
                     </td>
                 </tr>
                 <tr>
@@ -220,11 +221,14 @@
                 <tr>
                     <td class="title">Date of Birth :</td>
                     <td>
-                        <p:calendar id="dlgCalBrDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
-                                    disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalBrDateOfBirth" showOn="button" showButtonPanel="true" navigator="true"
+                                        disabled="#{not prescreenMaker.enableCustomerForm}"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.dateOfBirth}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('borrower')}"
                                     process="@this"
@@ -233,7 +237,7 @@
                                     listener="#{prescreenMaker.onChangeDate('borrower')}"
                                     process="@this"
                                     update=":customerDlgForm:age"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td class="title right">Age :</td>
                     <td>
@@ -411,12 +415,14 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"/>
+                                     onclick="onClickReadonlyField(this, 1)"
+                                     readonly="true" />
                     </td>
                     <td class="title right">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"/>
+                                     onclick="onClickReadonlyField(this, 1)"
+                                     readonly="true"/>
                     </td>
                 </tr>
                 <tr>
@@ -496,11 +502,13 @@
                 <tr>
                     <td class="title">Date of Birth :</td>
                     <td>
-                        <p:calendar id="dlgCalSpDateOfBirth" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.spouse.dateOfBirth}"
-                                    pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalSpDateOfBirth" showOn="button" showButtonPanel="true" navigator="true"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.spouse.dateOfBirth}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('spouse')}"
                                     process="@form"
@@ -509,7 +517,7 @@
                                     listener="#{prescreenMaker.onChangeDate('spouse')}"
                                     process="@form"
                                     update=":customerDlgForm"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td class="title right">Age :</td>
                     <td>
@@ -631,9 +639,9 @@
                 <tr>
                     <td class="title" style="min-width: 144px; width:144px; max-width: 144px;">Registration ID :</td>
                     <td colspan="3">
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.registrationId}" styleClass="large" maxlength="13"
+                        <p:inputText id="dlgInputJrRegistrationText" value="#{prescreenMaker.borrowerInfo.registrationId}" styleClass="large" maxlength="13"
                                      required="#{not empty param[saveCustomerButton.clientId]}"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
+                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkJuristicThaiID(this)"
                                      readonly="#{not prescreenMaker.enableCitizenId}"/>
                     </td>
                 </tr>
@@ -641,14 +649,14 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableTMBCustomerId}"/>
+                                     onclick="onClickReadonlyField(this,1)"
+                                     readonly="true" />
                     </td>
                     <td class="title right">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
-                                     readonly="#{not prescreenMaker.enableCustomerForm}"/>
+                                     onclick="onClickReadonlyField(this, 1)"
+                                     readonly="true"/>
                     </td>
                 </tr>
                 <tr>
@@ -729,11 +737,14 @@
                 <tr>
                     <td class="title">Date of Register :</td>
                     <td>
-                        <p:calendar id="dlgCalBrDateOfRegister" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                    value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
-                                    disabled="#{not prescreenMaker.enableCustomerForm}" pattern="dd/MM/yyyy"
-                                    locale="th_TH"
-                                    yearRange="2440:3000">
+                        <clv:BECalendar id="dlgCalBrDateOfRegister" showOn="button" showButtonPanel="true" navigator="true"
+                                        disabled="#{not prescreenMaker.enableCustomerForm}"
+                                        yearRange="1950:2100"
+                                        mindate="01/01/1950"
+                                        maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                        pattern="dd/MM/yyyy"
+                                        value="#{prescreenMaker.borrowerInfo.dateOfRegister}"
+                                        locale="th_TH" >
                             <p:ajax event="change"
                                     listener="#{prescreenMaker.onChangeDate('juristic')}"
                                     process="@form"
@@ -742,7 +753,7 @@
                                     listener="#{prescreenMaker.onChangeDate('juristic')}"
                                     process="@form"
                                     update=":customerDlgForm"/>
-                        </p:calendar>
+                        </clv:BECalendar>
                     </td>
                     <td id="yearInBusiness" class="title right">Year In Business :</td>
                     <td>
