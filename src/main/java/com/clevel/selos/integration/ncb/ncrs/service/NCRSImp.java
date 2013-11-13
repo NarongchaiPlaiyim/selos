@@ -530,11 +530,11 @@ public class NCRSImp implements NCRS, Serializable {
             exportModel.setCountryCode("TH");
         }
         exportModel.setTitleCode(titleNameCode);
-        exportModel.setCustomerId(appRefNumber);
+        exportModel.setCustomerId(customerId);
         exportModel.setFirstName(firstName);
         exportModel.setLastName(lastName);
         exportModel.setJuristicName(null);
-        exportModel.setAppRefNumber(CANumber);
+        exportModel.setAppRefNumber(appRefNumber);
         exportModel.setCaution(null);
         exportModel.setReferenceTel(referenceTel);
         try {
