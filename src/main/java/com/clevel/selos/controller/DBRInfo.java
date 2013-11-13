@@ -111,7 +111,6 @@ public class DBRInfo implements Serializable {
     public void onCreation() {
         preRender();
         try{
-
             selectedItem = new DBRDetailView();
             dbr = new DBRView();
             dbr = dbrControl.getDBRByWorkCase(workCaseId);
@@ -121,7 +120,7 @@ public class DBRInfo implements Serializable {
                 dbrDetails = dbr.getDbrDetailViews();
             }
             loanAccountTypes = new ArrayList<LoanAccountTypeView>();
-            loanAccountTypes = loanAccountTypeControl.getListLoanTypeByCus(1);
+            loanAccountTypes = loanAccountTypeControl.getListLoanTypeByWorkcase(workCaseId);
             ncbDetails = new ArrayList<NCBDetailView>();
             ncbDetails = ncbInfoControl.getNCBForCalDBR(workCaseId);
         }catch (Exception e){
@@ -154,35 +153,7 @@ public class DBRInfo implements Serializable {
             }
         }
 
-        int loanType = selectedItem.getLoanAccountTypeView().getCalculateType();
-        final  BigDecimal month = BigDecimal.valueOf(12);
-        BigDecimal debtForCalculate = BigDecimal.ZERO;
-        //todo wait confirm Formula
-        BigDecimal totalAverage = BigDecimal.TEN;     // hardCode
-        switch (loanType){
-            case 1:  //normal
-                if(selectedItem.getInstallment().compareTo(BigDecimal.ZERO) != 0){  // Installment = 0
-                    debtForCalculate = debtForCalculate.add(selectedItem.getInstallment());
-                }else {
-                    debtForCalculate =  selectedItem.getLimit().divide(totalAverage);
-                    debtForCalculate = debtForCalculate.multiply(dbr.getDbrInterest());
-                    debtForCalculate = debtForCalculate.divide(month);
-                }
-                break;
-            case 2:    //*5%
-                debtForCalculate = selectedItem.getLimit().divide(totalAverage, 20, RoundingMode.HALF_UP);
-                debtForCalculate = debtForCalculate.multiply(BigDecimal.valueOf(5));
-                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 20, RoundingMode.HALF_UP);
-                break;
-            case 3:  // *10%
-                debtForCalculate = selectedItem.getLimit().divide(totalAverage, 20, RoundingMode.HALF_UP);
-                debtForCalculate = debtForCalculate.multiply(BigDecimal.valueOf(10));
-                debtForCalculate = debtForCalculate.divide(BigDecimal.valueOf(100), 20, RoundingMode.HALF_UP);
-                break;
-            default:
-            return;
-        }
-        selectedItem.setDebtForCalculate(debtForCalculate);
+        selectedItem.setDebtForCalculate(BigDecimal.ZERO);
         if (isUpdate) {
             dbrDetails.set(rowIndex, selectedItem);
         } else {
@@ -218,9 +189,8 @@ public class DBRInfo implements Serializable {
             dbr.setDbrDetailViews(dbrDetails);
             dbr.setWorkCaseId(workCaseId);
             dbr.setUserId(userId);
-            dbr.setTotalMonthDebtBorrower(getTotalMonthDebtBorrower());
-            dbr.setTotalMonthDebtRelated(getTotalMonthDebtRelated());
-            dbrControl.saveDBRInfo(dbr);
+
+            dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
             RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
@@ -245,7 +215,7 @@ public class DBRInfo implements Serializable {
         BigDecimal totalMonthDebtBorrower = BigDecimal.ZERO;
         if(ncbDetails != null && !ncbDetails.isEmpty()){
             for(NCBDetailView ncbDetailView : ncbDetails){
-                totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getOutstanding());
+                totalMonthDebtBorrower = totalMonthDebtBorrower.add(ncbDetailView.getDebtForCalculate());
             }
         }
         return totalMonthDebtBorrower;
