@@ -37,8 +37,8 @@ public class ContactRecordDetail {
     @Column(name="next_calling_time")
     private String nextCallingTime;
 
-    @JoinColumn(name="reason")
-    private String reason;
+    @Column(name="reason")
+    private int reason;
 
     @Column(name="remark")
     private String remark;
@@ -69,6 +69,10 @@ public class ContactRecordDetail {
     @ManyToOne
     @JoinColumn(name = "appraisal_id")
     private Appraisal appraisal;
+
+    @ManyToOne
+    @JoinColumn(name = "workcase_id")
+    private WorkCase workCase;
 
 
     public long getId() {
@@ -135,11 +139,11 @@ public class ContactRecordDetail {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public String getReason() {
+    public int getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(int reason) {
         this.reason = reason;
     }
 
@@ -207,6 +211,14 @@ public class ContactRecordDetail {
         this.appraisal = appraisal;
     }
 
+    public WorkCase getWorkCase() {
+        return workCase;
+    }
+
+    public void setWorkCase(WorkCase workCase) {
+        this.workCase = workCase;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -227,6 +239,7 @@ public class ContactRecordDetail {
                 .append("modifyBy", modifyBy)
                 .append("customerAcceptance", customerAcceptance)
                 .append("appraisal", appraisal)
+                .append("workCase", workCase)
                 .toString();
     }
 }
