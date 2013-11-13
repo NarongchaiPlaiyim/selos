@@ -2,10 +2,7 @@ package com.clevel.selos.businesscontrol;
 
 import com.clevel.selos.dao.master.*;
 import com.clevel.selos.dao.working.*;
-import com.clevel.selos.integration.BPMInterface;
-import com.clevel.selos.integration.BRMSInterface;
-import com.clevel.selos.integration.RLOSInterface;
-import com.clevel.selos.integration.RMInterface;
+import com.clevel.selos.integration.*;
 import com.clevel.selos.integration.brms.model.request.PreScreenRequest;
 import com.clevel.selos.integration.brms.model.response.PreScreenResponse;
 import com.clevel.selos.integration.corebanking.model.corporateInfo.CorporateResult;
@@ -19,11 +16,11 @@ import com.clevel.selos.integration.ncb.ncrs.ncrsmodel.*;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
 import com.clevel.selos.integration.rlos.csi.model.CSIResult;
-import com.clevel.selos.model.ActionResult;
-import com.clevel.selos.model.BorrowerType;
-import com.clevel.selos.model.RadioValue;
+import com.clevel.selos.model.*;
 import com.clevel.selos.model.db.master.*;
+import com.clevel.selos.model.db.master.DocumentType;
 import com.clevel.selos.model.db.working.*;
+import com.clevel.selos.model.db.working.NCB;
 import com.clevel.selos.model.view.*;
 import com.clevel.selos.transform.*;
 import com.clevel.selos.transform.business.CustomerBizTransform;
@@ -42,8 +39,8 @@ import java.util.List;
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     PrescreenTransform prescreenTransform;
     @Inject
@@ -111,6 +108,11 @@ public class PrescreenBusinessControl extends BusinessControl {
     NCBDAO ncbDAO;
     @Inject
     CustomerEntityDAO customerEntityDAO;
+    @Inject
+    CustomerAccountDAO customerAccountDAO;
+    @Inject
+    CustomerAccountNameDAO customerAccountNameDAO;
+
 
     @Inject
     RMInterface rmInterface;
@@ -276,10 +278,13 @@ public class PrescreenBusinessControl extends BusinessControl {
     }
 
     // *** Function for NCB *** //
-    public List<NcbView> getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
-        List<NcbView> ncbViewList = new ArrayList<NcbView>();
+    public NCBOutputView getNCBFromNCB(List<CustomerInfoView> customerInfoViewList, String userId, long workCasePreScreenId) throws Exception{
+        //List<NcbView> ncbViewList = new ArrayList<NcbView>();
+        NCBOutputView ncbOutputView = new NCBOutputView();
+
         NCRSInputModel ncrsInputModel = null;
         ArrayList<NCRSModel> ncrsModelList = new ArrayList<NCRSModel>();
+
         NCCRSInputModel nccrsInputModel = null;
         ArrayList<NCCRSModel> nccrsModelList = new ArrayList<NCCRSModel>();
 
@@ -347,6 +352,7 @@ public class PrescreenBusinessControl extends BusinessControl {
                 nccrsModelList.add(nccrsModel);
             }
         }
+
         log.debug("getNCBFromNCB ::: userId : {}, appNumber : {}, caNumber : {}, phoneNumber : {}", user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber());
         if(ncrsModelList.size() > 0){
             ncrsInputModel = new NCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), ncrsModelList);
@@ -356,171 +362,110 @@ public class PrescreenBusinessControl extends BusinessControl {
             nccrsInputModel = new NCCRSInputModel(user.getId(), workCasePrescreen.getAppNumber(), workCasePrescreen.getCaNumber(), user.getPhoneNumber(), nccrsModelList);
         }
 
-        //Get NCB for Individual
-            //ncbInterface.request();
-        //Get NCB for Juristic
+        //*** TRY TO CHECK NCB ***
         try{
             boolean checkNCBComplete = false;
             String exceptionMessage = "";
+
             if(ncrsInputModel != null){
                 log.info("getNCBFromNCB ::: ncrsInputModel : {}", ncrsInputModel);
                 List<NCRSOutputModel> ncrsOutputModelList = ncbInterface.request(ncrsInputModel);
-                log.info("getNCBFromNCB ::: ncrsOutputModelList {}", ncrsOutputModelList);
-                List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncrsOutputModelList);
-                log.info("getNCBFromNCB ::: ncbIndividualViewList : {}", ncbIndividualViewList);
+                log.info("getNCBFromNCB ::: ncrsOutputModel : {}", ncrsOutputModelList);
+                ncbOutputView.setNcrsOutputModelList(ncrsOutputModelList);
+                //**** END FUNCTION ****//
+                //*** Return ncbOutputView to Controller ***//
+            } else if(nccrsInputModel != null){
+                log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
+                List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
+                log.info("getNCBFromNCB ::: nccrsOutputModel : {}", nccrsOutputModelList);
+                ncbOutputView.setNccrsOutputModelList(nccrsOutputModelList);
+                //**** End function ****//
+                //*** Return ncbOutputView to Controller
+            }
+
+        } catch (Exception ex){
+            log.error("Exception : ", ex);
+            throw ex;
+        }
+
+        return ncbOutputView;
+    }
+
+    public List<NcbView> getNCBData(NCBOutputView ncbOutputView, long workCasePreScreenId) throws Exception{
+        List<NcbView> ncbViewList = new ArrayList<NcbView>();
+        log.debug("getNCBData ::: ncbOutputView : {}", ncbOutputView);
+        try{
+            if(ncbOutputView.getNcrsOutputModelList() != null && ncbOutputView.getNcrsOutputModelList().size() > 0){
+                log.info("getNCBData ::: ncrsOutputModelList {}", ncbOutputView.getNcrsOutputModelList());
+                List<NcbView> ncbIndividualViewList = ncbBizTransform.transformIndividual(ncbOutputView.getNcrsOutputModelList());
+
+                log.info("getNCBData ::: ncbIndividualViewList : {}", ncbIndividualViewList);
                 if(ncbIndividualViewList != null){
                     for(NcbView item : ncbIndividualViewList){
                         ncbViewList.add(item);
                     }
                 }
 
-
-                //TODO Check CSI
+                //*** Save NCB Data to Database *** //
                 for(NcbView ncbView : ncbIndividualViewList){
-                    log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
-                    log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
-
-                    //need to save ncb if check NCB Success
                     if(ncbView.getResult() == ActionResult.SUCCESS){
                         Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
-                        log.info("findByCitizenId customer : {}", customer);
+                        log.info("saving ncb (individual) data ... findByCitizenId customer : {}", customer);
                         if(customer == null ){
                             customer = new Customer();
                         }
 
-                        log.debug("ncbView before transform : {}",ncbView);
+                        log.debug("saving ncb (individual) data ... ncbView before transform : {}", ncbView);
                         NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
                         List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
-                        //save NCB
-                        //transform NCB
-                        NCB ncb = ncbTransform.transformToModel(ncbInfoView);
-                        ncb.setCustomer(customer);
-                        ncbDAO.persist(ncb);
-                        //transform NCBDetail list
-                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
-                            List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
-                            ncbDetailDAO.persist(ncbDetailList);
+                        //*** Save NCB ,, Transform NCB ***//
+                        if(ncbInfoView != null){
+                            NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+                            log.debug("saving ncb (individual) data ... ncbView after transform : {}", ncb);
+                            ncb.setCustomer(customer);
+                            ncbDAO.persist(ncb);
+
+                            if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
+                                List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
+                                ncbDetailDAO.persist(ncbDetailList);
+                            }
                         }
-
-                        CSIInputData csiInputData = new CSIInputData();
-                        csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
-                        csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
-
-                        log.info("getCSI ::: csiInputData : {}", csiInputData);
-                        CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
-                        log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
-                        log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
-
-                        //Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
-                        //Customer customer = customerDAO.findById(new Long(151));
-                        log.info("findByCitizenId customer : {}", customer);
-
-                        if(customer == null ){
-                            customer = new Customer();
-                        }
-
-                        List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
-
-                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
-                            log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
-                            CustomerCSI customerCSI = new CustomerCSI();
-                            customerCSI.setCustomer(customer);
-                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                            customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("F");
-                            customerCSIList.add(customerCSI);
-                        }
-
-                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
-                            log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
-                            CustomerCSI customerCSI = new CustomerCSI();
-                            customerCSI.setCustomer(customer);
-                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                            customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("P");
-                            customerCSIList.add(customerCSI);
-                        }
-                        log.info("getCSI ::: customerCSIList : {}", customerCSIList);
-                        if(customerCSIList != null && customerCSIList.size() > 0){
-                            log.info("getCSI ::: persist item");
-                            customerCSIDAO.persist(customerCSIList);
-                        }
-                        log.info("getCSI ::: end...");
                     }
                 }
-            }
-
-            if(nccrsInputModel != null){
-                log.info("getNCBFromNCB ::: nccrsInputModel : {}", nccrsInputModel);
-                List<NCCRSOutputModel> nccrsOutputModelList = ncbInterface.request(nccrsInputModel);
-                log.info("getNCBFromNCB ::: nccrsOutputModelList : {}", nccrsOutputModelList);
-                List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(nccrsOutputModelList);
-                log.info("getNCBFromNCB ::: ncbJuristicViewList : {}", ncbJuristicViewList);
+            } else if(ncbOutputView.getNccrsOutputModelList() != null && ncbOutputView.getNccrsOutputModelList().size() > 0){
+                log.info("getNCBData ::: nccrsOutputModelList : {}", ncbOutputView.getNccrsOutputModelList());
+                List<NcbView> ncbJuristicViewList = ncbBizTransform.transformJuristic(ncbOutputView.getNccrsOutputModelList());
+                log.info("getNCBData ::: ncbJuristicViewList : {}", ncbJuristicViewList);
                 if(ncbJuristicViewList != null){
                     for(NcbView item : ncbJuristicViewList){
                         ncbViewList.add(item);
                     }
                 }
 
-                //TODO Check CSI
+                //*** Save NCB Data to Database ***//
                 for(NcbView ncbView : ncbJuristicViewList){
-                    log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
-                    log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
+                    Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+                    log.info("saving ncb (juristic) data ... findByCitizenId customer : {}", customer);
+                    if(customer == null ){
+                        customer = new Customer();
+                    }
 
-                    if(ncbView.getResult() == ActionResult.SUCCESS){
-                        Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
-                        if(customer == null ){
-                            customer = new Customer();
-                        }
+                    log.debug("saving ncb (juristic) data ... ncbView before transform : {}", ncbView);
+                    NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
+                    List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
 
-                        log.debug("ncbView before transform : {}",ncbView);
-                        NCBInfoView ncbInfoView = ncbView.getNcbInfoView();
-                        List<NCBDetailView> ncbDetailViewList = ncbView.getNCBDetailViews();
-
-                        //save NCB
-                        //transform NCB
+                    //save NCB,, transform NCB
+                    if(ncbInfoView != null){
                         NCB ncb = ncbTransform.transformToModel(ncbInfoView);
+                        log.debug("saving ncb (juristic) data ... ncbView after transform : {}", ncb);
                         ncb.setCustomer(customer);
                         ncbDAO.persist(ncb);
+
                         //transform NCBDetail list
-                        if(ncbDetailViewList!=null && ncbDetailViewList.size()>0){
+                        if(ncbDetailViewList != null && ncbDetailViewList.size() > 0){
                             List<NCBDetail> ncbDetailList = ncbDetailTransform.transformToModel(ncbDetailViewList,ncb);
                             ncbDetailDAO.persist(ncbDetailList);
-                        }
-
-                        CSIInputData csiInputData = new CSIInputData();
-                        csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
-                        csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
-
-                        log.info("getCSI ::: csiInputData : {}", csiInputData);
-                        CSIResult csiResult = rlosInterface.getCSIData(userId, csiInputData);
-                        log.info("getCSI ::: csiResult.FullMatched : {}", csiResult.getWarningCodeFullMatched());
-                        log.info("getCSI ::: csiResult.PartialMatched : {}", csiResult.getWarningCodePartialMatched());
-
-                        //Customer customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
-
-                        List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
-
-                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
-                            CustomerCSI customerCSI = new CustomerCSI();
-                            customerCSI.setCustomer(customer);
-                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                            customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("F");
-                            customerCSIList.add(customerCSI);
-                        }
-
-                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
-                            CustomerCSI customerCSI = new CustomerCSI();
-                            customerCSI.setCustomer(customer);
-                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
-                            customerCSI.setWarningDate(csiData.getDateWarningCode());
-                            customerCSI.setMatchedType("P");
-                            customerCSIList.add(customerCSI);
-                        }
-                        if(customerCSIList != null && customerCSIList.size() >0){
-                            customerCSIDAO.persist(customerCSIList);
                         }
                     }
                 }
@@ -530,6 +475,215 @@ public class PrescreenBusinessControl extends BusinessControl {
         }
 
         return ncbViewList;
+    }
+
+    public List<CSIResult> getCSIData(List<NcbView> ncbViewList, int customerEntityId, String userId, long workCasePreScreenId){
+        //TODO Check CSI
+        List<CSIResult> csiResultList = new ArrayList<CSIResult>();
+        for(NcbView ncbView : ncbViewList){
+            log.info("getCSI ::: accountInfoIdList : {}", ncbView.getAccountInfoIdList());
+            log.info("getCSI ::: accountInfoNameList : {}", ncbView.getAccountInfoNameList());
+
+            //need to save ncb if check NCB Success
+            if(ncbView.getResult() == ActionResult.SUCCESS){
+                Customer customer = new Customer();
+                if(customerEntityId == 1){
+                    customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                }else if(customerEntityId == 2){
+                    customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+                }
+                log.info("findByCitizenId customer : {}", customer);
+                if(customer == null ){
+                    customer = new Customer();
+                }
+
+                CSIInputData csiInputData = new CSIInputData();
+                csiInputData.setIdModelList(ncbView.getAccountInfoIdList());
+                csiInputData.setNameModelList(ncbView.getAccountInfoNameList());
+
+                log.info("getCSI ::: csiInputData : {}", csiInputData);
+                CSIResult csiResult = new CSIResult();
+                try{
+                    csiResult = rlosInterface.getCSIData(userId, csiInputData);
+                    csiResult.setIdNumber(ncbView.getIdNumber());
+                    csiResult.setActionResult(ActionResult.SUCCESS);
+                    csiResult.setResultReason("SUCCESS");
+                    csiResultList.add(csiResult);
+                } catch (Exception ex){
+                    log.debug("getCSI ::: fail to get CSI");
+                    csiResult = new CSIResult();
+                    csiResult.setIdNumber(ncbView.getIdNumber());
+                    csiResult.setActionResult(ActionResult.FAILED);
+                    csiResult.setResultReason(ex.getMessage());
+                    csiResultList.add(csiResult);
+                }
+
+                //Customer customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                //Customer customer = customerDAO.findById(new Long(151));
+                log.debug("getCSIData ::: csiResult : {}", csiResult);
+                log.info("findByCitizenId customer : {}", customer);
+
+                if(customer == null ){
+                    customer = new Customer();
+                }
+
+                List<CustomerCSI> customerCSIs = customerCSIDAO.getCustomerCSIByCustomer(customer);
+                customerCSIDAO.delete(customerCSIs);
+
+                List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+
+                if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
+                    for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                        log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
+                        CustomerCSI customerCSI = new CustomerCSI();
+                        customerCSI.setCustomer(customer);
+                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                        customerCSI.setWarningDate(csiData.getDateWarningCode());
+                        customerCSI.setMatchedType("F");
+                        customerCSIList.add(customerCSI);
+                    }
+                }
+
+                if(csiResult != null && csiResult.getWarningCodePartialMatched() != null && csiResult.getWarningCodePartialMatched().size() > 0){
+                    for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                        log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
+                        CustomerCSI customerCSI = new CustomerCSI();
+                        customerCSI.setCustomer(customer);
+                        customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                        customerCSI.setWarningDate(csiData.getDateWarningCode());
+                        customerCSI.setMatchedType("P");
+                        customerCSIList.add(customerCSI);
+                    }
+                }
+
+                log.info("getCSI ::: customerCSIList : {}", customerCSIList);
+                if(customerCSIList != null && customerCSIList.size() > 0){
+                    log.info("getCSI ::: persist item");
+                    customerCSIDAO.persist(customerCSIList);
+                }
+                log.info("getCSI ::: end...");
+
+            }
+        }
+
+        return csiResultList;
+    }
+
+    public List<CSIResult> getCSIDataWithOutNCB(List<CustomerInfoView> customerInfoViewList, int customerEntityId, String userId, long workCasePreScreenId){
+        List<CSIResult> csiResultList = new ArrayList<CSIResult>();
+        long customerId = 0;
+        for(CustomerInfoView customerInfoView : customerInfoViewList){
+            int csiFlag = 0;
+            customerId = customerInfoView.getId();
+            csiFlag = customerInfoView.getCsiFlag();
+            log.debug("getCSIDataWithOutNCB ::: customerId : {}", customerId);
+            log.debug("getCSIDataWithOutNCB ::: csiFlag : {}", csiFlag);
+            if(customerId != 0 && csiFlag == 0){
+                //TODO Find AccountID to Search CSI
+                List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomerId(customerId);
+                log.debug("getCSIDataWithOutNCB ::: customerAccountList : {}", customerAccountList);
+                //TODO Find AccountName to Search CSI
+                List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomerId(customerId);
+                log.debug("getCSIDataWithOutNCB ::: customerAccountNameList : {}", customerAccountNameList);
+
+                List<AccountInfoId> accountInfoIdList = new ArrayList<AccountInfoId>();
+                for(CustomerAccount customerAccount : customerAccountList){
+                    AccountInfoId accountInfoId = new AccountInfoId();
+                    accountInfoId.setIdNumber(customerAccount.getIdNumber());
+                    if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 1){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CITIZEN_ID);
+                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 2){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.PASSPORT);
+                    }else if(customerAccount.getDocumentType() != null && customerAccount.getDocumentType().getId() == 3){
+                        accountInfoId.setDocumentType(com.clevel.selos.model.DocumentType.CORPORATE_ID);
+                    }
+                    accountInfoIdList.add(accountInfoId);
+                }
+
+                List<AccountInfoName> accountInfoNameList = new ArrayList<AccountInfoName>();
+                for(CustomerAccountName customerAccountName : customerAccountNameList){
+                    AccountInfoName accountInfoName = new AccountInfoName();
+
+                    accountInfoName.setNameTh(customerAccountName.getNameTh());
+                    accountInfoName.setNameEn(customerAccountName.getNameEn());
+                    accountInfoName.setSurnameTh(customerAccountName.getSurnameTh());
+                    accountInfoName.setSurnameEn(customerAccountName.getSurnameEn());
+
+                    accountInfoNameList.add(accountInfoName);
+                }
+
+                log.debug("getCSIDataWithOutNCB ::: accountInfoIdList : {}", accountInfoIdList);
+                log.debug("getCSIDataWithOutNCB ::: accountInfoNameList : {}", accountInfoNameList);
+
+                CSIInputData csiInputData = new CSIInputData();
+                csiInputData.setIdModelList(accountInfoIdList);
+                csiInputData.setNameModelList(accountInfoNameList);
+
+                log.info("getCSI ::: csiInputData : {}", csiInputData);
+                CSIResult csiResult = new CSIResult();
+                String idNumber = "";
+                Customer customer = new Customer();
+                if(customerEntityId == 1){
+                    idNumber = customerInfoView.getCitizenId();
+                    customer = individualDAO.findByCitizenId(idNumber, workCasePreScreenId);
+                } else if (customerEntityId == 2){
+                    idNumber = customerInfoView.getRegistrationId();
+                    customer = juristicDAO.findByRegistrationId(idNumber, workCasePreScreenId);
+                }
+                try{
+                    csiResult = rlosInterface.getCSIData(userId, csiInputData);
+
+                    csiResult.setIdNumber(idNumber);
+                    csiResult.setActionResult(ActionResult.SUCCESS);
+                    csiResult.setResultReason("SUCCESS");
+                    csiResultList.add(csiResult);
+
+                    List<CustomerCSI> customerCSIList = new ArrayList<CustomerCSI>();
+
+                    if(csiResult != null && csiResult.getWarningCodeFullMatched() != null && csiResult.getWarningCodeFullMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodeFullMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodeFullMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("F");
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    if(csiResult != null && csiResult.getWarningCodePartialMatched() != null && csiResult.getWarningCodePartialMatched().size() > 0){
+                        for(CSIData csiData : csiResult.getWarningCodePartialMatched()){
+                            log.info("getCSI ::: csiResult.getWarningCodePartialMatched : {}", csiData);
+                            CustomerCSI customerCSI = new CustomerCSI();
+                            customerCSI.setCustomer(customer);
+                            customerCSI.setWarningCode(warningCodeDAO.findByCode(csiData.getWarningCode()));
+                            customerCSI.setWarningDate(csiData.getDateWarningCode());
+                            customerCSI.setMatchedType("P");
+                            customerCSIList.add(customerCSI);
+                        }
+                    }
+
+                    log.info("getCSI ::: customerCSIList : {}", customerCSIList);
+                    if(customerCSIList != null && customerCSIList.size() > 0){
+                        log.info("getCSI ::: persist item");
+                        customerCSIDAO.persist(customerCSIList);
+                    }
+                    log.info("getCSI ::: end...");
+
+                } catch (Exception ex){
+                    log.error("getCSI ::: error ", ex);
+                    csiResult = new CSIResult();
+                    csiResult.setIdNumber(idNumber);
+                    csiResult.setActionResult(ActionResult.FAILED);
+                    csiResult.setResultReason(ex.getMessage());
+                    csiResultList.add(csiResult);
+                }
+
+            }
+        }
+
+        return csiResultList;
     }
 
     public List<PreScreenResponseView> getPreScreenCustomerResult(List<PreScreenResponseView> prescreenResponseViews){
@@ -653,6 +807,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
+
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 individualDAO.delete(customer.getIndividual());
@@ -731,10 +895,10 @@ public class PrescreenBusinessControl extends BusinessControl {
                     modifyCount = modifyCount + 1;
                 }
             }
-            if(tmpPrescreenView.isTcg() != currentPrescreenView.isTcg()){
+            if(tmpPrescreenView.getTcg() != currentPrescreenView.getTcg()){
                 modifyCount = modifyCount + 1;
             }
-            if(tmpPrescreenView.isRefinance() != currentPrescreenView.isRefinance()){
+            if(tmpPrescreenView.getRefinance() != currentPrescreenView.getRefinance()){
                 modifyCount = modifyCount + 1;
             }
             if(tmpPrescreenView.getRefinanceBank() != null && currentPrescreenView.getRefinanceBank() != null){
@@ -783,6 +947,16 @@ public class PrescreenBusinessControl extends BusinessControl {
         for(Customer customer : customerDeleteList){
             addressDAO.delete(customer.getAddressesList());
 
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
+            }
+
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
                 //Individual
                 individualDAO.delete(customer.getIndividual());
@@ -815,21 +989,24 @@ public class PrescreenBusinessControl extends BusinessControl {
 
             if(customer.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                 if(customer.getIndividual().getMaritalStatus() != null && customer.getIndividual().getMaritalStatus().getId() == 2){
-                    Customer spouse = new Customer();
-                    spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
-                    spouse.setIsSpouse(1);
-                    spouse.setSpouseId(0);
-                    customerDAO.persist(spouse);
-                    customer.setSpouseId(spouse.getId());
-                    customerDAO.persist(customer);
+                    if(customerInfoView.getSpouse() != null){
+                        if(customerInfoView.getSpouse().getDocumentType() != null && customerInfoView.getSpouse().getDocumentType().getId() != 0){
+                            Customer spouse = new Customer();
+                            spouse = customerTransform.transformToModel(customerInfoView.getSpouse(), workCasePrescreen, null);
+                            spouse.setIsSpouse(1);
+                            spouse.setSpouseId(0);
+                            customerDAO.persist(spouse);
+                            customer.setSpouseId(spouse.getId());
+                            customerDAO.persist(customer);
 
-                    if(spouse.getAddressesList() != null){
-                        addressDAO.persist(spouse.getAddressesList());
+                            if(spouse.getAddressesList() != null){
+                                addressDAO.persist(spouse.getAddressesList());
+                            }
+
+                            Individual individual = spouse.getIndividual();
+                            individualDAO.persist(individual);
+                        }
                     }
-
-                    Individual individual = spouse.getIndividual();
-                    individualDAO.persist(individual);
-
                 }
             }
         }
@@ -855,7 +1032,87 @@ public class PrescreenBusinessControl extends BusinessControl {
         return modifyFlag;
     }
 
-    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, long workCasePreScreenId){
+    public void savePreScreenChecker(List<CustomerInfoView> customerInfoViews, List<NcbView> ncbViewList, int customerEntityId, long workCasePreScreenId){
+        WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
+        List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
+
+        log.info("saveCustomer ::: customerList : {}", customerList);
+        for(Customer customer : customerList){
+            customerDAO.persist(customer);
+            if(customer.getAddressesList() != null){
+                //addressDAO.persist(customer.getAddressesList());
+            }
+            if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1) {
+                //Individual
+                Individual individual = customer.getIndividual();
+                individualDAO.persist(individual);
+            } else if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 2) {
+                //Juristic
+                Juristic juristic = customer.getJuristic();
+                juristicDAO.persist(juristic);
+            }
+        }
+
+        log.debug("savePreScreenChecker ::: ncbViewList : {}", ncbViewList);
+        for(NcbView ncbView : ncbViewList){
+            if(ncbView.getResult() == ActionResult.SUCCESS){
+                Customer customer = null;
+
+                if(customerEntityId == 1){
+                    customer = individualDAO.findByCitizenId(ncbView.getIdNumber(), workCasePreScreenId);
+                    log.debug("savePreScreenChecker ::: findCustomerIndividual : {}", customer);
+                }else if(customerEntityId == 2){
+                    customer = juristicDAO.findByRegistrationId(ncbView.getIdNumber(), workCasePreScreenId);
+                    log.debug("savePreScreenChecker ::: findCustomerJuristic : {}", customer);
+                }
+
+                if(customer != null){
+                    log.debug("savePreScreenChecker ::: ncbView.getAccountInfoIdList() : {}", ncbView.getAccountInfoIdList());
+
+                    List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+                    customerAccountDAO.delete(customerAccountList);
+
+                    if(ncbView.getAccountInfoIdList() != null && ncbView.getAccountInfoIdList().size() > 0){
+                        for(AccountInfoId accountInfoId : ncbView.getAccountInfoIdList()){
+                            CustomerAccount customerAccount = new CustomerAccount();
+                            DocumentType documentType = null;
+                            if(accountInfoId.getDocumentType() == com.clevel.selos.model.DocumentType.CITIZEN_ID){
+                                documentType = documentTypeDAO.findById(1);
+                            } else if(accountInfoId.getDocumentType() == com.clevel.selos.model.DocumentType.PASSPORT){
+                                documentType = documentTypeDAO.findById(2);
+                            } else if(accountInfoId.getDocumentType() == com.clevel.selos.model.DocumentType.CORPORATE_ID){
+                                documentType = documentTypeDAO.findById(3);
+                            }
+                            customerAccount.setCustomer(customer);
+                            customerAccount.setDocumentType(documentType);
+                            customerAccount.setIdNumber(accountInfoId.getIdNumber());
+                            customerAccountDAO.persist(customerAccount);
+                        }
+                    }
+
+                    log.debug("savePreScreenChecker ::: ncbView.getAccountInfoNameList() : {}", ncbView.getAccountInfoNameList());
+
+                    List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+                    customerAccountNameDAO.delete(customerAccountNameList);
+
+                    if(ncbView.getAccountInfoNameList() != null && ncbView.getAccountInfoNameList().size() > 0){
+                        for(AccountInfoName accountInfoName : ncbView.getAccountInfoNameList()){
+                            CustomerAccountName customerAccountName = new CustomerAccountName();
+                            customerAccountName.setCustomer(customer);
+                            customerAccountName.setNameTh(accountInfoName.getNameTh());
+                            customerAccountName.setSurnameTh(accountInfoName.getSurnameTh());
+                            customerAccountName.setNameEn(accountInfoName.getNameEn());
+                            customerAccountName.setSurnameEn(accountInfoName.getSurnameEn());
+                            customerAccountNameDAO.persist(customerAccountName);
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void savePreScreenCheckerOnlyCSI(List<CustomerInfoView> customerInfoViews, int customerEntityId, long workCasePreScreenId){
         WorkCasePrescreen workCasePrescreen = workCasePrescreenDAO.findById(workCasePreScreenId);
         List<Customer> customerList = customerTransform.transformToModelList(customerInfoViews, workCasePrescreen, null);
 
@@ -898,6 +1155,15 @@ public class PrescreenBusinessControl extends BusinessControl {
             if(customer.getAddressesList() != null){
                 List<Address> addressList = customer.getAddressesList();
                 addressDAO.delete(addressList);
+            }
+            List<CustomerAccount> customerAccountList = customerAccountDAO.getCustomerAccountByCustomer(customer);
+            if(customerAccountList != null){
+                customerAccountDAO.delete(customerAccountList);
+            }
+
+            List<CustomerAccountName> customerAccountNameList = customerAccountNameDAO.getCustomerAccountNameByCustomer(customer);
+            if(customerAccountNameList != null){
+                customerAccountNameDAO.delete(customerAccountNameList);
             }
             if(customer.getCustomerEntity() != null && customer.getCustomerEntity().getId() == 1){
                 Individual individual = customer.getIndividual();

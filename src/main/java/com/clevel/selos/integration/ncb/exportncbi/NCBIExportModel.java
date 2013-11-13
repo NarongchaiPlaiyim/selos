@@ -19,7 +19,7 @@ public class NCBIExportModel implements Serializable {
     private String firstName;
     private String lastName;
     private String juristicName;
-    private String caNumber;
+    private String appRefNumber;
     private String caution;
     private String referenceTel;
     private String inquiryStatus;
@@ -126,12 +126,12 @@ public class NCBIExportModel implements Serializable {
         this.juristicName = juristicName;
     }
 
-    public String getCaNumber() {
-        return caNumber;
+    public String getAppRefNumber() {
+        return appRefNumber;
     }
 
-    public void setCaNumber(String caNumber) {
-        this.caNumber = caNumber;
+    public void setAppRefNumber(String appRefNumber) {
+        this.appRefNumber = appRefNumber;
     }
 
     public String getCaution() {
@@ -197,7 +197,7 @@ public class NCBIExportModel implements Serializable {
                 .append("firstName", firstName)
                 .append("lastName", lastName)
                 .append("juristicName", juristicName)
-                .append("caNumber", caNumber)
+                .append("appRefNumber", appRefNumber)
                 .append("caution", caution)
                 .append("referenceTel", referenceTel)
                 .append("inquiryStatus", inquiryStatus)

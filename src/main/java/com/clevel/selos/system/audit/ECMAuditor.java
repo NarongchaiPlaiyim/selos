@@ -2,6 +2,7 @@ package com.clevel.selos.system.audit;
 
 import com.clevel.selos.dao.audit.ECMActivityDAO;
 import com.clevel.selos.integration.ECM;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.ActionResult;
 import com.clevel.selos.model.db.audit.ECMActivity;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.util.Date;
 @ECM
 public class ECMAuditor implements SystemAuditor {
     @Inject
+    @SELOS
     Logger log;
     @Inject
     ECMActivityDAO ecmActivityDAO;

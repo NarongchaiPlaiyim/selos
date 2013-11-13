@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.rlos.csi;
 
+import com.clevel.selos.exception.RLOSInterfaceException;
 import com.clevel.selos.integration.RLOS;
 import com.clevel.selos.integration.rlos.csi.model.CSIData;
 import com.clevel.selos.integration.rlos.csi.model.CSIInputData;
@@ -100,6 +101,8 @@ public class CSIService implements Serializable {
             csiResult.setWarningCodeFullMatched(warningCodeFullMatched);
             csiResult.setWarningCodePartialMatched(warningCodePartialMatched);
 
+        } catch (RLOSInterfaceException e){
+            throw e;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

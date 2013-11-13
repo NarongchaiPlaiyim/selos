@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class CreditScoreModel {
+import java.io.Serializable;
+
+public class CreditScoreModel implements Serializable {
     private String score;
     private String scoregrade;
     private String odds;

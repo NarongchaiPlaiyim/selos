@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ClosedAccountsAccountCreditInfoModel {
+import java.io.Serializable;
+
+public class ClosedAccountsAccountCreditInfoModel implements Serializable {
     private String credittype;
     private String creditor;
     private String creditortype;

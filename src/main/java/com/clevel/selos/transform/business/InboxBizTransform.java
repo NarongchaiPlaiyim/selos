@@ -4,6 +4,7 @@ import com.clevel.selos.dao.master.StepDAO;
 import com.clevel.selos.dao.working.WorkCaseDAO;
 import com.clevel.selos.dao.working.WorkCasePrescreenDAO;
 import com.clevel.selos.filenet.bpm.services.dto.CaseDTO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.Step;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.db.working.WorkCasePrescreen;
@@ -16,8 +17,8 @@ import java.util.List;
 
 public class InboxBizTransform extends BusinessTransform {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
     @Inject

@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ContactMessageModel {
+import java.io.Serializable;
+
+public class ContactMessageModel implements Serializable {
     private String email;
     private String phone;
 

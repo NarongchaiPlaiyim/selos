@@ -27,6 +27,8 @@ public class AccountType implements Serializable {
     private String ncbCode;
     @Column(name = "month_flag")
     private int monthFlag;
+    @Column(name = "calculatetype", length = 1)
+    private int calculateType;
 
     public AccountType() {
     }
@@ -95,16 +97,26 @@ public class AccountType implements Serializable {
         this.monthFlag = monthFlag;
     }
 
+    public int getCalculateType() {
+        return calculateType;
+    }
+
+    public void setCalculateType(int calculateType) {
+        this.calculateType = calculateType;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-                append("id", id).
-                append("name", name).
-                append("dbrFlag", dbrFlag).
-                append("wcFlag", wcFlag).
-                append("customerEntity", customerEntity).
-                append("active", active).
-                append("ncbCode", ncbCode).
-                toString();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("id", id)
+                .append("name", name)
+                .append("dbrFlag", dbrFlag)
+                .append("wcFlag", wcFlag)
+                .append("customerEntity", customerEntity)
+                .append("active", active)
+                .append("ncbCode", ncbCode)
+                .append("monthFlag", monthFlag)
+                .append("calculateType", calculateType)
+                .toString();
     }
 }

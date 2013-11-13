@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class ClosedAccountsAccountModel {
+import java.io.Serializable;
+
+public class ClosedAccountsAccountModel implements Serializable {
     private ClosedAccountsAccountDisputeModel dispute;
     private ClosedAccountsAccountCreditInfoModel creditinfo;
     private ClosedAccountsAccountPaymentPatternModel paymentpattern;

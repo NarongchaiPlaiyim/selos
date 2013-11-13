@@ -67,10 +67,10 @@ public class BankStatement implements Serializable {
     private BigDecimal avgDrawAmount;
 
     @Column(name = "avg_swing_percent")
-    private BigDecimal swingPercent;
+    private BigDecimal avgSwingPercent;
 
     @Column(name = "avg_utilization_percent")
-    private BigDecimal utilizationPercent;
+    private BigDecimal avgUtilizationPercent;
 
     @Column(name = "avg_gross_inflow_per_limit")
     private BigDecimal avgGrossInflowPerLimit;
@@ -242,20 +242,20 @@ public class BankStatement implements Serializable {
         this.avgDrawAmount = avgDrawAmount;
     }
 
-    public BigDecimal getSwingPercent() {
-        return swingPercent;
+    public BigDecimal getAvgSwingPercent() {
+        return avgSwingPercent;
     }
 
-    public void setSwingPercent(BigDecimal swingPercent) {
-        this.swingPercent = swingPercent;
+    public void setAvgSwingPercent(BigDecimal avgSwingPercent) {
+        this.avgSwingPercent = avgSwingPercent;
     }
 
-    public BigDecimal getUtilizationPercent() {
-        return utilizationPercent;
+    public BigDecimal getAvgUtilizationPercent() {
+        return avgUtilizationPercent;
     }
 
-    public void setUtilizationPercent(BigDecimal utilizationPercent) {
-        this.utilizationPercent = utilizationPercent;
+    public void setAvgUtilizationPercent(BigDecimal avgUtilizationPercent) {
+        this.avgUtilizationPercent = avgUtilizationPercent;
     }
 
     public BigDecimal getAvgGrossInflowPerLimit() {
@@ -396,8 +396,8 @@ public class BankStatement implements Serializable {
                 .append("avgIncomeNetBDM", avgIncomeNetBDM)
                 .append("avgIncomeNetUW", avgIncomeNetUW)
                 .append("avgDrawAmount", avgDrawAmount)
-                .append("swingPercent", swingPercent)
-                .append("utilizationPercent", utilizationPercent)
+                .append("avgSwingPercent", avgSwingPercent)
+                .append("avgUtilizationPercent", avgUtilizationPercent)
                 .append("avgGrossInflowPerLimit", avgGrossInflowPerLimit)
                 .append("avgOSBalanceAmount", avgOSBalanceAmount)
                 .append("chequeReturn", chequeReturn)

@@ -1,5 +1,6 @@
 package com.clevel.selos.integration.corebanking;
 
+import com.clevel.selos.exception.RMInterfaceException;
 import com.clevel.selos.exception.ValidationException;
 import com.clevel.selos.integration.RM;
 import com.clevel.selos.integration.RMInterface;
@@ -79,11 +80,13 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
         searchIndividual.setCustName("");
         searchIndividual.setCustSurname("");
         searchIndividual.setRadSelectSearch(searchByValue);
+        searchIndividual.setAcronym(userId);
+        searchIndividual.setProductCode(productCode);
         log.debug("RequestValue : {} ", searchIndividual.toString());
         IndividualModel individualModel = null;
         IndividualResult individualResult;
         try {
-            individualModel = rmService.individualService(searchIndividual, userId);
+            individualModel = rmService.individualCMService(searchIndividual, userId);
             individualResult = new IndividualResult();
             individualResult.setCustomerId(customerId);
             individualResult.setActionResult(ActionResult.SUCCESS);
@@ -93,6 +96,11 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
             individualResult.setCustomerId(customerId);
             individualResult.setActionResult(ActionResult.FAILED);
             individualResult.setReason(ex.getMessage());
+        } catch (RMInterfaceException ex) {
+            individualResult = new IndividualResult();
+            individualResult.setCustomerId(customerId);
+            individualResult.setActionResult(ActionResult.FAILED);
+            individualResult.setReason(ex.getCode() + " : " + ex.getMessage());
         } catch (Exception ex2) {
             individualResult = new IndividualResult();
             individualResult.setCustomerId(customerId);
@@ -142,6 +150,10 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
             corporateResult.setCustomerId(customerId);
             corporateResult.setActionResult(ActionResult.FAILED);
             corporateResult.setReason(ex.getMessage());
+        } catch (RMInterfaceException ex) {
+            corporateResult.setCustomerId(customerId);
+            corporateResult.setActionResult(ActionResult.FAILED);
+            corporateResult.setReason(ex.getCode() + " : " + ex.getMessage());
         } catch (Exception ex2) {
             corporateResult.setCustomerId(customerId);
             corporateResult.setActionResult(ActionResult.FAILED);
@@ -173,6 +185,10 @@ public class RMInterfaceImpl implements RMInterface, Serializable {
             customerAccountResult.setCustomerId(customerId);
             customerAccountResult.setActionResult(ActionResult.FAILED);
             customerAccountResult.setReason(ex.getMessage());
+        } catch (RMInterfaceException ex){
+            customerAccountResult.setCustomerId(customerId);
+            customerAccountResult.setActionResult(ActionResult.FAILED);
+            customerAccountResult.setReason(ex.getCode() + " : " + ex.getMessage());
         } catch (Exception ex2) {
             customerAccountResult.setCustomerId(customerId);
             customerAccountResult.setActionResult(ActionResult.FAILED);

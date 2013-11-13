@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.working;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.working.OpenAccount;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class OpenAccountDAO extends GenericDAO<OpenAccount, Long> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public OpenAccountDAO() {
     }

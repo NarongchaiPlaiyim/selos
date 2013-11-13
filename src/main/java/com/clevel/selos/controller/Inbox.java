@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 import com.clevel.selos.businesscontrol.InboxControl;
 import com.clevel.selos.integration.BPMInterface;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.view.AppHeaderView;
 import com.clevel.selos.model.view.InboxView;
 import com.clevel.selos.security.UserDetail;
@@ -27,8 +28,8 @@ import java.util.List;
 @ManagedBean(name = "inbox")
 public class Inbox implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
@@ -70,6 +71,14 @@ public class Inbox implements Serializable {
     }
 
     public void onSelectInbox() {
+
+        userDetail = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(userDetail == null){
+            FacesUtil.redirect("/login.jsf");
+            return;
+        }
+
         HttpSession session = FacesUtil.getSession(false);
         log.info("onSelectInbox ::: setSession ");
         log.info("onSelectInbox ::: inboxViewSelectItem : {}", inboxViewSelectItem);
@@ -82,20 +91,14 @@ public class Inbox implements Serializable {
         AppHeaderView appHeaderView = inboxControl.getHeaderInformation(inboxViewSelectItem.getWorkCasePreScreenId(), inboxViewSelectItem.getWorkCaseId());
         session.setAttribute("appHeaderInfo", appHeaderView);
 
-        try {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-
-            if (inboxViewSelectItem.getStepId() == 1001) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenInitial.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1002) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenChecker.jsf");
-            } else if (inboxViewSelectItem.getStepId() == 1003) {
-                ec.redirect(ec.getRequestContextPath() + "/site/prescreenMaker.jsf");
-            }
-            return;
-        } catch (Exception ex) {
-            log.info("Exception :: {}", ex);
+        if (inboxViewSelectItem.getStepId() == 1001) {
+            FacesUtil.redirect("/site/prescreenInitial.jsf");
+        } else if (inboxViewSelectItem.getStepId() == 1002) {
+            FacesUtil.redirect("/site/prescreenChecker.jsf");
+        } else if (inboxViewSelectItem.getStepId() == 1003) {
+            FacesUtil.redirect("/site/prescreenMaker.jsf");
         }
+        return;
     }
 
     public UserDetail getUserDetail() {

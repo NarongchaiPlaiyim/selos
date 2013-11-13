@@ -67,7 +67,7 @@ public class ExistingCreditDetail {
     private BigDecimal intFee;
 
     @Column(name = "tenor")
-    private int tenor;
+    private BigDecimal tenor;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_date")
@@ -229,11 +229,11 @@ public class ExistingCreditDetail {
         this.intFee = intFee;
     }
 
-    public int getTenor() {
+    public BigDecimal getTenor() {
         return tenor;
     }
 
-    public void setTenor(int tenor) {
+    public void setTenor(BigDecimal tenor) {
         this.tenor = tenor;
     }
 

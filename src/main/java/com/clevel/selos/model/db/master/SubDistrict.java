@@ -2,12 +2,15 @@ package com.clevel.selos.model.db.master;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "mst_sub_district")
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class SubDistrict implements Serializable {
     @Id
     @Column(name = "code")

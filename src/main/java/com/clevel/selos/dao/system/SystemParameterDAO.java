@@ -1,6 +1,7 @@
 package com.clevel.selos.dao.system;
 
 import com.clevel.selos.dao.GenericDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.system.SystemParameter;
 import com.clevel.selos.util.Util;
 import org.hibernate.Criteria;
@@ -11,8 +12,8 @@ import javax.inject.Inject;
 
 public class SystemParameterDAO extends GenericDAO<SystemParameter, String> {
     @Inject
-    private Logger log;
-
+    @SELOS
+    Logger log;
     @Inject
     public SystemParameterDAO() {
     }

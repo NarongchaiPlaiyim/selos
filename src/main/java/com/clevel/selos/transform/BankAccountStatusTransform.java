@@ -1,5 +1,6 @@
 package com.clevel.selos.transform;
 
+import com.clevel.selos.dao.master.BankAccountStatusDAO;
 import com.clevel.selos.model.db.master.BankAccountStatus;
 import com.clevel.selos.model.view.BankAccountStatusView;
 
@@ -9,6 +10,9 @@ public class BankAccountStatusTransform extends Transform {
 
     @Inject
     BankAccountTypeTransform bankAccountTypeTransform;
+
+    @Inject
+    BankAccountStatusDAO bankAccountStatusDAO;
 
     @Inject
     public BankAccountStatusTransform() {
@@ -25,5 +29,15 @@ public class BankAccountStatusTransform extends Transform {
             return bankAccountStatusView;
         }
         return null;
+    }
+
+    public BankAccountStatus getBankAccountStatus(BankAccountStatusView bankAccountStatusView){
+        BankAccountStatus bankAccountStatus = new BankAccountStatus();
+        if(bankAccountStatusView != null){
+            if(bankAccountStatusView.getId() != 0){
+                bankAccountStatus = bankAccountStatusDAO.findById(bankAccountStatusView.getId());
+            }
+        }
+        return bankAccountStatus;
     }
 }

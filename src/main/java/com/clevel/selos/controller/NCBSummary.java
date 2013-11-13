@@ -2,6 +2,7 @@ package com.clevel.selos.controller;
 
 
 import com.clevel.selos.dao.working.CustomerDAO;
+import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.Customer;
 import com.clevel.selos.model.view.NCBInfoView;
@@ -31,8 +32,8 @@ import java.util.List;
 @ManagedBean(name = "ncbSummary")
 public class NCBSummary implements Serializable {
     @Inject
+    @SELOS
     Logger log;
-
     @Inject
     @NormalMessage
     Message msg;
