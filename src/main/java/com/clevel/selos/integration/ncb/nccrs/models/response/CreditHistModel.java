@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class CreditHistModel {
+import java.io.Serializable;
+
+public class CreditHistModel implements Serializable {
     private String asofdate;
     private String outstanding;
     private String daypastdue;

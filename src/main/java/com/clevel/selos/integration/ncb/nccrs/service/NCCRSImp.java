@@ -446,7 +446,7 @@ public class NCCRSImp implements NCCRS, Serializable {
     private void saveNCBI(NCCRSResponseModel responseModel) throws Exception {
         NCBIExportModel exportModel = new NCBIExportModel();
 
-        exportModel.setOfficeCode("XXX");
+        exportModel.setOfficeCode("XXX"); //todo XXX
 
         exportModel.setRequestNo(memberRef);
         exportModel.setStaffId(userId);
@@ -461,7 +461,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         exportModel.setFirstName(null);
         exportModel.setLastName(null);
         exportModel.setJuristicName(companyName);
-        exportModel.setCaNumber(CANumber);
+        exportModel.setAppRefNumber(appRefNumber);
         exportModel.setCaution(null);
         exportModel.setReferenceTel(referenceTel);
 
@@ -549,7 +549,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         try {
             nTimeOut = Integer.parseInt(timeOut);
         } catch (Exception ex) {
-            log.debug("error can not convert time out to integer");
+            log.debug("can not convert time out to integer (Default is 60 second)");
         }
         result = new String(post.sendPost(xml, url, nTimeOut).getBytes("ISO-8859-1"), "UTF-8");
         String res = "<ncrsresponse>";

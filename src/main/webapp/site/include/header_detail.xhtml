@@ -13,7 +13,8 @@
             <p:commandButton id="btnCheckNCB" value="Check NCB" styleClass="blueButton"
                              rendered="#{baseController.manageButton.checkNCBButton}"
                              actionListener="#{prescreenChecker.onCheckCustomer}" process="@form"
-                             oncomplete="testHandle()" update=":frmMain :msgBoxSystemMessagePanel"/>
+                             onclick="blockUICheckCustomer.show()"
+                             oncomplete="blockUICheckCustomer.hide()" update=":frmMain :msgBoxSystemMessagePanel"/>
             <p:commandButton id="btnAssignChecker" value="Assign To Checker" styleClass="blueButton"
                              rendered="#{baseController.manageButton.assignToCheckerButton}"
                              disabled="#{prescreenMaker.disableAssignButton}" onclick="assignCheckerDlg.show()"

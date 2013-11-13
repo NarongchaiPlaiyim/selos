@@ -2,10 +2,61 @@ function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
 
+function checkThaiID(id) {
+    if(id=='') return true;
+    if(id.length != 13) return false;
+    var sum = 0;
+    for(i=0; i < 12; i++) {	sum += (13-i)*parseFloat(id.charAt(i));	}
+    var x = sum%11;
+    if(x <= 1 && (1-x != parseFloat(id.charAt(12)))) return false;
+    else if(x > 1 && (11-x != parseFloat(id.charAt(12)))) return false;
+    return true;
+}
+
+function checkSearchThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenSearchDlg').show();
+        }
+    }
+}
+
+function checkBorrowerThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenBrDlg').show();
+        }
+    }
+}
+
+function checkSpouseThaiID(obj){
+    if(obj != undefined){
+        var id = obj.value;
+        if(!checkThaiID(id)){
+            PF('msgBoxInvalidCitizenSpDlg').show();
+        }
+    }
+}
+
+function closeMessageCitizenDialog(msgDlgName, inputId){
+    PF(msgDlgName).hide();
+    $("#"+inputId).focus();
+}
+
 function removeComma(obj) {
     var val = obj.value;
     val = val.replace(/,/g, '');
     obj.value = val;
+}
+
+function onClickReadonlyField(obj, readonly){
+    if(readonly != 1){
+        if(obj != undefined){
+            obj.blur();
+        }
+    }
 }
 
 function formatNumber(obj) {
@@ -50,15 +101,22 @@ function onKeyMoney(evt) {
     var validNums = '0123456789.,';
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
-    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
-    /*  96-105 = numkey 0-9
+    /*
+     35 = home
+     36 = end
+     37 = left
+     39 = right
+     96-105 = numkey 0-9
      8 = backspace
      9 = tab
      46 = delete
      188 = comma
      190 = period
      */
-    if ((evt.keyCode > 95 && evt.keyCode < 106) || evt.keyCode == '8' || evt.keyCode == '9' || evt.keyCode == '46' || evt.keyCode == 188 || evt.keyCode == 190) {
+    if ((evt.keyCode > 95 && evt.keyCode < 106)
+            || (( evt.keyCode == 35 || evt.keyCode == 36 || evt.keyCode == 37 || evt.keyCode == 39 ) && evt.charCode == 0 )
+            || evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 46
+            || evt.keyCode == 188 || evt.keyCode == 190) {
         return true;
     } else {
         keychar = String.fromCharCode(nbr);
@@ -241,9 +299,27 @@ function handleDlgCreditProposeRequest(xhr, status, args) {
     }
 }
 
-
+// Credit Facility Propose Condition Dialog
 function handleConditionInfoRequest(xhr, status, args) {
     if (args.functionComplete) {
         conditionDlg.hide();
     }
 }
+
+// Credit Facility Propose Collateral Dialog
+function handleProposeCollateralDetailRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        collateralInfoDlg.hide();
+    }
+}
+
+// Credit Facility Propose Sub Collateral Dialog
+function handleSubCollateralInfoRequest(xhr, status, args) {
+    if (args.functionComplete) {
+        subCollateralInfoDlg.hide();
+    }
+}
+// Credit Facility Propose Guarantor Dialog
+
+// Credit Facility Propose Credit Dialog
+

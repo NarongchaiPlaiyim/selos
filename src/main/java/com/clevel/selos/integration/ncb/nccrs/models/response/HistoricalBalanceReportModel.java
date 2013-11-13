@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class HistoricalBalanceReportModel {
+import java.io.Serializable;
+
+public class HistoricalBalanceReportModel implements Serializable {
     private NonOverDraftsModel nonoverdrafts;
     private OverDraftsModel overdrafts;
 

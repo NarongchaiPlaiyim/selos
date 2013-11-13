@@ -3,10 +3,7 @@ package com.clevel.selos.model.db.master;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +16,9 @@ public class AddressType implements Serializable {
     private String name;
     @Column(name = "active")
     private int active;
+    @OneToOne
+    @JoinColumn(name = "customer_entity_id")
+    private CustomerEntity customerEntity;
 
     public AddressType() {
     }
@@ -47,12 +47,21 @@ public class AddressType implements Serializable {
         this.active = active;
     }
 
+    public CustomerEntity getCustomerEntity() {
+        return customerEntity;
+    }
+
+    public void setCustomerEntity(CustomerEntity customerEntity) {
+        this.customerEntity = customerEntity;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
                 append("id", id).
                 append("name", name).
                 append("active", active).
+                append("customerEntity", customerEntity).
                 toString();
     }
 }

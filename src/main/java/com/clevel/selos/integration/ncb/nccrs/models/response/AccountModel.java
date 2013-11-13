@@ -1,6 +1,8 @@
 package com.clevel.selos.integration.ncb.nccrs.models.response;
 
-public class AccountModel {
+import java.io.Serializable;
+
+public class AccountModel implements Serializable {
     private AccountDisputeModel dispute;
     private CreditInfoModel creditinfo;
     private PaymentPatternModel paymentpattern;

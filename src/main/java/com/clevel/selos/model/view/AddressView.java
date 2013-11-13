@@ -36,6 +36,25 @@ public class AddressView implements Serializable {
         this.addressType = new AddressType();
     }
 
+    public AddressView(AddressView inputAddressView,long id){
+        this.id = id;
+        this.addressType = inputAddressView.getAddressType();
+        this.addressNo = inputAddressView.getAddressNo();
+        this.moo = inputAddressView.getMoo();
+        this.building = inputAddressView.getBuilding();
+        this.road = inputAddressView.getRoad();
+        this.province = inputAddressView.getProvince();
+        this.district = inputAddressView.getDistrict();
+        this.subDistrict = inputAddressView.getSubDistrict();
+        this.postalCode = inputAddressView.getPostalCode();
+        this.country = inputAddressView.getCountry();
+        this.phoneNumber = inputAddressView.getPhoneNumber();
+        this.extension = inputAddressView.getExtension();
+        this.contactName = inputAddressView.getContactName();
+        this.contactPhone = inputAddressView.getContactPhone();
+        this.address = inputAddressView.getAddress();
+    }
+
     public long getId() {
         return id;
     }
