@@ -9,6 +9,7 @@ public class H2HRequestModel implements Serializable {
     private String inqpurpose;
     private String producttype;
     private String memberref;
+    private String displayinqhist = "1";
     private String confirmconsent;
     private String language;
 
