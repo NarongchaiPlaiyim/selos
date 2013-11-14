@@ -3,6 +3,7 @@ package com.clevel.selos.transform;
 import com.clevel.selos.model.db.working.Appraisal;
 import com.clevel.selos.model.db.working.ContactRecordDetail;
 import com.clevel.selos.model.db.working.CustomerAcceptance;
+import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.ContactRecordDetailView;
 import org.joda.time.DateTime;
 
@@ -11,11 +12,12 @@ import java.util.List;
 
 public class ContactRecordDetailTransform extends Transform  {
 
-    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,CustomerAcceptance customerAcceptance){
+    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,CustomerAcceptance customerAcceptance,WorkCase workCase){
         List<ContactRecordDetail> contactRecordDetailList = new ArrayList<ContactRecordDetail>();
         for(ContactRecordDetailView contactRecordDetailView : contactRecordDetailViewList){
 
             ContactRecordDetail ContactRecordDetail = new ContactRecordDetail();
+            ContactRecordDetail.setWorkCase(workCase);
             ContactRecordDetail.setCustomerAcceptance(customerAcceptance);
             ContactRecordDetail.setCreateBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setCreateDate(DateTime.now().toDate());
@@ -36,11 +38,12 @@ public class ContactRecordDetailTransform extends Transform  {
         return contactRecordDetailList;
     }
 
-    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,Appraisal appraisal){
+    public List<ContactRecordDetail> transformToModel(List<ContactRecordDetailView> contactRecordDetailViewList,Appraisal appraisal,WorkCase workCase){
         List<ContactRecordDetail> contactRecordDetailList = new ArrayList<ContactRecordDetail>();
         for(ContactRecordDetailView contactRecordDetailView : contactRecordDetailViewList){
 
             ContactRecordDetail ContactRecordDetail = new ContactRecordDetail();
+            ContactRecordDetail.setWorkCase(workCase);
             ContactRecordDetail.setAppraisal(appraisal);
             ContactRecordDetail.setCreateBy(contactRecordDetailView.getCreateBy());
             ContactRecordDetail.setCreateDate(DateTime.now().toDate());

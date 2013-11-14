@@ -284,6 +284,15 @@ public class CustomerInfoControl extends BusinessControl {
         customerDAO.delete(customer);
     }
 
+    public List<CustomerInfoView> getAllCustomerByWorkCase(long workCaseId){
+        log.info("getAllCustomerByWorkCase ::: workCaseId : {}", workCaseId);
+
+        List<Customer> customerList = customerDAO.findByWorkCaseId(workCaseId);
+        List<CustomerInfoView> customerInfoViewList = customerTransform.transformToViewList(customerList);
+
+        return customerInfoViewList;
+    }
+
     //** function for integration **//
 
     // *** Function for RM *** //

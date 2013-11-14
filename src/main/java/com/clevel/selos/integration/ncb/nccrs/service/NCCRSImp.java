@@ -408,9 +408,15 @@ public class NCCRSImp implements NCCRS, Serializable {
                 if (null == responseModel.getBody().getTransaction().getH2herror()) {
                     return responseModel;
                 } else {
-                    resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
-                    log.error("NCCRS NCB Exception H2HERROR {}", resultDesc);
-                    return responseModel;
+                    if (null != responseModel.getBody().getErrormsg()) {
+                        resultDesc = responseModel.getBody().getErrormsg();
+                        log.error("NCCRS NCB Exception {}", responseModel.getBody().getErrormsg());
+                        throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
+                    } else {
+                        resultDesc = responseModel.getBody().getTransaction().getH2herror().getErrormsg();
+                        log.error("NCCRS NCB Exception H2HERROR {}", resultDesc);
+                        return responseModel;
+                    }
 //                    throw new NCBInterfaceException(new Exception(resultDesc), exception, resultDesc);
                 }
             } else {
@@ -511,7 +517,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         return new NCCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
-                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId())));
+                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId(), memberRef)));
 
     }
 
