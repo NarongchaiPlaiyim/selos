@@ -323,3 +323,6 @@ function handleSubCollateralInfoRequest(xhr, status, args) {
 
 // Credit Facility Propose Credit Dialog
 
+function onSave(buttonID, isDisable){
+     document.getElementById(buttonID).disabled=isDisable;
+}

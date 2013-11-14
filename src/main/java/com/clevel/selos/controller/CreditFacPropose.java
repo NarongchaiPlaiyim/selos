@@ -73,7 +73,12 @@ public class CreditFacPropose implements Serializable {
     private List<Disbursement> disbursementList;
 
     private CreditFacProposeView creditFacProposeView;
+
+    //for control Propose Credit
     private ProposeCreditDetailView proposeCreditDetailView;
+    private ProposeCreditDetailView proposeCreditDetailSelected;
+    private int rowSpanNumber;
+    private boolean modeEdit;
 
     // for control Propose Collateral
     private ProposeCollateralInfoView proposeCollateralInfoView;
@@ -84,13 +89,13 @@ public class CreditFacPropose implements Serializable {
     private List<CollateralType> collateralTypeList;
     private List<PotentialCollateral> potentialCollateralList;
     // for  control Guarantor Information Dialog
-    private GuarantorDetailView guarantorDetailView;
-    private GuarantorDetailView guarantorDetailViewItem;
+    private ProposeGuarantorDetailView proposeGuarantorDetailView;
+    private ProposeGuarantorDetailView proposeGuarantorDetailViewItem;
     private List<Customer> guarantorList;
 
     // for  control Condition Information Dialog
-    private ConditionInfoDetailView conditionInfoDetailView;
-    private ConditionInfoDetailView selectConditionItem;
+    private ProposeConditionDetailView proposeConditionDetailView;
+    private ProposeConditionDetailView selectConditionItem;
 
     AppraisalData appraisalData;
     HeadCollateralData headCollateralData;
@@ -171,12 +176,12 @@ public class CreditFacPropose implements Serializable {
             disbursementList = new ArrayList<Disbursement>();
         }
 
-        if (conditionInfoDetailView == null) {
-            conditionInfoDetailView = new ConditionInfoDetailView();
+        if (proposeConditionDetailView == null) {
+            proposeConditionDetailView = new ProposeConditionDetailView();
         }
 
-        if(guarantorDetailView == null){
-            guarantorDetailView = new GuarantorDetailView();
+        if(proposeGuarantorDetailView == null){
+            proposeGuarantorDetailView = new ProposeGuarantorDetailView();
         }
 
         if(proposeCollateralInfoView == null){
@@ -207,6 +212,8 @@ public class CreditFacPropose implements Serializable {
         subCollateralTypeList = subCollateralTypeDAO.findAll();
         collateralTypeList = collateralTypeDAO.findAll();
         potentialCollateralList = potentialCollateralDAO.findAll();
+        rowSpanNumber = 1;
+        modeEdit = true;
     }
 
     //Call  BRMS to get data Propose Credit Info
@@ -263,10 +270,11 @@ public class CreditFacPropose implements Serializable {
 
     //  Start Propose Credit Information  //
     public void onAddCreditInfo() {
+        proposeCreditDetailView  = new ProposeCreditDetailView();
     }
 
     public void onEditCreditInfo() {
-
+        modeEdit = false;
     }
 
     public void onDeleteCreditInfo() {
@@ -347,7 +355,7 @@ public class CreditFacPropose implements Serializable {
     //Start Condition Information //
     public void onAddConditionInfo() {
         log.info("onAddConditionInfo ::: ");
-        conditionInfoDetailView = new ConditionInfoDetailView();
+        proposeConditionDetailView = new ProposeConditionDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
@@ -359,10 +367,10 @@ public class CreditFacPropose implements Serializable {
 
         if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
 
-            ConditionInfoDetailView conditionInfoDetailViewAdd = new ConditionInfoDetailView();
-            conditionInfoDetailViewAdd.setLoanType(conditionInfoDetailView.getLoanType());
-            conditionInfoDetailViewAdd.setConditionDesc(conditionInfoDetailView.getConditionDesc());
-            creditFacProposeView.getConditionInfoDetailViewList().add(conditionInfoDetailViewAdd);
+            ProposeConditionDetailView proposeConditionDetailViewAdd = new ProposeConditionDetailView();
+            proposeConditionDetailViewAdd.setLoanType(proposeConditionDetailView.getLoanType());
+            proposeConditionDetailViewAdd.setConditionDesc(proposeConditionDetailView.getConditionDesc());
+            creditFacProposeView.getProposeConditionDetailViewList().add(proposeConditionDetailViewAdd);
             complete = true;
 
         } else {
@@ -378,7 +386,7 @@ public class CreditFacPropose implements Serializable {
 
     public void onDeleteConditionInfo() {
        log.info("onDeleteConditionInfo :: ");
-       creditFacProposeView.getConditionInfoDetailViewList().remove(selectConditionItem);
+       creditFacProposeView.getProposeConditionDetailViewList().remove(selectConditionItem);
     }
 
     // END Condition Information //
@@ -524,36 +532,36 @@ public class CreditFacPropose implements Serializable {
         this.disbursementList = disbursementList;
     }
 
-    public ConditionInfoDetailView getConditionInfoDetailView() {
-        return conditionInfoDetailView;
+    public ProposeConditionDetailView getProposeConditionDetailView() {
+        return proposeConditionDetailView;
     }
 
-    public void setConditionInfoDetailView(ConditionInfoDetailView conditionInfoDetailView) {
-        this.conditionInfoDetailView = conditionInfoDetailView;
+    public void setProposeConditionDetailView(ProposeConditionDetailView proposeConditionDetailView) {
+        this.proposeConditionDetailView = proposeConditionDetailView;
     }
 
-    public ConditionInfoDetailView getSelectConditionItem() {
+    public ProposeConditionDetailView getSelectConditionItem() {
         return selectConditionItem;
     }
 
-    public void setSelectConditionItem(ConditionInfoDetailView selectConditionItem) {
+    public void setSelectConditionItem(ProposeConditionDetailView selectConditionItem) {
         this.selectConditionItem = selectConditionItem;
     }
 
-    public GuarantorDetailView getGuarantorDetailViewItem() {
-        return guarantorDetailViewItem;
+    public ProposeGuarantorDetailView getProposeGuarantorDetailViewItem() {
+        return proposeGuarantorDetailViewItem;
     }
 
-    public void setGuarantorDetailViewItem(GuarantorDetailView guarantorDetailViewItem) {
-        this.guarantorDetailViewItem = guarantorDetailViewItem;
+    public void setProposeGuarantorDetailViewItem(ProposeGuarantorDetailView proposeGuarantorDetailViewItem) {
+        this.proposeGuarantorDetailViewItem = proposeGuarantorDetailViewItem;
     }
 
-    public GuarantorDetailView getGuarantorDetailView() {
-        return guarantorDetailView;
+    public ProposeGuarantorDetailView getProposeGuarantorDetailView() {
+        return proposeGuarantorDetailView;
     }
 
-    public void setGuarantorDetailView(GuarantorDetailView guarantorDetailView) {
-        this.guarantorDetailView = guarantorDetailView;
+    public void setProposeGuarantorDetailView(ProposeGuarantorDetailView proposeGuarantorDetailView) {
+        this.proposeGuarantorDetailView = proposeGuarantorDetailView;
     }
 
     public List<Customer> getGuarantorList() {
@@ -610,6 +618,30 @@ public class CreditFacPropose implements Serializable {
 
     public void setPotentialCollateralList(List<PotentialCollateral> potentialCollateralList) {
         this.potentialCollateralList = potentialCollateralList;
+    }
+
+    public int getRowSpanNumber() {
+        return rowSpanNumber;
+    }
+
+    public void setRowSpanNumber(int rowSpanNumber) {
+        this.rowSpanNumber = rowSpanNumber;
+    }
+
+    public boolean isModeEdit() {
+        return modeEdit;
+    }
+
+    public void setModeEdit(boolean modeEdit) {
+        this.modeEdit = modeEdit;
+    }
+
+    public ProposeCreditDetailView getProposeCreditDetailSelected() {
+        return proposeCreditDetailSelected;
+    }
+
+    public void setProposeCreditDetailSelected(ProposeCreditDetailView proposeCreditDetailSelected) {
+        this.proposeCreditDetailSelected = proposeCreditDetailSelected;
     }
 }
 

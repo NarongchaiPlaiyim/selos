@@ -121,14 +121,16 @@
 </tr>
 <tr>
     <td>
-        <!--<p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reducePriceFlag}">
-        </p:selectBooleanCheckbox>-->
+        <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFlag}" disabled="#{creditFacPropose.modeEdit}}">
+        </p:selectBooleanCheckbox>
+        <p:spacer width="20px;"/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reducePricing')}"/>
     </td>
     <td></td>
     <td colspan="2">
-        <!--     <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFrontEndFee}">
-             </p:selectBooleanCheckbox>-->
+        <p:selectBooleanCheckbox value="#{creditFacPropose.proposeCreditDetailView.reduceFrontEndFlag}" disabled="#{creditFacPropose.modeEdit}">
+             </p:selectBooleanCheckbox>
+        <p:spacer width="20px;"/>
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.reduceFront')}"/>
     </td>
 </tr>
@@ -138,7 +140,8 @@
     </td>
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.standardPrice}"
-                     style="text-align:right"/>
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEdit}"/>
     </td>
 </tr>
 <tr>
@@ -147,7 +150,8 @@
     </td>
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.suggestPrice}"
-                     style="text-align:right"/>
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEdit}"/>
     </td>
 </tr>
 <tr>
@@ -211,7 +215,8 @@
     </td>
     <td colspan="3">
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.frontEndFee}"
-                     style="text-align:right">
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEdit}">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
         </p:inputText>
     </td>
@@ -231,7 +236,8 @@
     <td colspan="3">
         <h:inputTextarea value="#{creditFacPropose.proposeCreditDetailView.remark}"
                          cols="95"
-                         rows="2"/>
+                         rows="2"
+                         disabled="#{creditFacPropose.modeEdit}"/>
     </td>
 </tr>
 <tr>

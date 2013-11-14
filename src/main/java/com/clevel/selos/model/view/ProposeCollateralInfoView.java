@@ -29,7 +29,6 @@ public class ProposeCollateralInfoView implements Serializable {
     private CollateralHeaderDetailView collateralHeaderDetailView;
 
     private List<CreditTypeDetailView> creditTypeDetailViewList;
-    private List<CollateralDetailView> CollateralDetailViewList;
 
     public long getId() {
         return id;
@@ -191,11 +190,5 @@ public class ProposeCollateralInfoView implements Serializable {
         this.creditTypeDetailViewList = creditTypeDetailViewList;
     }
 
-    public List<CollateralDetailView> getCollateralDetailViewList() {
-        return CollateralDetailViewList;
-    }
 
-    public void setCollateralDetailViewList(List<CollateralDetailView> collateralDetailViewList) {
-        CollateralDetailViewList = collateralDetailViewList;
-    }
 }
