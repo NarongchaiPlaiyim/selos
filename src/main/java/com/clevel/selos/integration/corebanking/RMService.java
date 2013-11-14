@@ -79,15 +79,15 @@ public class RMService implements Serializable {
     @Config(name = "interface.rm.customerAccount.sessionId")
     String customerSessionId;
 
-    @Inject
-    @Config(name = "interface.rm.individual.connectTimeout")
-    String individualConnectTimeout;
-    @Inject
-    @Config(name = "interface.rm.juristic.connectTimeout")
-    String juristicConnectTimeout;
-    @Inject
-    @Config(name = "interface.rm.customerAccount.connectTimeout")
-    String cusAccountConnectTimeout;
+//    @Inject
+//    @Config(name = "interface.rm.individual.connectTimeout")
+//    String individualConnectTimeout;
+//    @Inject
+//    @Config(name = "interface.rm.juristic.connectTimeout")
+//    String juristicConnectTimeout;
+//    @Inject
+//    @Config(name = "interface.rm.customerAccount.connectTimeout")
+//    String cusAccountConnectTimeout;
 
     @Inject
     @Config(name = "interface.rm.individual.requestTimeout")
@@ -851,7 +851,7 @@ public class RMService implements Serializable {
         }
 
         try{
-            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,Integer.parseInt(individualConnectTimeout)*1000);
+            ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,Integer.parseInt(individualRequestTimeout)*1000);
         }catch (Exception e){
             log.debug("individual Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchInd).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT,60000);
@@ -879,7 +879,7 @@ public class RMService implements Serializable {
         }
 
         try{
-            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(juristicConnectTimeout)*1000);
+            ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(juristicRequestTimeout)*1000);
         }catch (Exception e){
             log.debug("juristic Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchCor).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
@@ -907,7 +907,7 @@ public class RMService implements Serializable {
         }
 
         try{
-            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(cusAccountConnectTimeout)*1000);
+            ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, Integer.parseInt(cusAccountRequestTimeout)*1000);
         }catch (Exception e){
             log.debug("customerAccount Service connect_timeout must be a number!");
             ((BindingProvider) eaiSearchCa).getRequestContext().put(BindingProviderProperties.CONNECT_TIMEOUT, 60000);
