@@ -517,7 +517,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         return new NCCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
-                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId())));
+                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId(), memberRef)));
 
     }
 
