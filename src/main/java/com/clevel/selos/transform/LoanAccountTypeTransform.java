@@ -32,7 +32,7 @@ public class LoanAccountTypeTransform {
 
     public List<LoanAccountTypeView> getLoanAccountTypeViews(List<AccountType> loanAccountTypes) {
         List<LoanAccountTypeView> loanAccountTypeViews = new ArrayList<LoanAccountTypeView>();
-        if (loanAccountTypes == null && loanAccountTypes.isEmpty()) {
+        if (loanAccountTypes == null || loanAccountTypes.isEmpty()) {
             return loanAccountTypeViews;
         }
         for (AccountType loanAccountType : loanAccountTypes) {
@@ -48,7 +48,7 @@ public class LoanAccountTypeTransform {
         }
         loanAccountType.setId(loanAccountTypeView.getId());
         loanAccountType.setName(loanAccountTypeView.getName());
-
+        loanAccountType.setCalculateType(loanAccountTypeView.getCalculateType());
         return loanAccountType;
 
     }

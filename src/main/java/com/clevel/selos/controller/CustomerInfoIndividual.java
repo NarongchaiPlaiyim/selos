@@ -16,6 +16,7 @@ import com.clevel.selos.system.message.NormalMessage;
 import com.clevel.selos.system.message.ValidationMessage;
 import com.clevel.selos.util.DateTimeUtil;
 import com.clevel.selos.util.FacesUtil;
+import com.clevel.selos.util.Util;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 
@@ -147,6 +148,7 @@ public class CustomerInfoIndividual implements Serializable {
     private String userId;
     private User user;
 
+    //
     private int caseBorrowerTypeId;
 
     // Boolean for search customer //
@@ -1043,10 +1045,12 @@ public class CustomerInfoIndividual implements Serializable {
         //check citizen id
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
-            messageHeader = "Save Individual Failed.";
-            message = "Citizen Id is already exist";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return;
+            if(customer.getId() != customerInfoView.getId()){
+                messageHeader = "Save Individual Failed.";
+                message = "Citizen Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return;
+            }
         }
 
         if(addressFlagForm2 == 1){ //dup address 1 to address 2
@@ -1078,11 +1082,10 @@ public class CustomerInfoIndividual implements Serializable {
         }
 
         //calculate age
-        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
-        Calendar today = Calendar.getInstance();
-//        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
-//        customerInfoView.setAge(today.getTime().getYear());
-        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
+        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
+//        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
+//        Calendar today = Calendar.getInstance();
+//        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
 
         try{
             customerInfoControl.saveCustomerInfoIndividual(customerInfoView, workCaseId);
@@ -1104,10 +1107,24 @@ public class CustomerInfoIndividual implements Serializable {
         //check citizen id
         Customer customer = individualDAO.findCustomerByCitizenIdAndWorkCase(customerInfoView.getCitizenId(),workCaseId);
         if(customer != null && customer.getId() != 0){
-            messageHeader = "Save Individual Failed.";
-            message = "Citizen Id is already exist";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
-            return "";
+            if(customer.getId() != customerInfoView.getId()){
+                messageHeader = "Save Individual Failed.";
+                message = "Citizen Id is already exist";
+                RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                return "";
+            }
+        }
+
+        //for check citizen id form list
+        if(cusInfoJuristic.getIndividualViewList() != null && cusInfoJuristic.getIndividualViewList().size() > 0){
+            for(CustomerInfoView cus : cusInfoJuristic.getIndividualViewList()){
+                if(cus.getCitizenId().equalsIgnoreCase(customerInfoView.getCitizenId())){
+                    messageHeader = "Save Individual Failed.";
+                    message = "Citizen Id is already exist";
+                    RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+                    return "";
+                }
+            }
         }
 
         //todo: find title , relation , reference , etc for show in list in juristic page
@@ -1116,11 +1133,7 @@ public class CustomerInfoIndividual implements Serializable {
 //        customerInfoView.setReference(referenceDAO.findById(customerInfoView.getReference().getId()));
 
         //calculate age
-        Calendar dateOfBirth = DateTimeUtil.dateToCalendar(customerInfoView.getDateOfBirth());
-        Calendar today = Calendar.getInstance();
-//        today.add(Calendar.YEAR,-(dateOfBirth.getTime().getYear()));
-//        customerInfoView.setAge(today.getTime().getYear());
-        customerInfoView.setAge(today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR));
+        customerInfoView.setAge(Util.calAge(customerInfoView.getDateOfBirth()));
 
         if(isEditFromJuristic){
             cusInfoJuristic.getIndividualViewList().set(rowIndex,customerInfoView);

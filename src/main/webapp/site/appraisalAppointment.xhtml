@@ -354,7 +354,7 @@
                             <p:dataTable tableStyleClass="center" style="width: 100%"
                                          id="contactRecordDetailViewTable"
                                          var="contactRecordDetailView"
-                                         value="#{customerAcceptance.contactRecordDetailViewList}"
+                                         value="#{appraisalAppointment.contactRecordDetailViewList}"
                                          paginator="false"
                                          rowKey="#{contactRecordDetailView.id}"
                                          rowIndexVar="rowIndex" >
@@ -388,11 +388,7 @@
                                 </p:column>
                                 <p:column  styleClass="left" style="width:120px;" >
                                     <p:outputLabel value="#{contactRecordDetailView.callingDate}" >
-                                        <f:convertDateTime pattern="dd/MM/yyy"  />
-                                    </p:outputLabel>
-                                    <p:spacer width="10" />
-                                    <p:outputLabel value="#{contactRecordDetailView.callingTime}" >
-                                        <f:convertDateTime pattern="HH:mm"  />
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />
                                     </p:outputLabel>
                                 </p:column>
                                 <p:column styleClass="left" style="width:100px;">
@@ -403,37 +399,33 @@
                                 </p:column>
                                 <p:column styleClass="left" style="width:120px;" >
                                     <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
-                                        <f:convertDateTime pattern="dd/MM/yyy"  />
-                                    </p:outputLabel>
-                                    <p:spacer width="10" />
-                                    <p:outputLabel value="#{contactRecordDetailView.nextCallingTime}">
-                                        <f:convertDateTime pattern="HH:mm"  />
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />
                                     </p:outputLabel>
                                 </p:column>
                                 <p:column styleClass="left" style="width:150px;">
-                                    <p:outputLabel value="#{contactRecordDetailView.reason.description}"/>
+                                    <p:outputLabel value="#{contactRecordDetailView.reasonStr}"/>
                                 </p:column>
                                 <p:column  styleClass="left" style="width:200px;">
                                     <p:outputLabel value="#{contactRecordDetailView.remark}"/>
                                 </p:column>
                                 <p:column headerText="" styleClass="center" style="width:8%;">
                                     <p:commandButton icon="ui-icon-pencil"
-                                                     action="#{customerAcceptance.onEditContactRecordDetailView()}"
+                                                     action="#{appraisalAppointment.onEditContactRecordDetailView()}"
                                                      update=":contactRecordViewDlgForm"
                                                      process=":frmMain:contactRecordDetailViewTable"
                                                      oncomplete="contactRecordDetailViewDlg.show();">
                                         <f:setPropertyActionListener value="#{contactRecordDetailView}"
-                                                                     target="#{customerAcceptance.selectContactRecordDetail}"/>
+                                                                     target="#{appraisalAppointment.selectContactRecordDetail}"/>
                                         <f:setPropertyActionListener value="#{rowIndex}"
-                                                                     target="#{customerAcceptance.rowIndex}"/>
+                                                                     target="#{appraisalAppointment.rowIndex}"/>
                                     </p:commandButton>
                                     <p:commandButton title="Remove" process="@this"
                                                      icon="ui-icon-trash"
                                                      oncomplete="confirmDeleteContactRecordDetailViewDlg.show()" >
                                         <f:setPropertyActionListener value="#{contactRecordDetailView}"
-                                                                     target="#{customerAcceptance.selectContactRecordDetail}"/>
+                                                                     target="#{appraisalAppointment.selectContactRecordDetail}"/>
                                         <f:setPropertyActionListener value="#{rowIndex}"
-                                                                     target="#{customerAcceptance.rowIndex}"/>
+                                                                     target="#{appraisalAppointment.rowIndex}"/>
                                     </p:commandButton>
                                 </p:column>
                             </p:dataTable>
