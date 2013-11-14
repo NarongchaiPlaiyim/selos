@@ -1,6 +1,7 @@
 package com.clevel.selos.model.view;
 
 import com.clevel.selos.model.db.master.CollateralType;
+import com.clevel.selos.model.db.master.PotentialCollateral;
 import com.clevel.selos.model.db.master.User;
 
 import java.math.BigDecimal;
@@ -14,9 +15,9 @@ public class CollateralHeaderDetailView {
     private String collateralLocation;
     private BigDecimal appraisalValue;
     private CollateralType headCollType;
+    private PotentialCollateral   potentialCollateral ;
 
     //dropdown
-//    private potential;
 //    private collTypePercentLTV ;
 
     private String existingCredit;
@@ -133,5 +134,11 @@ public class CollateralHeaderDetailView {
         this.insuranceCompany = insuranceCompany;
     }
 
+    public PotentialCollateral getPotentialCollateral() {
+        return potentialCollateral;
+    }
 
+    public void setPotentialCollateral(PotentialCollateral potentialCollateral) {
+        this.potentialCollateral = potentialCollateral;
+    }
 }

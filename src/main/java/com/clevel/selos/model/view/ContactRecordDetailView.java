@@ -21,7 +21,8 @@ public class ContactRecordDetailView {
     private String acceptResultStr;
     private Date nextCallingDate;
     private String nextCallingTime;
-    private String reason;
+    private int reason;
+    private String reasonStr;
     private String remark;
     private String status;
     private Date createDate;
@@ -120,12 +121,20 @@ public class ContactRecordDetailView {
         this.nextCallingTime = nextCallingTime;
     }
 
-    public String getReason() {
+    public int getReason() {
         return reason;
     }
 
-    public void setReason(String reason) {
+    public void setReason(int reason) {
         this.reason = reason;
+    }
+
+    public String getReasonStr() {
+        return reasonStr;
+    }
+
+    public void setReasonStr(String reasonStr) {
+        this.reasonStr = reasonStr;
     }
 
     public String getRemark() {

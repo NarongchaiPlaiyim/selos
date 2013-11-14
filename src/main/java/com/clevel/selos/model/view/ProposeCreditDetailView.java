@@ -35,6 +35,7 @@ public class ProposeCreditDetailView implements Serializable {
     private BigDecimal finalPrice;
     private BigDecimal tenor;
     private Disbursement disbursement;
+    private BigDecimal purpose;
 
     // master
 //    private loanPurpose
@@ -68,6 +69,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.holdLimitAmount = BigDecimal.ZERO;
         this.finalPrice = BigDecimal.ZERO;
         this.tenor = BigDecimal.ZERO;
+        this.purpose = BigDecimal.ZERO;
     }
 
     public int getRequestType() {
@@ -268,5 +270,13 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void setDisbursement(Disbursement disbursement) {
         this.disbursement = disbursement;
+    }
+
+    public BigDecimal getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(BigDecimal purpose) {
+        this.purpose = purpose;
     }
 }

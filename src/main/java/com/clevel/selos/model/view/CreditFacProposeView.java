@@ -125,6 +125,8 @@ public class CreditFacProposeView implements Serializable {
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
         this.singleLendingLimit = 0;
+
+
     }
 
     public BigDecimal getWCNeed() {
@@ -518,4 +520,6 @@ public class CreditFacProposeView implements Serializable {
     public void setCollateralDetailView(ProposeCollateralInfoView collateralDetailView) {
         this.collateralDetailView = collateralDetailView;
     }
+
+
 }

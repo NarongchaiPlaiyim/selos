@@ -90,7 +90,7 @@ public class CustomerAcceptance implements Serializable {
             log.info("workCaseId :: {} ",workCaseId);
             customerAcceptanceView = customerAcceptanceControl.getCustomerAcceptanceByWorkCase(workCaseId); // find NCB by customer
             if(customerAcceptanceView != null){
-                contactRecordDetailViewList = customerAcceptanceControl.getContactRecordViewList(customerAcceptanceView);
+                contactRecordDetailViewList = customerAcceptanceControl.getContactRecordViewList(workCaseId);
                 log.info("contactRecordDetailViewList  :::::::::::: {} ", contactRecordDetailViewList);
                 if(contactRecordDetailViewList == null){
                     contactRecordDetailViewList = new ArrayList<ContactRecordDetailView>();
@@ -123,6 +123,20 @@ public class CustomerAcceptance implements Serializable {
                 contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.accept"));
             }else{
                 contactRecordDetailViewForStr.setAcceptResultStr(msg.get("app.contactRecordDetail.radio.label.acceptResult.etc"));
+            }
+
+            if(contactRecordDetailViewForStr.getReason()==1){
+                contactRecordDetailViewForStr.setReasonStr("ลูกค้าแจ้งนัดกับ BDM แล้ว");
+            }else if(contactRecordDetailViewForStr.getReason()==2){
+                contactRecordDetailViewForStr.setReasonStr("ไม่สามารถติดต่อได้");
+            }else if(contactRecordDetailViewForStr.getReason()==3){
+                contactRecordDetailViewForStr.setReasonStr("ลูกค้ายังไม่รับนัด");
+            }else if(contactRecordDetailViewForStr.getReason()==4){
+                contactRecordDetailViewForStr.setReasonStr("ลูกค้าไม่สะดวก");
+            }else if(contactRecordDetailViewForStr.getReason()==5){
+                contactRecordDetailViewForStr.setReasonStr("ลูกค้าขอติดต่อ BDM ก่อน");
+            }else if(contactRecordDetailViewForStr.getReason()==6){
+                contactRecordDetailViewForStr.setReasonStr("ลูกค้ารอเงินที่จะเป็นหลักประกัน");
             }
 
         }
