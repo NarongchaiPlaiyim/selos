@@ -1886,11 +1886,20 @@ public class PrescreenMaker implements Serializable {
                         onChangeDistrictBorrower();
                         if(borrowerInfo.getCustomerEntity().getId() == 1){
                             onChangeDate("borrower");
+                            if(Util.isEmpty(borrowerInfo.getCitizenId())){
+                                enableCitizenId = true;
+                            }
                         } else if (borrowerInfo.getCustomerEntity().getId() == 2){
                             onChangeDate("juristic");
+                            if(Util.isEmpty(borrowerInfo.getRegistrationId())){
+                                enableCitizenId = true;
+                            }
                         }
                         if(borrowerInfo.getCustomerEntity().getId() == BorrowerType.INDIVIDUAL.value()){
                             if(borrowerInfo.getSpouse() != null){
+                                /*if(Util.isEmpty(borrowerInfo.getSpouse().getCitizenId())){
+                                    enableSpous
+                                }*/
                                 onChangeProvinceSpouse();
                                 onChangeDistrictSpouse();
                                 onChangeDate("spouse");
