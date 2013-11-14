@@ -56,9 +56,9 @@ public class InboxControl extends BusinessControl {
         List<InboxView> inboxViewList = new ArrayList<InboxView>();
 
         //For WebSphere//
-        List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
+        //List<CaseDTO> caseDTOList = bpmInterface.getInboxList();
 
-        /*List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
+        List<CaseDTO> caseDTOList = new ArrayList<CaseDTO>();
 
 
         List<WorkCasePrescreen> workCasePrescreenList = getWorkCasePreScreen();
@@ -93,7 +93,7 @@ public class InboxControl extends BusinessControl {
             caseDTO.setCaseData(caseData);
 
             caseDTOList.add(caseDTO);
-        }*/
+        }
 
         log.info("CaseDTO : caseDTOList : {}", caseDTOList);
         inboxViewList = inboxBizTransform.transformToView(caseDTOList);

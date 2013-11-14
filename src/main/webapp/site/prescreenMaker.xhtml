@@ -137,16 +137,17 @@
                             <tr>
                                 <td class="title">Expected submission date :</td>
                                 <td>
-                                    <p:calendar id="expectSumitDate" mindate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                value="#{prescreenMaker.prescreenView.expectedSubmitDate}"
-                                                locale="th_TH"
-                                                yearRange="2440:3000"
-                                                pattern="dd/MM/yyyy">
+                                    <clv:BECalendar id="expectSumitDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="#{prescreenMaker.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{prescreenMaker.prescreenView.expectedSubmitDate}"
+                                                    locale="th_TH" >
                                         <p:ajax event="change"
                                                 listener="#{prescreenMaker.onCheckMaxDate('dateOfexpected')}"
                                                 process="@form"
                                                 update=":frmMain"/>
-                                    </p:calendar>
+                                    </clv:BECalendar>
                                 </td>
                             </tr>
                             <tr>
@@ -438,17 +439,6 @@
                                                 process="@form"
                                                 update=":frmMain"/>
                                     </clv:BECalendar>
-                                    <h:outputText value="#{prescreenMaker.currentDateDDMMYY}"/>
-                                    <!-- <p:calendar id="registerDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                 value="#{prescreenMaker.prescreenView.registerDate}"
-                                                 locale="th_TH"
-                                                 yearRange="2440:3000"
-                                                 pattern="dd/MM/yyyy">
-                                         <p:ajax event="change"
-                                                 listener="#{prescreenMaker.onCheckMaxDate('dateOfregister')}"
-                                                 process="@form"
-                                                 update=":frmMain"/>
-                                     </p:calendar>-->
                                 </td>
                             </tr>
                             <tr>
@@ -673,7 +663,7 @@
         <ui:include src="dialog/prescreenFacilityDialog.xhtml"/>
     </p:dialog>
     <p:dialog id="customerDialog" widgetVar="customerDlg" header="Customer Information"
-              onShow="hideWindowsScrollBar()" onHide="showWindowsScrollBar()" resizable="false"
+              onShow="hideWindowsScrollBar();" onHide="showWindowsScrollBar()" resizable="false"
               modal="true" width="850" height="550">
         <ui:include src="dialog/prescreenCustomerDialog.xhtml"/>
     </p:dialog>
