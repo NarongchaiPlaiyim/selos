@@ -56,10 +56,8 @@ public class CreditFacProposeView implements Serializable {
     private List<ProposeFeeDetailView> proposeFeeDetailViewList;
     private List<ProposeCreditDetailView> proposeCreditDetailViewList;
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
-    private List<GuarantorDetailView> guarantorDetailViewList;
-    private List<ConditionInfoDetailView> conditionInfoDetailViewList;
-
-    private ProposeCollateralInfoView collateralDetailView;
+    private List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList;
+    private List<ProposeConditionDetailView> proposeConditionDetailViewList;
 
     private int relatedTMBLending;
     private int twentyFivePercentShareRelatedTMBLending;
@@ -118,9 +116,8 @@ public class CreditFacProposeView implements Serializable {
         this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
         this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
-        this.guarantorDetailViewList = new ArrayList<GuarantorDetailView>();
-        this.conditionInfoDetailViewList = new ArrayList<ConditionInfoDetailView>();
-        this.collateralDetailView = new ProposeCollateralInfoView();
+        this.proposeGuarantorDetailViewList = new ArrayList<ProposeGuarantorDetailView>();
+        this.proposeConditionDetailViewList = new ArrayList<ProposeConditionDetailView>();
 
         this.relatedTMBLending = 0;
         this.twentyFivePercentShareRelatedTMBLending = 0;
@@ -473,20 +470,20 @@ public class CreditFacProposeView implements Serializable {
         this.proposeFeeDetailViewList = proposeFeeDetailViewList;
     }
 
-    public List<GuarantorDetailView> getGuarantorDetailViewList() {
-        return guarantorDetailViewList;
+    public List<ProposeGuarantorDetailView> getProposeGuarantorDetailViewList() {
+        return proposeGuarantorDetailViewList;
     }
 
-    public void setGuarantorDetailViewList(List<GuarantorDetailView> guarantorDetailViewList) {
-        this.guarantorDetailViewList = guarantorDetailViewList;
+    public void setProposeGuarantorDetailViewList(List<ProposeGuarantorDetailView> proposeGuarantorDetailViewList) {
+        this.proposeGuarantorDetailViewList = proposeGuarantorDetailViewList;
     }
 
-    public List<ConditionInfoDetailView> getConditionInfoDetailViewList() {
-        return conditionInfoDetailViewList;
+    public List<ProposeConditionDetailView> getProposeConditionDetailViewList() {
+        return proposeConditionDetailViewList;
     }
 
-    public void setConditionInfoDetailViewList(List<ConditionInfoDetailView> conditionInfoDetailViewList) {
-        this.conditionInfoDetailViewList = conditionInfoDetailViewList;
+    public void setProposeConditionDetailViewList(List<ProposeConditionDetailView> proposeConditionDetailViewList) {
+        this.proposeConditionDetailViewList = proposeConditionDetailViewList;
     }
 
     public int getSingleLendingLimit() {
@@ -513,13 +510,6 @@ public class CreditFacProposeView implements Serializable {
         this.twentyFivePercentShareRelatedTMBLending = twentyFivePercentShareRelatedTMBLending;
     }
 
-    public ProposeCollateralInfoView getCollateralDetailView() {
-        return collateralDetailView;
-    }
-
-    public void setCollateralDetailView(ProposeCollateralInfoView collateralDetailView) {
-        this.collateralDetailView = collateralDetailView;
-    }
 
 
 }

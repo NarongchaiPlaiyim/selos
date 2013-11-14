@@ -7,6 +7,7 @@ import com.clevel.selos.model.db.master.User;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class ProposeCreditDetailView implements Serializable {
     private BigDecimal PCEAmount;
     private int reducePriceFlag;
     private int reduceFrontEndFee;
+    private boolean reduceFlag;
+    private boolean reduceFrontEndFlag;
     private BigDecimal standardPrice;
     private BigDecimal suggestPrice;
     private BigDecimal frontEndFee;
@@ -70,6 +73,7 @@ public class ProposeCreditDetailView implements Serializable {
         this.finalPrice = BigDecimal.ZERO;
         this.tenor = BigDecimal.ZERO;
         this.purpose = BigDecimal.ZERO;
+        this.creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
     }
 
     public int getRequestType() {
@@ -278,5 +282,31 @@ public class ProposeCreditDetailView implements Serializable {
 
     public void setPurpose(BigDecimal purpose) {
         this.purpose = purpose;
+    }
+
+    public boolean isReduceFlag() {
+        if(this.reducePriceFlag==1 ){
+            reduceFlag =  true;
+        }else if(this.reducePriceFlag==0 ){
+            reduceFlag = false;
+        }
+        return reduceFlag;
+    }
+
+    public void setReduceFlag(boolean reduceFlag) {
+        this.reduceFlag = reduceFlag;
+    }
+
+    public boolean isReduceFrontEndFlag() {
+        if(this.reduceFrontEndFee==1 ){
+            reduceFrontEndFlag =  true;
+        }else if(this.reduceFrontEndFee==0 ){
+            reduceFrontEndFlag = false;
+        }
+        return reduceFrontEndFlag;
+    }
+
+    public void setReduceFrontEndFlag(boolean reduceFrontEndFlag) {
+        this.reduceFrontEndFlag = reduceFrontEndFlag;
     }
 }

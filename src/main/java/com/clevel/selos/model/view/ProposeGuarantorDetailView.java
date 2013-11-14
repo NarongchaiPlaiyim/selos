@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class GuarantorDetailView implements Serializable {
+public class ProposeGuarantorDetailView implements Serializable {
 
     private String guarantorName;
     private String tcgLgNo ;
@@ -22,10 +22,8 @@ public class GuarantorDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    //test
-    private CreditTypeDetailView creditTypeDetailView;
 
-    public GuarantorDetailView() {
+    public ProposeGuarantorDetailView() {
         reset();
     }
 
@@ -112,13 +110,4 @@ public class GuarantorDetailView implements Serializable {
         this.totalGuaranteeAmount = totalGuaranteeAmount;
     }
 
-
-    // test
-    public CreditTypeDetailView getCreditTypeDetailView() {
-        return creditTypeDetailView;
-    }
-
-    public void setCreditTypeDetailView(CreditTypeDetailView creditTypeDetailView) {
-        this.creditTypeDetailView = creditTypeDetailView;
-    }
 }
