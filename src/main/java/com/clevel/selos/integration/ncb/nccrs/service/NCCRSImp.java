@@ -358,9 +358,10 @@ public class NCCRSImp implements NCCRS, Serializable {
                     return checkOnlineResponseModel(callOnline(nccrsModel));
                 }
             } else {
-                resultDesc = "transaction did not found";
+//                resultDesc = "transaction did not found";
                 log.error("transaction did not found");
-                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
+                return checkOnlineResponseModel(callOnline(nccrsModel));
+//                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
