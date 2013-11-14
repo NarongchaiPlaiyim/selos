@@ -1354,16 +1354,16 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
-                                                                            lastNPLDateTMB = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateTMB = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
                                                                         }
                                                                     } else {
                                                                         isNPLOther = true;
                                                                         if (Util.isEmpty(lastNPLDateOther)) {
-                                                                            lastNPLDateOther = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateOther = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
                                                                         }
                                                                     }
                                                                 }
@@ -1406,16 +1406,16 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
-                                                                            lastNPLDateTMB = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateTMB = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
                                                                         }
                                                                     } else {
                                                                         isNPLOther = true;
                                                                         if (Util.isEmpty(lastNPLDateOther)) {
-                                                                            lastNPLDateOther = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateOther = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
                                                                         }
                                                                     }
                                                                 }
@@ -1566,16 +1566,16 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
-                                                                            lastNPLDateTMB = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateTMB = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
                                                                         }
                                                                     } else {
                                                                         isNPLOther = true;
                                                                         if (Util.isEmpty(lastNPLDateOther)) {
                                                                             lastNPLDateOther = creditHistModel.getDaypastdue();
                                                                         } else {
-                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
                                                                         }
                                                                     }
                                                                 }
@@ -1616,16 +1616,16 @@ public class NCBBizTransform extends BusinessTransform {
                                                                     if (isTMBAccount) {
                                                                         isNPLTMB = true;
                                                                         if (Util.isEmpty(lastNPLDateTMB)) {
-                                                                            lastNPLDateTMB = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateTMB = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateTMB = getLastDateYYYYMMDD(lastNPLDateTMB, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateTMB = getLastDateYYYYMM(lastNPLDateTMB, creditHistModel.getAsofdate());
                                                                         }
                                                                     } else {
                                                                         isNPLOther = true;
                                                                         if (Util.isEmpty(lastNPLDateOther)) {
-                                                                            lastNPLDateOther = creditHistModel.getDaypastdue();
+                                                                            lastNPLDateOther = creditHistModel.getAsofdate();
                                                                         } else {
-                                                                            lastNPLDateOther = getLastDateYYYYMMDD(lastNPLDateOther, creditHistModel.getDaypastdue());
+                                                                            lastNPLDateOther = getLastDateYYYYMM(lastNPLDateOther, creditHistModel.getAsofdate());
                                                                         }
                                                                     }
                                                                 }
@@ -1970,6 +1970,25 @@ public class NCBBizTransform extends BusinessTransform {
     private String getLastDateYYYYMMDD(String dateStr1, String dateStr2) {
         Date date1 = Util.strYYYYMMDDtoDateFormat(dateStr1);
         Date date2 = Util.strYYYYMMDDtoDateFormat(dateStr2);
+        if (date1 != null && date2 != null) {
+            if (date1.compareTo(date2) > 0) {
+                return Util.createDateString(date1, "yyyyMMdd");
+            } else if (date1.compareTo(date2) < 0) {
+                return Util.createDateString(date2, "yyyyMMdd");
+            }
+        } else {
+            if (date1 == null) {
+                return dateStr2;
+            } else {
+                return dateStr1;
+            }
+        }
+        return dateStr1;
+    }
+
+    private String getLastDateYYYYMM(String dateStr1, String dateStr2) {
+        Date date1 = DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(dateStr1));
+        Date date2 = DateTimeUtil.getLastDayOfMonth(Util.strYYYYMMtoDateFormat(dateStr2));
         if (date1 != null && date2 != null) {
             if (date1.compareTo(date2) > 0) {
                 return Util.createDateString(date1, "yyyyMMdd");
