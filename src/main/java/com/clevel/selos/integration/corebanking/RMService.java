@@ -266,12 +266,13 @@ public class RMService implements Serializable {
                             && resSearchIndividualCustomer.getBody().getPersonalDetailSection() != null
                             && resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail() != null){
                         if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId().equals(searchIndividual.getType())){
-                            individualModel.setDocumentType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
+                            individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
                         }else{
-                            individualModel.setDocumentType("");
+                            individualModel.setCitizenID("");
                         }
                     }
-                    individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
+                    individualModel.setDocumentType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
+
                     log.debug("=================================== {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setDocumentExpiredDate(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setCusType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustType());
@@ -568,7 +569,7 @@ public class RMService implements Serializable {
                     corporateModel.setCompanyNameEN(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName1()
                             + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName2()
                             + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName3());
-                    corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
+
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
                     corporateModel.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(), blank));
@@ -577,13 +578,14 @@ public class RMService implements Serializable {
                     corporateModel.setPostcode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getPostalCd());
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
+                    corporateModel.setDocumentType(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
 
                     if(resSearchCorporateCustomer.getBody()!=null && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection() != null
                             && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail() != null){
                         if (resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId().equals(searchIndividual.getType())){
-                            corporateModel.setDocumentType(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
+                            corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                         }else{
-                            corporateModel.setDocumentType("");
+                            corporateModel.setRegistrationID("");
                         }
                     }
 
