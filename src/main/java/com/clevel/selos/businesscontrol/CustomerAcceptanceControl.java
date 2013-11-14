@@ -20,9 +20,6 @@ import java.util.List;
 @Stateless
 public class CustomerAcceptanceControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     CustomerAcceptanceDAO customerAcceptanceDAO;
     @Inject
     ContactRecordDetailDAO contactRecordDetailDAO;

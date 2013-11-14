@@ -30,19 +30,22 @@ public class InboxControl extends BusinessControl {
 
     @Inject
     WorkCasePrescreenDAO workCasePrescreenDAO;
+
     @Inject
     WorkCaseDAO workCaseDAO;
-    @Inject
-    UserDAO userDAO;
+
     @Inject
     CustomerDAO customerDAO;
+
     @Inject
     PrescreenDAO prescreenDAO;
+
     @Inject
     PrescreenFacilityDAO prescreenFacilityDAO;
 
     @Inject
     InboxBizTransform inboxBizTransform;
+
     @Inject
     CustomerTransform customerTransform;
 

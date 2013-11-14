@@ -17,9 +17,6 @@ import java.util.List;
 @Stateless
 public class AppraisalResultControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     WorkCaseDAO workCaseDAO;
     @Inject
     AppraisalDAO appraisalDAO;
