@@ -73,6 +73,7 @@ public class DBRInfo implements Serializable {
     private long workCaseId;
     private long stepId;
     private String userId;
+    private String lastUpdated;
 
     private boolean isComplete;
 
@@ -193,7 +194,7 @@ public class DBRInfo implements Serializable {
             dbrControl.saveDBRInfo(dbr, ncbDetails);
             messageHeader = "Save Basic Info Success.";
             message = "Save Basic Info data success.";
-            RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
+
 
             //update Display
             dbr = new DBRView();
@@ -209,6 +210,7 @@ public class DBRInfo implements Serializable {
                 message = "Save Basic Info data failed. Cause : " + e.getMessage();
             }
         }
+        RequestContext.getCurrentInstance().execute("msgBoxSystemMessageDlg.show()");
     }
 
     public BigDecimal getTotalMonthDebtBorrower(){

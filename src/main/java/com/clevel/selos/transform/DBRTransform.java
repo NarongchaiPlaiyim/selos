@@ -5,6 +5,7 @@ import com.clevel.selos.model.db.master.User;
 import com.clevel.selos.model.db.working.DBR;
 import com.clevel.selos.model.db.working.WorkCase;
 import com.clevel.selos.model.view.DBRView;
+import com.clevel.selos.util.DateTimeUtil;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -33,6 +34,8 @@ public class DBRTransform extends Transform {
         dbrView.setMonthlyIncomeAdjust(dbr.getMonthlyIncomeAdjust());
         dbrView.setNetMonthlyIncome(dbr.getNetMonthlyIncome());
         dbrView.setDbrDetailViews(dbrDetailTransform.getDbrDetailViews(dbr.getDbrDetails()));
+        dbrView.setModifyBy(dbr.getModifyBy() == null ? "": dbr.getModifyBy().getId());
+        dbrView.setModifyDate(DateTimeUtil.convertToDateTH(dbr.getModifyDate()));
         return dbrView;
     }
 
@@ -50,8 +53,6 @@ public class DBRTransform extends Transform {
             if (dbr == null) {
                 dbr.setCreateBy(user);
                 dbr.setCreateDate(now);
-            } else {
-                dbr.setId(dbrView.getId());
             }
         }
         dbr.setMonthlyIncomeAdjust(dbrView.getMonthlyIncomeAdjust());
