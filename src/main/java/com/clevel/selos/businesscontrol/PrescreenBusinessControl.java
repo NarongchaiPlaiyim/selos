@@ -39,9 +39,6 @@ import java.util.List;
 @Stateless
 public class PrescreenBusinessControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     PrescreenTransform prescreenTransform;
     @Inject
     PrescreenFacilityTransform prescreenFacilityTransform;
@@ -86,8 +83,6 @@ public class PrescreenBusinessControl extends BusinessControl {
     IndividualDAO individualDAO;
     @Inject
     JuristicDAO juristicDAO;
-    @Inject
-    UserDAO userDAO;
     @Inject
     ActionDAO actionDAO;
     @Inject

@@ -412,9 +412,10 @@ public class NCRSImp implements NCRS, Serializable {
                     return checkOnlineResponseModel(callOnline(ncrsModel));
                 }
             } else {
-                resultDesc = "Matched transaction did not found";
-                log.error("Matched transaction did not found");
-                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
+//                resultDesc = "Matched transaction did not found";
+                log.debug("transaction did not found");
+                return checkOnlineResponseModel(callOnline(ncrsModel));
+//                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();

@@ -29,9 +29,6 @@ import java.util.List;
 @Stateless
 public class DBRControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     DBRDAO dbrdao;
 
     @Inject
@@ -39,9 +36,6 @@ public class DBRControl extends BusinessControl {
 
     @Inject
     WorkCaseDAO workCaseDAO;
-
-    @Inject
-    UserDAO userDAO;
 
     @Inject
     DBRTransform dbrTransform;

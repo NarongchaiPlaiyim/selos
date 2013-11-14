@@ -1,3 +1,31 @@
+PrimeFaces.locales ['th_TH'] = {
+    closeText: 'ปิด',
+    prevText: 'ย้อนกลับ',
+    nextText: 'ถัดไป',
+    monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม' ],
+    //monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.' ],
+    monthNamesShort: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม' ],
+    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Tue', 'Fri', 'Sat'],
+    dayNamesMin: ['อา', 'จ', 'อ', 'พ ', 'พฤ', 'ศ ', 'ส'],
+    weekHeader: 'สัปดาห์',
+    firstDay: 0,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'เวลา เท่านั้น',
+    timeText: 'Time',
+    hourText: 'Time',
+    minuteText: 'Minute',
+    secondText: 'Second',
+    currentText: 'ปัจจุบัน',
+    ampm: false,
+    month: 'เดือน',
+    week: 'สัปดาห์',
+    day: 'วัน',
+    allDayText: 'All Day'
+};
+
 function gotoInbox(contextUrl) {
     window.location = contextUrl;
 }
@@ -161,6 +189,33 @@ function onKeyAddress(evt) {
     }
 }
 
+function onKeyAddressMoo(evt) {
+    /*string = string.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g,'_');*/
+    var validNums = '0123456789/-';
+    var nbr = evt.keyCode ? evt.keyCode : evt.which;
+
+    /*home and end || evt.keyCode == '35' || evt.keyCode == '36' */
+    /*  96-105 = numkey 0-9
+     8 = backspace
+     9 = tab
+     46 = delete
+     191,111 = fwd slash
+     189,109 = dash
+     */
+    if ((evt.keyCode > 95 && evt.keyCode < 106)
+            || evt.keyCode == 8 || evt.keyCode == 9 || evt.keyCode == 46
+            || evt.keyCode == 191 || evt.keyCode == 111 || evt.keyCode == 189 || evt.keyCode == 109) {
+        return true;
+    } else {
+        keychar = String.fromCharCode(nbr);
+        validNums += String.fromCharCode(8);
+        if (validNums.indexOf(keychar) < 0) {
+            return false;
+        }
+        return true;
+    }
+}
+
 function onKeyName(evt){
     var nbr = evt.keyCode ? evt.keyCode : evt.which;
 
@@ -205,6 +260,20 @@ function hideWindowsScrollBar() {
 function showWindowsScrollBar() {
     $("body").attr("style", "overflow-y: scroll");
 }
+
+function onCheckRightClick(event){
+    if(event.button==2)
+    {
+        return false;
+    }
+}
+
+/*function onCheckEnter(obj, event){
+    if(event.keyCode == 13){
+        $(obj).attr("disabled","disabled");
+        return true;
+    }
+}*/
 
 function handleManageUserDialogRequest(xhr, status, args) {
     if (args.functionComplete) {

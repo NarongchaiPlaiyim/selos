@@ -582,7 +582,7 @@ public class RMService implements Serializable {
 
                     if(resSearchCorporateCustomer.getBody()!=null && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection() != null
                             && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail() != null){
-                        if (resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId().equals(searchIndividual.getType())){
+                        if (!Util.isEmpty(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId()) && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId().equals(searchIndividual.getType())){
                             corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
                         }else{
                             corporateModel.setRegistrationID("");

@@ -26,8 +26,6 @@ import java.util.List;
 @Stateless
 public class TCGInfoControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;    @Inject
     TCGDetailTransform tcgDetailTransform;
     @Inject
     TCGTransform tcgTransform;

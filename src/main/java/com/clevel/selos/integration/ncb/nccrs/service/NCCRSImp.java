@@ -358,9 +358,10 @@ public class NCCRSImp implements NCCRS, Serializable {
                     return checkOnlineResponseModel(callOnline(nccrsModel));
                 }
             } else {
-                resultDesc = "transaction did not found";
+//                resultDesc = "transaction did not found";
                 log.error("transaction did not found");
-                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
+                return checkOnlineResponseModel(callOnline(nccrsModel));
+//                throw new NCBInterfaceException(new Exception(resultDesc), exception, message.get(exception, resultDesc));
             }
         } catch (HttpHostConnectException e) {
             resultDesc = e.getMessage();
@@ -517,7 +518,7 @@ public class NCCRSImp implements NCCRS, Serializable {
         return new NCCRSRequestModel(
                 new HeaderModel(id, passwordEncrypt, command),
                 new BodyModel(
-                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId())));
+                        new CriteriaModel(Util.createDateString(new Date(), "yyyyMMdd"), id, nccrsModel.getRegistId(), memberRef)));
 
     }
 
