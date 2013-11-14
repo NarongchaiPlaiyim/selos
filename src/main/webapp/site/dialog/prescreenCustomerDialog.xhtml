@@ -126,13 +126,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText id="dlgBorrowerCustomerID" value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, 1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, 1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true" />
                     </td>
                 </tr>
@@ -415,13 +415,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, 1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, 1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true"/>
                     </td>
                 </tr>
@@ -491,11 +491,13 @@
                     <td class="title">First Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.firstNameTh}" styleClass="large"
+                                     required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                     </td>
                     <td class="title right">Last Name :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.spouse.lastNameTh}" styleClass="large"
+                                     required="#{not empty param[saveCustomerButton.clientId]}"
                                      onkeydown="return onKeyText(event);" onkeypress="return onKeyText(event);"/>
                     </td>
                 </tr>
@@ -649,13 +651,13 @@
                     <td class="title">TMB Customer ID :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.tmbCustomerId}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this,1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true" />
                     </td>
                     <td class="title right" style="min-width: 144px; width:144px; max-width: 144px;">Service Segment :</td>
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.serviceSegment}" styleClass="large" maxlength="15"
-                                     onclick="onClickReadonlyField(this, 1)"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="true"/>
                     </td>
                 </tr>
@@ -703,6 +705,7 @@
                     <td>
                         <p:inputText value="#{prescreenMaker.borrowerInfo.percentShare}" styleClass="small"
                                      onkeydown="return onKeyMoney(event);" onkeypress="return onKeyMoney(event);"
+                                     onclick="onClickReadonlyField(this, true)"
                                      readonly="#{not prescreenMaker.enableCustomerForm}">
                             <f:convertNumber pattern="##0.00" minFractionDigits="2" maxFractionDigits="2" maxIntegerDigits="3"/>
                             <f:validateDoubleRange maximum="100"/>
