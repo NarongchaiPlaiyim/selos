@@ -31,6 +31,8 @@ public class CSIService implements Serializable {
 
     }
 
+    private final String SPACE = " ";
+
     public CSIResult getCSIData(String userId, CSIInputData csiInputData) throws Exception {
         log.debug("getCSIData service userId: {}, csiInputData: {}", userId, csiInputData.toString());
         List<CSIData> csiDataList = new ArrayList<CSIData>();
@@ -60,11 +62,29 @@ public class CSIService implements Serializable {
                 for (AccountInfoName nameModel : csiInputData.getNameModelList()) {
                     String nameTh = null;
                     String nameEn = null;
-                    if (!Util.isEmpty(nameModel.getNameTh()) && !Util.isEmpty(nameModel.getSurnameTh())) {
-                        nameTh = nameModel.getNameTh().concat(" ").concat(nameModel.getSurnameTh());
+                    if (!Util.isEmpty(nameModel.getNameTh()) || !Util.isEmpty(nameModel.getSurnameTh())) {
+                        if(!Util.isEmpty(nameModel.getNameTh())){
+                            nameTh = nameModel.getNameTh().trim();
+                            if(!Util.isEmpty(nameModel.getSurnameTh())){
+                                nameTh = nameTh.concat(SPACE).concat(nameModel.getSurnameTh().trim());
+                            }
+                        } else {
+                            if(!Util.isEmpty(nameModel.getSurnameTh())){
+                                nameTh = nameModel.getSurnameTh().trim();
+                            }
+                        }
                     }
-                    if (!Util.isEmpty(nameModel.getNameEn()) && !Util.isEmpty(nameModel.getSurnameEn())) {
-                        nameEn = nameModel.getNameEn().concat(" ").concat(nameModel.getSurnameEn());
+                    if (!Util.isEmpty(nameModel.getNameEn()) || !Util.isEmpty(nameModel.getSurnameEn())) {
+                        if(!Util.isEmpty(nameModel.getNameEn())){
+                            nameEn = nameModel.getNameEn().trim();
+                            if(!Util.isEmpty(nameModel.getSurnameEn())){
+                                nameEn = nameEn.concat(SPACE).concat(nameModel.getSurnameEn().trim());
+                            }
+                        } else {
+                            if(!Util.isEmpty(nameModel.getSurnameEn())){
+                                nameEn = nameModel.getSurnameEn().trim();
+                            }
+                        }
                     }
                     Map<String, CSIData> warningCodeMap = dbExecute.getWarningCodeListPartialMatched(nameTh, nameEn);
                     if (warningCodeMap != null) {
