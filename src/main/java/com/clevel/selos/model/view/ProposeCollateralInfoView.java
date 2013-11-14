@@ -8,18 +8,18 @@ import java.util.List;
 
 public class ProposeCollateralInfoView implements Serializable {
     private long id;
-    private long jobID;
+    private String jobID;
     private Date appraisalDate;
-    private String  AADDecision;
-    private String  AADDecisionReason;
-    private String  AADDecisionReasonDetail;
+    private String  aadDecision;
+    private String  aadDecisionReason;
+    private String  aadDecisionReasonDetail;
     private String  usage;
     private String  typeOfUsage;
-    private String  UWDecision;
-    private String  UWRemark;
+    private String  uwDecision;
+    private String  uwRemark;
     private String  mortgageCondition;
     private String  mortgageConditionDetail;
-    private String  BDMComments;
+    private String  bdmComments;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -29,7 +29,6 @@ public class ProposeCollateralInfoView implements Serializable {
     private CollateralHeaderDetailView collateralHeaderDetailView;
 
     private List<CreditTypeDetailView> creditTypeDetailViewList;
-    private List<CollateralDetailView> CollateralDetailViewList;
 
     public long getId() {
         return id;
@@ -39,11 +38,11 @@ public class ProposeCollateralInfoView implements Serializable {
         this.id = id;
     }
 
-    public long getJobID() {
+    public String getJobID() {
         return jobID;
     }
 
-    public void setJobID(long jobID) {
+    public void setJobID(String jobID) {
         this.jobID = jobID;
     }
 
@@ -55,28 +54,28 @@ public class ProposeCollateralInfoView implements Serializable {
         this.appraisalDate = appraisalDate;
     }
 
-    public String getAADDecision() {
-        return AADDecision;
+    public String getAadDecision() {
+        return aadDecision;
     }
 
-    public void setAADDecision(String AADDecision) {
-        this.AADDecision = AADDecision;
+    public void setAadDecision(String aadDecision) {
+        this.aadDecision = aadDecision;
     }
 
-    public String getAADDecisionReason() {
-        return AADDecisionReason;
+    public String getAadDecisionReason() {
+        return aadDecisionReason;
     }
 
-    public void setAADDecisionReason(String AADDecisionReason) {
-        this.AADDecisionReason = AADDecisionReason;
+    public void setAadDecisionReason(String aadDecisionReason) {
+        this.aadDecisionReason = aadDecisionReason;
     }
 
-    public String getAADDecisionReasonDetail() {
-        return AADDecisionReasonDetail;
+    public String getAadDecisionReasonDetail() {
+        return aadDecisionReasonDetail;
     }
 
-    public void setAADDecisionReasonDetail(String AADDecisionReasonDetail) {
-        this.AADDecisionReasonDetail = AADDecisionReasonDetail;
+    public void setAadDecisionReasonDetail(String aadDecisionReasonDetail) {
+        this.aadDecisionReasonDetail = aadDecisionReasonDetail;
     }
 
     public String getUsage() {
@@ -95,20 +94,20 @@ public class ProposeCollateralInfoView implements Serializable {
         this.typeOfUsage = typeOfUsage;
     }
 
-    public String getUWDecision() {
-        return UWDecision;
+    public String getUwDecision() {
+        return uwDecision;
     }
 
-    public void setUWDecision(String UWDecision) {
-        this.UWDecision = UWDecision;
+    public void setUwDecision(String uwDecision) {
+        this.uwDecision = uwDecision;
     }
 
-    public String getUWRemark() {
-        return UWRemark;
+    public String getUwRemark() {
+        return uwRemark;
     }
 
-    public void setUWRemark(String UWRemark) {
-        this.UWRemark = UWRemark;
+    public void setUwRemark(String uwRemark) {
+        this.uwRemark = uwRemark;
     }
 
     public String getMortgageCondition() {
@@ -127,28 +126,12 @@ public class ProposeCollateralInfoView implements Serializable {
         this.mortgageConditionDetail = mortgageConditionDetail;
     }
 
-    public String getBDMComments() {
-        return BDMComments;
+    public String getBdmComments() {
+        return bdmComments;
     }
 
-    public void setBDMComments(String BDMComments) {
-        this.BDMComments = BDMComments;
-    }
-
-    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
-        return creditTypeDetailViewList;
-    }
-
-    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
-        this.creditTypeDetailViewList = creditTypeDetailViewList;
-    }
-
-    public List<CollateralDetailView> getCollateralDetailViewList() {
-        return CollateralDetailViewList;
-    }
-
-    public void setCollateralDetailViewList(List<CollateralDetailView> collateralDetailViewList) {
-        CollateralDetailViewList = collateralDetailViewList;
+    public void setBdmComments(String bdmComments) {
+        this.bdmComments = bdmComments;
     }
 
     public Date getCreateDate() {
@@ -198,4 +181,14 @@ public class ProposeCollateralInfoView implements Serializable {
     public void setCollateralHeaderDetailView(CollateralHeaderDetailView collateralHeaderDetailView) {
         this.collateralHeaderDetailView = collateralHeaderDetailView;
     }
+
+    public List<CreditTypeDetailView> getCreditTypeDetailViewList() {
+        return creditTypeDetailViewList;
+    }
+
+    public void setCreditTypeDetailViewList(List<CreditTypeDetailView> creditTypeDetailViewList) {
+        this.creditTypeDetailViewList = creditTypeDetailViewList;
+    }
+
+
 }

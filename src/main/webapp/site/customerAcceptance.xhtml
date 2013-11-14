@@ -112,12 +112,8 @@
                                         </p:column>
                                         <p:column  styleClass="left" style="width:120px;" >
                                             <p:outputLabel value="#{contactRecordDetailView.callingDate}" >
-                                                <f:convertDateTime pattern="dd/MM/yyy"  />
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm"  />
                                              </p:outputLabel>
-                                            <p:spacer width="10" />
-                                            <p:outputLabel value="#{contactRecordDetailView.callingTime}" >
-                                                <f:convertDateTime pattern="HH:mm"  />
-                                            </p:outputLabel>
                                         </p:column>
                                         <p:column styleClass="left" style="width:100px;">
                                             <p:outputLabel value="#{contactRecordDetailView.callingResultStr}"/>
@@ -127,15 +123,12 @@
                                         </p:column>
                                         <p:column styleClass="left" style="width:120px;" >
                                             <p:outputLabel value="#{contactRecordDetailView.nextCallingDate}">
-                                                <f:convertDateTime pattern="dd/MM/yyy"  />
+                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
                                             </p:outputLabel>
-                                            <p:spacer width="10" />
-                                            <p:outputLabel value="#{contactRecordDetailView.nextCallingTime}">
-                                                <f:convertDateTime pattern="HH:mm"  />
-                                            </p:outputLabel>
+
                                         </p:column>
                                         <p:column styleClass="left" style="width:150px;">
-                                            <p:outputLabel value="#{contactRecordDetailView.reason.description}"/>
+                                            <p:outputLabel value="#{contactRecordDetailView.reasonStr}"/>
                                         </p:column>
                                         <p:column  styleClass="left" style="width:200px;">
                                             <p:outputLabel value="#{contactRecordDetailView.remark}"/>

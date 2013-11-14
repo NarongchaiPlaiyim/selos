@@ -32,6 +32,19 @@ public class ContactRecordDetailDAO extends GenericDAO<ContactRecordDetail, Inte
         return contactRecordDetailList;
     }
 
+    public List<ContactRecordDetail> findRecordCallingByWorkCase(long workCaseId) {
+
+        Criteria criteria = createCriteria();
+        criteria.add(Restrictions.eq("workCase.id", workCaseId));
+        criteria.addOrder(Order.asc("id"));
+        List<ContactRecordDetail> contactRecordDetailList = criteria.list();
+
+        log.info("findByBizInfoSummaryId. (result size: {})", contactRecordDetailList.size());
+
+        return contactRecordDetailList;
+    }
+
+
     public List<ContactRecordDetail> findByAppraisal(Appraisal appraisal ){
 
         log.info("findByAppraisal begin ");

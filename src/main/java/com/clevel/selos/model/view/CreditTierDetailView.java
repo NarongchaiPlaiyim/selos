@@ -11,6 +11,8 @@ public class CreditTierDetailView implements Serializable {
     private BigDecimal finalPriceRate;
     private BigDecimal tenor;
     private BigDecimal installment;
+    private BigDecimal standardPrice;
+    private BigDecimal suggestPrice;
     private Date createDate;
     private Date modifyDate;
     private User createBy;
@@ -25,6 +27,8 @@ public class CreditTierDetailView implements Serializable {
         this.finalPriceRate = BigDecimal.ZERO;
         this.tenor = BigDecimal.ZERO;
         this.installment = BigDecimal.ZERO;
+        this.standardPrice = BigDecimal.ZERO;
+        this.suggestPrice = BigDecimal.ZERO;
     }
 
     public BigDecimal getFinalPriceRate() {
@@ -81,5 +85,21 @@ public class CreditTierDetailView implements Serializable {
 
     public void setModifyBy(User modifyBy) {
         this.modifyBy = modifyBy;
+    }
+
+    public BigDecimal getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(BigDecimal standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
+    public BigDecimal getSuggestPrice() {
+        return suggestPrice;
+    }
+
+    public void setSuggestPrice(BigDecimal suggestPrice) {
+        this.suggestPrice = suggestPrice;
     }
 }

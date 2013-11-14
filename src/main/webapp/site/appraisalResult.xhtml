@@ -26,7 +26,7 @@
         <ui:include src="include/menubar.xhtml" />
         <!-- End Menu -->
         <div id="content_container">
-            <div id="content_name"><p:outputLabel value="#{msg.get('app.appraisalRequest.header')}"/></div>
+            <div id="content_name"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisalRequest.header')}"/></div>
             <div id="content">
                 <table id="table_content" style="width: 100%;" class="content_table_form">
                     <tr>
@@ -39,12 +39,12 @@
                         <td colspan="6"><div class="separate"><!-- --></div></td>
                     </tr>
                     <tr>
-                        <td colspan="6"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
+                        <td colspan="6"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDetail')}" style="font-size: 15px"/> </td>
                     </tr>
                     <tr>
-                        <td class="title"><p:outputLabel value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
+                        <td class="title"><p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalType')}"/></td>
                         <td>
-                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" >
+                            <p:selectOneRadio id="bizPermissionRadio" value="#{appraisalResult.appraisalView.appraisalType}" disabled="true">
                                 <f:selectItem itemLabel="Internal" itemValue="0" />
                                 <f:selectItem itemLabel="External" itemValue="1" />
                             </p:selectOneRadio>
@@ -52,10 +52,10 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalCompany')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}"  required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalCompany.id}" disabled="true"  required="#{not empty param[saveButton.clientId]}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalCompanyList}"
                                                var="appraisalCompany"
@@ -64,10 +64,10 @@
                             </p:selectOneMenu>
                         </td>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDivision')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}"  required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" size="1" value="#{appraisalResult.appraisalView.appraisalDivision.id}" disabled="true" required="#{not empty param[saveButton.clientId]}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.appraisalDivisionList}"
                                                var="appraisalDivision"
@@ -78,18 +78,18 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalName')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalName')}"/>
                         </td>
                         <td>
-                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}"  />
+                            <p:inputText value="#{appraisalResult.appraisalView.appraisalName}"  disabled="true" />
                         </td>
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.receivedTaskDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="receivedTaskDate" showOn="button" navigator="true"
+                            <p:calendar size="10" id="receivedTaskDate" showOn="button" navigator="true"   disabled="true"
                                         value="#{appraisalResult.appraisalView.receivedTaskDate}"
                                         pattern="dd/MM/yyyy"
                                         locale="th_TH"
@@ -102,10 +102,10 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.locationOfProperty')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}"  required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" id="locationOfPropertyId" size="1" value="#{appraisalResult.appraisalView.locationOfProperty.id}" disabled="true" required="#{not empty param[saveButton.clientId]}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.locationPropertyList}"
                                                var="locationProperty"
@@ -114,10 +114,10 @@
                             </p:selectOneMenu>
                         </td>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.provinceOfProperty')}"/>
                         </td>
                         <td>
-                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}"  required="#{not empty param[saveButton.clientId]}">
+                            <p:selectOneMenu styleClass="largest" id="provinceOfPropertyId" size="1" value="#{appraisalResult.appraisalView.provinceOfProperty.code}" disabled="true" required="#{not empty param[saveButton.clientId]}">
                                 <f:selectItem itemLabel="- Please Select -" itemValue=""/>
                                 <f:selectItems value="#{appraisalResult.provinceList}"
                                                var="province"
@@ -128,10 +128,10 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.appraisalDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="appraisalDate" mindate="#{appraisalResult.currentDate}" showOn="button" navigator="true"
+                            <p:calendar size="10" id="appraisalDate" mindate="#{appraisalResult.currentDate}" showOn="button" navigator="true" disabled="true"
                                         value="#{appraisalResult.appraisalView.appraisalDate}"
                                         pattern="dd/MM/yyyy"
                                         locale="th_TH"
@@ -142,10 +142,10 @@
                             </p:calendar>
                         </td>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.dueDate')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.dueDate')}"/>
                         </td>
                         <td>
-                            <p:calendar size="10" id="dueDate" showOn="button" navigator="true"
+                            <p:calendar size="10" id="dueDate" showOn="button" navigator="true" disabled="true"
                                         value="#{appraisalResult.appraisalView.dueDate}"
                                         pattern="dd/MM/yyyy"
                                         locale="th_TH"
@@ -157,10 +157,10 @@
                     </tr>
                     <tr>
                         <td class="title">
-                            <p:outputLabel value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
+                            <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.label.AADAdminRemark')}"/>
                         </td>
                         <td colspan="5">
-                            <p:inputTextarea cols="100" rows="3" value="#{appraisalResult.appraisalView.AADAdminRemark}" />
+                            <p:inputTextarea cols="100" rows="3" value="#{appraisalResult.appraisalView.AADAdminRemark}" disabled="true" />
                         </td>
                     </tr>
                     <tr>
@@ -213,7 +213,7 @@
                                      </colgroup>
                                      <tr>
                                          <td>
-                                            Job ID :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.jobID')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.jobID}"/>
@@ -221,7 +221,7 @@
                                      </tr>
                                      <tr>
                                          <td>
-                                             Appraisal Date :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.appraisalDate')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.appraisalDate}"/>
@@ -229,7 +229,7 @@
                                      </tr>
                                      <tr>
                                          <td>
-                                             AAD Decesion :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecision')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.AADDecision}"/>
@@ -237,13 +237,13 @@
                                      </tr>
                                      <tr>
                                          <td>
-                                             AAD Decision Reason :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReason')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.AADDecisionReason}"/>
                                          </td>
                                          <td>
-                                             AAD Decision Reason (Detail) :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.AADDecisionReasonDetail')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.AADDecisionReasonDetail}"/>
@@ -251,13 +251,27 @@
                                      </tr>
                                      <tr>
                                          <td>
-                                             Mortgagae Condition :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.usage')}"/>
+                                         </td>
+                                         <td>
+                                             <p:outputLabel value="#{collateralDetailView.usage}"/>
+                                         </td>
+                                         <td>
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.typeOfUsage')}"/>
+                                         </td>
+                                         <td>
+                                             <p:outputLabel value="#{collateralDetailView.typeOfUsage}"/>
+                                         </td>
+                                     </tr>
+                                     <tr>
+                                         <td>
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageCondition')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.mortgageCondition}"/>
                                          </td>
                                          <td>
-                                             Mortgagae Condition (Detail) :
+                                             <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateral.label.mortgageConditionDetail')}"/>
                                          </td>
                                          <td>
                                              <p:outputLabel value="#{collateralDetailView.mortgageConditionDetail}"/>
@@ -277,7 +291,7 @@
                                          </colgroup>
                                          <tr>
                                              <td>
-                                                 Title Deed :
+                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.titleDeed')}"/>
                                              </td>
                                              <td>
                                                  <p:outputLabel value="#{collateralHeaderDetailView.titleDeed}"/>
@@ -285,7 +299,7 @@
                                          </tr>
                                          <tr>
                                              <td>
-                                                 Address :
+                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.collateralLocation')}"/>
                                              </td>
                                              <td>
                                                  <p:outputLabel value="#{collateralHeaderDetailView.collateralLocation}"/>
@@ -293,18 +307,20 @@
                                          </tr>
                                          <tr>
                                              <td>
-                                                 Head Collateral - Appraisal Value :
+                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.appraisalValue')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.appraisalValue}"/>
+                                                 <p:outputLabel value="#{collateralHeaderDetailView.appraisalValue}">
+                                                     <f:convertNumber pattern="#,##0" />
+                                                 </p:outputLabel>
                                              </td>
                                          </tr>
                                          <tr>
                                              <td>
-                                                 Head Collateral Type :
+                                                 <p:outputLabel styleClass="title" value="#{msg.get('app.appraisal.collateralHeader.label.headCollType')}"/>
                                              </td>
                                              <td>
-                                                 <p:outputLabel value="#{collateralHeaderDetailView.headCollType.code}"/>
+                                                 <p:outputLabel value="#{collateralHeaderDetailView.headCollType.description}"/>
                                              </td>
                                          </tr>
                                          <tr>
@@ -319,17 +335,17 @@
                                                      <p:columnGroup type="header">
                                                          <p:row>
                                                              <p:column />
-                                                             <p:column  headerText="Sub Coll Type"/>
-                                                             <p:column  headerText="Title Deed" />
-                                                             <p:column  headerText="Collateral Owner"/>
-                                                             <p:column  headerText="Appraisal Value "/>
+                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.subCollateralType')}"/>
+                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.titleDeed')}" />
+                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.CollateralOwner')}"/>
+                                                             <p:column  headerText="#{msg.get('app.appraisal.subCollateral.label.tb.appraisalValue')}"/>
                                                          </p:row>
                                                      </p:columnGroup>
                                                      <p:column styleClass="center" style="width: 50px">
                                                          <p:outputLabel value="#{subCollateralDetailView.no}"/>
                                                      </p:column>
                                                      <p:column  styleClass="left" style="width: 500px">
-                                                         <p:outputLabel value="#{subCollateralDetailView.subCollateralType.code}"/> <br/>
+                                                         <p:outputLabel value="#{subCollateralDetailView.subCollateralType.description}"/> <br/>
                                                          <p:outputLabel value="#{subCollateralDetailView.address}"/><br/>
                                                          <p:outputLabel value="#{subCollateralDetailView.landOffice}"/>
                                                      </p:column>
