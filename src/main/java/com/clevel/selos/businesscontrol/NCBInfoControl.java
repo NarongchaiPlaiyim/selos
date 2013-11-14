@@ -29,18 +29,20 @@ import java.util.List;
 @Stateless
 public class NCBInfoControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-    @Inject
     NCBDetailTransform ncbDetailTransform;
+
     @Inject
     NCBTransform ncbTransform;
+
     @Inject
     NCBDAO ncbDAO;
+
     @Inject
     NCBDetailDAO ncbDetailDAO;
+
     @Inject
     WorkCaseDAO workCaseDAO;
+
     @Inject
     private CustomerDAO customerDAO;
 

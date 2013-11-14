@@ -8,7 +8,7 @@
 <p:panel id="customerDlgPanel" styleClass="panel-dialog">
     <h:form id="customerDlgForm">
         <div id="customer_relation">
-            <table class="content_form" border="0" style="width:650px;">
+            <table class="content_form" border="0" style="width:700px;">
                 <tr>
                     <td class="title" style="min-width: 144px; width: 144px; max-width: 144px;">Document Type :</td>
                     <td colspan="3">
@@ -52,7 +52,7 @@
                         <p:inputText id="dlgInputSearchText" value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="13"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);" onblur="checkSearchThaiID(this)"
-                                     rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 1}"
+                                     rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and (prescreenMaker.borrowerInfo.documentType.id == 1 || prescreenMaker.borrowerInfo.documentType.id == 3)}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <!-- only passport allow free text -->
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
@@ -61,11 +61,11 @@
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 2}"
                                      required="#{not empty param[searchButton.clientId]}" />
                         <!-- only all for number -->
-                        <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
+                        <!--<p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
                                      rendered="#{prescreenMaker.borrowerInfo.searchBy == 1 and prescreenMaker.borrowerInfo.documentType.id == 3}"
-                                     required="#{not empty param[searchButton.clientId]}" />
+                                     required="#{not empty param[searchButton.clientId]}" />-->
                         <p:inputText value="#{prescreenMaker.borrowerInfo.searchId}" maxlength="15"
                                      disabled="#{not prescreenMaker.enableSearchForm}"
                                      onkeydown="return onKeyNumber(event);" onkeypress="return onKeyNumber(event);"
