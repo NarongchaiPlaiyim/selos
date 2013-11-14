@@ -54,12 +54,11 @@ public class CreditFacPropose implements Serializable {
     private User user;
 
     enum ModeForButton {ADD, EDIT}
-
     private ModeForButton modeForButton;
 
     enum ModeForDB {ADD_DB, EDIT_DB, CANCEL_DB}
-
     private ModeForDB modeForDB;
+
     private String messageHeader;
     private String message;
     private boolean messageErr;
@@ -77,6 +76,8 @@ public class CreditFacPropose implements Serializable {
     //for control Propose Credit
     private ProposeCreditDetailView proposeCreditDetailView;
     private ProposeCreditDetailView proposeCreditDetailSelected;
+    CreditTierDetailView creditTierDetailView;
+    List<CreditTierDetailView> creditTierDetailViewList;
     private int rowSpanNumber;
     private boolean modeEdit;
 
@@ -270,12 +271,66 @@ public class CreditFacPropose implements Serializable {
 
     //  Start Propose Credit Information  //
     public void onAddCreditInfo() {
+        log.info("onAddCreditInfo ::: ");
         proposeCreditDetailView  = new ProposeCreditDetailView();
+        modeForButton = ModeForButton.ADD;
     }
 
     public void onEditCreditInfo() {
         modeEdit = false;
     }
+
+    public void onSaveCreditInfo() {
+        log.info("onSaveCreditInfo ::: mode : {}", modeForButton);
+        boolean complete = false;
+        RequestContext context = RequestContext.getCurrentInstance();
+
+        if((proposeCreditDetailView.getProductProgram().getId() != 0 ) && (proposeCreditDetailView.getCreditType().getId() !=0))
+        {
+            if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
+
+                ProductProgram  productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
+                CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
+
+                ProposeCreditDetailView creditDetailAdd = new ProposeCreditDetailView();
+                creditDetailAdd.setRequestType(proposeCreditDetailView.getRequestType());
+                creditDetailAdd.setRefinance(proposeCreditDetailView.getRefinance());
+                creditDetailAdd.setProductProgram(productProgram);
+                creditDetailAdd.setCreditType(creditType);
+                creditDetailAdd.setProductCode(proposeCreditDetailView.getProductCode());
+                creditDetailAdd.setProjectCode(proposeCreditDetailView.getProjectCode());
+                creditDetailAdd.setLimit(proposeCreditDetailView.getLimit());
+                creditDetailAdd.setPCEPercent(proposeCreditDetailView.getPCEPercent());
+                creditDetailAdd.setPCEAmount(proposeCreditDetailView.getPCEAmount());
+
+                creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
+                creditTierDetailView = new CreditTierDetailView();
+                creditTierDetailViewList.add(creditTierDetailView);
+                creditTierDetailView = new CreditTierDetailView();
+                creditTierDetailViewList.add(creditTierDetailView);
+                creditDetailAdd.setCreditTierDetailViewList(creditTierDetailViewList);
+                creditFacProposeView.getProposeCreditDetailViewList().add(creditDetailAdd);
+
+            }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
+
+
+            }else {
+                log.info("onSaveNcbRecord ::: Undefined modeForButton !!");
+            }
+
+            complete = true;
+
+        } else {
+
+            log.info("onSaveNcbRecord ::: validation failed.");
+            complete = false;
+        }
+        rowSpanNumber = creditFacProposeView.getProposeCreditDetailViewList().size();
+        log.info("  complete >>>>  :  {}", complete);
+        context.addCallbackParam("functionComplete", complete);
+
+    }
+
 
     public void onDeleteCreditInfo() {
 
@@ -642,6 +697,16 @@ public class CreditFacPropose implements Serializable {
 
     public void setProposeCreditDetailSelected(ProposeCreditDetailView proposeCreditDetailSelected) {
         this.proposeCreditDetailSelected = proposeCreditDetailSelected;
+    }
+
+    //
+
+    public CreditTierDetailView getCreditTierDetailView() {
+        return creditTierDetailView;
+    }
+
+    public void setCreditTierDetailView(CreditTierDetailView creditTierDetailView) {
+        this.creditTierDetailView = creditTierDetailView;
     }
 }
 
