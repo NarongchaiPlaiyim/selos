@@ -728,6 +728,8 @@ public class PrescreenMaker implements Serializable {
 
         borrowerRelation = new Relation();
         spouseRelation = new Relation();
+        borrowerReference = new Reference();
+        spouseReference = new Reference();
 
         borrowerInfo = new CustomerInfoView();
         borrowerInfo.reset();
