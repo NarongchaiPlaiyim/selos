@@ -1339,8 +1339,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
-                                                                if (!Util.isEmpty(worstCode)) {
-                                                                    worstCode = creditHistModel.getDaypastdue();
+                                                                if (Util.isEmpty(worstCode)) {
+                                                                    if(!isIgnoreCode(creditHistModel.getDaypastdue())){
+                                                                        worstCode = creditHistModel.getDaypastdue();
+                                                                    }
                                                                 } else {
                                                                     worstCode = getWorstCode(creditHistModel.getDaypastdue(), worstCode);
                                                                 }
@@ -1388,8 +1390,11 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 }
 
                                                                 //get worstCode
-                                                                if (!Util.isEmpty(worstCode)) {
-                                                                    worstCode = creditHistModel.getDaypastdue();
+                                                                if (Util.isEmpty(worstCode)) {
+                                                                    if(!isIgnoreCode(creditHistModel.getDaypastdue())){
+                                                                        worstCode = creditHistModel.getDaypastdue();
+                                                                    }
+
                                                                 } else {
                                                                     worstCode = getWorstCode(creditHistModel.getDaypastdue(), worstCode);
                                                                 }
@@ -1546,8 +1551,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
-                                                                if (!Util.isEmpty(worstCode)) {
-                                                                    worstCode = creditHistModel.getDaypastdue();
+                                                                if (Util.isEmpty(worstCode)) {
+                                                                    if(!isIgnoreCode(creditHistModel.getDaypastdue())){
+                                                                        worstCode = creditHistModel.getDaypastdue();
+                                                                    }
                                                                 } else {
                                                                     worstCode = getWorstCode(creditHistModel.getDaypastdue(), worstCode);
                                                                 }
@@ -1594,8 +1601,10 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 }
 
                                                                 //get worstCode
-                                                                if (!Util.isEmpty(worstCode)) {
-                                                                    worstCode = creditHistModel.getDaypastdue();
+                                                                if (Util.isEmpty(worstCode)) {
+                                                                    if(!isIgnoreCode(creditHistModel.getDaypastdue())){
+                                                                        worstCode = creditHistModel.getDaypastdue();
+                                                                    }
                                                                 } else {
                                                                     worstCode = getWorstCode(creditHistModel.getDaypastdue(), worstCode);
                                                                 }
@@ -1866,8 +1875,8 @@ public class NCBBizTransform extends BusinessTransform {
     private String getWorstCode(String code, String worstCode) {
         int value1 = NCBPaymentCode.getValue(worstCode).value();
         int value2 = NCBPaymentCode.getValue(code).value();
-        if (value2 < 0){
-           return worstCode;
+        if(isIgnoreCode(code)) { //ignore code;
+            return worstCode;
         }
         if (value2 > value1) {
             return code;
