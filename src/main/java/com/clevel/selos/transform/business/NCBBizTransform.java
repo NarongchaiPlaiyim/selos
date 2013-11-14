@@ -1335,6 +1335,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                             //get worstCode
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), SIX_MONTH)) {
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
+                                                                log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
@@ -1381,6 +1382,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                             }*/
 
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
+                                                                log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
@@ -1540,6 +1542,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                             //get worstCode
                                                             if (isInMonthPeriodYYYYMM(creditHistModel.getAsofdate(), SIX_MONTH)) {
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
+                                                                log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
@@ -1585,6 +1588,7 @@ public class NCBBizTransform extends BusinessTransform {
                                                                 numberOfOverLimit++;
                                                             }*/
                                                                 isValidPayment = isValidPaymentPatternJuristic(creditHistModel);
+                                                                log.debug("DayPastDue : {}, trim : {}",creditHistModel.getDaypastdue(),creditHistModel.getDaypastdue().trim());
                                                                 if(!isValidPayment) {
                                                                     break;
                                                                 }
