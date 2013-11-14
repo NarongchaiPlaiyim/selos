@@ -8,6 +8,7 @@ import org.hibernate.criterion.Criterion;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -113,4 +114,5 @@ public abstract class GenericDAO<T, ID extends Serializable> implements BaseDAO<
         }
         return (T) criteria.uniqueResult();
     }
+
 }

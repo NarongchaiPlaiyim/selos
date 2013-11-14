@@ -1,5 +1,6 @@
 package com.clevel.selos.businesscontrol.isa;
 
+import com.clevel.selos.businesscontrol.BusinessControl;
 import com.clevel.selos.dao.audit.IsaActivityDAO;
 import com.clevel.selos.dao.audit.SecurityActivityDAO;
 import com.clevel.selos.dao.master.UserDAO;
@@ -30,11 +31,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Stateless
-public class IsaBusinessControl implements Serializable {
+public class IsaBusinessControl extends BusinessControl {
 
     @Inject
     @SELOS
     Logger log;
+
     @Inject
     UserDAO userDAO;
 

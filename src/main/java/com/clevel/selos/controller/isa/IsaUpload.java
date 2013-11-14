@@ -1,7 +1,9 @@
 package com.clevel.selos.controller.isa;
 
+import com.clevel.selos.businesscontrol.isa.ImportService;
 import com.clevel.selos.businesscontrol.isa.IsaUploadService;
 import com.clevel.selos.integration.SELOS;
+import com.clevel.selos.util.Util;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +34,9 @@ public class IsaUpload implements Serializable{
 
     @Inject
     IsaUploadService isaUploadService;
+
+    @Inject
+    ImportService importService;
 
     public IsaUpload(){
 
@@ -62,18 +69,31 @@ public class IsaUpload implements Serializable{
         Date now = Calendar.getInstance().getTime();
         String userUploadId = dateFormatFile.format(now) + UPLOAD_FOLDER;
         System.out.println(userUploadId+file.getSize());
+
+            try {
+                InputStream is= file.getInputstream();
+//                is.
+
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+//            String result = importService.uploadDocFiles(request, userUploadId);
+//
+        String tmpDir = "C:\\Users\\sahawat\\Desktop\\test" ;//+ (Util.isEmpty(userUploadId)?"":"\\"+userUploadId);
+            System.out.println("TMPDIR : "+tmpDir);
+
+        File file = new File(tmpDir);
+        if(file.isDirectory()){
+            isaUploadService.processUserUploadFiles(tmpDir, file.listFiles()[0].getName());
+            System.out.println("OK");
+        } else{
+            System.out.println("NOT OK");
+        }
+
         }else {
             System.out.println("file is null");
         }
-//        String result = importService.uploadDocFiles(request, userUploadId);
-//
-//        String tmpDir = importService.getTmpFolder(userUploadId);
-//
-        File file = new File("C:\\Users\\sahawat\\Desktop\\test");
-        if(file.isDirectory()){
-//            isaUploadService.processUserUploadFiles(tmpDir, file.listFiles()[0].getName());
-        }
-
     }
 
 

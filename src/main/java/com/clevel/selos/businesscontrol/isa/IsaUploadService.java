@@ -1,10 +1,11 @@
 package com.clevel.selos.businesscontrol.isa;
 
+import com.clevel.selos.businesscontrol.BusinessControl;
+import com.clevel.selos.businesscontrol.util.stp.STPExecutor;
 import com.clevel.selos.dao.master.UserDAO;
+import com.clevel.selos.integration.SELOS;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.*;
@@ -16,13 +17,13 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class IsaUploadService implements Serializable {
+public class IsaUploadService extends BusinessControl {
     @Inject
-    UserDAO userDAO;
+    STPExecutor stpExecutor;
 
-//    @Resource
-//    UserService userService;
+
     @Inject
+    @SELOS
     Logger log;
    
     String processFileName = null;
@@ -57,6 +58,7 @@ public class IsaUploadService implements Serializable {
                     bufferedWriter = new BufferedWriter(outputStreamWriter);
 
                     if (processFileName.indexOf(".csv") < 0 && processFileName.indexOf(".CSV") < 0) {
+
                         logResult("File Format", UploadResult.FAILED, "File " + processFileName + " has wrong format. The file should be in COMMA Delimited format(.csv).");
                     } else {
 
@@ -81,6 +83,7 @@ public class IsaUploadService implements Serializable {
                         line = bufferedReader.readLine();
 
                         while (line != null) {
+                            System.out.println("LINE : = "+line);
                             try {
                                 List<String> params = getToken(line);
                                 String importResult = executeScript(params);
@@ -168,22 +171,21 @@ public class IsaUploadService implements Serializable {
         public String executeScript(List<String> params) throws SQLException, Exception {
             String result = "";
             //todo
-//            String create_by = userService.getUserDetails().getUserId();
-//
+//            String create_by = getCurrentUserID();
+
 //            params.add(create_by);
             String[] stringParams = params.toArray(new String[params.size()]);
-
+            System.out.println(stringParams.length);
+            for(String ssd:stringParams){
+                System.out.println("--- "+ssd);
+            }
             log.debug("parameters ", stringParams);
 
-            //String params[] = new String[] {command, userid, username, userbu, usergroup, userrole, userImportRole, userActive, create_by};
+//            String params[] = new String[] {command, userid, username, userbu, usergroup, userrole, userImportRole, userActive, create_by};
             try {
 //                todo
-//                result = userDAO.executeStoreProcedure("{CALL USERPROFILE_PACKAGE.pUserprofileUpload(?,?,?,?,?,?,?,?,?,?)}", stringParams);
-//            }
-//            catch (SQLException e) {
-//                log.error("SQLException", e);
-//                throw new SQLException(e.getMessage());
-            } catch (Exception e) {
+                result = stpExecutor.addUserFromFile("{CALL USERPROFILE_PACKAGE.pUserprofileUpload(?,?,?,?,?,?,?,?,?,?)}", stringParams);
+            }catch (Exception e) {
                 log.error("Exception", e);
                 throw new Exception(e.getMessage());
             }
