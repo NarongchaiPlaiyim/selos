@@ -4,12 +4,14 @@
         xmlns:f="http://java.sun.com/jsf/core"
         xmlns:h="http://java.sun.com/jsf/html"
         xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui">
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:clv="http://clevel.com/ui">
 
 <h:head>
     <title>SE-LOS : Prescreen Maker</title>
     <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/style.css"/>
-    <script type="text/javascript" language="javascript" src="#{request.contextPath}/resources/js/custom.js"/>
+    <h:outputScript library="js" name="custom.js"/>
+    <h:outputScript library="js" name="jquery.ui.datepicker.min.js" />
 </h:head>
 
 <h:body>
@@ -424,34 +426,49 @@
                             <tr>
                                 <td class="title">Date of register :</td>
                                 <td>
-                                    <p:calendar id="registerDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                value="#{prescreenMaker.prescreenView.registerDate}"
-                                                locale="th_TH"
-                                                yearRange="2440:3000"
-                                                pattern="dd/MM/yyyy">
+                                    <clv:BECalendar id="registerDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                    yearRange="1950:2100"
+                                                    mindate="01/01/1950"
+                                                    maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                                    pattern="dd/MM/yyyy"
+                                                    value="#{prescreenMaker.prescreenView.registerDate}"
+                                                    locale="th_TH" >
                                         <p:ajax event="change"
                                                 listener="#{prescreenMaker.onCheckMaxDate('dateOfregister')}"
                                                 process="@form"
                                                 update=":frmMain"/>
-                                    </p:calendar>
+                                    </clv:BECalendar>
+                                    <h:outputText value="#{prescreenMaker.currentDateDDMMYY}"/>
+                                    <!-- <p:calendar id="registerDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
+                                                 value="#{prescreenMaker.prescreenView.registerDate}"
+                                                 locale="th_TH"
+                                                 yearRange="2440:3000"
+                                                 pattern="dd/MM/yyyy">
+                                         <p:ajax event="change"
+                                                 listener="#{prescreenMaker.onCheckMaxDate('dateOfregister')}"
+                                                 process="@form"
+                                                 update=":frmMain"/>
+                                     </p:calendar>-->
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title">Referred company :</td>
                                 <td>
-                                    <table class="content_table_form">
+                                    <table class="content_table_form" style="padding: 0; border-spacing:0; border-collapse:collapse; margin-left: -1px;">
                                         <tr>
                                             <td style="width: 180px;">
-                                                <p:calendar id="referredDate" maxdate="#{prescreenMaker.currentDate}" showOn="button" navigator="true"
-                                                            value="#{prescreenMaker.prescreenView.referDate}"
-                                                            locale="th_TH"
-                                                            yearRange="2440:3000"
-                                                            pattern="dd/MM/yyyy">
+                                                <clv:BECalendar id="referredDate" showOn="button" showButtonPanel="true" navigator="true"
+                                                                yearRange="1950:2100"
+                                                                mindate="01/01/1950"
+                                                                maxdate="#{prescreenMaker.currentDateDDMMYY}"
+                                                                pattern="dd/MM/yyyy"
+                                                                value="#{prescreenMaker.prescreenView.referDate}"
+                                                                locale="th_TH" >
                                                     <p:ajax event="change"
                                                             listener="#{prescreenMaker.onCheckMaxDate('dateOfrefer')}"
                                                             process="@form"
                                                             update=":frmMain"/>
-                                                </p:calendar>
+                                                </clv:BECalendar>
                                             </td>
                                             <td>
                                                 <p:selectOneMenu value="#{prescreenMaker.prescreenView.referredExperience.id}"
@@ -642,6 +659,14 @@
                          process="@this"
                          update=":frmMain"
                          oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenSpDlg', 'customerDlgForm\\:dlgInputSpCitizenText')"/>
+    </p:confirmDialog>
+    <p:confirmDialog id="msgBoxInvalidCitizenJrDialog" widgetVar="msgBoxInvalidCitizenJrDlg" styleClass="messageDialog"
+                     closable="false"
+                     header="Invalid input citizen id" message="Invalid input citizen id. please check value.">
+        <p:commandButton value="OK"
+                         process="@this"
+                         update=":frmMain"
+                         oncomplete="closeMessageCitizenDialog('msgBoxInvalidCitizenJrDlg', 'customerDlgForm\\:dlgInputJrRegistrationText')"/>
     </p:confirmDialog>
     <p:dialog id="facilityDialog" widgetVar="facilityDlg" header="Facility Information"
               modal="true" width="400" height="150">

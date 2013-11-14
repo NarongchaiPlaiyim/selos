@@ -246,6 +246,8 @@ public class RMService implements Serializable {
                     if (resSearchIndividualCustomer.getBody().getSearchResult().equals("CL")) {
                         throw new RMInterfaceException(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE, exceptionMsg.get(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE));
                     }
+
+
                     //personal detail session
                     individualModel.setTmbCusID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustNbr());
                     individualModel.setTitleTH(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getTitle());
@@ -260,8 +262,17 @@ public class RMService implements Serializable {
                             individualModel.setLastname(name[1]);
                         }
                     }
+                    if(resSearchIndividualCustomer.getBody() != null
+                            && resSearchIndividualCustomer.getBody().getPersonalDetailSection() != null
+                            && resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail() != null){
+                        if (resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId().equals(searchIndividual.getType())){
+                            individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
+                        }else{
+                            individualModel.setCitizenID("");
+                        }
+                    }
                     individualModel.setDocumentType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustId());
-                    individualModel.setCitizenID(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCitizenId());
+
                     log.debug("=================================== {}", resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setDocumentExpiredDate(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getExpDt());
                     individualModel.setCusType(resSearchIndividualCustomer.getBody().getPersonalDetailSection().getPersonalDetail().getCustType());
@@ -547,7 +558,9 @@ public class RMService implements Serializable {
                     if (resSearchCorporateCustomer.getBody().getSearchResult().equals("CL")) {
                         throw new RMInterfaceException(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE, exceptionMsg.get(ExceptionMapping.RM_CUSTOMER_RESULT_MULTIPLE));
                     }
-                    //personal detail session
+
+
+                        //personal detail session
                     corporateModel.setTitleTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getTitle());
                     corporateModel.setTmbCusID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCustNbr());
                     corporateModel.setCompanyNameTH(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getThaiName1()
@@ -556,7 +569,7 @@ public class RMService implements Serializable {
                     corporateModel.setCompanyNameEN(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName1()
                             + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName2()
                             + " " + resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEngName3());
-                    corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
+
                     corporateModel.setRegistrationDate(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getEstDate());
                     corporateModel.setRegistrationCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCountry());
                     corporateModel.setSubdistrict(Util.replaceToBlank(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddrTumbon(), blank));
@@ -566,6 +579,16 @@ public class RMService implements Serializable {
                     corporateModel.setCountry(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCtry());
                     corporateModel.setCountryCode(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getIsoCtryCode());
                     corporateModel.setDocumentType(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId());
+
+                    if(resSearchCorporateCustomer.getBody()!=null && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection() != null
+                            && resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail() != null){
+                        if (resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCId().equals(searchIndividual.getType())){
+                            corporateModel.setRegistrationID(resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getCitizenCId());
+                        }else{
+                            corporateModel.setRegistrationID("");
+                        }
+                    }
+
                     if (resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine1PRI() != null) {
                         String addressPri[] = resSearchCorporateCustomer.getBody().getCorporateCustomerDetailSection().getCorporateDetail().getAddressLine1PRI().split(" ");
                         int addressPriSize1 = addressPri.length;

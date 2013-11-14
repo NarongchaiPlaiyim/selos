@@ -141,6 +141,7 @@ public class PrescreenMaker implements Serializable {
     private long stepId;
     private String queueName;
     private Date currentDate;
+    private String currentDateDDMMYY;
     private int previousProductGroupId;
     private int caseBorrowerTypeId;
     private CustomerEntity caseBorrowerType;
@@ -748,6 +749,7 @@ public class PrescreenMaker implements Serializable {
             if(caseBorrowerTypeId == BorrowerType.INDIVIDUAL.value()){    //case borrower type = individual
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.INDIVIDUAL.value());
                 documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
+                spouseDocumentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
             } else if (caseBorrowerTypeId == BorrowerType.JURISTIC.value()){
                 borrowerInfo.getCustomerEntity().setId(BorrowerType.JURISTIC.value());
                 documentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.JURISTIC.value());
@@ -837,7 +839,9 @@ public class PrescreenMaker implements Serializable {
             }
         }
 
-
+        if(stepId == 1001){
+            spouseDocumentTypeList = documentTypeDAO.getDocumentTypeListPreScreen(BorrowerType.INDIVIDUAL.value());
+        }
 
         modeForButton = ModeForButton.EDIT;
 
@@ -1900,7 +1904,8 @@ public class PrescreenMaker implements Serializable {
                     log.debug("onSearchCustomerInfo ::: customer not found.");
                     if(borrowerInfo.getSearchBy() == 2){
                         //enableDocumentType = true;
-                        borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+                        //borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+                        log.debug("search by TMB Cus id not found");
                     }else{
                         //enableDocumentType = false;
                         borrowerInfo.setCitizenId(borrowerInfo.getSearchId());
@@ -1925,7 +1930,8 @@ public class PrescreenMaker implements Serializable {
             } else {
                 if(borrowerInfo.getSearchBy() == 2){
                     //enableDocumentType = true;
-                    borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+                    //borrowerInfo.setTmbCustomerId(borrowerInfo.getSearchId());
+                    log.debug("Search customer failed : search by 2");
                 }else{
                     //enableDocumentType = false;
                     if(borrowerInfo.getSearchId() != null){
@@ -3003,5 +3009,14 @@ public class PrescreenMaker implements Serializable {
 
     public void setSpouseReference(Reference spouseReference) {
         this.spouseReference = spouseReference;
+    }
+
+    public String getCurrentDateDDMMYY() {
+        log.debug("current date : {}", getCurrentDate());
+        return  currentDateDDMMYY = DateTimeUtil.convertToStringDDMMYYYY(getCurrentDate());
+    }
+
+    public void setCurrentDateDDMMYY(String currentDateDDMMYY) {
+        this.currentDateDDMMYY = currentDateDDMMYY;
     }
 }

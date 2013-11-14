@@ -43,6 +43,13 @@ public class DateTimeUtil {
         return dateConvert.toDate();
     }
 
+    public static String convertToStringDDMMYYYY(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = simpleDateFormat.format(date);
+
+        return dateString;
+    }
+
     public static Date convertToDateTH(Date date){
         DateTime dateConvert = new DateTime(date, BuddhistChronology.getInstance());
         log.debug("dateConvert : {}", dateConvert);
