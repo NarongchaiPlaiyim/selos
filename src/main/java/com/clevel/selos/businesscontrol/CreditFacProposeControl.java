@@ -3,7 +3,6 @@ package com.clevel.selos.businesscontrol;
 import com.clevel.selos.dao.master.CollateralTypeDAO;
 import com.clevel.selos.dao.master.SubCollateralTypeDAO;
 import com.clevel.selos.dao.working.CustomerDAO;
-import com.clevel.selos.integration.SELOS;
 import com.clevel.selos.integration.coms.model.AppraisalData;
 import com.clevel.selos.integration.coms.model.HeadCollateralData;
 import com.clevel.selos.integration.coms.model.SubCollateralData;
@@ -13,7 +12,6 @@ import com.clevel.selos.model.view.CollateralHeaderDetailView;
 import com.clevel.selos.model.view.ProposeCollateralInfoView;
 import com.clevel.selos.model.view.SubCollateralDetailView;
 import com.clevel.selos.transform.CustomerTransform;
-import org.slf4j.Logger;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,12 +22,7 @@ import java.util.List;
 @Stateless
 public class CreditFacProposeControl extends BusinessControl {
     @Inject
-    @SELOS
-    Logger log;
-
-    @Inject
     CustomerTransform customerTransform;
-
     @Inject
     CustomerDAO customerDAO;
     @Inject

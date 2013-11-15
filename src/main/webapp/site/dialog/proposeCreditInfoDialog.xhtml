@@ -87,8 +87,11 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.limitNotional')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.limit}"
-                     style="text-align:right"/>
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.limit}"
+                     style="text-align:right">
+            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
     <td class="title">
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pcePercent')}"/>
@@ -108,10 +111,11 @@
         <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.pceAmt')}"/>
     </td>
     <td>
-        <h:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEAmount}"
+        <p:inputText value="#{creditFacPropose.proposeCreditDetailView.PCEAmount}"
                      style="text-align:right">
             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
-        </h:inputText>
+            <p:ajax event="blur" update="@this"/>
+        </p:inputText>
     </td>
 </tr>
 <tr>
@@ -202,7 +206,7 @@
 
             <p:column styleClass="center">
                 <h:outputText value="#{item.installment}">
-                    <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                    <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0" />
                 </h:outputText>
             </p:column>
 
@@ -217,7 +221,8 @@
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.frontEndFee}"
                      style="text-align:right"
                      disabled="#{creditFacPropose.modeEdit}">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+                             integerOnly="true" maxIntegerDigits="14"/>
         </p:inputText>
     </td>
 </tr>
@@ -249,7 +254,8 @@
                          value="#{creditFacPropose.proposeCreditDetailView.disbursement.id}"
                          size="1"
                          style="min-width: 200px; width: 200px; max-width: 200px;"
-                         required="true">
+                         required="true"
+                         disabled="#{creditFacPropose.modeEdit}">
             <f:selectItems value="#{creditFacPropose.disbursementList}"
                            var="disbursementItem"
                            itemLabel="#{disbursementItem.disbursement}"
@@ -262,8 +268,10 @@
     </td>
     <td>
         <p:inputText value="#{creditFacPropose.proposeCreditDetailView.holdLimitAmount}"
-                     style="text-align:right">
-            <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
+                     style="text-align:right"
+                     disabled="#{creditFacPropose.modeEdit}">
+            <f:convertNumber pattern="#,##0" minFractionDigits="0" maxFractionDigits="0"
+                             integerOnly="true" maxIntegerDigits="14"/>
         </p:inputText>
     </td>
 </tr>
@@ -272,9 +280,9 @@
         <p:commandButton id="dlgSaveCreditBtn"
                          styleClass="small"
                          value="#{msg.get('app.button.ok')}"
-                         action="#{creditFacPropose.onSaveCreditInfoDlg}"
+                         action="#{creditFacPropose.onSaveCreditInfo}"
                          process="@form"
-                         update=":creditInfoDlgForm :frmMain"
+                         update=":creditInfoDlgForm,:frmMain"
                          oncomplete="handleDlgCreditProposeRequest(xhr, status, args)"/>
         <p:commandButton type="button" styleClass="small"
                          value="#{msg.get('app.button.cancel')}"
@@ -285,9 +293,10 @@
 </table>
 </h:form>
 </p:panel>
-<!-- <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:addDlgCreditButton">
+
+ <p:blockUI widgetVar="blockcreditInfoDlg" block="creditInfoDlgPanel" trigger=":creditInfoDlgForm:dlgSaveCreditBtn">
      LOADING<br/>
      <p:graphicImage value="/resources/images/shared/ajax-loader.gif"/>
- </p:blockUI>-->
+ </p:blockUI>
 
 </ui:composition>
