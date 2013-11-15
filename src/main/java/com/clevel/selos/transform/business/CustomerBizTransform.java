@@ -499,7 +499,7 @@ public class CustomerBizTransform extends BusinessTransform {
                                 if (customerAccountListModel.getAppl().equals("ST")) {
                                     if (customerAccountListModel.getCtl4() != null) {
                                         if (customerAccountListModel.getCtl4().equals("200")) {
-                                            if (customerAccountListModel.getAccountNo().length() > 4) {
+                                            if (customerAccountListModel.getAccountNo().length() >= 4) {
                                                 accountList.add(customerAccountListModel.getAccountNo().substring(4));
                                             }
                                         }
