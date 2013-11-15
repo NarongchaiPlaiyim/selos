@@ -74,8 +74,8 @@ public class CreditFacPropose implements Serializable {
     private CreditFacProposeView creditFacProposeView;
 
     //for control Propose Credit
-    private ProposeCreditDetailView proposeCreditDetailView;
-    private ProposeCreditDetailView proposeCreditDetailSelected;
+    private CreditInfoDetailView creditInfoDetailView;
+    private CreditInfoDetailView proposeCreditDetailSelected;
     CreditTierDetailView creditTierDetailView;
     List<CreditTierDetailView> creditTierDetailViewList;
     private int rowSpanNumber;
@@ -161,8 +161,8 @@ public class CreditFacPropose implements Serializable {
             countryList = new ArrayList<Country>();
         }
 
-        if (proposeCreditDetailView == null) {
-            proposeCreditDetailView = new ProposeCreditDetailView();
+        if (creditInfoDetailView == null) {
+            creditInfoDetailView = new CreditInfoDetailView();
         }
 
         if (productProgramList == null) {
@@ -272,7 +272,7 @@ public class CreditFacPropose implements Serializable {
     //  Start Propose Credit Information  //
     public void onAddCreditInfo() {
         log.info("onAddCreditInfo ::: ");
-        proposeCreditDetailView  = new ProposeCreditDetailView();
+        creditInfoDetailView = new CreditInfoDetailView();
         modeForButton = ModeForButton.ADD;
     }
 
@@ -285,23 +285,23 @@ public class CreditFacPropose implements Serializable {
         boolean complete = false;
         RequestContext context = RequestContext.getCurrentInstance();
 
-        if((proposeCreditDetailView.getProductProgram().getId() != 0 ) && (proposeCreditDetailView.getCreditType().getId() !=0))
+        if((creditInfoDetailView.getProductProgram().getId() != 0 ) && (creditInfoDetailView.getCreditType().getId() !=0))
         {
             if(modeForButton != null && modeForButton.equals(ModeForButton.ADD)){
 
-                ProductProgram  productProgram = productProgramDAO.findById(proposeCreditDetailView.getProductProgram().getId());
-                CreditType creditType = creditTypeDAO.findById(proposeCreditDetailView.getCreditType().getId());
+                ProductProgram  productProgram = productProgramDAO.findById(creditInfoDetailView.getProductProgram().getId());
+                CreditType creditType = creditTypeDAO.findById(creditInfoDetailView.getCreditType().getId());
 
-                ProposeCreditDetailView creditDetailAdd = new ProposeCreditDetailView();
-                creditDetailAdd.setRequestType(proposeCreditDetailView.getRequestType());
-                creditDetailAdd.setRefinance(proposeCreditDetailView.getRefinance());
+                CreditInfoDetailView creditDetailAdd = new CreditInfoDetailView();
+                creditDetailAdd.setRequestType(creditInfoDetailView.getRequestType());
+                creditDetailAdd.setRefinance(creditInfoDetailView.getRefinance());
                 creditDetailAdd.setProductProgram(productProgram);
                 creditDetailAdd.setCreditType(creditType);
-                creditDetailAdd.setProductCode(proposeCreditDetailView.getProductCode());
-                creditDetailAdd.setProjectCode(proposeCreditDetailView.getProjectCode());
-                creditDetailAdd.setLimit(proposeCreditDetailView.getLimit());
-                creditDetailAdd.setPCEPercent(proposeCreditDetailView.getPCEPercent());
-                creditDetailAdd.setPCEAmount(proposeCreditDetailView.getPCEAmount());
+                creditDetailAdd.setProductCode(creditInfoDetailView.getProductCode());
+                creditDetailAdd.setProjectCode(creditInfoDetailView.getProjectCode());
+                creditDetailAdd.setLimit(creditInfoDetailView.getLimit());
+                creditDetailAdd.setPCEPercent(creditInfoDetailView.getPCEPercent());
+                creditDetailAdd.setPCEAmount(creditInfoDetailView.getPCEAmount());
 
                 creditTierDetailViewList = new ArrayList<CreditTierDetailView>();
                 creditTierDetailView = new CreditTierDetailView();
@@ -309,7 +309,7 @@ public class CreditFacPropose implements Serializable {
                 creditTierDetailView = new CreditTierDetailView();
                 creditTierDetailViewList.add(creditTierDetailView);
                 creditDetailAdd.setCreditTierDetailViewList(creditTierDetailViewList);
-                creditFacProposeView.getProposeCreditDetailViewList().add(creditDetailAdd);
+                creditFacProposeView.getCreditInfoDetailViewList().add(creditDetailAdd);
 
             }else if(modeForButton != null && modeForButton.equals(ModeForButton.EDIT)){
 
@@ -325,7 +325,7 @@ public class CreditFacPropose implements Serializable {
             log.info("onSaveNcbRecord ::: validation failed.");
             complete = false;
         }
-        rowSpanNumber = creditFacProposeView.getProposeCreditDetailViewList().size();
+        rowSpanNumber = creditFacProposeView.getCreditInfoDetailViewList().size();
         log.info("  complete >>>>  :  {}", complete);
         context.addCallbackParam("functionComplete", complete);
 
@@ -555,12 +555,12 @@ public class CreditFacPropose implements Serializable {
         this.user = user;
     }
 
-    public ProposeCreditDetailView getProposeCreditDetailView() {
-        return proposeCreditDetailView;
+    public CreditInfoDetailView getCreditInfoDetailView() {
+        return creditInfoDetailView;
     }
 
-    public void setProposeCreditDetailView(ProposeCreditDetailView proposeCreditDetailView) {
-        this.proposeCreditDetailView = proposeCreditDetailView;
+    public void setCreditInfoDetailView(CreditInfoDetailView creditInfoDetailView) {
+        this.creditInfoDetailView = creditInfoDetailView;
     }
 
     public List<ProductProgram> getProductProgramList() {
@@ -691,11 +691,11 @@ public class CreditFacPropose implements Serializable {
         this.modeEdit = modeEdit;
     }
 
-    public ProposeCreditDetailView getProposeCreditDetailSelected() {
+    public CreditInfoDetailView getProposeCreditDetailSelected() {
         return proposeCreditDetailSelected;
     }
 
-    public void setProposeCreditDetailSelected(ProposeCreditDetailView proposeCreditDetailSelected) {
+    public void setProposeCreditDetailSelected(CreditInfoDetailView proposeCreditDetailSelected) {
         this.proposeCreditDetailSelected = proposeCreditDetailSelected;
     }
 

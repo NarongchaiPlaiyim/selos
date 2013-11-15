@@ -554,8 +554,8 @@
 <tr>
     <td>
 
-        <p:dataTable value="#{creditFacPropose.creditFacProposeView.proposeCreditDetailViewList}"
-                     var="proposeCreditDetailView">
+        <p:dataTable value="#{creditFacPropose.creditFacProposeView.creditInfoDetailViewList}"
+                     var="creditInfoDetailView">
             <p:columnGroup type="header">
                 <p:row>
                     <p:column>
@@ -573,11 +573,11 @@
                 </p:row>
             </p:columnGroup>
 
-            <p:subTable value="#{proposeCreditDetailView.creditTierDetailViewList}"
+            <p:subTable value="#{creditInfoDetailView.creditTierDetailViewList}"
                             var="creditTierDetailView">
 
                     <p:column rowspan="3">
-                        <h:outputText value="#{proposeCreditDetailView.productProgram.description}"/>
+                        <h:outputText value="#{creditInfoDetailView.productProgram.description}"/>
                     </p:column>
 
                         <p:column>
@@ -622,31 +622,31 @@
 
            <tbody>
 
-            <ui:repeat value="#{creditFacPropose.creditFacProposeView.proposeCreditDetailViewList}"
-                       var="proposeCreditDetailView" varStatus="i">
+            <ui:repeat value="#{creditFacPropose.creditFacProposeView.creditInfoDetailViewList}"
+                       var="creditInfoDetailView" varStatus="i">
                 <tr>
                     <td rowspan="#{creditFacPropose.rowSpanNumber + 1}" style="vertical-align: top">
                         <h:outputText value="#{rowIndex+1}"/>
                     </td>
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="vertical-align: top">
-                        <h:outputText value="#{proposeCreditDetailView.productProgram.description}"/>
+                        <h:outputText value="#{creditInfoDetailView.productProgram.description}"/>
                     </td>
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="vertical-align: top">
-                        <h:outputText value="#{proposeCreditDetailView.creditType.description}"/>
+                        <h:outputText value="#{creditInfoDetailView.creditType.description}"/>
                     </td>
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="vertical-align: top">
-                       <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{proposeCreditDetailView.productCode}"/><br/>
-                       <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{proposeCreditDetailView.projectCode}"/>
+                       <h:outputText value="#{msg.get('app.credit.facility.propose.dlg.label.product')}  #{creditInfoDetailView.productCode}"/><br/>
+                       <h:outputText value=" #{msg.get('app.credit.facility.propose.dlg.label.project')}  #{creditInfoDetailView.projectCode}"/>
                     </td>
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="text-align: right;">
-                        <h:outputText value="#{proposeCreditDetailView.limit}">
+                        <h:outputText value="#{creditInfoDetailView.limit}">
                             <f:convertNumber pattern="#,##0" minFractionDigits="2" maxFractionDigits="2"/>
                         </h:outputText>
                     </td>
 
                     <td colspan="5" rowspan="#{creditFacPropose.rowSpanNumber}">
                     <table>
-                        <ui:repeat value="#{proposeCreditDetailView.creditTierDetailViewList}"
+                        <ui:repeat value="#{creditInfoDetailView.creditTierDetailViewList}"
                                    var="creditTierDetailView" varStatus="j">
 
                             <tr>
@@ -677,13 +677,13 @@
 
 
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="text-align: center;" >
-                        <h:outputText value="#{proposeCreditDetailView.frontEndFee}"/>
+                        <h:outputText value="#{creditInfoDetailView.frontEndFee}"/>
                     </td>
                     <td rowspan="#{creditFacPropose.rowSpanNumber}" style="text-align: center;" >
                         <p:commandButton icon="ui-icon-pencil"
                                          action="#{creditFacPropose.onEditCreditInfo()}"
                                          process="@this">
-                            <f:setPropertyActionListener value="#{proposeCreditDetailView}"
+                            <f:setPropertyActionListener value="#{creditInfoDetailView}"
                                                          target="#{creditFacPropose.proposeCreditDetailSelected}"/>
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"></p:commandButton>
@@ -692,7 +692,7 @@
 
 &lt;!&ndash;
 
-                         <ui:repeat value="#{proposeCreditDetailView.creditTierDetailViewList}"
+                         <ui:repeat value="#{creditInfoDetailView.creditTierDetailViewList}"
                                     var="creditTierDetailView">
                              <tr>
                                  <td></td>
@@ -735,7 +735,7 @@
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left;width: 250px;">
-                                    <h:outputText value="#{proposeCreditDetailView.requestType}">
+                                    <h:outputText value="#{creditInfoDetailView.requestType}">
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left;width: 100px;" class="title">
@@ -744,7 +744,7 @@
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left;width: 250px;">
-                                    <h:outputText value="#{proposeCreditDetailView.refinance}">
+                                    <h:outputText value="#{creditInfoDetailView.refinance}">
                                     </h:outputText>
                                 </td>
                             </tr>
@@ -755,7 +755,7 @@
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left" colspan="3">
-                                    <h:outputText value="#{proposeCreditDetailView.purpose}">
+                                    <h:outputText value="#{creditInfoDetailView.purpose}">
                                         <f:convertNumber pattern="#,##0"
                                                          minFractionDigits="2"
                                                          maxFractionDigits="2"/>
@@ -770,7 +770,7 @@
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left" colspan="3">
-                                    <h:outputText value="#{proposeCreditDetailView.remark}">
+                                    <h:outputText value="#{creditInfoDetailView.remark}">
                                     </h:outputText>
                                 </td>
                             </tr>
@@ -782,7 +782,7 @@
                                     </h:outputText>
                                 </td>
                                 <td>
-                                    <h:outputText value="#{proposeCreditDetailView.disbursement.disbursement}">
+                                    <h:outputText value="#{creditInfoDetailView.disbursement.disbursement}">
                                     </h:outputText>
                                 </td>
                                 <td style="text-align: left" class="title">
@@ -794,7 +794,7 @@
                                     </h:outputText>
                                 </td>
                                 <td>
-                                    <h:outputText value="#{proposeCreditDetailView.holdLimitAmount}">
+                                    <h:outputText value="#{creditInfoDetailView.holdLimitAmount}">
                                         <f:convertNumber pattern="#,##0"
                                                          minFractionDigits="2"
                                                          maxFractionDigits="2"/>

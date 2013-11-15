@@ -54,7 +54,7 @@ public class CreditFacProposeView implements Serializable {
     private String reasonForReduction;
 
     private List<ProposeFeeDetailView> proposeFeeDetailViewList;
-    private List<ProposeCreditDetailView> proposeCreditDetailViewList;
+    private List<CreditInfoDetailView> creditInfoDetailViewList;
     private List<ProposeCollateralInfoView> proposeCollateralInfoViewList;
     private List<GuarantorDetailView> guarantorDetailViewList;
     private List<ConditionDetailView> conditionDetailViewList;
@@ -114,7 +114,7 @@ public class CreditFacProposeView implements Serializable {
         this.reasonForReduction = "";
 
         this.proposeFeeDetailViewList = new ArrayList<ProposeFeeDetailView>();
-        this.proposeCreditDetailViewList = new ArrayList<ProposeCreditDetailView>();
+        this.creditInfoDetailViewList = new ArrayList<CreditInfoDetailView>();
         this.proposeCollateralInfoViewList = new ArrayList<ProposeCollateralInfoView>();
         this.guarantorDetailViewList = new ArrayList<GuarantorDetailView>();
         this.conditionDetailViewList = new ArrayList<ConditionDetailView>();
@@ -254,12 +254,12 @@ public class CreditFacProposeView implements Serializable {
         this.case3WcDebitCoreWc = case3WcDebitCoreWc;
     }
 
-    public List<ProposeCreditDetailView> getProposeCreditDetailViewList() {
-        return proposeCreditDetailViewList;
+    public List<CreditInfoDetailView> getCreditInfoDetailViewList() {
+        return creditInfoDetailViewList;
     }
 
-    public void setProposeCreditDetailViewList(List<ProposeCreditDetailView> proposeCreditDetailViewList) {
-        this.proposeCreditDetailViewList = proposeCreditDetailViewList;
+    public void setCreditInfoDetailViewList(List<CreditInfoDetailView> creditInfoDetailViewList) {
+        this.creditInfoDetailViewList = creditInfoDetailViewList;
     }
 
     public List<ProposeCollateralInfoView> getProposeCollateralInfoViewList() {
