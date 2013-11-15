@@ -5,7 +5,7 @@ import com.clevel.selos.model.db.master.User;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ProposeConditionDetailView implements Serializable {
+public class ConditionDetailView implements Serializable {
 
     private String loanType;
     private String conditionDesc;
@@ -15,7 +15,7 @@ public class ProposeConditionDetailView implements Serializable {
     private User createBy;
     private User modifyBy;
 
-    public ProposeConditionDetailView() {
+    public ConditionDetailView() {
         reset();
     }
 
